@@ -1,15 +1,16 @@
 class Frame {
     constructor() {
         this.names = {};
-        this.properties = {};
+        this.roles = {};
     }
-    set(property, name, value) {
-
+    set(role, property, value) {
+        this.roles[role][property] = value;
+        return this;
     }
-    get(property, name) {
-
+    get(role, property) {
+        return this.roles[role][property];
     }
-    remove(property, name) {
-
+    remove(role, property) {
+        delete this.roles[role][property];
     }
 }

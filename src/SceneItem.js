@@ -1,4 +1,4 @@
-class SceneItem {
+class SceneItem extends Pipe {
     constructor() {
         this.options = {};
         this._playState = "paused";//paused|running|initial|inherit
@@ -69,7 +69,7 @@ class SceneItem {
 
         return value;
     }
-    getNowFrame(time) {
+    getLeftRightIndex(time) {
         const timeline = this.timeline, {times, last, length} = timeline;
 
         if(length === 0)
@@ -101,30 +101,36 @@ class SceneItem {
         } else {
             left = index = right;
         }
+        return {left, right};
+    }
+    getNowFrame(time) {
 
+        const indices = this.getLeftRightIndex();
+        if(!indices)
+            return;
 
-	const frame = new Frame();
+        const {left, right} = indices;
+        const frame = new Frame();
 
-	const names = this.names,length = names.length;
-    let role, propertyNames, nameLength, property, value;
-    let i,j;
-	for(i = 0; i < length; ++i) {
-        role = _roles[i];
+        const names = this.names,length = names.length;
+        let role, propertyNames, nameLength, property, value;
+        let i,j;
+        for(i = 0; i < length; ++i) {
+            role = _roles[i];
 
-		propertyNames = names[roleName];
-		nameLength = propertyNames.length;
-		for(j = 0; j < nameLength; ++j) {
-			property = propertyNames[j];
-			value = this.getNowValue(time, roleName, property, left, right);
+            propertyNames = names[roleName];
+            nameLength = propertyNames.length;
+            for(j = 0; j < nameLength; ++j) {
+                property = propertyNames[j];
+                value = this.getNowValue(time, roleName, property, left, right);
 
-            if(typeof value === "undfined")
-                continue;
+                if(typeof value === "undfined")
+                    continue;
 
-			frame.set(roleName, property, value);
-		}
-	}
-
-	return frame;
+                frame.set(roleName, property, value);
+            }
+        }
+        return frame;
     }
 }
 
@@ -142,3 +148,13 @@ Util.defineGetterSetter(SceneItem.prototype, "fillMode", "options");
 Util.defineGetterSetter(SceneItem.prototype, "direction", "options");
 //time
 Util.defineGetterSetter(SceneItem.prototype, "delay", "options");
+
+
+
+
+
+/*
+    sceneItem.times(3).property.set(??)
+    sceneItem.times(3).transform.get
+
+*/
