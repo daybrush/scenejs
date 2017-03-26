@@ -1,11 +1,19 @@
 class SceneItem extends Pipe {
+    static addRole(role) {
+
+    }
     constructor() {
         this.options = {};
         this._playState = "paused";//paused|running|initial|inherit
-        this.timeline = new Timeline();
-        this.names = {};
+        this.timeline = new FrameTimeline();
+        this._currentTime = 0;
     }
-
+    get currentTime() {
+        return this._currentTime;
+    }
+    set currentTime(time) {
+        this._currentTime = time;
+    }
     get timingFunction() {
     }
     set timgingFunction(value) {
@@ -14,14 +22,88 @@ class SceneItem extends Pipe {
     }
     get playState() {
     }
-    newFrame(time) {
+    addName(name) {
+        this.names[name] = true;
+    }
+    update() {
 
+    }
+    updateFrame(frame) {
+
+    }
+    newFrame(time) {
+        this.timeline.set(time, new Frame());
+        return this.time(time);
     }
     setFrame(time, frame) {
         this.timeline.set(time, frame);
+        return this;
     }
     getFrame(time) {
         return this.timeline.get(time);
+    }
+    frame(time) {
+        this.startChain("time", time);
+        return this;
+    }
+    get(property) {
+        const [time, role] = this.getChain(["time", "role"]);
+        if(isUndefined(time) || isUndefined(role))
+            return;
+
+        const frame = this.getFrame(frame);
+        return frame[role].get(property);
+    }
+    _set(time, role, property, value) {
+        let frame = this.getFrame(time);
+
+        if(!frame)
+           frame = this.newFrame(time);
+
+        if(isUndefined(role)) {
+            frame.set(property);
+            return this;
+        }
+
+        frame[role].set(property, value);
+        return this;
+    }
+    /*
+        sceneItem.set({
+            0: "",
+            1: "",
+            2: ""
+        });
+        sceneItem.frame(10).set({
+            a : "a",
+            b : "b",
+            transform: "c",
+            filter : "d"
+        });
+
+        sceneItem.frame(10).property.set({
+            a : "a",
+            b : "b"
+        });
+    */
+    set(property, value) {
+        const [time, role] = this.getChain(["time", "role"]);
+        /*
+            sceneItem.set({
+                a: "a",
+                b: "b"
+            });
+        */
+        if(isUndefined(time)) {
+            if(typeof property === "object")
+                this.load(property);
+
+            return this;
+        }
+
+        //set frame by frame(time) function.
+        this._set(time, role, property, value);
+        return this;
     }
     getNowValue(time, role, property, left, right) {
         const timeline = this.timeline, times = timeline.times, length = times.length;
@@ -104,7 +186,6 @@ class SceneItem extends Pipe {
         return {left, right};
     }
     getNowFrame(time) {
-
         const indices = this.getLeftRightIndex();
         if(!indices)
             return;
@@ -151,10 +232,27 @@ Util.defineGetterSetter(SceneItem.prototype, "delay", "options");
 
 
 
-
+/*
+frame
+*/
 
 /*
-    sceneItem.times(3).property.set(??)
-    sceneItem.times(3).transform.get
 
+    scene.set({
+
+    });
+    sceneItem.set({
+
+    });
+    sceneItem.frame(10).get();
+    sceneItem.nowFrame(10).get();
+
+
+    sceneItem.frame(10).set({
+
+    });
+    sceneItem.frame(10).now();
+    sceneItem.frame(10).property.set(10, "", "");
+
+    sceneItem.currentTime = 10;
 */

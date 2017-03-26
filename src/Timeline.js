@@ -1,7 +1,10 @@
-class Timeline {
+/*@import TimelineStep from "TimelineStep"*/
+
+/*@export default */class Timeline {
     constructor() {
         this.times = [];
-        this.timeObject = {};
+        this.item = {};
+        this.step = new TimelineStep(this.times, this.item);
     }
     get last() {
         const times = this.times;
@@ -11,8 +14,8 @@ class Timeline {
         return this.times.length;
     }
     add(time, object) {
-        this.timeObject[time] = object;
-        this.adTime(time);
+        this.item[time] = object;
+        this.addTime(time);
         return this;
     }
     addTime(time) {
@@ -33,13 +36,13 @@ class Timeline {
         return this;
     }
     has(time) {
-        return this.timeObject.hasOwnProperty(time);
+        return this.item.hasOwnProperty(time);
     }
     get(time) {
-        return this.timeObject[time];
+        return this.item[time];
     }
     remove(time) {
-        delete this.timeObject[time];
+        delete this.item[time];
         this.removeTime(time);
         return this;
     }
