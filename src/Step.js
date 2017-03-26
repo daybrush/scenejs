@@ -59,5 +59,5 @@ class Step {
 }
 
 //step.set(1);
-//step.next().get();
-//step.prev().get();
+//step.next().value();
+//step.prev().value();

@@ -24,5 +24,7 @@ QUnit.test("Timline Step", function( assert ) {
     assert.equal(step.last().key(), 4, "step last test");
     assert.notOk(step.last().hasNext(), "step hasNext test");
     assert.ok(step.prev().hasNext(), "step hasNext test");
+    assert.notOk(step.first().hasPrev(), "step first, hasPrev test"); // key : 0
+    assert.ok(step.next().hasPrev(), "step hasPrev test"); // key : 0
 
 });
