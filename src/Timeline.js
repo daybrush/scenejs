@@ -1,4 +1,7 @@
-/*@import TimelineStep from "TimelineStep"*/
+/*@import TimelineStep from "./TimelineStep"*/
+
+
+
 
 /*@export default */class Timeline {
     constructor() {
@@ -55,3 +58,4 @@
         return this;
     }
 }
+export const a = "231/*sdsd*/231";

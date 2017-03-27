@@ -1,7 +1,5 @@
 node_modules/
-.DS_Store
+dist/
+*.DS_Store
 functions.txt
 gitignore
-scene.all.js
-jquery.min.js
-doc/

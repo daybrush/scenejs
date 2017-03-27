@@ -9,12 +9,15 @@
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
     <script src="./js/qunit.js"></script>
-    <script src="../src/Util.js"></script>
-    <script src="../src/Step.js"></script>
-    <script src="../src/TimelineStep.js"></script>
-    <script src="../src/Timeline.js"></script>
-    <script src="../src/FrameTimeline.js"></script>
+    <script src="../dist/Timeline.js"></script>
     <script src="./js/Timeline.js"></script>
+
 
 </body>
 </html>
+
+<!--
+getJS("../src/FrameTimeline.js").then(function() {
+           loadJS("./js/Timeline.js");
+        });
+-->

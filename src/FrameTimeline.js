@@ -1,3 +1,5 @@
+/*@import Timeline from "Timeline"*/
+
 /*@export default */class FrameTimeline extends Timeline {
     constructor() {
         super();

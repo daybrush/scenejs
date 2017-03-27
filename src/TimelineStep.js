@@ -1,5 +1,5 @@
-/*@import TimelineStep from "Step"*/
-/*@export default */class TimelineStep extends Step{
+import Step from "./Step";
+export default class TimelineStep extends Step{
     constructor(list, value) {
         super();
         this._list = list;
