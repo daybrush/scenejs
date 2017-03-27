@@ -5,34 +5,35 @@ module.exports = function(grunt) {
 grunt.loadNpmTasks('grunt-contrib-qunit');
 grunt.loadNpmTasks('grunt-webpack');
 
-var Test = require("comment-plugin");
+var ExportPlugin = require("es6-export-plugin");
 var moduleConfig =  {
     loaders:  [
         {
         	test:  /\.js$/,
-			loader: 'comment-loader',
-			query: {
-				presets: ['es2015'],
-			}
+			loader: 'comment-loader'
 		}
 	]
 };
+var obj = {};
+function library(name) {
+    return {
+        entry: `./src/{name}.js`,
+        output: {
+            filename: `./{name}.js`,
+            path: __dirname + "/dist/",
+            library: name,
+        },
+        module: moduleConfig,
+        plugins: [new ExportPlugin()]
+    };
+}
 
 grunt.initConfig({
 	qunit: {
 		all : ["./test/Timeline.html"]
 	},
     webpack: {
-        timeline: {
-            entry: './src/Timeline.js',
-            output: {
-                filename: 'Timeline.js',
-                path: __dirname + "/dist/",
-                library: 'Timeline',
-            },
-            module: moduleConfig,
-            plugins: [new Test()]
-        }
+        timeline: library("Timeline"),
     }
 });
 
