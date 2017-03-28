@@ -35,8 +35,12 @@
 
     }
     newFrame(time) {
-        this.timeline.set(time, new Frame());
-        return this.time(time);
+        const timeline = this.timeline;
+        if(timeline.has(time))
+            return this.getFrame(time);
+
+        timeline.set(time, new Frame());
+        return this.getFrame(time);
     }
     setFrame(time, frame) {
         this.timeline.set(time, frame);
