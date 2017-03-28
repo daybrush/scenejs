@@ -26,14 +26,9 @@
     "comment-loader": "git+https://github.com/daybrush/comment-loader.git",
     "es6-export-plugin": "git+https://github.com/daybrush/es6-export-plugin.git",
     "grunt": "^1.0.1",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-qunit": "^1.2.0",
-    "grunt-contrib-uglify": "^2.0.0",
     "grunt-jsdoc": "^2.1.0",
     "grunt-webpack": "^2.0.1",
     "qunitjs": "^2.0.1",
-    "script-loader": "^0.7.0",
     "webpack": "^2.3.2"
   }
 }
