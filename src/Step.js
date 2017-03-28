@@ -1,4 +1,4 @@
-export default class Step {
+/*@export default */class Step {
     constructor() {
         this._step = 0;
     }

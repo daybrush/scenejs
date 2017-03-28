@@ -60,7 +60,7 @@ const getJS = function(url) {
 
     loaded[url] = true;
     return fetch(url).then(req => req.text()).then(text => {
-        const imports = text.match(importReg);
+        const imports = text.match(/\/\*\@import(.*?)\*\//g);
 
         if(!imports)
             return;

@@ -1,4 +1,7 @@
-class SceneItem extends Pipe {
+/*@import FrameTimeline from "./FrameTimeline";*/
+/*@import {isUndefined, defineGetterSetter} from "./Util";*/
+
+/*@export default */class SceneItem {
     static addRole(role) {
 
     }
@@ -42,69 +45,6 @@ class SceneItem extends Pipe {
     getFrame(time) {
         return this.timeline.get(time);
     }
-    frame(time) {
-        this.startChain("time", time);
-        return this;
-    }
-    get(property) {
-        const [time, role] = this.getChain(["time", "role"]);
-        if(isUndefined(time) || isUndefined(role))
-            return;
-
-        const frame = this.getFrame(frame);
-        return frame[role].get(property);
-    }
-    _set(time, role, property, value) {
-        let frame = this.getFrame(time);
-
-        if(!frame)
-           frame = this.newFrame(time);
-
-        if(isUndefined(role)) {
-            frame.set(property);
-            return this;
-        }
-
-        frame[role].set(property, value);
-        return this;
-    }
-    /*
-        sceneItem.set({
-            0: "",
-            1: "",
-            2: ""
-        });
-        sceneItem.frame(10).set({
-            a : "a",
-            b : "b",
-            transform: "c",
-            filter : "d"
-        });
-
-        sceneItem.frame(10).property.set({
-            a : "a",
-            b : "b"
-        });
-    */
-    set(property, value) {
-        const [time, role] = this.getChain(["time", "role"]);
-        /*
-            sceneItem.set({
-                a: "a",
-                b: "b"
-            });
-        */
-        if(isUndefined(time)) {
-            if(typeof property === "object")
-                this.load(property);
-
-            return this;
-        }
-
-        //set frame by frame(time) function.
-        this._set(time, role, property, value);
-        return this;
-    }
     getNowValue(time, role, property, left, right) {
         const timeline = this.timeline, times = timeline.times, length = times.length;
 
@@ -128,7 +68,7 @@ class SceneItem extends Pipe {
         }
 
         const prevValue = prevFrame[name].get(property);
-        if(typeof prevValue === "undefined")
+        if(isUndefined(prevValue))
             return;
 
         if(!nextFrame)
@@ -136,10 +76,8 @@ class SceneItem extends Pipe {
 
         const nextValue = nextFrame[name].get(property);
 
-        if(typeof nextValue === "undefined")
+        if(isUndefined(nextValue))
             return prevValue;
-
-        var value;
 
 
         if(prevTime < 0)
@@ -147,7 +85,7 @@ class SceneItem extends Pipe {
 
         // 전값과 나중값을 시간에 의해 내적을 한다.
 
-        value = _u.dot(prevValue, nextValue, time - prevTime, nextFrame.time - time);
+        let value = _u.dot(prevValue, nextValue, time - prevTime, nextFrame.time - time);
 
         return value;
     }
@@ -205,7 +143,7 @@ class SceneItem extends Pipe {
                 property = propertyNames[j];
                 value = this.getNowValue(time, roleName, property, left, right);
 
-                if(typeof value === "undfined")
+                if(isUndefined(value))
                     continue;
 
                 frame.set(roleName, property, value);
@@ -222,13 +160,13 @@ class SceneItem extends Pipe {
 //playState  paused|running|initial|inherit
 
 //iterationCount //infinite | number
-Util.defineGetterSetter(SceneItem.prototype, "inifiniteCount", "options");
+defineGetterSetter(SceneItem.prototype, "inifiniteCount", "options");
 //none|forwards|backwards|both|initial
-Util.defineGetterSetter(SceneItem.prototype, "fillMode", "options");
+defineGetterSetter(SceneItem.prototype, "fillMode", "options");
 //normal|reverse|alternate|alternate-reverse|initial
-Util.defineGetterSetter(SceneItem.prototype, "direction", "options");
+defineGetterSetter(SceneItem.prototype, "direction", "options");
 //time
-Util.defineGetterSetter(SceneItem.prototype, "delay", "options");
+defineGetterSetter(SceneItem.prototype, "delay", "options");
 
 
 

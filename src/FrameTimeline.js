@@ -1,4 +1,4 @@
-/*@import Timeline from "Timeline"*/
+/*@import Timeline from "./Timeline"*/
 
 /*@export default */class FrameTimeline extends Timeline {
     constructor() {

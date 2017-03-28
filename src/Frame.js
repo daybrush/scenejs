@@ -1,13 +1,15 @@
-class Frame {
+/*@import {camelize, defineProperty, isObject} from "./Util.js";*/
+
+/*@export default */class Frame {
     static addRole(role) {
         const framePrototype = Frame.prototype;
-        const _role = Capitalize(role);
+        const _role = camelize(" " + role);
         const obj = {};
 
-        Object.defineProperty(framePrototype, "set" + _role, function(property, value) {
+        defineProperty(framePrototype, "set" + _role, function(property, value) {
             this.set(role, property, value);
         });
-        Object.defineProperty(framePrototype, "get" + _role, function(property) {
+        defineProperty(framePrototype, "get" + _role, function(property) {
             return this.get(role, property);
         });
     }
@@ -39,11 +41,11 @@ class Frame {
         this.roles[role][property] = value;
     }
     set(role, property, value) {
-        if(typeof role === "object") {
+        if(isObject(role)) {
             this.load(role);
             return this;
         }
-        if(typeof property === "object") {
+        if(isObject(property)) {
             //role, properties
             for(let name in property) {
                 //role, property, value
@@ -58,7 +60,6 @@ class Frame {
         return this.roles[role][property];
     }
     remove(role, property) {
-        this.updating = true;
         delete this.roles[role][property];
     }
 }

@@ -17,9 +17,9 @@ var moduleConfig =  {
 var obj = {};
 function library(name) {
     return {
-        entry: `./src/{name}.js`,
+        entry: `./src/${name}.js`,
         output: {
-            filename: `./{name}.js`,
+            filename: `./${name}.js`,
             path: __dirname + "/dist/",
             library: name,
         },
