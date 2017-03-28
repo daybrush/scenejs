@@ -1,4 +1,5 @@
 /*@import FrameTimeline from "./FrameTimeline";*/
+/*@import Frame from "./Frame";*/
 /*@import {isUndefined, defineGetterSetter} from "./Util";*/
 
 /*@export default */class SceneItem {
@@ -39,11 +40,11 @@
         if(timeline.has(time))
             return this.getFrame(time);
 
-        timeline.set(time, new Frame());
+        this.setFrame(time, new Frame());
         return this.getFrame(time);
     }
     setFrame(time, frame) {
-        this.timeline.set(time, frame);
+        this.timeline.add(time, frame);
         return this;
     }
     getFrame(time) {
@@ -171,30 +172,3 @@ defineGetterSetter(SceneItem.prototype, "fillMode", "options");
 defineGetterSetter(SceneItem.prototype, "direction", "options");
 //time
 defineGetterSetter(SceneItem.prototype, "delay", "options");
-
-
-
-/*
-frame
-*/
-
-/*
-
-    scene.set({
-
-    });
-    sceneItem.set({
-
-    });
-    sceneItem.frame(10).get();
-    sceneItem.nowFrame(10).get();
-
-
-    sceneItem.frame(10).set({
-
-    });
-    sceneItem.frame(10).now();
-    sceneItem.frame(10).property.set(10, "", "");
-
-    sceneItem.currentTime = 10;
-*/

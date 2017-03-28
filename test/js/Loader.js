@@ -68,7 +68,8 @@ const getJS = function(url) {
         return Promise.all(imports.map(line => {
             const matches = /\"([^\"]*)\"/g.exec(line);
             let filename = matches[1];
-            filename += ".js";
+            if(filename.indexOf(".js") !== filename.length - 3)
+                filename += ".js";
             return getJS(concatenatePath(url, filename));
         }));
     }).then(text => {
