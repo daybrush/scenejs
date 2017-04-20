@@ -32,7 +32,7 @@ class FrameTimeline extends Timeline {
 	}
 	/**
 	* update property names used in frames.
-	* @return {Scene.Frame} An instance itself
+	* @return {FrameTimeline} An instance itself
 	* @example
 timeline.update();
 	*/
@@ -54,7 +54,7 @@ timeline.update();
 	* update property names used in frame.
 	* @param {Number} time - frame's time
 	* @param {Frame} [frame] - frame of that time.
-	* @return {Scene.Frame} An instance itself
+	* @return {FrameTimeline} An instance itself
 	* @example
 timeline.updateFrame(time, this.get(time));
 	*/

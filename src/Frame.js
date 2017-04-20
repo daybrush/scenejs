@@ -10,7 +10,6 @@ import {toPropertyObject} from "./Util/Property.js";
 import PropertyObject from "./PropertyObject";
 /**
  * Animation's Frame
- * @alias Scene.Frame
  */
 class Frame {
 	/**
@@ -61,7 +60,7 @@ let frame = new Scene.Frame({
 	/**
 	* load json of properties.
 	* @param {Object} properties - properties
-	* @return {Scene.Frame} An instance itself
+	* @return {Frame} An instance itself
 	* @example
 frame.load({
 	display: "none"
@@ -102,7 +101,7 @@ frame.load({
 	* remove property value
 	* @param {String} role - property role(property, transform, filter)
 	* @param {String} property - property name
-	* @return {Scene.Frame} An instance itself
+	* @return {Frame} An instance itself
 	* @example
 	frame.remove("property", "display")
 	*/
@@ -123,7 +122,7 @@ frame.load({
 	* @param {Object|String} role - property role(property, transform, filter)
 	* @param {Object|String} property - property name
 	* @param {Object|String} value - property value
-	* @return {Scene.Frame} An instance itself
+	* @return {Frame} An instance itself
 	* @example
 // one parameter
 frame.set({
@@ -259,7 +258,7 @@ frame.set("property", "display", "none");
 	* @param {String} role - property role(property, transform, filter)
 	* @param {String} format - string format to get properties.
 	* @param {String} separator - separator between properties.
-	* @return {Scene.Frame} An instance itself
+	* @return {Frame} An instance itself
 	* @example
 var frame = new Scene.Frame({
 	a: 1,
