@@ -1,4 +1,4 @@
-const timeline = new Timeline();
+const timeline = new Scene.Timeline();
 timeline.add(0, 1);
 timeline.add(1, 2);
 timeline.add(0.5, 3);

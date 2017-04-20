@@ -1,39 +1,58 @@
-/*@import FrameTimeline from "./FrameTimeline";*/
-/*@import Frame from "./Frame";*/
-/*@import {isUndefined, defineGetterSetter} from "./Util";*/
+import Animator from "./Animator";
+import Frame from "./Frame";
+import {camelize, isUndefined, isObject, defineGetter, defineSetter, defineGetterSetter, defineProperty} from "./Util";
+import FrameTimeline from "./FrameTimeline";
+import {dot} from "./Util/Dot";
+// import EventTrigger from "./EventTrigger";
+import TimingFunction from "./TimingFunction";
+import {SCENE_ROLES} from "./Constant.js";
 
-/*@export default */class SceneItem {
+export default class SceneItem extends Animator {
     static addRole(role) {
-
+        Frame.addRole(role);
+        SceneItem.prototype[camelize("set " + role)] = function(time, properties, value) {
+            this.set(time, role, properties, value);
+            return this;
+        };
+        
+        SceneItem.prototype[camelize("get " + role)] = function(time, property) {
+            const frame = this.getFrame(time);
+            if(!frame)
+                return;
+            
+            return frame.get(role, property);
+        };
     }
-    constructor() {
-        this.options = {};
-        this._playState = "paused";//paused|running|initial|inherit
+    constructor(object) {
+        super();
         this.timeline = new FrameTimeline();
-        this._currentTime = 0;
-    }
-    get currentTime() {
-        return this._currentTime;
-    }
-    set currentTime(time) {
-        this._currentTime = time;
-    }
-    get timingFunction() {
-    }
-    set timgingFunction(value) {
+        
+        this.load(object);
     }
     get duration() {
+        return this.timeline.last;
     }
-    get playState() {
+    set(time, role, properties, value) {
+        let frame = this.getFrame(time);
+        if(!frame)
+            frame = this.newFrame(time);
+        
+        frame.set(role, properties, value);
+        
+        this.updateFrame(time, frame);  
+        
+        return this;
     }
-    addName(name) {
-        this.names[name] = true;
+    setIterationTime(time) {
+        super.setIterationTime(time);
+        this.trigger("animate", [time, this.getNowFrame(time), this.currentTime]);
+        return this;
     }
     update() {
-
+        this.timeline.update();
     }
-    updateFrame(frame) {
-
+    updateFrame(time, frame = this.getFrame(time)) {
+        this.timeline.updateFrame(time, frame);
     }
     newFrame(time) {
         const timeline = this.timeline;
@@ -50,7 +69,30 @@
     getFrame(time) {
         return this.timeline.get(time);
     }
-    getNowValue(time, role, property, left, right) {
+    removeFrame(time) {
+        const timeline = this.timeline;
+        timeline.remove(time);
+    	delete this.frames[time];
+    	
+    	return this;
+    }
+    copyFrame(fromTime, toTime) {
+        if(isObject(fromTime)) {
+            for(let time in fromTime) {
+                this.copyFrame(time, fromTime[time]);
+            }
+            return this;
+        }
+    	var frame = this.getFrame(fromTime);
+    	if(!frame)
+    		return this;
+    		
+    	var copyFrame = frame.copy();
+    	this.setFrame(toTime, copyFrame);	
+    	return this;
+    }
+
+    getNowValue(role, property, time, left = 0, right = this.timeline.length) {
         const timeline = this.timeline, times = timeline.times, length = times.length;
 
         let prevFrame, nextFrame, i;
@@ -60,26 +102,26 @@
             return;
 
         for(i = left; i >= 0; --i) {
-            prevFrame = this.frames[times[i]];
             prevTime = times[i];
-            if(prevFrame[role].has(property))
+            prevFrame = timeline.get(prevTime);
+            if(prevFrame.has(role, property))
                 break;
         }
         for(i = right; i < length; ++i) {
-            nextFrame = this.frames[times[i]];
             nextTime = times[i];
-            if(nextFrame[role].has(property))
+            nextFrame = timeline.get(nextTime);
+            if(nextFrame.has(role, property))
                 break;
         }
 
-        const prevValue = prevFrame[name].get(property);
+        const prevValue = prevFrame.get(role, property);
         if(isUndefined(prevValue))
             return;
 
         if(!nextFrame)
             return prevValue;
 
-        const nextValue = nextFrame[name].get(property);
+        const nextValue = nextFrame.get(role, property);
 
         if(isUndefined(nextValue))
             return prevValue;
@@ -90,7 +132,7 @@
 
         // 전값과 나중값을 시간에 의해 내적을 한다.
 
-        let value = _u.dot(prevValue, nextValue, time - prevTime, nextFrame.time - time);
+        let value = dot(prevValue, nextValue, time - prevTime, nextTime - time);
 
         return value;
     }
@@ -102,6 +144,7 @@
 
         // index : length = time : last
         let index = parseInt(last > 0 ? time * length / last : 0) , right = length - 1, left = 0;
+
 
         if(index < 0)
             index = 0;
@@ -129,46 +172,52 @@
         return {left, right};
     }
     getNowFrame(time) {
-        const indices = this.getLeftRightIndex();
+        const indices = this.getLeftRightIndex(time);
         if(!indices)
             return;
 
         const {left, right} = indices;
         const frame = new Frame();
 
-        const names = this.names,length = names.length;
+        const names = this.timeline.names;
         let role, propertyNames, nameLength, property, value;
-        let i,j;
-        for(i = 0; i < length; ++i) {
-            role = _roles[i];
+        let i, j;
 
-            propertyNames = names[roleName];
-            nameLength = propertyNames.length;
-            for(j = 0; j < nameLength; ++j) {
-                property = propertyNames[j];
-                value = this.getNowValue(time, roleName, property, left, right);
+        for(let role in SCENE_ROLES) {
+            propertyNames = names[role];
+            for(property in propertyNames) {
+                
+                value = this.getNowValue(role, property, time, left, right);
 
                 if(isUndefined(value))
                     continue;
 
-                frame.set(roleName, property, value);
+                frame.set(role, property, value);
             }
         }
         return frame;
     }
+    load(object) {
+        if(!isObject(object))
+            return this;
+            
+            
+        let isOptions = false;
+        for(let time in object) {
+            if(time === "options") {
+                isOptions = true;
+                continue;
+            }
+
+            this.set(time, object[time]);
+        }
+        
+        if(isOptions)
+            this.setOptions(object.options);
+             
+        return this;
+    }
 }
 
 
-
-//timingFunciton
-//duration
-//playState  paused|running|initial|inherit
-
-//iterationCount //infinite | number
-defineGetterSetter(SceneItem.prototype, "inifiniteCount", "options");
-//none|forwards|backwards|both|initial
-defineGetterSetter(SceneItem.prototype, "fillMode", "options");
-//normal|reverse|alternate|alternate-reverse|initial
-defineGetterSetter(SceneItem.prototype, "direction", "options");
-//time
-defineGetterSetter(SceneItem.prototype, "delay", "options");
+SceneItem.addRole("property");

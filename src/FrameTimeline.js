@@ -1,52 +1,87 @@
-/*@import Timeline from "./Timeline"*/
+import Timeline from "./Timeline";
+import {SCENE_ROLES} from "./Constant";
+import {has} from "./Util";
+/**
+* Animation's Timeline with Frame
+* @extends Timeline
+*/
+class FrameTimeline extends Timeline {
+	constructor() {
+		super();
+		this.updateNumber = {};
+		this.names = {};
+		const names = this.names;
 
-/*@export default */class FrameTimeline extends Timeline {
-    constructor() {
-        super();
-        this.updateNumber = {};
-        this.names = {};
-    }
-    addTime(time) {
-        super.addTime(time);
+		for (const role in SCENE_ROLES) {
+			names[role] = {};
+		}
+	}
+	addTime(time) {
+		super.addTime(time);
 
-        if(this.updateNumber.hasOwnProperty(time))
-            return;
-        this.updateNumber[time] = 0;
-    }
-    removeTime(time) {
-        super.removeTime(time);
-        delete this.updateNumber[time];
-    }
-    update() {
-        const updateNumber = this.updateNumber;
-        let frame, time;
-        for(time in updateNumber) {
-            frame = this.get(time);
-            if(updateNumber[time] === frame.updateNumber)
-                continue;
+		if (has(this.updateNumber, time)) {
+			return this;
+		}
+		this.updateNumber[time] = 0;
 
-            this.updateFrame(time, frame);
-        }
-    }
-    updateFrame(time, frame = this.get(time)) {
-        if(!frame)
-            return this;
+		return this;
+	}
+	removeTime(time) {
+		super.removeTime(time);
+		delete this.updateNumber[time];
+	}
+	/**
+	* update property names used in frames.
+	* @return {Scene.Frame} An instance itself
+	* @example
+timeline.update();
+	*/
+	update() {
+		const updateNumber = this.updateNumber;
+		let frame;
+		let time;
 
-        const frameNames = frame.names;
-        const itemNames = this.names;
-        let framePropertyNames, itemPropertyNames, name;
-        for(let role in frameNames) {
-            framePropertyNames = frameNames[role];
-            itemPropertyNames = itemNames[role];
+		for (time in updateNumber) {
+			frame = this.get(time);
+			if (updateNumber[time] === frame.updateNumber) {
+				continue;
+			}
+			this.updateFrame(time, frame);
+		}
+		return this;
+	}
+	/**
+	* update property names used in frame.
+	* @param {Number} time - frame's time
+	* @param {Frame} [frame] - frame of that time.
+	* @return {Scene.Frame} An instance itself
+	* @example
+timeline.updateFrame(time, this.get(time));
+	*/
+	updateFrame(time, frame = this.get(time)) {
+		if (!frame) {
+			return this;
+		}
+		const frameRoles = frame.properties;
+		const itemNames = this.names;
+		let frameProperties;
+		let itemPropertyNames;
+		let name;
 
-            for(name in framePropertyNames) {
-                if(itemPropertyNames.hasOwnProperty(name))
-                    continue;
+		for (const role in frameRoles) {
+			frameProperties = frameRoles[role];
+			itemPropertyNames = itemNames[role];
 
-                itemPropertyNames[name] = true;
-            }
-        }
-        this.updateNumber[time] = frame.updateNumber
-        return this;
-    }
+			for (name in frameProperties) {
+				if (has(itemPropertyNames, name)) {
+					continue;
+				}
+				itemPropertyNames[name] = true;
+			}
+		}
+		this.updateNumber[time] = frame.updateNumber;
+		return this;
+	}
 }
+
+export default FrameTimeline;
