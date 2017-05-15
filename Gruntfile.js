@@ -28,7 +28,7 @@ var obj = {};
 var config = {
 	jsdoc : {
 		dist : {
-			src: ['./src/*.js'],
+			src: ['./src/*.js', "./src/CSS/*.js", "./src/Util/*.js"],
 			options: {
 				destination: 'doc',
 				template: "./template"
@@ -36,7 +36,7 @@ var config = {
 		}
 	},
 	qunit: {
-		all : []
+		all : ["./test/*.html", "./test/Util/*.html"]
 	},
     webpack: {
     },
@@ -44,17 +44,15 @@ var config = {
         
     }
 };
-function tester(title, dest, name) {
+function tester(target) {
     config.tester.test = {
-        title: title,
-        dest: dest,
+        title: "Scene.js",
+        dest: "./dist/Scene.js",
         test: "./test/",
-        target: name
+        target
     }
 }
-function test(name) {
-    config.qunit.all.push("./test/" + name +".html");
-}
+
 function library(name, libray, watch = false) {
     var library = name.split("/");
     library = library[library.length - 1];
@@ -74,17 +72,17 @@ function library(name, libray, watch = false) {
 }
 var watch = grunt.option('watch');
 var target =  grunt.option("target");
-if(target) {
-	test(target);
-	library("Scene", watch);	
-	tester("Scene.js","./dist/Scene.js", target);
-}
 
+library("Scene", watch);
+if (target) {
+	tester(target);
+}
 grunt.initConfig(config);
 
 
-grunt.registerTask('default', ["webpack:timeline"]);
-grunt.registerTask('test', ["webpack", "tester", "qunit"]);
+grunt.registerTask('default', ["webpack"]);
+grunt.registerTask('maketest', ["tester"]);
+grunt.registerTask('test', ["webpack", "qunit"]);
 grunt.registerTask('doc', ["jsdoc"]);
 
 }

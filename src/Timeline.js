@@ -1,5 +1,5 @@
 import {has} from "./Util";
-import TimelineStep from "./TimelineStep";
+// import TimelineStep from "./TimelineStep";
 /**
 * a list of objects in chronological order.
 */
@@ -7,7 +7,6 @@ class Timeline {
 	constructor() {
 		this.times = [];
 		this.item = {};
-		this.step = new TimelineStep(this.times, this.item);
 	}
 	/**
 	* get last time of list

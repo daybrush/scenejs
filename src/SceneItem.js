@@ -1,223 +1,411 @@
 import Animator from "./Animator";
 import Frame from "./Frame";
-import {camelize, isUndefined, isObject, defineGetter, defineSetter, defineGetterSetter, defineProperty} from "./Util";
+import {
+	camelize,
+	isUndefined,
+	isObject,
+} from "./Util";
 import FrameTimeline from "./FrameTimeline";
 import {dot} from "./Util/Dot";
-// import EventTrigger from "./EventTrigger";
-import TimingFunction from "./TimingFunction";
 import {SCENE_ROLES} from "./Constant.js";
 
-export default class SceneItem extends Animator {
-    static addRole(role) {
-        Frame.addRole(role);
-        SceneItem.prototype[camelize("set " + role)] = function(time, properties, value) {
-            this.set(time, role, properties, value);
-            return this;
-        };
-        
-        SceneItem.prototype[camelize("get " + role)] = function(time, property) {
-            const frame = this.getFrame(time);
-            if(!frame)
-                return;
-            
-            return frame.get(role, property);
-        };
-    }
-    constructor(object) {
-        super();
-        this.timeline = new FrameTimeline();
-        
-        this.load(object);
-    }
-    get duration() {
-        return this.timeline.last;
-    }
-    set(time, role, properties, value) {
-        let frame = this.getFrame(time);
-        if(!frame)
-            frame = this.newFrame(time);
-        
-        frame.set(role, properties, value);
-        
-        this.updateFrame(time, frame);  
-        
-        return this;
-    }
-    setIterationTime(time) {
-        super.setIterationTime(time);
-        this.trigger("animate", [time, this.getNowFrame(time), this.currentTime]);
-        return this;
-    }
-    update() {
-        this.timeline.update();
-    }
-    updateFrame(time, frame = this.getFrame(time)) {
-        this.timeline.updateFrame(time, frame);
-    }
-    newFrame(time) {
-        const timeline = this.timeline;
-        if(timeline.has(time))
-            return this.getFrame(time);
+/**
+* manage Frame Timeline and play Timeline.
+* @extends Animator
+*/
+class SceneItem extends Animator {
+	static addGetterSetter(role) {
+		this.prototype[camelize(`set ${role}`)] = function(time, properties, value) {
+			this.set(time, role, properties, value);
+			return this;
+		};
+		this.prototype[camelize(`get ${role}`)] = function(time, property) {
+			const frame = this.getFrame(time);
 
-        this.setFrame(time, new Frame());
-        return this.getFrame(time);
-    }
-    setFrame(time, frame) {
-        this.timeline.add(time, frame);
-        return this;
-    }
-    getFrame(time) {
-        return this.timeline.get(time);
-    }
-    removeFrame(time) {
-        const timeline = this.timeline;
-        timeline.remove(time);
-    	delete this.frames[time];
-    	
-    	return this;
-    }
-    copyFrame(fromTime, toTime) {
-        if(isObject(fromTime)) {
-            for(let time in fromTime) {
-                this.copyFrame(time, fromTime[time]);
-            }
-            return this;
-        }
-    	var frame = this.getFrame(fromTime);
-    	if(!frame)
-    		return this;
-    		
-    	var copyFrame = frame.copy();
-    	this.setFrame(toTime, copyFrame);	
-    	return this;
-    }
+			if (!frame) {
+				return 0;
+			}
+			return frame.get(role, property);
+		};
+	}
+	/**
+	* add Role to SceneItem.
+	* @static
+	* @param {String} role - property role(property, transform, filter)
+	* @example
+Scene.SceneItem.addRole("property");
+Scene.SceneItem.addRole("transform");
+Scene.SceneItem.addRole("filter");
+	*/
+	static addRole(role) {
+		Frame.addRole(role);
+		this.addGetterSetter(role);
+	}
+	/**
+	* Create a scene's item.
+	* @param {Object} properties - properties
+	* @example
+let item = new Scene.SceneItem({
+	0: {
+		display: "none",
+	},
+	1: {
+		display: "block",
+		opacity: 0,
+	},
+	2: {
+		opacity: 1,
+	}
+});
+	*/
+	constructor(properties) {
+		super();
+		this.timeline = new FrameTimeline();
+		this.load(properties);
+	}
+	/**
+	* Specifies how many seconds an animation takes to complete one cycle
+	* Specifies timeline's lastTime
+	* @override
+	* @example
+item.duration; // = item.timeline.last
+	*/
+	get duration() {
+		return this.timeline.last;
+	}
+	/**
+	* set properties to the sceneItem at that time
+	* @param {Number} time - time
+	* @param {String|Object} role - property role or properties
+	* @param {String|Object} [properties] - property's name or properties
+	* @param {Object} [value] - property's value
+	* @return {SceneItem} An instance itself
+	* @example
+item.duration; // = item.timeline.last
+	*/
+	set(time, role, properties, value) {
+		if (isObject(time)) {
+			this.load(time);
+			return this;
+		}
+		let frame = this.getFrame(time);
 
-    getNowValue(role, property, time, left = 0, right = this.timeline.length) {
-        const timeline = this.timeline, times = timeline.times, length = times.length;
+		if (!frame) {
+			frame = this.newFrame(time);
+		}
+		frame.set(role, properties, value);
+		this.updateFrame(time, frame);
+		return this;
+	}
+	setIterationTime(_time) {
+		super.setIterationTime(_time);
+		const time = this.currentIterationTime;
 
-        let prevFrame, nextFrame, i;
-        let prevTime = times[left], nextTime = times[right];
+		this.trigger("animate", [time, this.getNowFrame(time), this.currentTime]);
+		return this;
+	}
+	/**
+	* update property names used in frames.
+	* @override
+	* @return {SceneItem} An instance itself
+	* @example
+item.update();
+	*/
+	update() {
+		this.timeline.update();
+		return this;
+	}
+	/**
+	* update property names used in frame.
+	* @param {Number} time - frame's time
+	* @param {Frame} [frame] - frame of that time.
+	* @return {SceneItem} An instance itself
+	* @example
+item.updateFrame(time, this.get(time));
+	*/
+	updateFrame(time, frame = this.getFrame(time)) {
+		this.timeline.updateFrame(time, frame);
+		return this;
+	}
+	/**
+	* create and add a frame to the sceneItem at that time
+	* @param {Number} time - frame's time
+	* @return {Frame} Created frame.
+	* @example
+item.newFrame(time);
+	*/
+	newFrame(time) {
+/*
+		let frame = this.getFrame(time);
 
-        if(time < prevTime)
-            return;
+		if (frame) {
+			return frame;
+		}
+*/
+		const frame = new Frame();
 
-        for(i = left; i >= 0; --i) {
-            prevTime = times[i];
-            prevFrame = timeline.get(prevTime);
-            if(prevFrame.has(role, property))
-                break;
-        }
-        for(i = right; i < length; ++i) {
-            nextTime = times[i];
-            nextFrame = timeline.get(nextTime);
-            if(nextFrame.has(role, property))
-                break;
-        }
+		if (!isUndefined(time)) {
+			this.setFrame(time, frame);
+		}
+		return frame;
+	}
+	/**
+	* add a frame to the sceneItem at that time
+	* @param {Number} time - frame's time
+	* @return {SceneItem} An instance itself
+	* @example
+item.setFrame(time, frame);
+	*/
+	setFrame(time, frame) {
+		this.timeline.add(time, frame);
+		return this;
+	}
+	/**
+	* get sceneItem's frame at that time
+	* @param {Number} time - frame's time
+	* @return {Frame} sceneItem's frame at that time
+	* @example
+const frame = item.getFrame(time);
+	*/
+	getFrame(time) {
+		return this.timeline.get(time);
+	}
+	/**
+	* check if the item has a frame at that time
+	* @param {Number} time - frame's time
+	* @return {Boolean} true: the item has a frame // false: not
+	* @example
+if (item.hasFrame(10)) {
+	// has
+} else {
+	// not
+}
+	*/
+	hasFrame(time) {
+		return this.timeline.has(time);
+	}
+	/**
+	* remove sceneItem's frame at that time
+	* @param {Number} time - frame's time
+	* @return {SceneItem} An instance itself
+	* @example
+item.removeFrame(time);
+	*/
+	removeFrame(time) {
+		const timeline = this.timeline;
 
-        const prevValue = prevFrame.get(role, property);
-        if(isUndefined(prevValue))
-            return;
+		timeline.remove(time);
+		delete this.frames[time];
 
-        if(!nextFrame)
-            return prevValue;
+		return this;
+	}
+	/**
+	* Copy frame of the previous time at the next time.
+	* @param {Number} fromTime - the previous time
+	* @param {Number} toTime - the next time
+	* @return {SceneItem} An instance itself
+	* @example
+// getFrame(0) equal getFrame(1)
+item.copyFrame(0, 1);
+	*/
+	copyFrame(fromTime, toTime) {
+		let time;
 
-        const nextValue = nextFrame.get(role, property);
+		if (isObject(fromTime)) {
+			for (time in fromTime) {
+				this.copyFrame(time, fromTime[time]);
+			}
+			return this;
+		}
+		const frame = this.getFrame(fromTime);
 
-        if(isUndefined(nextValue))
-            return prevValue;
+		if (!frame) {
+			return this;
+		}
+		const copyFrame = frame.clone();
+
+		this.setFrame(toTime, copyFrame);
+		return this;
+	}
+
+	getNowValue(role, property, time, left = 0, right = this.timeline.length) {
+		const timeline = this.timeline;
+		const times = timeline.times;
+		const length = times.length;
+
+		let prevFrame;
+		let nextFrame;
+		let i;
+
+		let prevTime = times[left];
+		let nextTime = times[right];
+
+		if (time < prevTime) {
+			return undefined;
+		}
+		for (i = left; i >= 0; --i) {
+			prevTime = times[i];
+			prevFrame = timeline.get(prevTime);
+			if (prevFrame.has(role, property)) {
+				break;
+			}
+		}
+		for (i = right; i < length; ++i) {
+			nextTime = times[i];
+			nextFrame = timeline.get(nextTime);
+			if (nextFrame.has(role, property)) {
+				break;
+			}
+		}
+
+		const prevValue = prevFrame.get(role, property);
+
+		if (isUndefined(prevValue)) {
+			return undefined;
+		}
+		if (!nextFrame) {
+			return prevValue;
+		}
+		const nextValue = nextFrame.get(role, property);
+
+		if (isUndefined(nextValue)) {
+			return prevValue;
+		}
+
+		if (prevTime < 0) {
+			prevTime = 0;
+		}
+
+		const value = dot(prevValue, nextValue, time - prevTime, nextTime - time);
+
+		return value;
+	}
+	getLeftRightIndex(time) {
+		const timeline = this.timeline;
+		const {times, last, length} = timeline;
+
+		if (length === 0) {
+			return undefined;
+		}
+		// index : length = time : last
+		let index = parseInt(last > 0 ? time * length / last : 0, 10);
+		let right = length - 1;
+		let left = 0;
 
 
-        if(prevTime < 0)
-            prevTime = 0;
+		if (index < 0) {
+			index = 0;
+		} else if (index > right) {
+			index = right;
+		}
+		if (time < times[right]) {
+			// Binary Search
+			while (left < right) {
+				if ((left === index || right === index) && (left + 1 === right)) {
+					break;
+				} else if (times[index] > time) {
+					right = index;
+				} else if (times[index] < time) {
+					left = index;
+				} else {
+					right = index;
+					left = right;
+					break;
+				}
+				index = parseInt((left + right) / 2, 10);
+			}
+		} else {
+			index = right;
+			left = index;
+		}
+		return {left, right};
+	}
+	/**
+	* Get frame of the current time
+	* @param {Number} time - the current time
+	* @return {Frame} frame of the current time
+	* @example
+let item = new Scene.SceneItem({
+	0: {
+		display: "none",
+	},
+	1: {
+		display: "block",
+		opacity: 0,
+	},
+	2: {
+		opacity: 1,
+	}
+});
+// opacity: 0.7; display:"block";
+const frame = item.getNowFrame(1.7);
+	*/
+	getNowFrame(time) {
+		const indices = this.getLeftRightIndex(time);
 
-        // 전값과 나중값을 시간에 의해 내적을 한다.
+		if (!indices) {
+			return indices;
+		}
+		const {left, right} = indices;
+		const frame = this.newFrame();
 
-        let value = dot(prevValue, nextValue, time - prevTime, nextTime - time);
+		const names = this.timeline.names;
+		let role;
+		let propertyNames;
+		let property;
+		let value;
 
-        return value;
-    }
-    getLeftRightIndex(time) {
-        const timeline = this.timeline, {times, last, length} = timeline;
+		for (role in SCENE_ROLES) {
+			propertyNames = names[role];
+			for (property in propertyNames) {
+				value = this.getNowValue(role, property, time, left, right);
 
-        if(length === 0)
-            return;
+				if (isUndefined(value)) {
+					continue;
+				}
+				frame.set(role, property, value);
+			}
+		}
+		return frame;
+	}
+	/**
+	* load properties
+	* @param {Object} properties - properties
+	* @example
+item.load({
+	0: {
+		display: "none",
+	},
+	1: {
+		display: "block",
+		opacity: 0,
+	},
+	2: {
+		opacity: 1,
+	}
+});
+	*/
+	load(properties) {
+		if (!isObject(properties)) {
+			return this;
+		}
+		let isOptions = false;
+		let time;
 
-        // index : length = time : last
-        let index = parseInt(last > 0 ? time * length / last : 0) , right = length - 1, left = 0;
+		for (time in properties) {
+			if (time === "options") {
+				isOptions = true;
+				continue;
+			}
 
-
-        if(index < 0)
-            index = 0;
-        else if(index > right)
-            index = right;
-
-        if(time < times[right]) {
-            //Binary Search
-            while (left < right) {
-                if( (left === index  || right === index ) && (left +1 === right)) {
-                    break;
-                } else if (times[index] > time) {
-                    right = index;
-                } else if (times[index] < time) {
-                    left = index;
-                } else {
-                    left = right = index;
-                    break;
-                }
-                index = parseInt((left + right) / 2);
-            }
-        } else {
-            left = index = right;
-        }
-        return {left, right};
-    }
-    getNowFrame(time) {
-        const indices = this.getLeftRightIndex(time);
-        if(!indices)
-            return;
-
-        const {left, right} = indices;
-        const frame = new Frame();
-
-        const names = this.timeline.names;
-        let role, propertyNames, nameLength, property, value;
-        let i, j;
-
-        for(let role in SCENE_ROLES) {
-            propertyNames = names[role];
-            for(property in propertyNames) {
-                
-                value = this.getNowValue(role, property, time, left, right);
-
-                if(isUndefined(value))
-                    continue;
-
-                frame.set(role, property, value);
-            }
-        }
-        return frame;
-    }
-    load(object) {
-        if(!isObject(object))
-            return this;
-            
-            
-        let isOptions = false;
-        for(let time in object) {
-            if(time === "options") {
-                isOptions = true;
-                continue;
-            }
-
-            this.set(time, object[time]);
-        }
-        
-        if(isOptions)
-            this.setOptions(object.options);
-             
-        return this;
-    }
+			this.set(time, properties[time]);
+		}
+		if (isOptions) {
+			this.setOptions(properties.options);
+		}
+		return this;
+	}
 }
 
-
 SceneItem.addRole("property");
+export default SceneItem;

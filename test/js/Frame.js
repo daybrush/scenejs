@@ -14,6 +14,7 @@ QUnit.test("Frame", function( assert ) {
             b: 5
         }
     });
+
     frame.setTransform("c", 1);
     frame.removeProperty("c");
 
@@ -81,6 +82,6 @@ QUnit.test("copy Frame", function( assert ) {
     
     frame2.merge(frame);
     assert.deepEqual(frame.properties, frame2.properties, "equal frame and frame2");
-    assert.deepEqual(frame, frame.copy(), "equal frame and copy");
-    assert.deepEqual(frame3, frame3.copy(), "copy PropertyObject");
+    assert.deepEqual(frame.properties, frame.clone().properties, "equal frame and copy");
+    assert.deepEqual(frame3.properties, frame3.clone().properties, "copy PropertyObject");
 });

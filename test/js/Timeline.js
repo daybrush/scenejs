@@ -16,6 +16,7 @@ QUnit.test("Timline default function", function( assert ) {
     assert.notOk(timeline.has(3), "remove function");
 });
 
+/*
 QUnit.test("Timline Step", function( assert ) {
     assert.equal(step.value(), 1, "step value test");// key : 0
     assert.equal(step.next().value(), 3, "step next value test"); // key : 0.5
@@ -28,3 +29,4 @@ QUnit.test("Timline Step", function( assert ) {
     assert.ok(step.next().hasPrev(), "step hasPrev test"); // key : 0
 
 });
+*/

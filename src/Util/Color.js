@@ -1,54 +1,109 @@
-/*@export*/ const COLOR_MODELS = ["rgb", "rgba", "hsl", "hsla"];
+/**
+* @namespace
+* @name Color
+*/
+export const COLOR_MODELS = ["rgb", "rgba", "hsl", "hsla"];
 
-/*@export*/ const hexToRGB = function(h) {
-    h = cutHex(h);
-    var r = parseInt(h.substring(0,2), 16);
-    var g = parseInt(h.substring(2,4), 16);
-    var b = parseInt(h.substring(4,6), 16);
-    var a = parseInt(h.substring(6,8), 16) / 255;
-    if(isNaN(a))
-        a = 1;
-    
-    return [r, g, b, a];
-}
+/**
+* Remove the # from the hex color.
+* @memberof Color
+* @function cutHex
+* @param {String} hex - hex color
+* @return {String} hex color
+* @example
+console.log(cutHex("#000000"))
+// "000000"
+*/
+export const cutHex = function(hex) {
+	return (hex.charAt(0) === "#") ? hex.substring(1, 9) : hex;
+};
+/**
+* convert hex color to rgb color.
+* @memberof Color
+* @function hexToRGB
+* @param {String} hex - hex color
+* @return {Array} rgb color
+* @example
+console.log(hexToRGB("#000000"));
+// [0, 0, 0]
+console.log(hexToRGB("#201045"));
+// [32, 16, 69]
+*/
+export const hexToRGB = function(hex) {
+	const h = cutHex(hex);
+	const r = parseInt(h.substring(0, 2), 16);
+	const g = parseInt(h.substring(2, 4), 16);
+	const b = parseInt(h.substring(4, 6), 16);
+	let a = parseInt(h.substring(6, 8), 16) / 255;
 
-/*@export*/ const cutHex = function(h) {
-    return (h.charAt(0)==="#") ? h.substring(1,9):h;
-}
-/*@export*/ const hex4to6 = function(h) {
-	var r = h.charAt(1);
-	var g = h.charAt(2);
-	var b = h.charAt(3);
-	var arr = [r, r, g, g, b, b];
-	
+	if (isNaN(a)) {
+		a = 1;
+	}
+	return [r, g, b, a];
+};
+
+/**
+* convert 3-digit hex color to 6-digit hex color.
+* @memberof Color
+* @function hex3to6
+* @param {String} hex - 3-digit hex color
+* @return {String} 6-digit hex color
+* @example
+console.log(hex3to6("#123"));
+// "#112233"
+*/
+export const hex3to6 = function(h) {
+	const r = h.charAt(1);
+	const g = h.charAt(2);
+	const b = h.charAt(3);
+	const arr = ["#", r, r, g, g, b, b];
+
 	return arr.join("");
-}
-/*@export*/ const hslToRGB = function(hsl) {
-	var h = hsl[0], s = hsl[1], l = hsl[2];
-	if( h < 0)
-		h = h + parseInt((Math.abs(h) + 360) / 360) * 360;
-		
-	h = h % 360;
-	var c = (1- Math.abs(2 * l - 1)) * s;
-	var x = c * (1 - Math.abs((h/60) % 2 - 1));
-	var m = l - c / 2;
-	var rgb;
-	if(h < 60)
+};
+/**
+* convert hsl color to rgb color.
+* @memberof Color
+* @function hslToRGB
+* @param {Array} hsl - hsl color(hue: 0 ~ 360, saturation: 0 ~ 1, lightness: 0 ~ 1)
+* @return {Array} rgb color
+* @example
+console.log(hslToRGB([150, 0.5, 0.4]));
+// [51, 153, 102]
+*/
+export const hslToRGB = function(hsl) {
+	let h = hsl[0];
+	const s = hsl[1];
+	const l = hsl[2];
+
+	if (h < 0) {
+		h += parseInt((Math.abs(h) + 360) / 360, 10) * 360;
+	}
+	h %= 360;
+
+	const c = (1 - Math.abs(2 * l - 1)) * s;
+	const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+	const m = l - c / 2;
+	let rgb;
+
+	if (h < 60) {
 		rgb = [c, x, 0];
-	else if (h < 120)
+	} else if (h < 120) {
 		rgb = [x, c, 0];
-	else if(h < 180)
+	} else if (h < 180) {
 		rgb = [0, c, x];
-	else if(h < 240)
+	} else if (h < 240) {
 		rgb = [0, x, c];
-	else if(h < 300)
+	} else if (h < 300) {
 		rgb = [x, 0, c];
-	else if(h < 360)
+	} else if (h < 360) {
 		rgb = [c, 0, x];
-	
-	var result = [Math.round((rgb[0] + m) * 255), Math.round((rgb[1] + m) * 255), Math.round((rgb[2] + m) * 255)];
-    if(hsl.length > 3)
-    	result[3] = hsl[3];
-    
-    return result;
-}
+	}
+	const result = [Math.round((rgb[0] + m) * 255),
+		Math.round((rgb[1] + m) * 255),
+		Math.round((rgb[2] + m) * 255)];
+
+	if (hsl.length > 3) {
+		result[3] = hsl[3];
+	}
+	return result;
+};

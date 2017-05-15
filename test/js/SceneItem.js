@@ -4,7 +4,6 @@ SceneItem.addRole("filter");
 
 
 var item = new SceneItem();
-
 var frame0 = item.newFrame(0);
 var frame1 = item.newFrame(1);
 var frame05 = item.newFrame(0.5);

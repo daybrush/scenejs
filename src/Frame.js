@@ -1,11 +1,5 @@
 import {SCENE_ROLES} from "./Constant.js";
-import {
-	camelize,
-	isObject,
-	isString,
-	isUndefined,
-	has,
-} from "./Util.js";
+import {camelize, isObject, isString, isUndefined, has} from "./Util.js";
 import {toPropertyObject} from "./Util/Property.js";
 import PropertyObject from "./PropertyObject";
 /**
@@ -22,16 +16,16 @@ Scene.Frame.addRole("transform");
 Scene.Frame.addRole("filter");
 	*/
 	static addRole(role) {
-		const framePrototype = Frame.prototype;
+		const framePrototype = this.prototype;
 		const _role = camelize(` ${role}`);
 
-		framePrototype[`set ${_role}`] = function(property, value) {
+		framePrototype[`set${_role}`] = function(property, value) {
 			this.set(role, property, value);
 		};
-		framePrototype[`get ${_role}`] = function(property) {
+		framePrototype[`get${_role}`] = function(property) {
 			return this.get(role, property);
 		};
-		framePrototype[`remove ${_role}`] = function(property) {
+		framePrototype[`remove${_role}`] = function(property) {
 			this.remove(role, property);
 			return this;
 		};
@@ -166,7 +160,7 @@ frame.set("property", "display", "none");
 
 		if (isString(property) && isUndefined(_value)) {
 			_value = toPropertyObject(property);
-			if (!isObject(value)) {
+			if (!isObject(_value)) {
 				return this;
 			}
 
@@ -209,7 +203,7 @@ frame.set("property", "display", "none");
 	* @example
 	frame.copy();
 	*/
-	copy() {
+	clone() {
 		const frame = new Frame();
 
 		frame.merge(this);
@@ -244,7 +238,7 @@ frame.set("property", "display", "none");
 			for (property in _properties) {
 				value = _properties[property];
 				if (value instanceof PropertyObject) {
-					value = value.copy();
+					value = value.clone();
 				}
 
 				this.set(name, property, value);

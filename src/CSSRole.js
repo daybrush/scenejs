@@ -5,8 +5,7 @@ import {
 	defineGetterSetter,
 } from "./Util";
 
-SceneItem.addRole("transform");
-SceneItem.addRole("filter");
+
 
 const GETTER = function(func) {
 	return {
@@ -14,16 +13,16 @@ const GETTER = function(func) {
 	};
 };
 
-SceneItem.prototype.setTime = function(time) {
-	this._currentTime = time;
-};
+const SceneItemPrototype = SceneItem.prototype;
 
-defineProperty(SceneItem.prototype, "selector", GETTER(function(selector) {
+defineGetterSetter({target: SceneItemPrototype, name: "element", parent: "options"});
+
+defineProperty(SceneItemPrototype, "selector", GETTER(function(selector) {
 	this.options.selector = selector;
 	this.element = document.querySelectorAll(selector);
 }));
 
-defineGetterSetter({target: SceneItem.prototype, name: "element", parent: "options"});
+defineGetterSetter({target: SceneItemPrototype, name: "element", parent: "options"});
 
 const convertCrossBrowserCSSObject = function(cssObject, property) {
 	const value = cssObject[property];
@@ -34,7 +33,7 @@ const convertCrossBrowserCSSObject = function(cssObject, property) {
 	cssObject[`-webkit-${property}`] = value;
 };
 
-defineProperty(Frame.prototype, "cssText", function() {
+defineProperty(Frame.prototype, "cssText", GETTER(function() {
 	const cssObject = {};
 	const cssArray = [];
 	let property;
@@ -48,4 +47,4 @@ defineProperty(Frame.prototype, "cssText", function() {
 		cssArray.push(`${property}:${cssObject[property]};`);
 	}
 	return cssArray.join("");
-});
+}));
