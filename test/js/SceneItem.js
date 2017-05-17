@@ -1,7 +1,4 @@
 var SceneItem = Scene.SceneItem;
-SceneItem.addRole("transform");
-SceneItem.addRole("filter");
-
 
 var item = new SceneItem();
 var frame0 = item.newFrame(0);

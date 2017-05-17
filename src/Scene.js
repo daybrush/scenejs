@@ -1,12 +1,13 @@
 import Animator from "./Animator";
-import SceneItem from "./CSS/CSSItem";
-import Frame from "./CSS/CSSFrame";
+import SceneItem from "./SceneItem";
+import Frame from "./Frame";
 import Timeline from "./Timeline";
+import * as Constant from "./Constant";
 import * as Util from "./Util";
 import * as Dot from "./Util/Dot";
 import * as Property from "./Util/Property";
 import PropertyObject from "./PropertyObject";
-import TimingFunction from "./TimingFunction";
+
 
 /**
 * manage sceneItems and play Scene.
@@ -69,7 +70,7 @@ item.duration; // = item.timeline.last
 
 		for (id in items) {
 			item = items[id];
-			time = Math.max(time, item.totalDuration);
+			time = Math.max(time, item.totalDuration * item.playSpeed);
 		}
 		return time;
 	}
@@ -94,7 +95,7 @@ const item = scene.newItem("item1")
 		}
 		const item = new SceneItem();
 
-		this.items[name] = item;
+		this.setItem(name, item);
 		return item;
 	}
 	/**
@@ -105,6 +106,7 @@ const item = scene.newItem("item1")
 const item = scene.newItem("item1")
 	*/
 	setItem(name, item) {
+		item.id = name;
 		this.items[name] = item;
 		return this;
 	}
@@ -117,7 +119,7 @@ const item = scene.newItem("item1")
 
 		for (id in items) {
 			item = items[id];
-			item.currentTime = time;
+			item.currentTime = time * item.playSpeed;
 		}
 		return this;
 	}
@@ -168,5 +170,13 @@ scene.load({
 	}
 }
 
-export {Util, Frame, SceneItem, Dot, Property, PropertyObject, Timeline, Animator, TimingFunction};
+Scene.Util = Util;
+Scene.Frame = Frame;
+Scene.SceneItem = SceneItem;
+Scene.Dot = Dot;
+Scene.Constant = Constant;
+Scene.Property = Property;
+Scene.PropertyObject = PropertyObject;
+Scene.Timeline = Timeline;
+Scene.Animator = Animator;
 export default Scene;

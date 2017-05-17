@@ -41,8 +41,12 @@ class CSSItem extends SceneItem {
 		this.on("animate", animateFunction);
 	}
 	newFrame(time) {
-		const frame = new CSSFrame();
+		let frame = this.getFrame(time);
 
+		if (frame) {
+			return frame;
+		}
+		frame = new CSSFrame();
 		if (!isUndefined(time)) {
 			this.setFrame(time, frame);
 		}
@@ -61,12 +65,15 @@ const element2 = document.querySelectorAll(".scene .item li:first-child");
 		return this.options.selector;
 	}
 	set selector(value) {
-		this.options.selector = value;
-		this.element = document.querySelectorAll(value);
+		this.setSelector(value);
 	}
-	set id(_id) {
+	setId(_id) {
 		const element = this.element;
 
+		this.options.id = _id;
+		if (!element) {
+			return this;
+		}
 		if (element instanceof NodeList) {
 			const length = element.length;
 			let i;
@@ -77,10 +84,20 @@ const element2 = document.querySelectorAll(".scene .item li:first-child");
 		} else {
 			element.setAttribute("data-scene-id", _id);
 		}
-		this.options.id = _id;
+		return this;
 	}
 	set element(_element) {
 		this.setElement(_element);
+	}
+	setSelector(_selector) {
+		let selector = _selector;
+
+		if (!selector) {
+			selector = this.id;
+		}
+		this.options.selector = selector;
+		this.element = document.querySelectorAll(selector);
+		return this;
 	}
 	setElement(_element) {
 		let element = _element;
@@ -89,11 +106,9 @@ const element2 = document.querySelectorAll(".scene .item li:first-child");
 			element = element[0];
 		}
 		if (!element) {
-			return;
+			return this;
 		}
-		// element.dataset.sceneId
-		const dataset = element.dataset;
-		let id = (dataset && dataset.sceneId) || element.getAttribute("data-scene-id");
+		let id = this.id;
 		let checkElement;
 
 		this.options.element = _element;
@@ -105,10 +120,9 @@ const element2 = document.querySelectorAll(".scene .item li:first-child");
 					break;
 				}
 			}
-			this.id = id;
-		} else {
-			this.options.id = id;
 		}
+		this.id = id;
+		return this;
 	}
 	/**
 	* adds css style of items's element to the frame at that time.
@@ -141,10 +155,9 @@ frame.getProperty("border-left").toValue(); // "10px solid black"
 		const cssObject = {};
 		let i;
 		let matches;
-
 		for (i = 0; i < length; ++i) {
 			matches = /([^:]*):([\S\s]*)/g.exec(cssArray[i]);
-			if (matches.length < 3) {
+			if (!matches || matches.length < 3) {
 				continue;
 			}
 			cssObject[matches[1]] = matches[2];
@@ -258,11 +271,5 @@ item.selector = ".scene .item li:first-child";
 item.element = document.querySelector(".scene .item li:first-child");
 */
 defineGetter({target: CSSItem.prototype, name: "element", parent: "options"});
-/**
-* Specifies the item's id to synchronize the element.
-* @memberof CSSItem
-* @instance
-* @name id
-*/
-defineGetter({target: CSSItem.prototype, name: "id", parent: "options"});
+
 export default CSSItem;

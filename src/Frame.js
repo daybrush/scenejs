@@ -1,6 +1,6 @@
 import {SCENE_ROLES} from "./Constant.js";
 import {camelize, isObject, isString, isUndefined, has} from "./Util.js";
-import {toPropertyObject} from "./Util/Property.js";
+import {toPropertyObject, splitSpace} from "./Util/Property.js";
 import PropertyObject from "./PropertyObject";
 /**
  * Animation's Frame
@@ -140,9 +140,9 @@ frame.set("transform", {
 // three parameters
 frame.set("property", "display", "none");
 	*/
-	set(role, property, value) {
+	set(role, property, _value) {
 		let name;
-		let _value = value;
+		let value = _value;
 
 		if (isObject(role)) {
 			this.load(role);
@@ -159,31 +159,36 @@ frame.set("property", "display", "none");
 
 
 		if (isString(property) && isUndefined(_value)) {
-			_value = toPropertyObject(property);
-			if (!isObject(_value)) {
+			value = splitSpace(property);
+
+			if (!isObject(value)) {
 				return this;
 			}
+			const length = value.length;
+			let obj;
 
-			_value.each((obj, index) => {
+			for (let i = 0; i < length; ++i) {
+				obj = toPropertyObject(value[i]);
+
 				if (!isObject(obj)) {
-					return;
+					continue;
 				}
 
 				if (!obj.model) {
-					return;
+					continue;
 				}
 
 				if (obj.length === 1) {
 					this._set(role, obj.model, obj.value[0]);
-					return;
+					continue;
 				}
 				this._set(role, obj.model, new PropertyObject(obj.value, {
-					separator: _value.separator,
+					separator: obj.separator,
 				}));
-			});
+			}
 			return this;
 		}
-		this._set(role, property, _value);
+		this._set(role, property, value);
 		return this;
 	}
 	/**

@@ -1,6 +1,6 @@
 import EventTrigger from "./EventTrigger";
 import {cubicBezier} from "./TimingFunction";
-import {defineGetter, defineGetterSetter} from "./Util";
+import {defineGetter, defineGetterSetter, isObject} from "./Util";
 
 let lastTime = 0;
 
@@ -38,9 +38,9 @@ class Animator extends EventTrigger {
 	* @example
 const animator = new Scene.Animator({
 	delay: 2,
-	diretion: "forwards",
+	diretion: "alternate",
 	duration: 2,
-	fillMode: "alternate",
+	fillMode: "forwards",
 	iterationCount: 3,
 	timingFuncition: Scene.Animator.EASE,
 });
@@ -53,7 +53,7 @@ const animator = new Scene.Animator({
 		this.options = {};
 		this.iterationCount = 1;
 		this.delay = 0;
-		this.fillMode = "normal";
+		this.fillMode = "forwards";
 		this.direction = "none";
 		this.playState = "paused";
 		this.playSpeed = 1;
@@ -65,6 +65,22 @@ const animator = new Scene.Animator({
 	}
 	set timingFunction(curveArray) {
 		this.options.timingFunction = cubicBezier(curveArray);
+	}
+	set timingFunctions(curveArrays) {
+		const length = curveArrays.length;
+		const curves = [];
+		let start;
+		let end;
+		let curve;
+
+		for (let i = 0; i < length / 3; ++i) {
+			start = curveArrays[3 * i + 0];
+			end = curveArrays[3 * i + 1];
+			curve = curveArrays[3 * i + 2];
+			curve = cubicBezier(curve);
+			curves.push({start, end, curve});
+		}
+		this.options.timingFunction = curves;
 	}
 	/**
 	* set animator's options.
@@ -94,6 +110,10 @@ animator.({
 		let option;
 
 		for (option in options) {
+			if (option === "timingFunction" || option === "timingFunctions") {
+				this[option] = options[option];
+				continue;
+			}
 			this.options[option] = options[option];
 		}
 
@@ -192,6 +212,9 @@ if (animator.paused) {
 	* @return {Animator} An instance itself.
 	*/
 	play() {
+		if (this.ended) {
+			this.currentTime = 0;
+		}
 		this.playState = "running";
 		requestAnimFrame(time => {
 			this._prevTime = time;
@@ -216,8 +239,17 @@ if (animator.paused) {
 	*/
 	stop() {
 		this.playState = "paused";
-		this.currentTime = 0;
 		this.trigger("ended");
+		return this;
+	}
+	/**
+	* reset animator
+	* @return {Animator} An instance itself.
+	*/
+	reset() {
+		this.currentTime = 0;
+		this.stop();
+		return this;
 	}
 	/**
 	* set currentTime
@@ -289,15 +321,50 @@ animator.currentTime // 10
 
 		this.setIterationTime(currentIterationTime);
 	}
+	caculateTimingFunction(_time) {
+		let duration = this.duration;
+		const timingFunction = this.timingFunction;
+		let time = _time;
+		let ratio;
+
+		if (isObject(timingFunction)) {
+			const length = timingFunction.length;
+			let nowTimingFunction = this.options.nowTimingFunction;
+
+			// 시간이 벗어나거나 TimingFunction이 미지정일시 해당 시간에 만족하는 TimingFunction을 찾는다.
+			if ((nowTimingFunction && (nowTimingFunction.end < time || time < nowTimingFunction.start)) ||
+				(length > 0 && !nowTimingFunction)) {
+				nowTimingFunction = 0;
+				this.options.nowTimingFunction = 0;
+				for (let i = 0; i < length; ++i) {
+					if (timingFunction[i].start <= time && time <= timingFunction[i].end) {
+						nowTimingFunction = timingFunction[i];
+						this.options.nowTimingFunction = nowTimingFunction;
+						break;
+					}
+				}
+			}
+			if (nowTimingFunction) {
+				const start = nowTimingFunction.start;
+
+				if (duration < nowTimingFunction.end) {
+					nowTimingFunction.end = duration;
+				}
+				duration = nowTimingFunction.end - start;
+				ratio = duration === 0 ? 0 : (time - start) / duration;
+				time = start + nowTimingFunction.curve(ratio) * duration;
+			}
+		} else {
+			ratio = duration === 0 ? 0 : time / duration;
+			time = this.timingFunction(ratio) * duration;
+		}
+		return time;
+	}
 	setIterationTime(_time) {
 		let time = _time;
 
 		if (this.timingFunction) {
-			console.log(this.timingFunction);
-			const duration = this.duration;
-			const ratio = duration === 0 ? 0 : time / duration;
-
-			time = this.timingFunction(ratio);
+			time = this.caculateTimingFunction(time);
 		}
 		this._currentIterationTime = time;
 		this.trigger("iterationtimeupdate", [time]);

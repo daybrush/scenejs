@@ -7,6 +7,6 @@ QUnit.test("cssText", function( assert ) {
 	});
 	console.log(frame);
 	var cssText = frame.cssText;
-	assert.equal(cssText, "a:1;transform:a(1 1) b(2 2);-moz-transform:a(1 1) b(2 2);-ms-transform:a(1 1) b(2 2);-o-transform:a(1 1) b(2 2);-webkit-transform:a(1 1) b(2 2);");
+	assert.equal(cssText, "a:1;transform:a(1,1) b(2,2);-moz-transform:a(1,1) b(2,2);-ms-transform:a(1,1) b(2,2);-o-transform:a(1,1) b(2,2);-webkit-transform:a(1,1) b(2,2);");
 	
 });

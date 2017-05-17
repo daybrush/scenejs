@@ -17,11 +17,7 @@ var moduleConfig =  {
 			query: {
 				presets: ['es2015'],
 			}
-		},
-        {
-        	test:  /\.js$/,
-			loader: 'comment-loader'
-		}  
+		}
 	]
 };
 var obj = {};
@@ -53,13 +49,11 @@ function tester(target) {
     }
 }
 
-function library(name, libray, watch = false) {
-    var library = name.split("/");
-    library = library[library.length - 1];
+function library(name, library, watch = false) {
     config.webpack[name] = {
         entry: `./src/${name}.js`,
         output: {
-            filename: `./${name}.js`,
+            filename: `./${library}.js`,
             path: __dirname + "/dist/",
             library: library,
             libraryTarget: 'umd',
@@ -73,7 +67,7 @@ function library(name, libray, watch = false) {
 var watch = grunt.option('watch');
 var target =  grunt.option("target");
 
-library("Scene", watch);
+library("CSS/CSSScene", "Scene");
 if (target) {
 	tester(target);
 }

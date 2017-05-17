@@ -13,13 +13,23 @@ var text8 = Property.toPropertyObject("123 '123 45,12 a(1)' a \"123 a(1)\"");
 QUnit.test("Util/Property", function( assert ) {
     assert.equal(text1, "123", "string test");
     assert.equal(text2.get(0), "123", "string test");
+    assert.equal(text2.toValue(), "123,123", "string test");
+
     assert.equal(text3.get(0), "123", "string test");
+    assert.equal(text3.toValue(), "123 a(123)", "string test");
+    
     assert.equal(text4.get(0), "123", "string test");
+    assert.equal(text4.toValue(), "123 a(123)a b(123)", "string test");
 });
 QUnit.test("split by comma", function(assert) {
    assert.deepEqual(Property.splitComma("1,2"), ["1","2"], "Property.splitComma default test");
    assert.deepEqual(Property.splitComma("rgb(1),2"), ["rgb(1)","2"], "split by comma with one pair brackets");
    assert.deepEqual(Property.splitComma("rgb(1),rgb(2)"), ["rgb(1)","rgb(2)"], "split by comma with two pair brackets");
+});
+QUnit.test("split by space", function(assert) {
+   assert.deepEqual(Property.splitSpace("1,2"), ["1,2"], "Property.splitComma default test");
+   assert.deepEqual(Property.splitSpace("rgb(1), 2"), ["rgb(1),","2"], "split by comma with one pair brackets");
+   assert.deepEqual(Property.splitSpace("rgb(1) rgb(2)"), ["rgb(1)","rgb(2)"], "split by comma with two pair brackets");
 });
 QUnit.test("if text has Brackets, call toBracketObject function", function( assert ) {
     assert.equal(text3.get(1).get(0), "123", "test one pair brackets");

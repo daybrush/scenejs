@@ -24,6 +24,20 @@ QUnit.test("Frame", function( assert ) {
     assert.notOk(frame.getProperty("c"), "remove property test");
     assert.equal(frame.get("transform", "b"), 5, "get test");
     assert.equal(frame.get("transform", "c"), 1, "get test");
+    
+    
+    
+    frame.load({
+	    transform: "d(1,2)"
+    });
+    frame.load({
+	    transform: "e(1,2) f(1,2)"
+    });
+    
+    assert.equal(frame.get("transform", "d").toValue(), "1,2", "get test");
+    assert.equal(frame.get("transform", "e").toValue(), "1,2", "get test");    
+    assert.equal(frame.get("transform", "f").toValue(), "1,2", "get test");    
+
 });
 
 
@@ -33,6 +47,7 @@ QUnit.test("split text in frame", function( assert ) {
         filter: "a(10) b(15)"
     });
     assert.equal(frame.getProperty("a").get(0), "1", "split text by comma");
+    assert.equal(frame.getProperty("a").toValue(), "1,2,3", "split text by comma");
     
     frame.setProperty("b", "a(5) c(5)");
     frame.setProperty("e(5) g(6)");

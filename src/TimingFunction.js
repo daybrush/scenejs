@@ -1,4 +1,6 @@
-export const cubicBezier = function(x1, y1, x2, y2) {
+export const cubicBezier = function(curveArray) {
+	const [x1, y1, x2, y2] = curveArray;
+
 	function cubic(_x1, _x2, t) {
 		const t2 = 1 - t;
 

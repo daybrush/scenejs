@@ -4,6 +4,7 @@ var SceneItem = Scene.SceneItem;
 
 QUnit.test("set element", function( assert ) {
 	var item = new SceneItem();
+
 	var element = document.querySelector("#qunit-header");
 	item.selector = "#qunit-header";
 	assert.equal(item.element[0], element, "set selector");
@@ -12,6 +13,15 @@ QUnit.test("set element", function( assert ) {
 	assert.equal(id, element.getAttribute("data-scene-id"), "test if id is the same");
 });
 
+QUnit.test("selector", function( assert ) {
+	var item = new SceneItem();
+	item.id = "#qunit-header";
+	item.setSelector();	
+	var element = document.querySelector("#qunit-header");
+	assert.equal(item.element[0], element, "set selector");
+	assert.equal("#qunit-header", element.getAttribute("data-scene-id"), "test if id is the same");
+
+});
 
 QUnit.test("copy css", function( assert ) {
 	var item = new SceneItem();

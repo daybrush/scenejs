@@ -4,7 +4,8 @@ QUnit.test("test Animator", function( assert ) {
 	var anim = new Animator({
 		delay: 2,
 		duration: 3,
-		iterationCount: 2
+		iterationCount: 2,
+		fillMode: ""
 	});
 	anim.setTime(1);
 

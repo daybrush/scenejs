@@ -4,6 +4,7 @@ import {
 	camelize,
 	isUndefined,
 	isObject,
+	defineGetter,
 } from "./Util";
 import FrameTimeline from "./FrameTimeline";
 import {dot} from "./Util/Dot";
@@ -73,6 +74,12 @@ item.duration; // = item.timeline.last
 	get duration() {
 		return this.timeline.last;
 	}
+	set id(_id) {
+		this.setId(_id);
+	}
+	setId(_id) {
+		this.options.id = _id;
+	}
 	/**
 	* set properties to the sceneItem at that time
 	* @param {Number} time - time
@@ -135,15 +142,12 @@ item.updateFrame(time, this.get(time));
 item.newFrame(time);
 	*/
 	newFrame(time) {
-/*
 		let frame = this.getFrame(time);
 
 		if (frame) {
 			return frame;
 		}
-*/
-		const frame = new Frame();
-
+		frame = new Frame();
 		if (!isUndefined(time)) {
 			this.setFrame(time, frame);
 		}
@@ -341,6 +345,8 @@ let item = new Scene.SceneItem({
 const frame = item.getNowFrame(1.7);
 	*/
 	getNowFrame(time) {
+		this.update();
+
 		const indices = this.getLeftRightIndex(time);
 
 		if (!indices) {
@@ -406,6 +412,13 @@ item.load({
 		return this;
 	}
 }
+/**
+* Specifies the item's id to synchronize the element.
+* @memberof SceneItem
+* @instance
+* @name id
+*/
+defineGetter({target: SceneItem.prototype, name: "id", parent: "options"});
 
 SceneItem.addRole("property");
 export default SceneItem;

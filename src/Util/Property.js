@@ -11,6 +11,40 @@ let toPropertyObject;
 let stringToColorObject;
 
 /**
+* divide text by space.
+* @memberof Property
+* @function splitSpace
+* @param {String} text - text to divide
+* @return {Array} divided texts
+* @example
+console.log(splitSpace("a b c d e f g"));
+// ["a", "b", "c", "d", "e", "f", "g"]
+console.log(splitSpace("'a,b' c 'd,e' f g"));
+// ["'a,b'", "c", "'d,e'", "f", "g"]
+*/
+export const splitSpace = function(text) {
+	// divide comma(,)
+	const matches = text.split(/("[^"]*"|'[^']*'|[^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\s+/g);
+	const length = matches.length;
+	const arr = [];
+	let value;
+	let arrValue;
+	let index = 0;
+
+	for (let i = 0; i < length; ++i) {
+		value = matches[i];
+		if (isUndefined(value)) {
+			++index;
+			continue;
+		} else if (!value) {
+			continue;
+		}
+		arrValue = arr[index];
+		arr[index] = arrValue ? arrValue + value : value;
+	}
+	return arr;
+};
+/**
 * divide text by comma.
 * @memberof Property
 * @function splitComma
@@ -24,7 +58,8 @@ console.log(splitComma("'a,b',c,'d,e',f,g"));
 */
 export const splitComma = function(text) {
 	// divide comma(,)
-	const matches = text.split(/("[^"]"|'[^']'|[^,\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^,\s()]*)|\s*,\s*/g);
+	// "[^"]*"|'[^']*'
+	const matches = text.split(/("[^"]*"|'[^']*'|[^,\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^,\s()]*)|\s*,\s*/g);
 	const length = matches.length;
 	const arr = [];
 	let value;
@@ -235,15 +270,17 @@ toPropertyObject = function(value) {
 	if (!isString(value)) {
 		return value;
 	}
-	// ref http://stackoverflow.com/questions/20215440/parse-css-gradient-rule-with-javascript-regex
-	// inner brackets
-	// one level nesting \(([^()]*|\([^()]*\))*\)
-	// two level nesting \(([^()]*|\(([^()]*|\([^()]*\))*\))*\)
-	const matches = value.match(/"[^"]*"|'[^']*'|[^()\s]*\(([^()]*|\([^()]*\))*\)[^()\s]*|[^()\s,]+/g);
+	let values = splitComma(value);
 	let result;
 
-	if (matches && matches.length !== 1) {
-		result = new PropertyObject(matches.map(v => toPropertyObject(v)), " ");
+	if (values.length > 1) {
+		result = new PropertyObject(values.map(v => toPropertyObject(v)), ",");
+		result.type = "array";
+		return result;
+	}
+	values = splitSpace(value);
+	if (values.length > 1) {
+		result = new PropertyObject(values.map(v => toPropertyObject(v)), " ");
 		result.type = "array";
 		return result;
 	} else if ((result = value.charAt(0)) && (result === '"' || result === "'")) {

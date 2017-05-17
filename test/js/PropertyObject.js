@@ -1,3 +1,5 @@
+var PropertyObject = Scene.PropertyObject;
+
 var obj1 = new PropertyObject([1,2,3]);
 var obj2 = new PropertyObject([1,2,3], {
     separator: "@"
@@ -32,7 +34,7 @@ QUnit.test("PropertyObject toValue", function( assert ) {
 });
 
 QUnit.test("Copy PropertyObject", function( assert ) {
-    assert.deepEqual(obj2, obj2.copy(), "copy test");
-    assert.notEqual(obj2, obj2.copy(), "original and copy are not equal");
-    assert.equal(obj2.toValue(), obj2.copy().toValue(), "original and copy are not equal");
+    assert.deepEqual(obj2, obj2.clone(), "copy test");
+    assert.notEqual(obj2, obj2.clone(), "original and copy are not equal");
+    assert.equal(obj2.toValue(), obj2.clone().toValue(), "original and copy are not equal");
 });
