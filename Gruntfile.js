@@ -68,6 +68,8 @@ var watch = grunt.option('watch');
 var target =  grunt.option("target");
 
 library("CSS/CSSScene", "Scene");
+library("Scenario", "Scenario");
+
 if (target) {
 	tester(target);
 }

@@ -70,7 +70,7 @@ item.duration; // = item.timeline.last
 
 		for (id in items) {
 			item = items[id];
-			time = Math.max(time, item.totalDuration * item.playSpeed);
+			time = Math.max(time, item.totalDuration / item.playSpeed);
 		}
 		return time;
 	}

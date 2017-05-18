@@ -1,5 +1,5 @@
 import Animator from "./Animator";
-import {isObject} from "./Util";
+import {isObject, has} from "./Util";
 
 class Scenario extends Animator {
 	/**
@@ -15,17 +15,24 @@ var scenario = new Scenario({
      */
 	constructor(scenes = {}) {
 		super();
-		this.scenes = scenes;
+		this.scenes = {};
+		this.addScene(scenes);
 	}
 	get duration() {
 		const scenes = this.scenes;
+		let _scenes;
 		let scene;
 		let time = 0;
 		let id;
+		let i;
+		let length;
 
 		for (id in scenes) {
-			scene = scenes[id];
-			time = Math.max(time, scene.totalDuration * scene.playSpeed);
+			_scenes = scenes[id];
+			for (length = _scenes.length, i = length - 1; i >= 0; --i) {
+				scene = _scenes[i];
+				time = Math.max(time, scene.totalDuration / scene.playSpeed);
+			}
 		}
 		return time;
 	}
@@ -35,10 +42,19 @@ var scenario = new Scenario({
 		const scenes = this.scenes;
 		let scene;
 		let id;
+		let _scenes;
+		let i;
+		let length;
 
 		for (id in scenes) {
-			scene = scenes[id];
-			scene.currentTime = time * scene.playSpeed;
+			if (id > time) {
+				continue;
+			}
+			_scenes = scenes[id];
+			for (length = _scenes.length, i = length - 1; i >= 0; --i) {
+				scene = _scenes[i];
+				scene.currentTime = time * scene.playSpeed;
+			}
 		}
 		return this;
 	}
@@ -58,13 +74,18 @@ scenario.addScene({
 });
      */
 	addScene(_time, scene) {
+		const scenes = this.scenes;
+
 		if (isObject(_time)) {
 			for (const time in _time) {
-				this.scenes[time] = _time[time];
+				this.addScene(time, _time[time]);
 			}
 			return this;
 		}
-		this.scenes[_time] = scene;
+		if (!has(scenes, _time)) {
+			scenes[_time] = [];
+		}
+		scenes[_time].push(scene);
 		return this;
 	}
 }

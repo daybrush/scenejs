@@ -36,6 +36,28 @@ class CSSScene extends Scene {
 		}
 		return this;
 	}
+	load(properties) {
+		super.load(properties);
+		const isSelector = properties && properties.options && properties.options.selector;
+
+		if (!isSelector) {
+			return this;
+		}
+		let name;
+		let item;
+
+		for (name in properties) {
+			if (name === "options") {
+				continue;
+			}
+			item = this.getItem(name);
+			if (!item) {
+				continue;
+			}
+			item.setSelector(name);
+		}
+		return this;
+	}
 }
 CSSScene.SceneItem = SceneItem;
 CSSScene.Frame = Frame;

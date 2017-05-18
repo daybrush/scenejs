@@ -155,6 +155,7 @@ frame.getProperty("border-left").toValue(); // "10px solid black"
 		const cssObject = {};
 		let i;
 		let matches;
+
 		for (i = 0; i < length; ++i) {
 			matches = /([^:]*):([\S\s]*)/g.exec(cssArray[i]);
 			if (!matches || matches.length < 3) {
@@ -213,6 +214,20 @@ frame.getProperty("opacity"); // 0.5
 		}
 		this.set(time, cssObject);
 
+		return this;
+	}
+	setOptions(options) {
+		super.setOptions(options);
+		const selector = options && options.selector;
+
+		if (!selector) {
+			return this;
+		}
+		if (selector === true) {
+			this.setSelector();
+		} else {
+			this.setSelector(selector);
+		}
 		return this;
 	}
 }
