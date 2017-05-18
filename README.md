@@ -1,28 +1,23 @@
 Scene.js
 ============
-[![Build Status](https://travis-ci.org/daybrush/scenejs.svg?branch=master)](https://travis-ci.org/daybrush/scenejs)
 
 
 Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 <br>
 
-<img src="https://github.com/daybrush/scenejs/raw/master/model/model.png">
-
 ## Component
 * **Scene** : Control SceneItem, Speed & Count, Play & Stop
 * **Scene.SceneItem** : Add & Manage Frame
 * **Scene.Frame** : Set Property & get CSSText
-* **Scene.TimingFunction** : Set Transition Timing Function in Scene time zone.
-	+ ex) sceneItem.addTimingFunction(startTime, endTime, ease);
 * **Scene.Util** : dot product with array, object, number, color, PropertyObject
 * **Scene.PropertyObject** : Make String to Property Object for the dot product
-	+ ex) Util.stringToObject("rgba(200, 100, 20, 10)") to {prefix: "rgba(", suffix: ")", arr: [200,100, 20,10], separator: ","}
-	+ ex) Util.stringToObject("a b c d") to {prefix: "", suffix: "", arr: ["a","b", "c", "d"], separator: " "}
+	+ ex) toPropertyObject("rgba(200, 100, 20, 10)") to {prefix: "rgba(", suffix: ")", arr: [200,100, 20,10], separator: ","}
+	+ ex) toPropertyObject("a b c d") to {prefix: "", suffix: "", arr: ["a","b", "c", "d"], separator: " "}
 
 * **Scene.Curve** : Make Transition Function with Bezier Curve.
 * **Scene.Color** : Convert RGB, HSL HEX4, HEX6 to RGBA Model.
-	+ ex) Color.hexToRGB("#123456") to [18, 52, 86]
-	+ ex) Color.hslToRGB([240, 0.5, 0.5]) to [63, 63, 191]
+	+ ex) hexToRGB("#123456") to [18, 52, 86]
+	+ ex) hslToRGB([240, 0.5, 0.5]) to [63, 63, 191]
 
 ## Support Browser
 **Default**
@@ -49,11 +44,9 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 
 ## Demo
 
-[Circle Burst](http://daybrush.com/Scene.js/sample/circleburst.html)   /   [Circle Burst ES6](http://daybrush.com/Scene.js/sample/circleburst.es6.html)
+[Circle Burst](http://daybrush.com/Scene.js2/example/circleburst.html)
 
-[Color Test](http://daybrush.com/Scene.js/sample/colortest.html)
-
-[Moon SVG](http://daybrush.com/Scene.js/sample/fullmoon.html)
+[Cube](http://daybrush.com/Scene.js2/example/cube.html)
 
 
 
@@ -86,9 +79,6 @@ sceneItem.setTransform(time, name, value);
 sceneItem.setFilter(time, name, value);
 //blur, brightness, contrast, drop-shadow, grayscale, hue-rotate, invert, opacity, saturate, sepia
 
-var ease= [.42,0,.58,1];
-sceneItem.addTimingFunction(startTime, endTime, ease);
-
 scene.play();
         
 ```
@@ -97,16 +87,19 @@ or
 
 ```javascript
 var scene = new Scene({
-	"item1" : {
-		0 : {width: "30px", height: "20px", property:value},
-		2 : {width: "50px", property:value},
-		6.5:{height: "200px", property:value},
+	".sample" : {
+		0: {width: "30px", height: "20px", property:value},
+		2: {width: "50px", property:value},
+		6.5: {height: "200px", property:value},
 	},
 	"item2" : {
 		0 : {transform:{scale:0.5}, property:value},
 		2 : {transform:{scale:1.5, rotate:"0deg"}, width: "50px", property:value},
 		6.5: {transform:{scale:1, rotate:"50deg"}, width: "10px", property:value},
 	},
+	options: {
+		selector: true // set selector to ".sample" item automatically.
+	}
 });
 
 scene.setSelector({

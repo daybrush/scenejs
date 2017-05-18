@@ -77,7 +77,9 @@ const animator = new Scene.Animator({
 			start = curveArrays[3 * i + 0];
 			end = curveArrays[3 * i + 1];
 			curve = curveArrays[3 * i + 2];
-			curve = cubicBezier(curve);
+			if (typeof curve !== "function") {
+				curve = cubicBezier(curve);
+			}
 			curves.push({start, end, curve});
 		}
 		this.options.timingFunction = curves;
@@ -144,7 +146,7 @@ const animator = new Scene.Animator({
 animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 3 = 8
 	*/
 	get totalDuration() {
-		if (this.iteraionCount === "infinite") {
+		if (this.iterationCount === "infinite") {
 			return Infinity;
 		}
 		return this.delay + this.activeDuration;

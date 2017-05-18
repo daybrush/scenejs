@@ -45,6 +45,21 @@ QUnit.test("test fillMode", function( assert ) {
 });
 
 
+QUnit.test("iterationCount is infinite", function( assert ) {
+	var anim = new Animator({
+		delay: 2,
+		duration: 3,
+		iterationCount: "infinite",
+	});
+	assert.equal(anim.totalDuration, Infinity, "totalDuration is Infinity")
+	anim.currentTime = 1;
+	assert.equal(anim.currentIterationTime, 0, "test before delay");
+	anim.currentTime = 3;
+	assert.equal(anim.currentIterationTime, 1, "test before delay");
+	anim.currentTime = 10;
+	assert.equal(anim.currentIterationTime, 2, "test before delay");
+
+});
 
 
 QUnit.test("direction is reverse", function( assert ) {
