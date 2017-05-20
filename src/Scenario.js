@@ -29,9 +29,10 @@ var scenario = new Scenario({
 
 		for (id in scenes) {
 			_scenes = scenes[id];
+			id = parseFloat(id);
 			for (length = _scenes.length, i = length - 1; i >= 0; --i) {
 				scene = _scenes[i];
-				time = Math.max(time, scene.totalDuration / scene.playSpeed);
+				time = Math.max(time, id + scene.totalDuration / scene.playSpeed);
 			}
 		}
 		return time;
@@ -51,9 +52,10 @@ var scenario = new Scenario({
 				continue;
 			}
 			_scenes = scenes[id];
+			id = parseFloat(id);
 			for (length = _scenes.length, i = length - 1; i >= 0; --i) {
 				scene = _scenes[i];
-				scene.currentTime = time * scene.playSpeed;
+				scene.currentTime = time * scene.playSpeed - id;
 			}
 		}
 		return this;

@@ -25,16 +25,19 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
 |9+|(yes)|(yes)|(yes)|(yes)|
+
 **Transform**
 
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
 |9+|4+|3.5+|3.2+|10.5+|
+
 **Transform 3D**
 
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
 |10+|12+|10+|4+|15+|
+
 **Filter**
 
 |Internet Explorer|Chrome|FireFox|Safari|Opera|

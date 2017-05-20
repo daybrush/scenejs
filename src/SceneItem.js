@@ -107,7 +107,11 @@ item.duration; // = item.timeline.last
 	setIterationTime(_time) {
 		super.setIterationTime(_time);
 		const time = this.currentIterationTime;
+		const frame = this.getNowFrame(time);
 
+		if (!frame) {
+			return this;
+		}
 		this.trigger("animate", [time, this.getNowFrame(time), this.currentTime]);
 		return this;
 	}
@@ -231,7 +235,34 @@ item.copyFrame(0, 1);
 		this.setFrame(toTime, copyFrame);
 		return this;
 	}
+	/**
+	* merge frame of the previous time at the next time.
+	* @param {Number} fromTime - the previous time
+	* @param {Number} toTime - the next time
+	* @return {SceneItem} An instance itself
+	* @example
+// getFrame(1) contains getFrame(0)
+item.merge(0, 1);
+	*/
+	mergeFrame(fromTime, toTime) {
+		let time;
 
+		if (isObject(fromTime)) {
+			for (time in fromTime) {
+				this.mergeFrame(time, fromTime[time]);
+			}
+			return this;
+		}
+		const frame = this.getFrame(fromTime);
+
+		if (!frame) {
+			return this;
+		}
+		const toFrame = this.newFrame(toTime);
+
+		toFrame.merge(frame);
+		return this;
+	}
 	getNowValue(role, property, time, left = 0, right = this.timeline.length) {
 		const timeline = this.timeline;
 		const times = timeline.times;
@@ -397,13 +428,18 @@ item.load({
 		}
 		let isOptions = false;
 		let time;
+		let _properties;
 
 		for (time in properties) {
 			if (time === "options") {
 				isOptions = true;
 				continue;
 			}
-
+			_properties = properties[time];
+			if (typeof _properties === "number") {
+				this.mergeFrame(_properties, time);
+				continue;
+			}
 			this.set(time, properties[time]);
 		}
 		if (isOptions) {

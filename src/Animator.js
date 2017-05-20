@@ -64,7 +64,7 @@ const animator = new Scene.Animator({
 		this.setOptions(options);
 	}
 	set timingFunction(curveArray) {
-		this.options.timingFunction = cubicBezier(curveArray);
+		this.options.timingFunction = (typeof curveArray === "function") ? curveArray : cubicBezier(curveArray);
 	}
 	set timingFunctions(curveArrays) {
 		const length = curveArrays.length;
