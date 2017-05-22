@@ -277,7 +277,7 @@ animator.currentTime // 10
 	calculateIterationTime() {
 		const currentTime = this._currentTime;
 		const {duration, iterationCount, fillMode, direction} = this;
-		const activeTime = Math.max(currentTime - this.delay, 0);
+		const activeTime = parseInt(Math.max(currentTime - this.delay, 0) * 10000, 10) / 10000;
 		const currentIterationCount = duration === 0 ? 0 : activeTime / duration;
 		const isOdd = currentIterationCount % 2 >= 1;
 
@@ -311,8 +311,8 @@ animator.currentTime // 10
 				if (isAlternate || currentIterationCount !== iterationCount || iterationCount % 1 !== 0) {
 					break;
 				}
-
 				currentIterationTime = duration - currentIterationTime;
+
 				break;
 			default:
 				if (currentIterationCount !== iterationCount || iterationCount % 1 !== 0) {
@@ -320,7 +320,6 @@ animator.currentTime // 10
 				}
 				currentIterationTime = 0;
 		}
-
 		this.setIterationTime(currentIterationTime);
 	}
 	caculateTimingFunction(_time) {
