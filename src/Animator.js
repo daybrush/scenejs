@@ -241,6 +241,7 @@ if (animator.paused) {
 	*/
 	stop() {
 		this.playState = "paused";
+		this.trigger("paused");
 		this.trigger("ended");
 		return this;
 	}

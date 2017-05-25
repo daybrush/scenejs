@@ -12,19 +12,14 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 * **Scene.Animator** : Control Speed & Count, Play & Stop
 * **Scene.Util** : dot product with array, object, number, color, PropertyObject
 * **Scene.PropertyObject** : Make String to Property Object for the dot product
-	+ ex) toPropertyObject("rgba(200, 100, 20, 10)") to {prefix: "rgba(", suffix: ")", arr: [200,100, 20,10], separator: ","}
-	+ ex) toPropertyObject("a b c d") to {prefix: "", suffix: "", arr: ["a","b", "c", "d"], separator: " "}
 * **Scene.Curve** : Make Transition Function with Bezier Curve.
 * **Scene.Color** : Convert RGB, HSL HEX4, HEX6 to RGBA Model.
-	+ ex) hexToRGB("#123456") to [18, 52, 86]
-	+ ex) hslToRGB([240, 0.5, 0.5]) to [63, 63, 191]
 
 ## Support Browser
 **Default**
-
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
-|9+|(yes)|(yes)|(yes)|(yes)|
+|9+|(yes)|2.0|3.0|9.5|
 
 **Transform**
 

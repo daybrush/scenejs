@@ -316,8 +316,8 @@ const delay = 0.4;
 for(let i = 0; i < scene2_radius.length; ++i) {
 	let r = scene2_radius[i];
 	scene2.newItem("rc" + i).load({
-		[delay]: {"stroke-dasharray": "0 1000", "stroke-dashoffset": 1},
-		[delay + 1]: {"stroke-dasharray": r + " 1000", "stroke-dashoffset": 1},
+		[delay]: {"stroke-dasharray": "0 1000"},
+		[delay + 1]: {"stroke-dasharray": r + " 1000"},
 		[delay + 2]: {"stroke-dashoffset": -r}
 	}).setSelector("#rotate_circle" + (i+1));
 }
