@@ -66,7 +66,7 @@ Ready to start using Scene.js! Scene.js has Scene namespace and can be used as b
 ```javascript
 var element = document.querySelector(".sample")
 var scene = new Scene();
-var sceneItem = scene.addElement(element); // add Item
+var sceneItem = scene.setElement(element); // add Item
 
 sceneItem.setProperty(time, property, value);
 // width margin padding height ....

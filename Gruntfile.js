@@ -25,7 +25,7 @@ var obj = {};
 var config = {
 	jsdoc : {
 		dist : {
-			src: ['./src/*.js', "./src/CSS/*.js", "./src/Util/*.js"],
+			src: ["./README.md", './src/*.js', "./src/CSS/*.js", "./src/Util/*.js"],
 			options: {
 				destination: 'doc',
 				template: "./template"
