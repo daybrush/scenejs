@@ -17,6 +17,7 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 
 ## Support Browser
 **Default**
+
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
 |9+|(yes)|2.0|3.0|9.5|
