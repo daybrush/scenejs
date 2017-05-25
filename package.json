@@ -26,8 +26,11 @@
     "comment-loader": "git+https://github.com/daybrush/comment-loader.git",
     "es6-export-plugin": "git+https://github.com/daybrush/es6-export-plugin.git",
     "grunt": "^1.0.1",
+    "grunt-contrib-qunit": "^2.0.0",
+    "grunt-contrib-uglify": "^3.0.1",
     "grunt-jsdoc": "^2.1.0",
     "grunt-webpack": "^2.0.1",
+    "qunit-tester": "git+https://github.com/daybrush/qunit-tester.git",
     "qunitjs": "^2.0.1",
     "webpack": "^2.3.2"
   }
