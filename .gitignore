@@ -1,5 +1,4 @@
 node_modules/
 *.DS_Store
-functions.txt
-gitignore
+.DS_Store
 doc/
