@@ -3,7 +3,7 @@
 * @name Dot
 */
 
-import {isObject, splitUnit} from "../Util";
+import {isObject, splitUnit} from "../utils";
 import PropertyObject from "../PropertyObject";
 import {toColorObject} from "./Property";
 

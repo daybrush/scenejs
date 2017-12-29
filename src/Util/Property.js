@@ -5,7 +5,7 @@
 
 import PropertyObject from "../PropertyObject";
 import {COLOR_MODELS, hexToRGB, hex3to6, hslToRGB} from "./Color";
-import {isString, isObject, isUndefined} from "../Util";
+import {isString, isObject, isUndefined} from "../utils";
 
 let toPropertyObject;
 let stringToColorObject;

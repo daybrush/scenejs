@@ -1,4 +1,4 @@
-import {isObject, has} from "./Util";
+import {isObject, has} from "./utils";
 /**
 * attach and trigger event handlers.
 */

@@ -1,4 +1,4 @@
-import {has, isObject, isString} from "./Util";
+import {has, isObject, isString} from "./utils";
 
 class PropertyObject {
 	/**

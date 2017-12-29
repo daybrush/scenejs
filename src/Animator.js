@@ -1,6 +1,6 @@
 import EventTrigger from "./EventTrigger";
 import {cubicBezier} from "./TimingFunction";
-import {defineGetter, defineGetterSetter, isObject} from "./Util";
+import {defineGetter, defineGetterSetter, isObject} from "./utils";
 
 let lastTime = 0;
 

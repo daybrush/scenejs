@@ -1,4 +1,4 @@
-import {has} from "./Util";
+import {has} from "./utils";
 // import TimelineStep from "./TimelineStep";
 /**
 * a list of objects in chronological order.

@@ -1,36 +1,38 @@
-import {SCENE_ROLES} from "./Constant.js";
-import {camelize, isObject, isString, isUndefined, has} from "./Util.js";
+import {SCENE_ROLES} from "./consts";
+import {camelize, isObject, isString, isUndefined, isArray, has} from "./utils";
 import {toPropertyObject, splitSpace} from "./Util/Property.js";
 import PropertyObject from "./PropertyObject";
+
+function isPropertyObject(value) {
+	return value instanceof PropertyObject;
+}
+function clone(target) {
+	return merge({}, target);
+}
+function merge(to, from) {
+	for (let name in from) {
+		const value = from[name];
+
+		if (isObject(value)) {
+			if (value instanceof PropertyObject) {
+				to[name] = value.clone();
+			} else if (isArray(value)) {
+				to[name] = value.slice();
+			} else if (isObject(to[name]) && !(to[name] instanceof PropertyObject)) {
+				merge(to[name], value);
+			} else {
+				to[name] = clone(value);
+			}
+			continue;
+		}
+		to[name] = from[name];
+	}
+	return to;
+}
 /**
  * Animation's Frame
  */
 class Frame {
-	/**
-	* add Role to Frame.
-	* @static
-	* @param {String} role - property role(property, transform, filter)
-	* @example
-Scene.Frame.addRole("property");
-Scene.Frame.addRole("transform");
-Scene.Frame.addRole("filter");
-	*/
-	static addRole(role) {
-		const framePrototype = this.prototype;
-		const _role = camelize(` ${role}`);
-
-		framePrototype[`set${_role}`] = function(property, value) {
-			this.set(role, property, value);
-		};
-		framePrototype[`get${_role}`] = function(property) {
-			return this.get(role, property);
-		};
-		framePrototype[`remove${_role}`] = function(property) {
-			this.remove(role, property);
-			return this;
-		};
-		SCENE_ROLES[role] = true;
-	}
 	/**
 	* Create an animation's frame.
 	* @param {Object} properties - properties
@@ -43,7 +45,6 @@ let frame = new Scene.Frame({
 		let role;
 
 		this.properties = {};
-		this.updateNumber = 0;
 
 		for (role in SCENE_ROLES) {
 			this.properties[role] = {};
@@ -75,6 +76,10 @@ frame.load({
 				this.set(property, value);
 				continue;
 			}
+			if(isObject(value) && !isArray(value) && !isPropertyObject(value)) {
+				this.set(property, value);
+				continue;
+			}
 			// role, property, value
 			this._set("property", property, value);
 		}
@@ -89,7 +94,10 @@ frame.load({
 	frame.get("property", "display") // => "none", "block", ....
 	*/
 	get(role, property) {
-		return this.properties[role][property];
+		if (!property) {
+			return this.properties["property"][role];
+		}
+		return this.properties[role] && this.properties[role][property];
 	}
 	/**
 	* remove property value
@@ -100,14 +108,19 @@ frame.load({
 	frame.remove("property", "display")
 	*/
 	remove(role, property) {
+		if (!property) {
+			delete this.properties["property"][role];
+		}
 		delete this.properties[role][property];
 	}
 	_set(role, property, value) {
 		let _value = value;
 
-		++this.updateNumber;
 		if (isString(_value)) {
 			_value = toPropertyObject(_value);
+		}
+		if (!(role in this.properties)) {
+			this.properties[role] = {};
 		}
 		this.properties[role][property] = _value;
 	}
@@ -156,36 +169,19 @@ frame.set("property", "display", "none");
 			}
 			return this;
 		}
+		if (isUndefined(_value)) {
+			if (isString(property)) {
+				value = splitSpace(property).map(v => toPropertyObject(v));
+				const length = value.length;
 
+				const isProperties = value.every(v => v.model && v.type !== "color");
 
-		if (isString(property) && isUndefined(_value)) {
-			value = splitSpace(property);
-
-			if (!isObject(value)) {
-				return this;
+				if (isProperties) {
+					value.forEach(v => this._set(role, v.model, v));
+					return this;
+				}
 			}
-			const length = value.length;
-			let obj;
-
-			for (let i = 0; i < length; ++i) {
-				obj = toPropertyObject(value[i]);
-
-				if (!isObject(obj)) {
-					continue;
-				}
-
-				if (!obj.model) {
-					continue;
-				}
-
-				if (obj.length === 1) {
-					this._set(role, obj.model, obj.value[0]);
-					continue;
-				}
-				this._set(role, obj.model, new PropertyObject(obj.value, {
-					separator: obj.separator,
-				}));
-			}
+			this._set("property", role, property);
 			return this;
 		}
 		this._set(role, property, value);
@@ -229,26 +225,7 @@ frame.set("property", "display", "none");
 		if (!frameProperties) {
 			return this;
 		}
-
-		let _properties;
-		let property;
-		let value;
-		let name;
-
-		for (name in properties) {
-			if (!has(frameProperties, name)) {
-				continue;
-			}
-			_properties = frameProperties[name];
-			for (property in _properties) {
-				value = _properties[property];
-				if (value instanceof PropertyObject) {
-					value = value.clone();
-				}
-
-				this.set(name, property, value);
-			}
-		}
+		merge(properties, frameProperties);
 
 		return this;
 	}

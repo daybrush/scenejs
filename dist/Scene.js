@@ -17,9 +17,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -608,52 +608,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Animation's Frame
  */
 var Frame = function () {
-	_createClass(Frame, null, [{
-		key: "addRole",
-
-		/**
-  * add Role to Frame.
-  * @static
-  * @param {String} role - property role(property, transform, filter)
-  * @example
-  Scene.Frame.addRole("property");
-  Scene.Frame.addRole("transform");
-  Scene.Frame.addRole("filter");
-  */
-		value: function addRole(role) {
-			var framePrototype = this.prototype;
-			var _role = (0, _Util.camelize)(" " + role);
-
-			framePrototype["set" + _role] = function (property, value) {
-				this.set(role, property, value);
-			};
-			framePrototype["get" + _role] = function (property) {
-				return this.get(role, property);
-			};
-			framePrototype["remove" + _role] = function (property) {
-				this.remove(role, property);
-				return this;
-			};
-			_Constant.SCENE_ROLES[role] = true;
-		}
-		/**
-  * Create an animation's frame.
-  * @param {Object} properties - properties
-  * @example
-  let frame = new Scene.Frame({
-  display: "none"
-  });
-  */
-
-	}]);
-
+	/**
+ * Create an animation's frame.
+ * @param {Object} properties - properties
+ * @example
+ let frame = new Scene.Frame({
+ display: "none"
+ });
+ */
 	function Frame(properties) {
 		_classCallCheck(this, Frame);
 
 		var role = void 0;
 
 		this.properties = {};
-		this.updateNumber = 0;
 
 		for (role in _Constant.SCENE_ROLES) {
 			this.properties[role] = {};
@@ -706,6 +674,9 @@ var Frame = function () {
 	}, {
 		key: "get",
 		value: function get(role, property) {
+			if (!property) {
+				return this.properties["property"][role];
+			}
 			return this.properties[role][property];
 		}
 		/**
@@ -720,6 +691,9 @@ var Frame = function () {
 	}, {
 		key: "remove",
 		value: function remove(role, property) {
+			if (!property) {
+				delete this.properties["property"][role];
+			}
 			delete this.properties[role][property];
 		}
 	}, {
@@ -764,6 +738,8 @@ var Frame = function () {
 	}, {
 		key: "set",
 		value: function set(role, property, _value) {
+			var _this = this;
+
 			var name = void 0;
 			var value = _value;
 
@@ -781,32 +757,21 @@ var Frame = function () {
 			}
 
 			if ((0, _Util.isString)(property) && (0, _Util.isUndefined)(_value)) {
-				value = (0, _Property.splitSpace)(property);
-
-				if (!(0, _Util.isObject)(value)) {
-					return this;
-				}
+				value = (0, _Property.splitSpace)(property).map(function (v) {
+					return (0, _Property.toPropertyObject)(v);
+				});
 				var length = value.length;
-				var obj = void 0;
 
-				for (var i = 0; i < length; ++i) {
-					obj = (0, _Property.toPropertyObject)(value[i]);
+				var isProperties = value.every(function (v) {
+					return v.model && v.type !== "color";
+				});
 
-					if (!(0, _Util.isObject)(obj)) {
-						continue;
-					}
-
-					if (!obj.model) {
-						continue;
-					}
-
-					if (obj.length === 1) {
-						this._set(role, obj.model, obj.value[0]);
-						continue;
-					}
-					this._set(role, obj.model, new _PropertyObject2.default(obj.value, {
-						separator: obj.separator
-					}));
+				if (isProperties) {
+					value.forEach(function (v) {
+						return _this._set(role, v.model, v);
+					});
+				} else {
+					this._set("property", role, property);
 				}
 				return this;
 			}
@@ -4063,15 +4028,5 @@ var hslToRGB = exports.hslToRGB = function hslToRGB(hsl) {
 /***/ })
 /******/ ]);
 });
-        
-        if(Scene.hasOwnProperty("default")) {
-            var a = Scene;
-            var b = window.Scene = a.default;
-            for(var c in a) {
-                if(c === "default")
-                    continue;
-                b[c] = a[c];
-            }
-        }
-    ;
+        window.Scene = Scene.default;
     })();

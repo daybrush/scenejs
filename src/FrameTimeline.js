@@ -1,6 +1,6 @@
 import Timeline from "./Timeline";
-import {SCENE_ROLES} from "./Constant";
-import {has} from "./Util";
+import {SCENE_ROLES} from "./consts";
+import {has} from "./utils";
 /**
 * Animation's Timeline with Frame
 * @extends Timeline

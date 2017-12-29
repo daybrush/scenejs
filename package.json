@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "karma start",
+    "test:chrome": "karma start --chrome"
   },
   "repository": {
     "type": "git",
@@ -23,15 +24,20 @@
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
     "babel-preset-es2015": "^6.24.0",
+    "chai": "^4.1.2",
     "comment-loader": "git+https://github.com/daybrush/comment-loader.git",
     "es6-export-plugin": "git+https://github.com/daybrush/es6-export-plugin.git",
-    "grunt": "^1.0.1",
-    "grunt-contrib-qunit": "^2.0.0",
-    "grunt-contrib-uglify": "^3.0.1",
-    "grunt-jsdoc": "^2.1.0",
-    "grunt-webpack": "^2.0.1",
-    "qunit-tester": "git+https://github.com/daybrush/qunit-tester.git",
-    "qunitjs": "^2.0.1",
+    "karma": "^1.7.1",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage-istanbul-reporter": "^1.3.0",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-sinon": "^1.0.5",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^2.0.9",
+    "mocha": "^4.0.1",
+    "sinon": "^4.1.2",
     "webpack": "^2.3.2"
   }
 }

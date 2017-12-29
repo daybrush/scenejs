@@ -5,43 +5,16 @@ import {
 	isUndefined,
 	isObject,
 	defineGetter,
-} from "./Util";
+} from "./utils";
 import FrameTimeline from "./FrameTimeline";
 import {dot} from "./Util/Dot";
-import {SCENE_ROLES} from "./Constant.js";
+import {SCENE_ROLES} from "./consts";
 
 /**
 * manage Frame Timeline and play Timeline.
 * @extends Animator
 */
 class SceneItem extends Animator {
-	static addGetterSetter(role) {
-		this.prototype[camelize(`set ${role}`)] = function(time, properties, value) {
-			this.set(time, role, properties, value);
-			return this;
-		};
-		this.prototype[camelize(`get ${role}`)] = function(time, property) {
-			const frame = this.getFrame(time);
-
-			if (!frame) {
-				return 0;
-			}
-			return frame.get(role, property);
-		};
-	}
-	/**
-	* add Role to SceneItem.
-	* @static
-	* @param {String} role - property role(property, transform, filter)
-	* @example
-Scene.SceneItem.addRole("property");
-Scene.SceneItem.addRole("transform");
-Scene.SceneItem.addRole("filter");
-	*/
-	static addRole(role) {
-		Frame.addRole(role);
-		this.addGetterSetter(role);
-	}
 	/**
 	* Create a scene's item.
 	* @param {Object} properties - properties
@@ -74,11 +47,17 @@ item.duration; // = item.timeline.last
 	get duration() {
 		return this.timeline.last;
 	}
-	set id(_id) {
-		this.setId(_id);
+	/**
+	* Specifies the item's id to synchronize the element.
+	* @memberof SceneItem
+	* @instance
+	* @name id
+	*/
+	get id() {
+		return this.options.id;
 	}
-	setId(_id) {
-		this.options.id = _id;
+	set id(id) {
+		this.options.id = id;
 	}
 	/**
 	* set properties to the sceneItem at that time
@@ -95,14 +74,16 @@ item.duration; // = item.timeline.last
 			this.load(time);
 			return this;
 		}
-		let frame = this.getFrame(time);
+		const frame = this.getFrame(time) || this.newFrame(time);
 
-		if (!frame) {
-			frame = this.newFrame(time);
-		}
 		frame.set(role, properties, value);
 		this.updateFrame(time, frame);
 		return this;
+	}
+	get(time, role, properties) {
+		const frame = this.getFrame(time);
+
+		return frame && frame.get(role, properties);
 	}
 	setIterationTime(_time) {
 		super.setIterationTime(_time);
@@ -448,13 +429,5 @@ item.load({
 		return this;
 	}
 }
-/**
-* Specifies the item's id to synchronize the element.
-* @memberof SceneItem
-* @instance
-* @name id
-*/
-defineGetter({target: SceneItem.prototype, name: "id", parent: "options"});
 
-SceneItem.addRole("property");
 export default SceneItem;
