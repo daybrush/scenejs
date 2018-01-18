@@ -1,14 +1,11 @@
 import Animator from "./Animator";
 import Frame from "./Frame";
 import {
-	camelize,
 	isUndefined,
 	isObject,
-	defineGetter,
 } from "./utils";
 import FrameTimeline from "./FrameTimeline";
-import {dot} from "./Util/Dot";
-import {SCENE_ROLES} from "./consts";
+import {dot} from "./utils/dot";
 
 /**
 * manage Frame Timeline and play Timeline.
@@ -32,10 +29,10 @@ let item = new Scene.SceneItem({
 	}
 });
 	*/
-	constructor(properties) {
-		super();
+	constructor(properties, options) {
+		super(options);
 		this.timeline = new FrameTimeline();
-		this.load(properties);
+		this.load(properties, options);
 	}
 	/**
 	* Specifies how many seconds an animation takes to complete one cycle
@@ -77,13 +74,19 @@ item.duration; // = item.timeline.last
 		const frame = this.getFrame(time) || this.newFrame(time);
 
 		frame.set(role, properties, value);
-		this.updateFrame(time, frame);
+		this.updateFrame(frame);
 		return this;
 	}
 	get(time, role, properties) {
 		const frame = this.getFrame(time);
 
 		return frame && frame.get(role, properties);
+	}
+	remove(time, role, properties) {
+		const frame = this.getFrame(time);
+
+		frame && frame.remove(role, properties);
+		return this;
 	}
 	setIterationTime(_time) {
 		super.setIterationTime(_time);
@@ -93,7 +96,11 @@ item.duration; // = item.timeline.last
 		if (!frame) {
 			return this;
 		}
-		this.trigger("animate", [time, this.getNowFrame(time), this.currentTime]);
+		this.trigger("animate", {
+			time,
+			frame: this.getNowFrame(time),
+			currentTime: this.currentTime,
+		});
 		return this;
 	}
 	/**
@@ -115,8 +122,8 @@ item.update();
 	* @example
 item.updateFrame(time, this.get(time));
 	*/
-	updateFrame(time, frame = this.getFrame(time)) {
-		this.timeline.updateFrame(time, frame);
+	updateFrame(frame) {
+		this.timeline.updateFrame(frame);
 		return this;
 	}
 	/**
@@ -184,6 +191,7 @@ item.removeFrame(time);
 		const timeline = this.timeline;
 
 		timeline.remove(time);
+		timeline.update();
 		delete this.frames[time];
 
 		return this;
@@ -357,8 +365,6 @@ let item = new Scene.SceneItem({
 const frame = item.getNowFrame(1.7);
 	*/
 	getNowFrame(time) {
-		this.update();
-
 		const indices = this.getLeftRightIndex(time);
 
 		if (!indices) {
@@ -373,7 +379,7 @@ const frame = item.getNowFrame(1.7);
 		let property;
 		let value;
 
-		for (role in SCENE_ROLES) {
+		for (role in names) {
 			propertyNames = names[role];
 			for (property in propertyNames) {
 				value = this.getNowValue(role, property, time, left, right);
@@ -403,17 +409,12 @@ item.load({
 	}
 });
 	*/
-	load(properties) {
-		if (!isObject(properties)) {
-			return this;
-		}
-		let isOptions = false;
+	load(properties = {}, options = properties.options) {
 		let time;
 		let _properties;
 
 		for (time in properties) {
 			if (time === "options") {
-				isOptions = true;
 				continue;
 			}
 			_properties = properties[time];
@@ -423,8 +424,8 @@ item.load({
 			}
 			this.set(time, properties[time]);
 		}
-		if (isOptions) {
-			this.setOptions(properties.options);
+		if (options) {
+			this.setOptions(options);
 		}
 		return this;
 	}

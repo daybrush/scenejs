@@ -4,7 +4,7 @@
 */
 
 import PropertyObject from "../PropertyObject";
-import {COLOR_MODELS, hexToRGB, hex3to6, hslToRGB} from "./Color";
+import {COLOR_MODELS, hexToRGB, hex3to6, hslToRGB} from "./color";
 import {isString, isObject, isUndefined} from "../utils";
 
 let toPropertyObject;
@@ -34,7 +34,7 @@ export const splitSpace = function(text) {
 	for (let i = 0; i < length; ++i) {
 		value = matches[i];
 		if (isUndefined(value)) {
-			++index;
+			arr[index] && ++index;
 			continue;
 		} else if (!value) {
 			continue;
@@ -69,7 +69,7 @@ export const splitComma = function(text) {
 	for (let i = 0; i < length; ++i) {
 		value = matches[i];
 		if (isUndefined(value)) {
-			++index;
+			arr[index] && ++index;
 			continue;
 		} else if (!value) {
 			continue;
@@ -222,7 +222,7 @@ export const toBracketObject = function(value) {
 		suffix,
 	});
 };
- /**
+/**
 * convert text with parentheses to PropertyObject[type=color].
 * If the values are not RGBA model, change them RGBA mdoel.
 * @memberof Property
@@ -254,7 +254,7 @@ stringToColorObject = function(value) {
 
 	return toColorObject(colorObject);
 };
- /**
+/**
 * convert CSS Value to PropertyObject
 * @memberof Property
 * @function toPropertyObject

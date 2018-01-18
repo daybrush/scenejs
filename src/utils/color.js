@@ -98,9 +98,11 @@ export const hslToRGB = function(hsl) {
 	} else if (h < 360) {
 		rgb = [c, 0, x];
 	}
-	const result = [Math.round((rgb[0] + m) * 255),
+	const result = [
+		Math.round((rgb[0] + m) * 255),
 		Math.round((rgb[1] + m) * 255),
-		Math.round((rgb[2] + m) * 255)];
+		Math.round((rgb[2] + m) * 255),
+	];
 
 	if (hsl.length > 3) {
 		result[3] = hsl[3];

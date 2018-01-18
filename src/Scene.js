@@ -1,13 +1,6 @@
 import Animator from "./Animator";
 import SceneItem from "./SceneItem";
-import Frame from "./Frame";
-import Timeline from "./Timeline";
-import * as Constant from "./Constant";
-import * as Util from "./Util";
-import * as Dot from "./Util/Dot";
-import * as Property from "./Util/Property";
-import PropertyObject from "./PropertyObject";
-
+import {has} from "./utils";
 
 /**
 * manage sceneItems and play Scene.
@@ -50,8 +43,8 @@ const scene = new Scene({
 	}
 });
 	*/
-	constructor(properties) {
-		super();
+	constructor(properties, options) {
+		super(options);
 		this.items = {};
 		this.load(properties);
 	}
@@ -90,7 +83,7 @@ const item = scene.getItem("item1")
 const item = scene.newItem("item1")
 	*/
 	newItem(name) {
-		if (Util.has(this.items, name)) {
+		if (has(this.items, name)) {
 			return this.items[name];
 		}
 		const item = new SceneItem();
@@ -147,36 +140,16 @@ scene.load({
 	}
 });
 	*/
-	load(properties) {
-		if (!Util.isObject(properties)) {
-			return this;
-		}
+	load(properties = {}) {
 		let item;
-		let isOptions;
 		let name;
 
 		for (name in properties) {
-			if (name === "options") {
-				isOptions = true;
-				continue;
-			}
 			item = this.newItem(name);
 			item.load(properties[name]);
-		}
-		if (isOptions) {
-			this.setOptions(properties.options);
 		}
 		return this;
 	}
 }
 
-Scene.Util = Util;
-Scene.Frame = Frame;
-Scene.SceneItem = SceneItem;
-Scene.Dot = Dot;
-Scene.Constant = Constant;
-Scene.Property = Property;
-Scene.PropertyObject = PropertyObject;
-Scene.Timeline = Timeline;
-Scene.Animator = Animator;
 export default Scene;

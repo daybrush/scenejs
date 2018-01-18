@@ -59,7 +59,7 @@ target.on("animate", function(a1, a2) {
 target.trigger("animate", [1, 2]); // log => "animate", 1, 2
 
 	*/
-	trigger(name, data) {
+	trigger(name, ...data) {
 		const events = this._events;
 
 		if (!has(events, name)) {

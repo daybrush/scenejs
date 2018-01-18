@@ -1,27 +1,32 @@
-import {SCENE_ROLES} from "./consts";
-import {camelize, isObject, isString, isUndefined, isArray, has} from "./utils";
-import {toPropertyObject, splitSpace} from "./Util/Property.js";
+import {PROPERTY, SCENE_ROLES} from "./consts";
+import {isObject, isString, isUndefined, isArray, has} from "./utils";
+import {toPropertyObject, splitSpace} from "./utils/property";
 import PropertyObject from "./PropertyObject";
 
 function isPropertyObject(value) {
 	return value instanceof PropertyObject;
 }
-function clone(target) {
-	return merge({}, target);
+/* eslint-disable */
+function clone(target, toValue = false) {
+	return merge({}, target, toValue);
 }
-function merge(to, from) {
-	for (let name in from) {
+function merge(to, from, toValue = false) {
+	for (const name in from) {
 		const value = from[name];
 
 		if (isObject(value)) {
 			if (value instanceof PropertyObject) {
-				to[name] = value.clone();
+				if (toValue) {
+					to[name] = value.toValue();
+				} else {
+					to[name] = value.clone();
+				}
 			} else if (isArray(value)) {
 				to[name] = value.slice();
 			} else if (isObject(to[name]) && !(to[name] instanceof PropertyObject)) {
-				merge(to[name], value);
+				merge(to[name], value, toValue);
 			} else {
-				to[name] = clone(value);
+				to[name] = clone(value, toValue);
 			}
 			continue;
 		}
@@ -29,6 +34,7 @@ function merge(to, from) {
 	}
 	return to;
 }
+/* eslint-enable */
 /**
  * Animation's Frame
  */
@@ -76,12 +82,12 @@ frame.load({
 				this.set(property, value);
 				continue;
 			}
-			if(isObject(value) && !isArray(value) && !isPropertyObject(value)) {
+			if (isObject(value) && !isArray(value) && !isPropertyObject(value)) {
 				this.set(property, value);
 				continue;
 			}
 			// role, property, value
-			this._set("property", property, value);
+			this._set(PROPERTY, property, value);
 		}
 		return this;
 	}
@@ -91,11 +97,14 @@ frame.load({
 	* @param {String} property - property name
 	* @return {Number|String|Scene.PropertyObejct} property value
 	* @example
-	frame.get("property", "display") // => "none", "block", ....
+	frame.get("display") // => "none", "block", ....
 	*/
 	get(role, property) {
 		if (!property) {
-			return this.properties["property"][role];
+			if (role in SCENE_ROLES) {
+				return this.properties[role];
+			}
+			return this.properties[PROPERTY][role];
 		}
 		return this.properties[role] && this.properties[role][property];
 	}
@@ -105,13 +114,19 @@ frame.load({
 	* @param {String} property - property name
 	* @return {Frame} An instance itself
 	* @example
-	frame.remove("property", "display")
+	frame.remove("display")
 	*/
 	remove(role, property) {
 		if (!property) {
-			delete this.properties["property"][role];
+			if (role in SCENE_ROLES) {
+				delete this.properties[role];
+			} else {
+				delete this.properties[PROPERTY][role];
+			}
+		} else {
+			delete this.properties[role][property];
 		}
-		delete this.properties[role][property];
+		return this;
 	}
 	_set(role, property, value) {
 		let _value = value;
@@ -172,12 +187,17 @@ frame.set("property", "display", "none");
 		if (isUndefined(_value)) {
 			if (isString(property)) {
 				value = splitSpace(property).map(v => toPropertyObject(v));
-				const length = value.length;
-
 				const isProperties = value.every(v => v.model && v.type !== "color");
 
 				if (isProperties) {
-					value.forEach(v => this._set(role, v.model, v));
+					value.forEach(v => {
+						const model = v.model;
+
+						v.model = "";
+						v.prefix = "";
+						v.suffix = "";
+						this._set(role, model, v);
+					});
 					return this;
 				}
 			}
@@ -229,42 +249,8 @@ frame.set("property", "display", "none");
 
 		return this;
 	}
-	/**
-	* get string into format for properties.
-	* @param {String} role - property role(property, transform, filter)
-	* @param {String} format - string format to get properties.
-	* @param {String} separator - separator between properties.
-	* @return {Frame} An instance itself
-	* @example
-var frame = new Scene.Frame({
-	a: 1,
-	b: 2,
-	c: 3,
-	transform: {
-		translate: "10px, 10px",
-		scale: 1,
-	}
-});
-frame.format("property", "$1:$2;", ""); // => a:1;b:2;c:3;
-frame.format("transform", "$1($2)", " "); // => translate(10px,10px) scale(1)
-	*/
-	format(role, format, separator) {
-		const properties = this.properties[role];
-		const arr = [];
-		let value;
-		let property;
-
-
-		for (property in properties) {
-			value = properties[property];
-			if (value instanceof PropertyObject) {
-				value = value.toValue();
-			}
-			value = format.replace(/\$1/g, property).replace(/\$2/g, value);
-			arr.push(value);
-		}
-
-		return arr.join(separator);
+	toObject() {
+		return clone(this.properties, true);
 	}
 }
 export default Frame;

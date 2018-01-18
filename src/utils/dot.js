@@ -5,7 +5,7 @@
 
 import {isObject, splitUnit} from "../utils";
 import PropertyObject from "../PropertyObject";
-import {toColorObject} from "./Property";
+import {toColorObject} from "./property";
 
 let dot;
 
@@ -130,7 +130,7 @@ export const dotObject = function(a1, a2, b1, b2) {
 	obj.suffix = a1.suffix;
 	return obj;
 };
- /**
+/**
 * The dot product of a1 and a2 for the b1 and b2.
 * @memberof Dot
 * @function dot

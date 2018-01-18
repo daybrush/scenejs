@@ -1,4 +1,4 @@
-export const cubicBezier = function(curveArray) {
+export default function(curveArray) {
 	const [x1, y1, x2, y2] = curveArray;
 
 	function cubic(_x1, _x2, t) {
@@ -43,17 +43,3 @@ export const cubicBezier = function(curveArray) {
 		return cubic(y1, y2, x);
 	};
 };
-
-/**
-* 8애니메이션이 해당 시간대에 어떤 TimingFunction을 사용할건지 지정한다.
-*/
-class TimingFunction {
-	constructor(_curveArray) {
-		this._curve = cubicBezier(_curveArray[0], _curveArray[1], _curveArray[2], _curveArray[3]);
-	}
-	curve(ratio) {
-		return this._curve(ratio);
-	}
-}
-
-export default TimingFunction;

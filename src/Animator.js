@@ -1,6 +1,6 @@
 import EventTrigger from "./EventTrigger";
-import {cubicBezier} from "./TimingFunction";
-import {defineGetter, defineGetterSetter, isObject} from "./utils";
+import cubicBezier from "./cubicBezier";
+import {defineGetter, defineGetterSetter} from "./utils";
 
 let lastTime = 0;
 
@@ -34,7 +34,7 @@ class Animator extends EventTrigger {
 	* @param {Number} [options.duration] - Specifies how many seconds or milliseconds an animation takes to complete one cycle
 	* @param {String} [options.fillMode] - Specifies a style for the element when the animation is not playing (when it is finished, or when it has a delay)
 	* @param {Number|String} [options.iterationCount] - specifies the number of times an animation should be played
-	* @param {Object} [options.timingFunction] - Specifies the speed curve of the animation
+	* @param {Object} [options.easing] - Specifies the speed curve of the animation
 	* @example
 const animator = new Scene.Animator({
 	delay: 2,
@@ -42,12 +42,11 @@ const animator = new Scene.Animator({
 	duration: 2,
 	fillMode: "forwards",
 	iterationCount: 3,
-	timingFuncition: Scene.Animator.EASE,
+	easing: Scene.Animator.EASE,
 });
 	*/
 	constructor(options) {
 		super();
-		this._currentTime = 0;
 		this._timer = 0;
 
 		this.options = {};
@@ -63,26 +62,11 @@ const animator = new Scene.Animator({
 		this._prevTime = 0;
 		this.setOptions(options);
 	}
-	set timingFunction(curveArray) {
-		this.options.timingFunction = (typeof curveArray === "function") ? curveArray : cubicBezier(curveArray);
+	set easing(curveArray) {
+		this.options.easing = (typeof curveArray === "function") ? curveArray : cubicBezier(curveArray);
 	}
-	set timingFunctions(curveArrays) {
-		const length = curveArrays.length;
-		const curves = [];
-		let start;
-		let end;
-		let curve;
-
-		for (let i = 0; i < length / 3; ++i) {
-			start = curveArrays[3 * i + 0];
-			end = curveArrays[3 * i + 1];
-			curve = curveArrays[3 * i + 2];
-			if (typeof curve !== "function") {
-				curve = cubicBezier(curve);
-			}
-			curves.push({start, end, curve});
-		}
-		this.options.timingFunction = curves;
+	get easing() {
+		return this.options.easing;
 	}
 	/**
 	* set animator's options.
@@ -93,7 +77,7 @@ const animator = new Scene.Animator({
 	* @param {Number} [options.duration] - Specifies how many seconds or milliseconds an animation takes to complete one cycle
 	* @param {String} [options.fillMode] - Specifies a style for the element when the animation is not playing (when it is finished, or when it has a delay)
 	* @param {Number|String} [options.iterationCount] - specifies the number of times an animation should be played
-	* @param {Object} [options.timingFunction] - Specifies the speed curve of the animation
+	* @param {Object} [options.easing] - Specifies the speed curve of the animation
 	* @example
 animator.({
 	delay: 2,
@@ -101,7 +85,7 @@ animator.({
 	duration: 2,
 	fillMode: "forwards",
 	iterationCount: 3,
-	timingFuncition: Scene.Animator.EASE,
+	easing: Scene.Animator.EASE,
 });
 	*/
 	setOptions(options) {
@@ -112,7 +96,7 @@ animator.({
 		let option;
 
 		for (option in options) {
-			if (option === "timingFunction" || option === "timingFunctions") {
+			if (option === "easing") {
 				this[option] = options[option];
 				continue;
 			}
@@ -129,7 +113,7 @@ animator.currentTime = 10;
 animator.currentTime // 10
 	*/
 	set currentTime(value) {
-		this.setTime(value);
+		this.setCurrentTime(value);
 	}
 	/**
 	* total duration including all iteration.
@@ -141,7 +125,7 @@ const animator = new Scene.Animator({
 	duration: 2,
 	fillMode: "forwards",
 	iterationCount: 3,
-	timingFuncition: Scene.Animator.EASE,
+	easing: Scene.Animator.EASE,
 });
 animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 3 = 8
 	*/
@@ -161,7 +145,7 @@ const animator = new Scene.Animator({
 	duration: 2,
 	fillMode: "forwards",
 	iterationCount: 3,
-	timingFuncition: Scene.Animator.EASE,
+	easin: Scene.Animator.EASE,
 });
 animator.activeDuration; // duration * iterationCount =  2 * 3 = 6
 	*/
@@ -262,18 +246,18 @@ animator.setTime(10);
 
 animator.currentTime // 10
 	*/
-	setTime(time) {
+	setCurrentTime(time) {
 		const {totalDuration} = this;
-		let _time = time;
+		let currentTime = time;
 
-		if (_time < 0) {
-			_time = 0;
-		} else if (_time > totalDuration) {
-			_time = totalDuration;
+		if (currentTime < 0) {
+			currentTime = 0;
+		} else if (currentTime > totalDuration) {
+			currentTime = totalDuration;
 		}
-		this._currentTime = _time;
+		this._currentTime = currentTime;
 		this.calculateIterationTime();
-		this.trigger("timeupdate", [_time]);
+		this.trigger("timeupdate", {currentTime});
 	}
 	calculateIterationTime() {
 		const currentTime = this._currentTime;
@@ -323,53 +307,22 @@ animator.currentTime // 10
 		}
 		this.setIterationTime(currentIterationTime);
 	}
-	caculateTimingFunction(_time) {
-		let duration = this.duration;
-		const timingFunction = this.timingFunction;
-		let time = _time;
-		let ratio;
-
-		if (isObject(timingFunction)) {
-			const length = timingFunction.length;
-			let nowTimingFunction = this.options.nowTimingFunction;
-
-			// 시간이 벗어나거나 TimingFunction이 미지정일시 해당 시간에 만족하는 TimingFunction을 찾는다.
-			if ((nowTimingFunction && (nowTimingFunction.end < time || time < nowTimingFunction.start)) ||
-				(length > 0 && !nowTimingFunction)) {
-				nowTimingFunction = 0;
-				this.options.nowTimingFunction = 0;
-				for (let i = 0; i < length; ++i) {
-					if (timingFunction[i].start <= time && time <= timingFunction[i].end) {
-						nowTimingFunction = timingFunction[i];
-						this.options.nowTimingFunction = nowTimingFunction;
-						break;
-					}
-				}
-			}
-			if (nowTimingFunction) {
-				const start = nowTimingFunction.start;
-
-				if (duration < nowTimingFunction.end) {
-					nowTimingFunction.end = duration;
-				}
-				duration = nowTimingFunction.end - start;
-				ratio = duration === 0 ? 0 : (time - start) / duration;
-				time = start + nowTimingFunction.curve(ratio) * duration;
-			}
-		} else {
-			ratio = duration === 0 ? 0 : time / duration;
-			time = this.timingFunction(ratio) * duration;
+	caculateEasing(time) {
+		if (!this.options.easing) {
+			return time;
 		}
-		return time;
+		const duration = this.duration;
+		const easing = this.options.easing;
+		const ratio = duration === 0 ? 0 : time / duration;
+		const easingTime = easing(ratio) * duration;
+
+		return easingTime;
 	}
-	setIterationTime(_time) {
-		let time = _time;
+	setIterationTime(time) {
+		const iterationTime = this.caculateEasing(time);
 
-		if (this.timingFunction) {
-			time = this.caculateTimingFunction(time);
-		}
-		this._currentIterationTime = time;
-		this.trigger("iterationtimeupdate", [time]);
+		this._currentIterationTime = iterationTime;
+		this.trigger("iterationtimeupdate", {iterationTime});
 
 		return this;
 	}
@@ -378,7 +331,7 @@ animator.currentTime // 10
 		const currentTime = this.currentTime + Math.min(1000, now - prevTime) / 1000 * this.playSpeed;
 
 		this._prevTime = now;
-		this.setTime(currentTime);
+		this.setCurrentTime(currentTime);
 		if (this.ended) {
 			this.stop();
 		}
@@ -403,7 +356,7 @@ animator.currentIterationTime // ....
 */
 defineGetter({target: Animator.prototype, name: "currentIterationTime", prefix: "_"});
 defineGetter({target: Animator.prototype, name: "currentTime", prefix: "_"});
-defineGetter({target: Animator.prototype, name: "timingFunction", parent: "options"});
+defineGetter({target: Animator.prototype, name: "easing", parent: "options"});
 /**
 * playSpeed
 * @memberof Animator
@@ -442,7 +395,7 @@ const animator = new Scene.Animator({
 	duration: 2,
 	fillMode: "alternate",
 	iterationCount: 3,
-	timingFuncition: Scene.Animator.EASE,
+	easing: Scene.Animator.EASE,
 });
 animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 3 = 8
 animator.iterationCount = 2;

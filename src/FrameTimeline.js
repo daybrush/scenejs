@@ -1,6 +1,5 @@
 import Timeline from "./Timeline";
-import {SCENE_ROLES} from "./consts";
-import {has} from "./utils";
+
 /**
 * Animation's Timeline with Frame
 * @extends Timeline
@@ -8,27 +7,7 @@ import {has} from "./utils";
 class FrameTimeline extends Timeline {
 	constructor() {
 		super();
-		this.updateNumber = {};
 		this.names = {};
-		const names = this.names;
-
-		for (const role in SCENE_ROLES) {
-			names[role] = {};
-		}
-	}
-	addTime(time) {
-		super.addTime(time);
-
-		if (has(this.updateNumber, time)) {
-			return this;
-		}
-		this.updateNumber[time] = 0;
-
-		return this;
-	}
-	removeTime(time) {
-		super.removeTime(time);
-		delete this.updateNumber[time];
 	}
 	/**
 	* update property names used in frames.
@@ -37,49 +16,28 @@ class FrameTimeline extends Timeline {
 timeline.update();
 	*/
 	update() {
-		const updateNumber = this.updateNumber;
-		let frame;
-		let time;
+		const items = this.items;
 
-		for (time in updateNumber) {
-			frame = this.get(time);
-			if (updateNumber[time] === frame.updateNumber) {
-				continue;
-			}
-			this.updateFrame(time, frame);
+		for (const time in items) {
+			this.updateFrame(items[time]);
 		}
 		return this;
 	}
-	/**
-	* update property names used in frame.
-	* @param {Number} time - frame's time
-	* @param {Frame} [frame] - frame of that time.
-	* @return {FrameTimeline} An instance itself
-	* @example
-timeline.updateFrame(time, this.get(time));
-	*/
-	updateFrame(time, frame = this.get(time)) {
+	updateFrame(frame) {
 		if (!frame) {
 			return this;
 		}
-		const frameRoles = frame.properties;
-		const itemNames = this.names;
-		let frameProperties;
-		let itemPropertyNames;
-		let name;
+		const roles = frame.properties;
+		const names = this.names;
 
-		for (const role in frameRoles) {
-			frameProperties = frameRoles[role];
-			itemPropertyNames = itemNames[role];
+		for (const role in roles) {
+			names[role] = names[role] || {};
+			const properties = roles[role];
 
-			for (name in frameProperties) {
-				if (has(itemPropertyNames, name)) {
-					continue;
-				}
-				itemPropertyNames[name] = true;
+			for (const name in properties) {
+				names[role][name] = true;
 			}
 		}
-		this.updateNumber[time] = frame.updateNumber;
 		return this;
 	}
 }

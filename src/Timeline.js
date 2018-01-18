@@ -6,7 +6,7 @@ import {has} from "./utils";
 class Timeline {
 	constructor() {
 		this.times = [];
-		this.item = {};
+		this.items = {};
 	}
 	/**
 	* get last time of list
@@ -33,7 +33,7 @@ class Timeline {
 	* @return {Timeline} An instance itself
 	*/
 	add(time, object) {
-		this.item[time] = object;
+		this.items[time] = object;
 		this.addTime(time);
 		return this;
 	}
@@ -61,7 +61,7 @@ class Timeline {
 	* @return {Boolean} true: if has time, false: not
 	*/
 	has(time) {
-		return has(this.item, time);
+		return has(this.items, time);
 	}
 	/**
 	* get object at that time.
@@ -69,7 +69,7 @@ class Timeline {
 	* @return {Object} object at that time
 	*/
 	get(time) {
-		return this.item[time];
+		return this.items[time];
 	}
 	/**
 	* remove object at that time.
@@ -77,7 +77,7 @@ class Timeline {
 	* @return {Timeline} An instance itself
 	*/
 	remove(time) {
-		delete this.item[time];
+		delete this.items[time];
 		this.removeTime(time);
 		return this;
 	}

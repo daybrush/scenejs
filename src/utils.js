@@ -35,12 +35,9 @@ export const isObject = function(value) {
 };
 export const isArray = function(value) {
 	return Array.isArray(value);
-}
+};
 export const isString = function(value) {
 	return (typeof value === "string");
-};
-export const isPropertyObject = function(value) {
-	return (value instanceof PropertyObject);
 };
 export const has = function(object, name) {
 	return Object.prototype.hasOwnProperty.call(object, name);

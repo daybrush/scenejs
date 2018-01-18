@@ -5,8 +5,6 @@ import {
 	defineGetterSetter,
 } from "./Util";
 
-
-
 const GETTER = function(func) {
 	return {
 		get: func,
