@@ -64,8 +64,13 @@ const animator = new Scene.Animator({
 		this.setOptions(options);
 	}
 	set easing(curveArray) {
-	
-		this.options.easing = (typeof curveArray === "function") ? curveArray : cubicBezier(curveArray);
+		if (Array.isArray(curveArray)) {
+			this.options.easingName = `cubic-bezier(${curveArray.join(" ,")})`;
+			this.options.easing = cubicBezier(...curveArray);
+		} else {
+			this.options.easing = curveArray;
+			this.options.easingName = curveArray.easingName || "linear";
+		}
 	}
 	get easing() {
 		return this.options.easing;
@@ -321,7 +326,7 @@ animator.currentTime // 10
 		return easingTime;
 	}
 	setIterationTime(time) {
-		const iterationTime = this.caculateEasing(time);
+		const iterationTime = time;
 
 		this._currentIterationTime = iterationTime;
 		this.trigger("iterationtimeupdate", {iterationTime});

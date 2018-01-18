@@ -184,10 +184,20 @@ obj4.join();  // =>   "100,100,100,0.5"
 	*/
 	each(func) {
 		const arr = this.value;
-		let i;
 
-		for (i in arr) {
+		for (const i in arr) {
 			func(arr[i], i, arr);
+		}
+	}
+	multiply(number) {
+		const arr = this.value;
+
+		for (const i in arr) {
+			if (arr[i] instanceof PropertyObject) {
+				arr[i].multiply(number);
+			} else {
+				arr[i] *= number;
+			}
 		}
 	}
 }

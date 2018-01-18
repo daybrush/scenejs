@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -194,6 +194,37 @@ var defineGetterSetter = exports.defineGetterSetter = function defineGetterSette
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EASE_IN_OUT = exports.EASE_OUT = exports.EASE_IN = exports.EASE = exports.PLAY_DIRECTION = exports.FILL_MODE = exports.ANIMATION_PLAY_STATE = exports.SCENE_ROLES = exports.PROPERTY = exports.PREFIX = undefined;
+
+var _cubicBezier = __webpack_require__(3);
+
+var _cubicBezier2 = _interopRequireDefault(_cubicBezier);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var PREFIX = exports.PREFIX = "__SCENEJS_";
+var PROPERTY = exports.PROPERTY = "property";
+var SCENE_ROLES = exports.SCENE_ROLES = _defineProperty({}, PROPERTY, true);
+var ANIMATION_PLAY_STATE = exports.ANIMATION_PLAY_STATE = ["idle", "pending", "paused", "running", "finished"];
+var FILL_MODE = exports.FILL_MODE = ["none", "forwards", "backwards", "both", "auto"];
+var PLAY_DIRECTION = exports.PLAY_DIRECTION = ["normal", "reverse", "alternate", "alternate-reverse"];
+var EASE = exports.EASE = (0, _cubicBezier2.default)(0.25, 0.1, 0.25, 1);
+var EASE_IN = exports.EASE_IN = (0, _cubicBezier2.default)(0.42, 0, 1, 1);
+var EASE_OUT = exports.EASE_OUT = (0, _cubicBezier2.default)(0, 0, 0.58, 1);
+var EASE_IN_OUT = exports.EASE_IN_OUT = (0, _cubicBezier2.default)(0.42, 0, 0.58, 1);
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -397,10 +428,22 @@ var PropertyObject = function () {
 		key: "each",
 		value: function each(func) {
 			var arr = this.value;
-			var i = void 0;
 
-			for (i in arr) {
+			for (var i in arr) {
 				func(arr[i], i, arr);
+			}
+		}
+	}, {
+		key: "multiply",
+		value: function multiply(number) {
+			var arr = this.value;
+
+			for (var i in arr) {
+				if (arr[i] instanceof PropertyObject) {
+					arr[i].multiply(number);
+				} else {
+					arr[i] *= number;
+				}
 			}
 		}
 	}, {
@@ -430,38 +473,65 @@ var PropertyObject = function () {
 exports.default = PropertyObject;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
-exports.EASE_IN_OUT = exports.EASE_OUT = exports.EASE_IN = exports.EASE = exports.PLAY_DIRECTION = exports.FILL_MODE = exports.ANIMATION_PLAY_STATE = exports.SCENE_ROLES = exports.PROPERTY = exports.PREFIX = undefined;
 
-var _cubicBezier = __webpack_require__(8);
+exports.default = function (x1, y1, x2, y2) {
+	function cubic(_x1, _x2, t) {
+		var t2 = 1 - t;
 
-var _cubicBezier2 = _interopRequireDefault(_cubicBezier);
+		// Bezier Curve Formula
+		return t * t * t + 3 * t * t * t2 * _x2 + 3 * t * t2 * t2 * _x1;
+	}
+	/*
+ 	x = f(t)
+ 	calculate inverse function by x
+ 	t = f-1(x)
+ */
+	function solveFromX(_x) {
+		// x  0 ~ 1
+		// t 0 ~ 1
+		var t = _x;
+		var x = _x;
+		var dx = 1;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+		while (Math.abs(dx) > 1 / 1000) {
+			// 예상 t초에 의한 _x값
+			x = cubic(x1, x2, t);
+			dx = x - _x;
+			// 차이가 미세하면 그 값을 t로 지정
+			if (Math.abs(dx) < 1 / 1000) {
+				return t;
+			}
+			t -= dx / 2;
+		}
+		return t;
+	}
+	var func = function func(_x) {
+		var x = _x;
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+		if (x >= 1) {
+			x = 1;
+		} else if (x <= 0) {
+			x = 0;
+		}
+		x = solveFromX(x);
+		return cubic(y1, y2, x);
+	};
 
-var PREFIX = exports.PREFIX = "__SCENEJS_";
-var PROPERTY = exports.PROPERTY = "property";
-var SCENE_ROLES = exports.SCENE_ROLES = _defineProperty({}, PROPERTY, true);
-var ANIMATION_PLAY_STATE = exports.ANIMATION_PLAY_STATE = ["idle", "pending", "paused", "running", "finished"];
-var FILL_MODE = exports.FILL_MODE = ["none", "forwards", "backwards", "both", "auto"];
-var PLAY_DIRECTION = exports.PLAY_DIRECTION = ["normal", "reverse", "alternate", "alternate-reverse"];
-var EASE = exports.EASE = (0, _cubicBezier2.default)([0.25, 0.1, 0.25, 1]);
-var EASE_IN = exports.EASE_IN = (0, _cubicBezier2.default)([0.42, 0, 1, 1]);
-var EASE_OUT = exports.EASE_OUT = (0, _cubicBezier2.default)([0, 0, 0.58, 1]);
-var EASE_IN_OUT = exports.EASE_IN_OUT = (0, _cubicBezier2.default)([0.42, 0, 0.58, 1]);
+	func.easingName = "cubic-bezier(" + x1 + ", " + y1 + ", " + x2 + ", " + y2 + ")";
+	return func;
+};
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -473,17 +543,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _EventTrigger2 = __webpack_require__(12);
+var _EventTrigger2 = __webpack_require__(11);
 
 var _EventTrigger3 = _interopRequireDefault(_EventTrigger2);
 
-var _cubicBezier = __webpack_require__(8);
+var _cubicBezier = __webpack_require__(3);
 
 var _cubicBezier2 = _interopRequireDefault(_cubicBezier);
 
 var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -757,7 +829,7 @@ var Animator = function (_EventTrigger) {
 	}, {
 		key: "setIterationTime",
 		value: function setIterationTime(time) {
-			var iterationTime = this.caculateEasing(time);
+			var iterationTime = time;
 
 			this._currentIterationTime = iterationTime;
 			this.trigger("iterationtimeupdate", { iterationTime: iterationTime });
@@ -788,8 +860,13 @@ var Animator = function (_EventTrigger) {
 	}, {
 		key: "easing",
 		set: function set(curveArray) {
-
-			this.options.easing = typeof curveArray === "function" ? curveArray : (0, _cubicBezier2.default)(curveArray);
+			if (Array.isArray(curveArray)) {
+				this.options.easingName = "cubic-bezier(" + curveArray.join(" ,") + ")";
+				this.options.easing = _cubicBezier2.default.apply(undefined, _toConsumableArray(curveArray));
+			} else {
+				this.options.easing = curveArray;
+				this.options.easingName = curveArray.easingName || "linear";
+			}
 		},
 		get: function get() {
 			return this.options.easing;
@@ -986,7 +1063,7 @@ animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 2 = 6
 exports.default = Animator;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -998,13 +1075,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _consts = __webpack_require__(2);
+var _consts = __webpack_require__(1);
 
 var _utils = __webpack_require__(0);
 
-var _property = __webpack_require__(9);
+var _property = __webpack_require__(8);
 
-var _PropertyObject = __webpack_require__(1);
+var _PropertyObject = __webpack_require__(2);
 
 var _PropertyObject2 = _interopRequireDefault(_PropertyObject);
 
@@ -1306,7 +1383,7 @@ var Frame = function () {
 exports.default = Frame;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1320,17 +1397,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _Animator2 = __webpack_require__(3);
+var _Animator2 = __webpack_require__(4);
 
 var _Animator3 = _interopRequireDefault(_Animator2);
 
-var _Frame = __webpack_require__(4);
+var _Frame = __webpack_require__(5);
 
 var _Frame2 = _interopRequireDefault(_Frame);
 
 var _utils = __webpack_require__(0);
 
-var _FrameTimeline = __webpack_require__(13);
+var _FrameTimeline = __webpack_require__(12);
 
 var _FrameTimeline2 = _interopRequireDefault(_FrameTimeline);
 
@@ -1628,6 +1705,7 @@ var SceneItem = function (_Animator) {
 		value: function getNowValue(role, property, time) {
 			var left = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 			var right = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : this.timeline.length;
+			var isEasing = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : true;
 
 			var timeline = this.timeline;
 			var times = timeline.times;
@@ -1657,7 +1735,6 @@ var SceneItem = function (_Animator) {
 					break;
 				}
 			}
-
 			var prevValue = prevFrame.get(role, property);
 
 			if ((0, _utils.isUndefined)(prevValue)) {
@@ -1675,14 +1752,22 @@ var SceneItem = function (_Animator) {
 			if (prevTime < 0) {
 				prevTime = 0;
 			}
+			var startTime = times[left];
+			var endTime = times[right];
 
-			var value = (0, _dot.dot)(prevValue, nextValue, time - prevTime, nextTime - time);
+			if (!isEasing || !this.options.easing || startTime === endTime) {
+				return (0, _dot.dot)(prevValue, nextValue, time - prevTime, nextTime - time);
+			}
+			var startValue = (0, _dot.dot)(prevValue, nextValue, startTime - prevTime, nextTime - startTime);
+			var endValue = (0, _dot.dot)(prevValue, nextValue, endTime - prevTime, nextTime - endTime);
+			var ratio = this.options.easing((time - startTime) / (endTime - startTime));
+			var value = (0, _dot.dot)(startValue, endValue, ratio, 1 - ratio);
 
 			return value;
 		}
 	}, {
-		key: "getLeftRightIndex",
-		value: function getLeftRightIndex(time) {
+		key: "getNearIndex",
+		value: function getNearIndex(time) {
 			var timeline = this.timeline;
 			var times = timeline.times,
 			    last = timeline.last,
@@ -1706,6 +1791,9 @@ var SceneItem = function (_Animator) {
 				// Binary Search
 				while (left < right) {
 					if ((left === index || right === index) && left + 1 === right) {
+						if (time < times[left]) {
+							right = left;
+						}
 						break;
 					} else if (times[index] > time) {
 						right = index;
@@ -1722,6 +1810,7 @@ var SceneItem = function (_Animator) {
 				index = right;
 				left = index;
 			}
+
 			return { left: left, right: right };
 		}
 		/**
@@ -1748,7 +1837,9 @@ var SceneItem = function (_Animator) {
 	}, {
 		key: "getNowFrame",
 		value: function getNowFrame(time) {
-			var indices = this.getLeftRightIndex(time);
+			var isEasing = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+			var indices = this.getNearIndex(time);
 
 			if (!indices) {
 				return indices;
@@ -1757,17 +1848,13 @@ var SceneItem = function (_Animator) {
 			    right = indices.right;
 
 			var frame = this.newFrame();
-
 			var names = this.timeline.names;
-			var role = void 0;
-			var propertyNames = void 0;
-			var property = void 0;
-			var value = void 0;
 
-			for (role in names) {
-				propertyNames = names[role];
-				for (property in propertyNames) {
-					value = this.getNowValue(role, property, time, left, right);
+			for (var role in names) {
+				var propertyNames = names[role];
+
+				for (var property in propertyNames) {
+					var value = this.getNowValue(role, property, time, left, right, isEasing);
 
 					if ((0, _utils.isUndefined)(value)) {
 						continue;
@@ -1833,102 +1920,6 @@ var SceneItem = function (_Animator) {
 exports.default = SceneItem;
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _Frame2 = __webpack_require__(4);
-
-var _Frame3 = _interopRequireDefault(_Frame2);
-
-var _PropertyObject = __webpack_require__(1);
-
-var _PropertyObject2 = _interopRequireDefault(_PropertyObject);
-
-var _utils = __webpack_require__(7);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function toInnerProperties(obj) {
-	if (!obj) {
-		return "";
-	}
-	var arrObj = [];
-	for (var name in obj) {
-		arrObj.push(name + "(" + obj[name] + ")");
-	}
-	return arrObj.join(" ");
-}
-
-/**
-* Animation's CSS Frame
-* @extends Frame
-*/
-
-var CSSFrame = function (_Frame) {
-	_inherits(CSSFrame, _Frame);
-
-	function CSSFrame() {
-		_classCallCheck(this, CSSFrame);
-
-		return _possibleConstructorReturn(this, (CSSFrame.__proto__ || Object.getPrototypeOf(CSSFrame)).apply(this, arguments));
-	}
-
-	_createClass(CSSFrame, [{
-		key: "toCSS",
-		value: function toCSS() {
-			var frameObject = this.toObject();
-			var cssObject = {};
-
-			var properties = frameObject.property;
-			for (var name in properties) {
-				cssObject[name] = properties[name];
-			}
-			var transform = toInnerProperties(frameObject.transform);
-			var filter = toInnerProperties(frameObject.filter);
-
-			transform && (0, _utils.convertCrossBrowserCSSObject)(cssObject, "transform", transform);
-			filter && (0, _utils.convertCrossBrowserCSSObject)(cssObject, "filter", filter);
-
-			var cssArray = [];
-
-			for (var _name in cssObject) {
-				cssArray.push(_name + ":" + cssObject[_name] + ";");
-			}
-			return cssArray.join("");
-		}
-		/**
-  * get the contents of a style declaration as a string.
-  * @readonly
-  */
-
-	}, {
-		key: "cssText",
-		get: function get() {
-			return this.toCSS();
-		}
-	}]);
-
-	return CSSFrame;
-}(_Frame3.default);
-
-exports.default = CSSFrame;
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1972,74 +1963,9 @@ var toId = exports.toId = function toId(text) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-exports.default = function (curveArray) {
-	var _curveArray = _slicedToArray(curveArray, 4),
-	    x1 = _curveArray[0],
-	    y1 = _curveArray[1],
-	    x2 = _curveArray[2],
-	    y2 = _curveArray[3];
-
-	function cubic(_x1, _x2, t) {
-		var t2 = 1 - t;
-
-		// Bezier Curve Formula
-		return t * t * t + 3 * t * t * t2 * _x2 + 3 * t * t2 * t2 * _x1;
-	}
-	/*
- 	x = f(t)
- 	calculate inverse function by x
- 	t = f-1(x)
- */
-	function solveFromX(_x) {
-		// x  0 ~ 1
-		// t 0 ~ 1
-		var t = _x;
-		var x = _x;
-		var dx = 1;
-
-		while (Math.abs(dx) > 1 / 1000) {
-			// 예상 t초에 의한 _x값
-			x = cubic(x1, x2, t);
-			dx = x - _x;
-			// 차이가 미세하면 그 값을 t로 지정
-			if (Math.abs(dx) < 1 / 1000) {
-				return t;
-			}
-			t -= dx / 2;
-		}
-		return t;
-	}
-	return function (_x) {
-		var x = _x;
-
-		if (x >= 1) {
-			x = 1;
-		} else if (x <= 0) {
-			x = 0;
-		}
-		x = solveFromX(x);
-		return cubic(y1, y2, x);
-	};
-};
-
-;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
 exports.stringToColorObject = exports.toPropertyObject = exports.toBracketObject = exports.toColorObject = exports.arrayToColorObject = exports.splitComma = exports.splitSpace = undefined;
 
-var _PropertyObject = __webpack_require__(1);
+var _PropertyObject = __webpack_require__(2);
 
 var _PropertyObject2 = _interopRequireDefault(_PropertyObject);
 
@@ -2363,7 +2289,7 @@ exports.toPropertyObject = _toPropertyObject;
 exports.stringToColorObject = stringToColorObject;
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2377,7 +2303,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _Scene2 = __webpack_require__(14);
+var _Scene2 = __webpack_require__(13);
 
 var _Scene3 = _interopRequireDefault(_Scene2);
 
@@ -2385,11 +2311,9 @@ var _SceneItem = __webpack_require__(16);
 
 var _SceneItem2 = _interopRequireDefault(_SceneItem);
 
-var _Frame = __webpack_require__(6);
-
-var _Frame2 = _interopRequireDefault(_Frame);
-
 var _utils = __webpack_require__(0);
+
+var _consts = __webpack_require__(1);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2468,25 +2392,65 @@ var CSSScene = function (_Scene) {
 			}
 			return this;
 		}
+	}, {
+		key: "exportCSS",
+		value: function exportCSS() {
+			var items = this.items;
+
+			for (var id in items) {
+				var item = items[id];
+
+				item.exportCSS(this.duration);
+			}
+			return this;
+		}
+	}, {
+		key: "playCSS",
+		value: function playCSS() {
+			this.exportCSS();
+			var items = this.items;
+
+			for (var id in items) {
+				var item = items[id];
+				var element = item.options.element;
+
+				if (!element) {
+					continue;
+				}
+				var length = element.length;
+
+				for (var i = 0; i < length; ++i) {
+					element[i].className += " startAnimation";
+				}
+			}
+			return this;
+		}
 	}]);
 
 	return CSSScene;
 }(_Scene3.default);
 
+_consts.SCENE_ROLES.transform = true;
+_consts.SCENE_ROLES.filter = true;
+
 exports.default = CSSScene;
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _Scene = __webpack_require__(10);
+var _Scene = __webpack_require__(9);
 
 var _Scene2 = _interopRequireDefault(_Scene);
 
-var _consts = __webpack_require__(2);
+var _consts = __webpack_require__(1);
+
+var _cubicBezier = __webpack_require__(3);
+
+var _cubicBezier2 = _interopRequireDefault(_cubicBezier);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2494,11 +2458,12 @@ _Scene2.default.EASE = _consts.EASE;
 _Scene2.default.EASE_IN = _consts.EASE_IN;
 _Scene2.default.EASE_OUT = _consts.EASE_OUT;
 _Scene2.default.EASE_IN_OUT = _consts.EASE_IN_OUT;
+_Scene2.default.cubicBezier = _cubicBezier2.default;
 
 module.exports = _Scene2.default;
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2609,7 +2574,7 @@ EventTrigger.defaultEvents = {};
 exports.default = EventTrigger;
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2621,7 +2586,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Timeline2 = __webpack_require__(15);
+var _Timeline2 = __webpack_require__(14);
 
 var _Timeline3 = _interopRequireDefault(_Timeline2);
 
@@ -2693,7 +2658,7 @@ var FrameTimeline = function (_Timeline) {
 exports.default = FrameTimeline;
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2707,11 +2672,11 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Animator2 = __webpack_require__(3);
+var _Animator2 = __webpack_require__(4);
 
 var _Animator3 = _interopRequireDefault(_Animator2);
 
-var _SceneItem = __webpack_require__(5);
+var _SceneItem = __webpack_require__(6);
 
 var _SceneItem2 = _interopRequireDefault(_SceneItem);
 
@@ -2777,10 +2742,10 @@ var Scene = function (_Animator) {
 	function Scene(properties, options) {
 		_classCallCheck(this, Scene);
 
-		var _this = _possibleConstructorReturn(this, (Scene.__proto__ || Object.getPrototypeOf(Scene)).call(this, options));
+		var _this = _possibleConstructorReturn(this, (Scene.__proto__ || Object.getPrototypeOf(Scene)).call(this));
 
 		_this.items = {};
-		_this.load(properties);
+		_this.load(properties, options);
 		return _this;
 	}
 	/**
@@ -2892,9 +2857,9 @@ var Scene = function (_Animator) {
 				}
 				item = this.newItem(name);
 				item.load(properties[name]);
-			}
-			if (options) {
-				this.setOptions(options);
+				if (options) {
+					item.setOptions(options);
+				}
 			}
 			return this;
 		}
@@ -2902,12 +2867,11 @@ var Scene = function (_Animator) {
 		key: "duration",
 		get: function get() {
 			var items = this.items;
-			var item = void 0;
 			var time = 0;
-			var id = void 0;
 
-			for (id in items) {
-				item = items[id];
+			for (var id in items) {
+				var item = items[id];
+
 				time = Math.max(time, item.totalDuration / item.playSpeed);
 			}
 			return time;
@@ -2920,7 +2884,7 @@ var Scene = function (_Animator) {
 exports.default = Scene;
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3060,6 +3024,102 @@ var Timeline = function () {
 exports.default = Timeline;
 
 /***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Frame2 = __webpack_require__(5);
+
+var _Frame3 = _interopRequireDefault(_Frame2);
+
+var _PropertyObject = __webpack_require__(2);
+
+var _PropertyObject2 = _interopRequireDefault(_PropertyObject);
+
+var _utils = __webpack_require__(7);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function toInnerProperties(obj) {
+	if (!obj) {
+		return "";
+	}
+	var arrObj = [];
+	for (var name in obj) {
+		arrObj.push(name + "(" + obj[name] + ")");
+	}
+	return arrObj.join(" ");
+}
+
+/**
+* Animation's CSS Frame
+* @extends Frame
+*/
+
+var CSSFrame = function (_Frame) {
+	_inherits(CSSFrame, _Frame);
+
+	function CSSFrame() {
+		_classCallCheck(this, CSSFrame);
+
+		return _possibleConstructorReturn(this, (CSSFrame.__proto__ || Object.getPrototypeOf(CSSFrame)).apply(this, arguments));
+	}
+
+	_createClass(CSSFrame, [{
+		key: "toCSS",
+		value: function toCSS() {
+			var frameObject = this.toObject();
+			var cssObject = {};
+
+			var properties = frameObject.property;
+			for (var name in properties) {
+				cssObject[name] = properties[name];
+			}
+			var transform = toInnerProperties(frameObject.transform);
+			var filter = toInnerProperties(frameObject.filter);
+
+			transform && (0, _utils.convertCrossBrowserCSSObject)(cssObject, "transform", transform);
+			filter && (0, _utils.convertCrossBrowserCSSObject)(cssObject, "filter", filter);
+
+			var cssArray = [];
+
+			for (var _name in cssObject) {
+				cssArray.push(_name + ":" + cssObject[_name] + ";");
+			}
+			return cssArray.join("");
+		}
+		/**
+  * get the contents of a style declaration as a string.
+  * @readonly
+  */
+
+	}, {
+		key: "cssText",
+		get: function get() {
+			return this.toCSS();
+		}
+	}]);
+
+	return CSSFrame;
+}(_Frame3.default);
+
+exports.default = CSSFrame;
+
+/***/ }),
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3074,17 +3134,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _SceneItem2 = __webpack_require__(5);
+var _SceneItem2 = __webpack_require__(6);
 
 var _SceneItem3 = _interopRequireDefault(_SceneItem2);
 
-var _consts = __webpack_require__(2);
+var _consts = __webpack_require__(1);
 
 var _utils = __webpack_require__(0);
 
 var _utils2 = __webpack_require__(7);
 
-var _Frame = __webpack_require__(6);
+var _Frame = __webpack_require__(15);
 
 var _Frame2 = _interopRequireDefault(_Frame);
 
@@ -3126,7 +3186,6 @@ function makeId() {
 			return id;
 		}
 	}
-	return -1;
 }
 
 /**
@@ -3313,22 +3372,22 @@ var CSSItem = function (_SceneItem) {
 			var id = this.options.id || this.setId(makeId()).options.id;
 
 			if (!id) {
-				return;
+				return "";
 			}
 			var itemDuration = this.duration;
 			var ratio = itemDuration / duration;
 			var times = this.timeline.times;
 
 			var keyframes = times.map(function (time) {
-				var frame = _this2.getFrame(time);
+				var frame = _this2.getNowFrame(time, false);
 
 				return time / itemDuration * ratio * 100 + "%{" + frame.toCSS() + "}";
 			});
 
 			if (ratio < 1) {
-				keyframes.push("100%{" + this.getFrame(itemDuration).toCSS() + "}");
+				keyframes.push("100%{" + this.getNowFrame(itemDuration, false).toCSS() + "}");
 			}
-			return "@keyframes " + _consts.PREFIX + "KEYFRAMES_" + (0, _utils2.toId)(id) + "{" + keyframes.join("") + "}";
+			return "@keyframes " + _consts.PREFIX + "KEYFRAMES_" + (0, _utils2.toId)(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
 		}
 	}, {
 		key: "toCSS",
@@ -3347,11 +3406,13 @@ var CSSItem = function (_SceneItem) {
 			var count = options.iterationCount || this.options.iterationCount;
 			var cssArray = [];
 
-			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation", _consts.PREFIX + "KEYFRAMES_" + (0, _utils2.toId)(id) + " " + duration + " " + easing);
+			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-name", _consts.PREFIX + "KEYFRAMES_" + (0, _utils2.toId)(id));
+			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-duration", duration + "s");
+			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-timing-function", easing);
 			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-fill-mode", fillMode);
 			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-iteration-count", count);
 
-			var css = selector + ".startAnimation {" + cssArray.join("") + "}\n\t\t\t" + this.toKeyframes();
+			var css = selector + ".startAnimation {\n\t\t\t" + cssArray.join("") + "\n\t\t}\n\t\t" + this.toKeyframes();
 
 			return css;
 		}
@@ -3530,11 +3591,11 @@ exports.dot = exports.dotObject = exports.dotColor = exports.dotArray = undefine
 
 var _utils = __webpack_require__(0);
 
-var _PropertyObject = __webpack_require__(1);
+var _PropertyObject = __webpack_require__(2);
 
 var _PropertyObject2 = _interopRequireDefault(_PropertyObject);
 
-var _property = __webpack_require__(9);
+var _property = __webpack_require__(8);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

@@ -1,6 +1,4 @@
-export default function(curveArray) {
-	const [x1, y1, x2, y2] = curveArray;
-
+export default function(x1, y1, x2, y2) {
 	function cubic(_x1, _x2, t) {
 		const t2 = 1 - t;
 
@@ -31,7 +29,7 @@ export default function(curveArray) {
 		}
 		return t;
 	}
-	return function(_x) {
+	const func = function(_x) {
 		let x = _x;
 
 		if (x >= 1) {
@@ -42,4 +40,7 @@ export default function(curveArray) {
 		x = solveFromX(x);
 		return cubic(y1, y2, x);
 	};
-};
+
+	func.easingName = `cubic-bezier(${x1}, ${y1}, ${x2}, ${y2})`;
+	return func;
+}

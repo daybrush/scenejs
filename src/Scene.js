@@ -44,9 +44,9 @@ const scene = new Scene({
 });
 	*/
 	constructor(properties, options) {
-		super(options);
+		super();
 		this.items = {};
-		this.load(properties);
+		this.load(properties, options);
 	}
 	/**
 	* Specifies how many seconds an items'animation takes to complete one cycle
@@ -57,12 +57,11 @@ item.duration; // = item.timeline.last
 	*/
 	get duration() {
 		const items = this.items;
-		let item;
 		let time = 0;
-		let id;
 
-		for (id in items) {
-			item = items[id];
+		for (const id in items) {
+			const item = items[id];
+
 			time = Math.max(time, item.totalDuration / item.playSpeed);
 		}
 		return time;
@@ -150,9 +149,9 @@ scene.load({
 			}
 			item = this.newItem(name);
 			item.load(properties[name]);
-		}
-		if (options) {
-			this.setOptions(options);
+			if (options) {
+				item.setOptions(options);
+			}
 		}
 		return this;
 	}

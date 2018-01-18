@@ -31,7 +31,6 @@ function makeId() {
 			return id;
 		}
 	}
-	return -1;
 }
 
 /**
@@ -61,7 +60,7 @@ class CSSItem extends SceneItem {
 
 		super.setId(id);
 		const sceneId = toId(this.options.id);
-		
+
 		this.options.selector || (this.options.selector = `[data-scene-id="${sceneId}"]`);
 
 		if (!element) {
@@ -83,7 +82,7 @@ class CSSItem extends SceneItem {
 		if (!element) {
 			return this;
 		}
-		let id = this.id;
+		const id = this.id;
 
 		this.options.element = (element instanceof Element) ? [element] : element;
 		this.setId((!id || id === "null") ? makeId() : id);
@@ -156,7 +155,7 @@ frame.getProperty("opacity"); // 0.5
 
 	*/
 	copyCSSProperty(time, property) {
-		const element = this.element && this.element[0]
+		const element = this.element && this.element[0];
 
 		if (!element) {
 			return this;
@@ -196,22 +195,24 @@ frame.getProperty("opacity"); // 0.5
 		const id = this.options.id || this.setId(makeId()).options.id;
 
 		if (!id) {
-			return;
+			return "";
 		}
 		const itemDuration = this.duration;
 		const ratio = itemDuration / duration;
 		const times = this.timeline.times;
 
 		const keyframes = times.map(time => {
-			const frame = this.getFrame(time);
+			const frame = this.getNowFrame(time, false);
 
 			return `${time / itemDuration * ratio * 100}%{${frame.toCSS()}}`;
 		});
 
 		if (ratio < 1) {
-			keyframes.push(`100%{${this.getFrame(itemDuration).toCSS()}}`);
+			keyframes.push(`100%{${this.getNowFrame(itemDuration, false).toCSS()}}`);
 		}
-		return `@keyframes ${PREFIX}KEYFRAMES_${toId(id)}{${keyframes.join("")}}`;
+		return `@keyframes ${PREFIX}KEYFRAMES_${toId(id)}{
+			${keyframes.join("\n")}
+		}`;
 	}
 	toCSS(duration = this.duration, options = {}) {
 		const id = this.options.id || this.setId(makeId()).options.id;
@@ -225,12 +226,16 @@ frame.getProperty("opacity"); // 0.5
 		const count = options.iterationCount || this.options.iterationCount;
 		const cssArray = [];
 
-		convertCrossBrowserCSSArray(cssArray, "animation", `${PREFIX}KEYFRAMES_${toId(id)} ${duration} ${easing}`);
+		convertCrossBrowserCSSArray(cssArray, "animation-name", `${PREFIX}KEYFRAMES_${toId(id)}`);
+		convertCrossBrowserCSSArray(cssArray, "animation-duration", `${duration}s`);
+		convertCrossBrowserCSSArray(cssArray, "animation-timing-function", easing);
 		convertCrossBrowserCSSArray(cssArray, "animation-fill-mode", fillMode);
 		convertCrossBrowserCSSArray(cssArray, "animation-iteration-count", count);
 
-		const css = `${selector}.startAnimation {${cssArray.join("")}}
-			${this.toKeyframes()}`;
+		const css = `${selector}.startAnimation {
+			${cssArray.join("")}
+		}
+		${this.toKeyframes()}`;
 
 		return css;
 	}

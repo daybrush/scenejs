@@ -243,7 +243,7 @@ item.merge(0, 1);
 		toFrame.merge(frame);
 		return this;
 	}
-	getNowValue(role, property, time, left = 0, right = this.timeline.length) {
+	getNowValue(role, property, time, left = 0, right = this.timeline.length, isEasing = true) {
 		const timeline = this.timeline;
 		const times = timeline.times;
 		const length = times.length;
@@ -272,7 +272,6 @@ item.merge(0, 1);
 				break;
 			}
 		}
-
 		const prevValue = prevFrame.get(role, property);
 
 		if (isUndefined(prevValue)) {
@@ -290,12 +289,20 @@ item.merge(0, 1);
 		if (prevTime < 0) {
 			prevTime = 0;
 		}
+		const startTime = times[left];
+		const endTime = times[right];
 
-		const value = dot(prevValue, nextValue, time - prevTime, nextTime - time);
+		if (!isEasing || !this.options.easing || startTime === endTime) {
+			return dot(prevValue, nextValue, time - prevTime, nextTime - time);
+		}
+		const startValue = dot(prevValue, nextValue, startTime - prevTime, nextTime - startTime);
+		const endValue = dot(prevValue, nextValue, endTime - prevTime, nextTime - endTime);
+		const ratio = this.options.easing((time - startTime) / (endTime - startTime));
+		const value = dot(startValue, endValue, ratio, 1 - ratio);
 
 		return value;
 	}
-	getLeftRightIndex(time) {
+	getNearIndex(time) {
 		const timeline = this.timeline;
 		const {times, last, length} = timeline;
 
@@ -317,6 +324,9 @@ item.merge(0, 1);
 			// Binary Search
 			while (left < right) {
 				if ((left === index || right === index) && (left + 1 === right)) {
+					if (time < times[left]) {
+						right = left;
+					}
 					break;
 				} else if (times[index] > time) {
 					right = index;
@@ -333,6 +343,7 @@ item.merge(0, 1);
 			index = right;
 			left = index;
 		}
+
 		return {left, right};
 	}
 	/**
@@ -355,25 +366,21 @@ let item = new Scene.SceneItem({
 // opacity: 0.7; display:"block";
 const frame = item.getNowFrame(1.7);
 	*/
-	getNowFrame(time) {
-		const indices = this.getLeftRightIndex(time);
+	getNowFrame(time, isEasing = true) {
+		const indices = this.getNearIndex(time);
 
 		if (!indices) {
 			return indices;
 		}
 		const {left, right} = indices;
 		const frame = this.newFrame();
-
 		const names = this.timeline.names;
-		let role;
-		let propertyNames;
-		let property;
-		let value;
 
-		for (role in names) {
-			propertyNames = names[role];
-			for (property in propertyNames) {
-				value = this.getNowValue(role, property, time, left, right);
+		for (const role in names) {
+			const propertyNames = names[role];
+
+			for (const property in propertyNames) {
+				const value = this.getNowValue(role, property, time, left, right, isEasing);
 
 				if (isUndefined(value)) {
 					continue;

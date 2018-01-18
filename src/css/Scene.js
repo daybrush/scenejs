@@ -1,7 +1,7 @@
 import Scene from "../Scene";
 import SceneItem from "./SceneItem";
-import Frame from "./Frame";
 import {has} from "../utils";
+import {SCENE_ROLES} from "../consts";
 
 class CSSScene extends Scene {
 	newItem(name) {
@@ -58,6 +58,38 @@ class CSSScene extends Scene {
 		}
 		return this;
 	}
+	exportCSS() {
+		const items = this.items;
+
+		for (const id in items) {
+			const item = items[id];
+
+			item.exportCSS(this.duration);
+		}
+		return this;
+	}
+	playCSS() {
+		this.exportCSS();
+		const items = this.items;
+
+		for (const id in items) {
+			const item = items[id];
+			const element = item.options.element;
+
+			if (!element) {
+				continue;
+			}
+			const length = element.length;
+
+			for (let i = 0; i < length; ++i) {
+				element[i].className += " startAnimation";
+			}
+		}
+		return this;
+	}
 }
+
+SCENE_ROLES.transform = true;
+SCENE_ROLES.filter = true;
 
 export default CSSScene;
