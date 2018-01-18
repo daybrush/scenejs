@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Javascript Animation Library",
   "main": "main.js",
   "directories": {
@@ -16,12 +16,12 @@
     "type": "git",
     "url": "https://github.com/daybrush/scenejs.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Daybrush",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/daybrush/Scene.js/issues"
+    "url": "https://github.com/daybrush/scenejs/issues"
   },
-  "homepage": "https://github.com/daybrush/Scene.js#readme",
+  "homepage": "https://daybrush.com",
   "devDependencies": {
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
