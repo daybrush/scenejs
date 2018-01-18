@@ -3,7 +3,6 @@ module.exports = function(config) {
       frameworks: ["mocha", "chai", "sinon"],
   
       files: [
-        "./node_modules/lite-fixture/index.js",
         "./test/unit/**/*.spec.js",
       ],
       client: {
