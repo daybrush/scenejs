@@ -1,9 +1,11 @@
 import SceneItem from "../SceneItem";
-import {defineGetter, isObject, isUndefined} from "../Util";
-import CSSFrame from "./CSSFrame";
+import {PREFIX} from "../consts";
+import {defineGetter, isObject, isUndefined} from "../utils";
+import {convertCrossBrowserCSSArray, toId} from "./utils";
+import Frame from "./Frame";
 
-function animateFunction(time, frame) {
-	const element = this.element;
+function animateFunction({time, frame}) {
+	const element = this.options.element;
 
 	if (!element) {
 		return;
@@ -14,16 +16,22 @@ function animateFunction(time, frame) {
 		return;
 	}
 	this.options.cssText = cssText;
-	if (element instanceof NodeList) {
-		const length = element.length;
-		let i;
+	const length = element.length;
 
-		for (i = 0; i < length; ++i) {
-			element[i].style.cssText = cssText;
-		}
-		return;
+	for (let i = 0; i < length; ++i) {
+		element[i].style.cssText = cssText;
 	}
-	element.style.cssText = cssText;
+}
+function makeId() {
+	for (;;) {
+		const id = `${parseInt(Math.random() * 100000, 10)}`;
+		const checkElement = document.querySelector(`[data-scene-id="${id}"]`);
+
+		if (!checkElement) {
+			return id;
+		}
+	}
+	return -1;
 }
 
 /**
@@ -31,10 +39,6 @@ function animateFunction(time, frame) {
 * @extends SceneItem
 */
 class CSSItem extends SceneItem {
-	static addRole(role) {
-		CSSFrame.addRole(role);
-		this.addGetterSetter(role);
-	}
 	constructor(properties) {
 		super(properties);
 
@@ -46,82 +50,43 @@ class CSSItem extends SceneItem {
 		if (frame) {
 			return frame;
 		}
-		frame = new CSSFrame();
+		frame = new Frame();
 		if (!isUndefined(time)) {
 			this.setFrame(time, frame);
 		}
 		return frame;
 	}
-	/**
-	* In CSS, selectors are patterns used to select the element(s) you want to style.
-	* @see {@link https://www.w3schools.com/cssref/css_selectors.asp|CSS Seelctor}
-	* @example
-item.selector = ".scene .item li:first-child";
-const element = item.element;
-const element2 = document.querySelectorAll(".scene .item li:first-child");
-//element[0] and element2[0] are the same.
-	*/
-	get selector() {
-		return this.options.selector;
-	}
-	set selector(value) {
-		this.setSelector(value);
-	}
-	setId(_id) {
+	setId(id) {
 		const element = this.element;
 
-		this.options.id = _id;
+		super.setId(id);
+		const sceneId = toId(this.options.id);
+		
+		this.options.selector || (this.options.selector = `[data-scene-id="${sceneId}"]`);
+
 		if (!element) {
 			return this;
 		}
-		if (element instanceof NodeList) {
-			const length = element.length;
-			let i;
+		const length = element.length;
 
-			for (i = 0; i < length; ++i) {
-				element[i].setAttribute("data-scene-id", _id);
-			}
-		} else {
-			element.setAttribute("data-scene-id", _id);
+		for (let i = 0; i < length; ++i) {
+			element[i].setAttribute("data-scene-id", sceneId);
 		}
 		return this;
 	}
-	set element(_element) {
-		this.setElement(_element);
-	}
-	setSelector(_selector) {
-		let selector = _selector;
-
-		if (!selector) {
-			selector = this.id;
-		}
-		this.options.selector = selector;
-		this.element = document.querySelectorAll(selector);
+	setSelector(selector) {
+		this.options.selector = selector || `[data-scene-id="${this.options.id}"]`;
+		this.setElement(document.querySelectorAll(selector));
 		return this;
 	}
-	setElement(_element) {
-		let element = _element;
-
-		if (element instanceof NodeList) {
-			element = element[0];
-		}
+	setElement(element) {
 		if (!element) {
 			return this;
 		}
 		let id = this.id;
-		let checkElement;
 
-		this.options.element = _element;
-		if (!id || id === "null") {
-			for (;;) {
-				id = parseInt(Math.random() * 10000, 10);
-				checkElement = document.querySelector(`[data-scene-id="${id}"]`);
-				if (!checkElement) {
-					break;
-				}
-			}
-		}
-		this.id = id;
+		this.options.element = (element instanceof Element) ? [element] : element;
+		this.setId((!id || id === "null") ? makeId() : id);
 		return this;
 	}
 	/**
@@ -191,11 +156,8 @@ frame.getProperty("opacity"); // 0.5
 
 	*/
 	copyCSSProperty(time, property) {
-		let element = this.element;
+		const element = this.element && this.element[0]
 
-		if (element instanceof NodeList) {
-			element = element[0];
-		}
 		if (!element) {
 			return this;
 		}
@@ -224,55 +186,73 @@ frame.getProperty("opacity"); // 0.5
 			return this;
 		}
 		if (selector === true) {
-			this.setSelector();
+			this.setSelector(this.options.id);
 		} else {
 			this.setSelector(selector);
 		}
 		return this;
 	}
+	toKeyframes(duration = this.duration, options = {}) {
+		const id = this.options.id || this.setId(makeId()).options.id;
+
+		if (!id) {
+			return;
+		}
+		const itemDuration = this.duration;
+		const ratio = itemDuration / duration;
+		const times = this.timeline.times;
+
+		const keyframes = times.map(time => {
+			const frame = this.getFrame(time);
+
+			return `${time / itemDuration * ratio * 100}%{${frame.toCSS()}}`;
+		});
+
+		if (ratio < 1) {
+			keyframes.push(`100%{${this.getFrame(itemDuration).toCSS()}}`);
+		}
+		return `@keyframes ${PREFIX}KEYFRAMES_${toId(id)}{${keyframes.join("")}}`;
+	}
+	toCSS(duration = this.duration, options = {}) {
+		const id = this.options.id || this.setId(makeId()).options.id;
+
+		if (!id) {
+			return "";
+		}
+		const selector = this.options.selector;
+		const easing = options.easingName || this.options.easingName;
+		const fillMode = options.fillMode || this.options.fillMode;
+		const count = options.iterationCount || this.options.iterationCount;
+		const cssArray = [];
+
+		convertCrossBrowserCSSArray(cssArray, "animation", `${PREFIX}KEYFRAMES_${toId(id)} ${duration} ${easing}`);
+		convertCrossBrowserCSSArray(cssArray, "animation-fill-mode", fillMode);
+		convertCrossBrowserCSSArray(cssArray, "animation-iteration-count", count);
+
+		const css = `${selector}.startAnimation {${cssArray.join("")}}
+			${this.toKeyframes()}`;
+
+		return css;
+	}
+	exportCSS(duration = this.duration, options = {}) {
+		const id = toId(this.options.id || this.setId(makeId()).options.id || "");
+
+		if (!id) {
+			return;
+		}
+		const styleElement = document.querySelector(`#${PREFIX}${id}`);
+
+
+		const css = this.toCSS();
+
+		if (styleElement) {
+			styleElement.innerText = css;
+		} else {
+			document.body.insertAdjacentHTML("beforeend",
+				`<style id="${PREFIX}STYLE_${id}">${css}</style>`);
+		}
+	}
 }
-
-
-/**
-* get transform'value in the sceneItem at that time
-* @param {Number} time - time
-* @param {String|Object} property - property's name
-* @method CSSItem#getTransform
-* @return {Object} property's value
-* @example
-item.getTransform(10, "scale");
-*/
-/**
-* set transform to the sceneItem at that time
-* @param {Number} time - time
-* @param {String} [property] - property's name or properties
-* @param {Object} [value] - property's value
-* @method SceneItem#setTransform
-* @return {SceneItem} An instance itself
-* @example
-item.setTransform(10, "scale", "1,1");
-*/
-CSSItem.addRole("transform");
-/**
-* get filter's value in the sceneItem at that time
-* @param {Number} time - time
-* @param {String|Object} property - property's name
-* @method SceneItem#getFilter
-* @return {Object} property's value
-* @example
-item.getFilter(10, "opacity");
-*/
-/**
-* set filter to the sceneItem at that time
-* @param {Number} time - time
-* @param {String} [property] - property's name or properties
-* @param {Object} [value] - property's value
-* @method CSSItem#setFilter
-* @return {SceneItem} An instance itself
-* @example
-item.setFilter(10, "opacity", "50%");
-*/
-CSSItem.addRole("filter");
 
 /**
 * Specifies an element to synchronize sceneItem's timeline.

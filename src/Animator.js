@@ -50,6 +50,7 @@ const animator = new Scene.Animator({
 		this._timer = 0;
 
 		this.options = {};
+		this.options.easingName = "linear";
 		this.iterationCount = 1;
 		this.delay = 0;
 		this.fillMode = "forwards";
@@ -63,6 +64,7 @@ const animator = new Scene.Animator({
 		this.setOptions(options);
 	}
 	set easing(curveArray) {
+	
 		this.options.easing = (typeof curveArray === "function") ? curveArray : cubicBezier(curveArray);
 	}
 	get easing() {
@@ -314,7 +316,7 @@ animator.currentTime // 10
 		const duration = this.duration;
 		const easing = this.options.easing;
 		const ratio = duration === 0 ? 0 : time / duration;
-		const easingTime = easing(ratio) * duration;
+		const easingTime = easing(ratio) * time;
 
 		return easingTime;
 	}

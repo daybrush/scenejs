@@ -99,7 +99,7 @@ const item = scene.newItem("item1")
 const item = scene.newItem("item1")
 	*/
 	setItem(name, item) {
-		item.id = name;
+		item.setId(name);
 		this.items[name] = item;
 		return this;
 	}
@@ -140,13 +140,19 @@ scene.load({
 	}
 });
 	*/
-	load(properties = {}) {
+	load(properties = {}, options = properties.options) {
 		let item;
 		let name;
 
 		for (name in properties) {
+			if (name === "options") {
+				continue;
+			}
 			item = this.newItem(name);
 			item.load(properties[name]);
+		}
+		if (options) {
+			this.setOptions(options);
 		}
 		return this;
 	}

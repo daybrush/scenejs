@@ -44,16 +44,7 @@ item.duration; // = item.timeline.last
 	get duration() {
 		return this.timeline.last;
 	}
-	/**
-	* Specifies the item's id to synchronize the element.
-	* @memberof SceneItem
-	* @instance
-	* @name id
-	*/
-	get id() {
-		return this.options.id;
-	}
-	set id(id) {
+	setId(id) {
 		this.options.id = id;
 	}
 	/**

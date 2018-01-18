@@ -1,7 +1,7 @@
 import Scene from "../Scene";
-import SceneItem from "./CSSItem";
-import Frame from "./CSSFrame";
-import {has} from "../Util";
+import SceneItem from "./SceneItem";
+import Frame from "./Frame";
+import {has} from "../utils";
 
 class CSSScene extends Scene {
 	newItem(name) {
@@ -32,13 +32,13 @@ class CSSScene extends Scene {
 			if (!item) {
 				continue;
 			}
-			item.selector = selector;
+			item.setSelector(selector);
 		}
 		return this;
 	}
-	load(properties) {
-		super.load(properties);
-		const isSelector = properties && properties.options && properties.options.selector;
+	load(properties, options) {
+		super.load(properties, options);
+		const isSelector = this.options.selector;
 
 		if (!isSelector) {
 			return this;
@@ -59,7 +59,5 @@ class CSSScene extends Scene {
 		return this;
 	}
 }
-CSSScene.SceneItem = SceneItem;
-CSSScene.Frame = Frame;
 
 export default CSSScene;

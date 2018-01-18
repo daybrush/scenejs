@@ -38,6 +38,13 @@ describe("SceneItem Test", function() {
         afterEach(() => {
             this.sceneItem = null;
         });
+        it("should check 'setId' method", () => {
+            // When
+            this.sceneItem.setId(".a .b");
+
+            // Given
+            expect(this.sceneItem.options.id).to.be.equals(".a .b");
+        });
         it("should check 'getNowFrame' method", () => {
             const sceneItem = this.sceneItem;
 

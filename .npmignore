@@ -7,3 +7,6 @@ example/
 karma.conf.js
 test/
 mocha.opts
+Gruntfile.js
+webpack.*.js
+.travis.yml

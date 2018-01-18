@@ -269,7 +269,7 @@ const scene1 = new Scene({
 		0.4998 : {"display": "none"},
 		0.5 : {"border-width" : "0px", "transform" : "scale(1, 1)"},
 		options: {
-			timingFunction : customTimingFunction,
+			easing : customTimingFunction,
 		}
 	},
 	"sun2" : {
@@ -277,7 +277,7 @@ const scene1 = new Scene({
 		0.2 : {"transform" : "scale(0, 0)"},
 		0.45 : {"transform": "scale(0.9, 0.9)", "border-width": "0px"},
 		options: {
-			timingFunction : customTimingFunction,
+			easing : customTimingFunction,
 		}
 	},
 	options : {
@@ -297,7 +297,7 @@ for (let i = 1; i <= 8; ++i) {
 		0.5 : {transform : {translate: "150px, 0px", scale : "0, 1"}},
 		0.9 : {transform : {translate : "80px, 0px", scale : "0,1"}},
 		options : {
-			timingFunction : customTimingFunction
+			easing : customTimingFunction
 		}
 	}).setSelector(".sun_afterimage:nth-child(" + (i) + ")");
 }
@@ -322,24 +322,17 @@ for(let i = 0; i < scene2_radius.length; ++i) {
 	}).setSelector("#rotate_circle" + (i+1));
 }
 scene2.load({
-	"stick" : {
+	"#stick" : {
 		0 : {transform: {rotate:"-90deg", scale:"1, 0"}},
 		[delay / 2] : {transform: {rotate:"-90deg", scale:"1,1"}}, // t = delay / 2
 		[delay] : {transform: {rotate:"-90deg", scale:"1,1"}}, // t = delay
 		[1 + delay] : {transform: {rotate:"270deg", scale:"1,1"}}, // t = 1 + delay
 		[2 + delay] : {transform: {rotate:"630deg", scale:"1,1"}}, // t = 2 + delay
 		[2 + delay + delay / 2] : {transform: {scale:"1,0"}}, // t = 2 + delay + delay / 2
-	},
-	options : {
-		timingFunctions :[
-			0, delay, ease,
-			delay, delay + 1, ease,
-			delay + 1, delay + 2, ease,
-			delay + 2, delay + delay / 2, ease
-		]
 	}
-}).setSelector({
-	"#stick" : "stick"
+}, {
+	easing: ease,
+	selector: true,
 });
 scene2.on("play", function() {
 	text.innerHTML = "2";
@@ -376,7 +369,7 @@ for (let i = 0; i < circles.length; ++i) {
 		[duration * 0.7 + d]: {"opacity" : 1},
 		[duration + d]: {transform:"scale(1,1)", "border-width" : "0px", opacity: 0},
 		"options": {
-			timingFunctions : [d, duration + d, customTimingFunction]
+			easing : customTimingFunction,
 		}
 	}).setSelector("#circles1 .circle:nth-child(" + (i+1) + ")").copyCSSStyle(-1);
 }
@@ -401,8 +394,8 @@ for(let i = 0; i <= 5; ++i) {
 	scene4_slice_circle.newFrame(0.3 + i * scene4_duration).load({"clip": "rect("+clipArea+"px, 150px, 150px, 0px)", transform : "rotate(" + sign*10+"deg)"});
 	if(i >= 4)
 		continue;
-	scene4_slice_circle.timingFunctions = [0.3 + i * scene4_duration, 0.3 + (i + 1) * scene4_duration, customTimingFunction];
 }
+scene4_slice_circle.easing = customTimingFunction;
 scene4_slice_circle.setSelector("#slice_circle");
 
 scene4.on("play", function() {
@@ -438,7 +431,7 @@ const scene6 = new Scene({
 		0.3 : {transform: "scale(1.3, 1.3)"},
 		0.5 : {transform: "scale(1,1)"},
 		options : {
-			timingFunctions : [0, 0.5, ease]
+			easing : ease
 		}
 	},
 	"tail" : {
@@ -449,7 +442,7 @@ const scene6 = new Scene({
 		2 : {transform : "scale(1,1)"},
 		3 : {transform : "scale(20,20)"},
 		options : {
-			timingFunctions : [2, 3, ease]
+			easing: ease,
 		}
 	},
 	options: {

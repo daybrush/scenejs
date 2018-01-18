@@ -9,11 +9,6 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 * **Scene** : Control SceneItem, Speed & Count, Play & Stop
 * **Scene.SceneItem** : Add & Manage Frame
 * **Scene.Frame** : Set Property & get CSSText
-* **Scene.Animator** : Control Speed & Count, Play & Stop
-* **Scene.Util** : dot product with array, object, number, color, PropertyObject
-* **Scene.PropertyObject** : Make String to Property Object for the dot product
-* **Scene.Curve** : Make Transition Function with Bezier Curve.
-* **Scene.Color** : Convert RGB, HSL HEX4, HEX6 to RGBA Model.
 
 ## Support Browser
 **Default**
@@ -49,7 +44,6 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 
 
 
-
 ## How to use?
 
 Only load Scene,js
@@ -59,6 +53,14 @@ Only load Scene,js
 or
 <script src="./dist/Scene.min.js"></script>
 
+```
+
+```sh
+npm install scenejs
+```
+
+```js
+import Scene from "scenejs";
 ```
  
 Ready to start using Scene.js! Scene.js has Scene namespace and can be used as below example.

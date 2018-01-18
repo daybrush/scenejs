@@ -1,5 +1,6 @@
 import cubicBezier from "./cubicBezier";
 
+export const PREFIX = "__SCENEJS_";
 export const PROPERTY = "property";
 export const SCENE_ROLES = {[PROPERTY]: true};
 export const ANIMATION_PLAY_STATE = ["idle", "pending", "paused", "running", "finished"];

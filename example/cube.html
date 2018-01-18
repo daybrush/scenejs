@@ -91,35 +91,25 @@
 			0.5: {width: "100px", height: "100px",  top: "300px"},
 			1.5: {width: "140px", "height": "140px",  top: "350px"},
 			4: {transform: "translateX(0px)"},
-			5: {transform: "translateX(200px)"},
-			options: {
-				timingFunctions: [0.5, 1.5, Scene.Constant.EASE_IN_OUT,
-								4, 5, Scene.Constant.EASE_IN_OUT]
-			}
+			5: {transform: "translateX(200px)"}
 		},
 		".cube22" : {
 			1.7 : {filter:"hue-rotate(0deg)"},
 			2.4 : {filter:"hue-rotate(50deg)"},
 			5 : {transform: "translate(0px, 0px)"},
 			5.5 : {transform: "translate(-50px, -30px)"},
-			6 : {transform: "translate(-100px, 0px)"},
-			options: {
-				timingFunctions: [5,6, Scene.Constant.EASE_IN_OUT]
-			}
+			6 : {transform: "translate(-100px, 0px)"}
 		},
 		".cube20" : {
 			2.7: {filter:"hue-rotate(0deg)"},
 			3.4 : {filter:"hue-rotate(50deg)"},
 			6 : {transform: "translate(0px, 0px)"},
 			6.5 : {transform: "translate(-50px, -30px)"},
-			7 : {transform: "translate(-100px,0px)"},
-			options: {
-				timingFunctions: [6,7, Scene.Constant.EASE_IN_OUT]
-			}
-		},
-		options: {
-			selector: true
+			7 : {transform: "translate(-100px,0px)"}
 		}
+	}, {
+		easing: Scene.EASE_IN_OUT,
+		selector: true
 	});
 	scene.play();
 </script>

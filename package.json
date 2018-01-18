@@ -8,6 +8,7 @@
   },
   "scripts": {
     "lint": "eslint src",
+    "build": "webpack",
     "test": "karma start",
     "test:chrome": "karma start --chrome"
   },
