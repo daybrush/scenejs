@@ -1,0 +1,23 @@
+<style>
+    .circle {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+</style>
+
+<div class="circle"></div>
+
+<script src="../dist/StopMotion.js"></script>
+<script>
+    var motion = StopMotion({
+        ".circle": {
+            0: {"background":"rgb(100, 100, 100)", left: "0px", top: "0px"},
+            5: {"background":"rgb(255, 100, 100)", left: "300px", top: "300px"}
+        }
+    }, {
+        selector: true,
+        level: 5
+    }).play()
+</script>

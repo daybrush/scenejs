@@ -180,11 +180,14 @@ frame.getProperty("opacity"); // 0.5
 	setOptions(options) {
 		super.setOptions(options);
 		const selector = options && options.selector;
+		const element = options && options.element;
 
-		if (!selector) {
+		if (!selector && !element) {
 			return this;
 		}
-		if (selector === true) {
+		if (element) {
+			this.setElement(element);
+		} if (selector === true) {
 			this.setSelector(this.options.id);
 		} else {
 			this.setSelector(selector);
