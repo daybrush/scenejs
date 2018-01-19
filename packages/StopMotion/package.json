@@ -12,8 +12,12 @@
     "release:latest": "npm run release:mkdir && cp -a ./dist/. release/latest",
     "deploy": "npm run release && gh-pages -d ./release --dest=./release/$npm_package_name --add"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Daybrush",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daybrush/scenejs/issues"
+  },
+  "homepage": "https://daybrush.com",
   "devDependencies": {
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
