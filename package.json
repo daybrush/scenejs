@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Javascript Animation Library",
   "main": "main.js",
   "directories": {
@@ -15,7 +15,7 @@
     "release:mkdir": "mkdir -p release",
     "release:current": "npm run release:mkdir && cp -a ./dist/. release/$npm_package_version",
     "release:latest": "npm run release:mkdir && cp -a ./dist/. release/latest",
-    "deploy": "npm run release && gh-pages -d ./release --dest=./release/$npm_package_name --add"
+    "deploy": "npm run release && gh-pages -d ./release --dest=./release/ --add"
   },
   "repository": {
     "type": "git",

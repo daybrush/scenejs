@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="../dist/Scene.js"></script>
+<script src="../release/latest/scene.js"></script>
 <style>
 	.cubes {
 		position: absolute;
@@ -111,14 +111,7 @@
 		easing: Scene.EASE_IN_OUT,
 		selector: true
 	});
-	scene.on("play", function() {
-		console.log("play");
-	});
-	scene.getItem(".cubes").on("animate", function(e) {
-		console.log(e.time, e.frame);
-	})
 	scene.play();
-	// scene.playCSS();
 
 </script>
 </body></html>
