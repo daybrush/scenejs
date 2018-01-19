@@ -1,7 +1,0 @@
-{
-    "extends": "naver",
-    "env": { "es6": true},
-    "plugins": ["import"],
-    "rules": {
-    }
-}
