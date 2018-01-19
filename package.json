@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "0.0.5",
+  "version": "0.1.1",
   "description": "Javascript Animation Library",
   "main": "main.js",
   "directories": {
@@ -10,7 +10,12 @@
     "lint": "eslint src",
     "build": "webpack",
     "test": "karma start",
-    "test:chrome": "karma start --chrome"
+    "test:chrome": "karma start --chrome",
+    "release": "npm run build && npm run release:current && npm run release:latest",
+    "release:mkdir": "mkdir -p release",
+    "release:current": "npm run release:mkdir && cp -a ./dist/. release/$npm_package_version",
+    "release:latest": "npm run release:mkdir && cp -a ./dist/. release/latest",
+    "deploy": "npm run release && gh-pages -d ./release --dest=./release/$npm_package_name --add"
   },
   "repository": {
     "type": "git",
@@ -30,6 +35,8 @@
     "eslint": "^4.15.0",
     "eslint-config-naver": "^2.0.1",
     "eslint-loader": "^1.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "gh-pages": "^1.1.0",
     "karma": "^1.7.1",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -41,6 +48,7 @@
     "karma-webpack": "^2.0.9",
     "mocha": "^4.0.1",
     "sinon": "^4.1.2",
-    "webpack": "^2.3.2"
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack": "^3.10.0"
   }
 }

@@ -1,11 +1,16 @@
 {
   "name": "scenejs-stopmotion",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.1",
+  "description": "Javascript StopMotion Animation Library",
   "main": "StopMotion.js",
   "scripts": {
     "build": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "npm run build && npm run release:current && npm run release:latest",
+    "release:mkdir": "mkdir -p release",
+    "release:current": "npm run release:mkdir && cp -a ./dist/. release/$npm_package_version",
+    "release:latest": "npm run release:mkdir && cp -a ./dist/. release/latest",
+    "deploy": "npm run release && gh-pages -d ./release --dest=./release/$npm_package_name --add"
   },
   "author": "",
   "license": "ISC",
@@ -13,7 +18,11 @@
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
     "babel-preset-es2015": "^6.24.0",
-    "scenejs": "0.0.3",
-    "webpack": "^2.3.2"
+    "gh-pages": "^1.1.0",
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack": "^3.10.0"
+  },
+  "dependencies": {
+    "scenejs": "^0.1.1"
   }
 }

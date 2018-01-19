@@ -38,8 +38,8 @@ function makeId() {
 * @extends SceneItem
 */
 class CSSItem extends SceneItem {
-	constructor(properties) {
-		super(properties);
+	constructor(properties, options) {
+		super(properties, options);
 
 		this.on("animate", animateFunction);
 	}

@@ -1,25 +1,31 @@
 var webpack = require("webpack");
+var UglifyJSWebpackPlugin = require("uglifyjs-webpack-plugin");
 
 var moduleConfig = {
-    loaders:  [
+    rules:  [
 		{
 			test:  /\.js$/,
-			loader: 'babel-loader',
-			query: {
-				presets: ['es2015'],
-			}
+			loader: 'babel-loader'
 		}
 	]
 };
 var config = {
-    entry: `./index.js`,
+    entry: {
+        "stopmotion": `./index.js`,
+        "stopmotion.min": `./index.js`,
+    },
     output: {
-        filename: `./StopMotion.js`,
+        filename: `./[name].js`,
         path: `${__dirname}/dist/`,
         libraryTarget: 'umd',
         umdNamedDefine: true,
         library: "StopMotion",
     },
+	plugins: [
+		new UglifyJSWebpackPlugin({
+            include: /\.min\.js$/,
+        }),
+	],
     module: moduleConfig
 };
 

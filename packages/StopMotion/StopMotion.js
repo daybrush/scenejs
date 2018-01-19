@@ -1,13 +1,18 @@
 import Scene, {SceneItem} from "scenejs";
 
-function stopMotion(item, start = 0, end, level) {
-	const depth = (end - start) / level;
+const interval = 0.00001;
 
-	for (let i = 1; i <= level - 1; ++i) {
+function stopMotion(item, start = 0, end, count) {
+	if (!count || count < 1) {
+		return;
+	}
+	const depth = (end - start) / count;
+
+	for (let i = 1; i <= count - 1; ++i) {
 		item.setFrame(start + i * depth, item.getNowFrame(start + i * depth));
 	}
-	for (let i = 1; i <= level; ++i) {
-		item.setFrame(start + i * depth - 0.01, item.getFrame(start + (i - 1) * depth));
+	for (let i = 1; i <= count; ++i) {
+		item.setFrame(start + i * depth - interval, item.getFrame(start + (i - 1) * depth));
 	}
 }
 
@@ -18,10 +23,10 @@ export default function StopMotion(obj, options = {}) {
 		for (const id in items) {
 			const item = items[id];
 
-			stopMotion(item, 0, item.duration, options.level);
+			stopMotion(item, 0, item.duration, options.count);
 		}
 	} else if (obj instanceof SceneItem) {
-		stopMotion(obj, 0, obj.duration, options.level);
+		stopMotion(obj, 0, obj.duration, options.count);
 	} else {
 		const scene = new Scene(obj, options);
 
@@ -34,7 +39,7 @@ export default function StopMotion(obj, options = {}) {
 export const StopMotionItem = function StopMotionItem(obj, options = {}) {
 	const item = new SceneItem(obj, options);
 
-	stopMotion(item, 0, item.duration, options.level);
+	stopMotion(item, 0, item.duration, options.count);
 
 	return item;
 };

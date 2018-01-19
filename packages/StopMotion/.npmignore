@@ -11,3 +11,4 @@ Gruntfile.js
 webpack.*.js
 .travis.yml
 packages
+release/

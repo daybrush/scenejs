@@ -13,11 +13,11 @@
 <script>
     var motion = StopMotion({
         ".circle": {
-            0: {"background":"rgb(100, 100, 100)", left: "0px", top: "0px"},
-            5: {"background":"rgb(255, 100, 100)", left: "300px", top: "300px"}
+            0: {"background":"rgb(100, 100, 100)", left: "0px"},
+            5: {"background":"rgb(255, 100, 100)", left: "300px"}
         }
     }, {
         selector: true,
-        level: 5
-    }).play()
+        count: 5
+    }).play();
 </script>
