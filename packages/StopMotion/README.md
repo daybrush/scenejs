@@ -8,7 +8,7 @@ $ npm install scenejs-stopmotion
 ### Import Library
 #### ES5
 ```html
-<script src="//daybrush.github.io/scenejs/release/scenejs-stopmotion/latest/stopmotion.min.js">
+<script src="//daybrush.github.io/scenejs/scenejs-stopmotion/release/latest/stopmotion.min.js">
 ```
 ```js
 var StopMotionItem = StopMotion.Item;
