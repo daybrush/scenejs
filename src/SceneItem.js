@@ -282,10 +282,9 @@ item.merge(0, 1);
 		}
 		const nextValue = nextFrame.get(role, property);
 
-		if (isUndefined(nextValue)) {
+		if (isUndefined(nextValue) || prevValue === nextValue) {
 			return prevValue;
 		}
-
 		if (prevTime < 0) {
 			prevTime = 0;
 		}
