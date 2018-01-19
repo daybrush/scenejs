@@ -3,6 +3,7 @@ import Frame from "./Frame";
 import {
 	isUndefined,
 	isObject,
+	isString,
 } from "./utils";
 import FrameTimeline from "./FrameTimeline";
 import {dot} from "./utils/dot";
@@ -43,6 +44,21 @@ item.duration; // = item.timeline.last
 	*/
 	get duration() {
 		return this.timeline.last;
+	}
+	set duration(duration) {
+		const ratio = duration / this.duration;
+		const timeline = this.timeline;
+		const {times, items} = timeline;
+		const obj = {};
+
+		timeline.times = times.map(time => {
+			const time2 = time * ratio;
+
+			obj[time2] = items[time];
+
+			return time2;
+		});
+		timeline.items = obj;
 	}
 	setId(id) {
 		this.options.id = id;
@@ -155,6 +171,9 @@ item.setFrame(time, frame);
 const frame = item.getFrame(time);
 	*/
 	getFrame(time) {
+		if (isString(time) && ~time.search(/([0-9]|\.|-|e-|e\+)+%/g)) {
+			return this.timeline.get(parseFloat(time) / 100 * this.duration);
+		}
 		return this.timeline.get(time);
 	}
 	/**
@@ -407,19 +426,25 @@ item.load({
 });
 	*/
 	load(properties = {}, options = properties.options) {
-		let time;
-		let _properties;
-
-		for (time in properties) {
+		for (const time in properties) {
 			if (time === "options") {
 				continue;
 			}
-			_properties = properties[time];
+			const _properties = properties[time];
+			let realTime;
+
+			if (time === "from") {
+				realTime = 0;
+			} else if (time === "to") {
+				realTime = 100;
+			} else {
+				realTime = parseFloat(time);
+			}
 			if (typeof _properties === "number") {
-				this.mergeFrame(_properties, time);
+				this.mergeFrame(_properties, realTime);
 				continue;
 			}
-			this.set(time, properties[time]);
+			this.set(realTime, properties[realTime]);
 		}
 		if (options) {
 			this.setOptions(options);

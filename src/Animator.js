@@ -157,6 +157,9 @@ const animator = new Scene.Animator({
 animator.activeDuration; // duration * iterationCount =  2 * 3 = 6
 	*/
 	get activeDuration() {
+		if (this.iterationCount === "infinite") {
+			return Infinity;
+		}
 		return this.duration * this.iterationCount;
 	}
 	/**
@@ -335,7 +338,7 @@ animator.currentTime // 10
 	}
 	tick(now) {
 		const prevTime = this._prevTime;
-		const currentTime = this.currentTime + Math.min(1000, now - prevTime) / 1000 * this.playSpeed;
+		const currentTime = this.currentTime + Math.min(1000, now - prevTime) / 1000;
 
 		this._prevTime = now;
 		this.setCurrentTime(currentTime);

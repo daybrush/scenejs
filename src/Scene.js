@@ -66,6 +66,17 @@ item.duration; // = item.timeline.last
 		}
 		return time;
 	}
+	set duration(duration) {
+		const items = this.items;
+		const sceneDuration = this.activeDuration;
+
+		for (const id in items) {
+			const item = items[id];
+			const time = (item.activeDuration / item.playSpeed) / sceneDuration * duration;
+
+			item.duration = time;
+		}
+	}
 	/**
 	* get item in scene by name
 	* @param {String} name - item's name
