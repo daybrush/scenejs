@@ -839,7 +839,7 @@ var Animator = function (_EventTrigger) {
 			var _this3 = this;
 
 			var prevTime = this._prevTime;
-			var currentTime = this.currentTime + Math.min(1000, now - prevTime) / 1000 * this.playSpeed;
+			var currentTime = this.currentTime + Math.min(1000, now - prevTime) / 1000;
 
 			this._prevTime = now;
 			this.setCurrentTime(currentTime);
@@ -914,6 +914,9 @@ var Animator = function (_EventTrigger) {
 	}, {
 		key: "activeDuration",
 		get: function get() {
+			if (this.iterationCount === "infinite") {
+				return Infinity;
+			}
 			return this.duration * this.iterationCount;
 		}
 		/**
@@ -1277,6 +1280,9 @@ var SceneItem = function (_Animator) {
 	}, {
 		key: "getFrame",
 		value: function getFrame(time) {
+			if ((0, _utils.isString)(time) && ~time.search(/([0-9]|\.|-|e-|e\+)+%/g)) {
+				return this.timeline.get(parseFloat(time) / 100 * this.duration);
+			}
 			return this.timeline.get(time);
 		}
 		/**
@@ -1564,19 +1570,25 @@ var SceneItem = function (_Animator) {
 			var properties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 			var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : properties.options;
 
-			var time = void 0;
-			var _properties = void 0;
-
-			for (time in properties) {
+			for (var time in properties) {
 				if (time === "options") {
 					continue;
 				}
-				_properties = properties[time];
+				var _properties = properties[time];
+				var realTime = void 0;
+
+				if (time === "from") {
+					realTime = 0;
+				} else if (time === "to") {
+					realTime = 100;
+				} else {
+					realTime = parseFloat(time);
+				}
 				if (typeof _properties === "number") {
-					this.mergeFrame(_properties, time);
+					this.mergeFrame(_properties, realTime);
 					continue;
 				}
-				this.set(time, properties[time]);
+				this.set(realTime, properties[realTime]);
 			}
 			if (options) {
 				this.setOptions(options);
@@ -1587,6 +1599,23 @@ var SceneItem = function (_Animator) {
 		key: "duration",
 		get: function get() {
 			return this.timeline.last;
+		},
+		set: function set(duration) {
+			var ratio = duration / this.duration;
+			var timeline = this.timeline;
+			var times = timeline.times,
+			    items = timeline.items;
+
+			var obj = {};
+
+			timeline.times = times.map(function (time) {
+				var time2 = time * ratio;
+
+				obj[time2] = items[time];
+
+				return time2;
+			});
+			timeline.items = obj;
 		}
 	}]);
 
@@ -1777,6 +1806,7 @@ var Frame = function () {
 			}
 			this.properties[role][property] = _value;
 		}
+
 		/**
   * set property
   * @param {Object|String} role - property role(property, transform, filter)
@@ -1815,6 +1845,20 @@ var Frame = function () {
 
 			if ((0, _utils.isObject)(role)) {
 				this.load(role);
+				return this;
+			} else if (arguments.length === 1) {
+				var properties = role.split(";");
+				var length = properties.length;
+
+				for (var i = 0; i < length; ++i) {
+					var matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
+
+					if (!matches || matches.length < 3 || !matches[1]) {
+						continue;
+					}
+
+					this.set(matches[1], matches[2]);
+				}
 				return this;
 			}
 			if ((0, _utils.isObject)(property)) {
@@ -3024,6 +3068,17 @@ var Scene = function (_Animator) {
 				time = Math.max(time, item.totalDuration / item.playSpeed);
 			}
 			return time;
+		},
+		set: function set(duration) {
+			var items = this.items;
+			var sceneDuration = this.activeDuration;
+
+			for (var id in items) {
+				var item = items[id];
+				var time = item.activeDuration / item.playSpeed / sceneDuration * duration;
+
+				item.duration = time;
+			}
 		}
 	}]);
 
