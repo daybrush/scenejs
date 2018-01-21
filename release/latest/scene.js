@@ -1846,7 +1846,7 @@ var Frame = function () {
 			if ((0, _utils.isObject)(role)) {
 				this.load(role);
 				return this;
-			} else if (arguments.length === 1) {
+			} else if (!property) {
 				var properties = role.split(";");
 				var length = properties.length;
 
