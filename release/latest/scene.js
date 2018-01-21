@@ -1796,15 +1796,16 @@ var Frame = function () {
 	}, {
 		key: "_set",
 		value: function _set(role, property, value) {
+			var name = role.trim();
 			var _value = value;
 
 			if ((0, _utils.isString)(_value)) {
 				_value = (0, _property.toPropertyObject)(_value);
 			}
-			if (!(role in this.properties)) {
-				this.properties[role] = {};
+			if (!(name in this.properties)) {
+				this.properties[name] = {};
 			}
-			this.properties[role][property] = _value;
+			this.properties[name][property] = _value;
 		}
 
 		/**
@@ -1908,7 +1909,7 @@ var Frame = function () {
 	}, {
 		key: "has",
 		value: function has(role, property) {
-			return (0, _utils.has)(this.properties[role], property);
+			return this.properties[role] && (0, _utils.has)(this.properties[role], property);
 		}
 		/**
   * copy frame.
