@@ -68,12 +68,13 @@ describe("SceneItem Test", function() {
             sceneItem.set(0.7, "b", "b");
             sceneItem.set(1, "display", "block");
             sceneItem.set(1, "c", 1);
+            sceneItem.set(1, "d:1;e:2;f:a;transform:translate(10px, 20px);");
             expect(sceneItem.getFrame(0.5).get("a")).to.be.equals(1);
             expect(sceneItem.getFrame(0.6).get("transform", "a")).to.be.equals(1);
             expect(sceneItem.getFrame(0.7).get("b")).to.be.equals("b");
             expect(sceneItem.getFrame(1).get("display")).to.be.equals("block");
             expect(sceneItem.getFrame(1).get("a")).to.be.equals(2);
-            expect(sceneItem.getFrame(1).get("c")).to.be.equals(1);
+            expect(parseFloat(sceneItem.getFrame(1).get("d"))).to.be.equals(1);
         });
     });
     describe("test sceneItem events", function() {
