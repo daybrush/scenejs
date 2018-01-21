@@ -1,6 +1,6 @@
 {
   "name": "scenejs-stopmotion",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Javascript StopMotion Animation Library",
   "main": "StopMotion.js",
   "scripts": {
@@ -17,6 +17,10 @@
   "bugs": {
     "url": "https://github.com/daybrush/scenejs/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daybrush/scenejs.git"
+  },
   "homepage": "https://daybrush.com",
   "devDependencies": {
     "babel-core": "^6.24.0",
@@ -27,6 +31,6 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
-    "scenejs": "^0.1.1"
+    "scenejs": "^0.2.0"
   }
 }

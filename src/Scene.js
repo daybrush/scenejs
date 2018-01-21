@@ -69,10 +69,11 @@ item.duration; // = item.timeline.last
 	set duration(duration) {
 		const items = this.items;
 		const sceneDuration = this.activeDuration;
+		const ratio = duration / sceneDuration;
 
 		for (const id in items) {
 			const item = items[id];
-			const time = (item.activeDuration / item.playSpeed) / sceneDuration * duration;
+			const time = (item.totalDuration / item.playSpeed) * ratio - item.delay / item.playSpeed;
 
 			item.duration = time;
 		}
