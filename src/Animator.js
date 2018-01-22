@@ -112,93 +112,30 @@ animator.({
 
 		return this;
 	}
-	/**
-	* currentTime
-	* @example
-animator.currentTime = 10;
-
-animator.currentTime // 10
-	*/
-	set currentTime(value) {
-		this.setCurrentTime(value);
-	}
-	/**
-	* total duration including all iteration.
-	* @readonly
-	* @example
-const animator = new Scene.Animator({
-	delay: 2,
-	diretion: "alternate",
-	duration: 2,
-	fillMode: "forwards",
-	iterationCount: 3,
-	easing: Scene.Animator.EASE,
-});
-animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 3 = 8
-	*/
-	get totalDuration() {
-		if (this.iterationCount === "infinite") {
+	getTotalDuration() {
+		if (this.options.iterationCount === "infinite") {
 			return Infinity;
 		}
-		return this.delay + this.activeDuration;
+		return this.options.delay + this.getActiveDuration();
 	}
-	/**
-	* total duration excluding delay.
-	* @readonly
-	* @example
-const animator = new Scene.Animator({
-	delay: 2,
-	diretion: "alternate",
-	duration: 2,
-	fillMode: "forwards",
-	iterationCount: 3,
-	easin: Scene.Animator.EASE,
-});
-animator.activeDuration; // duration * iterationCount =  2 * 3 = 6
-	*/
-	get activeDuration() {
-		if (this.iterationCount === "infinite") {
+	getActiveDuration() {
+		if (this.options.iterationCount === "infinite") {
 			return Infinity;
 		}
-		return this.duration * this.iterationCount;
+		return this.getDuration() * this.options.iterationCount;
 	}
-	/**
-	* check if animator is ended.
-	* @readonly
-	* @return {Boolean} true: animattor is ended, false : not ended.
-	* @example
-// true: animator is ended, false : not ended.
-if (animator.ended) {
-	// is ended...
-} else {
-	// not ended...
-}
-	*/
-	get ended() {
-		if (this.currentTime === 0 && this.playState === "paused") {
+	isEnded() {
+		if (this.getTime() === 0 && this.options.playState === "paused") {
 			return true;
-		} else if (this.currentTime < this.totalDuration) {
+		} else if (this.gettTime() < this.getTotalDuration()) {
 			return false;
 		}
-
 		return true;
 	}
-	/**
-	* check if animator is paused.
-	* @readonly
-	* @return {Boolean} true: animattor is paused, false : not paused.
-	* @example
-// true: animator is paused(not playing), false : not paused.
-if (animator.paused) {
-	// is paused...
-} else {
-	// not paused...
-}
-	*/
-	get paused() {
+	isPaused() {
 		return this.playState === "paused";
 	}
-	set next(animator) {
+	setNext(animator) {
 		this.on("ended", () => {
 			animator.play();
 		});
@@ -208,8 +145,8 @@ if (animator.paused) {
 	* @return {Animator} An instance itself.
 	*/
 	play() {
-		if (this.ended) {
-			this.currentTime = 0;
+		if (this.isEnded()) {
+			this.setTime(0);
 		}
 		this.playState = "running";
 		requestAnimFrame(time => {
@@ -244,7 +181,7 @@ if (animator.paused) {
 	* @return {Animator} An instance itself.
 	*/
 	reset() {
-		this.currentTime = 0;
+		this.setTime(0);
 		this.stop();
 		return this;
 	}
@@ -256,7 +193,7 @@ animator.setTime(10);
 
 animator.currentTime // 10
 	*/
-	setCurrentTime(time) {
+	setime(time) {
 		const {totalDuration} = this;
 		let currentTime = time;
 
@@ -341,7 +278,7 @@ animator.currentTime // 10
 		const currentTime = this.currentTime + Math.min(1000, now - prevTime) / 1000;
 
 		this._prevTime = now;
-		this.setCurrentTime(currentTime);
+		this.setTime(currentTime);
 		if (this.ended) {
 			this.stop();
 		}
