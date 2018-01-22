@@ -128,8 +128,20 @@ function stopMotion(item) {
 	}
 }
 
+function test(inst, target) {
+	if (Array.isArray(inst)) {
+		return inst.indexOf(target);
+	} else if (typeof inst === "string") {
+		return inst === target;
+	} else {
+		return inst.test(target);
+	}
+}
 function StopMotion(obj) {
 	var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	var include = options.include,
+	    exclude = options.exclude;
+
 
 	if (obj instanceof _scenejs2.default) {
 		var items = obj.items;
@@ -137,6 +149,9 @@ function StopMotion(obj) {
 		for (var id in items) {
 			var item = items[id];
 
+			if (include && !test(include, id) || exclude && test(exclude, id)) {
+				continue;
+			}
 			stopMotion(item, 0, item.duration, options.count);
 		}
 	} else if (obj instanceof _scenejs.SceneItem) {
