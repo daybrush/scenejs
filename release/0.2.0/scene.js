@@ -548,8 +548,6 @@ var _cubicBezier = __webpack_require__(3);
 
 var _cubicBezier2 = _interopRequireDefault(_cubicBezier);
 
-var _utils = __webpack_require__(0);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -682,6 +680,11 @@ var Animator = function (_EventTrigger) {
 			}
 
 			return this;
+		}
+	}, {
+		key: "setPlaySpeed",
+		value: function setPlaySpeed(playSpeed) {
+			this.state.playSpeed = playSpeed;
 		}
 	}, {
 		key: "getTotalDuration",
@@ -1116,7 +1119,14 @@ var SceneItem = function (_Animator) {
 	}, {
 		key: "set",
 		value: function set(time, role, properties, value) {
-			if ((0, _utils.isObject)(time)) {
+			var _this2 = this;
+
+			if ((0, _utils.isArray)(time)) {
+				time.forEach(function (t) {
+					_this2.set(t, role, properties, value);
+				});
+				return this;
+			} else if ((0, _utils.isObject)(time)) {
 				this.load(time);
 				return this;
 			}
