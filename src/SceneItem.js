@@ -38,15 +38,12 @@ let item = new Scene.SceneItem({
 	/**
 	* Specifies how many seconds an animation takes to complete one cycle
 	* Specifies timeline's lastTime
-	* @override
-	* @example
-item.duration; // = item.timeline.last
 	*/
-	get duration() {
+	getDuration() {
 		return this.timeline.last;
 	}
-	set duration(duration) {
-		const ratio = duration / this.duration;
+	setDuration(duration) {
+		const ratio = duration / this.getDuration();
 		const timeline = this.timeline;
 		const {times, items} = timeline;
 		const obj = {};
@@ -97,7 +94,7 @@ item.duration; // = item.timeline.last
 	}
 	setIterationTime(_time) {
 		super.setIterationTime(_time);
-		const time = this.currentIterationTime;
+		const time = this.getIterationTime();
 		const frame = this.getNowFrame(time);
 
 		if (!frame) {
@@ -106,13 +103,12 @@ item.duration; // = item.timeline.last
 		this.trigger("animate", {
 			time,
 			frame: this.getNowFrame(time),
-			currentTime: this.currentTime,
+			currentTime: this.getTime(),
 		});
 		return this;
 	}
 	/**
 	* update property names used in frames.
-	* @override
 	* @return {SceneItem} An instance itself
 	* @example
 item.update();
@@ -172,7 +168,7 @@ const frame = item.getFrame(time);
 	*/
 	getFrame(time) {
 		if (isString(time) && ~time.search(/([0-9]|\.|-|e-|e\+)+%/g)) {
-			return this.timeline.get(parseFloat(time) / 100 * this.duration);
+			return this.timeline.get(parseFloat(time) / 100 * this.getDuration());
 		}
 		return this.timeline.get(time);
 	}
@@ -310,12 +306,12 @@ item.merge(0, 1);
 		const startTime = times[left];
 		const endTime = times[right];
 
-		if (!isEasing || !this.options.easing || startTime === endTime) {
+		if (!isEasing || !this.state.easing || startTime === endTime) {
 			return dot(prevValue, nextValue, time - prevTime, nextTime - time);
 		}
 		const startValue = dot(prevValue, nextValue, startTime - prevTime, nextTime - startTime);
 		const endValue = dot(prevValue, nextValue, endTime - prevTime, nextTime - endTime);
-		const ratio = this.options.easing((time - startTime) / (endTime - startTime));
+		const ratio = this.state.easing((time - startTime) / (endTime - startTime));
 		const value = dot(startValue, endValue, ratio, 1 - ratio);
 
 		return value;

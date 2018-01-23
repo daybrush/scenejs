@@ -12,3 +12,4 @@ webpack.*.js
 .travis.yml
 packages
 release/
+demo/

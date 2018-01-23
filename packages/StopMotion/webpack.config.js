@@ -14,6 +14,9 @@ var config = {
         "stopmotion": `./index.js`,
         "stopmotion.min": `./index.js`,
     },
+    externals: {
+        "scenejs": "Scene",
+    },
     output: {
         filename: `./[name].js`,
         path: `${__dirname}/dist/`,

@@ -1,0 +1,60 @@
+<html>
+    <style>
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            top: 100px;
+            left: 0;
+            right: 0;
+            margin: 0px auto;
+            width: 0;
+            height: 0;
+            border: 100px solid black;
+        }
+    </style>
+    <div class="shape">
+        <div class="assistant"></div>
+    </div>
+    <script src="../release/latest/scene.js"></script>
+    <script>
+        var scene = new Scene({
+            ".shape" : {
+                0: {
+                    "border-radius": "0%",
+                    "transform": "translateY(0px) rotate(0deg)"
+                },
+                1: {
+                    "border-radius": "50%",
+                    "transform": "translateY(200px) rotate(90deg)",
+                    "border-color": "rgba(0, 0, 0, 1)",
+                    "border-bottom-color": "rgba(0, 0, 0, 1)"
+                },
+                2: {
+                    "transform": "translateY(0px) rotate(-180deg)",
+                    "border-color": "rgba(0, 0, 0, 0)",
+                    "border-bottom-color": "rgba(0, 0, 0, 1)",
+                    "box-shadow": "0px 0px 0 0 black"
+                },
+                3: {
+                    "border-radius": "50%",
+                    "transform": "translateY(200px) rotate(105deg)",
+                    "border-color": "rgba(0, 0, 0, 0)",
+                    "border-bottom-color": "rgba(0, 0, 0, 0)",
+                    "box-shadow": "-15px -20px 0px 0px black"
+                },
+                4: {
+                    "border-radius": "0%",
+                    "transform": "translateY(0px) rotate(0deg)",
+                    "box-shadow": "0px 0px 0px 0px black",
+                    "border-color": "rgba(0, 0, 0, 1)",
+                    "border-bottom-color": "rgba(0, 0, 0, 1)"
+                }
+            }
+        }, {
+            selector: true,
+            iterationCount: "infinite",
+            easing: Scene.EASE_IN_OUT
+        });
+        scene.playCSS();
+    </script>
+</html>

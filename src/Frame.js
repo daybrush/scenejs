@@ -129,16 +129,18 @@ frame.load({
 		return this;
 	}
 	_set(role, property, value) {
+		const name = role.trim();
 		let _value = value;
 
 		if (isString(_value)) {
 			_value = toPropertyObject(_value);
 		}
-		if (!(role in this.properties)) {
-			this.properties[role] = {};
+		if (!(name in this.properties)) {
+			this.properties[name] = {};
 		}
-		this.properties[role][property] = _value;
+		this.properties[name][property] = _value;
 	}
+
 	/**
 	* set property
 	* @param {Object|String} role - property role(property, transform, filter)
@@ -174,6 +176,20 @@ frame.set("property", "display", "none");
 
 		if (isObject(role)) {
 			this.load(role);
+			return this;
+		} else if (!property) {
+			const properties = role.split(";");
+			const length = properties.length;
+
+			for (let i = 0; i < length; ++i) {
+				const matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
+
+				if (!matches || matches.length < 3 || !matches[1]) {
+					continue;
+				}
+
+				this.set(matches[1].trim(), matches[2]);
+			}
 			return this;
 		}
 		if (isObject(property)) {
@@ -216,7 +232,7 @@ frame.set("property", "display", "none");
 	frame.has("property", "display") // => true or false
 	*/
 	has(role, property) {
-		return has(this.properties[role], property);
+		return this.properties[role] && has(this.properties[role], property);
 	}
 	/**
 	* copy frame.

@@ -51,31 +51,29 @@ const scene = new Scene({
 	/**
 	* Specifies how many seconds an items'animation takes to complete one cycle
 	* Specifies timeline's lastTime
-	* @override
-	* @example
-item.duration; // = item.timeline.last
 	*/
-	get duration() {
+	getDuration() {
 		const items = this.items;
 		let time = 0;
 
 		for (const id in items) {
 			const item = items[id];
 
-			time = Math.max(time, item.totalDuration / item.playSpeed);
+			time = Math.max(time, item.getTotalDuration() / item.state.playSpeed);
 		}
 		return time;
 	}
-	set duration(duration) {
+	setDuration(duration) {
 		const items = this.items;
-		const sceneDuration = this.activeDuration;
+		const sceneDuration = this.getActiveDuration();
 		const ratio = duration / sceneDuration;
 
 		for (const id in items) {
 			const item = items[id];
-			const time = (item.totalDuration / item.playSpeed) * ratio - item.delay / item.playSpeed;
+			const {playSpeed, delay} = item.state;
+			const time = (item.getTotalDuration() / playSpeed) * ratio - delay / playSpeed;
 
-			item.duration = time;
+			item.setDuration(time);
 		}
 	}
 	/**
@@ -116,14 +114,14 @@ const item = scene.newItem("item1")
 	}
 	setIterationTime(_time) {
 		super.setIterationTime(_time);
-		const time = this.currentIterationTime;
+		const time = this.getIterationTime();
 		const items = this.items;
 		let item;
 		let id;
 
 		for (id in items) {
 			item = items[id];
-			item.currentTime = time * item.playSpeed;
+			item.setTime(time * item.state.playSpeed);
 		}
 		return this;
 	}
@@ -153,9 +151,8 @@ scene.load({
 	*/
 	load(properties = {}, options = properties.options) {
 		let item;
-		let name;
 
-		for (name in properties) {
+		for (const name in properties) {
 			if (name === "options") {
 				continue;
 			}
@@ -166,6 +163,13 @@ scene.load({
 			}
 		}
 		return this;
+	}
+	forEach(func) {
+		const items = this.items;
+
+		for (const name in items) {
+			func(items[name], name, items);
+		}
 	}
 }
 

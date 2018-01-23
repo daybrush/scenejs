@@ -16,13 +16,28 @@ function stopMotion(item, start = 0, end, count) {
 	}
 }
 
+function test(inst, target) {
+	if (Array.isArray(inst)) {
+		return inst.indexOf(target);
+	} else if (typeof inst === "string") {
+		return inst === target;
+	} else {
+		return inst.test(target);
+	}
+}
 export default function StopMotion(obj, options = {}) {
+	const {include, exclude} = options;
+
 	if (obj instanceof Scene) {
 		const items = obj.items;
 
 		for (const id in items) {
 			const item = items[id];
 
+			if ((include && !test(include, id)) ||
+				(exclude && test(exclude, id))) {
+				continue;
+			}
 			stopMotion(item, 0, item.duration, options.count);
 		}
 	} else if (obj instanceof SceneItem) {

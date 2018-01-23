@@ -48,32 +48,33 @@ const animator = new Scene.Animator({
 	constructor(options) {
 		super();
 		this._timer = 0;
-
 		this.options = {};
-		this.options.easingName = "linear";
-		this.iterationCount = 1;
-		this.delay = 0;
-		this.fillMode = "forwards";
-		this.direction = "none";
-		this.playState = "paused";
-		this.playSpeed = 1;
-
-		this._currentTime = 0;
-		this._currentIterationTime = -1;
-		this._prevTime = 0;
+		this.state = {
+			easing: 0,
+			easingName: "linear",
+			iterationCount: 1,
+			delay: 0,
+			fillMode: "forwards",
+			direction: "none",
+			playSpeed: 1,
+			currentTime: 0,
+			currentIterationTime: -1,
+			prevTime: 0,
+			playState: "paused",
+		};
 		this.setOptions(options);
 	}
-	set easing(curveArray) {
+	setEasing(curveArray) {
 		if (Array.isArray(curveArray)) {
-			this.options.easingName = `cubic-bezier(${curveArray.join(" ,")})`;
-			this.options.easing = cubicBezier(...curveArray);
+			this.state.easingName = `cubic-bezier(${curveArray.join(" ,")})`;
+			this.state.easing = cubicBezier(...curveArray);
 		} else {
-			this.options.easing = curveArray;
-			this.options.easingName = curveArray.easingName || "linear";
+			this.state.easing = curveArray;
+			this.state.easingName = curveArray.easingName || "linear";
 		}
 	}
-	get easing() {
-		return this.options.easing;
+	getEasing() {
+		return this.state.easing;
 	}
 	/**
 	* set animator's options.
@@ -104,101 +105,38 @@ animator.({
 
 		for (option in options) {
 			if (option === "easing") {
-				this[option] = options[option];
+				this.setEasing(options[option]);
 				continue;
 			}
-			this.options[option] = options[option];
+			(option in this.state ? this.state : this.options)[option] = options[option];
 		}
 
 		return this;
 	}
-	/**
-	* currentTime
-	* @example
-animator.currentTime = 10;
-
-animator.currentTime // 10
-	*/
-	set currentTime(value) {
-		this.setCurrentTime(value);
-	}
-	/**
-	* total duration including all iteration.
-	* @readonly
-	* @example
-const animator = new Scene.Animator({
-	delay: 2,
-	diretion: "alternate",
-	duration: 2,
-	fillMode: "forwards",
-	iterationCount: 3,
-	easing: Scene.Animator.EASE,
-});
-animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 3 = 8
-	*/
-	get totalDuration() {
-		if (this.iterationCount === "infinite") {
+	getTotalDuration() {
+		if (this.state.iterationCount === "infinite") {
 			return Infinity;
 		}
-		return this.delay + this.activeDuration;
+		return this.state.delay + this.getActiveDuration();
 	}
-	/**
-	* total duration excluding delay.
-	* @readonly
-	* @example
-const animator = new Scene.Animator({
-	delay: 2,
-	diretion: "alternate",
-	duration: 2,
-	fillMode: "forwards",
-	iterationCount: 3,
-	easin: Scene.Animator.EASE,
-});
-animator.activeDuration; // duration * iterationCount =  2 * 3 = 6
-	*/
-	get activeDuration() {
-		if (this.iterationCount === "infinite") {
+	getActiveDuration() {
+		if (this.state.iterationCount === "infinite") {
 			return Infinity;
 		}
-		return this.duration * this.iterationCount;
+		return this.getDuration() * this.state.iterationCount;
 	}
-	/**
-	* check if animator is ended.
-	* @readonly
-	* @return {Boolean} true: animattor is ended, false : not ended.
-	* @example
-// true: animator is ended, false : not ended.
-if (animator.ended) {
-	// is ended...
-} else {
-	// not ended...
-}
-	*/
-	get ended() {
-		if (this.currentTime === 0 && this.playState === "paused") {
+	isEnded() {
+		if (this.getTime() === 0 && this.playState === "paused") {
 			return true;
-		} else if (this.currentTime < this.totalDuration) {
+		} else if (this.getTime() < this.getTotalDuration()) {
 			return false;
 		}
-
 		return true;
 	}
-	/**
-	* check if animator is paused.
-	* @readonly
-	* @return {Boolean} true: animattor is paused, false : not paused.
-	* @example
-// true: animator is paused(not playing), false : not paused.
-if (animator.paused) {
-	// is paused...
-} else {
-	// not paused...
-}
-	*/
-	get paused() {
+	isPaused() {
 		return this.playState === "paused";
 	}
-	set next(animator) {
+	setNext(animator) {
 		this.on("ended", () => {
 			animator.play();
 		});
@@ -208,12 +146,12 @@ if (animator.paused) {
 	* @return {Animator} An instance itself.
 	*/
 	play() {
-		if (this.ended) {
-			this.currentTime = 0;
+		if (this.isEnded()) {
+			this.setTime(0);
 		}
 		this.playState = "running";
 		requestAnimFrame(time => {
-			this._prevTime = time;
+			this.state.prevTime = time;
 			this.tick(time);
 		});
 		this.trigger("play");
@@ -244,7 +182,7 @@ if (animator.paused) {
 	* @return {Animator} An instance itself.
 	*/
 	reset() {
-		this.currentTime = 0;
+		this.setTime(0);
 		this.stop();
 		return this;
 	}
@@ -256,8 +194,8 @@ animator.setTime(10);
 
 animator.currentTime // 10
 	*/
-	setCurrentTime(time) {
-		const {totalDuration} = this;
+	setTime(time) {
+		const totalDuration = this.getTotalDuration();
 		let currentTime = time;
 
 		if (currentTime < 0) {
@@ -265,14 +203,17 @@ animator.currentTime // 10
 		} else if (currentTime > totalDuration) {
 			currentTime = totalDuration;
 		}
-		this._currentTime = currentTime;
+		this.state.currentTime = currentTime;
 		this.calculateIterationTime();
 		this.trigger("timeupdate", {currentTime});
 	}
+	getTime() {
+		return this.state.currentTime;
+	}
 	calculateIterationTime() {
-		const currentTime = this._currentTime;
-		const {duration, iterationCount, fillMode, direction} = this;
-		const activeTime = parseInt(Math.max(currentTime - this.delay, 0) * 10000, 10) / 10000;
+		const {currentTime, iterationCount, fillMode, direction, delay} = this.state;
+		const duration = this.getDuration();
+		const activeTime = parseInt(Math.max(currentTime - delay, 0) * 10000, 10) / 10000;
 		const currentIterationCount = duration === 0 ? 0 : activeTime / duration;
 		const isOdd = currentIterationCount % 2 >= 1;
 
@@ -318,15 +259,18 @@ animator.currentTime // 10
 		this.setIterationTime(currentIterationTime);
 	}
 	caculateEasing(time) {
-		if (!this.options.easing) {
+		if (!this.state.easing) {
 			return time;
 		}
-		const duration = this.duration;
-		const easing = this.options.easing;
+		const duration = this.getDuration();
+		const easing = this.state.easing;
 		const ratio = duration === 0 ? 0 : time / duration;
 		const easingTime = easing(ratio) * time;
 
 		return easingTime;
+	}
+	getIterationTime() {
+		return this._currentIterationTime;
 	}
 	setIterationTime(time) {
 		const iterationTime = time;
@@ -337,18 +281,17 @@ animator.currentTime // 10
 		return this;
 	}
 	tick(now) {
-		const prevTime = this._prevTime;
-		const currentTime = this.currentTime + Math.min(1000, now - prevTime) / 1000;
+		const prevTime = this.state.prevTime;
+		const currentTime = this.getTime() + Math.min(1000, now - prevTime) / 1000;
 
-		this._prevTime = now;
-		this.setCurrentTime(currentTime);
-		if (this.ended) {
+		this.state.prevTime = now;
+		this.setTime(currentTime);
+		if (this.isEnded()) {
 			this.stop();
 		}
 		if (this.playState === "paused") {
 			return;
 		}
-
 
 		requestAnimFrame(time => {
 			this.tick(time);
@@ -364,9 +307,6 @@ animator.currentTime // 10
 * @example
 animator.currentIterationTime // ....
 */
-defineGetter({target: Animator.prototype, name: "currentIterationTime", prefix: "_"});
-defineGetter({target: Animator.prototype, name: "currentTime", prefix: "_"});
-defineGetter({target: Animator.prototype, name: "easing", parent: "options"});
 /**
 * playSpeed
 * @memberof Animator
@@ -376,7 +316,6 @@ defineGetter({target: Animator.prototype, name: "easing", parent: "options"});
 animator.playSpeed = 1;// default speed
 animator.playSpeed = 2;// speed 2x
 */
-defineGetterSetter({target: Animator.prototype, name: "playSpeed", parent: "options"});
 /**
 * playState
 * @memberof Animator
@@ -392,7 +331,6 @@ animator.playState // => paused
 animator.stop();
 animator.playState // => paused
 */
-defineGetterSetter({target: Animator.prototype, name: "playState", parent: "options"});
 /**
 * specifies the number of times an animation should be played
 * @memberof Animator
@@ -411,34 +349,29 @@ animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 3 = 8
 animator.iterationCount = 2;
 animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 2 = 6
 */
-defineGetterSetter({target: Animator.prototype, name: "iterationCount", parent: "options"});
 /**
 * Specifies how many seconds or milliseconds an animation takes to complete one cycle
 * @memberof Animator
 * @instance
 * @name duration
 */
-defineGetterSetter({target: Animator.prototype, name: "duration", parent: "options"});
 /**
 * Specifies a style for the element when the animation is not playing (when it is finished, or when it has a delay)(none, forwards, backwards)
 * @memberof Animator
 * @instance
 * @name fillMode
 */
-defineGetterSetter({target: Animator.prototype, name: "fillMode", parent: "options"});
 /**
 * Specifies whether an animation should play in reverse direction or alternate cycles(normal, reverse, alternate, alternate-reverse)
 * @memberof Animator
 * @instance
 * @name direction
 */
-defineGetterSetter({target: Animator.prototype, name: "direction", parent: "options"});
 /**
 * specifies a delay for the start of an animation
 * @memberof Animator
 * @instance
 * @name delay
 */
-defineGetterSetter({target: Animator.prototype, name: "delay", parent: "options"});
 
 export default Animator;

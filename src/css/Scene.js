@@ -60,11 +60,15 @@ class CSSScene extends Scene {
 	}
 	exportCSS() {
 		const items = this.items;
+		let duration = this.getDuration();
 
+		if (duration !== duration || duration === Infinity || duration === -Infinity) {
+            duration = 0;
+        }
 		for (const id in items) {
 			const item = items[id];
 
-			item.exportCSS(this.duration);
+			item.exportCSS(duration || item.getDuration());
 		}
 		return this;
 	}

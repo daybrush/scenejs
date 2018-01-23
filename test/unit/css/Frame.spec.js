@@ -37,7 +37,7 @@ filter:brightness(90%) grayscale(40%);
             css.forEach((line, i) => {
                 expect(line).to.be.deep.equal(result[i]);
             });
-            expect(this.frame.cssText).to.be.deep.equal(result.join(""));
+            expect(this.frame.cssText()).to.be.deep.equal(result.join(""));
         });
     });
 });

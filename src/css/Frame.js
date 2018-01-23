@@ -41,9 +41,8 @@ class CSSFrame extends Frame {
 	}
 	/**
 	* get the contents of a style declaration as a string.
-	* @readonly
 	*/
-	get cssText() {
+	cssText() {
 		return this.toCSS();
 	}
 }

@@ -10,12 +10,12 @@ function animateFunction({time, frame}) {
 	if (!element) {
 		return;
 	}
-	const cssText = frame.cssText;
+	const cssText = frame.cssText();
 
-	if (this.options.cssText === cssText) {
+	if (this.state.cssText === cssText) {
 		return;
 	}
-	this.options.cssText = cssText;
+	this.state.cssText = cssText;
 	const length = element.length;
 
 	for (let i = 0; i < length; ++i) {
@@ -194,13 +194,13 @@ frame.getProperty("opacity"); // 0.5
 		}
 		return this;
 	}
-	toKeyframes(duration = this.duration, options = {}) {
+	toKeyframes(duration = this.getDuration(), options = {}) {
 		const id = this.options.id || this.setId(makeId()).options.id;
 
 		if (!id) {
 			return "";
 		}
-		const itemDuration = this.duration;
+		const itemDuration = this.getDuration();
 		const ratio = itemDuration / duration;
 		const times = this.timeline.times;
 
@@ -217,16 +217,16 @@ frame.getProperty("opacity"); // 0.5
 			${keyframes.join("\n")}
 		}`;
 	}
-	toCSS(duration = this.duration, options = {}) {
+	toCSS(duration = this.getDuration(), options = {}) {
 		const id = this.options.id || this.setId(makeId()).options.id;
 
 		if (!id) {
 			return "";
 		}
 		const selector = this.options.selector;
-		const easing = options.easingName || this.options.easingName;
-		const fillMode = options.fillMode || this.options.fillMode;
-		const count = options.iterationCount || this.options.iterationCount;
+		const easing = options.easingName || this.state.easingName;
+		const fillMode = options.fillMode || this.state.fillMode;
+		const count = options.iterationCount || this.state.iterationCount;
 		const cssArray = [];
 
 		convertCrossBrowserCSSArray(cssArray, "animation-name", `${PREFIX}KEYFRAMES_${toId(id)}`);
@@ -242,7 +242,7 @@ frame.getProperty("opacity"); // 0.5
 
 		return css;
 	}
-	exportCSS(duration = this.duration, options = {}) {
+	exportCSS(duration = this.getDuration(), options = {}) {
 		const id = toId(this.options.id || this.setId(makeId()).options.id || "");
 
 		if (!id) {
@@ -251,7 +251,7 @@ frame.getProperty("opacity"); // 0.5
 		const styleElement = document.querySelector(`#${PREFIX}${id}`);
 
 
-		const css = this.toCSS();
+		const css = this.toCSS(duration, options);
 
 		if (styleElement) {
 			styleElement.innerText = css;

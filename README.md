@@ -5,112 +5,100 @@ Scene.js
 Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 <br>
 
-## Component
-* **Scene** : Control SceneItem, Speed & Count, Play & Stop
-* **Scene.SceneItem** : Add & Manage Frame
-* **Scene.Frame** : Set Property & get CSSText
+![Shape Example](https://daybrush.github.io/scenejs/example/shape.gif)
+## Usage
+```js
+var scene = new Scene({
+  ".shape" : {
+    0: {
+      "border-radius": "0%",
+      "transform": "translateY(0px) rotate(0deg)"
+    },
+    1: {
+      "border-radius": "50%",
+      "transform": "translateY(200px) rotate(90deg)",
+      "border-color": "rgba(0, 0, 0, 1)",
+      "border-bottom-color": "rgba(0, 0, 0, 1)"
+    },
+    2: {
+      "transform": "translateY(0px) rotate(-180deg)",
+      "border-color": "rgba(0, 0, 0, 0)",
+      "border-bottom-color": "rgba(0, 0, 0, 1)",
+      "box-shadow": "0px 0px 0 0 black"
+    },
+    3: {
+      "border-radius": "50%",
+      "transform": "translateY(200px) rotate(105deg)",
+      "border-color": "rgba(0, 0, 0, 0)",
+      "border-bottom-color": "rgba(0, 0, 0, 0)",
+      "box-shadow": "-15px -20px 0px 0px black"
+    },
+    4: {
+      "border-radius": "0%",
+      "transform": "translateY(0px) rotate(0deg)",
+      "box-shadow": "0px 0px 0px 0px black",
+      "border-color": "rgba(0, 0, 0, 1)",
+      "border-bottom-color": "rgba(0, 0, 0, 1)"
+    }
+  }
+}, {
+  selector: true,
+  iterationCount: "infinite",
+  easing: Scene.EASE_IN_OUT
+});
+// play javascript
+scene.play();
+// play css
+scene.playCSS();
+```
 
 ## Support Browser
 **Default**
 
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
-|9+|(yes)|2.0|3.0|9.5|
+|8+|latest|latest|latest|latest|
 
-**Transform**
-
-|Internet Explorer|Chrome|FireFox|Safari|Opera|
-|---|---|---|---|---|
-|9+|4+|3.5+|3.2+|10.5+|
-
-**Transform 3D**
-
-|Internet Explorer|Chrome|FireFox|Safari|Opera|
-|---|---|---|---|---|
-|10+|12+|10+|4+|15+|
-
-**Filter**
-
-|Internet Explorer|Chrome|FireFox|Safari|Opera|
-|---|---|---|---|---|
-|X|18+|35+|6+|15+|
-
+* If you want to use in IE8, please use polyfill.
 
 ## Demo
+* [Circle Burst](https://daybrush.github.io/scenejs/example/circleburst.html)
+* [Cube](https://daybrush.github.io/scenejs/example/cube.html)
+* [Shape](https://daybrush.github.io/scenejs/example/shape.html)
 
-[Circle Burst](http://daybrush.com/Scene.js2/example/circleburst.html)
+## How to use
 
-[Cube](http://daybrush.com/Scene.js2/example/cube.html)
-
-
-
-## How to use?
-
-Only load Scene,js
+### Import library
 
 ```HTML
-<script src="./dist/Scene.js"></script>
-or
-<script src="./dist/Scene.min.js"></script>
+<script src="//daybrush.github.io/scenejs/release/latest/scene.min.js"></script>
 
-```
-
-```sh
-npm install scenejs
 ```
 
 ```js
 import Scene from "scenejs";
 ```
- 
-Ready to start using Scene.js! Scene.js has Scene namespace and can be used as below example.
+
+### Make scene
 
 ```javascript
-var element = document.querySelector(".sample")
-var scene = new Scene();
-var sceneItem = scene.setElement(element); // add Item
-
-sceneItem.setProperty(time, property, value);
-// width margin padding height ....
-
-
-sceneItem.setTransform(time, name, value);
-//translate, scale, rotate, skew ....
-
-sceneItem.setFilter(time, name, value);
-//blur, brightness, contrast, drop-shadow, grayscale, hue-rotate, invert, opacity, saturate, sepia
+var scene = new Scene({
+  ".class": {
+    0: "left: 0px; top: 0px",
+    1: {
+      "left": "100px",
+      "top": "0px",
+    },
+    2: {
+      "left": "200px",
+      "top": "100px",
+    }
+  }
+}, {
+  selector: true,
+});
 
 scene.play();
         
 ```
-
-or
-
-```javascript
-var scene = new Scene({
-	".sample" : {
-		0: {width: "30px", height: "20px", property:value},
-		2: {width: "50px", property:value},
-		6.5: {height: "200px", property:value},
-	},
-	"item2" : {
-		0 : {transform:{scale:0.5}, property:value},
-		2 : {transform:{scale:1.5, rotate:"0deg"}, width: "50px", property:value},
-		6.5: {transform:{scale:1, rotate:"50deg"}, width: "10px", property:value},
-	},
-	options: {
-		selector: true // set selector to ".sample" item automatically.
-	}
-});
-
-scene.setSelector({
-	".item1" : "item1",
-	".item2" : "item2"
-});
-
-
-scene.play();
-
-```
-
 

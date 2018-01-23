@@ -12,10 +12,10 @@
     "test": "karma start",
     "test:chrome": "karma start --chrome",
     "release": "npm run build && npm run release:current && npm run release:latest",
-    "release:mkdir": "mkdir -p release",
-    "release:current": "npm run release:mkdir && cp -a ./dist/. release/$npm_package_version",
-    "release:latest": "npm run release:mkdir && cp -a ./dist/. release/latest",
-    "deploy": "npm run release && gh-pages -d ./release --dest=./release/ --add"
+    "release:mkdir": "mkdir -p ./demo/release",
+    "release:current": "npm run release:mkdir && rm -rf ./demo/release/$npm_package_version && cp -a ./dist/. ./demo/release/$npm_package_version",
+    "release:latest": "npm run release:mkdir && rm -rf ./demo/release/latest && cp -a ./dist/. ./demo/release/latest",
+    "deploy": "npm run release && gh-pages -d ./demo --dest=./ --add "
   },
   "repository": {
     "type": "git",

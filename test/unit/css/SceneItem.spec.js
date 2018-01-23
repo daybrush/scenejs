@@ -73,13 +73,13 @@ describe("CSS Frame Test", function() {
             // Given
             // When
             // Then
-            console.log(this.item.toKeyframes());
+            // console.log(this.item.toKeyframes());
         });
         it("should check 'toCSS' method", () => {
             // Given
             // When
             // Then
-            console.log(this.item.toCSS());
+            // console.log(this.item.toCSS());
         });
         it("should check 'exportCSS' method", () => {
             // Given
