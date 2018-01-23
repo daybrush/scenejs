@@ -99,7 +99,6 @@ module.exports = _StopMotion2.default;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.StopMotionItem = undefined;
 exports.default = StopMotion;
 
 var _scenejs = __webpack_require__(2);
@@ -164,17 +163,15 @@ function StopMotion(obj) {
 	return obj;
 }
 
-var StopMotionItem = exports.StopMotionItem = function StopMotionItem(obj) {
-	var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-	var item = new _scenejs.SceneItem(obj, options);
-
-	stopMotion(item, 0, item.duration, options.count);
-
-	return item;
+_scenejs2.default.prototype.setStopMotion = function setStopMotion(options) {
+	StopMotion(this, options);
+	return this;
 };
 
-StopMotion.Scene = _scenejs2.default;
+_scenejs.SceneItem.prototype.setStopMotion = function setStopMotion(options) {
+	StopMotion(this, options);
+	return this;
+};
 
 /***/ }),
 /* 2 */
