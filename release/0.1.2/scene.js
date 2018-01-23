@@ -1796,18 +1796,16 @@ var Frame = function () {
 	}, {
 		key: "_set",
 		value: function _set(role, property, value) {
-			var name = role.trim();
 			var _value = value;
 
 			if ((0, _utils.isString)(_value)) {
 				_value = (0, _property.toPropertyObject)(_value);
 			}
-			if (!(name in this.properties)) {
-				this.properties[name] = {};
+			if (!(role in this.properties)) {
+				this.properties[role] = {};
 			}
-			this.properties[name][property] = _value;
+			this.properties[role][property] = _value;
 		}
-
 		/**
   * set property
   * @param {Object|String} role - property role(property, transform, filter)
@@ -1846,20 +1844,6 @@ var Frame = function () {
 
 			if ((0, _utils.isObject)(role)) {
 				this.load(role);
-				return this;
-			} else if (!property) {
-				var properties = role.split(";");
-				var length = properties.length;
-
-				for (var i = 0; i < length; ++i) {
-					var matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
-
-					if (!matches || matches.length < 3 || !matches[1]) {
-						continue;
-					}
-
-					this.set(matches[1], matches[2]);
-				}
 				return this;
 			}
 			if ((0, _utils.isObject)(property)) {
@@ -1909,7 +1893,7 @@ var Frame = function () {
 	}, {
 		key: "has",
 		value: function has(role, property) {
-			return this.properties[role] && (0, _utils.has)(this.properties[role], property);
+			return (0, _utils.has)(this.properties[role], property);
 		}
 		/**
   * copy frame.
@@ -3073,10 +3057,11 @@ var Scene = function (_Animator) {
 		set: function set(duration) {
 			var items = this.items;
 			var sceneDuration = this.activeDuration;
+			var ratio = duration / sceneDuration;
 
 			for (var id in items) {
 				var item = items[id];
-				var time = item.activeDuration / item.playSpeed / sceneDuration * duration;
+				var time = item.totalDuration / item.playSpeed * ratio - item.delay / item.playSpeed;
 
 				item.duration = time;
 			}
