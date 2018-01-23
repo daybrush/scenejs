@@ -13,3 +13,4 @@ webpack.*.js
 packages
 release/
 demo/
+coverage/

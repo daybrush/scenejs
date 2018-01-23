@@ -9,6 +9,7 @@
   "scripts": {
     "lint": "eslint src",
     "build": "webpack",
+    "coverage": "karma start --coverage",
     "test": "karma start",
     "test:chrome": "karma start --chrome",
     "release": "npm run build && npm run release:current && npm run release:latest",
@@ -37,6 +38,7 @@
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.8.0",
     "gh-pages": "^1.1.0",
+    "istanbul-instrumenter-loader": "^3.0.0",
     "karma": "^1.7.1",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.2.0",

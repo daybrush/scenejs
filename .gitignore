@@ -5,3 +5,4 @@ doc/
 dist/
 release/
 npm-debug.log*
+coverage/

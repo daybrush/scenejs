@@ -1,4 +1,4 @@
-Scene.js
+Scene.js  [![npm version](https://badge.fury.io/js/scenejs.svg)](https://badge.fury.io/js/scenejs)
 ============
 
 
@@ -53,7 +53,6 @@ scene.playCSS();
 ```
 
 ## Support Browser
-**Default**
 
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
@@ -72,12 +71,11 @@ $ npm install scenejs
 ```
 
 ### Import library
-
+#### ES5
 ```HTML
 <script src="//daybrush.github.io/scenejs/release/latest/scene.min.js"></script>
-
 ```
-
+#### ES6
 ```js
 import Scene from "scenejs";
 ```
@@ -99,9 +97,7 @@ var scene = new Scene({
   }
 }, {
   selector: true,
-});
+}).play();
 
-scene.play();
-        
 ```
 
