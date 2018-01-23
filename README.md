@@ -65,6 +65,11 @@ scene.playCSS();
 * [Shape](https://daybrush.github.io/scenejs/example/shape.html)
 
 ## How to use
+### Installation with npm
+
+```bash
+$ npm install scenejs
+```
 
 ### Import library
 

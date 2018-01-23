@@ -50,13 +50,12 @@ export default function StopMotion(obj, options = {}) {
 	return obj;
 }
 
+Scene.prototype.setStopMotion = function setStopMotion(options) {
+	StopMotion(this, options);
+	return this;
+}
 
-export const StopMotionItem = function StopMotionItem(obj, options = {}) {
-	const item = new SceneItem(obj, options);
-
-	stopMotion(item, 0, item.duration, options.count);
-
-	return item;
-};
-
-StopMotion.Scene = Scene;
+SceneItem.prototype.setStopMotion = function setStopMotion(options) {
+	StopMotion(this, options);
+	return this;
+}
