@@ -2691,12 +2691,13 @@ var CSSScene = function (_Scene) {
 
 	_createClass(CSSScene, [{
 		key: "newItem",
-		value: function newItem(name) {
+		value: function newItem(name, options) {
 			if ((0, _utils.has)(this.items, name)) {
 				return this.items[name];
 			}
 			var item = new _SceneItem2.default();
 
+			item.setOptions(options);
 			this.setItem(name, item);
 			return item;
 		}
