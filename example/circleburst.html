@@ -260,46 +260,40 @@ body {
 
 
 <script>
-const ease = [.42,0,.58,1];
-const customTimingFunction = [.48,.01,.25,1];
-const scene1 = new Scene({
-	"sun1" : {
+var item;
+var ease = [0.42, 0, 0.58, 1];
+var customTimingFunction = [0.48, 0.01, 0.25, 1];
+var scene1 = new Scene({
+	"#sun1" : {
 		0 : {"transform" : "scale(0, 0)"},
 		0.2 : {"border-width" : "100px"},
 		0.4998 : {"display": "none"},
-		0.5 : {"border-width" : "0px", "transform" : "scale(1, 1)"},
-		options: {
-			easing : customTimingFunction,
-		}
+		0.5 : {"border-width" : "0px", "transform" : "scale(1, 1)"}
 	},
-	"sun2" : {
+	"#sun2" : {
 		0 : {"transform" : "scale(0, 0)", "border-width" : "100px"},
 		0.2 : {"transform" : "scale(0, 0)"},
-		0.45 : {"transform": "scale(0.9, 0.9)", "border-width": "0px"},
-		options: {
-			easing : customTimingFunction,
-		}
-	},
-	options : {
-		playSpeed: 0.5
-	},
-}).setSelector({
-	"#sun":"sun1",
-	"#sun2": "sun2"
+		0.45 : {"transform": "scale(0.9, 0.9)", "border-width": "0px"}
+	}
+}, {
+	playSpeed: 0.5,
+	easing : customTimingFunction,
+	selector: true
 });
 
 
 
-for (let i = 1; i <= 8; ++i) {
-	scene1.newItem("sun_after" + i).load({
+for (var i = 1; i <= 8; ++i) {
+	scene1.newItem(".sun_afterimage:nth-child(" + i + ")").load({
 		0 : {transform : {rotate: i* 45 + "deg", translate : "80px, 0px", scale : "0,1"}},
 		0.2 : {transform : {translate:"80px, 0px", scale : "0.7, 1"}},
 		0.5 : {transform : {translate: "150px, 0px", scale : "0, 1"}},
 		0.9 : {transform : {translate : "80px, 0px", scale : "0,1"}},
 		options : {
-			easing : customTimingFunction
+			easing : customTimingFunction,
+			selector: true
 		}
-	}).setSelector(".sun_afterimage:nth-child(" + (i) + ")");
+	});
 }
 
 
@@ -308,18 +302,18 @@ for (let i = 1; i <= 8; ++i) {
 
 //	stroke-dasharray: 283 1000;
 //	stroke-dashoffset: -283;
-const scene2 = new Scene();
-const scene2_radius = [25 * 2 * Math.PI, 35 * 2 * Math.PI, 45 * 2 * Math.PI];
-const delay = 0.4;
+var scene2 = new Scene();
+var scene2_radius = [25 * 2 * Math.PI, 35 * 2 * Math.PI, 45 * 2 * Math.PI];
+var delay = 0.4;
 
+for (let i = 0; i < scene2_radius.length; ++i) {
+	const r = scene2_radius[i];
 
-for(let i = 0; i < scene2_radius.length; ++i) {
-	let r = scene2_radius[i];
-	scene2.newItem("rc" + i).load({
-		[delay]: {"stroke-dasharray": "0 1000"},
-		[delay + 1]: {"stroke-dasharray": r + " 1000"},
-		[delay + 2]: {"stroke-dashoffset": -r}
-	}).setSelector("#rotate_circle" + (i+1));
+	scene2.newItem("#rotate_circle" + (i + 1), {selector: true}).set({
+		[delay]: "stroke-dasharray: 0 1000",
+		[delay + 1]: `stroke-dasharray: ${r} 1000`,
+		[delay + 2]: `stroke-dashoffset: ${-r}`,
+	});
 }
 scene2.load({
 	"#stick" : {

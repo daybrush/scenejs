@@ -2946,11 +2946,14 @@ var Scene = function (_Animator) {
 	}, {
 		key: "newItem",
 		value: function newItem(name) {
+			var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
 			if ((0, _utils.has)(this.items, name)) {
 				return this.items[name];
 			}
 			var item = new _SceneItem2.default();
 
+			item.setOptions(options);
 			this.setItem(name, item);
 			return item;
 		}
