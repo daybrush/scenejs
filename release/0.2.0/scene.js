@@ -880,14 +880,14 @@ var Animator = function (_EventTrigger) {
 	}, {
 		key: "getIterationTime",
 		value: function getIterationTime() {
-			return this._currentIterationTime;
+			return this.state.currentIterationTime;
 		}
 	}, {
 		key: "setIterationTime",
 		value: function setIterationTime(time) {
 			var iterationTime = time;
 
-			this._currentIterationTime = iterationTime;
+			this.state.currentIterationTime = iterationTime;
 			this.trigger("iterationtimeupdate", { iterationTime: iterationTime });
 
 			return this;
