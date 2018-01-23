@@ -57,9 +57,7 @@ scene.playCSS();
 
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
-|8+|latest|latest|latest|latest|
-
-* If you want to use in IE8, please use polyfill.
+|8+(polyfill)|latest|latest|latest|latest|
 
 ## Demo
 * [Circle Burst](https://daybrush.github.io/scenejs/example/circleburst.html)
