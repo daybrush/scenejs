@@ -268,13 +268,13 @@ var ease = [0.42, 0, 0.58, 1];
 var customTimingFunction = [0.48, 0.01, 0.25, 1];
 var scene1 = new Scene({
 	"#sun" : {
-		0 : {"transform" : "scale(0, 0)"},
-		0.2 : {"border-width" : "100px"},
+		0 : {"border-width" : "100px", "transform" : "scale(0, 0)"},
+// 		0.2 : {"border-width" : "100px"},
 		0.5 : {"border-width" : "0px", "transform" : "scale(1, 1)"}
 	},
 	"#sun2" : {
 		0 : {"transform" : "scale(0, 0)", "border-width" : "100px"},
-		0.2 : {"transform" : "scale(0, 0)"},
+// 		0.2 : {"transform" : "scale(0, 0)"},
 		0.45 : {"transform": "scale(0.9, 0.9)", "border-width": "0px"}
 	}
 }, {
@@ -288,10 +288,11 @@ var scene1 = new Scene({
 for (var i = 1; i <= 8; ++i) {
 	scene1.newItem(".sun_afterimage:nth-child(" + i + ")").load({
 		0 : {transform : {rotate: i* 45 + "deg", translate : "80px, 0px", scale : "0,1"}},
-		0.2 : {transform : {translate:"80px, 0px", scale : "0.7, 1"}},
-		0.5 : {transform : {translate: "150px, 0px", scale : "0, 1"}},
-		0.9 : {transform : {translate : "80px, 0px", scale : "0,1"}},
+// 		0.2 : {transform : {translate:"80px, 0px", scale : "0.7, 1"}},
+		0.6 : {transform : {translate: "150px, 0px"}},
+		0.9 : {transform : {translate : "80px, 0px", scale : "1,1"}},
 		options : {
+			playSpeed: 0.5,
 			easing : customTimingFunction,
 			selector: true
 		}

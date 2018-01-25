@@ -2697,8 +2697,8 @@ var CSSScene = function (_Scene) {
 			}
 			var item = new _SceneItem2.default();
 
-			item.setOptions(options);
 			this.setItem(name, item);
+			item.setOptions(options);
 			return item;
 		}
 	}, {
