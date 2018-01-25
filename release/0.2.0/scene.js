@@ -1067,7 +1067,7 @@ var SceneItem = function (_Animator) {
 		var _this = _possibleConstructorReturn(this, (SceneItem.__proto__ || Object.getPrototypeOf(SceneItem)).call(this, options));
 
 		_this.timeline = new _FrameTimeline2.default();
-		_this.load(properties, options);
+		_this.load(properties);
 		return _this;
 	}
 	/**
