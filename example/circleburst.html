@@ -181,7 +181,7 @@ body {
 	border-radius: 50%;
 }
 
-.scene3, .scene4, .scene5, .scnee6 {
+.scene4, .scene5, .scene6 {
 	display: none;
 }
 </style>
@@ -269,30 +269,25 @@ var customTimingFunction = [0.48, 0.01, 0.25, 1];
 var scene1 = new Scene({
 	"#sun" : {
 		0 : {"border-width" : "100px", "transform" : "scale(0, 0)"},
-// 		0.2 : {"border-width" : "100px"},
 		0.5 : {"border-width" : "0px", "transform" : "scale(1, 1)"}
 	},
 	"#sun2" : {
 		0 : {"transform" : "scale(0, 0)", "border-width" : "100px"},
-// 		0.2 : {"transform" : "scale(0, 0)"},
 		0.45 : {"transform": "scale(0.9, 0.9)", "border-width": "0px"}
 	}
 }, {
-	playSpeed: 0.5,
 	easing : customTimingFunction,
-	selector: true
+	selector: true,
+	playSpeed: 0.5
 });
 
 
 
 for (var i = 1; i <= 8; ++i) {
 	scene1.newItem(".sun_afterimage:nth-child(" + i + ")").load({
-		0 : {transform : {rotate: i* 45 + "deg", translate : "80px, 0px", scale : "0,1"}},
-// 		0.2 : {transform : {translate:"80px, 0px", scale : "0.7, 1"}},
-		0.6 : {transform : {translate: "150px, 0px"}},
-		0.9 : {transform : {translate : "80px, 0px", scale : "1,1"}},
+		0 : {transform : {rotate: i* 45 + "deg", translate : "40px, 0px", scale : "0,1"}, width: "120px"},
+		0.9 : {transform : {translate : "140px, 0px", scale : "1,1"}, width: "0px"},
 		options : {
-			playSpeed: 0.5,
 			easing : customTimingFunction,
 			selector: true
 		}
@@ -312,14 +307,14 @@ var delay = 0.4;
 for (let i = 0; i < scene2_radius.length; ++i) {
 	const r = scene2_radius[i];
 
-	scene2.newItem("#rotate_circle" + (i + 1), {selector: true}).set({
+	scene2.newItem("#rotate_circle" + (i + 1), {selector: true, easing: ease}).set({
 		[delay]: "stroke-dasharray: 0 1000; stroke-dashoffset: 1;",
 		[delay + 1]: `stroke-dasharray: ${r} 1000; stroke-dashoffset: 1;"`,
 		[delay + 2]: `stroke-dashoffset: ${-r}`,
 	});
 }
 scene2.newItem("#stick", {easing: ease, selector: true}).set({
-	0 : "transform: rotate:(90deg) scale(1, 0)",
+	0 : "transform: rotate(-90deg) scale(1, 0)",
 	[delay / 2] : "transform: rotate(-90deg) scale(1,1)", // t = delay / 2
 	[delay] : "transform: rotate(-90deg) scale(1,1)", // t = delay
 	[1 + delay] : "transform: rotate(270deg) scale(1,1)", // t = 1 + delay
@@ -354,16 +349,15 @@ for (let i = 0; i < circles.length; ++i) {
 	x = cp.x, y = cp.y;
 	
 	scene3.newItem("#circles1 .circle:nth-child(" + (i+1) + ")", {
-			easing : customTimingFunction,
-			selector: true,
-		}).set({
-		[-1]: {"margin-left": "-"+r, "margin-top" : "-"+r, width: w, height: w},
-		0: {transform : {translate : x +"px,"+y+"px", scale : "0,0" }},
-		[d]: {transform:"scale(0,0)"},
+		easing : customTimingFunction,
+		selector: true,
+	}).set({
+		0: {"margin-left": "-"+r, "border-width" : r, "margin-top" : "-"+r, width: w, height: w, transform : {translate : x +"px,"+y+"px", scale : "0,0" }},
+		[d+ 0.001]: {transform: "scale(0,0)"},
 		[duration * 0.3 + d]: {"border-width" : r},
 		[duration * 0.7 + d]: {"opacity" : 1},
-		[duration + d]: {transform:"scale(1,1)", "border-width" : "0px", opacity: 0},
-	})
+		[duration + d]: {transform:"scale(1,1)", "border-width" : "0px"},
+	}).setCSS(0, ["border-color"]);
 }
 
 scene3.on("play", function() {
@@ -457,9 +451,8 @@ scene6.setTime(0);
 
 scene1.play();
 scene1.setNext(scene2);
-/*
-
 scene2.setNext(scene3);
+/*
 scene3.setNext(scene4);
 scene4.setNext(scene5);
 scene5.setNext(scene6);

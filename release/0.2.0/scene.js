@@ -2375,45 +2375,23 @@ var CSSItem = function (_SceneItem) {
 			this.setId(!id || id === "null" ? makeId() : id);
 			return this;
 		}
-		/**
-  * adds css style of items's element to the frame at that time.
-  * @param {Number} time - frame's time
-  * @example
-  // html
-  // <div id="item1" style="opacity:0.5;display:none;border-left:10px solid black;">
-  const item = new Scene.SceneItem();
-  item.selector = "#item1";
-  item.copyCSSStyle(0);
-  const frame = item.getFrame(0);
-  frame.getProperty("opacity"); // 0.5
-  frame.getProperty("display"); // "none"
-  frame.getProperty("border-left").toValue(); // "10px solid black"
-  */
-
 	}, {
-		key: "copyCSSStyle",
-		value: function copyCSSStyle(time) {
-			var element = this.element;
-
-			if (element instanceof NodeList) {
-				element = element[0];
+		key: "setCSS",
+		value: function setCSS(time, properties) {
+			if (!properties || !properties.length) {
+				return this;
 			}
+			var element = this.options.element && this.options.element[0];
+
 			if (!element) {
 				return this;
 			}
-			var cssText = element.style.cssText;
-			var cssArray = cssText.split(";");
-			var length = cssArray.length;
 			var cssObject = {};
-			var i = void 0;
-			var matches = void 0;
+			var styles = window.getComputedStyle(element);
+			var length = properties.length;
 
-			for (i = 0; i < length; ++i) {
-				matches = /([^:]*):([\S\s]*)/g.exec(cssArray[i]);
-				if (!matches || matches.length < 3) {
-					continue;
-				}
-				cssObject[matches[1]] = matches[2];
+			for (var i = 0; i < length; ++i) {
+				cssObject[properties[i]] = styles[properties[i]];
 			}
 			this.set(time, cssObject);
 			return this;
