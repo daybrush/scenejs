@@ -91,13 +91,15 @@ const item = scene.getItem("item1")
 	* @example
 const item = scene.newItem("item1")
 	*/
-	newItem(name) {
+	newItem(name, options = {}) {
 		if (has(this.items, name)) {
 			return this.items[name];
 		}
 		const item = new SceneItem();
 
 		this.setItem(name, item);
+		item.setOptions(options);
+
 		return item;
 	}
 	/**

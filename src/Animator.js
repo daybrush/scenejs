@@ -1,6 +1,5 @@
 import EventTrigger from "./EventTrigger";
 import cubicBezier from "./cubicBezier";
-import {defineGetter, defineGetterSetter} from "./utils";
 
 let lastTime = 0;
 
@@ -112,6 +111,15 @@ animator.({
 		}
 
 		return this;
+	}
+	setDirection(direction) {
+		this.state.direction = direction;
+	}
+	setIterationCount(iterationCount) {
+		this.state.iterationCount = iterationCount;
+	}
+	setPlaySpeed(playSpeed) {
+		this.state.playSpeed = playSpeed;
 	}
 	getTotalDuration() {
 		if (this.state.iterationCount === "infinite") {
@@ -270,12 +278,12 @@ animator.currentTime // 10
 		return easingTime;
 	}
 	getIterationTime() {
-		return this._currentIterationTime;
+		return this.state.currentIterationTime;
 	}
 	setIterationTime(time) {
 		const iterationTime = time;
 
-		this._currentIterationTime = iterationTime;
+		this.state.currentIterationTime = iterationTime;
 		this.trigger("iterationtimeupdate", {iterationTime});
 
 		return this;

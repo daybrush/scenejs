@@ -4,13 +4,14 @@ import {has} from "../utils";
 import {SCENE_ROLES} from "../consts";
 
 class CSSScene extends Scene {
-	newItem(name) {
+	newItem(name, options) {
 		if (has(this.items, name)) {
 			return this.items[name];
 		}
 		const item = new SceneItem();
 
 		this.setItem(name, item);
+		item.setOptions(options);
 		return item;
 	}
 	setSelector(selectors, _itemName) {

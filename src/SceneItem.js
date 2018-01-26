@@ -4,6 +4,7 @@ import {
 	isUndefined,
 	isObject,
 	isString,
+	isArray,
 } from "./utils";
 import FrameTimeline from "./FrameTimeline";
 import {dot} from "./utils/dot";
@@ -33,7 +34,7 @@ let item = new Scene.SceneItem({
 	constructor(properties, options) {
 		super(options);
 		this.timeline = new FrameTimeline();
-		this.load(properties, options);
+		this.load(properties);
 	}
 	/**
 	* Specifies how many seconds an animation takes to complete one cycle
@@ -71,7 +72,12 @@ let item = new Scene.SceneItem({
 item.duration; // = item.timeline.last
 	*/
 	set(time, role, properties, value) {
-		if (isObject(time)) {
+		if (isArray(time)) {
+			time.forEach(t => {
+				this.set(t, role, properties, value);
+			});
+			return this;
+		} else if (isObject(time)) {
 			this.load(time);
 			return this;
 		}

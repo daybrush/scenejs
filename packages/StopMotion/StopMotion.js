@@ -38,10 +38,10 @@ export default function StopMotion(obj, options = {}) {
 				(exclude && test(exclude, id))) {
 				continue;
 			}
-			stopMotion(item, 0, item.duration, options.count);
+			stopMotion(item, 0, item.getDuration(), options.count);
 		}
 	} else if (obj instanceof SceneItem) {
-		stopMotion(obj, 0, obj.duration, options.count);
+		stopMotion(obj, 0, obj.getDuration(), options.count);
 	} else {
 		const scene = new Scene(obj, options);
 
@@ -53,9 +53,9 @@ export default function StopMotion(obj, options = {}) {
 Scene.prototype.setStopMotion = function setStopMotion(options) {
 	StopMotion(this, options);
 	return this;
-}
+};
 
 SceneItem.prototype.setStopMotion = function setStopMotion(options) {
 	StopMotion(this, options);
 	return this;
-}
+};
