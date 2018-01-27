@@ -1,7 +1,6 @@
 Scene.js  [![npm version](https://badge.fury.io/js/scenejs.svg)](https://badge.fury.io/js/scenejs) [![Build Status](https://travis-ci.org/daybrush/scenejs.svg?branch=master)](https://travis-ci.org/daybrush/scenejs)
 ============ 
 
-
 Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 <br>
 
@@ -52,11 +51,17 @@ scene.play();
 scene.playCSS();
 ```
 
+## Plugins
+* [StopMotion](https://github.com/daybrush/scenejs-stopmotion)
+* GetterSetter
+* MovieEffect
+
+
 ## Support Browser
 
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
-|8+(polyfill)|latest|latest|latest|latest|
+|9+(polyfill 8+)|latest|latest|latest|latest|
 
 ## Demo
 * [Circle Burst](https://daybrush.github.io/scenejs/example/circleburst.html)
@@ -85,18 +90,18 @@ import Scene from "scenejs";
 ```javascript
 var scene = new Scene({
   ".class": {
-    0: "left: 0px; top: 0px",
+    0: "left: 0px; top: 0px"
     1: {
       "left": "100px",
-      "top": "0px",
+      "top": "0px"
     },
     2: {
       "left": "200px",
-      "top": "100px",
+      "top": "100px"
     }
   }
 }, {
-  selector: true,
+  selector: true
 }).play();
 
 ```

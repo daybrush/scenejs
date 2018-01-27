@@ -112,6 +112,15 @@ animator.({
 
 		return this;
 	}
+	setFillMode(fillMode) {
+		this.state.fillMode = fillMode;
+	}
+	setDirection(direction) {
+		this.state.direction = direction;
+	}
+	setDelay(delay) {
+		this.state.delay = delay;
+	}
 	setDirection(direction) {
 		this.state.direction = direction;
 	}
@@ -134,7 +143,7 @@ animator.({
 		return this.getDuration() * this.state.iterationCount;
 	}
 	isEnded() {
-		if (this.getTime() === 0 && this.playState === "paused") {
+		if (this.getTime() === 0 && this.state.playState === "paused") {
 			return true;
 		} else if (this.getTime() < this.getTotalDuration()) {
 			return false;
@@ -142,7 +151,7 @@ animator.({
 		return true;
 	}
 	isPaused() {
-		return this.playState === "paused";
+		return this.state.playState === "paused";
 	}
 	setNext(animator) {
 		this.on("ended", () => {
@@ -157,7 +166,7 @@ animator.({
 		if (this.isEnded()) {
 			this.setTime(0);
 		}
-		this.playState = "running";
+		this.state.playState = "running";
 		requestAnimFrame(time => {
 			this.state.prevTime = time;
 			this.tick(time);
@@ -171,7 +180,7 @@ animator.({
 	* @return {Animator} An instance itself.
 	*/
 	pause() {
-		this.playState = "paused";
+		this.state.playState = "paused";
 		this.trigger("paused");
 		return this;
 	}
@@ -180,7 +189,7 @@ animator.({
 	* @return {Animator} An instance itself.
 	*/
 	stop() {
-		this.playState = "paused";
+		this.state.playState = "paused";
 		this.trigger("paused");
 		this.trigger("ended");
 		return this;
@@ -297,7 +306,7 @@ animator.currentTime // 10
 		if (this.isEnded()) {
 			this.stop();
 		}
-		if (this.playState === "paused") {
+		if (this.state.playState === "paused") {
 			return;
 		}
 
