@@ -19,7 +19,7 @@ function animateFunction({time, frame}) {
 	const length = element.length;
 
 	for (let i = 0; i < length; ++i) {
-		element[i].style.cssText = cssText;
+		element[i].style.cssText += cssText;
 	}
 }
 function makeId() {
