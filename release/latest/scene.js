@@ -2312,7 +2312,7 @@ function animateFunction(_ref) {
 	if (this.state.cssText === cssText) {
 		return;
 	}
-	this.state.cssText = cssText;
+	this.state.cssText += cssText;
 	var length = element.length;
 
 	for (var i = 0; i < length; ++i) {
