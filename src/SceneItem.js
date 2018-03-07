@@ -109,6 +109,7 @@ item.duration; // = item.timeline.last
 		this.trigger("animate", {
 			time,
 			frame: this.getNowFrame(time),
+			iterationTime: time,
 			currentTime: this.getTime(),
 		});
 		return this;

@@ -58,6 +58,7 @@ const animator = new Scene.Animator({
 			playSpeed: 1,
 			currentTime: 0,
 			currentIterationTime: -1,
+			currentIterationCount: 0,
 			prevTime: 0,
 			playState: "paused",
 		};
@@ -120,9 +121,6 @@ animator.({
 	}
 	setDelay(delay) {
 		this.state.delay = delay;
-	}
-	setDirection(direction) {
-		this.state.direction = direction;
 	}
 	setIterationCount(iterationCount) {
 		this.state.iterationCount = iterationCount;
@@ -222,21 +220,29 @@ animator.currentTime // 10
 		}
 		this.state.currentTime = currentTime;
 		this.calculateIterationTime();
-		this.trigger("timeupdate", {currentTime});
+
+		this.trigger("timeupdate", {
+			currentTime,
+			iterationTime: this.state.currentIterationTime,
+			iterationCount: this.state.currentIterationCount,
+		});
 	}
 	getTime() {
 		return this.state.currentTime;
 	}
+	getActiveTime() {
+		return parseInt(Math.max(this.state.currentTime - this.state.delay, 0) * 10000, 10) / 10000;
+	}
 	calculateIterationTime() {
-		const {currentTime, iterationCount, fillMode, direction, delay} = this.state;
+		const {iterationCount, fillMode, direction} = this.state;
 		const duration = this.getDuration();
-		const activeTime = parseInt(Math.max(currentTime - delay, 0) * 10000, 10) / 10000;
+		const activeTime = this.getActiveTime();
 		const currentIterationCount = duration === 0 ? 0 : activeTime / duration;
 		const isOdd = currentIterationCount % 2 >= 1;
-
 		let currentIterationTime = activeTime % duration;
 		let isAlternate = false;
 
+		this.state.currentIterationCount = currentIterationCount;
 		// direction : normal, reverse, alternate, alternate-reverse
 		// fillMode : forwards, backwards, both, none
 		switch (direction) {
@@ -293,7 +299,6 @@ animator.currentTime // 10
 		const iterationTime = time;
 
 		this.state.currentIterationTime = iterationTime;
-		this.trigger("iterationtimeupdate", {iterationTime});
 
 		return this;
 	}

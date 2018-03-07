@@ -65,7 +65,7 @@ const scene = new Scene({
 	}
 	setDuration(duration) {
 		const items = this.items;
-		const sceneDuration = this.getActiveDuration();
+		const sceneDuration = this.getDuration();
 		const ratio = duration / sceneDuration;
 
 		for (const id in items) {
