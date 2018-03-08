@@ -74,7 +74,8 @@ class CSSItem extends SceneItem {
 		return this;
 	}
 	setSelector(selector) {
-		this.options.selector = selector || `[data-scene-id="${this.options.id}"]`;
+		this.options.selector = selector === true ? this.options.id :
+			(selector || `[data-scene-id="${this.options.id}"]`);
 		this.setElement(document.querySelectorAll(selector));
 		return this;
 	}
@@ -202,14 +203,14 @@ frame.getProperty("opacity"); // 0.5
 			return "";
 		}
 		const selector = this.options.selector;
-		const easing = options.easingName || this.state.easingName;
+		const easingName = (options.easing && options.easingName) || this.state.easingName;
 		const fillMode = options.fillMode || this.state.fillMode;
 		const count = options.iterationCount || this.state.iterationCount;
 		const cssArray = [];
 
 		convertCrossBrowserCSSArray(cssArray, "animation-name", `${PREFIX}KEYFRAMES_${toId(id)}`);
 		convertCrossBrowserCSSArray(cssArray, "animation-duration", `${duration}s`);
-		convertCrossBrowserCSSArray(cssArray, "animation-timing-function", easing);
+		convertCrossBrowserCSSArray(cssArray, "animation-timing-function", easingName);
 		convertCrossBrowserCSSArray(cssArray, "animation-fill-mode", fillMode);
 		convertCrossBrowserCSSArray(cssArray, "animation-iteration-count", count);
 

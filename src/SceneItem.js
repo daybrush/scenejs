@@ -32,9 +32,9 @@ let item = new Scene.SceneItem({
 });
 	*/
 	constructor(properties, options) {
-		super(options);
+		super();
 		this.timeline = new FrameTimeline();
-		this.load(properties);
+		this.load(properties, options);
 	}
 	/**
 	* Specifies how many seconds an animation takes to complete one cycle
@@ -98,18 +98,17 @@ item.duration; // = item.timeline.last
 		frame && frame.remove(role, properties);
 		return this;
 	}
-	setIterationTime(_time) {
-		super.setIterationTime(_time);
-		const time = this.getIterationTime();
-		const frame = this.getNowFrame(time);
+	setTime(time, easing) {
+		super.setTime(time);
+		const iterationTime = this.getIterationTime();
+		const frame = this.getNowFrame(iterationTime, easing);
 
 		if (!frame) {
 			return this;
 		}
 		this.trigger("animate", {
-			time,
-			frame: this.getNowFrame(time),
-			iterationTime: time,
+			time: iterationTime,
+			frame,
 			currentTime: this.getTime(),
 		});
 		return this;
@@ -265,7 +264,8 @@ item.merge(0, 1);
 		toFrame.merge(frame);
 		return this;
 	}
-	getNowValue(role, property, time, left = 0, right = this.timeline.length, isEasing = true) {
+	getNowValue(role, property, time, left = 0,
+		right = this.timeline.length, easing = this.state.easing) {
 		const timeline = this.timeline;
 		const times = timeline.times;
 		const length = times.length;
@@ -312,13 +312,14 @@ item.merge(0, 1);
 		}
 		const startTime = times[left];
 		const endTime = times[right];
+		const easingFunction = this.state.easing || easing;
 
-		if (!isEasing || !this.state.easing || startTime === endTime) {
+		if (!easingFunction || startTime === endTime) {
 			return dot(prevValue, nextValue, time - prevTime, nextTime - time);
 		}
 		const startValue = dot(prevValue, nextValue, startTime - prevTime, nextTime - startTime);
 		const endValue = dot(prevValue, nextValue, endTime - prevTime, nextTime - endTime);
-		const ratio = this.state.easing((time - startTime) / (endTime - startTime));
+		const ratio = easingFunction((time - startTime) / (endTime - startTime));
 		const value = dot(startValue, endValue, ratio, 1 - ratio);
 
 		return value;
@@ -387,7 +388,7 @@ let item = new Scene.SceneItem({
 // opacity: 0.7; display:"block";
 const frame = item.getNowFrame(1.7);
 	*/
-	getNowFrame(time, isEasing = true) {
+	getNowFrame(time, easing) {
 		const indices = this.getNearIndex(time);
 
 		if (!indices) {
@@ -401,7 +402,7 @@ const frame = item.getNowFrame(1.7);
 			const propertyNames = names[role];
 
 			for (const property in propertyNames) {
-				const value = this.getNowValue(role, property, time, left, right, isEasing);
+				const value = this.getNowValue(role, property, time, left, right, easing);
 
 				if (isUndefined(value)) {
 					continue;
@@ -439,7 +440,7 @@ item.load({
 			if (time === "from") {
 				realTime = 0;
 			} else if (time === "to") {
-				realTime = 100;
+				realTime = this.getDuration() || 100;
 			} else {
 				realTime = parseFloat(time);
 			}

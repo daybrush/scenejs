@@ -66,15 +66,19 @@ const scene = new Scene({
 	setDuration(duration) {
 		const items = this.items;
 		const sceneDuration = this.getDuration();
+
+		if (!isFinite(sceneDuration)) {
+			return this;
+		}
 		const ratio = duration / sceneDuration;
 
 		for (const id in items) {
 			const item = items[id];
-			const {playSpeed, delay} = item.state;
-			const time = (item.getTotalDuration() / playSpeed) * ratio - delay / playSpeed;
 
-			item.setDuration(time);
+			item.setDelay(item.getDelay() * ratio);
+			item.setDuration(item.getActiveDuration() * ratio);
 		}
+		return this;
 	}
 	/**
 	* get item in scene by name
@@ -118,12 +122,12 @@ const item = scene.newItem("item1")
 		super.setIterationTime(_time);
 		const time = this.getIterationTime();
 		const items = this.items;
-		let item;
-		let id;
+		const easing = this.state.easing;
 
-		for (id in items) {
-			item = items[id];
-			item.setTime(time * item.state.playSpeed);
+		for (const id in items) {
+			const item = items[id];
+
+			item.setTime(time * item.state.playSpeed, easing);
 		}
 		return this;
 	}
@@ -152,18 +156,15 @@ scene.load({
 });
 	*/
 	load(properties = {}, options = properties.options) {
-		let item;
-
 		for (const name in properties) {
 			if (name === "options") {
 				continue;
 			}
-			item = this.newItem(name);
+			const item = this.newItem(name);
+
 			item.load(properties[name]);
-			if (options) {
-				item.setOptions(options);
-			}
 		}
+		this.setOptions(options);
 		return this;
 	}
 	forEach(func) {

@@ -61,6 +61,7 @@ const animator = new Scene.Animator({
 			currentIterationCount: 0,
 			prevTime: 0,
 			playState: "paused",
+			duration: 0,
 		};
 		this.setOptions(options);
 	}
@@ -100,15 +101,15 @@ animator.({
 		if (!options) {
 			return this;
 		}
-
-		let option;
-
-		for (option in options) {
-			if (option === "easing") {
-				this.setEasing(options[option]);
+		for (const name in options) {
+			if (name === "easing") {
+				this.setEasing(options[name]);
+				continue;
+			} else if (name === "duration") {
+				this.setDuration(options[name]);
 				continue;
 			}
-			(option in this.state ? this.state : this.options)[option] = options[option];
+			(name in this.state ? this.state : this.options)[name] = options[name];
 		}
 
 		return this;
@@ -127,6 +128,12 @@ animator.({
 	}
 	setPlaySpeed(playSpeed) {
 		this.state.playSpeed = playSpeed;
+	}
+	setDuration(duration) {
+		this.state.duration = duration;
+	}
+	getDuration() {
+		return this.state.duration;
 	}
 	getTotalDuration() {
 		if (this.state.iterationCount === "infinite") {

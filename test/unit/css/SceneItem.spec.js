@@ -14,6 +14,9 @@ describe("CSS Frame Test", function() {
                 0: {
                     a: 1,
                 },
+                0.5: {
+                    a: 3,
+                },
                 1: {
                     display: "block",
                     a: 2,

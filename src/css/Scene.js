@@ -63,13 +63,19 @@ class CSSScene extends Scene {
 		const items = this.items;
 		let duration = this.getDuration();
 
-		if (duration !== duration || duration === Infinity || duration === -Infinity) {
-            duration = 0;
-        }
+		if (!duration || !isFinite(duration)) {
+			duration = 0;
+		}
+		const {easing, easingName, iterationCount} = this.state;
+
 		for (const id in items) {
 			const item = items[id];
 
-			item.exportCSS(duration || item.getDuration());
+			item.exportCSS(duration || item.getDuration(), {
+				easing,
+				easingName,
+				iterationCount,
+			});
 		}
 		return this;
 	}
