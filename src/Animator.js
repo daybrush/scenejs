@@ -35,7 +35,7 @@ class Animator extends EventTrigger {
 	* @param {Number|String} [options.iterationCount] - specifies the number of times an animation should be played
 	* @param {Object} [options.easing] - Specifies the speed curve of the animation
 	* @example
-const animator = new Scene.Animator({
+const animator = new Animator({
 	delay: 2,
 	diretion: "alternate",
 	duration: 2,
@@ -134,6 +134,18 @@ animator.({
 	}
 	getDuration() {
 		return this.state.duration;
+	}
+	getDelay(delay) {
+		return this.state.delay;
+	}
+	getIterationCount() {
+		return this.state.iterationCount;
+	}
+	getFillMode() {
+		return this.state.fillMode;
+	}
+	getDirection() {
+		return this.state.direction;
 	}
 	getTotalDuration() {
 		if (this.state.iterationCount === "infinite") {
