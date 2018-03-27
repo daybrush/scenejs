@@ -1,13 +1,13 @@
 import SceneItem from "../SceneItem";
 import {PREFIX} from "../consts";
-import {defineGetter, isObject, isUndefined} from "../utils";
+import {isObject, isUndefined} from "../utils";
 import {convertCrossBrowserCSSArray, toId} from "./utils";
 import Frame from "./Frame";
 
 function animateFunction({time, frame}) {
-	const element = this.options.element;
+	const elements = this._elements;
 
-	if (!element) {
+	if (!elements || !elements.length) {
 		return;
 	}
 	const cssText = frame.cssText();
@@ -16,10 +16,10 @@ function animateFunction({time, frame}) {
 		return;
 	}
 	this.state.cssText = cssText;
-	const length = element.length;
+	const length = elements.length;
 
 	for (let i = 0; i < length; ++i) {
-		element[i].style.cssText += cssText;
+		elements[i].style.cssText += cssText;
 	}
 }
 function makeId() {
@@ -56,20 +56,23 @@ class CSSItem extends SceneItem {
 		return frame;
 	}
 	setId(id) {
-		const element = this.element;
+		const elements = this._elements;
 
 		super.setId(id);
 		const sceneId = toId(this.options.id);
 
 		this.options.selector || (this.options.selector = `[data-scene-id="${sceneId}"]`);
 
-		if (!element) {
+		if (!elements) {
 			return this;
 		}
-		const length = element.length;
+		const length = elements.length;
 
+		if (!length) {
+			return this;
+		}
 		for (let i = 0; i < length; ++i) {
-			element[i].setAttribute("data-scene-id", sceneId);
+			elements[i].setAttribute("data-scene-id", sceneId);
 		}
 		return this;
 	}
@@ -79,13 +82,13 @@ class CSSItem extends SceneItem {
 		this.setElement(document.querySelectorAll(selector));
 		return this;
 	}
-	setElement(element) {
-		if (!element) {
+	setElement(elements) {
+		if (!elements) {
 			return this;
 		}
 		const id = this.id;
 
-		this.options.element = (element instanceof Element) ? [element] : element;
+		this._elements = (elements instanceof Element) ? [elements] : elements;
 		this.setId((!id || id === "null") ? makeId() : id);
 		return this;
 	}
@@ -93,13 +96,13 @@ class CSSItem extends SceneItem {
 		if (!properties || !properties.length) {
 			return this;
 		}
-		const element = this.options.element && this.options.element[0];
+		const elements = this._elements;
 
-		if (!element) {
+		if (!elements || !elements.length) {
 			return this;
 		}
 		const cssObject = {};
-		const styles = window.getComputedStyle(element);
+		const styles = window.getComputedStyle(elements[0]);
 		const length = properties.length;
 
 
@@ -134,12 +137,12 @@ frame.getProperty("opacity"); // 0.5
 
 	*/
 	copyCSSProperty(time, property) {
-		const element = this.element && this.element[0];
+		const elements = this._elements;
 
-		if (!element) {
+		if (!elements || !elements.length) {
 			return this;
 		}
-		const style = element.style;
+		const style = elements[0].style;
 		const cssObject = {};
 
 		if (isObject(property)) {
@@ -147,10 +150,11 @@ frame.getProperty("opacity"); // 0.5
 
 			for (let i = 0, length = property.length; i < length; ++i) {
 				name = property[i];
-				cssObject[property] = (style && style[name]) || window.getComputedStyle(element)[name];
+				cssObject[property] = (style && style[name]) || window.getComputedStyle(elements[0])[name];
 			}
 		} else {
-			cssObject[property] = (style && style[property]) || window.getComputedStyle(element)[property];
+			cssObject[property] = (style && style[property]) ||
+				window.getComputedStyle(elements[0])[property];
 		}
 		this.set(time, cssObject);
 
@@ -159,13 +163,13 @@ frame.getProperty("opacity"); // 0.5
 	setOptions(options) {
 		super.setOptions(options);
 		const selector = options && options.selector;
-		const element = options && options.element;
+		const elements = this.options.elements || this.options.element;
 
-		if (!selector && !element) {
+		if (!selector && !elements) {
 			return this;
 		}
-		if (element) {
-			this.setElement(element);
+		if (elements) {
+			this.setElement(elements);
 		} if (selector === true) {
 			this.setSelector(this.options.id);
 		} else {
@@ -173,23 +177,23 @@ frame.getProperty("opacity"); // 0.5
 		}
 		return this;
 	}
-	toKeyframes(duration = this.getDuration(), options = {}) {
+	toKeyframes(duration = this.getDuration()) {
 		const id = this.options.id || this.setId(makeId()).options.id;
 
 		if (!id) {
 			return "";
 		}
 		const itemDuration = this.getDuration();
-		const ratio = itemDuration / duration;
 		const times = this.timeline.times;
+		const playSpeed = this.state.playSpeed;
 
 		const keyframes = times.map(time => {
 			const frame = this.getNowFrame(time, false);
 
-			return `${time / itemDuration * ratio * 100}%{${frame.toCSS()}}`;
+			return `${time / playSpeed / duration * 100}%{${frame.toCSS()}}`;
 		});
 
-		if (ratio < 1) {
+		if (itemDuration !== duration) {
 			keyframes.push(`100%{${this.getNowFrame(itemDuration, false).toCSS()}}`);
 		}
 		return `@keyframes ${PREFIX}KEYFRAMES_${toId(id)}{
@@ -202,22 +206,30 @@ frame.getProperty("opacity"); // 0.5
 		if (!id) {
 			return "";
 		}
+
+		const isZeroDuration = duration === 0;
 		const selector = this.options.selector;
-		const easingName = (options.easing && options.easingName) || this.state.easingName;
-		const fillMode = options.fillMode || this.state.fillMode;
-		const count = options.iterationCount || this.state.iterationCount;
+		const playSpeed = (options.playSpeed || 1);
+		const delay = ((options.delay || 0) + this.state.delay) / playSpeed;
+		const easingName = (!isZeroDuration && options.easing && options.easingName) ||
+			this.state.easingName;
+		const count = (!isZeroDuration && options.iterationCount) || this.state.iterationCount;
+		const fillMode = (options.fillMode !== "forwards" && options.fillMode) || this.state.fillMode;
+		const direction = (options.direction !== "none" && options.direction) || this.state.direction;
 		const cssArray = [];
 
 		convertCrossBrowserCSSArray(cssArray, "animation-name", `${PREFIX}KEYFRAMES_${toId(id)}`);
-		convertCrossBrowserCSSArray(cssArray, "animation-duration", `${duration}s`);
+		convertCrossBrowserCSSArray(cssArray, "animation-duration", `${duration / playSpeed}s`);
+		convertCrossBrowserCSSArray(cssArray, "animation-delay", `${delay}s`);
 		convertCrossBrowserCSSArray(cssArray, "animation-timing-function", easingName);
 		convertCrossBrowserCSSArray(cssArray, "animation-fill-mode", fillMode);
+		convertCrossBrowserCSSArray(cssArray, "animation-direction", direction);
 		convertCrossBrowserCSSArray(cssArray, "animation-iteration-count", count);
 
 		const css = `${selector}.startAnimation {
 			${cssArray.join("")}
 		}
-		${this.toKeyframes()}`;
+		${this.toKeyframes(duration, options)}`;
 
 		return css;
 	}
@@ -239,6 +251,20 @@ frame.getProperty("opacity"); // 0.5
 				`<style id="${PREFIX}STYLE_${id}">${css}</style>`);
 		}
 	}
+	playCSS(exportCSS = true) {
+		exportCSS && this.exportCSS();
+		const elements = this._elements;
+
+		if (!elements || !elements.length) {
+			return this;
+		}
+		const length = elements.length;
+
+		for (let i = 0; i < length; ++i) {
+			elements[i].className += " startAnimation";
+		}
+		return this;
+	}
 }
 
 /**
@@ -247,11 +273,10 @@ frame.getProperty("opacity"); // 0.5
 * @instance
 * @name element
 * @example
-item.selector = ".scene .item li:first-child";
+item.setSelector(".scene .item li:first-child");
 
 // same
-item.element = document.querySelector(".scene .item li:first-child");
+item.setElement(document.querySelector(".scene .item li:first-child"));
 */
-defineGetter({target: CSSItem.prototype, name: "element", parent: "options"});
 
 export default CSSItem;

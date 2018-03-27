@@ -119,6 +119,24 @@ describe("item Test", function() {
             expect(this.item.getActiveDuration()).to.be.equals(Infinity);
             expect(this.item.getTotalDuration()).to.be.equals(Infinity);
         });
+        it("should check 'from, to' method", () => {
+            // Given
+            // When
+            this.item.setDuration(10);
+            this.item.load({
+                "from": {
+                    a: 1,
+                },
+                "to": {
+                    a: 2,
+                }
+            });
+            // Then
+            expect(this.item.getDuration()).to.be.equals(10);
+            expect(this.item.get("from", "a")).to.be.equal(1);
+            expect(this.item.get("to", "a")).to.be.equal(2);
+            expect(this.item.get("50%", "a")).to.be.equal(1.5);
+        });
     });
     describe("test item events", function() {
         beforeEach(() => {

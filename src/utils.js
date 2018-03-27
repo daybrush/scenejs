@@ -27,6 +27,9 @@ const FUNCTIONS = {
 	},
 };
 
+export const isPercent = function(value) {
+	return ~value.search(/([0-9]|\.|-|e-|e\+)+%/g);
+};
 export const isUndefined = function(value) {
 	return (typeof value === "undefined");
 };

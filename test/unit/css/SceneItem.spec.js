@@ -31,7 +31,7 @@ describe("CSS Frame Test", function() {
             // Given
             const element = document.createElement("div");
 
-            this.item.options.element = [element];
+            this.item._elements = [element];
             // When
             
             this.item.setId(".a .b");
@@ -39,7 +39,7 @@ describe("CSS Frame Test", function() {
            // Then
            expect(this.item.options.id).to.be.equals(".a .b");
            expect(this.item.options.selector).to.be.equals(`[data-scene-id="ab"]`);
-           expect(this.item.options.element[0].getAttribute("data-scene-id")).to.be.equal("ab");
+           expect(this.item._elements[0].getAttribute("data-scene-id")).to.be.equal("ab");
         });
         it("should check 'setSelector' method", () => {
             // Given
@@ -49,28 +49,28 @@ describe("CSS Frame Test", function() {
 
             // Then
             expect(this.item.options.selector).to.be.equals("div");
-            expect(this.item.options.element[0].getAttribute("data-scene-id")).to.be.equals(this.item.options.id);
+            expect(this.item._elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.options.id);
         });
         it("should check 'setElement' method", () => {
             // Given
             // When
             this.item.setElement(this.element);
-            const id = this.item.options.element[0].getAttribute("data-scene-id");
+            const id = this.item._elements[0].getAttribute("data-scene-id");
             // Then
             expect(this.item.options.id).to.be.equals(id);
             expect(this.item.options.selector).to.be.equals(`[data-scene-id="${id}"]`);
-            expect(this.item.options.element[0]).to.be.equals(this.element);
+            expect(this.item._elements[0]).to.be.equals(this.element);
         });
         it("should check 'setElement' method (already has selector)", () => {
             // Given
             this.item.options.selector = "div";
             // When
             this.item.setElement(this.element);
-            const id = this.item.options.element[0].getAttribute("data-scene-id");
+            const id = this.item._elements[0].getAttribute("data-scene-id");
             // Then
             expect(this.item.options.id).to.be.equals(id);
             expect(this.item.options.selector).to.be.equals(`div`);
-            expect(this.item.options.element[0]).to.be.equals(this.element);
+            expect(this.item._elements[0]).to.be.equals(this.element);
         });
         it("should check 'toKeyframes' method", () => {
             // Given

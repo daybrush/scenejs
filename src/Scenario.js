@@ -48,11 +48,6 @@ var scenario = new Scenario({
 		let length;
 
 		for (id in scenes) {
-/*
-			if (id > time) {
-				continue;
-			}
-*/
 			_scenes = scenes[id];
 			id = parseFloat(id);
 			for (length = _scenes.length, i = length - 1; i >= 0; --i) {

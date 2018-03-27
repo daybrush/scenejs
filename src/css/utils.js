@@ -19,7 +19,7 @@ export const convertCrossBrowserCSSArray = function(cssArray, property, value) {
 		`-moz-${property}: ${value};`,
 		`-ms-${property}: ${value};`,
 		`-o-${property}: ${value};`,
-		`-webkit-${property}: ${value};`
+		`-webkit-${property}: ${value};`,
 	);
 	return cssArray;
 };

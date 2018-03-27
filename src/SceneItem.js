@@ -5,6 +5,7 @@ import {
 	isObject,
 	isString,
 	isArray,
+	isPercent,
 } from "./utils";
 import FrameTimeline from "./FrameTimeline";
 import {dot} from "./utils/dot";
@@ -173,8 +174,14 @@ item.setFrame(time, frame);
 const frame = item.getFrame(time);
 	*/
 	getFrame(time) {
-		if (isString(time) && ~time.search(/([0-9]|\.|-|e-|e\+)+%/g)) {
-			return this.timeline.get(parseFloat(time) / 100 * this.getDuration());
+		if (isString(time)) {
+			if (isPercent(time)) {
+				return this.timeline.get(parseFloat(time) / 100 * this.getDuration());
+			} else if (time === "from") {
+				return this.timeline.get(0);
+			} else if (time === "to") {
+				return this.timeline.get(this.getDuration());
+			}
 		}
 		return this.timeline.get(time);
 	}
@@ -430,6 +437,9 @@ item.load({
 });
 	*/
 	load(properties = {}, options = properties.options) {
+		const duration = this.getDuration() || 100;
+
+		console.log(this.getDuration());
 		for (const time in properties) {
 			if (time === "options") {
 				continue;
@@ -440,7 +450,9 @@ item.load({
 			if (time === "from") {
 				realTime = 0;
 			} else if (time === "to") {
-				realTime = this.getDuration() || 100;
+				realTime = duration;
+			} else if (isPercent(time)) {
+				realTime = parseFloat(parseFloat(time) / 100 * duration);
 			} else {
 				realTime = parseFloat(time);
 			}
@@ -448,7 +460,7 @@ item.load({
 				this.mergeFrame(_properties, realTime);
 				continue;
 			}
-			this.set(realTime, properties[realTime]);
+			this.set(realTime, properties[time]);
 		}
 		if (options) {
 			this.setOptions(options);

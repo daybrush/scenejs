@@ -322,10 +322,11 @@ animator.currentTime // 10
 		return this;
 	}
 	tick(now) {
+		const playSpeed = this.state.playSpeed;
 		const prevTime = this.state.prevTime;
-		const currentTime = this.getTime() + Math.min(1000, now - prevTime) / 1000;
+		const currentTime = this.getTime() + Math.min(1000, now * playSpeed - prevTime) / 1000;
 
-		this.state.prevTime = now;
+		this.state.prevTime = now * playSpeed;
 		this.setTime(currentTime);
 		if (this.isEnded()) {
 			this.stop();

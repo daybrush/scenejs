@@ -1,5 +1,4 @@
 import Frame from "../Frame";
-import PropertyObject from "../PropertyObject";
 import {convertCrossBrowserCSSObject} from "./utils";
 
 function toInnerProperties(obj) {
@@ -7,6 +6,7 @@ function toInnerProperties(obj) {
 		return "";
 	}
 	const arrObj = [];
+
 	for (const name in obj) {
 		arrObj.push(`${name}(${obj[name]})`);
 	}
@@ -23,6 +23,7 @@ class CSSFrame extends Frame {
 		const cssObject = {};
 
 		const properties = frameObject.property;
+
 		for (const name in properties) {
 			cssObject[name] = properties[name];
 		}

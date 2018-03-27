@@ -66,16 +66,10 @@ class CSSScene extends Scene {
 		if (!duration || !isFinite(duration)) {
 			duration = 0;
 		}
-		const {easing, easingName, iterationCount} = this.state;
-
 		for (const id in items) {
 			const item = items[id];
 
-			item.exportCSS(duration || item.getDuration(), {
-				easing,
-				easingName,
-				iterationCount,
-			});
+			item.exportCSS(duration, this.state);
 		}
 		return this;
 	}
@@ -84,17 +78,7 @@ class CSSScene extends Scene {
 		const items = this.items;
 
 		for (const id in items) {
-			const item = items[id];
-			const element = item.options.element;
-
-			if (!element) {
-				continue;
-			}
-			const length = element.length;
-
-			for (let i = 0; i < length; ++i) {
-				element[i].className += " startAnimation";
-			}
+			items[id].playCSS(false);
 		}
 		return this;
 	}
