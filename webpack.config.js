@@ -1,34 +1,39 @@
-var webpack = require("webpack");
-var UglifyJSWebpackPlugin = require("uglifyjs-webpack-plugin");
+const UglifyJSWebpackPlugin = require("uglifyjs-webpack-plugin");
 
-var moduleConfig = {
-    rules:  [
-		{
-			test:  /\.js$/,
-			loader: 'babel-loader'
-		}
-	]
-};
-var config = {
-    entry: {
-        "scene": `./index.js`,
-        "scene.min": `./index.js`,
-    },
-    output: {
-        filename: `./[name].js`,
-        path: `${__dirname}/dist/`,
-        libraryTarget: 'umd',
-        umdNamedDefine: true,
-        library: "Scene",
-    },
+const config = {
+	entry: {
+		"scene": `./index.js`,
+		"scene.min": `./index.js`,
+	},
+	output: {
+		filename: `./[name].js`,
+		path: `${__dirname}/dist/`,
+		libraryTarget: "umd",
+		umdNamedDefine: true,
+		library: "Scene",
+	},
 	plugins: [
 		new UglifyJSWebpackPlugin({
-            include: /\.min\.js$/,
-        }),
+			include: /\.min\.js$/,
+			uglifyOptions: {
+				mangle: {
+					keep_fnames: true,
+				},
+			},
+		}),
 	],
-    module: moduleConfig
+	mode: "none",
+	module: {
+		rules: [
+			{
+				test: /\.js$/,
+				exclude: /(node_modules)/,
+				loader: "babel-loader",
+			},
+		],
+	},
 };
 
-module.exports = function (env) {
-    return config;
-}
+module.exports = function(env) {
+	return config;
+};
