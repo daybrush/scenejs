@@ -40,12 +40,6 @@ class CSSFrame extends Frame {
 		}
 		return cssArray.join("");
 	}
-	/**
-	* get the contents of a style declaration as a string.
-	*/
-	cssText() {
-		return this.toCSS();
-	}
 }
 
 export default CSSFrame;
