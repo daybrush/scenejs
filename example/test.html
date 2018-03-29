@@ -11,7 +11,7 @@
   background: #f55;
 }
 </style>
-<script src="../release/latest/scene.min.js"></script>
+<script src="../release/latest/scene.js"></script>
 <script>
 var item = new Scene.SceneItem({
 	"0%": {
@@ -26,13 +26,13 @@ var item = new Scene.SceneItem({
 	"75%": {
 		transform: "translate(0px, 200px) rotateX(180deg) rotateY(0deg)",
 	},
-	"100%": {
-		transform: "translate(0px, 0px) rotateX(0deg) rotateY(0deg)",
-	},
 }, {
-	duration: 4,
+	duration: 3,
 	easing: Scene.EASE_IN_OUT,
+	fillMode: "forwards",
 	iterationCount: "infinite",
 	selector: ".rectangle"
-}).playCSS();
+});
+
+item.play();
 </script>
