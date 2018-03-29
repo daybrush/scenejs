@@ -9,4 +9,4 @@ cache:
   directories:
     - node_modules
 after_success:
-  - npm run coveralls
+- npm run coveralls
