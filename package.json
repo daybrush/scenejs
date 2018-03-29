@@ -16,7 +16,8 @@
     "release:mkdir": "mkdir -p ./demo/release",
     "release:current": "npm run release:mkdir && rm -rf ./demo/release/$npm_package_version && cp -a ./dist/. ./demo/release/$npm_package_version",
     "release:latest": "npm run release:mkdir && rm -rf ./demo/release/latest && cp -a ./dist/. ./demo/release/latest",
-    "deploy": "npm run release && gh-pages -d ./demo --dest=./ --add "
+    "deploy": "npm run release && gh-pages -d ./demo --dest=./ --add ",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "babel-loader": "^7.1.4",
     "babel-preset-es2015": "^6.24.0",
     "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
     "eslint": "^4.15.0",
     "eslint-config-naver": "^2.0.1",
     "eslint-loader": "^1.9.0",
@@ -49,6 +51,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.9",
     "mocha": "^4.0.1",
+    "mocha-lcov-reporter": "^1.3.0",
     "sinon": "^4.1.2",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^4.3.0",
