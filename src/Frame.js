@@ -130,15 +130,11 @@ frame.load({
 	}
 	_set(role, property, value) {
 		const name = role.trim();
-		let _value = value;
 
-		if (isString(_value)) {
-			_value = toPropertyObject(_value);
-		}
 		if (!(name in this.properties)) {
 			this.properties[name] = {};
 		}
-		this.properties[name][property] = _value;
+		this.properties[name][property] = isString(value) ? toPropertyObject(value) : value;
 	}
 
 	/**
@@ -170,9 +166,8 @@ frame.set("transform", {
 // three parameters
 frame.set("property", "display", "none");
 	*/
-	set(role, property, _value) {
+	set(role, property, value) {
 		let name;
-		let value = _value;
 
 		if (isObject(role)) {
 			this.load(role);
@@ -200,13 +195,13 @@ frame.set("property", "display", "none");
 			}
 			return this;
 		}
-		if (isUndefined(_value)) {
+		if (isUndefined(value)) {
 			if (isString(property)) {
-				value = splitSpace(property).map(v => toPropertyObject(v));
-				const isProperties = value.every(v => v.model && v.type !== "color");
+				const arr = splitSpace(property).map(v => toPropertyObject(v));
+				const isProperties = arr.every(v => v.model && v.type !== "color");
 
 				if (isProperties) {
-					value.forEach(v => {
+					arr.forEach(v => {
 						const model = v.model;
 
 						v.model = "";

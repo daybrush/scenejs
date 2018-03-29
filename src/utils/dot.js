@@ -124,11 +124,13 @@ export const dotObject = function(a1, a2, b1, b2) {
 		return a1;
 	}
 	const arr = dotArray(value1, value2, b1, b2);
-	const obj = new PropertyObject(arr, a1.separator);
 
-	obj.prefix = a1.prefix;
-	obj.suffix = a1.suffix;
-	return obj;
+	return new PropertyObject(arr, {
+		separator: a1.separator || a2.separator,
+		prefix: a1.prefix || a2.prefix,
+		suffix: a1.suffix || a2.suffix,
+		model: a1.model || a2.model,
+	});
 };
 /**
 * The dot product of a1 and a2 for the b1 and b2.
@@ -173,5 +175,26 @@ dot = function(a1, a2, b1, b2) {
 	}
 	return v + unit.trim();
 };
+
+export const dotValue = function({
+	time,
+	prevTime,
+	nextTime,
+	startTime = prevTime,
+	endTime = nextTime,
+	prevValue,
+	nextValue,
+	easing}) {
+	if (!easing || startTime === endTime) {
+		return dot(prevValue, nextValue, time - prevTime, nextTime - time);
+	}
+	const startValue = dot(prevValue, nextValue, startTime - prevTime, nextTime - startTime);
+	const endValue = dot(prevValue, nextValue, endTime - prevTime, nextTime - endTime);
+	const ratio = easing((time - startTime) / (endTime - startTime));
+	const value = dot(startValue, endValue, ratio, 1 - ratio);
+
+	return value;
+};
+
 export {dot};
 

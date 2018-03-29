@@ -83,3 +83,11 @@ export const defineGetterSetter = function({target, name, parent, prefix}) {
 		set: FUNCTIONS.set(parent, name, prefix),
 	});
 };
+export const fill = function(arr, value) {
+	const length = arr.length;
+
+	for (let i = 0; i < length; ++i) {
+		arr[i] = value;
+	}
+	return arr;
+};

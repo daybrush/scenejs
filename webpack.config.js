@@ -2,8 +2,8 @@ const UglifyJSWebpackPlugin = require("uglifyjs-webpack-plugin");
 
 const config = {
 	entry: {
-		"scene": `./index.js`,
-		"scene.min": `./index.js`,
+		"scene": `./src/index.js`,
+		"scene.min": `./src/index.js`,
 	},
 	output: {
 		filename: `./[name].js`,

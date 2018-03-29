@@ -83,6 +83,9 @@ class CSSItem extends SceneItem {
 		if (!elements) {
 			return this;
 		}
+		if (typeof elements === "string") {
+			return this.setSelector(elements);
+		}
 		const id = this.id;
 
 		this._elements = (elements instanceof Element) ? [elements] : elements;

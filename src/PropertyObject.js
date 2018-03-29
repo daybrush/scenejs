@@ -45,17 +45,16 @@ var obj4 = new PropertyObject([100,100,100,0.5], {
 	}
 	/**
 	* the number of values.
-	* @readonly
 	* @example
 const obj1 = new PropertyObject("1,2,3", ",");
 
 console.log(obj1.length);
 // 3
 	 */
-	get length() {
+	size() {
 		const value = this.value;
 
-		if (has(value, "length")) {
+		if (Array.isArray(value)) {
 			return value.length;
 		}
 		let length = 0;

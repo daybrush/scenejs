@@ -222,6 +222,14 @@ export const toBracketObject = function(value) {
 		suffix,
 	});
 };
+
+export const arrayToPropertyObject = function(arr) {
+	return new PropertyObject(arr, {
+		type: "array",
+	});
+};
+
+
 /**
 * convert text with parentheses to PropertyObject[type=color].
 * If the values are not RGBA model, change them RGBA mdoel.
@@ -268,6 +276,9 @@ toPropertyObject("1px solid #000");
 */
 toPropertyObject = function(value) {
 	if (!isString(value)) {
+		if (Array.isArray(value)) {
+			return arrayToPropertyObject(value);
+		}
 		return value;
 	}
 	let values = splitComma(value);

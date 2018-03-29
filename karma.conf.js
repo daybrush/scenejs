@@ -2,7 +2,7 @@ module.exports = function(config) {
 	const karmaConfig = {
 		frameworks: ["mocha", "chai", "sinon"],
 
-		files: ["./test/unit/**/*.spec.js",],
+		files: ["./test/unit/**/*.spec.js"],
 		client: {
 			mocha: {
 				opts: "./mocha.opts",

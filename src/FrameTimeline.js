@@ -1,4 +1,15 @@
+import PropertyObject from "./PropertyObject";
 import Timeline from "./Timeline";
+import {TYPE_PROPERTY_OBJECT, TYPE_ARRAY, TYPE_TEXT} from "./consts";
+
+function getType(value) {
+	if (value instanceof PropertyObject) {
+		return TYPE_PROPERTY_OBJECT;
+	} else if (Array.isArray(value)) {
+		return TYPE_ARRAY;
+	}
+	return TYPE_TEXT;
+}
 
 /**
 * Animation's Timeline with Frame
@@ -35,7 +46,13 @@ timeline.update();
 			const properties = roles[role];
 
 			for (const name in properties) {
-				names[role][name] = true;
+				const value = properties[name];
+				const type = getType(value);
+				const size = (type === TYPE_PROPERTY_OBJECT && value.size()) ||
+					(type === TYPE_ARRAY && value.length) || 0;
+				const separator = (type === TYPE_PROPERTY_OBJECT && value.separator) || "";
+
+				names[role][name] = {type, size, separator};
 			}
 		}
 		return this;

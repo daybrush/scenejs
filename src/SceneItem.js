@@ -6,10 +6,25 @@ import {
 	isString,
 	isArray,
 	isPercent,
+	fill,
 } from "./utils";
+import PropertyObject from "./PropertyObject";
 import FrameTimeline from "./FrameTimeline";
-import {dot} from "./utils/dot";
+import {dotValue} from "./utils/dot";
+import {TYPE_PROPERTY_OBJECT, TYPE_ARRAY} from "./consts";
 
+
+export function getDefaultData(infos, fillText = 0) {
+	const {type, size, separator} = infos;
+
+	if (type === TYPE_PROPERTY_OBJECT) {
+		return new PropertyObject(fill(new Array(size), fillText), separator);
+	} else if (type === TYPE_ARRAY) {
+		return fill(new Array(size), fillText);
+	} else {
+		return fillText;
+	}
+}
 /**
 * manage Frame Timeline and play Timeline.
 * @extends Animator
@@ -42,10 +57,11 @@ let item = new Scene.SceneItem({
 	* Specifies timeline's lastTime
 	*/
 	getDuration() {
-		return this.timeline.last;
+		return Math.max(this.state.duration, this.timeline.getLastTime());
 	}
 	setDuration(duration) {
-		const ratio = duration / this.getDuration();
+		const originalDuration = this.getDuration();
+		const ratio = duration / originalDuration;
 		const timeline = this.timeline;
 		const {times, items} = timeline;
 		const obj = {};
@@ -58,6 +74,7 @@ let item = new Scene.SceneItem({
 			return time2;
 		});
 		timeline.items = obj;
+		super.setDuration(duration);
 	}
 	setId(id) {
 		this.options.id = id;
@@ -70,7 +87,7 @@ let item = new Scene.SceneItem({
 	* @param {Object} [value] - property's value
 	* @return {SceneItem} An instance itself
 	* @example
-item.duration; // = item.timeline.last
+item.duration; // = item.timeline.size()
 	*/
 	set(time, role, properties, value) {
 		if (isArray(time)) {
@@ -172,8 +189,8 @@ item.setFrame(time, frame);
 		this.timeline.add(time, frame);
 		return this;
 	}
-	_getTime(time) {
-		const duration = this.getDuration() || 100;
+	_getTime(time, options = {}) {
+		const duration = options.duration || this.getDuration() || 100;
 
 		if (isString(time)) {
 			if (isPercent(time)) {
@@ -283,14 +300,13 @@ item.merge(0, 1);
 		return this;
 	}
 	getNowValue(role, property, time, left = 0,
-		right = this.timeline.length, easing = this.state.easing) {
+		right = this.timeline.size(), easing = this.state.easing) {
 		const timeline = this.timeline;
 		const times = timeline.times;
 		const length = times.length;
 
 		let prevFrame;
 		let nextFrame;
-		let i;
 
 		let prevTime = times[left];
 		let nextTime = times[right];
@@ -298,14 +314,14 @@ item.merge(0, 1);
 		if (time < prevTime) {
 			return undefined;
 		}
-		for (i = left; i >= 0; --i) {
+		for (let i = left; i >= 0; --i) {
 			prevTime = times[i];
 			prevFrame = timeline.get(prevTime);
 			if (prevFrame.has(role, property)) {
 				break;
 			}
 		}
-		for (i = right; i < length; ++i) {
+		for (let i = right; i < length; ++i) {
 			nextTime = times[i];
 			nextFrame = timeline.get(nextTime);
 			if (nextFrame.has(role, property)) {
@@ -332,19 +348,22 @@ item.merge(0, 1);
 		const endTime = times[right];
 		const easingFunction = this.state.easing || easing;
 
-		if (!easingFunction || startTime === endTime) {
-			return dot(prevValue, nextValue, time - prevTime, nextTime - time);
-		}
-		const startValue = dot(prevValue, nextValue, startTime - prevTime, nextTime - startTime);
-		const endValue = dot(prevValue, nextValue, endTime - prevTime, nextTime - endTime);
-		const ratio = easingFunction((time - startTime) / (endTime - startTime));
-		const value = dot(startValue, endValue, ratio, 1 - ratio);
-
-		return value;
+		return dotValue({
+			time,
+			prevTime,
+			nextTime,
+			startTime,
+			endTime,
+			prevValue,
+			nextValue,
+			easing: easingFunction,
+		});
 	}
 	getNearIndex(time) {
 		const timeline = this.timeline;
-		const {times, last, length} = timeline;
+		const {times} = timeline;
+		const last = timeline.getLastTime();
+		const length = timeline.size();
 
 		if (length === 0) {
 			return undefined;
@@ -353,7 +372,6 @@ item.merge(0, 1);
 		let index = parseInt(last > 0 ? time * length / last : 0, 10);
 		let right = length - 1;
 		let left = 0;
-
 
 		if (index < 0) {
 			index = 0;
@@ -386,6 +404,52 @@ item.merge(0, 1);
 
 		return {left, right};
 	}
+	getFillFrame(fillText = 0) {
+		const frame = this.newFrame();
+		const names = this.timeline.names;
+		const roles = frame.properties;
+
+		for (const role in roles) {
+			const properties = names[role];
+
+			if (!properties) {
+				continue;
+			}
+			for (const name in properties) {
+				frame.set(role, name, getDefaultData(properties[name], fillText));
+			}
+		}
+		return frame;
+	}
+	_getNowFrame(time, easing) {
+		const prevTime = this.timeline.getLastTime();
+		const nextTime = this.state.duration;
+		const prevFrame = this.getNowFrame(prevTime);
+		const nextFrame = this.getFrame(0) || this.getFillFrame(0);
+		const frame = this.newFrame();
+		const names = this.timeline.names;
+
+		for (const role in names) {
+			const properties = names[role];
+
+			for (const name in properties) {
+				let nextValue = nextFrame.get(role, name);
+
+				if (typeof nextValue === "undefined") {
+					nextValue = getDefaultData(properties[name], 0);
+				}
+				frame.set(role, name, dotValue({
+					time,
+					prevTime,
+					nextTime,
+					easing,
+					prevValue: prevFrame.get(role, name),
+					nextValue,
+				}));
+			}
+		}
+		return frame;
+	}
 	/**
 	* Get frame of the current time
 	* @param {Number} time - the current time
@@ -407,6 +471,9 @@ let item = new Scene.SceneItem({
 const frame = item.getNowFrame(1.7);
 	*/
 	getNowFrame(time, easing) {
+		if (this.timeline.getLastTime() < time && time <= this.state.duration) {
+			return this._getNowFrame(time, easing);
+		}
 		const indices = this.getNearIndex(time);
 
 		if (!indices) {
@@ -448,21 +515,19 @@ item.load({
 });
 	*/
 	load(properties = {}, options = properties.options) {
+		this.setOptions(options);
 		for (const time in properties) {
 			if (time === "options") {
 				continue;
 			}
 			const _properties = properties[time];
-			const realTime = this._getTime(time);
+			const realTime = this._getTime(time, options);
 
 			if (typeof _properties === "number") {
 				this.mergeFrame(_properties, realTime);
 				continue;
 			}
 			this.set(realTime, properties[time]);
-		}
-		if (options) {
-			this.setOptions(options);
 		}
 		return this;
 	}

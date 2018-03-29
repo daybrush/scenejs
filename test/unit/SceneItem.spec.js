@@ -45,7 +45,7 @@ describe("item Test", function() {
             // When
             this.item.setId(".a .b");
 
-            // Given
+            // Then
             expect(this.item.options.id).to.be.equals(".a .b");
         });
         it("should check 'getNowFrame' method", () => {
@@ -55,6 +55,25 @@ describe("item Test", function() {
             expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
             expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
             expect(item.getNowFrame(1).get("display")).to.be.equals("none");
+        });
+        it("should check 'getFillFrame' method", () => {
+            const item = this.item;
+
+            item.set(3, "transform", "translate", "40px, 40px");
+            item.set(3, "transform", "f", "40px 40px");
+            // When
+            const frame = item.getFillFrame(0);
+            const frame2 = item.getFillFrame(1);
+
+            // Then
+            expect(frame.get("a")).to.be.equals(0);
+            expect(frame2.get("a")).to.be.equals(1);
+            expect(frame.get("display")).to.be.equals(0);
+            expect(frame2.get("display")).to.be.equals(1);
+            expect(frame.get("transform", "translate").toValue()).to.be.equals("0,0");
+            expect(frame2.get("transform", "translate").toValue()).to.be.equals("1,1");
+            expect(frame.get("transform", "f").toValue()).to.be.equals("0 0");
+            expect(frame2.get("transform", "f").toValue()).to.be.equals("1 1");
         });
         it("should check 'getFrame' method", () => {
             const item = this.item;

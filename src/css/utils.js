@@ -27,3 +27,4 @@ export const convertCrossBrowserCSSArray = function(cssArray, property, value) {
 export const toId = function toId(text) {
 	return text.match(/[0-9a-zA-Z]+/g).join("");
 };
+

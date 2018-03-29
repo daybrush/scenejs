@@ -10,20 +10,18 @@ class Timeline {
 	}
 	/**
 	* get last time of list
-	* @readonly
 	* @return {Number} last time
 	*/
-	get last() {
+	getLastTime() {
 		const times = this.times;
 
 		return times.length === 0 ? 0 : times[times.length - 1];
 	}
 	/**
-	* get last time of list
-	* @readonly
+	* get size of list
 	* @return {Number} length of list
 	*/
-	get length() {
+	size() {
 		return this.times.length;
 	}
 	/**
