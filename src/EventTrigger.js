@@ -46,6 +46,31 @@ target.trigger("animate");
 
 		return this;
 	}
+	off(name, callback) {
+		if (!name) {
+			this._events = {};
+		} else if (!callback) {
+			this._events[name] = [];
+		} else {
+			const callbacks = this._events[name];
+
+			if (!callbacks) {
+				return this;
+			}
+			const index = callbacks.indexOf(callback);
+
+			if (index !== -1) {
+				callbacks.splice(index, 1);
+			}
+		}
+		return this;
+	}
+	hasOn(name) {
+		const events = this._events;
+		const event = events[name];
+
+		return event && event.length;
+	}
 	/**
 	* execute event handler
 	* @param {String} name - event's name

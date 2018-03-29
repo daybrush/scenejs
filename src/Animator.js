@@ -74,6 +74,9 @@ const animator = new Animator({
 			this.state.easingName = curveArray.easingName || "linear";
 		}
 	}
+	getEasingName() {
+		return this.state.easingName;
+	}
 	getEasing() {
 		return this.state.easing;
 	}
@@ -242,8 +245,8 @@ animator.currentTime // 10
 
 		this.trigger("timeupdate", {
 			currentTime,
-			iterationTime: this.state.currentIterationTime,
-			iterationCount: this.state.currentIterationCount,
+			time: this.getIterationTime(),
+			iterationCount: this.getIterationCount(),
 		});
 	}
 	getTime() {

@@ -99,19 +99,25 @@ item.duration; // = item.timeline.last
 		frame && frame.remove(role, properties);
 		return this;
 	}
-	setTime(time, easing) {
-		super.setTime(time);
+	animate(time, parentEasing) {
 		const iterationTime = this.getIterationTime();
+		const easing = this.getEasing() || parentEasing;
 		const frame = this.getNowFrame(iterationTime, easing);
 
 		if (!frame) {
-			return this;
+			return frame;
 		}
 		this.trigger("animate", {
-			time: iterationTime,
 			frame,
+			time: iterationTime,
 			currentTime: this.getTime(),
 		});
+		return frame;
+	}
+	setTime(time, parentEasing) {
+		super.setTime(time);
+
+		this.animate(time, parentEasing);
 		return this;
 	}
 	/**
@@ -166,6 +172,20 @@ item.setFrame(time, frame);
 		this.timeline.add(time, frame);
 		return this;
 	}
+	_getTime(time) {
+		const duration = this.getDuration() || 100;
+
+		if (isString(time)) {
+			if (isPercent(time)) {
+				return parseFloat(time) / 100 * duration;
+			} else if (time === "from") {
+				return 0;
+			} else if (time === "to") {
+				return duration;
+			}
+		}
+		return parseFloat(time);
+	}
 	/**
 	* get sceneItem's frame at that time
 	* @param {Number} time - frame's time
@@ -174,16 +194,7 @@ item.setFrame(time, frame);
 const frame = item.getFrame(time);
 	*/
 	getFrame(time) {
-		if (isString(time)) {
-			if (isPercent(time)) {
-				return this.timeline.get(parseFloat(time) / 100 * this.getDuration());
-			} else if (time === "from") {
-				return this.timeline.get(0);
-			} else if (time === "to") {
-				return this.timeline.get(this.getDuration());
-			}
-		}
-		return this.timeline.get(time);
+		return this.timeline.get(this._getTime(time));
 	}
 	/**
 	* check if the item has a frame at that time
@@ -437,25 +448,13 @@ item.load({
 });
 	*/
 	load(properties = {}, options = properties.options) {
-		const duration = this.getDuration() || 100;
-
-		console.log(this.getDuration());
 		for (const time in properties) {
 			if (time === "options") {
 				continue;
 			}
 			const _properties = properties[time];
-			let realTime;
+			const realTime = this._getTime(time);
 
-			if (time === "from") {
-				realTime = 0;
-			} else if (time === "to") {
-				realTime = duration;
-			} else if (isPercent(time)) {
-				realTime = parseFloat(parseFloat(time) / 100 * duration);
-			} else {
-				realTime = parseFloat(time);
-			}
 			if (typeof _properties === "number") {
 				this.mergeFrame(_properties, realTime);
 				continue;

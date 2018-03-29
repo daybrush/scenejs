@@ -4,24 +4,6 @@ import {isObject, isUndefined} from "../utils";
 import {convertCrossBrowserCSSArray, toId} from "./utils";
 import Frame from "./Frame";
 
-function animateFunction({time, frame}) {
-	const elements = this._elements;
-
-	if (!elements || !elements.length) {
-		return;
-	}
-	const cssText = frame.cssText();
-
-	if (this.state.cssText === cssText) {
-		return;
-	}
-	this.state.cssText = cssText;
-	const length = elements.length;
-
-	for (let i = 0; i < length; ++i) {
-		elements[i].style.cssText += cssText;
-	}
-}
 function makeId() {
 	for (;;) {
 		const id = `${parseInt(Math.random() * 100000, 10)}`;
@@ -38,11 +20,6 @@ function makeId() {
 * @extends SceneItem
 */
 class CSSItem extends SceneItem {
-	constructor(properties, options) {
-		super(properties, options);
-
-		this.on("animate", animateFunction);
-	}
 	newFrame(time) {
 		let frame = this.getFrame(time);
 
@@ -75,6 +52,26 @@ class CSSItem extends SceneItem {
 			elements[i].setAttribute("data-scene-id", sceneId);
 		}
 		return this;
+	}
+	animate(time, parentEasing) {
+		const frame = super.animate(time, parentEasing);
+		const elements = this._elements;
+
+		if (!elements || !elements.length) {
+			return frame;
+		}
+		const cssText = frame.toCSS();
+
+		if (this.state.cssText === cssText) {
+			return frame;
+		}
+		this.state.cssText = cssText;
+		const length = elements.length;
+
+		for (let i = 0; i < length; ++i) {
+			elements[i].style.cssText += cssText;
+		}
+		return frame;
 	}
 	setSelector(selector) {
 		this.options.selector = selector === true ? this.options.id :
