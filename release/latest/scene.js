@@ -142,9 +142,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _Scene2 = __webpack_require__(2);
+var _Scene = __webpack_require__(2);
 
-var _Scene3 = _interopRequireDefault(_Scene2);
+var _Scene2 = _interopRequireDefault(_Scene);
 
 var _SceneItem = __webpack_require__(16);
 
@@ -162,19 +162,18 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 /**
 * manage sceneItems and play Scene.
-* @alias Scene
 * @extends Animator
 */
-var CSSScene = function (_Scene) {
-	_inherits(CSSScene, _Scene);
+var Scene = function (_SceneWrapper) {
+	_inherits(Scene, _SceneWrapper);
 
-	function CSSScene() {
-		_classCallCheck(this, CSSScene);
+	function Scene() {
+		_classCallCheck(this, Scene);
 
-		return _possibleConstructorReturn(this, (CSSScene.__proto__ || Object.getPrototypeOf(CSSScene)).apply(this, arguments));
+		return _possibleConstructorReturn(this, (Scene.__proto__ || Object.getPrototypeOf(Scene)).apply(this, arguments));
 	}
 
-	_createClass(CSSScene, [{
+	_createClass(Scene, [{
 		key: "newItem",
 		value: function newItem(name, options) {
 			if (this.items[name]) {
@@ -187,7 +186,7 @@ var CSSScene = function (_Scene) {
 			return item;
 		}
 		/**
-  * set elements' selector
+  * Specifies an element to synchronize items' timeline.
   * @param {Object} selectors - Selectors to find elements in items.
   * @example
   item.setSelector("#id.class");
@@ -210,7 +209,7 @@ var CSSScene = function (_Scene) {
 	}, {
 		key: "load",
 		value: function load(properties, options) {
-			_get(CSSScene.prototype.__proto__ || Object.getPrototypeOf(CSSScene.prototype), "load", this).call(this, properties, options);
+			_get(Scene.prototype.__proto__ || Object.getPrototypeOf(Scene.prototype), "load", this).call(this, properties, options);
 			var isSelector = this.options.selector;
 
 			if (!isSelector) {
@@ -266,13 +265,13 @@ var CSSScene = function (_Scene) {
 		}
 	}]);
 
-	return CSSScene;
-}(_Scene3.default);
+	return Scene;
+}(_Scene2.default);
 
 _consts.SCENE_ROLES.transform = true;
 _consts.SCENE_ROLES.filter = true;
 
-exports.default = CSSScene;
+exports.default = Scene;
 
 /***/ }),
 /* 2 */
@@ -797,6 +796,10 @@ var Animator = function (_EventTrigger) {
 				_this2.state.prevTime = time;
 				_this2.tick(time);
 			});
+			/**
+    * This event is fired when play animator.
+    * @event Animator#play
+    */
 			this.trigger("play");
 
 			return this;
@@ -810,21 +813,27 @@ var Animator = function (_EventTrigger) {
 		key: "pause",
 		value: function pause() {
 			this.state.playState = "paused";
+			/**
+    * This event is fired when animator is paused.
+    * @event Animator#paused
+    */
 			this.trigger("paused");
 			return this;
 		}
 		/**
-  * stop animator
-  * @return {Animator} An instance itself.
+   * end animator
+   * @return {Animator} An instance itself.
   */
 
 	}, {
-		key: "stop",
-		value: function stop() {
-			this.state.playState = "paused";
-			this.trigger("paused");
+		key: "end",
+		value: function end() {
+			this.pause();
+			/**
+    * This event is fired when animator is ended.
+    * @event Animator#ended
+    */
 			this.trigger("ended");
-			return this;
 		}
 		/**
   * reset animator
@@ -835,7 +844,7 @@ var Animator = function (_EventTrigger) {
 		key: "reset",
 		value: function reset() {
 			this.setTime(0);
-			this.stop();
+			this.pause();
 			return this;
 		}
 		/**
@@ -860,6 +869,14 @@ var Animator = function (_EventTrigger) {
 			this.state.currentTime = currentTime;
 			this.calculateIterationTime();
 
+			/**
+    * This event is fired when the animator updates the time.
+    * @event Animator#timeupdate
+    * @param {Object} param The object of data to be sent to an event.
+    * @param {Element} param.currentTime The total time that the animator is running.
+    * @param {Element} param.time The iteration time during duration that the animator is running.
+    * @param {Element} param.iterationCount The iteration count that the animator is running.
+    */
 			this.trigger("timeupdate", {
 				currentTime: currentTime,
 				time: this.getIterationTime(),
@@ -969,7 +986,7 @@ var Animator = function (_EventTrigger) {
 			this.state.prevTime = now * playSpeed;
 			this.setTime(currentTime);
 			if (this.isEnded()) {
-				this.stop();
+				this.end();
 			}
 			if (this.state.playState === "paused") {
 				return;
@@ -983,81 +1000,6 @@ var Animator = function (_EventTrigger) {
 
 	return Animator;
 }(_EventTrigger3.default);
-/**
-* iterationTime
-* @memberof Animator
-* @instance
-* @name currentIterationTime
-* @readonly
-* @example
-animator.currentIterationTime // ....
-*/
-/**
-* playSpeed
-* @memberof Animator
-* @instance
-* @name playSpeed
-* @example
-animator.playSpeed = 1;// default speed
-animator.playSpeed = 2;// speed 2x
-*/
-/**
-* playState
-* @memberof Animator
-* @instance
-* @name playState
-* @example
-animator.play();
-animator.playState // => running
-
-animator.pause();
-animator.playState // => paused
-
-animator.stop();
-animator.playState // => paused
-*/
-/**
-* specifies the number of times an animation should be played
-* @memberof Animator
-* @instance
-* @name iterationCount
-* @example
-const animator = new Scene.Animator({
-	delay: 2,
-	diretion: "forwards",
-	duration: 2,
-	fillMode: "alternate",
-	iterationCount: 3,
-	easing: Scene.Animator.EASE,
-});
-animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 3 = 8
-animator.iterationCount = 2;
-animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 2 = 6
-*/
-/**
-* Specifies how many seconds or milliseconds an animation takes to complete one cycle
-* @memberof Animator
-* @instance
-* @name duration
-*/
-/**
-* Specifies a style for the element when the animation is not playing (when it is finished, or when it has a delay)(none, forwards, backwards)
-* @memberof Animator
-* @instance
-* @name fillMode
-*/
-/**
-* Specifies whether an animation should play in reverse direction or alternate cycles(normal, reverse, alternate, alternate-reverse)
-* @memberof Animator
-* @instance
-* @name direction
-*/
-/**
-* specifies a delay for the start of an animation
-* @memberof Animator
-* @instance
-* @name delay
-*/
 
 exports.default = Animator;
 
@@ -1129,6 +1071,20 @@ var EventTrigger = function () {
 
 			return this;
 		}
+		/**
+  * Dettach an event handler function for one or more events to target
+  * @param {String} name - event's name
+  * @param {Function} callback -  function to execute when the event is triggered.
+  * @return {EventTrigger} An Instance itself.
+  * @example
+  const callback = function() {
+  console.log("animate");
+  };
+  target.on("animate", callback);
+  target.off("animate", callback);
+  target.off("animate");
+  	*/
+
 	}, {
 		key: "off",
 		value: function off(name, callback) {
@@ -1150,6 +1106,19 @@ var EventTrigger = function () {
 			}
 			return this;
 		}
+		/**
+  * Check if event handler has been attached once
+  * @param {String} name - event's name
+  * @return {Boolean} Returns true if at least one has been attached.
+  * @example
+  const callback = function() {
+  console.log("animate");
+  };
+  console.log(target.hasOn("animate")); // false
+  target.on("animate", callback);
+  console.log(target.hasOn("animate")); // true
+  	*/
+
 	}, {
 		key: "hasOn",
 		value: function hasOn(name) {
@@ -3175,11 +3144,6 @@ function getType(value) {
 	return _consts.TYPE_TEXT;
 }
 
-/**
-* Animation's Timeline with Frame
-* @extends Timeline
-*/
-
 var FrameTimeline = function (_Timeline) {
 	_inherits(FrameTimeline, _Timeline);
 
@@ -3191,13 +3155,6 @@ var FrameTimeline = function (_Timeline) {
 		_this.names = {};
 		return _this;
 	}
-	/**
- * update property names used in frames.
- * @return {FrameTimeline} An instance itself
- * @example
- timeline.update();
- */
-
 
 	_createClass(FrameTimeline, [{
 		key: "update",
@@ -3614,15 +3571,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _SceneItem2 = __webpack_require__(7);
+var _SceneItem = __webpack_require__(7);
 
-var _SceneItem3 = _interopRequireDefault(_SceneItem2);
+var _SceneItem2 = _interopRequireDefault(_SceneItem);
 
 var _consts = __webpack_require__(9);
 
-var _utils = __webpack_require__(5);
-
-var _utils2 = __webpack_require__(17);
+var _utils = __webpack_require__(17);
 
 var _Frame = __webpack_require__(18);
 
@@ -3650,20 +3605,21 @@ function makeId() {
 }
 
 /**
-* manage CSSFrame
-* @extends SceneItem
+* manage sceneItems and play Scene.
+* @alias SceneItem
+* @extends Animator
 */
 
-var CSSItem = function (_SceneItem) {
-	_inherits(CSSItem, _SceneItem);
+var SceneItem = function (_SceneItemWrapper) {
+	_inherits(SceneItem, _SceneItemWrapper);
 
-	function CSSItem() {
-		_classCallCheck(this, CSSItem);
+	function SceneItem() {
+		_classCallCheck(this, SceneItem);
 
-		return _possibleConstructorReturn(this, (CSSItem.__proto__ || Object.getPrototypeOf(CSSItem)).apply(this, arguments));
+		return _possibleConstructorReturn(this, (SceneItem.__proto__ || Object.getPrototypeOf(SceneItem)).apply(this, arguments));
 	}
 
-	_createClass(CSSItem, [{
+	_createClass(SceneItem, [{
 		key: "newFrame",
 		value: function newFrame(time) {
 			var frame = this.getFrame(time);
@@ -3672,7 +3628,7 @@ var CSSItem = function (_SceneItem) {
 				return frame;
 			}
 			frame = new _Frame2.default();
-			if (!(0, _utils.isUndefined)(time)) {
+			if (typeof time !== "undefined") {
 				this.setFrame(time, frame);
 			}
 			return frame;
@@ -3682,8 +3638,8 @@ var CSSItem = function (_SceneItem) {
 		value: function setId(id) {
 			var elements = this._elements;
 
-			_get(CSSItem.prototype.__proto__ || Object.getPrototypeOf(CSSItem.prototype), "setId", this).call(this, id);
-			var sceneId = (0, _utils2.toId)(this.options.id);
+			_get(SceneItem.prototype.__proto__ || Object.getPrototypeOf(SceneItem.prototype), "setId", this).call(this, id);
+			var sceneId = (0, _utils.toId)(this.options.id);
 
 			this.options.selector || (this.options.selector = "[data-scene-id=\"" + sceneId + "\"]");
 
@@ -3703,7 +3659,7 @@ var CSSItem = function (_SceneItem) {
 	}, {
 		key: "animate",
 		value: function animate(time, parentEasing) {
-			var frame = _get(CSSItem.prototype.__proto__ || Object.getPrototypeOf(CSSItem.prototype), "animate", this).call(this, time, parentEasing);
+			var frame = _get(SceneItem.prototype.__proto__ || Object.getPrototypeOf(SceneItem.prototype), "animate", this).call(this, time, parentEasing);
 			var elements = this._elements;
 
 			if (!elements || !elements.length) {
@@ -3722,6 +3678,13 @@ var CSSItem = function (_SceneItem) {
 			}
 			return frame;
 		}
+		/**
+  * Specifies an element to synchronize items' timeline.
+  * @param {string} selectors - Selectors to find elements in items.
+  * @example
+  item.setSelector("#id.class");
+  */
+
 	}, {
 		key: "setSelector",
 		value: function setSelector(selector) {
@@ -3729,6 +3692,14 @@ var CSSItem = function (_SceneItem) {
 			this.setElement(document.querySelectorAll(selector));
 			return this;
 		}
+		/**
+  * Specifies an element to synchronize item's timeline.
+  * @param {Element|Array|string} elements - elements to synchronize item's timeline.
+  * @example
+  item.setElement(document.querySelector("#id.class"));
+  item.setElement(document.querySelectorAll(".class"));
+  */
+
 	}, {
 		key: "setElement",
 		value: function setElement(elements) {
@@ -3744,6 +3715,15 @@ var CSSItem = function (_SceneItem) {
 			this.setId(!id || id === "null" ? makeId() : id);
 			return this;
 		}
+		/**
+  * add css styles of items's element to the frame at that time.
+  * @param {Array} properties - elements to synchronize item's timeline.
+  * @example
+  item.setElement(document.querySelector("#id.class"));
+  item.setCSS(0, ["opacity"]);
+  item.setCSS(0, ["opacity", "width", "height"]);
+  */
+
 	}, {
 		key: "setCSS",
 		value: function setCSS(time, properties) {
@@ -3765,54 +3745,10 @@ var CSSItem = function (_SceneItem) {
 			this.set(time, cssObject);
 			return this;
 		}
-		/**
-  * adds css property of items's element to the frame at that time.
-  * @param {Number} time - frame's time
-  * @param {String} property - the name of property or the names of properties to copy.
-  * @example
-  // css
-  // #item1 {display: inline-block; width: 100px; height: 100px;}
-  // html
-  // <div id="item1" style="opacity:0.5;border-left:10px solid black;"></div>
-  const item = new Scene.SceneItem();
-  item.selector = "#item1";
-  item.copyCSSProperty(0, "display");
-  item.copyCSSProperty(0, ["width", "opacity"]);
-  const frame = item.getFrame(0);
-  frame.getProperty("width"); // 100px;
-  frame.getProperty("display"); // "inline-block"
-  frame.getProperty("opacity"); // 0.5
-  	*/
-
-	}, {
-		key: "copyCSSProperty",
-		value: function copyCSSProperty(time, property) {
-			var elements = this._elements;
-
-			if (!elements || !elements.length) {
-				return this;
-			}
-			var style = elements[0].style;
-			var cssObject = {};
-
-			if ((0, _utils.isObject)(property)) {
-				var name = void 0;
-
-				for (var i = 0, length = property.length; i < length; ++i) {
-					name = property[i];
-					cssObject[property] = style && style[name] || window.getComputedStyle(elements[0])[name];
-				}
-			} else {
-				cssObject[property] = style && style[property] || window.getComputedStyle(elements[0])[property];
-			}
-			this.set(time, cssObject);
-
-			return this;
-		}
 	}, {
 		key: "setOptions",
 		value: function setOptions(options) {
-			_get(CSSItem.prototype.__proto__ || Object.getPrototypeOf(CSSItem.prototype), "setOptions", this).call(this, options);
+			_get(SceneItem.prototype.__proto__ || Object.getPrototypeOf(SceneItem.prototype), "setOptions", this).call(this, options);
 			var selector = options && options.selector;
 			var elements = this.options.elements || this.options.element;
 
@@ -3829,8 +3765,8 @@ var CSSItem = function (_SceneItem) {
 			return this;
 		}
 	}, {
-		key: "toKeyframes",
-		value: function toKeyframes() {
+		key: "_toKeyframes",
+		value: function _toKeyframes() {
 			var _this2 = this;
 
 			var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.getDuration();
@@ -3853,8 +3789,17 @@ var CSSItem = function (_SceneItem) {
 			if (itemDuration !== duration) {
 				keyframes.push("100%{" + this.getNowFrame(itemDuration, false).toCSS() + "}");
 			}
-			return "@" + _consts2.KEYFRAMES + " " + _consts.PREFIX + "KEYFRAMES_" + (0, _utils2.toId)(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
+			return "@" + _consts2.KEYFRAMES + " " + _consts.PREFIX + "KEYFRAMES_" + (0, _utils.toId)(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
 		}
+		/**
+  * Specifies an css text that coverted the timeline of the item.
+  * @param {Array} [duration=this.getDuration()] - elements to synchronize item's timeline.
+  * @param {Array} [options={}] - parent options to unify options of items.
+  * @example
+  item.setCSS(0, ["opacity"]);
+  item.setCSS(0, ["opacity", "width", "height"]);
+  */
+
 	}, {
 		key: "toCSS",
 		value: function toCSS() {
@@ -3877,15 +3822,15 @@ var CSSItem = function (_SceneItem) {
 			var direction = options.direction !== "none" && options.direction || this.state.direction;
 			var cssArray = [];
 
-			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-name", _consts.PREFIX + "KEYFRAMES_" + (0, _utils2.toId)(id));
-			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-duration", duration / playSpeed + "s");
-			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-delay", delay + "s");
-			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-timing-function", easingName);
-			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-fill-mode", fillMode);
-			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-direction", direction);
-			(0, _utils2.convertCrossBrowserCSSArray)(cssArray, "animation-iteration-count", count);
+			cssArray.push(_consts2.ANIMATION + "-name: " + _consts.PREFIX + "KEYFRAMES_" + (0, _utils.toId)(id));
+			cssArray.push(_consts2.ANIMATION + "-duration: " + duration / playSpeed + "s");
+			cssArray.push(_consts2.ANIMATION + "-delay: " + delay + "s");
+			cssArray.push(_consts2.ANIMATION + "-timing-function: " + easingName);
+			cssArray.push(_consts2.ANIMATION + "-fill-mode: " + fillMode);
+			cssArray.push(_consts2.ANIMATION + "-direction: " + direction);
+			cssArray.push(_consts2.ANIMATION + "-iteration-count: " + count);
 
-			var css = selector + ".startAnimation {\n\t\t\t" + cssArray.join("") + "\n\t\t}\n\t\t" + this.toKeyframes(duration, options);
+			var css = selector + ".startAnimation {\n\t\t\t" + cssArray.join("") + "\n\t\t}\n\t\t" + this._toKeyframes(duration, options);
 
 			return css;
 		}
@@ -3895,7 +3840,7 @@ var CSSItem = function (_SceneItem) {
 			var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.getDuration();
 			var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-			var id = (0, _utils2.toId)(this.options.id || this.setId(makeId()).options.id || "");
+			var id = (0, _utils.toId)(this.options.id || this.setId(makeId()).options.id || "");
 
 			if (!id) {
 				return;
@@ -3910,6 +3855,13 @@ var CSSItem = function (_SceneItem) {
 				document.body.insertAdjacentHTML("beforeend", "<style id=\"" + _consts.PREFIX + "STYLE_" + id + "\">" + css + "</style>");
 			}
 		}
+		/**
+  * play using the css animation and keyframes.
+  * @param {boolean} [exportCSS=true] Check if you want to export css.
+  * @example
+  scene.playCSS();
+  */
+
 	}, {
 		key: "playCSS",
 		value: function playCSS() {
@@ -3930,22 +3882,10 @@ var CSSItem = function (_SceneItem) {
 		}
 	}]);
 
-	return CSSItem;
-}(_SceneItem3.default);
+	return SceneItem;
+}(_SceneItem2.default);
 
-/**
-* Specifies an element to synchronize sceneItem's timeline.
-* @memberof CSSItem
-* @instance
-* @name element
-* @example
-item.setSelector(".scene .item li:first-child");
-
-// same
-item.setElement(document.querySelector(".scene .item li:first-child"));
-*/
-
-exports.default = CSSItem;
+exports.default = SceneItem;
 
 /***/ }),
 /* 17 */
@@ -3994,9 +3934,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Frame2 = __webpack_require__(8);
+var _Frame = __webpack_require__(8);
 
-var _Frame3 = _interopRequireDefault(_Frame2);
+var _Frame2 = _interopRequireDefault(_Frame);
 
 var _consts = __webpack_require__(19);
 
@@ -4022,19 +3962,19 @@ function toInnerProperties(obj) {
 
 /**
 * Animation's CSS Frame
-* @extends Frame
+* @extends Animator
 */
 
-var CSSFrame = function (_Frame) {
-	_inherits(CSSFrame, _Frame);
+var Frame = function (_FrameWrapper) {
+	_inherits(Frame, _FrameWrapper);
 
-	function CSSFrame() {
-		_classCallCheck(this, CSSFrame);
+	function Frame() {
+		_classCallCheck(this, Frame);
 
-		return _possibleConstructorReturn(this, (CSSFrame.__proto__ || Object.getPrototypeOf(CSSFrame)).apply(this, arguments));
+		return _possibleConstructorReturn(this, (Frame.__proto__ || Object.getPrototypeOf(Frame)).apply(this, arguments));
 	}
 
-	_createClass(CSSFrame, [{
+	_createClass(Frame, [{
 		key: "toCSSObject",
 		value: function toCSSObject() {
 			var frameObject = this.toObject();
@@ -4066,10 +4006,10 @@ var CSSFrame = function (_Frame) {
 		}
 	}]);
 
-	return CSSFrame;
-}(_Frame3.default);
+	return Frame;
+}(_Frame2.default);
 
-exports.default = CSSFrame;
+exports.default = Frame;
 
 /***/ }),
 /* 19 */
