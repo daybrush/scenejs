@@ -6,3 +6,5 @@ dist/
 release/
 npm-debug.log*
 coverage/
+jsdoc/
+doc/

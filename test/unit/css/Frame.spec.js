@@ -24,15 +24,7 @@ describe("CSS Frame Test", function() {
             const result = `a:1;
 b:2;
 transform:scale(1,2) translateX(100px) translateY(200px);
--moz-transform:scale(1,2) translateX(100px) translateY(200px);
--ms-transform:scale(1,2) translateX(100px) translateY(200px);
--o-transform:scale(1,2) translateX(100px) translateY(200px);
--webkit-transform:scale(1,2) translateX(100px) translateY(200px);
-filter:brightness(90%) grayscale(40%);
--moz-filter:brightness(90%) grayscale(40%);
--ms-filter:brightness(90%) grayscale(40%);
--o-filter:brightness(90%) grayscale(40%);
--webkit-filter:brightness(90%) grayscale(40%);`.split("\n");
+filter:brightness(90%) grayscale(40%);`.split("\n");
             
             css.forEach((line, i) => {
                 expect(line).to.be.deep.equal(result[i]);

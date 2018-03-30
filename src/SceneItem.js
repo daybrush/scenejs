@@ -194,6 +194,7 @@ item.setFrame(time, frame);
 
 		if (isString(time)) {
 			if (isPercent(time)) {
+				!this.state.duration && (this.state.duration = duration);
 				return parseFloat(time) / 100 * duration;
 			} else if (time === "from") {
 				return 0;
@@ -516,12 +517,22 @@ item.load({
 	*/
 	load(properties = {}, options = properties.options) {
 		this.setOptions(options);
+		if (Array.isArray(properties)) {
+			const length = properties.length;
+
+			for (let i = 0; i < length; ++i) {
+				const time = length === 1 ? 0 : this._getTime(`${i / (length - 1) * 100}%`, options);
+
+				this.set(time, properties[i]);
+			}
+			return this;
+		}
 		for (const time in properties) {
 			if (time === "options") {
 				continue;
 			}
 			const _properties = properties[time];
-			const realTime = this._getTime(time, options);
+			const realTime = this._getTime(time);
 
 			if (typeof _properties === "number") {
 				this.mergeFrame(_properties, realTime);

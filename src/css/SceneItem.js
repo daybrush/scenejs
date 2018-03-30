@@ -1,8 +1,8 @@
-import SceneItem from "../SceneItem";
+import SceneItemWrapper from "../SceneItem";
 import {PREFIX} from "../consts";
-import {isObject, isUndefined} from "../utils";
-import {convertCrossBrowserCSSArray, toId} from "./utils";
+import {toId} from "./utils";
 import Frame from "./Frame";
+import {KEYFRAMES, ANIMATION} from "./consts";
 
 function makeId() {
 	for (;;) {
@@ -16,10 +16,11 @@ function makeId() {
 }
 
 /**
-* manage CSSFrame
-* @extends SceneItem
+* manage sceneItems and play Scene.
+* @alias SceneItem
+* @extends Animator
 */
-class CSSItem extends SceneItem {
+class SceneItem extends SceneItemWrapper {
 	newFrame(time) {
 		let frame = this.getFrame(time);
 
@@ -27,7 +28,7 @@ class CSSItem extends SceneItem {
 			return frame;
 		}
 		frame = new Frame();
-		if (!isUndefined(time)) {
+		if (typeof time !== "undefined") {
 			this.setFrame(time, frame);
 		}
 		return frame;
@@ -73,12 +74,25 @@ class CSSItem extends SceneItem {
 		}
 		return frame;
 	}
+	/**
+	* Specifies an element to synchronize items' timeline.
+	* @param {string} selectors - Selectors to find elements in items.
+	* @example
+item.setSelector("#id.class");
+	*/
 	setSelector(selector) {
 		this.options.selector = selector === true ? this.options.id :
 			(selector || `[data-scene-id="${this.options.id}"]`);
 		this.setElement(document.querySelectorAll(selector));
 		return this;
 	}
+	/**
+	* Specifies an element to synchronize item's timeline.
+	* @param {Element|Array|string} elements - elements to synchronize item's timeline.
+	* @example
+item.setElement(document.querySelector("#id.class"));
+item.setElement(document.querySelectorAll(".class"));
+	*/
 	setElement(elements) {
 		if (!elements) {
 			return this;
@@ -92,6 +106,14 @@ class CSSItem extends SceneItem {
 		this.setId((!id || id === "null") ? makeId() : id);
 		return this;
 	}
+	/**
+	* add css styles of items's element to the frame at that time.
+	* @param {Array} properties - elements to synchronize item's timeline.
+	* @example
+item.setElement(document.querySelector("#id.class"));
+item.setCSS(0, ["opacity"]);
+item.setCSS(0, ["opacity", "width", "height"]);
+	*/
 	setCSS(time, properties) {
 		if (!properties || !properties.length) {
 			return this;
@@ -112,54 +134,6 @@ class CSSItem extends SceneItem {
 		this.set(time, cssObject);
 		return this;
 	}
-	/**
-	* adds css property of items's element to the frame at that time.
-	* @param {Number} time - frame's time
-	* @param {String} property - the name of property or the names of properties to copy.
-	* @example
-// css
-// #item1 {display: inline-block; width: 100px; height: 100px;}
-
-// html
-// <div id="item1" style="opacity:0.5;border-left:10px solid black;"></div>
-
-const item = new Scene.SceneItem();
-
-item.selector = "#item1";
-item.copyCSSProperty(0, "display");
-item.copyCSSProperty(0, ["width", "opacity"]);
-
-const frame = item.getFrame(0);
-
-frame.getProperty("width"); // 100px;
-frame.getProperty("display"); // "inline-block"
-frame.getProperty("opacity"); // 0.5
-
-	*/
-	copyCSSProperty(time, property) {
-		const elements = this._elements;
-
-		if (!elements || !elements.length) {
-			return this;
-		}
-		const style = elements[0].style;
-		const cssObject = {};
-
-		if (isObject(property)) {
-			let name;
-
-			for (let i = 0, length = property.length; i < length; ++i) {
-				name = property[i];
-				cssObject[property] = (style && style[name]) || window.getComputedStyle(elements[0])[name];
-			}
-		} else {
-			cssObject[property] = (style && style[property]) ||
-				window.getComputedStyle(elements[0])[property];
-		}
-		this.set(time, cssObject);
-
-		return this;
-	}
 	setOptions(options) {
 		super.setOptions(options);
 		const selector = options && options.selector;
@@ -177,7 +151,7 @@ frame.getProperty("opacity"); // 0.5
 		}
 		return this;
 	}
-	toKeyframes(duration = this.getDuration()) {
+	_toKeyframes(duration = this.getDuration()) {
 		const id = this.options.id || this.setId(makeId()).options.id;
 
 		if (!id) {
@@ -196,10 +170,18 @@ frame.getProperty("opacity"); // 0.5
 		if (itemDuration !== duration) {
 			keyframes.push(`100%{${this.getNowFrame(itemDuration, false).toCSS()}}`);
 		}
-		return `@keyframes ${PREFIX}KEYFRAMES_${toId(id)}{
+		return `@${KEYFRAMES} ${PREFIX}KEYFRAMES_${toId(id)}{
 			${keyframes.join("\n")}
 		}`;
 	}
+	/**
+	* Specifies an css text that coverted the timeline of the item.
+	* @param {Array} [duration=this.getDuration()] - elements to synchronize item's timeline.
+	* @param {Array} [options={}] - parent options to unify options of items.
+	* @example
+item.setCSS(0, ["opacity"]);
+item.setCSS(0, ["opacity", "width", "height"]);
+	*/
 	toCSS(duration = this.getDuration(), options = {}) {
 		const id = this.options.id || this.setId(makeId()).options.id;
 
@@ -218,18 +200,18 @@ frame.getProperty("opacity"); // 0.5
 		const direction = (options.direction !== "none" && options.direction) || this.state.direction;
 		const cssArray = [];
 
-		convertCrossBrowserCSSArray(cssArray, "animation-name", `${PREFIX}KEYFRAMES_${toId(id)}`);
-		convertCrossBrowserCSSArray(cssArray, "animation-duration", `${duration / playSpeed}s`);
-		convertCrossBrowserCSSArray(cssArray, "animation-delay", `${delay}s`);
-		convertCrossBrowserCSSArray(cssArray, "animation-timing-function", easingName);
-		convertCrossBrowserCSSArray(cssArray, "animation-fill-mode", fillMode);
-		convertCrossBrowserCSSArray(cssArray, "animation-direction", direction);
-		convertCrossBrowserCSSArray(cssArray, "animation-iteration-count", count);
+		cssArray.push(`${ANIMATION}-name: ${PREFIX}KEYFRAMES_${toId(id)}`);
+		cssArray.push(`${ANIMATION}-duration: ${duration / playSpeed}s`);
+		cssArray.push(`${ANIMATION}-delay: ${delay}s`);
+		cssArray.push(`${ANIMATION}-timing-function: ${easingName}`);
+		cssArray.push(`${ANIMATION}-fill-mode: ${fillMode}`);
+		cssArray.push(`${ANIMATION}-direction: ${direction}`);
+		cssArray.push(`${ANIMATION}-iteration-count: ${count}`);
 
 		const css = `${selector}.startAnimation {
 			${cssArray.join("")}
 		}
-		${this.toKeyframes(duration, options)}`;
+		${this._toKeyframes(duration, options)}`;
 
 		return css;
 	}
@@ -251,6 +233,12 @@ frame.getProperty("opacity"); // 0.5
 				`<style id="${PREFIX}STYLE_${id}">${css}</style>`);
 		}
 	}
+	/**
+	* play using the css animation and keyframes.
+	* @param {boolean} [exportCSS=true] Check if you want to export css.
+	* @example
+scene.playCSS();
+	*/
 	playCSS(exportCSS = true) {
 		exportCSS && this.exportCSS();
 		const elements = this._elements;
@@ -267,16 +255,4 @@ frame.getProperty("opacity"); // 0.5
 	}
 }
 
-/**
-* Specifies an element to synchronize sceneItem's timeline.
-* @memberof CSSItem
-* @instance
-* @name element
-* @example
-item.setSelector(".scene .item li:first-child");
-
-// same
-item.setElement(document.querySelector(".scene .item li:first-child"));
-*/
-
-export default CSSItem;
+export default SceneItem;

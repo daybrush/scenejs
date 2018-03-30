@@ -46,6 +46,21 @@ target.trigger("animate");
 
 		return this;
 	}
+	/**
+	* Dettach an event handler function for one or more events to target
+	* @param {String} name - event's name
+	* @param {Function} callback -  function to execute when the event is triggered.
+	* @return {EventTrigger} An Instance itself.
+	* @example
+const callback = function() {
+	console.log("animate");
+};
+target.on("animate", callback);
+
+target.off("animate", callback);
+target.off("animate");
+
+	*/
 	off(name, callback) {
 		if (!name) {
 			this._events = {};
@@ -65,6 +80,20 @@ target.trigger("animate");
 		}
 		return this;
 	}
+	/**
+	* Check if event handler has been attached once
+	* @param {String} name - event's name
+	* @return {Boolean} Returns true if at least one has been attached.
+	* @example
+const callback = function() {
+	console.log("animate");
+};
+console.log(target.hasOn("animate")); // false
+target.on("animate", callback);
+
+console.log(target.hasOn("animate")); // true
+
+	*/
 	hasOn(name) {
 		const events = this._events;
 		const event = events[name];

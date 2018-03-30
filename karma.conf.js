@@ -41,7 +41,7 @@ module.exports = function(config) {
 
 		reporters: ["mocha"],
 		webpackMiddleware: {
-			noInfo: true,
+			stats: "errors-only",
 		},
 	};
 

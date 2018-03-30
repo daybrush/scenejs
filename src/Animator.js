@@ -191,6 +191,10 @@ animator.({
 			this.state.prevTime = time;
 			this.tick(time);
 		});
+		/**
+		 * This event is fired when play animator.
+		 * @event Animator#play
+		 */
 		this.trigger("play");
 
 		return this;
@@ -201,18 +205,24 @@ animator.({
 	*/
 	pause() {
 		this.state.playState = "paused";
+		/**
+		 * This event is fired when animator is paused.
+		 * @event Animator#paused
+		 */
 		this.trigger("paused");
 		return this;
 	}
 	/**
-	* stop animator
-	* @return {Animator} An instance itself.
+	 * end animator
+	 * @return {Animator} An instance itself.
 	*/
-	stop() {
-		this.state.playState = "paused";
-		this.trigger("paused");
+	end() {
+		this.pause();
+		/**
+		 * This event is fired when animator is ended.
+		 * @event Animator#ended
+		 */
 		this.trigger("ended");
-		return this;
 	}
 	/**
 	* reset animator
@@ -220,7 +230,7 @@ animator.({
 	*/
 	reset() {
 		this.setTime(0);
-		this.stop();
+		this.pause();
 		return this;
 	}
 	/**
@@ -243,6 +253,14 @@ animator.currentTime // 10
 		this.state.currentTime = currentTime;
 		this.calculateIterationTime();
 
+		/**
+		 * This event is fired when the animator updates the time.
+		 * @event Animator#timeupdate
+		 * @param {Object} param The object of data to be sent to an event.
+		 * @param {Element} param.currentTime The total time that the animator is running.
+		 * @param {Element} param.time The iteration time during duration that the animator is running.
+		 * @param {Element} param.iterationCount The iteration count that the animator is running.
+		 */
 		this.trigger("timeupdate", {
 			currentTime,
 			time: this.getIterationTime(),
@@ -332,7 +350,7 @@ animator.currentTime // 10
 		this.state.prevTime = now * playSpeed;
 		this.setTime(currentTime);
 		if (this.isEnded()) {
-			this.stop();
+			this.end();
 		}
 		if (this.state.playState === "paused") {
 			return;
@@ -343,80 +361,4 @@ animator.currentTime // 10
 		});
 	}
 }
-/**
-* iterationTime
-* @memberof Animator
-* @instance
-* @name currentIterationTime
-* @readonly
-* @example
-animator.currentIterationTime // ....
-*/
-/**
-* playSpeed
-* @memberof Animator
-* @instance
-* @name playSpeed
-* @example
-animator.playSpeed = 1;// default speed
-animator.playSpeed = 2;// speed 2x
-*/
-/**
-* playState
-* @memberof Animator
-* @instance
-* @name playState
-* @example
-animator.play();
-animator.playState // => running
-
-animator.pause();
-animator.playState // => paused
-
-animator.stop();
-animator.playState // => paused
-*/
-/**
-* specifies the number of times an animation should be played
-* @memberof Animator
-* @instance
-* @name iterationCount
-* @example
-const animator = new Scene.Animator({
-	delay: 2,
-	diretion: "forwards",
-	duration: 2,
-	fillMode: "alternate",
-	iterationCount: 3,
-	easing: Scene.Animator.EASE,
-});
-animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 3 = 8
-animator.iterationCount = 2;
-animator.totalDuration; // delay + duration * iterationCount =  2 + 2 * 2 = 6
-*/
-/**
-* Specifies how many seconds or milliseconds an animation takes to complete one cycle
-* @memberof Animator
-* @instance
-* @name duration
-*/
-/**
-* Specifies a style for the element when the animation is not playing (when it is finished, or when it has a delay)(none, forwards, backwards)
-* @memberof Animator
-* @instance
-* @name fillMode
-*/
-/**
-* Specifies whether an animation should play in reverse direction or alternate cycles(normal, reverse, alternate, alternate-reverse)
-* @memberof Animator
-* @instance
-* @name direction
-*/
-/**
-* specifies a delay for the start of an animation
-* @memberof Animator
-* @instance
-* @name delay
-*/
-
 export default Animator;

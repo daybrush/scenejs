@@ -1,11 +1,14 @@
-import Scene from "../Scene";
+import SceneWrapper from "../Scene";
 import SceneItem from "./SceneItem";
-import {has} from "../utils";
 import {SCENE_ROLES} from "../consts";
 
-class CSSScene extends Scene {
+/**
+* manage sceneItems and play Scene.
+* @extends Animator
+*/
+class Scene extends SceneWrapper {
 	newItem(name, options) {
-		if (has(this.items, name)) {
+		if (this.items[name]) {
 			return this.items[name];
 		}
 		const item = new SceneItem();
@@ -14,22 +17,17 @@ class CSSScene extends Scene {
 		item.setOptions(options);
 		return item;
 	}
-	setSelector(selectors, _itemName) {
-		let item;
-		let selector;
-		let itemName = _itemName;
+	/**
+	* Specifies an element to synchronize items' timeline.
+	* @param {Object} selectors - Selectors to find elements in items.
+	* @example
+item.setSelector("#id.class");
+	*/
+	setSelector(selectors) {
+		for (const selector in selectors) {
+			const itemName = selectors[selector];
+			const item = this.getItem(itemName);
 
-		if (typeof selectors === "string") {
-			item = this.getItem(itemName);
-			if (!item) {
-				return this;
-			}
-			item.setSelector(selectors);
-			return this;
-		}
-		for (selector in selectors) {
-			itemName = selectors[selector];
-			item = this.getItem(itemName);
 			if (!item) {
 				continue;
 			}
@@ -73,6 +71,11 @@ class CSSScene extends Scene {
 		}
 		return this;
 	}
+	/**
+	* play using the css animation and keyframes.
+	* @example
+scene.playCSS();
+	*/
 	playCSS() {
 		this.exportCSS();
 		const items = this.items;
@@ -87,4 +90,4 @@ class CSSScene extends Scene {
 SCENE_ROLES.transform = true;
 SCENE_ROLES.filter = true;
 
-export default CSSScene;
+export default Scene;

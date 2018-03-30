@@ -11,21 +11,11 @@ function getType(value) {
 	return TYPE_TEXT;
 }
 
-/**
-* Animation's Timeline with Frame
-* @extends Timeline
-*/
 class FrameTimeline extends Timeline {
 	constructor() {
 		super();
 		this.names = {};
 	}
-	/**
-	* update property names used in frames.
-	* @return {FrameTimeline} An instance itself
-	* @example
-timeline.update();
-	*/
 	update() {
 		const items = this.items;
 

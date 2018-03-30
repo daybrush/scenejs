@@ -1,5 +1,5 @@
-import Frame from "../Frame";
-import {convertCrossBrowserCSSObject} from "./utils";
+import FrameWrapper from "../Frame";
+import {TRANSFORM, FILTER} from "./consts";
 
 function toInnerProperties(obj) {
 	if (!obj) {
@@ -15,10 +15,10 @@ function toInnerProperties(obj) {
 
 /**
 * Animation's CSS Frame
-* @extends Frame
+* @extends Animator
 */
-class CSSFrame extends Frame {
-	toCSS() {
+class Frame extends FrameWrapper {
+	toCSSObject() {
 		const frameObject = this.toObject();
 		const cssObject = {};
 
@@ -30,9 +30,13 @@ class CSSFrame extends Frame {
 		const transform = toInnerProperties(frameObject.transform);
 		const filter = toInnerProperties(frameObject.filter);
 
-		transform && convertCrossBrowserCSSObject(cssObject, "transform", transform);
-		filter && convertCrossBrowserCSSObject(cssObject, "filter", filter);
+		TRANSFORM && (cssObject[TRANSFORM] = transform);
+		FILTER && (cssObject[FILTER] = filter);
 
+		return cssObject;
+	}
+	toCSS() {
+		const cssObject = this.toCSSObject();
 		const cssArray = [];
 
 		for (const name in cssObject) {
@@ -42,4 +46,4 @@ class CSSFrame extends Frame {
 	}
 }
 
-export default CSSFrame;
+export default Frame;

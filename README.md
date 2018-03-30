@@ -51,11 +51,6 @@ scene.play();
 scene.playCSS();
 ```
 
-## Plugins
-* [StopMotion](https://github.com/daybrush/scenejs-stopmotion)
-* GetterSetter
-* MovieEffect
-
 
 ## Support Browser
 

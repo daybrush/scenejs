@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Javascript Animation Library",
   "main": "dist/scene.js",
   "directories": {
@@ -12,12 +12,14 @@
     "test": "karma start",
     "test:chrome": "karma start --chrome",
     "build": "webpack && npm run release:latest",
-    "release": "npm run build && npm run release:current",
+    "deploy": "gh-pages -d ./demo --dest=./ --add ",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "doc": "rm -rf ./doc && jsdoc ./src ./src/css ./README.md -d doc -t ./template",
+    "release": "npm run build && npm run release:current && npm run release:doc && npm run deploy",
     "release:mkdir": "mkdir -p ./demo/release",
     "release:current": "npm run release:mkdir && rm -rf ./demo/release/$npm_package_version && cp -a ./dist/. ./demo/release/$npm_package_version",
-    "release:latest": "npm run release:mkdir && rm -rf ./demo/release/latest && cp -a ./dist/. ./demo/release/latest",
-    "deploy": "npm run release && gh-pages -d ./demo --dest=./ --add ",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "release:doc": "npm run doc && cp -a ./doc/. ./demo/release/$npm_package_version/doc &&  cp -a ./doc/. ./demo/release/latest/doc",
+    "release:latest": "npm run release:mkdir && rm -rf ./demo/release/latest && cp -a ./dist/. ./demo/release/latest"
   },
   "repository": {
     "type": "git",
@@ -41,6 +43,7 @@
     "eslint-plugin-import": "^2.8.0",
     "gh-pages": "^1.1.0",
     "istanbul-instrumenter-loader": "^3.0.0",
+    "jsdoc": "^3.5.5",
     "karma": "^1.7.1",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -56,5 +59,8 @@
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^4.3.0",
     "webpack-cli": "^2.0.13"
+  },
+  "dependencies": {
+    "jsdoc-webpack-plugin": "0.0.2"
   }
 }
