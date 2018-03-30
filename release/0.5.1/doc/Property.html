@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Namespace: Property</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Namespace: Property</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>Property</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_property.js.html">utils/property.js</a>, <a href="utils_property.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".arrayToColorObject"><span class="type-signature">(static) </span>arrayToColorObject<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="PropertyObject.html">PropertyObject</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    convert array to PropertyObject[type=color].
+default model "rgba"
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+|
+
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ex) [0, 0, 0, 1]</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_property.js.html">utils/property.js</a>, <a href="utils_property.js.html#line82">line 82</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    PropertyObject[type=color]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>arrayToColorObject([0, 0, 0])
+// => PropertyObject(type="color", model="rgba", value=[0, 0, 0, 1], separator=",")</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".splitComma"><span class="type-signature">(static) </span>splitComma<span class="signature">(text)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    divide text by comma.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">text to divide</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_property.js.html">utils/property.js</a>, <a href="utils_property.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    divided texts
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>console.log(splitComma("a,b,c,d,e,f,g"));
+// ["a", "b", "c", "d", "e", "f", "g"]
+console.log(splitComma("'a,b',c,'d,e',f,g"));
+// ["'a,b'", "c", "'d,e'", "f", "g"]</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".splitSpace"><span class="type-signature">(static) </span>splitSpace<span class="signature">(text)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    divide text by space.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">text to divide</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_property.js.html">utils/property.js</a>, <a href="utils_property.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    divided texts
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>console.log(splitSpace("a b c d e f g"));
+// ["a", "b", "c", "d", "e", "f", "g"]
+console.log(splitSpace("'a,b' c 'd,e' f g"));
+// ["'a,b'", "c", "'d,e'", "f", "g"]</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".stringToColorObject"><span class="type-signature">(static) </span>stringToColorObject<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="PropertyObject.html">PropertyObject</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    convert text with parentheses to PropertyObject[type=color].
+If the values are not RGBA model, change them RGBA mdoel.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ex) "rgba(0,0,0,1)"</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_property.js.html">utils/property.js</a>, <a href="utils_property.js.html#line233">line 233</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    PropertyObject[type=color]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>stringToColorObject("rgba(0, 0, 0,1)")
+// => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".toBracketObject"><span class="type-signature">(static) </span>toBracketObject<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="PropertyObject.html">PropertyObject</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    convert text with parentheses to PropertyObject.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ex) "rgba(0,0,0,1)"</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_property.js.html">utils/property.js</a>, <a href="utils_property.js.html#line178">line 178</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    PropertyObject
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>toBracketObject("abcde(0, 0, 0,1)")
+// => PropertyObject(model="abcde", value=[0, 0, 0,1], separator=",")</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".toColorObject"><span class="type-signature">(static) </span>toColorObject<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="PropertyObject.html">PropertyObject</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    convert text with parentheses to PropertyObject[type=color].
+If the values are not RGBA model, change them RGBA mdoel.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">color value "rgba(0,0,0,1)"</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_property.js.html">utils/property.js</a>, <a href="utils_property.js.html#line116">line 116</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    PropertyObject[type=color]
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>toColorObject("rgba(0, 0, 0,1)")
+// => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".toPropertyObject"><span class="type-signature">(static) </span>toPropertyObject<span class="signature">(value)</span><span class="type-signature"> &rarr; {String|<a href="PropertyObject.html">PropertyObject</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    convert CSS Value to PropertyObject
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">it's text contains the array.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_property.js.html">utils/property.js</a>, <a href="utils_property.js.html#line265">line 265</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>referenced regular expression <a href="http://stackoverflow.com/questions/20215440/parse-css-gradient-rule-with-javascript-regex">http://stackoverflow.com/questions/20215440/parse-css-gradient-rule-with-javascript-regex</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+<ul>
+        <li>
+<div class="param-desc">
+    Not Array, Not Separator, Only Number & Unit
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    Array with Separator.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+    </dd>
+</dl>
+</li>
+    </ul>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>toPropertyObject("1px solid #000");
+// => PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)])</code></pre>
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Animator.html">Animator</a></li><li><a href="CSSFrame.html">CSSFrame</a></li><li><a href="CSSItem.html">CSSItem</a></li><li><a href="EventTrigger.html">EventTrigger</a></li><li><a href="Frame.html">Frame</a></li><li><a href="FrameTimeline.html">FrameTimeline</a></li><li><a href="PropertyObject.html">PropertyObject</a></li><li><a href="Scenario.html">Scenario</a></li><li><a href="Scene.html">Scene</a></li><li><a href="SceneItem.html">SceneItem</a></li><li><a href="Timeline.html">Timeline</a></li></ul><h3>Namespaces</h3><ul><li><a href="Color.html">Color</a></li><li><a href="Dot.html">Dot</a></li><li><a href="Property.html">Property</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 30 2018 15:00:35 GMT+0900 (KST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

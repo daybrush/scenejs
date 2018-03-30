@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Namespace: Dot</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Namespace: Dot</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>Dot</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_dot.js.html">utils/dot.js</a>, <a href="utils_dot.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".dot"><span class="type-signature">(static) </span>dot<span class="signature">(a1, a2, b1, b2)</span><span class="type-signature"> &rarr; {String|<a href="PropertyObject.html">PropertyObject</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    The dot product of a1 and a2 for the b1 and b2.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>a1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Number</span>
+|
+
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">value1</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>a2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Number</span>
+|
+
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">value2</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>b1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">b1 ratio</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>b2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">b2 ratio</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_dot.js.html">utils/dot.js</a>, <a href="utils_dot.js.html#line135">line 135</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+<ul>
+        <li>
+<div class="param-desc">
+    Not Array, Not Separator, Only Number & Unit
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    Array with Separator.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+    </dd>
+</dl>
+</li>
+    </ul>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>dot(1, 3, 0.3, 0.7);
+// => 1.6</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".dotArray"><span class="type-signature">(static) </span>dotArray<span class="signature">(a1, a2, b1, b2)</span><span class="type-signature"> &rarr; {Array|Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    The dot product of Arrays
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>a1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">value1</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>a2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">value2</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>b1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">b1 ratio</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>b2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">b2 ratio</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_dot.js.html">utils/dot.js</a>, <a href="utils_dot.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Array.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>dotArray([0, 0, 0, 1],[50, 50, 50, 1],0.5, 0.5);
+// => [25, 25, 25, 1]</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".dotColor"><span class="type-signature">(static) </span>dotColor<span class="signature">(a1, a2, b1, b2)</span><span class="type-signature"> &rarr; {<a href="PropertyObject.html">PropertyObject</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    The dot product of PropertyObject(type=color)
+If the values are not RGBA model, change them RGBA mdoel.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>a1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">value1</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>a2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">value2</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>b1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">b1 ratio</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>b2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">b2 ratio</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_dot.js.html">utils/dot.js</a>, <a href="utils_dot.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    PropertyObject(type=color).
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var colorObject = ......; //PropertyObject(type=color, model="rgba", value=[254, 254, 254, 1]);
+dotColor("#000",  colorObject, 0.5, 0.5);
+// "#000" => PropertyObject(type=color, model="rgba", value=[0, 0, 0, 1]);
+// return => PropertyObject(type=color, model="rgba", value=[127, 127, 127, 1]);</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".dotObject"><span class="type-signature">(static) </span>dotObject<span class="signature">(a1, a2, b1, b2)</span><span class="type-signature"> &rarr; {<a href="PropertyObject.html">PropertyObject</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    The dot product of Objects
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>a1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">value1</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>a2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">value2</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>b1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">b1 ratio</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>b2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">b2 ratio</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_dot.js.html">utils/dot.js</a>, <a href="utils_dot.js.html#line99">line 99</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Array with Separator.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>dotObject(PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)]),
+PropertyObject(["9px", "solid", rgba(50, 50, 50, 1)]),
+0.5, 0.5);
+// => PropertyObject(["5px", "solid", rgba(25, 25, 25, 1)])</code></pre>
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Animator.html">Animator</a></li><li><a href="CSSFrame.html">CSSFrame</a></li><li><a href="CSSItem.html">CSSItem</a></li><li><a href="EventTrigger.html">EventTrigger</a></li><li><a href="Frame.html">Frame</a></li><li><a href="FrameTimeline.html">FrameTimeline</a></li><li><a href="PropertyObject.html">PropertyObject</a></li><li><a href="Scenario.html">Scenario</a></li><li><a href="Scene.html">Scene</a></li><li><a href="SceneItem.html">SceneItem</a></li><li><a href="Timeline.html">Timeline</a></li></ul><h3>Namespaces</h3><ul><li><a href="Color.html">Color</a></li><li><a href="Dot.html">Dot</a></li><li><a href="Property.html">Property</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 30 2018 15:00:35 GMT+0900 (KST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

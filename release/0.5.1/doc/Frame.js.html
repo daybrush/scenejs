@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Frame.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Frame.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {PROPERTY, SCENE_ROLES} from "./consts";
+import {isObject, isString, isUndefined, isArray, has} from "./utils";
+import {toPropertyObject, splitSpace} from "./utils/property";
+import PropertyObject from "./PropertyObject";
+
+function isPropertyObject(value) {
+	return value instanceof PropertyObject;
+}
+/* eslint-disable */
+function clone(target, toValue = false) {
+	return merge({}, target, toValue);
+}
+function merge(to, from, toValue = false) {
+	for (const name in from) {
+		const value = from[name];
+
+		if (isObject(value)) {
+			if (value instanceof PropertyObject) {
+				if (toValue) {
+					to[name] = value.toValue();
+				} else {
+					to[name] = value.clone();
+				}
+			} else if (isArray(value)) {
+				to[name] = value.slice();
+			} else if (isObject(to[name]) &amp;&amp; !(to[name] instanceof PropertyObject)) {
+				merge(to[name], value, toValue);
+			} else {
+				to[name] = clone(value, toValue);
+			}
+			continue;
+		}
+		to[name] = from[name];
+	}
+	return to;
+}
+/* eslint-enable */
+/**
+ * Animation's Frame
+ */
+class Frame {
+	/**
+	* Create an animation's frame.
+	* @param {Object} properties - properties
+	* @example
+let frame = new Scene.Frame({
+	display: "none"
+});
+	*/
+	constructor(properties) {
+		let role;
+
+		this.properties = {};
+
+		for (role in SCENE_ROLES) {
+			this.properties[role] = {};
+		}
+
+		this.load(properties);
+	}
+	/**
+	* load json of properties.
+	* @param {Object} properties - properties
+	* @return {Frame} An instance itself
+	* @example
+frame.load({
+	display: "none"
+});
+	*/
+	load(properties) {
+		if (properties &amp;&amp; !isObject(properties)) {
+			return this;
+		}
+
+		let value;
+		let property;
+
+		for (property in properties) {
+			value = properties[property];
+			if (has(SCENE_ROLES, property)) {
+				// role, properties
+				this.set(property, value);
+				continue;
+			}
+			if (isObject(value) &amp;&amp; !isArray(value) &amp;&amp; !isPropertyObject(value)) {
+				this.set(property, value);
+				continue;
+			}
+			// role, property, value
+			this._set(PROPERTY, property, value);
+		}
+		return this;
+	}
+	/**
+	* get property value
+	* @param {String} role - property role(property, transform, filter)
+	* @param {String} property - property name
+	* @return {Number|String|Scene.PropertyObejct} property value
+	* @example
+	frame.get("display") // => "none", "block", ....
+	*/
+	get(role, property) {
+		if (!property) {
+			if (role in SCENE_ROLES) {
+				return this.properties[role];
+			}
+			return this.properties[PROPERTY][role];
+		}
+		return this.properties[role] &amp;&amp; this.properties[role][property];
+	}
+	/**
+	* remove property value
+	* @param {String} role - property role(property, transform, filter)
+	* @param {String} property - property name
+	* @return {Frame} An instance itself
+	* @example
+	frame.remove("display")
+	*/
+	remove(role, property) {
+		if (!property) {
+			if (role in SCENE_ROLES) {
+				delete this.properties[role];
+			} else {
+				delete this.properties[PROPERTY][role];
+			}
+		} else {
+			delete this.properties[role][property];
+		}
+		return this;
+	}
+	_set(role, property, value) {
+		const name = role.trim();
+
+		if (!(name in this.properties)) {
+			this.properties[name] = {};
+		}
+		this.properties[name][property] = isString(value) ? toPropertyObject(value) : value;
+	}
+
+	/**
+	* set property
+	* @param {Object|String} role - property role(property, transform, filter)
+	* @param {Object|String} property - property name
+	* @param {Object|String} value - property value
+	* @return {Frame} An instance itself
+	* @example
+// one parameter
+frame.set({
+	display: "none",
+	transform: {
+		translate: "10px, 10px",
+		scale: "1",
+	},
+	filter: {
+		brightness: "50%",
+		grayscale: "100%"
+	}
+});
+
+// two parameters
+frame.set("transform", {
+	translate: "10px, 10px",
+	scale: "1",
+});
+
+// three parameters
+frame.set("property", "display", "none");
+	*/
+	set(role, property, value) {
+		let name;
+
+		if (isObject(role)) {
+			this.load(role);
+			return this;
+		} else if (!property) {
+			const properties = role.split(";");
+			const length = properties.length;
+
+			for (let i = 0; i &lt; length; ++i) {
+				const matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
+
+				if (!matches || matches.length &lt; 3 || !matches[1]) {
+					continue;
+				}
+
+				this.set(matches[1].trim(), matches[2]);
+			}
+			return this;
+		}
+		if (isObject(property)) {
+			// role, properties
+			for (name in property) {
+				// role, property, value
+				this._set(role, name, property[name]);
+			}
+			return this;
+		}
+		if (isUndefined(value)) {
+			if (isString(property)) {
+				const arr = splitSpace(property).map(v => toPropertyObject(v));
+				const isProperties = arr.every(v => v.model &amp;&amp; v.type !== "color");
+
+				if (isProperties) {
+					arr.forEach(v => {
+						const model = v.model;
+
+						v.model = "";
+						v.prefix = "";
+						v.suffix = "";
+						this._set(role, model, v);
+					});
+					return this;
+				}
+			}
+			this._set("property", role, property);
+			return this;
+		}
+		this._set(role, property, value);
+		return this;
+	}
+	/**
+	* check that has property.
+	* @param {String} role - property role(property, transform, filter)
+	* @param {String} property - property name
+	* @return {Boolean} true : has property, false : has not property
+	* @example
+	frame.has("property", "display") // => true or false
+	*/
+	has(role, property) {
+		return this.properties[role] &amp;&amp; has(this.properties[role], property);
+	}
+	/**
+	* copy frame.
+	* @return {Scene.Frame} An instance of copy
+	* @example
+	frame.copy();
+	*/
+	clone() {
+		const frame = new Frame();
+
+		frame.merge(this);
+
+		return frame;
+	}
+	/**
+	* merge one frame to other frame.
+	* @param {Scene.Frame} frame - target frame.
+	* @return {Scene.Frame} An instance itself
+	* @example
+	frame.merge(frame2);
+	*/
+	merge(frame) {
+		const properties = this.properties;
+		const frameProperties = frame.properties;
+
+		if (!frameProperties) {
+			return this;
+		}
+		merge(properties, frameProperties);
+
+		return this;
+	}
+	toObject() {
+		return clone(this.properties, true);
+	}
+}
+export default Frame;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Animator.html">Animator</a></li><li><a href="CSSFrame.html">CSSFrame</a></li><li><a href="CSSItem.html">CSSItem</a></li><li><a href="EventTrigger.html">EventTrigger</a></li><li><a href="Frame.html">Frame</a></li><li><a href="FrameTimeline.html">FrameTimeline</a></li><li><a href="PropertyObject.html">PropertyObject</a></li><li><a href="Scenario.html">Scenario</a></li><li><a href="Scene.html">Scene</a></li><li><a href="SceneItem.html">SceneItem</a></li><li><a href="Timeline.html">Timeline</a></li></ul><h3>Namespaces</h3><ul><li><a href="Color.html">Color</a></li><li><a href="Dot.html">Dot</a></li><li><a href="Property.html">Property</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 30 2018 15:00:35 GMT+0900 (KST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
