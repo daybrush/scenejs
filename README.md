@@ -63,6 +63,10 @@ scene.playCSS();
 * [Cube](https://daybrush.github.io/scenejs/example/cube.html)
 * [Shape](https://daybrush.github.io/scenejs/example/shape.html)
 
+
+## Documents
+* [API documentation](https://daybrush.github.io/scenejs/release/latest/doc/)
+
 ## How to use
 ### Installation with npm
 
