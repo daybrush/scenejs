@@ -298,6 +298,12 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
             var members = find({kind:'member', memberof: item.longname});
             var docdash = env && env.conf && env.conf.docdash || {};
 
+            if (item.kind === "event") {
+                if (item.inherits) {
+                    return;
+                }
+            }
+
             if ( !hasOwnProp.call(item, 'longname') ) {
                 itemsNav += '<li>' + linktoFn('', item.name);
                 itemsNav += '</li>';
@@ -319,9 +325,11 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
 
                 if (methods.length) {
                     itemsNav += "<ul class='methods'>";
-
+                    // methods.sort(method => {
+                    //     return method.inherits ? 1 : -1;
+                    // });
                     methods.forEach(function (method) {
-                        itemsNav += "<li data-type='method'>";
+                        itemsNav += `<li data-type='method' class="method ${method.inherits ? "inherits" : ""}">`;
                         itemsNav += linkto(method.longname, method.name);
                         itemsNav += "</li>";
                     });

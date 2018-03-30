@@ -202,10 +202,24 @@ nav > ul {
   padding: 0 10px;
 }
 
-nav > ul > li > a {
-  color: #606;
+nav > ul > li > a { 
+  color: black;
+  font-weight: bold;
 }
-
+nav .method a {
+  font-family: sans-serif;
+  color: black;
+  font-weight: 600;
+}
+nav .method.inherits a {
+  color: #777;
+}
+nav .method.inherits a:after {
+  content: "ⓘ";
+  margin-left: 5px;
+  font-size: 50%;
+  
+}
 nav ul ul {
   margin-bottom: 10px
 }
