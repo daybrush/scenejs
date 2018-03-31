@@ -21,6 +21,54 @@ describe("item Test", function() {
             expect(item.get(0, "a")).to.be.equals(1);
             expect(item.get(1, "display")).to.be.equals("block");
         });
+        it("should check array item", function() {
+            const item = new SceneItem([{
+                a: 1,
+            }]);
+            const item2 = new SceneItem([
+                {
+                    a: 1,
+                },
+                {
+                    a: 2,
+                },
+                {
+                    a: 3,
+                }
+            ]);
+            const item3 = new SceneItem([
+                {
+                    a: 1,
+                },
+                {
+                    a: 2,
+                },
+                {
+                    a: 3,
+                }
+            ], {
+                duration: 2
+            });
+
+            expect(item.get(0, "a")).to.be.equals(1);
+            expect(item.getDuration()).to.be.equals(0);
+
+            expect(item2.get(0, "a")).to.be.equals(1);
+            expect(item2.get(100, "a")).to.be.equals(3);
+            expect(item2.get("0%", "a")).to.be.equals(1);
+            expect(item2.get("50%", "a")).to.be.equals(2);
+            expect(item2.get("100%", "a")).to.be.equals(3);
+            expect(item2.get("from", "a")).to.be.equals(1);
+            expect(item2.get("to", "a")).to.be.equals(3);
+            expect(item2.getDuration()).to.be.equals(100);
+
+            expect(item3.get(0, "a")).to.be.equals(1);
+            expect(item3.get(1, "a")).to.be.equals(2);
+            expect(item3.get(2, "a")).to.be.equals(3);
+            expect(item2.get("from", "a")).to.be.equals(1);
+            expect(item2.get("to", "a")).to.be.equals(3);
+            expect(item3.getDuration()).to.be.equals(2);
+        });
     });
     describe("test item method", function() {
         beforeEach(() => {
@@ -55,6 +103,12 @@ describe("item Test", function() {
             expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
             expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
             expect(item.getNowFrame(1).get("display")).to.be.equals("none");
+        });
+        it("should check 'getNowFrame' method(getDuration < time <= duration)", () => {
+            const item = this.item;
+
+            item.state.duration = 2;
+            expect(item.getDuration()).to.be.equals(2);
         });
         it("should check 'getFillFrame' method", () => {
             const item = this.item;

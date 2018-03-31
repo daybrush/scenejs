@@ -517,7 +517,7 @@ item.load({
 	*/
 	load(properties = {}, options = properties.options) {
 		this.setOptions(options);
-		if (Array.isArray(properties)) {
+		if (isArray(properties)) {
 			const length = properties.length;
 
 			for (let i = 0; i < length; ++i) {

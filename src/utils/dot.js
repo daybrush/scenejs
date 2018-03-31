@@ -3,7 +3,7 @@
 * @name Dot
 */
 
-import {isObject, splitUnit} from "../utils";
+import {isObject, isArray, splitUnit} from "../utils";
 import PropertyObject from "../PropertyObject";
 import {toColorObject} from "./property";
 
@@ -23,19 +23,21 @@ dotArray([0, 0, 0, 1],[50, 50, 50, 1],0.5, 0.5);
 // => [25, 25, 25, 1]
 */
 export const dotArray = function(a1, a2, b1, b2) {
-	const obj = [];
-	let v1;
-	let i;
-
-	for (i in a1) {
-		v1 = a1[i];
-		if (!(i in a2)) {
-			obj[i] = v1;
-		} else {
-			obj[i] = dot(v1, a2[i], b1, b2);
-		}
+	if (b2 === 0) {
+		return a2;
 	}
-	return obj;
+	if (!isArray(a2)) {
+		return a1;
+	}
+	const length = a2.length;
+
+	return a1.map((v1, i) => {
+		if (i >= length) {
+			return v1;
+		} else {
+			return dot(v1, a2[i], b1, b2);
+		}
+	});
 };
 
 /**
@@ -150,6 +152,8 @@ dot = function(a1, a2, b1, b2) {
 	// dot Object
 	if (a1 instanceof PropertyObject) {
 		return dotObject(a1, a2, b1, b2);
+	} else if (isArray(a1)) {
+		return dotArray(a1, a2, b1, b2);
 	}
 	// prevent division by zero.
 	if (b1 + b2 === 0) {

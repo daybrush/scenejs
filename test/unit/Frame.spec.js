@@ -86,6 +86,7 @@ describe("Frame Test", function() {
                     grayscale: "50%",
                 },
             });
+            frame2.merge({});
             frame2.merge(this.frame);
 
             expect(frame2.get("a")).to.be.equals(1);
@@ -104,10 +105,15 @@ describe("Frame Test", function() {
             expect(this.frame.get("a")).to.be.not.ok;
             expect(this.frame.get("transform", "scale")).to.be.ok;
 
-            // Given, When
+            // When
+            this.frame.remove("transform", "scale");
+            // Then
+            expect(this.frame.get("transform", "scale")).to.be.not.ok;
+
+
+            // When
             this.frame.remove("transform");
-            
-            //Then
+            // Then
             expect(this.frame.get("transform", "scale")).to.be.not.ok;
             expect(this.frame.get("transform")).to.be.not.ok;
         });
