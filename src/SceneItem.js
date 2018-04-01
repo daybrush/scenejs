@@ -240,7 +240,6 @@ item.removeFrame(time);
 
 		timeline.remove(time);
 		timeline.update();
-		delete this.frames[time];
 
 		return this;
 	}

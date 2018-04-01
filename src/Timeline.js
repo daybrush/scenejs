@@ -75,7 +75,9 @@ class Timeline {
 	* @return {Timeline} An instance itself
 	*/
 	remove(time) {
-		delete this.items[time];
+		const items = this.items;
+
+		delete items[time];
 		this.removeTime(time);
 		return this;
 	}

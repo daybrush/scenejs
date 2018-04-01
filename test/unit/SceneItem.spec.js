@@ -136,6 +136,26 @@ describe("item Test", function() {
             expect(item.getFrame(0.7)).to.be.not.ok;
             expect(item.getFrame(1).get("display")).to.be.equals("none");
         });
+        it("should check 'hasFrame' method", () => {
+            const item = this.item;
+
+            expect(item.hasFrame("0")).to.be.true;
+            expect(item.hasFrame("0.5")).to.be.true;
+            expect(item.hasFrame("1")).to.be.true;
+            expect(item.hasFrame("1.2")).to.be.false;
+        });
+        it("should check 'removeFrame' method", () => {
+            const item = this.item;
+
+            expect(item.hasFrame("0")).to.be.true;
+            expect(item.hasFrame("1")).to.be.true;
+            item.removeFrame(0);
+            expect(item.hasFrame("0")).to.be.false;
+            expect(item.getDuration()).to.be.equals(1);
+            item.removeFrame(1);
+            expect(item.hasFrame("1")).to.be.false;
+            expect(item.getDuration()).to.be.equals(0.5);
+        });
         it("should check 'set' method", () => {
             const item = this.item;
 
