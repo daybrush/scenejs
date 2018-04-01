@@ -1,4 +1,4 @@
-import {has, isObject, isString} from "./utils";
+import {isObject, isString} from "./utils";
 
 class PropertyObject {
 	/**
@@ -52,21 +52,7 @@ console.log(obj1.length);
 // 3
 	 */
 	size() {
-		const value = this.value;
-
-		if (Array.isArray(value)) {
-			return value.length;
-		}
-		let length = 0;
-		let i;
-
-		for (i in value) {
-			if (!has(value, i)) {
-				continue;
-			}
-			++length;
-		}
-		return length;
+		return this.value.length;
 	}
 	/**
 	* retrieve one of values at the index
@@ -105,15 +91,8 @@ const obj2 = obj1.clone();
 
 	 */
 	clone() {
-		const arr = [];
-		const value = this.value;
-		let v = "";
-		let i;
+		const arr = this.value.map(v => ((v instanceof PropertyObject) ? v.clone() : v));
 
-		for (i in value) {
-			v = value[i];
-			arr.push((v instanceof PropertyObject) ? v.clone() : v);
-		}
 		return new PropertyObject(arr, {
 			separator: this.separator,
 			prefix: this.prefix,
@@ -151,17 +130,9 @@ console.log(obj4.toValue());
 	obj4.join();  // =>   "100,100,100,0.5"
 	 */
 	join() {
-		const arr = [];
-		const value = this.value;
 		const separator = this.separator;
-		let v = "";
-		let i;
 
-		for (i in value) {
-			v = value[i];
-			arr.push((v instanceof PropertyObject) ? v.toValue() : v);
-		}
-		return arr.join(separator);
+		return this.value.map(v => ((v instanceof PropertyObject) ? v.toValue() : v)).join(separator);
 	}
 	/**
 	* executes a provided function once per array element.
@@ -179,25 +150,26 @@ var obj4 = new PropertyObject([100,100,100,0.5], {
 	"suffix" : ")"
 });
 
-obj4.join();  // =>   "100,100,100,0.5"
+obj4.forEach(t => {
+	console.log(t);
+});  // =>   "100,100,100,0.5"
 	*/
-	each(func) {
-		const arr = this.value;
-
-		for (const i in arr) {
-			func(arr[i], i, arr);
-		}
+	forEach(func) {
+		this.value.forEach(func);
+		return this;
 	}
 	multiply(number) {
 		const arr = this.value;
+		const length = arr.length;
 
-		for (const i in arr) {
+		for (let i = 0; i < length; ++i) {
 			if (arr[i] instanceof PropertyObject) {
 				arr[i].multiply(number);
 			} else {
 				arr[i] *= number;
 			}
 		}
+		return this;
 	}
 }
 export default PropertyObject;

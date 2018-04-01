@@ -128,6 +128,7 @@ export const dotObject = function(a1, a2, b1, b2) {
 	const arr = dotArray(value1, value2, b1, b2);
 
 	return new PropertyObject(arr, {
+		type: a1Type,
 		separator: a1.separator || a2.separator,
 		prefix: a1.prefix || a2.prefix,
 		suffix: a1.suffix || a2.suffix,

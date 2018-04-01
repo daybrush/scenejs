@@ -200,13 +200,13 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		const direction = (options.direction !== "none" && options.direction) || this.state.direction;
 		const cssArray = [];
 
-		cssArray.push(`${ANIMATION}-name: ${PREFIX}KEYFRAMES_${toId(id)}`);
-		cssArray.push(`${ANIMATION}-duration: ${duration / playSpeed}s`);
-		cssArray.push(`${ANIMATION}-delay: ${delay}s`);
-		cssArray.push(`${ANIMATION}-timing-function: ${easingName}`);
-		cssArray.push(`${ANIMATION}-fill-mode: ${fillMode}`);
-		cssArray.push(`${ANIMATION}-direction: ${direction}`);
-		cssArray.push(`${ANIMATION}-iteration-count: ${count}`);
+		cssArray.push(`${ANIMATION}-name: ${PREFIX}KEYFRAMES_${toId(id)};`);
+		cssArray.push(`${ANIMATION}-duration: ${duration / playSpeed}s;`);
+		cssArray.push(`${ANIMATION}-delay: ${delay}s;`);
+		cssArray.push(`${ANIMATION}-timing-function: ${easingName};`);
+		cssArray.push(`${ANIMATION}-fill-mode: ${fillMode};`);
+		cssArray.push(`${ANIMATION}-direction: ${direction};`);
+		cssArray.push(`${ANIMATION}-iteration-count: ${count};`);
 
 		const css = `${selector}.startAnimation {
 			${cssArray.join("")}
@@ -240,6 +240,9 @@ item.setCSS(0, ["opacity", "width", "height"]);
 scene.playCSS();
 	*/
 	playCSS(exportCSS = true) {
+		if (!ANIMATION) {
+			return this;
+		}
 		exportCSS && this.exportCSS();
 		const elements = this._elements;
 

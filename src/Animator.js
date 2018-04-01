@@ -54,7 +54,7 @@ const animator = new Animator({
 			iterationCount: 1,
 			delay: 0,
 			fillMode: "forwards",
-			direction: "none",
+			direction: "normal",
 			playSpeed: 1,
 			currentTime: 0,
 			currentIterationTime: -1,

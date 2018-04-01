@@ -145,12 +145,19 @@ describe("item Test", function() {
             item.set(1, "display", "block");
             item.set(1, "c", 1);
             item.set(1, "d:1;e:2;f:a;transform:translate(10px, 20px);");
+            item.set([0.8, 1, 1.2, 1.4], "c", 1);
+            item.set([0.8, 1, 1.2, 1.4], "g:1;h:5;transform:scale(5);");
             expect(item.getFrame(0.5).get("a")).to.be.equals(1);
             expect(item.getFrame(0.6).get("transform", "a")).to.be.equals(1);
             expect(item.getFrame(0.7).get("b")).to.be.equals("b");
             expect(item.getFrame(1).get("display")).to.be.equals("block");
             expect(item.getFrame(1).get("a")).to.be.equals(2);
             expect(parseFloat(item.getFrame(1).get("d"))).to.be.equals(1);
+            [0.8, 1, 1.2, 1.4].forEach(time => {
+                expect(item.getFrame(time).get("c")).to.be.equals(1);
+                expect(item.getFrame(time).get("g")).to.be.equals("1");
+                expect(item.getFrame(time).get("h")).to.be.equals("5");
+            });
         });
         it("should check 'getDuration' method", () => {
             // Given

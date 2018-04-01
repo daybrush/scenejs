@@ -30,8 +30,8 @@ class Frame extends FrameWrapper {
 		const transform = toInnerProperties(frameObject.transform);
 		const filter = toInnerProperties(frameObject.filter);
 
-		TRANSFORM && (cssObject[TRANSFORM] = transform);
-		FILTER && (cssObject[FILTER] = filter);
+		TRANSFORM && transform && (cssObject[TRANSFORM] = transform);
+		FILTER && filter && (cssObject[FILTER] = filter);
 
 		return cssObject;
 	}
