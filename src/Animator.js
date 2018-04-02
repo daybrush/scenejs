@@ -177,6 +177,7 @@ animator.({
 		this.on("ended", () => {
 			animator.play();
 		});
+		return this;
 	}
 	/**
 	* play animator
