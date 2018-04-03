@@ -276,6 +276,12 @@ describe("item Test", function() {
             expect(item.get("from", "a")).to.be.equal(1);
             expect(item.get("to", "a")).to.be.equal(2);
             expect(item.get("50%", "a")).to.be.equal(1.5);
+            expect(item.getNowFrame(0).get("a")).to.be.equal(1);
+            expect(item.getNowFrame(1).get("a")).to.be.equal(2);
+            expect(item.getNowFrame(0.5).get("a")).to.be.equal(1.5);
+            expect(item2.get(0, "a")).to.be.equal(1);
+            expect(item2.get(1, "a")).to.be.equal(2);
+            expect(item2.get("50%", "a")).to.be.equal(1.5);
             expect(item.getDelay()).to.be.equal(0);
             expect(item2.getDelay()).to.be.equal(1);
             expect(this.item.constructor).to.be.equals(item.constructor);

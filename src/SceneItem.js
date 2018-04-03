@@ -187,6 +187,7 @@ item.setFrame(time, frame);
 	*/
 	setFrame(time, frame) {
 		this.timeline.add(time, frame);
+		this.timeline.update();
 		return this;
 	}
 	_getTime(time, options = {}) {
