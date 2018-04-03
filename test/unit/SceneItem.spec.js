@@ -104,6 +104,30 @@ describe("item Test", function() {
             expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
             expect(item.getNowFrame(1).get("display")).to.be.equals("none");
         });
+        it("should check 'getNowFrame' method (no 0%)", () => {
+            const item = new SceneItem({
+                "0.5": {
+                    display: "none",
+                    a: 1.5,
+                },
+                1: {
+                    display: "block",
+                    a: 2,
+                },
+                1.2: {
+
+                }
+            });
+
+            expect(item.getNowFrame(0).get("display")).to.be.equals("none");
+            expect(item.getNowFrame(0).get("a")).to.be.equals(1.5);
+            expect(item.getNowFrame(0.4).get("display")).to.be.equals("none");
+            expect(item.getNowFrame(0.4).get("a")).to.be.equals(1.5);
+            expect(item.getNowFrame(0.6).get("display")).to.be.equals("none");
+            expect(item.getNowFrame(0.6).get("a")).to.be.equals(1.6);
+            expect(item.getNowFrame(1).get("display")).to.be.equals("block");
+            expect(item.getNowFrame(1).get("a")).to.be.equals(2);            
+        });
         it("should check 'getNowFrame' method(getDuration < time <= duration)", () => {
             const item = this.item;
 

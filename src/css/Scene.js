@@ -1,5 +1,6 @@
 import SceneWrapper from "../Scene";
 import SceneItem from "./SceneItem";
+import {ANIMATION} from "./consts";
 import {SCENE_ROLES} from "../consts";
 
 /**
@@ -73,16 +74,57 @@ item.setSelector("#id.class");
 	}
 	/**
 	* play using the css animation and keyframes.
+	* @param {boolean} [exportCSS=true] Check if you want to export css.
 	* @example
 scene.playCSS();
 	*/
-	playCSS() {
-		this.exportCSS();
+	playCSS(exportCSS = true) {
+		if (!ANIMATION || this.getPlayState() === "running") {
+			return this;
+		}
+		exportCSS && this.exportCSS();
+
 		const items = this.items;
+		let animationItem;
 
 		for (const id in items) {
-			items[id].playCSS(false);
+			const item = items[id];
+
+			item.playCSS(false);
+			if (item._animationend) {
+				animationItem = item;
+			}
 		}
+		if (!animationItem) {
+			return this;
+		}
+		this._animationend = e => {
+			this.end();
+		};
+		this._animationiteration = ({currentTime, iterationCount}) => {
+			this.state.currentTime = currentTime;
+			this.setCurrentIterationCount(iterationCount);
+		};
+		this._animationItem = animationItem;
+		animationItem.on("ended", this._animationend);
+		animationItem.on("iterated", this._animationiteration);
+		this.setPlayState("running");
+		return this;
+	}
+	end() {
+		super.end();
+
+		const animationItem = this._animationItem;
+
+		if (!animationItem) {
+			return this;
+		}
+		animationItem.off("ended", this._animationend);
+		animationItem.off("iterated", this._animationiteration);
+
+		this._animationItem = null;
+		this._animationend = null;
+		this._animationiteration = null;
 		return this;
 	}
 }

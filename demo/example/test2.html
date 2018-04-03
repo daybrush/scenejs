@@ -1,0 +1,47 @@
+<div class="rectangle"></div>
+<style>
+	body {
+  margin: 0;
+  padding: 0;
+}
+.rectangle {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: #f55;
+}
+</style>
+<script src="../release/latest/scene.js"></script>
+<script>
+	var scene = new Scene({
+		".rectangle": {
+			0: {
+				transform: "translate(0px, 0px)",
+			},
+			2: {
+				transform: "translate(200px, 0px)",
+			},
+			"options": {
+				easing: Scene.EASE_IN_OUT,
+				direction: "alternate-reverse",
+				fillMode: "both",
+				delay: 2,
+				iterationCount: 4,
+			}
+		}
+	}, {
+	easing: Scene.EASE_IN_OUT,
+	fillMode: "both",
+	iterationCount: 2,
+	selector: ".rectangle"
+});
+var item = scene.getItem(".rectangle");
+
+scene.on("ended", e => {
+	console.log("ended");
+});
+scene.on("iterated", e => {
+	console.log("it", e);
+});
+scene.play();
+</script>

@@ -151,24 +151,81 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		}
 		return this;
 	}
-	_toKeyframes(duration = this.getDuration()) {
+	_toKeyframes(duration = this.getDuration(), options = {}) {
 		const id = this.options.id || this.setId(makeId()).options.id;
 
 		if (!id) {
 			return "";
 		}
 		const itemDuration = this.getDuration();
-		const times = this.timeline.times;
+		const times = this.timeline.times.slice();
 		const playSpeed = this.state.playSpeed;
+		const isParent = typeof options.iterationCount !== "undefined";
+		const delay = (isParent && this.state.delay) || 0;
+		const direction = isParent && this.state.direction;
+		const keyframes = [];
+		let iterationCount = Math.max(parseInt(this.state.iterationCount, 10), 1);
 
-		const keyframes = times.map(time => {
-			const frame = this.getNowFrame(time, false);
+		(!this.getFrame(0)) && times.unshift(0);
+		(!this.getFrame(itemDuration)) && times.push(itemDuration);
+		const length = times.length;
+		const frames = times.map(time => this.getNowFrame(time, false).toCSS());
 
-			return `${time / playSpeed / duration * 100}%{${frame.toCSS()}}`;
-		});
+		iterationCount = isParent && iterationCount !== "infinite" ? iterationCount : 1;
 
-		if (itemDuration !== duration) {
-			keyframes.push(`100%{${this.getNowFrame(itemDuration, false).toCSS()}}`);
+		let shuttle = false;
+		let percent100 = false;
+		if (direction === "alternate-reverse" || direction === "alternate") {
+			shuttle = true;
+		}
+		if (delay) {
+			keyframes.push(`0%{${frames[0]}}`);
+			if (direction === "revsere" || direction === "alternate-reverse") {
+				keyframes.push(`${delay / playSpeed / duration * 100 - 0.00001}%{${frames[0]}}`);
+			}
+		}
+		for (let i = 0; i < iterationCount; ++i) {
+			const isOdd = i % 2 === 0;
+			const time = delay + i * itemDuration;
+			let reverse = false;
+
+			switch (direction) {
+				case "reverse":
+					reverse = true;
+					break;
+				case "alternate":
+					if (!isOdd) {
+						reverse = true;
+					}
+					break;
+				case "alternate-reverse":
+					if (isOdd) {
+						reverse = true;
+					}
+					break;
+				default:
+			}
+			for (let j = 0; j < length; ++j) {
+				const iterationIndex = reverse ? length - 1 - j : j;
+				const frame = frames[iterationIndex];
+				const iterationTime = times[iterationIndex];
+				const currentTime = time + (reverse ? itemDuration - iterationTime : iterationTime);
+				const percentage = currentTime / playSpeed / duration * 100;
+
+				percentage >= 100 && (percent100 = true);
+				if (i !== 0 && j === 0) {
+					if (shuttle) {
+						continue;
+					} else {
+						keyframes.push(`${percentage + 0.0001}%{${frame}}`);
+					}
+				} else {
+					keyframes.push(`${percentage}%{${frame}}`);
+				}
+			}
+			if (i + 1 === iterationCount && !percent100) {
+				keyframes.push(`100%{${frames[reverse ? 0 : length - 1]}}`);
+			}
 		}
 		return `@${KEYFRAMES} ${PREFIX}KEYFRAMES_${toId(id)}{
 			${keyframes.join("\n")}
@@ -192,7 +249,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		const isZeroDuration = duration === 0;
 		const selector = this.options.selector;
 		const playSpeed = (options.playSpeed || 1);
-		const delay = ((options.delay || 0) + this.state.delay) / playSpeed;
+		const delay = ((typeof options.delay === "undefined" ? this.state.delay : options.delay) || 0) / playSpeed;
 		const easingName = (!isZeroDuration && options.easing && options.easingName) ||
 			this.state.easingName;
 		const count = (!isZeroDuration && options.iterationCount) || this.state.iterationCount;
@@ -240,20 +297,56 @@ item.setCSS(0, ["opacity", "width", "height"]);
 scene.playCSS();
 	*/
 	playCSS(exportCSS = true) {
-		if (!ANIMATION) {
+		if (!ANIMATION || this.getPlayState() === "running") {
 			return this;
 		}
-		exportCSS && this.exportCSS();
 		const elements = this._elements;
 
 		if (!elements || !elements.length) {
 			return this;
 		}
+		if (this.isEnded()) {
+			this.setTime(0);
+		}
+		this.setPlayState("running");
+		exportCSS && this.exportCSS();
 		const length = elements.length;
 
 		for (let i = 0; i < length; ++i) {
 			elements[i].className += " startAnimation";
 		}
+
+		this.setPlayState("running");
+		this.trigger("play");
+
+		const duration = this.getDuration();
+
+		this._animationend = e => {
+			this.end();
+		};
+		this._animationiteration = e => {
+			const currentTime = e.elapsedTime;
+			const iterationCount = currentTime / duration;
+
+			this.state.currentTime = currentTime;
+			this.setCurrentIterationCount(iterationCount);
+		};
+		elements[0].addEventListener("animationend", this._animationend);
+		elements[0].addEventListener("animationiteration", this._animationiteration);
+		return this;
+	}
+	end() {
+		super.end();
+		const elements = this._elements;
+
+		if (!elements || !elements.length || !this._animationend) {
+			return this;
+		}
+		elements[0].removeEventListener("animationend", this._animationend);
+		elements[0].removeEventListener("animationiteration", this._animationiteration);
+
+		this._animationend = null;
+		this._animationiteration = null;
 		return this;
 	}
 }

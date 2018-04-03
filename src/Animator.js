@@ -119,27 +119,54 @@ animator.({
 	}
 	setFillMode(fillMode) {
 		this.state.fillMode = fillMode;
+		return this;
 	}
 	setDirection(direction) {
 		this.state.direction = direction;
+		return this;
 	}
 	setDelay(delay) {
 		this.state.delay = delay;
+		return this;
 	}
 	setIterationCount(iterationCount) {
 		this.state.iterationCount = iterationCount;
+		return this;
+	}
+	setCurrentIterationCount(iterationCount) {
+		const passIterationCount = parseInt(iterationCount, 10);
+
+		if (this.state.currentIterationCount < passIterationCount) {
+			this.trigger("iterated", {
+				currentTime: this.state.currentTime,
+				iterationCount: passIterationCount,
+			});
+		}
+		this.state.currentIterationCount = iterationCount;
 	}
 	setPlaySpeed(playSpeed) {
 		this.state.playSpeed = playSpeed;
+		return this;
+	}
+	setPlayState(playState) {
+		this.state.playState = playState;
+		return this;
 	}
 	setDuration(duration) {
 		this.state.duration = duration;
+		return this;
 	}
 	getDuration() {
 		return this.state.duration;
 	}
-	getDelay(delay) {
+	getDelay() {
 		return this.state.delay;
+	}
+	getPlaySpeed(speed) {
+		return this.state.playSpeed;
+	}
+	getPlayState(playState) {
+		return this.state.playState;
 	}
 	getIterationCount() {
 		return this.state.iterationCount;
@@ -278,12 +305,17 @@ animator.currentTime // 10
 		const {iterationCount, fillMode, direction} = this.state;
 		const duration = this.getDuration();
 		const activeTime = this.getActiveTime();
+		const isDelay = this.state.currentTime - this.state.delay < 0;
 		const currentIterationCount = duration === 0 ? 0 : activeTime / duration;
 		const isOdd = currentIterationCount % 2 >= 1;
 		let currentIterationTime = activeTime % duration;
 		let isAlternate = false;
 
-		this.state.currentIterationCount = currentIterationCount;
+		if (isDelay) {
+			this.setIterationTime(0);
+			return this;
+		}
+		this.setCurrentIterationCount(currentIterationCount);
 		// direction : normal, reverse, alternate, alternate-reverse
 		// fillMode : forwards, backwards, both, none
 		switch (direction) {
@@ -321,6 +353,7 @@ animator.currentTime // 10
 				currentIterationTime = 0;
 		}
 		this.setIterationTime(currentIterationTime);
+		return this;
 	}
 	caculateEasing(time) {
 		if (!this.state.easing) {

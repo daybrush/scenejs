@@ -305,20 +305,19 @@ item.merge(0, 1);
 		const times = timeline.times;
 		const length = times.length;
 
-		let prevFrame;
-		let nextFrame;
 
 		let prevTime = times[left];
 		let nextTime = times[right];
+		let prevFrame = timeline.get(prevTime);
+		let nextFrame = timeline.get(nextTime);
 
-		if (time < prevTime) {
-			return undefined;
-		}
-		for (let i = left; i >= 0; --i) {
-			prevTime = times[i];
-			prevFrame = timeline.get(prevTime);
-			if (prevFrame.has(role, property)) {
-				break;
+		if (time >= prevTime) {
+			for (let i = left; i >= 0; --i) {
+				prevTime = times[i];
+				prevFrame = timeline.get(prevTime);
+				if (prevFrame.has(role, property)) {
+					break;
+				}
 			}
 		}
 		for (let i = right; i < length; ++i) {
@@ -328,16 +327,12 @@ item.merge(0, 1);
 				break;
 			}
 		}
-		const prevValue = prevFrame.get(role, property);
+		const prevValue = prevFrame && prevFrame.get(role, property);
+		const nextValue = nextFrame && nextFrame.get(role, property);
 
 		if (isUndefined(prevValue)) {
-			return undefined;
+			return nextValue;
 		}
-		if (!nextFrame) {
-			return prevValue;
-		}
-		const nextValue = nextFrame.get(role, property);
-
 		if (isUndefined(nextValue) || prevValue === nextValue) {
 			return prevValue;
 		}
@@ -425,7 +420,7 @@ item.merge(0, 1);
 		const prevTime = this.timeline.getLastTime();
 		const nextTime = this.state.duration;
 		const prevFrame = this.getNowFrame(prevTime);
-		const nextFrame = this.getFrame(0) || this.getFillFrame(0);
+		const nextFrame = this.getNowFrame(0);
 		const frame = this.newFrame();
 		const names = this.timeline.names;
 
@@ -471,9 +466,6 @@ let item = new Scene.SceneItem({
 const frame = item.getNowFrame(1.7);
 	*/
 	getNowFrame(time, easing) {
-		if (this.timeline.getLastTime() < time && time <= this.state.duration) {
-			return this._getNowFrame(time, easing);
-		}
 		const indices = this.getNearIndex(time);
 
 		if (!indices) {
