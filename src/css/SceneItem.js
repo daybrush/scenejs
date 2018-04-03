@@ -175,6 +175,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 
 		let shuttle = false;
 		let percent100 = false;
+
 		if (direction === "alternate-reverse" || direction === "alternate") {
 			shuttle = true;
 		}

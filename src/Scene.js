@@ -8,18 +8,6 @@ import {has} from "./utils";
 */
 class Scene extends Animator {
 	/**
-	* add Role to Scene.
-	* @static
-	* @param {String} role - property role(property, transform, filter)
-	* @example
-Scene.addRole("property");
-Scene.addRole("transform");
-Scene.addRole("filter");
-	*/
-	static addRole(role) {
-		SceneItem.addRole(role);
-	}
-	/**
 	* Create a Scene
 	* @param {Object} [properties] - properties
 	* @example

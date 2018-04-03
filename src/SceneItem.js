@@ -533,6 +533,24 @@ item.load({
 		}
 		return this;
 	}
+	/**
+	* clone SceneItem.
+	* @return {Scene.SceneItem} An instance of clone
+	* @example
+	item.clone();
+	*/
+	clone(options = {}) {
+		const item = new this.constructor();
+		const times = this.timeline.times;
+
+		item.setOptions(this.state);
+		item.setOptions(options);
+		times.forEach(time => {
+			item.setFrame(time, this.getFrame(time).clone());
+		});
+
+		return item;
+	}
 }
 
 export default SceneItem;

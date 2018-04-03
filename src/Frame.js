@@ -230,13 +230,13 @@ frame.set("property", "display", "none");
 		return this.properties[role] && has(this.properties[role], property);
 	}
 	/**
-	* copy frame.
-	* @return {Scene.Frame} An instance of copy
+	* clone frame.
+	* @return {Scene.Frame} An instance of clone
 	* @example
-	frame.copy();
+	frame.clone();
 	*/
 	clone() {
-		const frame = new Frame();
+		const frame = new this.constructor();
 
 		frame.merge(this);
 

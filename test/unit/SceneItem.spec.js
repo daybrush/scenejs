@@ -261,6 +261,25 @@ describe("item Test", function() {
             expect(this.item.get("to", "a")).to.be.equal(2);
             expect(this.item.get("50%", "a")).to.be.equal(1.5);
         });
+        it("should check 'clone' method", () => {
+            // Given
+            const item = this.item.clone();
+            const item2 = this.item.clone({delay: 1});
+            // When
+            
+            // Then
+            expect(this.item.getDuration()).to.be.equals(1);
+            expect(item.getDuration()).to.be.equals(1);
+            expect(this.item.get("from", "a")).to.be.equal(1);
+            expect(this.item.get("to", "a")).to.be.equal(2);
+            expect(this.item.get("50%", "a")).to.be.equal(1.5);
+            expect(item.get("from", "a")).to.be.equal(1);
+            expect(item.get("to", "a")).to.be.equal(2);
+            expect(item.get("50%", "a")).to.be.equal(1.5);
+            expect(item.getDelay()).to.be.equal(0);
+            expect(item2.getDelay()).to.be.equal(1);
+            expect(this.item.constructor).to.be.equals(item.constructor);
+        });
     });
     describe("test item events", function() {
         beforeEach(() => {
