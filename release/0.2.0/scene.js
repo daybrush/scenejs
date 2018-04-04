@@ -682,31 +682,6 @@ var Animator = function (_EventTrigger) {
 			return this;
 		}
 	}, {
-		key: "setFillMode",
-		value: function setFillMode(fillMode) {
-			this.state.fillMode = fillMode;
-		}
-	}, {
-		key: "setDirection",
-		value: function setDirection(direction) {
-			this.state.direction = direction;
-		}
-	}, {
-		key: "setDelay",
-		value: function setDelay(delay) {
-			this.state.delay = delay;
-		}
-	}, {
-		key: "setDirection",
-		value: function setDirection(direction) {
-			this.state.direction = direction;
-		}
-	}, {
-		key: "setIterationCount",
-		value: function setIterationCount(iterationCount) {
-			this.state.iterationCount = iterationCount;
-		}
-	}, {
 		key: "setPlaySpeed",
 		value: function setPlaySpeed(playSpeed) {
 			this.state.playSpeed = playSpeed;
@@ -730,7 +705,7 @@ var Animator = function (_EventTrigger) {
 	}, {
 		key: "isEnded",
 		value: function isEnded() {
-			if (this.getTime() === 0 && this.state.playState === "paused") {
+			if (this.getTime() === 0 && this.playState === "paused") {
 				return true;
 			} else if (this.getTime() < this.getTotalDuration()) {
 				return false;
@@ -740,7 +715,7 @@ var Animator = function (_EventTrigger) {
 	}, {
 		key: "isPaused",
 		value: function isPaused() {
-			return this.state.playState === "paused";
+			return this.playState === "paused";
 		}
 	}, {
 		key: "setNext",
@@ -762,7 +737,7 @@ var Animator = function (_EventTrigger) {
 			if (this.isEnded()) {
 				this.setTime(0);
 			}
-			this.state.playState = "running";
+			this.playState = "running";
 			requestAnimFrame(function (time) {
 				_this2.state.prevTime = time;
 				_this2.tick(time);
@@ -779,7 +754,7 @@ var Animator = function (_EventTrigger) {
 	}, {
 		key: "pause",
 		value: function pause() {
-			this.state.playState = "paused";
+			this.playState = "paused";
 			this.trigger("paused");
 			return this;
 		}
@@ -791,7 +766,7 @@ var Animator = function (_EventTrigger) {
 	}, {
 		key: "stop",
 		value: function stop() {
-			this.state.playState = "paused";
+			this.playState = "paused";
 			this.trigger("paused");
 			this.trigger("ended");
 			return this;
@@ -933,7 +908,7 @@ var Animator = function (_EventTrigger) {
 			if (this.isEnded()) {
 				this.stop();
 			}
-			if (this.state.playState === "paused") {
+			if (this.playState === "paused") {
 				return;
 			}
 

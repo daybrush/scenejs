@@ -32,7 +32,7 @@
 	}, {
 	easing: Scene.EASE_IN_OUT,
 	fillMode: "both",
-	iterationCount: 2,
+	iterationCount: 1,
 	selector: ".rectangle"
 });
 var item = scene.getItem(".rectangle");
@@ -41,7 +41,9 @@ scene.on("ended", e => {
 	console.log("ended");
 });
 scene.on("iterated", e => {
-	console.log("it", e);
+	console.log("iterated", e);
 });
-scene.play();
+scene.playCSS(true, {
+	direction: "reverse"
+});
 </script>
