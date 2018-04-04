@@ -172,7 +172,7 @@ frame.set("property", "display", "none");
 		if (isObject(role)) {
 			this.load(role);
 			return this;
-		} else if (!property) {
+		} else if (isUndefined(property)) {
 			const properties = role.split(";");
 			const length = properties.length;
 
@@ -207,7 +207,7 @@ frame.set("property", "display", "none");
 						v.model = "";
 						v.prefix = "";
 						v.suffix = "";
-						this._set(role, model, v);
+						this._set(role, model, v.size() === 1 ? v.get(0) : v);
 					});
 					return this;
 				}

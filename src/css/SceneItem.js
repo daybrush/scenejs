@@ -1,8 +1,19 @@
 import SceneItemWrapper from "../SceneItem";
 import {PREFIX} from "../consts";
-import {toId} from "./utils";
+import {toId, addClass, removeClass, hasClass} from "./utils";
 import Frame from "./Frame";
 import {KEYFRAMES, ANIMATION} from "./consts";
+
+const ANIMATION_PROPERTIES = {
+	fillMode: "fill-mode",
+	name: "name",
+	delay: "delay",
+	iterationCount: "iteration-count",
+	easing: "timing-function",
+	direction: "direction",
+	duration: "duration",
+	playState: "play-state",
+};
 
 function makeId() {
 	for (;;) {
@@ -14,7 +25,14 @@ function makeId() {
 		}
 	}
 }
+function makeAnimationProperties(properties) {
+	const cssArray = [];
 
+	for (const name in properties) {
+		cssArray.push(`${ANIMATION}-${ANIMATION_PROPERTIES[name] || name} : ${properties[name]};`);
+	}
+	return cssArray.join("");
+}
 /**
 * manage sceneItems and play Scene.
 * @alias SceneItem
@@ -256,18 +274,20 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		const count = (!isZeroDuration && options.iterationCount) || this.state.iterationCount;
 		const fillMode = (options.fillMode !== "forwards" && options.fillMode) || this.state.fillMode;
 		const direction = (options.direction !== "none" && options.direction) || this.state.direction;
-		const cssArray = [];
 
-		cssArray.push(`${ANIMATION}-name: ${PREFIX}KEYFRAMES_${toId(id)};`);
-		cssArray.push(`${ANIMATION}-duration: ${duration / playSpeed}s;`);
-		cssArray.push(`${ANIMATION}-delay: ${delay}s;`);
-		cssArray.push(`${ANIMATION}-timing-function: ${easingName};`);
-		cssArray.push(`${ANIMATION}-fill-mode: ${fillMode};`);
-		cssArray.push(`${ANIMATION}-direction: ${direction};`);
-		cssArray.push(`${ANIMATION}-iteration-count: ${count};`);
+
+		const cssText = makeAnimationProperties({
+			fillMode,
+			direction,
+			delay: `${delay}s`,
+			name: `${PREFIX}KEYFRAMES_${toId(id)}`,
+			duration: `${duration / playSpeed}s`,
+			easing: easingName,
+			iterationCount: count,
+		});
 
 		const css = `${selector}.startAnimation {
-			${cssArray.join("")}
+			${cssText}
 		}
 		${this._toKeyframes(duration, options)}`;
 
@@ -292,12 +312,24 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		}
 	}
 	/**
-	* play using the css animation and keyframes.
+	* Play using the css animation and keyframes.
 	* @param {boolean} [exportCSS=true] Check if you want to export css.
+	* @param {Object} [properties={}] The shorthand properties for six of the animation properties.
+	* @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
+	* @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
+	* @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
+	* @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
+	* @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
+	* @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+	* @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
 	* @example
-scene.playCSS();
+item.playCSS();
+item.playCSS(false, {
+	direction: "reverse",
+	fillMode: "forwards",
+});
 	*/
-	playCSS(exportCSS = true) {
+	playCSS(exportCSS = true, properties = {}) {
 		if (!ANIMATION || this.getPlayState() === "running") {
 			return this;
 		}
@@ -312,9 +344,24 @@ scene.playCSS();
 		this.setPlayState("running");
 		exportCSS && this.exportCSS();
 		const length = elements.length;
+		const cssText = makeAnimationProperties(properties);
 
 		for (let i = 0; i < length; ++i) {
-			elements[i].className += " startAnimation";
+			const element = elements[i];
+
+			element.style.cssText += cssText;
+			if (hasClass(element, "startAnimation")) {
+				removeClass(element, "startAnimation");
+				(el => {
+					requestAnimationFrame(() => {
+						requestAnimationFrame(() => {
+							addClass(el, "startAnimation");
+						});
+					});
+				})(element);
+			} else {
+				addClass(element, "startAnimation");
+			}
 		}
 
 		this.setPlayState("running");

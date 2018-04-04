@@ -64,7 +64,7 @@ const scene = new Scene({
 			const item = items[id];
 
 			item.setDelay(item.getDelay() * ratio);
-			item.setDuration(item.getActiveDuration() * ratio);
+			item.setDuration(item.getDuration() * ratio);
 		}
 		return this;
 	}

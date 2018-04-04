@@ -195,7 +195,7 @@ item.setFrame(time, frame);
 
 		if (isString(time)) {
 			if (isPercent(time)) {
-				!this.state.duration && (this.state.duration = duration);
+				!this.getDuration() && (this.state.duration = duration);
 				return parseFloat(time) / 100 * duration;
 			} else if (time === "from") {
 				return 0;

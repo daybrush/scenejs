@@ -73,12 +73,24 @@ item.setSelector("#id.class");
 		return this;
 	}
 	/**
-	* play using the css animation and keyframes.
+	* Play using the css animation and keyframes.
 	* @param {boolean} [exportCSS=true] Check if you want to export css.
+	* @param {Object} [properties={}] The shorthand properties for six of the animation properties.
+	* @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
+	* @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
+	* @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
+	* @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
+	* @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
+	* @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+	* @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
 	* @example
 scene.playCSS();
+scene.playCSS(false, {
+	direction: "reverse",
+	fillMode: "forwards",
+});
 	*/
-	playCSS(exportCSS = true) {
+	playCSS(exportCSS = true, properties = {}) {
 		if (!ANIMATION || this.getPlayState() === "running") {
 			return this;
 		}
@@ -90,7 +102,7 @@ scene.playCSS();
 		for (const id in items) {
 			const item = items[id];
 
-			item.playCSS(false);
+			item.playCSS(false, properties);
 			if (item._animationend) {
 				animationItem = item;
 			}

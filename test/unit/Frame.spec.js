@@ -65,13 +65,15 @@ describe("Frame Test", function() {
         it("should check set method", () => {
             // Given
             // When
-            this.frame.set("a :1; b:2 ; c :transform:translate(10px, 20px); d: 1; e : 2;");
+            this.frame.set("a :1; b:2 ; c :1;transform:translate(10px, 20px) scale(10px); d: 1; e : 2;");
             
             // Then
             expect(parseFloat(this.frame.get("a"))).to.be.equals(1);
             expect(parseFloat(this.frame.get("b"))).to.be.equals(2);
             expect(parseFloat(this.frame.get("d"))).to.be.equals(1);
             expect(parseFloat(this.frame.get("e"))).to.be.equals(2);
+            expect(this.frame.get("transform", "translate").toValue()).to.be.equals("10px,20px");
+            expect(this.frame.get("transform", "scale")).to.be.equals("10px");
         });
         it("sholud check clone method", () => {
             const frame2 = this.frame.clone();
