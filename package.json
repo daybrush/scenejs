@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "0.8.9",
+  "version": "0.8.11",
   "description": "Javascript Animation Library",
   "main": "dist/scene.js",
   "directories": {

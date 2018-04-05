@@ -148,9 +148,15 @@ scene.load({
 			if (name === "options") {
 				continue;
 			}
+			const object = properties[name];
+
+			if (object instanceof SceneItem) {
+				this.setItem(name, object);
+				continue;
+			}
 			const item = this.newItem(name);
 
-			item.load(properties[name]);
+			item.load(object);
 		}
 		this.setOptions(options);
 		return this;
