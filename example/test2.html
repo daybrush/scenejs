@@ -26,13 +26,13 @@
 				direction: "alternate-reverse",
 				fillMode: "both",
 				delay: 2,
-				iterationCount: 4,
+				iterationCount: 2,
 			}
 		}
 	}, {
 	easing: Scene.EASE_IN_OUT,
 	fillMode: "both",
-	iterationCount: 1,
+	iterationCount: 2,
 	selector: ".rectangle"
 });
 var item = scene.getItem(".rectangle");
@@ -43,7 +43,5 @@ scene.on("ended", e => {
 scene.on("iterated", e => {
 	console.log("iterated", e);
 });
-scene.playCSS(true, {
-	direction: "reverse"
-});
+scene.play();
 </script>
