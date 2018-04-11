@@ -16,11 +16,7 @@ function merge(to, from, toValue = false) {
 
 		if (isObject(value)) {
 			if (value instanceof PropertyObject) {
-				if (toValue) {
-					to[name] = value.toValue();
-				} else {
-					to[name] = value.clone();
-				}
+				to[name] = toValue ? value.toValue() : value.clone();
 			} else if (isArray(value)) {
 				to[name] = value.slice();
 			} else if (isObject(to[name]) && !(to[name] instanceof PropertyObject)) {
@@ -48,14 +44,10 @@ let frame = new Scene.Frame({
 });
 	*/
 	constructor(properties) {
-		let role;
-
 		this.properties = {};
-
-		for (role in SCENE_ROLES) {
+		for (const role in SCENE_ROLES) {
 			this.properties[role] = {};
 		}
-
 		this.load(properties);
 	}
 	/**
@@ -71,12 +63,9 @@ frame.load({
 		if (properties && !isObject(properties)) {
 			return this;
 		}
+		for (const property in properties) {
+			const value = properties[property];
 
-		let value;
-		let property;
-
-		for (property in properties) {
-			value = properties[property];
 			if (has(SCENE_ROLES, property)) {
 				// role, properties
 				this.set(property, value);
@@ -100,13 +89,12 @@ frame.load({
 	frame.get("display") // => "none", "block", ....
 	*/
 	get(role, property) {
-		if (!property) {
-			if (role in SCENE_ROLES) {
-				return this.properties[role];
-			}
-			return this.properties[PROPERTY][role];
+		if (property) {
+			return this.properties[role] && this.properties[role][property];
+		} else if (role in SCENE_ROLES) {
+			return this.properties[role];
 		}
-		return this.properties[role] && this.properties[role][property];
+		return this.properties[PROPERTY][role];
 	}
 	/**
 	* remove property value
@@ -117,14 +105,12 @@ frame.load({
 	frame.remove("display")
 	*/
 	remove(role, property) {
-		if (!property) {
-			if (role in SCENE_ROLES) {
-				delete this.properties[role];
-			} else {
-				delete this.properties[PROPERTY][role];
-			}
-		} else {
+		if (property) {
 			delete this.properties[role][property];
+		} else if (role in SCENE_ROLES) {
+			delete this.properties[role];
+		} else {
+			delete this.properties[PROPERTY][role];
 		}
 		return this;
 	}
@@ -167,8 +153,6 @@ frame.set("transform", {
 frame.set("property", "display", "none");
 	*/
 	set(role, property, value) {
-		let name;
-
 		if (isObject(role)) {
 			this.load(role);
 			return this;
@@ -189,7 +173,7 @@ frame.set("property", "display", "none");
 		}
 		if (isObject(property)) {
 			// role, properties
-			for (name in property) {
+			for (const name in property) {
 				// role, property, value
 				this._set(role, name, property[name]);
 			}

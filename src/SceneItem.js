@@ -300,8 +300,8 @@ item.merge(0, 1);
 		toFrame.merge(frame);
 		return this;
 	}
-	getNowValue(role, property, time, left = 0,
-		right = this.timeline.size(), easing = this.state.easing) {
+	getNowValue(role, property, time, left = this.timeline.size(),
+		right = 0, easing = this.state.easing) {
 		const timeline = this.timeline;
 		const times = timeline.times;
 		const length = times.length;
@@ -399,52 +399,6 @@ item.merge(0, 1);
 		}
 
 		return {left, right};
-	}
-	getFillFrame(fillText = 0) {
-		const frame = this.newFrame();
-		const names = this.timeline.names;
-		const roles = frame.properties;
-
-		for (const role in roles) {
-			const properties = names[role];
-
-			if (!properties) {
-				continue;
-			}
-			for (const name in properties) {
-				frame.set(role, name, getDefaultData(properties[name], fillText));
-			}
-		}
-		return frame;
-	}
-	_getNowFrame(time, easing) {
-		const prevTime = this.timeline.getLastTime();
-		const nextTime = this.state.duration;
-		const prevFrame = this.getNowFrame(prevTime);
-		const nextFrame = this.getNowFrame(0);
-		const frame = this.newFrame();
-		const names = this.timeline.names;
-
-		for (const role in names) {
-			const properties = names[role];
-
-			for (const name in properties) {
-				let nextValue = nextFrame.get(role, name);
-
-				if (typeof nextValue === "undefined") {
-					nextValue = getDefaultData(properties[name], 0);
-				}
-				frame.set(role, name, dotValue({
-					time,
-					prevTime,
-					nextTime,
-					easing,
-					prevValue: prevFrame.get(role, name),
-					nextValue,
-				}));
-			}
-		}
-		return frame;
 	}
 	/**
 	* Get frame of the current time
@@ -546,9 +500,7 @@ item.load({
 
 		item.setOptions(this.state);
 		item.setOptions(options);
-		times.forEach(time => {
-			item.setFrame(time, this.getFrame(time).clone());
-		});
+		times.forEach(time => item.setFrame(time, this.getFrame(time).clone()));
 
 		return item;
 	}

@@ -1,32 +1,3 @@
-const FUNCTIONS = {
-	"get": function(parent, _property, prefix = "") {
-		const property = prefix + _property;
-
-		if (parent) {
-			return function() {
-				return this[parent][property];
-			};
-		}
-		return function() {
-			return this[property];
-		};
-	},
-	"set": function(parent, _property, prefix = "") {
-		const property = prefix + _property;
-
-		if (parent) {
-			return function(value) {
-				this[parent][property] = value;
-				return this;
-			};
-		}
-		return function(value) {
-			this[property] = value;
-			return this;
-		};
-	},
-};
-
 export const isPercent = function(value) {
 	return ~value.search(/([0-9]|\.|-|e-|e\+)+%/g);
 };
@@ -53,8 +24,6 @@ export const splitUnit = function splitUnit(_value) {
 		const unit = v.replace(value, "") || "";
 
 		value = parseFloat(value);
-
-
 		return {unit, value};
 	} catch (e) {
 		return {unit: v};
@@ -64,24 +33,20 @@ export const splitUnit = function splitUnit(_value) {
 export const camelize = function camelize(str) {
 	return str.replace(/[\s-_]([a-z])/g, (all, letter) => letter.toUpperCase());
 };
-export const defineProperty = function(target, name, descriptor) {
-	Object.defineProperty(target, name, descriptor);
+export const defineGetter = function(target, name, parent) {
+	target[camelize(`get ${name}`)] = function() {
+		return (parent ? this[parent] : this)[name];
+	};
 };
-export const defineGetter = function({target, name, parent, prefix}) {
-	defineProperty(target, name, {
-		get: FUNCTIONS.get(parent, name, prefix),
-	});
+export const defineSetter = function(target, name, parent) {
+	target[camelize(`set ${name}`)] = function(value) {
+		parent ? (this[parent][name] = value) : (this[name] = value);
+		return this;
+	};
 };
-export const defineSetter = function({target, name, parent, prefix}) {
-	defineProperty(target, name, {
-		set: FUNCTIONS.set(parent, name, prefix),
-	});
-};
-export const defineGetterSetter = function({target, name, parent, prefix}) {
-	defineProperty(target, name, {
-		get: FUNCTIONS.get(parent, name, prefix),
-		set: FUNCTIONS.set(parent, name, prefix),
-	});
+export const defineGetterSetter = function(target, name, parent) {
+	defineGetter(target, name, parent);
+	defineSetter(target, name, parent);
 };
 export const fill = function(arr, value) {
 	const length = arr.length;

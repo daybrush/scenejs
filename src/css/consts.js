@@ -20,3 +20,4 @@ export const TRANSFORM = checkProperties(["webkit", "ms", "moz", "o"], "transfor
 export const FILTER = checkProperties(["webkit", "ms", "moz", "o"], "filter");
 export const ANIMATION = checkProperties(["webkit", "ms", "moz", "o"], "animation");
 export const KEYFRAMES = ANIMATION.replace("animation", "keyframes");
+export const START_ANIMATION = "startAnimation";

@@ -98,8 +98,6 @@ body {
   
   stroke: #ff8c3a;
 }
-.svg_circle circle#rotate_circle1 {
-}
 .svg_circle circle#rotate_circle2 {
 	stroke-width: 2;
   stroke: #3AA1BF;
@@ -278,13 +276,12 @@ const scene1 = new Scene({
 
 
 for (let i = 1; i <= 8; ++i) {
-	scene1.newItem(".sun_afterimage:nth-child(" + i + ")").load({
-		0 : {transform : {rotate: i* 45 + "deg", translate : "40px, 0px", scale : "0,1"}, width: "120px"},
+	scene1.newItem(`.sun_afterimage:nth-child(${i})`, {
+		easing : customTimingFunction,
+		selector: true
+	}).set({
+		0 : {transform : {rotate: i * 45 + "deg", translate : "40px, 0px", scale : "0,1"}, width: "120px"},
 		0.9 : {transform : {translate : "140px, 0px", scale : "1,1"}, width: "0px"},
-		options : {
-			easing : customTimingFunction,
-			selector: true
-		}
 	});
 }
 
@@ -297,12 +294,12 @@ const scene2_radius = [25 * 2 * Math.PI, 35 * 2 * Math.PI, 45 * 2 * Math.PI];
 const scene2_delay = 0.4;
 
 for (let i = 0; i < scene2_radius.length; ++i) {
-	const r = scene2_radius[i];
+	const radius = scene2_radius[i];
 
 	scene2.newItem("#rotate_circle" + (i + 1), {selector: true, easing: ease, delay: scene2_delay}).set({
 		0: "stroke-dasharray: 0 1000; stroke-dashoffset: 1;",
-		1: `stroke-dasharray: ${r} 1000; stroke-dashoffset: 1;"`,
-		2: `stroke-dashoffset: ${-r}`,
+		1: `stroke-dasharray: ${radius} 1000; stroke-dashoffset: 1;"`,
+		2: `stroke-dashoffset: ${-radius}`,
 	});
 }
 scene2.newItem("#stick", {easing: ease, selector: true}).set({
@@ -325,12 +322,12 @@ const scene3 = new Scene();
 const circles = document.querySelectorAll("#circles1 .circle");
 
 const circlesPosition = [
-{x:0, y:0, r: 100, delay: 0, duration: 1.2},
-{x:-30, y:-50, r: 40, delay: 0.3, duration: 0.9},
-{x:40, y:50, r: 50, delay: 0.5, duration: 0.9},
-{x:-40, y:60, r: 60, delay: 0.6, duration: 0.9},
-{x:70, y:-40, r: 50, delay: 0.8, duration: 1}
-]
+	{x:0, y:0, r: 100, delay: 0, duration: 1.2},
+	{x:-30, y:-50, r: 40, delay: 0.3, duration: 0.9},
+	{x:40, y:50, r: 50, delay: 0.5, duration: 0.9},
+	{x:-40, y:60, r: 60, delay: 0.6, duration: 0.9},
+	{x:70, y:-40, r: 50, delay: 0.8, duration: 1}
+];
 
 
 for (let i = 0; i < circles.length; ++i) {
@@ -359,9 +356,9 @@ scene3.on("play", function() {
 
 const scene4 = new Scene();
 const scene4_slice_circle = scene4.newItem("#slice_circle", {selector: true, easing: customTimingFunction});
-let scene4_duration = 0.3;
+const scene4_duration = 0.3;
 
-scene4_slice_circle.load({
+scene4_slice_circle.set({
 	0 : {transform : "scale(0,0)"},
 	0.3 : {transform : "scale(1,1)"}, 
 });
@@ -370,9 +367,11 @@ for(let i = 0; i <= 5; ++i) {
 	const clipArea = i * 30 ;
 	const sign = i % 2 == 0 ? 1 : -1;
 
-	scene4_slice_circle.set(0.3 + i * scene4_duration, {"clip": "rect("+clipArea+"px, 150px, 150px, 0px)", transform : "rotate(" + sign*10+"deg)"});
+	scene4_slice_circle.set(0.3 + i * scene4_duration, {
+		clip: "rect("+clipArea+"px, 150px, 150px, 0px)",
+		transform : "rotate(" + sign*10+"deg)"
+	});
 }
-scene4_slice_circle.update();
 
 scene4.on("play", function() {
 	text.innerHTML = "4";	

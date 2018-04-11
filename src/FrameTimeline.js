@@ -16,6 +16,11 @@ class FrameTimeline extends Timeline {
 		super();
 		this.names = {};
 	}
+	hasName(role, name) {
+		const names = this.names;
+
+		return (role in names) && names[role] && (name in names[role]);
+	}
 	update() {
 		const items = this.items;
 

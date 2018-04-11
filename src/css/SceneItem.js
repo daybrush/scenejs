@@ -2,7 +2,7 @@ import SceneItemWrapper from "../SceneItem";
 import {PREFIX} from "../consts";
 import {toId, addClass, removeClass, hasClass} from "./utils";
 import Frame from "./Frame";
-import {KEYFRAMES, ANIMATION} from "./consts";
+import {KEYFRAMES, ANIMATION, START_ANIMATION} from "./consts";
 
 const ANIMATION_PROPERTIES = {
 	fillMode: "fill-mode",
@@ -133,24 +133,34 @@ item.setCSS(0, ["opacity"]);
 item.setCSS(0, ["opacity", "width", "height"]);
 	*/
 	setCSS(time, properties) {
+		this.set(time, this.fromCSS(properties));
+		return this;
+	}
+	/**
+	* get css styles of items's element
+	* @param {Array} properties - elements to synchronize item's timeline.
+	* @example
+item.setElement(document.querySelector("#id.class"));
+item.fromCSS(["opacity"]); // {opacity: 1}
+item.fromCSS(["opacity", "width", "height"]); // {opacity: 1, width: "100px", height: "100px"}
+	*/
+	fromCSS(properties) {
 		if (!properties || !properties.length) {
-			return this;
+			return {};
 		}
 		const elements = this._elements;
 
 		if (!elements || !elements.length) {
-			return this;
+			return {};
 		}
 		const cssObject = {};
 		const styles = window.getComputedStyle(elements[0]);
 		const length = properties.length;
 
-
 		for (let i = 0; i < length; ++i) {
 			cssObject[properties[i]] = styles[properties[i]];
 		}
-		this.set(time, cssObject);
-		return this;
+		return cssObject;
 	}
 	setOptions(options) {
 		super.setOptions(options);
@@ -182,7 +192,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		const delay = (isParent && this.state.delay) || 0;
 		const direction = isParent && this.state.direction;
 		const keyframes = [];
-		let iterationCount = Math.max(parseInt(this.state.iterationCount, 10), 1);
+		let iterationCount = this.state.iterationCount;
 
 		(!this.getFrame(0)) && times.unshift(0);
 		(!this.getFrame(itemDuration)) && times.push(itemDuration);
@@ -231,19 +241,27 @@ item.setCSS(0, ["opacity", "width", "height"]);
 				const currentTime = time + (reverse ? itemDuration - iterationTime : iterationTime);
 				const percentage = currentTime / playSpeed / duration * 100;
 
-				percentage >= 100 && (percent100 = true);
+				if (percentage > 100) {
+					break;
+				}
+				percentage === 100 && (percent100 = true);
 				if (i !== 0 && j === 0) {
-					if (shuttle) {
-						continue;
-					} else {
+					if (!shuttle) {
+						// not alternate and iterationCount > 1
 						keyframes.push(`${percentage + 0.0001}%{${frame}}`);
 					}
 				} else {
 					keyframes.push(`${percentage}%{${frame}}`);
 				}
 			}
-			if (i + 1 === iterationCount && !percent100) {
-				keyframes.push(`100%{${frames[reverse ? 0 : length - 1]}}`);
+			if (i + 1 > iterationCount && !percent100) {
+				const remain = iterationCount % 1;
+				const cssText = remain ?
+					this.getNowFrame(itemDuration * (reverse ? 1 - remain : remain)).toCSS() :
+					frames[reverse ? 0 : length - 1];
+
+				remain && keyframes.push(`${iterationCount * itemDuration / playSpeed / duration * 100}%{${cssText}}`);
+				keyframes.push(`100%{${cssText}}`);
 			}
 		}
 		return `@${KEYFRAMES} ${PREFIX}KEYFRAMES_${toId(id)}{
@@ -286,7 +304,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 			iterationCount: count,
 		});
 
-		const css = `${selector}.startAnimation {
+		const css = `${selector}.${START_ANIMATION} {
 			${cssText}
 		}
 		${this._toKeyframes(duration, options)}`;
@@ -350,17 +368,17 @@ item.playCSS(false, {
 			const element = elements[i];
 
 			element.style.cssText += cssText;
-			if (hasClass(element, "startAnimation")) {
-				removeClass(element, "startAnimation");
+			if (hasClass(element, START_ANIMATION)) {
+				removeClass(element, START_ANIMATION);
 				(el => {
 					requestAnimationFrame(() => {
 						requestAnimationFrame(() => {
-							addClass(el, "startAnimation");
+							addClass(el, START_ANIMATION);
 						});
 					});
 				})(element);
 			} else {
-				addClass(element, "startAnimation");
+				addClass(element, START_ANIMATION);
 			}
 		}
 

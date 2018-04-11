@@ -50,7 +50,7 @@ module.exports = function(config) {
 	if (config.coverage) {
 		karmaConfig.reporters.push("coverage-istanbul");
 		karmaConfig.coverageIstanbulReporter = {
-			reports: ["text-summary", "html", "lcovonly"],
+			reports: ["text-summary", "lcovonly"],
 			dir: "./coverage",
 		};
 		karmaConfig.webpack.module.rules.unshift({

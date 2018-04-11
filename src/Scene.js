@@ -47,7 +47,7 @@ const scene = new Scene({
 		for (const id in items) {
 			const item = items[id];
 
-			time = Math.max(time, item.getTotalDuration() / item.state.playSpeed);
+			time = Math.max(time, item.getTotalDuration() / item.getPlaySpeed());
 		}
 		return time;
 	}
