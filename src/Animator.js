@@ -67,12 +67,13 @@ const animator = new Animator({
 	}
 	setEasing(curveArray) {
 		if (Array.isArray(curveArray)) {
-			this.state.easingName = `cubic-bezier(${curveArray.join(" ,")})`;
+			this.state.easingName = `cubic-bezier(${curveArray.join(",")})`;
 			this.state.easing = cubicBezier(...curveArray);
 		} else {
 			this.state.easing = curveArray;
 			this.state.easingName = curveArray.easingName || "linear";
 		}
+		return this;
 	}
 	getEasingName() {
 		return this.state.easingName;
@@ -162,7 +163,7 @@ animator.({
 	getDelay() {
 		return this.state.delay;
 	}
-	getPlaySpeed(speed) {
+	getPlaySpeed() {
 		return this.state.playSpeed;
 	}
 	getPlayState(playState) {
