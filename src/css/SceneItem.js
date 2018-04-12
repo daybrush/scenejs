@@ -254,7 +254,7 @@ item.fromCSS(["opacity", "width", "height"]); // {opacity: 1, width: "100px", he
 					keyframes.push(`${percentage}%{${frame}}`);
 				}
 			}
-			if (i + 1 > iterationCount && !percent100) {
+			if (i + 1 >= iterationCount && !percent100) {
 				const remain = iterationCount % 1;
 				const cssText = remain ?
 					this.getNowFrame(itemDuration * (reverse ? 1 - remain : remain)).toCSS() :
