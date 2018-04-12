@@ -8,8 +8,7 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "coverage": "karma start --coverage",
-    "cov": "print-coveralls ./coverage/lcov.info",
+    "coverage": "karma start --coverage && print-coveralls",
     "test": "karma start",
     "test:chrome": "karma start --chrome",
     "build": "webpack && npm run release:latest",
@@ -57,7 +56,7 @@
     "karma-webpack": "^3.0.0",
     "mocha": "^4.0.1",
     "mocha-lcov-reporter": "^1.3.0",
-    "print-coveralls": "git+https://github.com/daybrush/print-coveralls.git",
+    "print-coveralls": "^1.1.0",
     "sinon": "^4.1.2",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^4.3.0",
