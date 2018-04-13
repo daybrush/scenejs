@@ -1,5 +1,6 @@
 import EventTrigger from "./EventTrigger";
 import cubicBezier from "./cubicBezier";
+import {defineGetter, defineGetterSetter} from "./utils";
 
 let lastTime = 0;
 
@@ -75,12 +76,6 @@ const animator = new Animator({
 		}
 		return this;
 	}
-	getEasingName() {
-		return this.state.easingName;
-	}
-	getEasing() {
-		return this.state.easing;
-	}
 	/**
 	* set animator's options.
 	* <br/>see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
@@ -118,22 +113,6 @@ animator.({
 
 		return this;
 	}
-	setFillMode(fillMode) {
-		this.state.fillMode = fillMode;
-		return this;
-	}
-	setDirection(direction) {
-		this.state.direction = direction;
-		return this;
-	}
-	setDelay(delay) {
-		this.state.delay = delay;
-		return this;
-	}
-	setIterationCount(iterationCount) {
-		this.state.iterationCount = iterationCount;
-		return this;
-	}
 	setCurrentIterationCount(iterationCount) {
 		const passIterationCount = parseInt(iterationCount, 10);
 
@@ -144,39 +123,6 @@ animator.({
 			});
 		}
 		this.state.currentIterationCount = iterationCount;
-	}
-	setPlaySpeed(playSpeed) {
-		this.state.playSpeed = playSpeed;
-		return this;
-	}
-	setPlayState(playState) {
-		this.state.playState = playState;
-		return this;
-	}
-	setDuration(duration) {
-		this.state.duration = duration;
-		return this;
-	}
-	getDuration() {
-		return this.state.duration;
-	}
-	getDelay() {
-		return this.state.delay;
-	}
-	getPlaySpeed() {
-		return this.state.playSpeed;
-	}
-	getPlayState(playState) {
-		return this.state.playState;
-	}
-	getIterationCount() {
-		return this.state.iterationCount;
-	}
-	getFillMode() {
-		return this.state.fillMode;
-	}
-	getDirection() {
-		return this.state.direction;
 	}
 	getTotalDuration() {
 		if (this.state.iterationCount === "infinite") {
@@ -396,4 +342,18 @@ animator.currentTime // 10
 		});
 	}
 }
+
+const AnimatorPrototype = Animator.prototype;
+
+defineGetterSetter(AnimatorPrototype, "delay", "state");
+defineGetterSetter(AnimatorPrototype, "fillMode", "state");
+defineGetterSetter(AnimatorPrototype, "iterationCount", "state");
+defineGetterSetter(AnimatorPrototype, "direction", "state");
+defineGetterSetter(AnimatorPrototype, "playState", "state");
+defineGetterSetter(AnimatorPrototype, "playSpeed", "state");
+defineGetterSetter(AnimatorPrototype, "duration", "state");
+defineGetter(AnimatorPrototype, "easingName", "state");
+defineGetter(AnimatorPrototype, "easing", "state");
+
+
 export default Animator;
