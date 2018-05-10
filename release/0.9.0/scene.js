@@ -1180,6 +1180,10 @@ var EventTrigger = function () {
 
 			var event = events[name];
 
+			if (data.length) {
+				data[0].type = name;
+				data[0].currentTarget = this;
+			}
 			event.forEach(function (callback) {
 				callback.apply(_this, data);
 			});
