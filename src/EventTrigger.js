@@ -122,6 +122,10 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2
 
 		const event = events[name];
 
+		if (data.length) {
+			data[0].type = name;
+			data[0].currentTarget = this;
+		}
 		event.forEach(callback => {
 			callback.apply(this, data);
 		});

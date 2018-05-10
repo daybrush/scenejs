@@ -255,7 +255,7 @@ animator.currentTime // 10
 		const isDelay = this.state.currentTime - this.state.delay < 0;
 		const currentIterationCount = duration === 0 ? 0 : activeTime / duration;
 		const isOdd = currentIterationCount % 2 >= 1;
-		let currentIterationTime = activeTime % duration;
+		let currentIterationTime = duration ? activeTime % duration : 0;
 		let isAlternate = false;
 
 		if (isDelay) {
