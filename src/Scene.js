@@ -115,6 +115,15 @@ const item = scene.newItem("item1")
 		for (const id in items) {
 			const item = items[id];
 
+
+			/**
+			 * This event is fired when timeupdate and animate.
+			 * @event Scene#animate
+			 * @param {Number} param.currentTime The total time that the animator is running.
+			 * @param {Number} param.time The iteration time during duration that the animator is running.
+			 * @param {Frame} param.frame frame of that time.
+			 * @param {SceneItem} param.target The scene item that timeupdate and animate.
+			 */
 			item.setTime(time * item.state.playSpeed, easing, this);
 		}
 		return this;

@@ -153,11 +153,19 @@ item.duration; // = item.timeline.size()
 		}
 		const currentTime = this.getTime();
 
+		/**
+		 * This event is fired when timeupdate and animate.
+		 * @event SceneItem#animate
+		 * @param {Number} param.currentTime The total time that the animator is running.
+		 * @param {Number} param.time The iteration time during duration that the animator is running.
+		 * @param {Frame} param.frame frame of that time.
+		 */
 		this.trigger("animate", {
 			frame,
 			currentTime,
 			time: iterationTime,
 		});
+
 		parent && parent.trigger("animate", {
 			frame,
 			currentTime,

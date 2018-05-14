@@ -15,7 +15,6 @@ function toInnerProperties(obj) {
 
 /**
 * Animation's CSS Frame
-* @extends Animator
 */
 class Frame extends FrameWrapper {
 	toCSSObject() {

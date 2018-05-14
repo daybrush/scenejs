@@ -16,7 +16,7 @@ body {
   padding: 0 20px;
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 16px;
-  line-height: 160%;
+  /* line-height: 160%; */
 }
 
 a,
@@ -202,14 +202,16 @@ nav > ul {
   padding: 0 10px;
 }
 
-nav > ul > li > a { 
+nav > ul > li > a {
+  font-size: 16px;
   color: black;
   font-weight: bold;
 }
-nav .method a {
+nav .method a, nav .event a {
   font-family: sans-serif;
   color: black;
   font-weight: 600;
+  font-size: 13px;
 }
 nav .method.inherits a {
   color: #777;
@@ -220,12 +222,20 @@ nav .method.inherits a:after {
   font-size: 50%;
   
 }
+nav ul h4, nav ul ul {
+  margin-left: 15px;
+}
 nav ul ul {
   margin-bottom: 10px
 }
+nav ul h4 {
+  font-size: 14px;
+  margin-top: 5px;
+  color: black;
+}
 
 nav ul ul + ul {
-  margin-top: -10px;
+  /* margin-top: -10px; */
 }
 
 nav ul ul a {
@@ -246,8 +256,10 @@ nav h2 {
 
 nav > h2 > a {
    display: block;
-   margin: 10px 0 -10px;
-   color: #606 !important;
+   margin: 30px 10px 20px;
+   font-size: 16px;
+   font-weight: bold;
+   color: #333 !important;
 }
 
 footer {

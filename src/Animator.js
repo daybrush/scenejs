@@ -117,7 +117,14 @@ animator.({
 		const passIterationCount = parseInt(iterationCount, 10);
 
 		if (this.state.currentIterationCount < passIterationCount) {
-			this.trigger("iterated", {
+			/**
+			* The event is fired when an iteration of an animation ends.
+			* @event Animator#iteration
+			* @param {Object} param The object of data to be sent to an event.
+			* @param {Number} param.currentTime The total time that the animator is running.
+			* @param {Number} param.iterationCount The iteration count that the animator is running.
+			*/
+			this.trigger("iteration", {
 				currentTime: this.state.currentTime,
 				iterationCount: passIterationCount,
 			});
@@ -232,9 +239,9 @@ animator.currentTime // 10
 		 * This event is fired when the animator updates the time.
 		 * @event Animator#timeupdate
 		 * @param {Object} param The object of data to be sent to an event.
-		 * @param {Element} param.currentTime The total time that the animator is running.
-		 * @param {Element} param.time The iteration time during duration that the animator is running.
-		 * @param {Element} param.iterationCount The iteration count that the animator is running.
+		 * @param {Number} param.currentTime The total time that the animator is running.
+		 * @param {Number} param.time The iteration time during duration that the animator is running.
+		 * @param {Number} param.iterationCount The iteration count that the animator is running.
 		 */
 		this.trigger("timeupdate", {
 			currentTime,

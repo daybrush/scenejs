@@ -296,7 +296,9 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
         items.forEach(function(item) {
             var methods = find({kind:'function', memberof: item.longname});
             var members = find({kind:'member', memberof: item.longname});
+            var events = find({kind:'event', memberof: item.longname});
             var docdash = env && env.conf && env.conf.docdash || {};
+
 
             if (item.kind === "event") {
                 if (item.inherits) {
@@ -311,6 +313,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
                 itemsNav += '<li>' + linktoFn(item.longname, item.name.replace(/^module:/, ''));
 
                 if (docdash.static && members.find(function (m) { return m.scope === 'static'; } )) {
+                    itemsNav += "<h4>Members</h4>";
                     itemsNav += "<ul class='members'>";
 
                     members.forEach(function (member) {
@@ -324,6 +327,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
                 }
 
                 if (methods.length) {
+                    itemsNav += "<h4>Methods</h4>";
                     itemsNav += "<ul class='methods'>";
                     // methods.sort(method => {
                     //     return method.inherits ? 1 : -1;
@@ -336,6 +340,20 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
 
                     itemsNav += "</ul>";
                 }
+                if (events.length) {
+                    itemsNav += "<h4>Events</h4>";
+                    itemsNav += "<ul class='events'>";
+                    // methods.sort(method => {
+                    //     return method.inherits ? 1 : -1;
+                    // });
+                    events.forEach(function (event) {
+                        itemsNav += `<li data-type='event' class="event">`;
+                        itemsNav += linkto(event.longname, event.name);
+                        itemsNav += "</li>";
+                    });
+
+                    itemsNav += "</ul>";
+                }
 
                 itemsNav += '</li>';
                 itemsSeen[item.longname] = true;
@@ -343,7 +361,8 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
         });
 
         if (itemsNav !== '') {
-            nav += '<h3>' + itemHeading + '</h3><ul>' + itemsNav + '</ul>';
+            nav += '<ul>' + itemsNav + '</ul>';
+            //nav += '<h3>' + itemHeading + '</h3><ul>' + itemsNav + '</ul>';
         }
     }
 
@@ -370,7 +389,6 @@ function linktoExternal(longName, name) {
  * @param {array<object>} members.tutorials
  * @param {array<object>} members.events
  * @param {array<object>} members.interfaces
- * @return {s
  ring} The HTML for the navigation sidebar.
  */
 
@@ -382,7 +400,7 @@ function buildNav(members) {
     nav += buildMemberNav(members.classes, 'Classes', seen, linkto);
     nav += buildMemberNav(members.modules, 'Modules', {}, linkto);
     nav += buildMemberNav(members.externals, 'Externals', seen, linktoExternal);
-    nav += buildMemberNav(members.events, 'Events', seen, linkto);
+    // nav += buildMemberNav(members.events, 'Events', seen, linkto);
     nav += buildMemberNav(members.namespaces, 'Namespaces', seen, linkto);
     nav += buildMemberNav(members.mixins, 'Mixins', seen, linkto);
     nav += buildMemberNav(members.tutorials, 'Tutorials', seenTutorials, linktoTutorial);
