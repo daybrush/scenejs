@@ -1,0 +1,12 @@
+.readme table {
+	border-spacing: 0;
+    border-collapse: collapse;
+}
+.readme * {
+	box-sizing: border-box;
+}
+.readme table th, .readme table td {
+	padding: 6px 13px;
+    border: 1px solid #ddd;
+
+}
