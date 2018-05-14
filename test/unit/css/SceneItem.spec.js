@@ -37,7 +37,7 @@ describe("CSS Frame Test", function() {
             this.item.setId(".a .b");
 
            // Then
-           expect(this.item.options.id).to.be.equals(".a .b");
+           expect(this.item.state.id).to.be.equals(".a .b");
            expect(this.item.options.selector).to.be.equals(`[data-scene-id="ab"]`);
            expect(this.item._elements[0].getAttribute("data-scene-id")).to.be.equal("ab");
         });
@@ -49,7 +49,7 @@ describe("CSS Frame Test", function() {
 
             // Then
             expect(this.item.options.selector).to.be.equals("div");
-            expect(this.item._elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.options.id);
+            expect(this.item._elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.state.id);
         });
         it("should check 'setElement' method", () => {
             // Given
@@ -57,7 +57,7 @@ describe("CSS Frame Test", function() {
             this.item.setElement(this.element);
             const id = this.item._elements[0].getAttribute("data-scene-id");
             // Then
-            expect(this.item.options.id).to.be.equals(id);
+            expect(this.item.state.id).to.be.equals(id);
             expect(this.item.options.selector).to.be.equals(`[data-scene-id="${id}"]`);
             expect(this.item._elements[0]).to.be.equals(this.element);
         });
@@ -68,7 +68,7 @@ describe("CSS Frame Test", function() {
             this.item.setElement(this.element);
             const id = this.item._elements[0].getAttribute("data-scene-id");
             // Then
-            expect(this.item.options.id).to.be.equals(id);
+            expect(this.item.state.id).to.be.equals(id);
             expect(this.item.options.selector).to.be.equals(`div`);
             expect(this.item._elements[0]).to.be.equals(this.element);
         });
@@ -88,7 +88,7 @@ describe("CSS Frame Test", function() {
             // Given
             // When
             this.item.exportCSS();
-            const id = toId(this.item.options.id);
+            const id = toId(this.item.state.id);
             // Then
             
             expect(document.querySelector(`#__SCENEJS_STYLE_${id}`)).to.be.ok;

@@ -94,7 +94,7 @@ describe("item Test", function() {
             this.item.setId(".a .b");
 
             // Then
-            expect(this.item.options.id).to.be.equals(".a .b");
+            expect(this.item.state.id).to.be.equals(".a .b");
         });
         it("should check 'getNowFrame' method", () => {
             const item = this.item;

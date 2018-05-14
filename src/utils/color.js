@@ -15,7 +15,7 @@ console.log(cutHex("#000000"))
 // "000000"
 */
 export const cutHex = function(hex) {
-	return (hex.charAt(0) === "#") ? hex.substring(1, 9) : hex;
+	return (hex.charAt(0) === "#") ? hex.substring(1) : hex;
 };
 /**
 * convert hex color to rgb color.
