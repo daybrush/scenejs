@@ -3678,7 +3678,7 @@ var SceneItem = function (_SceneItemWrapper) {
 			if (typeof elements === "string") {
 				return this.setSelector(elements);
 			}
-			var id = this.id;
+			var id = this.state.id;
 
 			this._elements = elements instanceof Element ? [elements] : elements;
 			this.setId(!id || id === "null" ? makeId() : id);
