@@ -118,7 +118,7 @@ item.setElement(document.querySelectorAll(".class"));
 		if (typeof elements === "string") {
 			return this.setSelector(elements);
 		}
-		const id = this.id;
+		const id = this.state.id;
 
 		this._elements = (elements instanceof Element) ? [elements] : elements;
 		this.setId((!id || id === "null") ? makeId() : id);
