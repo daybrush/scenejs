@@ -116,7 +116,7 @@ item.duration; // = item.timeline.size()
 		frame && frame.remove(role, properties);
 		return this;
 	}
-	animate(time, parentEasing) {
+	animate(time, parentEasing, parent) {
 		const iterationTime = this.getIterationTime();
 		const easing = this.getEasing() || parentEasing;
 		const frame = this.getNowFrame(iterationTime, easing);
@@ -124,17 +124,25 @@ item.duration; // = item.timeline.size()
 		if (!frame) {
 			return frame;
 		}
+		const currentTime = this.getTime();
+
 		this.trigger("animate", {
 			frame,
+			currentTime,
 			time: iterationTime,
-			currentTime: this.getTime(),
+		});
+		parent && parent.trigger("animate", {
+			frame,
+			currentTime,
+			target: this,
+			time: iterationTime,
 		});
 		return frame;
 	}
-	setTime(time, parentEasing) {
+	setTime(time, parentEasing, parent) {
 		super.setTime(time);
 
-		this.animate(time, parentEasing);
+		this.animate(time, parentEasing, parent);
 		return this;
 	}
 	/**

@@ -103,7 +103,7 @@ console.log(target.hasOn("animate")); // true
 	/**
 	* execute event handler
 	* @param {String} name - event's name
-	* @param {Function} [data] - event handler's additional parameter
+	* @param {Function} [...data] - event handler's additional parameter
 	* @return {EventTrigger} An Instance itself.
 	* @example
 target.on("animate", function(a1, a2) {
@@ -123,8 +123,11 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2
 		const event = events[name];
 
 		if (data.length) {
-			data[0].type = name;
-			data[0].currentTarget = this;
+			const target = data[0];
+
+			target.type = name;
+			target.currentTarget = this;
+			!target.target && (target.target = this);
 		}
 		event.forEach(callback => {
 			callback.apply(this, data);

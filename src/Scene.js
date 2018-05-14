@@ -115,7 +115,7 @@ const item = scene.newItem("item1")
 		for (const id in items) {
 			const item = items[id];
 
-			item.setTime(time * item.state.playSpeed, easing);
+			item.setTime(time * item.state.playSpeed, easing, this);
 		}
 		return this;
 	}
