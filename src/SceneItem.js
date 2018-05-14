@@ -76,9 +76,24 @@ let item = new Scene.SceneItem({
 		timeline.items = obj;
 		super.setDuration(duration);
 	}
+	/**
+	* set the unique indicator of the item.
+	* @param {String} id - the indicator of the item.
+	* @example
+const item = new SceneItem();
+
+item.setId("item");
+console.log(item.getId()); // item
+	*/
 	setId(id) {
 		this.state.id = id;
 	}
+	/**
+	* Specifies the unique indicator of the item.
+	* @example
+const item = scene.newItem("item");
+console.log(item.getId()); // item
+	*/
 	getId() {
 		return this.state.id;
 	}
@@ -108,6 +123,15 @@ item.duration; // = item.timeline.size()
 		this.updateFrame(frame);
 		return this;
 	}
+	/**
+	* get properties of the sceneItem at that time
+	* @param {Number} time - time
+	* @param {String|Object} role - property role or properties
+	* @param {String|Object} [properties] - property's name or properties
+	* @return {Number|String|Scene.PropertyObejct} property value
+	* @example
+item.duration; // = item.timeline.size()
+	*/
 	get(time, role, properties) {
 		const frame = this.getFrame(time);
 
