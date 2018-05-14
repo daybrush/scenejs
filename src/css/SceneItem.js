@@ -72,8 +72,8 @@ class SceneItem extends SceneItemWrapper {
 		}
 		return this;
 	}
-	animate(time, parentEasing) {
-		const frame = super.animate(time, parentEasing);
+	animate(time, parentEasing, parent) {
+		const frame = super.animate(time, parentEasing, parent);
 		const elements = this._elements;
 
 		if (!elements || !elements.length) {

@@ -94,4 +94,27 @@ describe("CSS Frame Test", function() {
             expect(document.querySelector(`#__SCENEJS_STYLE_${id}`)).to.be.ok;
         });
     });
+    describe("test SceneItem events", function() {
+        beforeEach(() => {
+            this.element = document.createElement("div");
+            document.body.appendChild(this.element);
+            this.item = new SceneItem({
+                0: {
+                    a: 1,
+                },
+                0.5: {
+                    a: 3,
+                },
+                1: {
+                    display: "block",
+                    a: 2,
+                },
+            });
+        });
+        afterEach(() => {
+            document.body.innerHTML = "";
+            this.element = null;
+            this.item = null;
+        });
+    });
 });
