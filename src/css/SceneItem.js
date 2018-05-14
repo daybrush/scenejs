@@ -55,7 +55,7 @@ class SceneItem extends SceneItemWrapper {
 		const elements = this._elements;
 
 		super.setId(id);
-		const sceneId = toId(this.options.id);
+		const sceneId = toId(this.state.id);
 
 		this.options.selector || (this.options.selector = `[data-scene-id="${sceneId}"]`);
 
@@ -99,8 +99,8 @@ class SceneItem extends SceneItemWrapper {
 item.setSelector("#id.class");
 	*/
 	setSelector(selector) {
-		this.options.selector = selector === true ? this.options.id :
-			(selector || `[data-scene-id="${this.options.id}"]`);
+		this.options.selector = selector === true ? this.state.id :
+			(selector || `[data-scene-id="${this.state.id}"]`);
 		this.setElement(document.querySelectorAll(selector));
 		return this;
 	}
@@ -173,14 +173,14 @@ item.fromCSS(["opacity", "width", "height"]); // {opacity: 1, width: "100px", he
 		if (elements) {
 			this.setElement(elements);
 		} if (selector === true) {
-			this.setSelector(this.options.id);
+			this.setSelector(this.state.id);
 		} else {
 			this.setSelector(selector);
 		}
 		return this;
 	}
 	_toKeyframes(duration = this.getDuration(), options = {}) {
-		const id = this.options.id || this.setId(makeId()).options.id;
+		const id = this.state.id || this.setId(makeId()).state.id;
 
 		if (!id) {
 			return "";
@@ -277,7 +277,7 @@ item.setCSS(0, ["opacity"]);
 item.setCSS(0, ["opacity", "width", "height"]);
 	*/
 	toCSS(duration = this.getDuration(), options = {}) {
-		const id = this.options.id || this.setId(makeId()).options.id;
+		const id = this.state.id || this.setId(makeId()).state.id;
 
 		if (!id) {
 			return "";
@@ -312,7 +312,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		return css;
 	}
 	exportCSS(duration = this.getDuration(), options = {}) {
-		const id = toId(this.options.id || this.setId(makeId()).options.id || "");
+		const id = toId(this.state.id || this.setId(makeId()).state.id || "");
 
 		if (!id) {
 			return;

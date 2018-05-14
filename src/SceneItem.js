@@ -77,7 +77,10 @@ let item = new Scene.SceneItem({
 		super.setDuration(duration);
 	}
 	setId(id) {
-		this.options.id = id;
+		this.state.id = id;
+	}
+	getId() {
+		return this.state.id;
 	}
 	/**
 	* set properties to the sceneItem at that time
