@@ -1,4 +1,13 @@
+const webpack = require("webpack");
 const UglifyJSWebpackPlugin = require("uglifyjs-webpack-plugin");
+const StringReplacePlugin = require("string-replace-webpack-plugin");
+const pkg = require("./package.json");
+
+const banner = `Copyright (c) 2018 ${pkg.author}
+license: ${pkg.license}
+author: ${pkg.author}
+repository: ${pkg.repository.url}
+@version ${pkg.version}`;
 
 const config = {
 	entry: {
@@ -21,6 +30,7 @@ const config = {
 				},
 			},
 		}),
+		new webpack.BannerPlugin(banner),
 	],
 	mode: "none",
 	module: {
@@ -29,6 +39,17 @@ const config = {
 				test: /\.js$/,
 				exclude: /(node_modules)/,
 				loader: "babel-loader",
+			},
+			{
+				test: /(\.js)$/,
+				loader: StringReplacePlugin.replace({
+					replacements: [
+						{
+							pattern: /#__VERSION__#/ig,
+							replacement: () => pkg.version,
+						},
+					],
+				}),
 			},
 		],
 	},

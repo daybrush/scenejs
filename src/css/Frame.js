@@ -20,7 +20,6 @@ class Frame extends FrameWrapper {
 	toCSSObject() {
 		const frameObject = this.toObject();
 		const cssObject = {};
-
 		const properties = frameObject.property;
 
 		for (const name in properties) {

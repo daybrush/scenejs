@@ -172,17 +172,42 @@ describe("item Test", function() {
             item.set(1, "d:1;e:2;f:a;transform:translate(10px, 20px);");
             item.set([0.8, 1, 1.2, 1.4], "c", 1);
             item.set([0.8, 1, 1.2, 1.4], "g:1;h:5;transform:scale(5);");
+            item.set({
+                5: {
+                    a: 1,
+                    b: 2,
+                },
+                10: {
+                    a: 4,
+                    b: 5,
+                }
+            });
             expect(item.getFrame(0.5).get("a")).to.be.equals(1);
             expect(item.getFrame(0.6).get("transform", "a")).to.be.equals(1);
             expect(item.getFrame(0.7).get("b")).to.be.equals("b");
             expect(item.getFrame(1).get("display")).to.be.equals("block");
             expect(item.getFrame(1).get("a")).to.be.equals(2);
+            expect(item.getFrame(5).get("a")).to.be.equals(1);
+            expect(item.getFrame(5).get("b")).to.be.equals(2);
+            expect(item.getFrame(10).get("a")).to.be.equals(4);
+            expect(item.getFrame(10).get("b")).to.be.equals(5);
             expect(parseFloat(item.getFrame(1).get("d"))).to.be.equals(1);
             [0.8, 1, 1.2, 1.4].forEach(time => {
                 expect(item.getFrame(time).get("c")).to.be.equals(1);
                 expect(item.getFrame(time).get("g")).to.be.equals("1");
                 expect(item.getFrame(time).get("h")).to.be.equals("5");
             });
+        });
+        it("should check 'remove' method", () => {
+            // Given
+            const item = this.item;
+
+            // When
+            item.remove(0, "a");
+
+            // Then
+            expect(item.get(0, "a")).to.be.not.equals(1);
+            
         });
         it("should check 'getDuration' method", () => {
             // Given
@@ -266,6 +291,49 @@ describe("item Test", function() {
             expect(item.getDelay()).to.be.equal(0);
             expect(item2.getDelay()).to.be.equal(1);
             expect(this.item.constructor).to.be.equals(item.constructor);
+        });
+        it (`should check 'copyFrame' method`, () => {
+            // Given
+            // When
+            this.item.copyFrame(0.5, 1.5);
+            this.item.copyFrame(0.7, 1.5);
+            this.item.copyFrame({
+                0.7: 1,
+                2: 4,
+                1.5: 1.8,
+            });
+
+            expect(this.item.getFrame(1.5).properties).to.be.deep.equals(this.item.getFrame(0.5).properties);
+            expect(this.item.getFrame(1.5).properties).to.be.deep.equals(this.item.getFrame(1.8).properties);
+        });
+        it (`should check 'mergeFrame' method`, () => {
+            /*
+            0: {
+                    a: 1,
+                    display: "block",
+                },
+                "0.5": {
+                    a: 1.5,
+                },
+                1: {
+                    display: "none",
+                    a: 2,
+                },
+            */
+            // Given
+            this.item.set(0.5, "b", 2);
+            this.item.set(0.7, "c", 3);
+            // When
+            this.item.mergeFrame(0.5, 1.5);
+            this.item.mergeFrame(1, 1.5);
+            this.item.mergeFrame({0.7: 1.5});
+            this.item.mergeFrame(0.8, 1.5);
+
+            expect(this.item.getFrame(1.5).get("a")).to.be.deep.equals(2);
+            expect(this.item.getFrame(1.5).get("b")).to.be.deep.equals(2);
+            expect(this.item.getFrame(1.5).get("c")).to.be.deep.equals(3);
+            expect(this.item.getFrame(1.5).get("display")).to.be.deep.equals("none");
+
         });
     });
     describe("test item events", function() {

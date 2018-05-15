@@ -132,10 +132,10 @@ describe("CSS Frame Test(", function() {
                     0: {
                         a: 1,
                     },
-                    0.25: {
+                    0.1: {
                         a: 3,
                     },
-                    0.5: {
+                    0.2: {
                         display: "block",
                         a: 2,
                     },

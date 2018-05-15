@@ -144,4 +144,6 @@ scene.playCSS(false, {
 SCENE_ROLES.transform = true;
 SCENE_ROLES.filter = true;
 
+Scene.VERSION = "#__VERSION__#";
+
 export default Scene;

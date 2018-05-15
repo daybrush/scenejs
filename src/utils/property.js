@@ -27,19 +27,19 @@ export const splitSpace = function(text) {
 	const matches = text.split(/("[^"]*"|'[^']*'|[^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\s+/g);
 	const length = matches.length;
 	const arr = [];
-	let value;
-	let arrValue;
 	let index = 0;
 
 	for (let i = 0; i < length; ++i) {
-		value = matches[i];
+		const value = matches[i];
+
 		if (isUndefined(value)) {
 			arr[index] && ++index;
 			continue;
 		} else if (!value) {
 			continue;
 		}
-		arrValue = arr[index];
+		const arrValue = arr[index];
+
 		arr[index] = arrValue ? arrValue + value : value;
 	}
 	return arr;
@@ -62,19 +62,19 @@ export const splitComma = function(text) {
 	const matches = text.split(/("[^"]*"|'[^']*'|[^,\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^,\s()]*)|\s*,\s*/g);
 	const length = matches.length;
 	const arr = [];
-	let value;
-	let arrValue;
 	let index = 0;
 
 	for (let i = 0; i < length; ++i) {
-		value = matches[i];
+		const value = matches[i];
+
 		if (isUndefined(value)) {
 			arr[index] && ++index;
 			continue;
 		} else if (!value) {
 			continue;
 		}
-		arrValue = arr[index];
+		const arrValue = arr[index];
+
 		arr[index] = arrValue ? arrValue + value : value;
 	}
 	return arr;
@@ -97,6 +97,7 @@ export const arrayToColorObject = function(arr) {
 		arr.type = "color";
 		arr.model = model;
 		arr.prefix = `${model}(`;
+		arr.suffix = ")";
 		return arr;
 	}
 
@@ -133,8 +134,6 @@ export const toColorObject = function(value) {
 		colorObject = arrayToColorObject(value);
 	} else if (isString(value)) {
 		return stringToColorObject(value);
-	} else {
-		return value;
 	}
 	let colorArray = colorObject.value;
 

@@ -282,10 +282,8 @@ item.removeFrame(time);
 item.copyFrame(0, 1);
 	*/
 	copyFrame(fromTime, toTime) {
-		let time;
-
 		if (isObject(fromTime)) {
-			for (time in fromTime) {
+			for (const time in fromTime) {
 				this.copyFrame(time, fromTime[time]);
 			}
 			return this;
@@ -310,10 +308,8 @@ item.copyFrame(0, 1);
 item.merge(0, 1);
 	*/
 	mergeFrame(fromTime, toTime) {
-		let time;
-
 		if (isObject(fromTime)) {
-			for (time in fromTime) {
+			for (const time in fromTime) {
 				this.mergeFrame(time, fromTime[time]);
 			}
 			return this;

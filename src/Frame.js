@@ -89,12 +89,14 @@ frame.load({
 	frame.get("display") // => "none", "block", ....
 	*/
 	get(role, property) {
+		const properties = this.properties;
+
 		if (property) {
-			return this.properties[role] && this.properties[role][property];
+			return properties[role] && properties[role][property];
 		} else if (role in SCENE_ROLES) {
-			return this.properties[role];
+			return properties[role];
 		}
-		return this.properties[PROPERTY][role];
+		return properties[PROPERTY][role];
 	}
 	/**
 	* remove property value
@@ -116,11 +118,10 @@ frame.load({
 	}
 	_set(role, property, value) {
 		const name = role.trim();
+		const properties = this.properties;
 
-		if (!(name in this.properties)) {
-			this.properties[name] = {};
-		}
-		this.properties[name][property] = isString(value) ? toPropertyObject(value) : value;
+		!(name in properties) && (properties[name] = {});
+		properties[name][property] = isString(value) ? toPropertyObject(value) : value;
 	}
 
 	/**
