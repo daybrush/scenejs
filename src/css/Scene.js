@@ -119,7 +119,7 @@ scene.playCSS(false, {
 		};
 		this._animationItem = animationItem;
 		animationItem.on("ended", this._animationend);
-		animationItem.on("iterated", this._animationiteration);
+		animationItem.on("iteration", this._animationiteration);
 		this.setPlayState("running");
 		return this;
 	}
@@ -132,7 +132,7 @@ scene.playCSS(false, {
 			return this;
 		}
 		animationItem.off("ended", this._animationend);
-		animationItem.off("iterated", this._animationiteration);
+		animationItem.off("iteration", this._animationiteration);
 
 		this._animationItem = null;
 		this._animationend = null;

@@ -86,6 +86,7 @@ const animator = new Animator({
 	* @param {String} [options.fillMode] - Specifies a style for the element when the animation is not playing (when it is finished, or when it has a delay)
 	* @param {Number|String} [options.iterationCount] - specifies the number of times an animation should be played
 	* @param {Object} [options.easing] - Specifies the speed curve of the animation
+	* @return {Animator} An instance itself.
 	* @example
 animator.({
 	delay: 2,
@@ -218,6 +219,7 @@ animator.({
 	/**
 	* set currentTime
 	* @param {Number} time - currentTime
+	* @return {Animator} An instance itself.
 	* @example
 animator.setTime(10);
 
@@ -248,6 +250,8 @@ animator.currentTime // 10
 			time: this.getIterationTime(),
 			iterationCount: this.getIterationCount(),
 		});
+
+		return this;
 	}
 	getTime() {
 		return this.state.currentTime;
