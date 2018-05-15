@@ -1,3 +1,10 @@
+/*!
+ * Copyright (c) 2018 Daybrush
+ * license: MIT
+ * author: Daybrush
+ * repository: https://github.com/daybrush/scenejs.git
+ * @version 0.11.0
+ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -307,7 +314,7 @@ var Scene = function (_SceneWrapper) {
 			};
 			this._animationItem = animationItem;
 			animationItem.on("ended", this._animationend);
-			animationItem.on("iterated", this._animationiteration);
+			animationItem.on("iteration", this._animationiteration);
 			this.setPlayState("running");
 			return this;
 		}
@@ -322,7 +329,7 @@ var Scene = function (_SceneWrapper) {
 				return this;
 			}
 			animationItem.off("ended", this._animationend);
-			animationItem.off("iterated", this._animationiteration);
+			animationItem.off("iteration", this._animationiteration);
 
 			this._animationItem = null;
 			this._animationend = null;
@@ -336,6 +343,8 @@ var Scene = function (_SceneWrapper) {
 
 _consts2.SCENE_ROLES.transform = true;
 _consts2.SCENE_ROLES.filter = true;
+
+Scene.VERSION = "#__VERSION__#";
 
 exports.default = Scene;
 
@@ -710,6 +719,7 @@ var Animator = function (_EventTrigger) {
   * @param {String} [options.fillMode] - Specifies a style for the element when the animation is not playing (when it is finished, or when it has a delay)
   * @param {Number|String} [options.iterationCount] - specifies the number of times an animation should be played
   * @param {Object} [options.easing] - Specifies the speed curve of the animation
+  * @return {Animator} An instance itself.
   * @example
   animator.({
   delay: 2,
@@ -871,6 +881,7 @@ var Animator = function (_EventTrigger) {
 		/**
   * set currentTime
   * @param {Number} time - currentTime
+  * @return {Animator} An instance itself.
   * @example
   animator.setTime(10);
   animator.currentTime // 10
@@ -903,6 +914,8 @@ var Animator = function (_EventTrigger) {
 				time: this.getIterationTime(),
 				iterationCount: this.getIterationCount()
 			});
+
+			return this;
 		}
 	}, {
 		key: "getTime",
@@ -1104,6 +1117,9 @@ var EventTrigger = function () {
 				}
 				return this;
 			}
+			if (!callback) {
+				return this;
+			}
 			var event = events[name];
 
 			event.push(callback);
@@ -1144,27 +1160,6 @@ var EventTrigger = function () {
 				}
 			}
 			return this;
-		}
-		/**
-  * Check if event handler has been attached once
-  * @param {String} name - event's name
-  * @return {Boolean} Returns true if at least one has been attached.
-  * @example
-  const callback = function() {
-  console.log("animate");
-  };
-  console.log(target.hasOn("animate")); // false
-  target.on("animate", callback);
-  console.log(target.hasOn("animate")); // true
-  	*/
-
-	}, {
-		key: "hasOn",
-		value: function hasOn(name) {
-			var events = this._events;
-			var event = events[name];
-
-			return event && event.length;
 		}
 		/**
   * execute event handler
@@ -1358,8 +1353,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-exports.getDefaultData = getDefaultData;
-
 var _Animator2 = __webpack_require__(3);
 
 var _Animator3 = _interopRequireDefault(_Animator2);
@@ -1370,17 +1363,11 @@ var _Frame2 = _interopRequireDefault(_Frame);
 
 var _utils = __webpack_require__(5);
 
-var _PropertyObject = __webpack_require__(11);
-
-var _PropertyObject2 = _interopRequireDefault(_PropertyObject);
-
 var _FrameTimeline = __webpack_require__(13);
 
 var _FrameTimeline2 = _interopRequireDefault(_FrameTimeline);
 
 var _dot = __webpack_require__(15);
-
-var _consts = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1390,26 +1377,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-function getDefaultData(infos) {
-	var fillText = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-	var type = infos.type,
-	    size = infos.size,
-	    separator = infos.separator;
-
-
-	if (type === _consts.TYPE_PROPERTY_OBJECT) {
-		return new _PropertyObject2.default((0, _utils.fill)(new Array(size), fillText), separator);
-	} else if (type === _consts.TYPE_ARRAY) {
-		return (0, _utils.fill)(new Array(size), fillText);
-	} else {
-		return fillText;
-	}
-}
 /**
 * manage Frame Timeline and play Timeline.
 * @extends Animator
 */
-
 var SceneItem = function (_Animator) {
 	_inherits(SceneItem, _Animator);
 
@@ -2351,7 +2322,7 @@ exports.default = Frame;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.TYPE_TEXT = exports.TYPE_ARRAY = exports.TYPE_PROPERTY_OBJECT = exports.EASE_IN_OUT = exports.EASE_OUT = exports.EASE_IN = exports.EASE = exports.LINEAR = exports.PLAY_DIRECTION = exports.FILL_MODE = exports.ANIMATION_PLAY_STATE = exports.SCENE_ROLES = exports.PROPERTY = exports.PREFIX = undefined;
+exports.EASE_IN_OUT = exports.EASE_OUT = exports.EASE_IN = exports.EASE = exports.LINEAR = exports.PLAY_DIRECTION = exports.FILL_MODE = exports.ANIMATION_PLAY_STATE = exports.SCENE_ROLES = exports.PROPERTY = exports.PREFIX = undefined;
 
 var _cubicBezier = __webpack_require__(6);
 
@@ -2373,9 +2344,9 @@ var EASE_IN = exports.EASE_IN = (0, _cubicBezier2.default)(0.42, 0, 1, 1);
 var EASE_OUT = exports.EASE_OUT = (0, _cubicBezier2.default)(0, 0, 0.58, 1);
 var EASE_IN_OUT = exports.EASE_IN_OUT = (0, _cubicBezier2.default)(0.42, 0, 0.58, 1);
 
-var TYPE_PROPERTY_OBJECT = exports.TYPE_PROPERTY_OBJECT = "propertyobject";
-var TYPE_ARRAY = exports.TYPE_ARRAY = "array";
-var TYPE_TEXT = exports.TYPE_TEXT = "text";
+// export const TYPE_PROPERTY_OBJECT = "propertyobject";
+// export const TYPE_ARRAY = "array";
+// export const TYPE_TEXT = "text";
 
 /***/ }),
 /* 10 */
@@ -2924,21 +2895,6 @@ var PropertyObject = function () {
 			this.value.forEach(func);
 			return this;
 		}
-	}, {
-		key: "multiply",
-		value: function multiply(number) {
-			var arr = this.value;
-			var length = arr.length;
-
-			for (var i = 0; i < length; ++i) {
-				if (arr[i] instanceof PropertyObject) {
-					arr[i].multiply(number);
-				} else {
-					arr[i] *= number;
-				}
-			}
-			return this;
-		}
 	}]);
 
 	return PropertyObject;
@@ -3077,15 +3033,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _PropertyObject = __webpack_require__(11);
-
-var _PropertyObject2 = _interopRequireDefault(_PropertyObject);
-
 var _Timeline2 = __webpack_require__(14);
 
 var _Timeline3 = _interopRequireDefault(_Timeline2);
-
-var _consts = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3094,15 +3044,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function getType(value) {
-	if (value instanceof _PropertyObject2.default) {
-		return _consts.TYPE_PROPERTY_OBJECT;
-	} else if (Array.isArray(value)) {
-		return _consts.TYPE_ARRAY;
-	}
-	return _consts.TYPE_TEXT;
-}
 
 var FrameTimeline = function (_Timeline) {
 	_inherits(FrameTimeline, _Timeline);
@@ -3147,12 +3088,7 @@ var FrameTimeline = function (_Timeline) {
 				var properties = roles[role];
 
 				for (var name in properties) {
-					var value = properties[name];
-					var type = getType(value);
-					var size = type === _consts.TYPE_PROPERTY_OBJECT && value.size() || type === _consts.TYPE_ARRAY && value.length || 0;
-					var separator = type === _consts.TYPE_PROPERTY_OBJECT && value.separator || "";
-
-					names[role][name] = { type: type, size: size, separator: separator };
+					names[role][name] = true;
 				}
 			}
 			return this;
