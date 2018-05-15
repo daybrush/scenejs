@@ -158,7 +158,6 @@ describe("Scene Test", function() {
 				}
 			};
             scene.on("animate", ({target, time, frame, currentTime}) => {
-				console.log(target);
                 items[target.getId()][parseInt(time, 10)] = true;
             });
 

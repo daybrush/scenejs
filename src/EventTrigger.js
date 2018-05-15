@@ -40,6 +40,9 @@ target.trigger("animate");
 			}
 			return this;
 		}
+		if (!callback) {
+			return this;	
+		}
 		const event = events[name];
 
 		event.push(callback);
@@ -79,26 +82,6 @@ target.off("animate");
 			}
 		}
 		return this;
-	}
-	/**
-	* Check if event handler has been attached once
-	* @param {String} name - event's name
-	* @return {Boolean} Returns true if at least one has been attached.
-	* @example
-const callback = function() {
-	console.log("animate");
-};
-console.log(target.hasOn("animate")); // false
-target.on("animate", callback);
-
-console.log(target.hasOn("animate")); // true
-
-	*/
-	hasOn(name) {
-		const events = this._events;
-		const event = events[name];
-
-		return event && event.length;
 	}
 	/**
 	* execute event handler

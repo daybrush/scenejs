@@ -41,8 +41,8 @@ var item = scene.getItem(".rectangle");
 scene.on("ended", e => {
 	console.log("ended");
 });
-scene.on("iterated", e => {
-	console.log("iterated", e);
+scene.on("iteration", e => {
+	console.log("iteration", e);
 });
 scene.play();
 </script>

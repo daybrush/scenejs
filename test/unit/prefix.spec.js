@@ -1,5 +1,5 @@
 /* eslint-disable */
-import "./PrefixInjection";
+import "./injections/PrefixInjection";
 import {TRANSFORM, FILTER, ANIMATION, KEYFRAMES} from "../../src/css/consts";
 
 
