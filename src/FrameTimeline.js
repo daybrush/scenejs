@@ -1,15 +1,4 @@
-import PropertyObject from "./PropertyObject";
 import Timeline from "./Timeline";
-import {TYPE_PROPERTY_OBJECT, TYPE_ARRAY, TYPE_TEXT} from "./consts";
-
-function getType(value) {
-	if (value instanceof PropertyObject) {
-		return TYPE_PROPERTY_OBJECT;
-	} else if (Array.isArray(value)) {
-		return TYPE_ARRAY;
-	}
-	return TYPE_TEXT;
-}
 
 class FrameTimeline extends Timeline {
 	constructor() {
@@ -41,13 +30,7 @@ class FrameTimeline extends Timeline {
 			const properties = roles[role];
 
 			for (const name in properties) {
-				const value = properties[name];
-				const type = getType(value);
-				const size = (type === TYPE_PROPERTY_OBJECT && value.size()) ||
-					(type === TYPE_ARRAY && value.length) || 0;
-				const separator = (type === TYPE_PROPERTY_OBJECT && value.separator) || "";
-
-				names[role][name] = {type, size, separator};
+				names[role][name] = true;
 			}
 		}
 		return this;

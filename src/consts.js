@@ -12,6 +12,6 @@ export const EASE_IN = cubicBezier(0.42, 0, 1, 1);
 export const EASE_OUT = cubicBezier(0, 0, 0.58, 1);
 export const EASE_IN_OUT = cubicBezier(0.42, 0, 0.58, 1);
 
-export const TYPE_PROPERTY_OBJECT = "propertyobject";
-export const TYPE_ARRAY = "array";
-export const TYPE_TEXT = "text";
+// export const TYPE_PROPERTY_OBJECT = "propertyobject";
+// export const TYPE_ARRAY = "array";
+// export const TYPE_TEXT = "text";

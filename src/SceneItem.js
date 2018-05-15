@@ -6,25 +6,10 @@ import {
 	isString,
 	isArray,
 	isPercent,
-	fill,
 } from "./utils";
-import PropertyObject from "./PropertyObject";
 import FrameTimeline from "./FrameTimeline";
 import {dotValue} from "./utils/dot";
-import {TYPE_PROPERTY_OBJECT, TYPE_ARRAY} from "./consts";
 
-
-export function getDefaultData(infos, fillText = 0) {
-	const {type, size, separator} = infos;
-
-	if (type === TYPE_PROPERTY_OBJECT) {
-		return new PropertyObject(fill(new Array(size), fillText), separator);
-	} else if (type === TYPE_ARRAY) {
-		return fill(new Array(size), fillText);
-	} else {
-		return fillText;
-	}
-}
 /**
 * manage Frame Timeline and play Timeline.
 * @extends Animator

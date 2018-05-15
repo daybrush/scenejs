@@ -158,18 +158,5 @@ obj4.forEach(t => {
 		this.value.forEach(func);
 		return this;
 	}
-	multiply(number) {
-		const arr = this.value;
-		const length = arr.length;
-
-		for (let i = 0; i < length; ++i) {
-			if (arr[i] instanceof PropertyObject) {
-				arr[i].multiply(number);
-			} else {
-				arr[i] *= number;
-			}
-		}
-		return this;
-	}
 }
 export default PropertyObject;
