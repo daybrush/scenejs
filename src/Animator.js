@@ -102,14 +102,16 @@ animator.({
 			return this;
 		}
 		for (const name in options) {
+			const value = options[name];
+
 			if (name === "easing") {
-				this.setEasing(options[name]);
+				this.setEasing(value);
 				continue;
 			} else if (name === "duration") {
-				this.setDuration(options[name]);
+				value && this.setDuration(value);
 				continue;
 			}
-			(name in this.state ? this.state : this.options)[name] = options[name];
+			(name in this.state ? this.state : this.options)[name] = value;
 		}
 
 		return this;

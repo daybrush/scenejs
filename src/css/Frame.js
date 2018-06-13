@@ -17,6 +17,10 @@ function toInnerProperties(obj) {
 * Animation's CSS Frame
 */
 class Frame extends FrameWrapper {
+	/**
+	* Specifies an css object that coverted the frame.
+	* @return {object} cssObject
+	*/
 	toCSSObject() {
 		const frameObject = this.toObject();
 		const cssObject = {};
@@ -33,6 +37,10 @@ class Frame extends FrameWrapper {
 
 		return cssObject;
 	}
+	/**
+	* Specifies an css text that coverted the frame.
+	* @return {string} cssText
+	*/
 	toCSS() {
 		const cssObject = this.toCSSObject();
 		const cssArray = [];
