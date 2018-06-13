@@ -1,0 +1,64 @@
+{
+  "name": "react-scenejs",
+  "version": "0.1.1",
+  "description": "A react component that can easily use scenejs",
+  "types": "declaration/index.d.ts",
+  "main": "dist/index.js",
+  "dependencies": {
+    "scenejs": "^0.12.2|| ^1.0.0"
+  },
+  "peerDependencies": {
+    "react": "^15.4.2 || ^16.0.0",
+    "react-dom": "^15.4.2 || ^16.0.0"
+  },
+  "keywords": [
+    "react",
+    "scene",
+    "scenejs",
+    "animate",
+    "animation",
+    "css",
+    "requestAnimationFrame",
+    "motion"
+  ],
+  "author": "Daybrush",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daybrush/scenejs/issues"
+  },
+  "homepage": "https://daybrush.com",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.2",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.12.1",
+    "eslint-config-naver": "^2.0.1",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-react": "^7.7.0",
+    "file-loader": "^1.1.11",
+    "prop-types": "^15.4.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.2",
+    "write-file-webpack-plugin": "^4.2.0"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --host=0.0.0.0 ",
+    "build": "mkdir -p dist && babel src --out-dir dist/",
+    "prepublish": "mkdir -p dist && babel src --out-dir dist/"
+  }
+}

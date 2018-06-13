@@ -1,0 +1,9 @@
+{
+	"presets": [[
+		"env",
+		{
+			"loose": true
+		}
+	], "react", "stage-2"],
+	"plugins": ["add-module-exports"]
+}
