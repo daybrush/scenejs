@@ -4057,6 +4057,11 @@ var Frame = function (_FrameWrapper) {
 
 	_createClass(Frame, [{
 		key: "toCSSObject",
+
+		/**
+  * Specifies an css object that coverted the frame.
+  * @return {object} cssObject
+  */
 		value: function toCSSObject() {
 			var frameObject = this.toObject();
 			var cssObject = {};
@@ -4073,6 +4078,11 @@ var Frame = function (_FrameWrapper) {
 
 			return cssObject;
 		}
+		/**
+  * Specifies an css text that coverted the frame.
+  * @return {string} cssText
+  */
+
 	}, {
 		key: "toCSS",
 		value: function toCSS() {
