@@ -233,7 +233,10 @@ nav ul h4 {
   margin-top: 5px;
   color: black;
 }
-
+nav ul h4 a, nav ul h4 a:hover, nav ul h4 a:active {
+  color: black;
+  font-size: 14px;
+}
 nav ul ul + ul {
   /* margin-top: -10px; */
 }
