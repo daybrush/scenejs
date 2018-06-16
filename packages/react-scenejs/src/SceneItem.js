@@ -21,7 +21,7 @@ export default class SceneItem extends React.Component {
 		onAnimate: PropTypes.func,
 	};
 	static propTypes = {
-		timeline: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+		keyframes: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 		from: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 		to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 		play: PropTypes.bool,
@@ -70,8 +70,8 @@ export default class SceneItem extends React.Component {
 				styles: frame.toCSSObject(),
 			});
 		});
-		if (this.props.timeline) {
-			this.item.set(timeline);
+		if (this.props.keyframes) {
+			this.item.set(this.props.keyframes);
 		} else {
 			this.item.set(0, this.props.from);
 			this.item.set(1, this.props.to);
@@ -89,7 +89,7 @@ export default class SceneItem extends React.Component {
 		const children = this.props.children;
 
 		return Array.isArray(children) ?
-			children.map(component => typeof component === "function" ? component(state) : component) :
+			children.map(component => (typeof component === "function" ? component(state) : component)) :
 			children(state);
 	}
 	componentDidMount() {
