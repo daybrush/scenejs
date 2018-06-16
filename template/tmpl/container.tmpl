@@ -3,7 +3,7 @@
     var isGlobalPage;
 
     docs.forEach(function(doc, i) {
-        if (i > 0) return;
+        if (doc.name && i > 0) return;
 ?>
 
 <?js
@@ -139,7 +139,7 @@
         var methods = self.find({kind: 'function', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
         if (methods && methods.length && methods.forEach) {
     ?>
-        <h3 class="subsection-title">Methods</h3>
+        <h3 class="subsection-title" id="methods">Methods</h3>
 
         <?js methods.forEach(function(m) { ?>
             <?js= self.partial('method.tmpl', m) ?>

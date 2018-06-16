@@ -327,7 +327,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
                 }
 
                 if (methods.length) {
-                    itemsNav += "<h4>Methods</h4>";
+                    itemsNav += `<h4><a href="${item.longname}.html#methods">Methods</a></h4>`;
                     itemsNav += "<ul class='methods'>";
                     // methods.sort(method => {
                     //     return method.inherits ? 1 : -1;
@@ -341,7 +341,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
                     itemsNav += "</ul>";
                 }
                 if (events.length) {
-                    itemsNav += "<h4>Events</h4>";
+                    itemsNav += `<h4><a href="${item.longname}.html#events">Events</a></h4>`;
                     itemsNav += "<ul class='events'>";
                     // methods.sort(method => {
                     //     return method.inherits ? 1 : -1;
