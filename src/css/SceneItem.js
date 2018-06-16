@@ -72,11 +72,11 @@ class SceneItem extends SceneItemWrapper {
 		}
 		return this;
 	}
-	animate(time, parentEasing, parent) {
-		const frame = super.animate(time, parentEasing, parent);
+	animate(parentEasing, parent) {
+		const frame = super.animate(parentEasing, parent);
 		const elements = this._elements;
 
-		if (!elements || !elements.length) {
+		if (!frame || !elements || !elements.length) {
 			return frame;
 		}
 		const cssText = frame.toCSS();

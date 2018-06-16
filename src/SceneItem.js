@@ -45,7 +45,14 @@ let item = new Scene.SceneItem({
 		return Math.max(this.state.duration, this.timeline.getLastTime());
 	}
 	setDuration(duration) {
+		if (duration === 0) {
+			return this;
+		}
 		const originalDuration = this.getDuration();
+
+		if (originalDuration === 0) {
+			return this;
+		}
 		const ratio = duration / originalDuration;
 		const timeline = this.timeline;
 		const {times, items} = timeline;
@@ -60,6 +67,7 @@ let item = new Scene.SceneItem({
 		});
 		timeline.items = obj;
 		super.setDuration(duration);
+		return this;
 	}
 	/**
 	* set the unique indicator of the item.
@@ -128,7 +136,7 @@ item.duration; // = item.timeline.size()
 		frame && frame.remove(role, properties);
 		return this;
 	}
-	animate(time, parentEasing, parent) {
+	animate(parentEasing, parent) {
 		const iterationTime = this.getIterationTime();
 		const easing = this.getEasing() || parentEasing;
 		const frame = this.getNowFrame(iterationTime, easing);
@@ -162,7 +170,7 @@ item.duration; // = item.timeline.size()
 	setTime(time, parentEasing, parent) {
 		super.setTime(time);
 
-		this.animate(time, parentEasing, parent);
+		this.animate(parentEasing, parent);
 		return this;
 	}
 	/**
@@ -486,7 +494,7 @@ item.load({
 });
 	*/
 	load(properties = {}, options = properties.options) {
-		this.setOptions(options);
+		options && this.setOptions(options);
 		if (isArray(properties)) {
 			const length = properties.length;
 
@@ -497,8 +505,12 @@ item.load({
 			}
 			return this;
 		}
+		if (properties.keyframes) {
+			this.set(properties.keyframes);
+			return this;
+		}
 		for (const time in properties) {
-			if (time === "options") {
+			if (time === "options" || time === "keyframes") {
 				continue;
 			}
 			const _properties = properties[time];

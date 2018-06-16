@@ -3,6 +3,7 @@
     var isGlobalPage;
 
     docs.forEach(function(doc, i) {
+        if (i > 0) return;
 ?>
 
 <?js
@@ -169,7 +170,7 @@
         var events = self.find({kind: 'event', memberof: isGlobalPage ? {isUndefined: true} : doc.longname});
         if (events && events.length && events.forEach) {
     ?>
-        <h3 class="subsection-title">Events</h3>
+        <h3 class="subsection-title" id="events">Events</h3>
 
         <?js events.forEach(function(e) { ?>
             <?js= self.partial('method.tmpl', e) ?>
