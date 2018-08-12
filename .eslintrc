@@ -1,8 +1,0 @@
-{
-    "extends": "naver",
-    "env": { "es6": true},
-    "plugins": ["import"],
-    "rules": {
-        "array-element-newline": 0
-    }
-}

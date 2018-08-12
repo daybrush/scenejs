@@ -19,6 +19,16 @@ module.exports = function(config) {
 						exclude: /node_modules/,
 						loader: "babel-loader",
 					},
+					{
+						test: /\.ts$/,
+						exclude: /node_modules/,
+						use: {
+							loader: "awesome-typescript-loader",
+							options: {
+								transpileOnly: true
+							}
+						}
+					}
 				],
 			},
 		},

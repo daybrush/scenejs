@@ -1,9 +1,9 @@
-import {TRANSFORM, FILTER, SCENE_ROLES} from "./consts";
+import {TRANSFORM, FILTER, SCENE_ROLES, ObjectInterface, NameType} from "./consts";
 import {isObject, isString, isUndefined, isArray, isRole} from "./utils";
 import {toPropertyObject, splitStyle, toObject} from "./utils/property";
 import PropertyObject from "./PropertyObject";
 
-function toInnerProperties(obj) {
+function toInnerProperties(obj: ObjectInterface<string>) {
 	if (!obj) {
 		return "";
 	}
@@ -14,14 +14,14 @@ function toInnerProperties(obj) {
 	}
 	return arrObj.join(" ");
 }
-function isPropertyObject(value) {
+function isPropertyObject(value: any) {
 	return value instanceof PropertyObject;
 }
 /* eslint-disable */
-function clone(target, toValue = false) {
+function clone(target: ObjectInterface<any>, toValue = false) {
 	return merge({}, target, toValue);
 }
-function merge(to, from, toValue = false) {
+function merge(to: ObjectInterface<any>, from: ObjectInterface<any>, toValue = false) {
 	for (const name in from) {
 		const value = from[name];
 
@@ -46,6 +46,7 @@ function merge(to, from, toValue = false) {
  * Animation's Frame
  */
 class Frame {
+	public properties: ObjectInterface<any>;
 	/**
 	* Create an animation's frame.
 	* @param {Object} properties - properties
@@ -54,7 +55,7 @@ let frame = new Scene.Frame({
 	display: "none"
 });
 	*/
-	constructor(properties = {}) {
+	constructor(properties: ObjectInterface<any> = {}) {
 		this.properties = {};
 		this.set(properties);
 	}
@@ -65,7 +66,7 @@ let frame = new Scene.Frame({
 	frame.get("display") // => "none", "block", ....
 	frame.get("transform", "translate") // => "10px,10px"
 	*/
-	get(...args) {
+	public get(...args: NameType[]) {
 		let properties = this.properties;
 		const length = args.length;
 
@@ -84,7 +85,7 @@ let frame = new Scene.Frame({
 	* @example
 	frame.remove("display")
 	*/
-	remove(...args) {
+	public remove(...args: NameType[]) {
 		let properties = this.properties;
 		const length = args.length;
 
@@ -100,22 +101,6 @@ let frame = new Scene.Frame({
 		delete properties[args[length - 1]];
 		return this;
 	}
-	_set(args, value) {
-		let properties = this.properties;
-		const length = args.length;
-
-		for (let i = 0; i < length - 1; ++i) {
-			const name = args[i];
-
-			!(name in properties) && (properties[name] = {});
-			properties = properties[name];
-		}
-		if (!length) {
-			return;
-		}
-		properties[args[length - 1]] = isString(value) ? toPropertyObject(value) : value;
-	}
-
 	/**
 	* set property
 	* @param {Object|String} role - property role(property, transform, filter)
@@ -145,7 +130,7 @@ frame.set("transform", {
 // three parameters
 frame.set("property", "display", "none");
 	*/
-	set(...args) {
+	public set(...args: any[]) {
 		const length = args.length;
 		const params = args.slice(0, -1);
 		const value = args[length - 1];
@@ -192,7 +177,7 @@ frame.set("property", "display", "none");
 	* @example
 	frame.has("property", "display") // => true or false
 	*/
-	has(...args) {
+	public has(...args: NameType[]) {
 		let properties = this.properties;
 		const length = args.length;
 
@@ -210,8 +195,8 @@ frame.set("property", "display", "none");
 	* @example
 	frame.clone();
 	*/
-	clone() {
-		const frame = new this.constructor();
+	public clone() {
+		const frame = new Frame();
 
 		frame.merge(this);
 
@@ -224,7 +209,7 @@ frame.set("property", "display", "none");
 	* @example
 	frame.merge(frame2);
 	*/
-	merge(frame) {
+	public merge(frame: Frame) {
 		const properties = this.properties;
 		const frameProperties = frame.properties;
 
@@ -235,16 +220,16 @@ frame.set("property", "display", "none");
 
 		return this;
 	}
-	toObject() {
+	public toObject() {
 		return clone(this.properties, true);
 	}
 	/**
 	* Specifies an css object that coverted the frame.
 	* @return {object} cssObject
 	*/
-	toCSSObject() {
+	public toCSSObject() {
 		const properties = this.toObject();
-		const cssObject = {};
+		const cssObject: ObjectInterface<string> = {};
 
 		for (const name in properties) {
 			if (SCENE_ROLES[name]) {
@@ -264,7 +249,7 @@ frame.set("property", "display", "none");
 	* Specifies an css text that coverted the frame.
 	* @return {string} cssText
 	*/
-	toCSS() {
+	public toCSS() {
 		const cssObject = this.toCSSObject();
 		const cssArray = [];
 
@@ -272,6 +257,21 @@ frame.set("property", "display", "none");
 			cssArray.push(`${name}:${cssObject[name]};`);
 		}
 		return cssArray.join("");
+	}
+	private _set(args: NameType[], value: any) {
+		let properties = this.properties;
+		const length = args.length;
+
+		for (let i = 0; i < length - 1; ++i) {
+			const name = args[i];
+
+			!(name in properties) && (properties[name] = {});
+			properties = properties[name];
+		}
+		if (!length) {
+			return;
+		}
+		properties[args[length - 1]] = isString(value) ? toPropertyObject(value) : value;
 	}
 }
 export default Frame;

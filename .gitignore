@@ -8,3 +8,5 @@ npm-debug.log*
 coverage/
 jsdoc/
 doc/
+outjs/
+declaration/

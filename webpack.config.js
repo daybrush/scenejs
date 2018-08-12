@@ -2,8 +2,8 @@ const webpack = require("webpack");
 const UglifyJSWebpackPlugin = require("uglifyjs-webpack-plugin");
 const StringReplacePlugin = require("string-replace-webpack-plugin");
 const pkg = require("./package.json");
-
-const banner = `Copyright (c) 2018 ${pkg.author}
+const TSLintPlugin = require("tslint-webpack-plugin");
+ const banner = `Copyright (c) 2018 ${pkg.author}
 license: ${pkg.license}
 author: ${pkg.author}
 repository: ${pkg.repository.url}
@@ -11,8 +11,8 @@ repository: ${pkg.repository.url}
 
 const config = {
 	entry: {
-		"scene": `./src/index.js`,
-		"scene.min": `./src/index.js`,
+		"scene": `./src/index.ts`,
+		"scene.min": `./src/index.ts`,
 	},
 	output: {
 		filename: `./[name].js`,
@@ -22,26 +22,28 @@ const config = {
 		library: "Scene",
 	},
 	plugins: [
+		new TSLintPlugin({
+			files: ["./src/**/*.ts"],
+			project: "./tsconfig.json",
+		}),
 		new UglifyJSWebpackPlugin({
 			include: /\.min\.js$/,
 			uglifyOptions: {
-				mangle: {
-					keep_fnames: true,
-				},
 			},
 		}),
 		new webpack.BannerPlugin(banner),
+		new StringReplacePlugin()
 	],
 	mode: "none",
 	module: {
 		rules: [
 			{
-				test: /\.js$/,
-				exclude: /(node_modules)/,
-				loader: "babel-loader",
+				test: /\.tsx?$/,
+				exclude: /(node_modules|bower_components)/,
+				loader: "awesome-typescript-loader",
 			},
 			{
-				test: /(\.js)$/,
+				test: /\.js$/,
 				loader: StringReplacePlugin.replace({
 					replacements: [
 						{

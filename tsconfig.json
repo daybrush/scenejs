@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+	  "outDir": "./outjs/",
+	  "esModuleInterop": true,
+	  "sourceMap": true,
+	  "noImplicitAny": true,
+	  "module": "commonjs",
+	  "target": "es3",
+	  "skipLibCheck": true,
+		"lib": ["es2015", "dom"],
+	},
+	"include": ["./src/**/*.ts"],
+	"exclude": ["node_modules"]
+  }

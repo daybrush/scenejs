@@ -1,10 +1,15 @@
 import {isObject, has} from "./utils";
+type CallbackType = (...args: any[]) => any;
+interface EventParamterType {
+	[name: string]: CallbackType | CallbackType[];
+}
 /**
 * attach and trigger event handlers.
 */
 class EventTrigger {
+	private events: {[name: string]: CallbackType[]};
 	constructor() {
-		this._events = {};
+		this.events = {};
 	}
 	/**
 	* Attach an event handler function for one or more events to target
@@ -19,13 +24,11 @@ target.on("animate", function() {
 target.trigger("animate");
 
 	*/
-	on(name, callback) {
-		const events = this._events;
-		let i;
-		let j;
+	public on(name: string | EventParamterType, callback?: CallbackType | CallbackType[]) {
+		const events = this.events;
 
-		if (isObject(name)) {
-			for (i in name) {
+		if (typeof name === "object") {
+			for (const i in name) {
 				this.on(i, name[i]);
 			}
 			return this;
@@ -33,20 +36,16 @@ target.trigger("animate");
 		if (!has(events, name)) {
 			events[name] = [];
 		}
-
-		if (isObject(callback)) {
-			for (j in callback) {
-				this.on(name, callback[j]);
-			}
+		if (!callback) {
 			return this;
 		}
-		if (!callback) {
+		if (typeof callback === "object") {
+			callback.forEach(func => this.on(name, func));
 			return this;
 		}
 		const event = events[name];
 
 		event.push(callback);
-
 		return this;
 	}
 	/**
@@ -64,13 +63,13 @@ target.off("animate", callback);
 target.off("animate");
 
 	*/
-	off(name, callback) {
+	public off(name?: string, callback?: CallbackType) {
 		if (!name) {
-			this._events = {};
+			this.events = {};
 		} else if (!callback) {
-			this._events[name] = [];
+			this.events[name] = [];
 		} else {
-			const callbacks = this._events[name];
+			const callbacks = this.events[name];
 
 			if (!callbacks) {
 				return this;
@@ -96,8 +95,8 @@ target.on("animate", function(a1, a2) {
 target.trigger("animate", [1, 2]); // log => "animate", 1, 2
 
 	*/
-	trigger(name, ...data) {
-		const events = this._events;
+	public trigger(name: string, ...data: any[]) {
+		const events = this.events;
 
 		if (!has(events, name)) {
 			return this;
@@ -119,5 +118,4 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2
 		return this;
 	}
 }
-EventTrigger.defaultEvents = {};
 export default EventTrigger;
