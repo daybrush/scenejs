@@ -79,6 +79,21 @@ export const splitComma = function(text) {
 	}
 	return arr;
 };
+export const splitStyle = function(str) {
+	const properties = str.split(";");
+	const length = properties.length;
+	const obj = [];
+
+	for (let i = 0; i < length; ++i) {
+		const matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
+
+		if (!matches || matches.length < 3 || !matches[1]) {
+			continue;
+		}
+		obj.push({[matches[1].trim()]: toPropertyObject(matches[2].trim())});
+	}
+	return obj;
+};
 /**
 * convert array to PropertyObject[type=color].
 * default model "rgba"
@@ -175,7 +190,7 @@ export const toColorObject = function(value) {
 	return colorObject;
 };
 /**
-* convert text with parentheses to PropertyObject.
+* convert text with parentheses to object.
 * @memberof Property
 * @function toBracketObject
 * @param {String} value ex) "rgba(0,0,0,1)"
@@ -195,26 +210,18 @@ export const toBracketObject = function(value) {
 	const prefix = `${model}(`;
 	const text = matches[2];
 	const suffix = `)${matches[3]}`;
-
-	// divide comma(,)
-	const texts = splitComma(text);
-	const length = texts.length;
-	let result;
 	let separator = ",";
+	let values;
+	// divide comma(,)
+	const result = toPropertyObject(text);
 
-	if (length === 1) {
-		result = toPropertyObject(text);
-		if (!result.prefix && !result.suffix) {
-			separator = result.separator;
-			result = result.value;
-		}
+	if (result instanceof PropertyObject) {
+		separator = result.separator;
+		values = result.value;
+	} else {
+		values = [text];
 	}
-	if (!result) {
-		result = texts.map(t => toPropertyObject(t));
-	}
-
-
-	return new PropertyObject(result, {
+	return new PropertyObject(values, {
 		separator,
 		model,
 		prefix,
@@ -294,6 +301,7 @@ toPropertyObject = function(value) {
 		result.type = "array";
 		return result;
 	} else if ((result = value.charAt(0)) && (result === '"' || result === "'")) {
+		// Quotes
 		return value;
 	} else if (value.indexOf("(") !== -1) {
 		// in bracket.
@@ -306,17 +314,30 @@ toPropertyObject = function(value) {
 		if (COLOR_MODELS.indexOf(model) !== -1) {
 			return toColorObject(result);
 		}
-		const length = result.length;
-
-		for (let i = 0; i < length; ++i) {
-			result.set(i, toPropertyObject(result.get(i)));
-		}
 		return result;
 	} else if (value.indexOf("#") === 0) {
-		return toColorObject(value);
+		return stringToColorObject(value);
 	}
 	return value;
 };
+export function toObject(object, result = {}) {
+	if (!(object instanceof PropertyObject)) {
+		result[object] = true;
+		return result;
+	}
+	const model = object.model;
 
+	if (model) {
+		object.suffix = "";
+		object.model = "";
+		object.prefix = "";
+		const value = object.size() > 1 ? object : object.get(0);
+
+		result[model] = value;
+	} else {
+		object.forEach(obj => toObject(obj, result));
+	}
+	return result;
+}
 export {toPropertyObject, stringToColorObject};
 

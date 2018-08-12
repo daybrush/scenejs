@@ -185,18 +185,18 @@ export const dotValue = function({
 	time,
 	prevTime,
 	nextTime,
-	startTime = prevTime,
-	endTime = nextTime,
 	prevValue,
 	nextValue,
 	easing}) {
-	if (!easing || startTime === endTime) {
+	if (time === prevTime) {
+		return prevValue;
+	} else if (time === nextTime) {
+		return nextValue;
+	} else if (!easing) {
 		return dot(prevValue, nextValue, time - prevTime, nextTime - time);
 	}
-	const startValue = dot(prevValue, nextValue, startTime - prevTime, nextTime - startTime);
-	const endValue = dot(prevValue, nextValue, endTime - prevTime, nextTime - endTime);
-	const ratio = easing((time - startTime) / (endTime - startTime));
-	const value = dot(startValue, endValue, ratio, 1 - ratio);
+	const ratio = easing((time - prevTime) / (nextTime - prevTime));
+	const value = dot(prevValue, nextValue, ratio, 1 - ratio);
 
 	return value;
 };

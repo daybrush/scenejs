@@ -1,6 +1,6 @@
 /* eslint-disable */
 import "./injections/PrefixInjection";
-import {TRANSFORM, FILTER, ANIMATION, KEYFRAMES} from "../../src/css/consts";
+import {TRANSFORM, FILTER, ANIMATION, KEYFRAMES} from "../../src/consts";
 
 
 describe("Prefix Test", function() {

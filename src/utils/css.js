@@ -28,3 +28,25 @@ export const removeClass = function(element, className) {
 	}
 };
 
+export function fromCSS(elements, properties) {
+	if (!elements || !properties || !properties.length) {
+		return {};
+	}
+	let element;
+
+	if (elements instanceof Element) {
+		element = elements;
+	} else if (elements.length) {
+		element = elements[0];
+	} else {
+		return {};
+	}
+	const cssObject = {};
+	const styles = window.getComputedStyle(element);
+	const length = properties.length;
+
+	for (let i = 0; i < length; ++i) {
+		cssObject[properties[i]] = styles[properties[i]];
+	}
+	return cssObject;
+}

@@ -1,4 +1,6 @@
 import Scene from "../../src/Scene";
+import { hasClass } from "../../src/utils/css";
+import { START_ANIMATION } from "../../src/consts";
 /* eslint-disable */
 
 
@@ -167,6 +169,144 @@ describe("Scene Test", function() {
 			expect(items.item[0]).to.be.true;
 			expect(items.item2[0]).to.be.true;
 			done();
-        });   
-    });
+		});
+		it (`should check forEach method`, () => {
+			const scene = new Scene({
+				".test": {
+					0: {
+						width: "100px",
+						height: "100px",
+					},
+					1: {
+						width: "200px",
+						height: "200px",
+					}
+				},
+				".test2": {
+					0: {
+						width: "200px",
+						height: "200px",
+					},
+					1: {
+						width: "100px",
+						height: "100px",
+					}
+				}
+			});
+			const test = {};
+			let test2 = {};
+
+			scene.forEach((item, name, items) => {
+				test[name] = item;
+				test2 = items;
+			});
+			expect(test[".test"]).to.be.ok;
+			expect(test[".test2"]).to.be.ok;
+			expect(test[".test"].get(0, "width")).to.be.equals("100px");
+			expect(test[".test2"].get(0, "width")).to.be.equals("200px");
+			expect(test).to.be.deep.equals(test2);
+		});
+	});
+	describe(`test body's element`, () => {
+		beforeEach(() => {
+			document.body.innerHTML = `<div class="test"></div>`;
+		});
+		afterEach(() => {
+			document.body.innerHTML = "";
+		});
+		it (`should check Scene load`, () => {
+			const scene = new Scene({
+				".test": {
+					0: {
+						width: "100px",
+						height: "100px",
+					},
+					1: {
+						width: "200px",
+						height: "200px",
+					}
+				},
+			}, {
+				selector: true,
+			});
+
+			expect(scene.getItem(".test")._elements.length).to.be.equals(1);
+		});
+		it (`should check load options`, () => {
+			const scene = new Scene({
+				".test": {
+					0: {
+						width: "100px",
+						height: "100px",
+					},
+					1: {
+						width: "200px",
+						height: "200px",
+					}
+				},
+				options: {
+					selector: true,
+				}
+			});
+
+			expect(scene.getItem(".test")._elements.length).to.be.equals(1);
+		});
+		it (`should check playCSS method`, done => {
+			const scene = new Scene({
+				".test": {
+					0: {
+						width: "100px",
+						height: "100px",
+					},
+					0.1: {
+						width: "200px",
+						height: "200px",
+					}
+				},
+				options: {
+					selector: true,
+				}
+			});
+
+			scene.playCSS();
+
+			expect(hasClass(document.querySelector(".test"), START_ANIMATION)).to.be.true;
+			expect(scene.getPlayState()).to.be.equals("running");
+			scene.on("ended", e => {
+				expect(scene.getPlayState()).to.be.equals("paused");
+				done();
+			});
+		});
+		it (`should check playCSS method with iteration count = 2`, done => {
+			const scene = new Scene({
+				".test": {
+					0: {
+						width: "100px",
+						height: "100px",
+					},
+					0.1: {
+						width: "200px",
+						height: "200px",
+					}
+				},
+				options: {
+					iterationCount: 2,
+					selector: true,
+				}
+			});
+			scene.playCSS();
+
+			expect(hasClass(document.querySelector(".test"), START_ANIMATION)).to.be.true;
+			expect(scene.getPlayState()).to.be.equals("running");
+
+			const spy = sinon.spy();
+
+			scene.on("iteration", spy);
+			scene.on("ended", e => {
+				expect(spy.calledOnce).to.be.true;
+				expect(scene.getPlayState()).to.be.equals("paused");
+				done();
+			})
+		})
+	});
 });

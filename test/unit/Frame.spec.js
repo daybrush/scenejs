@@ -12,6 +12,7 @@ describe("Frame Test", function() {
                 a: 1,
                 b: 2,
             });
+
             expect(frame.get("a")).to.be.equals(1);
             expect(frame.get("b")).to.be.equals(2);
         });
@@ -24,6 +25,9 @@ describe("Frame Test", function() {
                     brightness: "90%",
                 }
             });
+
+            console.log(frame.properties);
+
             expect(frame.get("transform", "scale").toValue()).to.be.equals("1,2");
             expect(frame.get("filter", "brightness")).to.be.equals("90%");
             expect(frame.get("a")).to.be.equals(1);
@@ -62,14 +66,22 @@ describe("Frame Test", function() {
             // Then
             expect(this.frame.get("a")).to.be.equals(10);
         });
+        it("should check set method with transform", () => {
+            const frame = new Frame();
+            frame.set("transform: rotate(-90deg) scale(1, 0)");
+
+            console.log(frame.properties);
+            expect(frame.get("transform", "rotate")).to.be.equals("-90deg");
+        })
         it("should check set method", () => {
             // Given
             // When
-            this.frame.set("a :1; b:2 ; c :1;transform:translate(10px, 20px) scale(10px); d: 1; e : 2;");
+            this.frame.set("a :2; b:3 ; c :1;transform:translate(10px, 20px) scale(10px); d: 1; e : 2;");
             
             // Then
-            expect(parseFloat(this.frame.get("a"))).to.be.equals(1);
-            expect(parseFloat(this.frame.get("b"))).to.be.equals(2);
+            expect(parseFloat(this.frame.get("a"))).to.be.equals(2);
+            expect(parseFloat(this.frame.get("b"))).to.be.equals(3);
+            expect(parseFloat(this.frame.get("c"))).to.be.equals(1);
             expect(parseFloat(this.frame.get("d"))).to.be.equals(1);
             expect(parseFloat(this.frame.get("e"))).to.be.equals(2);
             expect(this.frame.get("transform", "translate").toValue()).to.be.equals("10px,20px");
@@ -135,11 +147,9 @@ describe("Frame Test", function() {
             const properties = this.frame.toObject();
 
             expect(properties).to.be.deep.equal({
-                property: {
-                    a: 1,
-                    b: 2,
-                    "border-color": "1px solid rgba(100,200,300,1)",
-                },
+                a: 1,
+                b: 2,
+                "border-color": "1px solid rgba(100,200,300,1)",
                 transform: {
                     scale: "1,2",
                 },
@@ -147,6 +157,32 @@ describe("Frame Test", function() {
                     brightness: "90%",
                 }
             });
+        });
+    });
+    describe("test frame for CSS", function() {
+        beforeEach(() => {
+            this.frame = new Frame({
+                a: 1,
+                b: 2,
+                transform: "scale(1, 2) translateX(100px) translateY(200px)",
+                filter: {
+                    brightness: "90%",
+                    grayscale: "40%",
+                }
+            });
+        })
+        it("should check 'toCSS' method", () => {
+            const css = this.frame.toCSS().replace(/;(\S)/g, ";\n$1").split("\n");
+
+            const result = `a:1;
+b:2;
+transform:scale(1,2) translateX(100px) translateY(200px);
+filter:brightness(90%) grayscale(40%);`.split("\n");
+            
+            css.forEach((line, i) => {
+                expect(line).to.be.deep.equal(result[i]);
+            });
+            expect(this.frame.toCSS()).to.be.deep.equal(result.join(""));
         });
     });
 });

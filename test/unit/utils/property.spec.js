@@ -1,4 +1,4 @@
-import {stringToColorObject, splitSpace, toColorObject, arrayToColorObject, toPropertyObject} from "../../../src/utils/property";
+import {stringToColorObject, splitSpace, toColorObject, arrayToColorObject, toPropertyObject, splitStyle, toObject} from "../../../src/utils/property";
 
 /* eslint-disable */
 
@@ -79,6 +79,29 @@ describe("property Test", function() {
             expect(obj.type).to.be.equals("array");
             expect(obj2.toValue()).to.be.equals("rgba(179,77,77,1)");
             expect(obj3.toValue()).to.be.equals("rgba(179,77,77,0.4)");
+        });
+        it (`should check 'splitStyle' method`, () => {
+            const obj = splitStyle(`a:1; b:2; c: 3;`);
+            const obj2 = splitStyle(`a:1; b:2; c: a(1) b(2) d(3);`);
+            const obj3 = splitStyle(`transform: translate(10px) rotate(10deg);`);
+
+            expect(obj).to.be.deep.equals([{a:'1'}, {b:'2'}, {c:'3'}]);
+            expect(obj2[2].c.size()).to.be.equals(3);
+            expect(obj2[2].c.toValue()).to.be.equals("a(1) b(2) d(3)");
+            expect(obj3[0].transform.size()).to.be.equals(2);
+            expect(obj3[0].transform.toValue()).to.be.equals("translate(10px) rotate(10deg)");
+        });
+        it (`should check 'toObject' method`, () => {
+            const obj = toObject(toPropertyObject("a(1)"));
+            const obj2 = toObject(toPropertyObject("a(1,3)"));
+            const obj3 = toObject(toPropertyObject("a(1,3) b(1) c(3)"));
+
+            expect(obj.a).to.be.equals("1");
+            expect(obj2.a.toValue()).to.be.equals("1,3");
+            expect(obj3.a.toValue()).to.be.equals("1,3");
+            expect(obj3.b).to.be.equals("1");
+            expect(obj3.c).to.be.equals("3");
+
         });
     });
 });

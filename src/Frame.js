@@ -1,8 +1,19 @@
-import {PROPERTY, SCENE_ROLES} from "./consts";
-import {isObject, isString, isUndefined, isArray, has} from "./utils";
-import {toPropertyObject, splitSpace} from "./utils/property";
+import {TRANSFORM, FILTER, SCENE_ROLES} from "./consts";
+import {isObject, isString, isUndefined, isArray, isRole} from "./utils";
+import {toPropertyObject, splitStyle, toObject} from "./utils/property";
 import PropertyObject from "./PropertyObject";
 
+function toInnerProperties(obj) {
+	if (!obj) {
+		return "";
+	}
+	const arrObj = [];
+
+	for (const name in obj) {
+		arrObj.push(`${name}(${obj[name]})`);
+	}
+	return arrObj.join(" ");
+}
 function isPropertyObject(value) {
 	return value instanceof PropertyObject;
 }
@@ -43,85 +54,66 @@ let frame = new Scene.Frame({
 	display: "none"
 });
 	*/
-	constructor(properties) {
+	constructor(properties = {}) {
 		this.properties = {};
-		for (const role in SCENE_ROLES) {
-			this.properties[role] = {};
-		}
-		this.load(properties);
-	}
-	/**
-	* load json of properties.
-	* @param {Object} properties - properties
-	* @return {Frame} An instance itself
-	* @example
-frame.load({
-	display: "none"
-});
-	*/
-	load(properties) {
-		if (properties && !isObject(properties)) {
-			return this;
-		}
-		for (const property in properties) {
-			const value = properties[property];
-
-			if (has(SCENE_ROLES, property)) {
-				// role, properties
-				this.set(property, value);
-				continue;
-			}
-			if (isObject(value) && !isArray(value) && !isPropertyObject(value)) {
-				this.set(property, value);
-				continue;
-			}
-			// role, property, value
-			this._set(PROPERTY, property, value);
-		}
-		return this;
+		this.set(properties);
 	}
 	/**
 	* get property value
-	* @param {String} role - property role(property, transform, filter)
-	* @param {String} property - property name
-	* @return {Number|String|Scene.PropertyObejct} property value
+	* @param {...Number|String|Scene.PropertyObejct} args - property name or value
 	* @example
 	frame.get("display") // => "none", "block", ....
+	frame.get("transform", "translate") // => "10px,10px"
 	*/
-	get(role, property) {
-		const properties = this.properties;
+	get(...args) {
+		let properties = this.properties;
+		const length = args.length;
 
-		if (property) {
-			return properties[role] && properties[role][property];
-		} else if (role in SCENE_ROLES) {
-			return properties[role];
+		for (let i = 0; i < length; ++i) {
+			if (isUndefined(properties)) {
+				return properties;
+			}
+			properties = properties[args[i]];
 		}
-		return properties[PROPERTY][role];
+		return properties;
 	}
 	/**
 	* remove property value
-	* @param {String} role - property role(property, transform, filter)
-	* @param {String} property - property name
+	* @param {...String} args - property name
 	* @return {Frame} An instance itself
 	* @example
 	frame.remove("display")
 	*/
-	remove(role, property) {
-		if (property) {
-			delete this.properties[role][property];
-		} else if (role in SCENE_ROLES) {
-			delete this.properties[role];
-		} else {
-			delete this.properties[PROPERTY][role];
+	remove(...args) {
+		let properties = this.properties;
+		const length = args.length;
+
+		if (!length) {
+			return this;
 		}
+		for (let i = 0; i < length - 1; ++i) {
+			if (isUndefined(properties)) {
+				return this;
+			}
+			properties = properties[args[i]];
+		}
+		delete properties[args[length - 1]];
 		return this;
 	}
-	_set(role, property, value) {
-		const name = role.trim();
-		const properties = this.properties;
+	_set(args, value) {
+		let properties = this.properties;
+		const length = args.length;
 
-		!(name in properties) && (properties[name] = {});
-		properties[name][property] = isString(value) ? toPropertyObject(value) : value;
+		for (let i = 0; i < length - 1; ++i) {
+			const name = args[i];
+
+			!(name in properties) && (properties[name] = {});
+			properties = properties[name];
+		}
+		if (!length) {
+			return;
+		}
+		properties[args[length - 1]] = isString(value) ? toPropertyObject(value) : value;
 	}
 
 	/**
@@ -153,66 +145,68 @@ frame.set("transform", {
 // three parameters
 frame.set("property", "display", "none");
 	*/
-	set(role, property, value) {
-		if (isObject(role)) {
-			this.load(role);
+	set(...args) {
+		const length = args.length;
+		const params = args.slice(0, -1);
+		const value = args[length - 1];
+
+		if (isArray(value)) {
+			this._set(params, value);
 			return this;
-		} else if (isUndefined(property)) {
-			const properties = role.split(";");
-			const length = properties.length;
-
-			for (let i = 0; i < length; ++i) {
-				const matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
-
-				if (!matches || matches.length < 3 || !matches[1]) {
-					continue;
-				}
-
-				this.set(matches[1].trim(), matches[2]);
+		}
+		if (isPropertyObject(value)) {
+			if (isRole(params)) {
+				this.set(...params, toObject(value));
+			} else {
+				this._set(params, value);
 			}
 			return this;
 		}
-		if (isObject(property)) {
-			// role, properties
-			for (const name in property) {
-				// role, property, value
-				this._set(role, name, property[name]);
+		if (isObject(value)) {
+			const params = args.slice(0, -1);
+
+			for (const name in value) {
+				this.set(...params, name, value[name]);
 			}
 			return this;
 		}
-		if (isUndefined(value)) {
-			if (isString(property)) {
-				const arr = splitSpace(property).map(v => toPropertyObject(v));
-				const isProperties = arr.every(v => v.model && v.type !== "color");
+		if (isString(value)) {
+			const params = args.slice(0, -1);
 
-				if (isProperties) {
-					arr.forEach(v => {
-						const model = v.model;
+			if (isRole(params)) {
+				this.set(...params, toPropertyObject(value));
+				return this;
+			} else {
+				const styles = splitStyle(value);
 
-						v.model = "";
-						v.prefix = "";
-						v.suffix = "";
-						this._set(role, model, v.size() === 1 ? v.get(0) : v);
-					});
+				styles.forEach(style => {
+					this.set(...params, style);
+				});
+				if (styles.length) {
 					return this;
 				}
 			}
-			this._set("property", role, property);
-			return this;
 		}
-		this._set(role, property, value);
+		this._set(params, value);
 		return this;
 	}
 	/**
 	* check that has property.
-	* @param {String} role - property role(property, transform, filter)
-	* @param {String} property - property name
-	* @return {Boolean} true : has property, false : has not property
+	* @param {...String} args - property name
 	* @example
 	frame.has("property", "display") // => true or false
 	*/
-	has(role, property) {
-		return this.properties[role] && has(this.properties[role], property);
+	has(...args) {
+		let properties = this.properties;
+		const length = args.length;
+
+		for (let i = 0; i < length; ++i) {
+			if (!properties || !(args[i] in properties)) {
+				return false;
+			}
+			properties = properties[args[i]];
+		}
+		return true;
 	}
 	/**
 	* clone frame.
@@ -247,6 +241,41 @@ frame.set("property", "display", "none");
 	}
 	toObject() {
 		return clone(this.properties, true);
+	}
+	/**
+	* Specifies an css object that coverted the frame.
+	* @return {object} cssObject
+	*/
+	toCSSObject() {
+		const properties = this.toObject();
+		const cssObject = {};
+
+		for (const name in properties) {
+			if (SCENE_ROLES[name]) {
+				continue;
+			}
+			cssObject[name] = properties[name];
+		}
+		const transform = toInnerProperties(properties.transform);
+		const filter = toInnerProperties(properties.filter);
+
+		TRANSFORM && transform && (cssObject[TRANSFORM] = transform);
+		FILTER && filter && (cssObject[FILTER] = filter);
+
+		return cssObject;
+	}
+	/**
+	* Specifies an css text that coverted the frame.
+	* @return {string} cssText
+	*/
+	toCSS() {
+		const cssObject = this.toCSSObject();
+		const cssArray = [];
+
+		for (const name in cssObject) {
+			cssArray.push(`${name}:${cssObject[name]};`);
+		}
+		return cssArray.join("");
 	}
 }
 export default Frame;

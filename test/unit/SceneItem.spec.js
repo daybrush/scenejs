@@ -1,5 +1,7 @@
 import SceneItem from "../../src/SceneItem";
 import {SCENE_ROLES} from "../../src/consts";
+import {toId} from "../../src/utils/css";
+import removeProperty from "./injections/ClassListInjection";
 /* eslint-disable */
 
 SCENE_ROLES["transform"] = true;
@@ -16,10 +18,13 @@ describe("item Test", function() {
                     display: "block",
                     a: 2,
                 },
+                2: 0,
             });
 
             expect(item.get(0, "a")).to.be.equals(1);
             expect(item.get(1, "display")).to.be.equals("block");
+            expect(item.get(1, "a")).to.be.equals(2);
+            expect(item.get(2, "a")).to.be.equals(1);
         });
         it("should check array item", function() {
             const item = new SceneItem([{
@@ -69,6 +74,13 @@ describe("item Test", function() {
             expect(item2.get("to", "a")).to.be.equals(3);
             expect(item3.getDuration()).to.be.equals(2);
         });
+        it("should check array item", function() {
+            const item = new SceneItem({keyframes: {0: {opacity: 0}, 1: {opacity: 1}}});
+
+            expect(item.getDuration()).to.be.equals(1);
+            expect(item.get(0, "opacity")).to.be.equals(0);
+            expect(item.get(1, "opacity")).to.be.equals(1);
+        });
     });
     describe("test item method", function() {
         beforeEach(() => {
@@ -109,21 +121,25 @@ describe("item Test", function() {
                 "0.5": {
                     display: "none",
                     a: 1.5,
+                    filter: {"hue-rotate": "0deg"},
                 },
                 1: {
                     display: "block",
                     a: 2,
+                    filter: {"hue-rotate": "100deg"},
                 },
                 1.2: {
 
                 }
             });
 
+            console.log(item.getNowFrame(0.75).properties);
             expect(item.getNowFrame(0).get("display")).to.be.equals("none");
             expect(item.getNowFrame(0).get("a")).to.be.equals(1.5);
             expect(item.getNowFrame(0.4).get("display")).to.be.equals("none");
             expect(item.getNowFrame(0.4).get("a")).to.be.equals(1.5);
             expect(item.getNowFrame(0.6).get("display")).to.be.equals("none");
+            expect(item.getNowFrame(0.75).get("filter", "hue-rotate")).to.be.equals("50deg");
             expect(item.getNowFrame(0.6).get("a")).to.be.equals(1.6);
             expect(item.getNowFrame(1).get("display")).to.be.equals("block");
             expect(item.getNowFrame(1).get("a")).to.be.equals(2);            
@@ -224,6 +240,55 @@ describe("item Test", function() {
             expect(this.item.getDuration()).to.be.equals(10);
             expect(this.item.getActiveDuration()).to.be.equals(10);
             expect(this.item.getTotalDuration()).to.be.equals(15);
+        });
+        it("should check 'setDuration' with no frame", () => {
+            var item = new SceneItem({});
+
+            item.setDuration(0);
+
+            expect(item.getDuration()).to.be.equals(0);
+        });
+        it("should check 'setDuration' option", () => {
+            var item = new SceneItem({
+                "0%": {
+                    transform: "translate(0px, 0px) rotate(0deg)",
+                },
+                "25%": {
+                    transform: "translate(200px, 0px) rotate(90deg)",
+                },
+                "50%": {
+                    transform: "translate(200px, 200px) rotate(180deg)",
+                },
+                "75%": {
+                    transform: "translate(0px, 200px) rotate(270deg)",
+                },
+                "100%": {
+                    transform: "translate(0px, 0px) rotate(360deg)",
+                },
+            }, {
+                duration: 3,
+            });
+            var item2 = new SceneItem({
+                "0": {
+                    transform: "translate(0px, 0px) rotate(0deg)",
+                },
+                "1": {
+                    transform: "translate(200px, 0px) rotate(90deg)",
+                },
+                "2": {
+                    transform: "translate(200px, 200px) rotate(180deg)",
+                },
+                "3": {
+                    transform: "translate(0px, 200px) rotate(270deg)",
+                },
+                "4": {
+                    transform: "translate(0px, 0px) rotate(360deg)",
+                },
+            }, {
+                duration: 3,
+            });
+            expect(item.getDuration()).to.be.equals(3);
+            expect(item2.getDuration()).to.be.equals(3);
         });
         it("should check 'getDuration' method with iterationCount", () => {
             // Given
@@ -333,7 +398,13 @@ describe("item Test", function() {
             expect(this.item.getFrame(1.5).get("b")).to.be.deep.equals(2);
             expect(this.item.getFrame(1.5).get("c")).to.be.deep.equals(3);
             expect(this.item.getFrame(1.5).get("display")).to.be.deep.equals("none");
+        });
+        it("should check no frame", () => {
+            var item = new SceneItem({});
 
+            item.setTime(0);
+            expect(item.getDuration()).to.be.equals(0);
+            expect(item.getTime()).to.be.equals(0);
         });
     });
     describe("test item events", function() {
@@ -367,5 +438,246 @@ describe("item Test", function() {
 
             item.setTime(1.5);
         });   
+    });
+    describe("test frame for CSS", function() {
+        beforeEach(() => {
+            this.element = document.createElement("div");
+            this.item = new SceneItem({
+                0: {
+                    a: 1,
+                },
+                0.5: {
+                    a: 3,
+                },
+                1: {
+                    display: "block",
+                    a: 2,
+                },
+            });
+        });
+        afterEach(() => {
+            this.element = "";
+            document.body.innerHTML = "";
+        })
+        it("should check 'setId' method (Element)", () => {
+            // Given
+            const element = document.createElement("div");
+
+            this.item._elements = [element];
+            // When
+            
+            this.item.setId(".a .b");
+
+           // Then
+           expect(this.item.state.id).to.be.equals(".a .b");
+           expect(this.item.options.selector).to.be.equals(`[data-scene-id="ab"]`);
+           expect(this.item._elements[0].getAttribute("data-scene-id")).to.be.equal("ab");
+        });
+        it("should check 'setSelector' method", () => {
+            // Given
+            document.body.appendChild(this.element);
+            // When
+            this.item.setSelector("div");
+
+            // Then
+            expect(this.item.options.selector).to.be.equals("div");
+            expect(this.item._elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.state.id);
+        });
+        it("should check 'setElement' method", () => {
+            // Given
+            // When
+            this.item.setElement(this.element);
+            const id = this.item._elements[0].getAttribute("data-scene-id");
+            // Then
+            expect(this.item.state.id).to.be.equals(id);
+            expect(this.item.options.selector).to.be.equals(`[data-scene-id="${id}"]`);
+            expect(this.item._elements[0]).to.be.equals(this.element);
+        });
+        it("should check 'setElement' method (already has selector)", () => {
+            // Given
+            this.item.options.selector = "div";
+            // When
+            this.item.setElement(this.element);
+            const id = this.item._elements[0].getAttribute("data-scene-id");
+            // Then
+            expect(this.item.state.id).to.be.equals(id);
+            expect(this.item.options.selector).to.be.equals(`div`);
+            expect(this.item._elements[0]).to.be.equals(this.element);
+        });
+        it("should check 'toKeyframes' method", () => {
+            // Given
+            // When
+            // Then
+            // console.log(this.item.toKeyframes());
+        });
+        it("should check 'toCSS' method", () => {
+            // Given
+            // When
+            // Then
+            // console.log(this.item.toCSS());
+        });
+        it("should check 'setCSS' method", () => {
+            // Given
+            this.element.style.width = "200px";
+            this.element.style.border = "5px solid black";
+            // When
+            this.item.setCSS(0, ["width"]);
+            const width = this.item.get(0, "width");
+            this.item.setCSS(0, ["border"]);
+            const border = this.item.get(0, "border");
+            this.item.setCSS(0);
+
+
+            document.body.appendChild(this.element);
+            this.item.setElement(this.element);
+            
+            this.item.setCSS(0, ["width"]);
+            const width2 = this.item.get(0, "width");
+            this.item.setCSS(0, ["border"]);
+            const border2 = this.item.get(0, "border");
+
+            // Then
+            expect(width).to.be.undefined;
+            expect(border).to.be.undefined;
+            expect(width2).to.be.equals("200px");
+            expect(border2.toValue()).to.be.equals("5px solid rgba(0,0,0,1)");
+        });
+        it("should check 'exportCSS' method", () => {
+            // Given
+            // When
+            this.item.exportCSS();
+            const id = toId(this.item.state.id);
+            // Then
+            
+            expect(document.querySelector(`#__SCENEJS_STYLE_${id}`)).to.be.ok;
+        });
+        it.only (`should check '_times' method`, () => {
+            const item = new SceneItem({
+                0: {
+                    a: 1,
+                },
+                0.5: {
+                    a: 3,
+                },
+                1: {
+                    display: "block",
+                    a: 2,
+                },
+            }, {
+                iterationCount: 3,
+                
+            });
+            console.log(item._times());
+        });
+    });
+    [true, false].forEach(hasClassList => {
+        describe(`test SceneItem events(hasClassList = ${hasClassList})`, function() {
+            beforeEach(() => {
+                this.element = document.createElement("div");
+                !hasClassList && removeProperty(this.element, "classList");
+                document.body.appendChild(this.element);
+                this.item = new SceneItem({
+                    0: {
+                        a: 1,
+                    },
+                    0.1: {
+                        a: 3,
+                    },
+                    0.2: {
+                        display: "block",
+                        a: 2,
+                    },
+                });
+            });
+            afterEach(() => {
+                document.body.innerHTML = "";
+                this.element = null;
+                this.item.off();
+                this.item = null;
+            });
+            it (`should check "playCSS" and event order `, done => {
+                // Given
+                this.item.setElement(this.element);
+                const play = sinon.spy();
+                const ended = sinon.spy();
+                const iteration = sinon.spy();
+                const paused = sinon.spy();
+                this.item.on("play", play);
+                this.item.on("ended", ended);
+                this.item.on("iteration", iteration);
+                this.item.on("paused", paused);
+
+                // When
+                this.item.playCSS();
+                this.item.playCSS();
+
+                
+                this.item.on("ended", e => {
+                    // Then
+                    expect(play.calledOnce).to.be.true;
+                    expect(iteration.calledOnce).to.be.false;
+                    expect(ended.calledOnce).to.be.true;
+                    expect(paused.calledOnce).to.be.true;
+                    done();
+                });
+            });
+            it (`should check "playCSS" and replay`, done => {
+                // Given
+                this.item.setElement(this.element);
+                const play = sinon.spy();
+                const ended = sinon.spy();
+                this.item.on("play", play);
+                this.item.on("ended", ended);
+
+                // When
+                this.item.playCSS();
+
+                
+                this.item.on("ended", e => {
+                    // Then
+                    if (play.callCount === 1) {
+                        this.item.playCSS();
+                    } else {
+                        expect(play.callCount).to.be.equals(2);
+                        expect(ended.callCount).to.be.equals(2);
+                        done();
+                    }
+                });
+            });
+            it (`should check "iteration" event `, done => {
+                // Given
+                this.item.setElement(this.element);
+                const play = sinon.spy();
+                const ended = sinon.spy();
+                const iteration = sinon.spy();
+                const paused = sinon.spy();
+                this.item.on("play", play);
+                this.item.on("ended", ended);
+                this.item.on("iteration", iteration);
+                this.item.on("paused", paused);
+
+                // When
+                this.item.setIterationCount(2);
+                this.item.playCSS();
+
+                
+                this.item.on("ended", e => {
+                    // Then
+                    expect(play.calledOnce).to.be.true;
+                    expect(iteration.calledOnce).to.be.true;
+                    expect(ended.calledOnce).to.be.true;
+                    expect(paused.calledOnce).to.be.true;
+                    done();
+                });
+            });
+            it (`should check "playCSS" and no elements `, () => {
+                // Given
+                // When
+                this.item.playCSS();
+
+                // Then
+                expect(this.item.getPlayState()).to.be.equals("paused");
+            });
+        });
     });
 });
