@@ -1,7 +1,7 @@
 import { ObjectInterface } from "./consts";
 import EventTrigger from "./EventTrigger";
 import cubicBezier, { EasingFunctionInterface } from "./cubicBezier";
-import {defineGetter, defineGetterSetter} from "./utils";
+import {defineGetter, defineGetterSetter, toFixed} from "./utils";
 
 let lastTime = 0;
 
@@ -295,7 +295,7 @@ animator.currentTime // 10
 		return this.state.currentTime;
 	}
 	public getActiveTime() {
-		return Math.floor(Math.max(this.state.currentTime - this.state.delay, 0) * 10000) / 10000;
+		return toFixed(Math.max(this.state.currentTime - this.state.delay, 0));
 	}
 	public calculateIterationTime() {
 		const {iterationCount, fillMode, direction} = this.state;

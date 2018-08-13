@@ -11,15 +11,13 @@ export type NameType = string | number;
 
 export const PREFIX = "__SCENEJS_";
 export const SCENE_ROLES: RoleInterface = {transform: true, filter: true};
-export const ANIMATION_PLAY_STATE = ["idle", "pending", "paused", "running", "finished"];
-export const FILL_MODE = ["none", "forwards", "backwards", "both", "auto"];
-export const PLAY_DIRECTION = ["normal", "reverse", "alternate", "alternate-reverse"];
 export const LINEAR = cubicBezier(0, 0, 1, 1);
 export const EASE = cubicBezier(0.25, 0.1, 0.25, 1);
 export const EASE_IN = cubicBezier(0.42, 0, 1, 1);
 export const EASE_OUT = cubicBezier(0, 0, 0.58, 1);
 export const EASE_IN_OUT = cubicBezier(0.42, 0, 0.58, 1);
-export const THRESHOLD = 0.00001;
+export const MAXIMUM = 1000000;
+export const THRESHOLD = 0.000001;
 
 const checkProperties = (prefixes: string[], property: string) => {
 	const styles = (document.body || document.documentElement).style as any;

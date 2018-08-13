@@ -7,10 +7,13 @@ import {
 	isArray,
 	decamelize,
 	splitUnit,
+	toFixed,
 } from "./utils";
 import Keyframes from "./Keyframes";
 import {dotValue} from "./utils/dot";
-import {KEYFRAMES, ANIMATION, START_ANIMATION, PREFIX, ObjectInterface, THRESHOLD, NameType} from "./consts";
+import {
+	KEYFRAMES, ANIMATION, START_ANIMATION, PREFIX, THRESHOLD, ObjectInterface, NameType
+} from "./consts";
 import {toId, addClass, removeClass, hasClass, fromCSS} from "./utils/css";
 
 function makeId() {
@@ -319,29 +322,6 @@ item.setFrame(time, frame);
 		this.keyframes.update();
 		return this;
 	}
-	public _getTime(time: string | number, options?: StateInterface) {
-		const duration = (options && options.duration) || this.getDuration() || 100;
-
-		if (isString(time)) {
-			if (time === "from") {
-				return 0;
-			} else if (time === "to") {
-				return duration;
-			}
-			const {unit, value} = splitUnit(time);
-
-			if (unit === "%") {
-				!this.getDuration() && (this.state.duration = duration);
-				return parseFloat(time) / 100 * duration;
-			} else if (unit === ">") {
-				return value + THRESHOLD;
-			} else {
-				value;
-			}
-		} else {
-			return time;
-		}
-	}
 	/**
 	* get sceneItem's frame at that time
 	* @param {Number} time - frame's time
@@ -546,32 +526,62 @@ item.load({
 		}
 		return this;
 	}
-	// _times() {
-	// 	const duration = this.getDuration();
-	// 	const times = this.keyframes.times;
-	// 	const length = times.length;
-	// 	const direction = this.state.direction;
-	// 	const keyframes = [];
-	// 	let iterationCount = this.state.iterationCount;
+	public getAllTimes(isStartZero = true, options: StateInterface = {}) {
+		const times = this.keyframes.times.slice();
+		let length = times.length;
+		const keys: number[] = [];
+		const values: ObjectInterface<number> = {};
 
-	// 	iterationCount = iterationCount !== "infinite" ? iterationCount : 1;
+		if (!length) {
+			return {keys: [], values: {}, times: []};
+		}
+		const keytimes: number[] = [];
+		const duration = this.getDuration();
+		const direction = options.direction || this.state.direction;
+		const isShuffle = direction === "alternate" || direction === "alternate-reverse";
+		(!this.getFrame(0)) && times.unshift(0);
+		(!this.getFrame(duration)) && times.push(duration);
+		length = times.length;
+		let iterationCount = options.iterationCount || this.state.iterationCount;
 
-	// 	if (!length) {
-	// 		return keyframes;
-	// 	}
-	// 	for (let i = 0; i < iterationCount; ++i) {
-	// 		const isReverse = direction === "reverse" || direction === (i % 2 ? "alternate-reverse" : "alternate");
-	// 		const start = i * duration;
+		iterationCount = iterationCount !== "infinite" ? iterationCount : 1;
+		const totalDuration = iterationCount * duration;
 
-	// 		for (let j = 0; j < length; ++j) {
-	// 			keyframes.push(start + (isReverse ? times[length - 1 - j] : times[j]));
-	// 			// normal 0: 0 => 1: 1 => 1.00001: 0 => 2: 1
-	// 			// alternate 0: 0 => 1: 1 => 0: 0 => 1: 1
-	// 		}
-	// 	}
-	// 	return keyframes;
+		for (let i = 0; i < iterationCount; ++i) {
+			const isReverse = direction === "reverse" || direction === (i % 2 ? "alternate" : "alternate-reverse");
+			const start = i * duration;
 
-	// }
+			for (let j = 0; j < length; ++j) {
+				if (isShuffle && i !== 0 && j === 0) {
+					// pass duplicate
+					continue;
+				}
+				// isStartZero is keytimes[0] is 0 (i === 0 & j === 0)
+				const threshold = j === 0 && (i === 0 ? !isStartZero : !isShuffle) ? THRESHOLD : 0;
+				const keyvalue = isReverse ? times[length - 1 - j] : times[j];
+				const time = toFixed(isReverse ? duration - keyvalue : keyvalue);
+				const keytime = toFixed(start + time + threshold);
+
+				if (totalDuration < keytime) {
+					break;
+				}
+				keys.push(keytime);
+				values[keytime] = keyvalue;
+				(keytimes.indexOf(keyvalue) === -1) && keytimes.push(keyvalue);
+			}
+		}
+		if (keys[keys.length - 1] < totalDuration) {
+			// last time === totalDuration
+			const isReverse = direction === "reverse" ||
+				direction === (iterationCount % 2 > 1 ? "alternate" : "alternate-reverse");
+			const keyvalue = toFixed(duration * (isReverse ? 1 - iterationCount % 1 : iterationCount % 1));
+
+			keys.push(totalDuration);
+			values[totalDuration] = keyvalue;
+			(keytimes.indexOf(keyvalue) === -1) && keytimes.push(keyvalue);
+		}
+		return {keys, values, times: keytimes};
+	}
 	/**
 	* Specifies an css text that coverted the keyframes of the item.
 	* @param {Array} [duration=this.getDuration()] - elements to synchronize item's keyframes.
@@ -707,90 +717,70 @@ item.playCSS(false, {
 		animatedElement.addEventListener("animationiteration", animationiteration);
 		return this;
 	}
+	private _getTime(time: string | number, options?: StateInterface) {
+		const duration = (options && options.duration) || this.getDuration() || 100;
+
+		if (isString(time)) {
+			if (time === "from") {
+				return 0;
+			} else if (time === "to") {
+				return duration;
+			}
+			const {unit, value} = splitUnit(time);
+
+			if (unit === "%") {
+				!this.getDuration() && (this.state.duration = duration);
+				return parseFloat(time) / 100 * duration;
+			} else if (unit === ">") {
+				return value + THRESHOLD;
+			} else {
+				return value;
+			}
+		} else {
+			return time;
+		}
+	}
 	private _toKeyframes(duration = this.getDuration(), options: StateInterface = {}) {
 		const id = this.state.id || this.setId(makeId()).state.id;
 
 		if (!id) {
 			return "";
 		}
-		const itemDuration = this.getDuration();
-		const times = this.keyframes.times.slice();
 		const playSpeed = this.state.playSpeed;
 		const isParent = typeof options.iterationCount !== "undefined";
-		const delay = (isParent && this.state.delay) || 0;
-		const direction = isParent && this.state.direction;
-		const keyframes = [];
-		let iterationCount = this.state.iterationCount;
+		const iterationCount =  this.state.iterationCount;
+		const delay = isParent ? this.state.delay : 0;
+		const direction = isParent ? this.state.direction : "normal";
+		const frames: ObjectInterface<string> = {};
+		const {keys, values, times} = this.getAllTimes(true, {
+			duration,
+			delay,
+			direction,
+			iterationCount: isParent && iterationCount !== "infinite" ? iterationCount : 1,
+		});
+		const length = keys.length;
+		const keyframes: string[] = [];
 
-		(!this.getFrame(0)) && times.unshift(0);
-		(!this.getFrame(itemDuration)) && times.push(itemDuration);
-		const length = times.length;
-		const frames = times.map(time => this.getNowFrame(time).toCSS());
-
-		iterationCount = isParent && iterationCount !== "infinite" ? iterationCount : 1;
-
-		let shuttle = false;
-		let percent100 = false;
-
-		if (direction === "alternate-reverse" || direction === "alternate") {
-			shuttle = true;
+		if (!keys.length) {
+			return "";
 		}
+		times.forEach(time => {
+			frames[time] = this.getNowFrame(time).toCSS();
+		});
 		if (delay) {
 			keyframes.push(`0%{${frames[0]}}`);
 			if (direction === "reverse" || direction === "alternate-reverse") {
 				keyframes.push(`${delay / playSpeed / duration * 100 - 0.00001}%{${frames[0]}}`);
 			}
 		}
-		for (let i = 0; i < iterationCount; ++i) {
-			const isOdd = i % 2 === 0;
-			const time = delay + i * itemDuration;
-			let reverse = false;
+		keys.forEach(time => {
+			keyframes.push(`${(delay + time)  / playSpeed / duration * 100}%{${frames[values[time]]}}`);
+		});
+		const lastTime = keys[length - 1];
 
-			switch (direction) {
-				case "reverse":
-					reverse = true;
-					break;
-				case "alternate":
-					if (!isOdd) {
-						reverse = true;
-					}
-					break;
-				case "alternate-reverse":
-					if (isOdd) {
-						reverse = true;
-					}
-					break;
-				default:
-			}
-			for (let j = 0; j < length; ++j) {
-				const iterationIndex = reverse ? length - 1 - j : j;
-				const frame = frames[iterationIndex];
-				const iterationTime = times[iterationIndex];
-				const currentTime = time + (reverse ? itemDuration - iterationTime : iterationTime);
-				const percentage = currentTime / playSpeed / duration * 100;
-
-				if (percentage > 100) {
-					break;
-				}
-				percentage === 100 && (percent100 = true);
-				if (i !== 0 && j === 0) {
-					if (!shuttle) {
-						// not alternate and iterationCount > 1
-						keyframes.push(`${percentage + 0.0001}%{${frame}}`);
-					}
-				} else {
-					keyframes.push(`${percentage}%{${frame}}`);
-				}
-			}
-			if (i + 1 >= iterationCount && !percent100) {
-				const remain = iterationCount % 1;
-				const cssText = remain ?
-					this.getNowFrame(itemDuration * (reverse ? 1 - remain : remain)).toCSS() :
-					frames[reverse ? 0 : length - 1];
-
-				remain && keyframes.push(`${iterationCount * itemDuration / playSpeed / duration * 100}%{${cssText}}`);
-				keyframes.push(`100%{${cssText}}`);
-			}
+		if ((delay + lastTime) / playSpeed < duration) {
+			// not 100%
+			keyframes.push(`100%{${frames[values[lastTime]]}`);
 		}
 		return `@${KEYFRAMES} ${PREFIX}KEYFRAMES_${toId(id)}{
 			${keyframes.join("\n")}

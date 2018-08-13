@@ -1,5 +1,8 @@
-import { SCENE_ROLES, ObjectInterface } from "./consts";
+import { SCENE_ROLES, ObjectInterface, MAXIMUM } from "./consts";
 
+export function toFixed(num: number) {
+	return Math.round(num * MAXIMUM) / MAXIMUM;
+}
 export function isRole(args: any[]) {
 	const length = args.length;
 	let role: any = SCENE_ROLES;
