@@ -5,6 +5,8 @@ interface EventParamterType {
 }
 /**
 * attach and trigger event handlers.
+* @memberof Scene
+* @class Scene.EventTrigger
 */
 class EventTrigger {
 	private events: {[name: string]: CallbackType[]};
@@ -13,9 +15,10 @@ class EventTrigger {
 	}
 	/**
 	* Attach an event handler function for one or more events to target
+	* @method Scene.EventTrigger#on
 	* @param {String} name - event's name
 	* @param {Function} callback -  function to execute when the event is triggered.
-	* @return {EventTrigger} An Instance itself.
+	* @return {Scene.EventTrigger} An Instance itself.
 	* @example
 target.on("animate", function() {
 	console.log("animate");
@@ -50,9 +53,10 @@ target.trigger("animate");
 	}
 	/**
 	* Dettach an event handler function for one or more events to target
+	* @method Scene.EventTrigger#off
 	* @param {String} name - event's name
 	* @param {Function} callback -  function to execute when the event is triggered.
-	* @return {EventTrigger} An Instance itself.
+	* @return {Scene.EventTrigger} An Instance itself.
 	* @example
 const callback = function() {
 	console.log("animate");
@@ -84,9 +88,10 @@ target.off("animate");
 	}
 	/**
 	* execute event handler
+	* @method Scene.EventTrigger#triiger
 	* @param {String} name - event's name
 	* @param {Function} [...data] - event handler's additional parameter
-	* @return {EventTrigger} An Instance itself.
+	* @return {Scene.EventTrigger} An Instance itself.
 	* @example
 target.on("animate", function(a1, a2) {
 	console.log("animate", a1, a2);

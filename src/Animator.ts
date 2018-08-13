@@ -46,35 +46,36 @@ export function isDirectionReverse(iterationCount: number, direction: DirectionT
 	return direction === "reverse" ||
 		direction === (iterationCount % 2 >= 1 ? "alternate" : "alternate-reverse");
 }
-
+/**
+* @typedef {Object} AnimatorOptions The Animator options. Properties used in css animation.
+* @property {number} [duration] The duration property defines how long an animation should take to complete one cycle.
+* @property {"none"|"forwards"|"backwards"|"both"} [fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
+* @property {"infinite"|number} [iterationCount] The iterationCount property specifies the number of times an animation should be played.
+* @property {array|function} [easing] The easing(timing-function) specifies the speed curve of an animation.
+* @property {number} [delay] The delay property specifies a delay for the start of an animation.
+* @property {"normal"|"reverse"|"alternate"|"alternate-reverse"} [direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+*/
 /**
 * play video, animation, the others
-* @extends EventTrigger
-*/
-class Animator extends EventTrigger {
-	public state: StateInterface;
-	public options: ObjectInterface<any>;
-
-	/**
-	* Create an Animator.
-	* <br/>see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
-	* @param {Object} [options] - animator's options
-	* @param {Number} [options.delay] - specifies a delay for the start of an animation
-	* @param {String} [options.direction] - Specifies whether an animation should play in reverse direction or alternate cycles
-	* @param {Number} [options.duration] - Specifies how many seconds or milliseconds an animation takes to complete one cycle
-	* @param {String} [options.fillMode] - Specifies a style for the element when the animation is not playing (when it is finished, or when it has a delay)
-	* @param {Number|String} [options.iterationCount] - specifies the number of times an animation should be played
-	* @param {Object} [options.easing] - Specifies the speed curve of the animation
-	* @example
+* @memberof Scene
+* @class Animator
+* @extends Scene.EventTrigger
+* @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
+* @param {AnimatorOptions} [options] - animator's options
+* @example
 const animator = new Animator({
 	delay: 2,
 	diretion: "alternate",
 	duration: 2,
 	fillMode: "forwards",
 	iterationCount: 3,
-	easing: Scene.Animator.EASE,
+	easing: Scene.eaasing.EASE,
 });
-	*/
+*/
+class Animator extends EventTrigger {
+	public state: StateInterface;
+	public options: ObjectInterface<any>;
+
 	constructor(options?: StateInterface) {
 		super();
 		this.options = {};
@@ -95,6 +96,21 @@ const animator = new Animator({
 		};
 		this.setOptions(options);
 	}
+	/**
+	* set animator's easing.
+	* @method Scene.Animator#setEasing
+	* @param {array| function} curverArray - The speed curve of an animation.
+	* @return {Scene.Animator} An instance itself.
+	* @example
+animator.({
+	delay: 2,
+	diretion: "alternate",
+	duration: 2,
+	fillMode: "forwards",
+	iterationCount: 3,
+	easing: Scene.easing.EASE,
+});
+	*/
 	public setEasing(curveArray: [number, number, number, number] | EasingFunctionInterface): this {
 		this.setState(Array.isArray(curveArray) ? {
 				easingName: `cubic-bezier(${curveArray.join(",")})`,
@@ -107,15 +123,10 @@ const animator = new Animator({
 	}
 	/**
 	* set animator's options.
-	* <br/>see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
-	* @param {Object} [options] - animator's options
-	* @param {Number} [options.delay] - specifies a delay for the start of an animation
-	* @param {String} [options.direction] - Specifies whether an animation should play in reverse direction or alternate cycles
-	* @param {Number} [options.duration] - Specifies how many seconds or milliseconds an animation takes to complete one cycle
-	* @param {String} [options.fillMode] - Specifies a style for the element when the animation is not playing (when it is finished, or when it has a delay)
-	* @param {Number|String} [options.iterationCount] - specifies the number of times an animation should be played
-	* @param {Object} [options.easing] - Specifies the speed curve of the animation
-	* @return {Animator} An instance itself.
+	* @method Scene.Animator#setOptions
+	* @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
+	* @param {Object} [AnimatorOptions] - animator's options
+	* @return {Scene.Animator} An instance itself.
 	* @example
 animator.({
 	delay: 2,
@@ -123,7 +134,7 @@ animator.({
 	duration: 2,
 	fillMode: "forwards",
 	iterationCount: 3,
-	easing: Scene.Animator.EASE,
+	easing: Scene.eaasing.EASE,
 });
 	*/
 	public setOptions(options: StateInterface): this {
@@ -145,14 +156,14 @@ animator.({
 
 		return this;
 	}
-	public setCurrentIterationCount(iterationCount: number): this {
+	protected setCurrentIterationCount(iterationCount: number): this {
 		const state = this.state;
 		const passIterationCount = Math.floor(iterationCount);
 
 		if (state.currentIterationCount < passIterationCount) {
 			/**
 			* The event is fired when an iteration of an animation ends.
-			* @event Animator#iteration
+			* @event Scene.Animator#iteration
 			* @param {Object} param The object of data to be sent to an event.
 			* @param {Number} param.currentTime The total time that the animator is running.
 			* @param {Number} param.iterationCount The iteration count that the animator is running.
@@ -165,18 +176,39 @@ animator.({
 		state.currentIterationCount = iterationCount;
 		return this;
 	}
+	/**
+	* Get the animator's total duration including delay
+	* @method Scene.Animator#getTotalDuration
+	* @return {number} Total duration
+	* @example
+animator.getTotalDuration();
+	*/
 	public getTotalDuration(): number {
 		if (this.state.iterationCount === "infinite") {
 			return Infinity;
 		}
 		return this.state.delay + this.getActiveDuration();
 	}
+	/**
+	* Get the animator's total duration excluding delay
+	* @method Scene.Animator#getActiveDuration
+	* @return {number} Total duration excluding delay
+	* @example
+animator.getTotalDuration();
+	*/
 	public getActiveDuration(): number {
 		if (this.state.iterationCount === "infinite") {
 			return Infinity;
 		}
 		return this.getDuration() * this.state.iterationCount;
 	}
+	/**
+	* Check if the animator has reached the end.
+	* @method Scene.Animator#isEnded
+	* @return {boolean} ended
+	* @example
+animator.isEnded(); // true or false
+	*/
 	public isEnded(): boolean {
 		if (this.getTime() === 0 && this.state.playState === "paused") {
 			return true;
@@ -185,6 +217,13 @@ animator.({
 		}
 		return true;
 	}
+	/**
+	*Check if the animator is paused:
+	* @method Scene.Animator#isPaused
+	* @return {boolean} paused
+	* @example
+animator.isPaused(); // true or false
+	*/
 	public isPaused(): boolean {
 		return this.state.playState === "paused";
 	}
@@ -196,7 +235,8 @@ animator.({
 	}
 	/**
 	* play animator
-	* @return {Animator} An instance itself.
+	* @method Scene.Animator#play
+	* @return {Scene.Animator} An instance itself.
 	*/
 	public play() {
 		if (this.isEnded()) {
@@ -209,7 +249,7 @@ animator.({
 		});
 		/**
 		 * This event is fired when play animator.
-		 * @event Animator#play
+		 * @event Scene.Animator#play
 		 */
 		this.trigger("play");
 
@@ -217,33 +257,36 @@ animator.({
 	}
 	/**
 	* pause animator
-	* @return {Animator} An instance itself.
+	* @method Scene.Animator#pause
+	* @return {Scene.Animator} An instance itself.
 	*/
 	public pause(): this {
 		this.state.playState = "paused";
 		/**
 		 * This event is fired when animator is paused.
-		 * @event Animator#paused
+		 * @event Scene.Animator#paused
 		 */
 		this.trigger("paused");
 		return this;
 	}
 	/**
 	 * end animator
-	 * @return {Animator} An instance itself.
+	 * @method Scene.Animator#end
+	 * @return {Scene.Animator} An instance itself.
 	*/
 	public end(): this {
 		this.pause();
 		/**
 		 * This event is fired when animator is ended.
-		 * @event Animator#ended
+		 * @event Scene.Animator#ended
 		 */
 		this.trigger("ended");
 		return this;
 	}
 	/**
 	* reset animator
-	* @return {Animator} An instance itself.
+	* @method Scene.Animator#reset
+	* @return {Scene.Animator} An instance itself.
 	*/
 	public reset() {
 		this.setTime(0);
@@ -252,12 +295,13 @@ animator.({
 	}
 	/**
 	* set currentTime
+	* @method Scene.Animator#setTime
 	* @param {Number} time - currentTime
-	* @return {Animator} An instance itself.
+	* @return {Scene.Animator} An instance itself.
 	* @example
 animator.setTime(10);
 
-animator.currentTime // 10
+animator.getTime() // 10
 	*/
 	public setTime(time: number) {
 		const totalDuration = this.getTotalDuration();
@@ -273,7 +317,7 @@ animator.currentTime // 10
 
 		/**
 		 * This event is fired when the animator updates the time.
-		 * @event Animator#timeupdate
+		 * @event Scene.Animator#timeupdate
 		 * @param {Object} param The object of data to be sent to an event.
 		 * @param {Number} param.currentTime The total time that the animator is running.
 		 * @param {Number} param.time The iteration time during duration that the animator is running.
@@ -296,13 +340,42 @@ animator.currentTime // 10
 		}
 		return this;
 	}
+	/**
+	* Get the animator's current time
+	* @method Scene.Animator#getTime
+	* @return {number} current time
+	* @example
+animator.getTime();
+	*/
 	public getTime(): number {
 		return this.state.currentTime;
 	}
+	/**
+	* Get the animator's current time excluding delay
+	* @method Scene.Animator#getActiveTime
+	* @return {number} current time excluding delay
+	* @example
+animator.getActiveTime();
+	*/
 	public getActiveTime() {
 		return toFixed(Math.max(this.state.currentTime - this.state.delay, 0));
 	}
-	public calculateIterationTime() {
+	/**
+	* Get the animator's current iteration time
+	* @method Scene.Animator#getIterationTime
+	* @return {number} current iteration time
+	* @example
+animator.getIterationTime();
+	*/
+	public getIterationTime() {
+		return this.state.currentIterationTime;
+	}
+	protected setIterationTime(time: number) {
+		this.state.currentIterationTime = time;
+
+		return this;
+	}
+	protected calculateIterationTime() {
 		const {iterationCount, fillMode, direction, currentTime, delay} = this.state;
 		const duration = this.getDuration();
 		const activeTime = this.getActiveTime();
@@ -335,7 +408,7 @@ animator.currentTime // 10
 		this.setIterationTime(currentIterationTime);
 		return this;
 	}
-	public caculateEasing(time: number) {
+	protected caculateEasing(time: number) {
 		if (!this.state.easing) {
 			return time;
 		}
@@ -346,17 +419,7 @@ animator.currentTime // 10
 
 		return easingTime;
 	}
-	public getIterationTime() {
-		return this.state.currentIterationTime;
-	}
-	public setIterationTime(time: number) {
-		const iterationTime = time;
-
-		this.state.currentIterationTime = iterationTime;
-
-		return this;
-	}
-	public tick(now: number) {
+	protected tick(now: number) {
 		const state = this.state;
 		const {playSpeed, prevTime} = state;
 		const currentTime = this.getTime() + Math.min(1000, now * playSpeed - prevTime) / 1000;
@@ -375,7 +438,93 @@ animator.currentTime // 10
 		});
 	}
 }
-
+/**
+ * Set a delay for the start of an animation.
+ * @method Scene.Animator#setDelay
+ * @param {number} delay - delay
+ * @return {Scene.Animator} An instance itself.
+ */
+/**
+ * Get a delay for the start of an animation.
+ * @method Scene.Animator#getDelay
+ * @return {number} delay 
+ */
+/**
+ * Set fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
+ * @method Scene.Animator#setFillMode
+ * @param {"none"|"forwards"|"backwards"|"both"} fillMode - fillMode
+ * @return {Scene.Animator} An instance itself.
+ */
+/**
+ * Get fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
+ * @method Scene.Animator#getFillMode
+ * @return {"none"|"forwards"|"backwards"|"both"} fillMode 
+ */
+/**
+ * Set the number of times an animation should be played.
+ * @method Scene.Animator#setIterationCount
+ * @param {"inifnite"|number} iterationCount - iterationCount
+ * @return {Scene.Animator} An instance itself.
+ */
+/**
+ * Get the number of times an animation should be played.
+ * @method Scene.Animator#getIterationCount
+ * @return {"inifnite"|number} iterationCount 
+ */
+/**
+ * Set whether an animation should be played forwards, backwards or in alternate cycles.
+ * @method Scene.Animator#setDirection
+ * @param {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction - direction
+ * @return {Scene.Animator} An instance itself.
+ */
+/**
+ * Get whether an animation should be played forwards, backwards or in alternate cycles.
+ * @method Scene.Animator#getDirection
+ * @return {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction 
+ */
+/**
+ * Set whether the animation is running or paused.
+ * @method Scene.Animator#setPlayState
+ * @param {"paused"|"running"} playState - playState
+ * @return {Scene.Animator} An instance itself.
+ */
+/**
+ * Get whether the animation is running or paused.
+ * @method Scene.Animator#getPlayState
+ * @return {"paused"|"running"} playState 
+ */
+/**
+ * Set the animator's play speed
+ * @method Scene.Animator#setPlaySpeed
+ * @param {number} playSpeed - playSpeed
+ * @return {Scene.Animator} An instance itself.
+ */
+/**
+ * Get the animator's play speed
+ * @method Scene.Animator#getPlaySpeed
+ * @return {number} playSpeed 
+ */
+/**
+ * Set how long an animation should take to complete one cycle.
+ * @method Scene.Animator#setDuration
+ * @param {number} duration - duration
+ * @return {Scene.Animator} An instance itself.
+ */
+/**
+ * Get how long an animation should take to complete one cycle.
+ * @method Scene.Animator#getDuration
+ * @return {number} duration 
+ */
+/**
+ * Get the speed curve of an animation.
+ * @method Scene.Animator#getEasing
+ * @return {0|function} easing
+ */
+/**
+ * Get the speed curve's name
+ * @method Scene.Animator#getEasingName
+ * @return {string} the curve's name.
+ */
 const AnimatorPrototype = Animator.prototype;
 
 interface Animator {

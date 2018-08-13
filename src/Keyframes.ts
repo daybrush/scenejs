@@ -34,6 +34,8 @@ function updateFrame(names: ObjectInterface<any>, properties: ObjectInterface<an
 }
 
 /**
+ * @memberof Scene
+* @class Scene.Keyframes
 * a list of objects in chronological order.
 */
 export default class Keyframes {
@@ -46,26 +48,23 @@ export default class Keyframes {
 		this.items = {};
 		this.names = {};
 	}
-	// hasName(...args) {
-	// 	const length = args.length;
-	// 	let names = this.names;
-
-	// 	if (!length) {
-	// 		return false;
-	// 	}
-	// 	for (let i = 0; i < length; ++i) {
-	// 		if (!isObject(names) || !(args[i] in names)) {
-	// 			return false;
-	// 		}
-	// 		names = names[args[i]];
-	// 	}
-	// 	return true;
-	// }
+	/**
+	* A list of names
+	* @method Scene.Keyframes#getNames
+	* @return {string[][]} names
+	* @example
+keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scale"]]
+	*/
 	public getNames() {
 		const names = this.names;
 
 		return getNames(names, []);
 	}
+	/**
+	 * update property names used in frames.
+	 * @method Scene.Keyframes#update
+	 * @return {Scene.Keyframes} An instance itself
+	 */
 	public update() {
 		const items = this.items;
 
@@ -74,6 +73,15 @@ export default class Keyframes {
 		}
 		return this;
 	}
+	/**
+	 * executes a provided function once for each scene item.
+	 * @method Scene.Keyframes#forEach
+	 * @param {Function} callback Function to execute for each element, taking three arguments
+	 * @param {Scene.Frame} [callback.item] The value of the item being processed in the keyframes.
+	 * @param {string} [callback.time] The time of the item being processed in the keyframes.
+	 * @param {object} [callback.items] The object that forEach() is being applied to.
+	 * @return {Scene.Keyframes} An instance itself
+	 */
 	public forEach(callback: (item: any, time: number, items: ObjectInterface<any>) => void) {
 		const times = this.times;
 		const items = this.items;
@@ -82,6 +90,14 @@ export default class Keyframes {
 			callback(items[time], time, items);
 		});
 	}
+	/**
+	* update property names used in frame.
+	* @method Scene.Keyframes#updateFrame
+	* @param {Scene.Frame} [frame] - frame of that time.
+	* @return {Scene.Keyframes} An instance itself
+	* @example
+keyframes.updateFrame(frame);
+	*/
 	public updateFrame(frame: Frame) {
 		if (!frame) {
 			return this;
@@ -93,14 +109,21 @@ export default class Keyframes {
 		return this;
 	}
 	/**
-	* get last time of list
-	* @return {Number} last time
-	*/
+	 * Get how long an animation should take to complete one cycle.
+	 * @method Scene.Keyframes#getDuration
+	 * @return {number} duration 
+	 */
 	public getDuration() {
 		const times = this.times;
 
 		return times.length === 0 ? 0 : times[times.length - 1];
 	}
+	/**
+	 * Set how long an animation should take to complete one cycle.
+	 * @method Scene.Keyframes#setDuration
+	 * @param {number} duration - duration
+	 * @return {Scene.Keyframes} An instance itself.
+	 */
 	public setDuration(duration: number, originalDuration: number = this.getDuration()) {
 		const ratio = duration / originalDuration;
 		const {times, items} = this;
@@ -117,6 +140,7 @@ export default class Keyframes {
 	}
 	/**
 	* get size of list
+	* @method Scene.Keyframes#size
 	* @return {Number} length of list
 	*/
 	public size() {
@@ -124,16 +148,17 @@ export default class Keyframes {
 	}
 	/**
 	* add object in list
+	* @method Scene.Keyframes#add
 	* @param {Number} time - frame's time
 	* @param {Object} object - target
-	* @return {Keyframes} An instance itself
+	* @return {Scene.Keyframes} An instance itself
 	*/
 	public add(time: number, object: any) {
 		this.items[time] = object;
 		this.addTime(time);
 		return this;
 	}
-	public addTime(time: number) {
+	private addTime(time: number) {
 		const times = this.times;
 		const length = times.length;
 		let pushIndex = length;
@@ -152,6 +177,7 @@ export default class Keyframes {
 	}
 	/**
 	* Check if keyframes has object at that time.
+	* @method Scene.Keyframes#has
 	* @param {Number} time - object's time
 	* @return {Boolean} true: if has time, false: not
 	*/
@@ -160,6 +186,7 @@ export default class Keyframes {
 	}
 	/**
 	* get object at that time.
+	* @method Scene.Keyframes#get
 	* @param {Number} time - object's time
 	* @return {Object} object at that time
 	*/
@@ -168,6 +195,7 @@ export default class Keyframes {
 	}
 	/**
 	* remove object at that time.
+	* @method Scene.Keyframes#remove
 	* @param {Number} time - object's time
 	* @return {Keyframes} An instance itself
 	*/
@@ -178,7 +206,7 @@ export default class Keyframes {
 		this.removeTime(time);
 		return this;
 	}
-	public removeTime(time: number) {
+	private removeTime(time: number) {
 		const index = this.times.indexOf(time);
 
 		if (index > -1) {

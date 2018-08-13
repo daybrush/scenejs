@@ -40,7 +40,7 @@ var obj4 = new PropertyObject([100,100,100,0.5], {
 		this.init(value);
 	}
 	public setOptions(options: PropertyObjectInterface) {
-		Object.assign(this.options, options);
+		(Object as any).assign(this.options, options);
 		return this;
 	}
 	public getOption(name: string) {

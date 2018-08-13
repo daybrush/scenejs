@@ -43,24 +43,27 @@ function merge(to: ObjectInterface<any>, from: ObjectInterface<any>, toValue = f
 }
 /* eslint-enable */
 /**
- * Animation's Frame
+* Animation's Frame
+* @class Scene.Frame
+* @param {Object} properties - properties
+* @example
+const frame = new Scene.Frame({
+	display: "none"
+	transform: {
+		translate: "50px",
+		scale: "5, 5",
+	}
+});
  */
 class Frame {
 	public properties: ObjectInterface<any>;
-	/**
-	* Create an animation's frame.
-	* @param {Object} properties - properties
-	* @example
-let frame = new Scene.Frame({
-	display: "none"
-});
-	*/
 	constructor(properties: ObjectInterface<any> = {}) {
 		this.properties = {};
 		this.set(properties);
 	}
 	/**
 	* get property value
+	* @method Scene.Frame#get
 	* @param {...Number|String|Scene.PropertyObejct} args - property name or value
 	* @example
 	frame.get("display") // => "none", "block", ....
@@ -80,8 +83,9 @@ let frame = new Scene.Frame({
 	}
 	/**
 	* remove property value
+	* @method Scene.Frame#remove
 	* @param {...String} args - property name
-	* @return {Frame} An instance itself
+	* @return {Scene.Frame} An instance itself
 	* @example
 	frame.remove("display")
 	*/
@@ -103,10 +107,9 @@ let frame = new Scene.Frame({
 	}
 	/**
 	* set property
-	* @param {Object|String} role - property role(property, transform, filter)
-	* @param {Object|String} property - property name
-	* @param {Object|String} value - property value
-	* @return {Frame} An instance itself
+	* @method Scene.Frame#set
+	* @param {...Number|String|Scene.PropertyObejct} args - property names or values
+	* @return {Scene.Frame} An instance itself
 	* @example
 // one parameter
 frame.set({
@@ -128,7 +131,7 @@ frame.set("transform", {
 });
 
 // three parameters
-frame.set("property", "display", "none");
+frame.set("transform", "translate", "50px");
 	*/
 	public set(...args: any[]) {
 		const length = args.length;
@@ -171,6 +174,7 @@ frame.set("property", "display", "none");
 	}
 	/**
 	* check that has property.
+	* @method Scene.Frame#has
 	* @param {...String} args - property name
 	* @example
 	frame.has("property", "display") // => true or false
@@ -192,6 +196,7 @@ frame.set("property", "display", "none");
 	}
 	/**
 	* clone frame.
+	* @method Scene.Frame#clone
 	* @return {Scene.Frame} An instance of clone
 	* @example
 	frame.clone();
@@ -204,6 +209,7 @@ frame.set("property", "display", "none");
 	}
 	/**
 	* merge one frame to other frame.
+	* @method Scene.Frame#merge
 	* @param {Scene.Frame} frame - target frame.
 	* @return {Scene.Frame} An instance itself
 	* @example
@@ -225,6 +231,7 @@ frame.set("property", "display", "none");
 	}
 	/**
 	* Specifies an css object that coverted the frame.
+	* @method Scene.Frame#toCSSObject
 	* @return {object} cssObject
 	*/
 	public toCSSObject() {
@@ -247,6 +254,7 @@ frame.set("property", "display", "none");
 	}
 	/**
 	* Specifies an css text that coverted the frame.
+	* @method Scene.Frame#toCSS
 	* @return {string} cssText
 	*/
 	public toCSS() {
