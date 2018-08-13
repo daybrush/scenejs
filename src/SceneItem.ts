@@ -612,7 +612,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 			delay: `${delay}s`,
 			name: `${PREFIX}KEYFRAMES_${toId(id)}`,
 			duration: `${duration / playSpeed}s`,
-			easing: easingName,
+			timingFunction: easingName,
 			iterationCount: count,
 		});
 

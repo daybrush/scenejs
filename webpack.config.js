@@ -11,8 +11,8 @@ repository: ${pkg.repository.url}
 
 const config = {
 	entry: {
-		"scene": `./src/index.ts`,
-		"scene.min": `./src/index.ts`,
+		"scene": `./src/index.umd.ts`,
+		"scene.min": `./src/index.umd.ts`,
 	},
 	output: {
 		filename: `./[name].js`,
@@ -35,10 +35,14 @@ const config = {
 		new StringReplacePlugin()
 	],
 	mode: "none",
+	resolve: {
+		extensions: [".ts", ".tsx", ".js", ".json"]
+	},
 	module: {
 		rules: [
 			{
 				test: /\.tsx?$/,
+				
 				exclude: /(node_modules|bower_components)/,
 				loader: "awesome-typescript-loader",
 			},

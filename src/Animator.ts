@@ -411,7 +411,6 @@ interface Animator {
 	getDuration(): number;
 	getEasing(): EasingType;
 	getEasingName(): string;
-
 }
 defineGetterSetter(AnimatorPrototype, "delay", "state");
 defineGetterSetter(AnimatorPrototype, "fillMode", "state");
