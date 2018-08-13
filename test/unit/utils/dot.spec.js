@@ -1,5 +1,6 @@
 import {dotArray, dotColor, dotObject} from "../../../src/utils/dot";
 import PropertyObject from "../../../src/PropertyObject";
+import { stringToColorObject } from "../../../src/utils/property";
 /* eslint-disable */
 
 describe("utils/dot Test", function() {
@@ -13,10 +14,10 @@ describe("utils/dot Test", function() {
 			expect(dotArray([1, 2, 3, 4], [2, 3, 4], 1, 1)).to.be.deep.equal([1.5, 2.5, 3.5, 4]);
 		});
 		it("should check 'dotColor' method(rgb vs rgb)", () => {
-			const color1 = "rgb(0, 0, 0)";
-			const color2 = "rgb(100, 200, 220)";
-			const color3 = "rgba(0, 0, 0, 0.5)";
-			const color4 = "rgba(100, 200, 220, 0.2)";
+			const color1 = stringToColorObject("rgb(0, 0, 0)");
+			const color2 = stringToColorObject("rgb(100, 200, 220)");
+			const color3 = stringToColorObject("rgba(0, 0, 0, 0.5)");
+			const color4 = stringToColorObject("rgba(100, 200, 220, 0.2)");
 			const color5 = new PropertyObject([0, 0, 0], {
 				model: "rgba",
 				prefix: "rgba(",

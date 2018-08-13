@@ -99,39 +99,39 @@ describe("EventTrigger Test", function() {
 
 
 			// Then
-			expect(event._events).to.be.deep.equals({});
+			expect(event.events).to.be.deep.equals({});
 
 			// When
 			event.on("a");
 			event.off("a", a);
 			// Then
-			expect(event._events).to.be.deep.equals({a: []});
+			expect(event.events).to.be.deep.equals({a: []});
 
 			// When
 			event.off();
 			event.off("a", a);
 			// Then
-			expect(event._events).to.be.deep.equals({});
+			expect(event.events).to.be.deep.equals({});
 
 			// When
 			event.on({"a": [a, b], "b": c});
 			// Then
-			expect(event._events).to.be.deep.equals({"a":[a, b], "b": [c]});
+			expect(event.events).to.be.deep.equals({"a":[a, b], "b": [c]});
 
 			// When
 			event.off("a", a);
 			// Then
-			expect(event._events).to.be.deep.equals({"a":[b], "b": [c]});
+			expect(event.events).to.be.deep.equals({"a":[b], "b": [c]});
 			
 			// When
 			event.off("a");
 			// Then
-			expect(event._events).to.be.deep.equals({"a":[], "b": [c]});
+			expect(event.events).to.be.deep.equals({"a":[], "b": [c]});
 
 			// When
 			event.off();
 			// Then
-			expect(event._events).to.be.deep.equals({});
+			expect(event.events).to.be.deep.equals({});
 		});
 		it ("should check 'off' method multiple", () => {
 			// Given

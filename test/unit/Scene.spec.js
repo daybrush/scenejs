@@ -230,7 +230,7 @@ describe("Scene Test", function() {
 				selector: true,
 			});
 
-			expect(scene.getItem(".test")._elements.length).to.be.equals(1);
+			expect(scene.getItem(".test").elements.length).to.be.equals(1);
 		});
 		it (`should check load options`, () => {
 			const scene = new Scene({
@@ -249,7 +249,7 @@ describe("Scene Test", function() {
 				}
 			});
 
-			expect(scene.getItem(".test")._elements.length).to.be.equals(1);
+			expect(scene.getItem(".test").elements.length).to.be.equals(1);
 		});
 		it (`should check playCSS method`, done => {
 			const scene = new Scene({
@@ -298,6 +298,7 @@ describe("Scene Test", function() {
 
 			expect(hasClass(document.querySelector(".test"), START_ANIMATION)).to.be.true;
 			expect(scene.getPlayState()).to.be.equals("running");
+			expect(scene.getState("playCSS")).to.be.true;
 
 			const spy = sinon.spy();
 

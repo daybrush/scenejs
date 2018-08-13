@@ -1,5 +1,5 @@
-import Frame from "../../src/Frame";
-import {SCENE_ROLES} from "../../src/consts";
+import Frame from "../../src/Frame.ts";
+import {SCENE_ROLES} from "../../src/consts.ts";
 /* eslint-disable */
 
 SCENE_ROLES["transform"] = true;
@@ -25,8 +25,6 @@ describe("Frame Test", function() {
                     brightness: "90%",
                 }
             });
-
-            console.log(frame.properties);
 
             expect(frame.get("transform", "scale").toValue()).to.be.equals("1,2");
             expect(frame.get("filter", "brightness")).to.be.equals("90%");
@@ -70,7 +68,6 @@ describe("Frame Test", function() {
             const frame = new Frame();
             frame.set("transform: rotate(-90deg) scale(1, 0)");
 
-            console.log(frame.properties);
             expect(frame.get("transform", "rotate")).to.be.equals("-90deg");
         })
         it("should check set method", () => {

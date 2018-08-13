@@ -1,13 +1,12 @@
-import SceneItem from "../../src/SceneItem";
-import {SCENE_ROLES} from "../../src/consts";
-import {toId} from "../../src/utils/css";
+import SceneItem from "../../src/SceneItem.ts";
+import {THRESHOLD} from "../../src/consts.ts";
+import {toId} from "../../src/utils/css.ts";
 import removeProperty from "./injections/ClassListInjection";
+import { orderByASC, group } from "./TestHelper";
 /* eslint-disable */
 
-SCENE_ROLES["transform"] = true;
-SCENE_ROLES["filter"] = true;
 
-describe("item Test", function() {
+describe("SceneItem Test", function() {
     describe("test item initialize", function() {
         it("should check default item", function() {
             const item = new SceneItem({
@@ -106,7 +105,7 @@ describe("item Test", function() {
             this.item.setId(".a .b");
 
             // Then
-            expect(this.item.state.id).to.be.equals(".a .b");
+            expect(this.item.getState("id")).to.be.equals(".a .b");
         });
         it("should check 'getNowFrame' method", () => {
             const item = this.item;
@@ -133,7 +132,6 @@ describe("item Test", function() {
                 }
             });
 
-            console.log(item.getNowFrame(0.75).properties);
             expect(item.getNowFrame(0).get("display")).to.be.equals("none");
             expect(item.getNowFrame(0).get("a")).to.be.equals(1.5);
             expect(item.getNowFrame(0.4).get("display")).to.be.equals("none");
@@ -463,7 +461,7 @@ describe("item Test", function() {
             // Given
             const element = document.createElement("div");
 
-            this.item._elements = [element];
+            this.item.elements = [element];
             // When
             
             this.item.setId(".a .b");
@@ -471,7 +469,7 @@ describe("item Test", function() {
            // Then
            expect(this.item.state.id).to.be.equals(".a .b");
            expect(this.item.options.selector).to.be.equals(`[data-scene-id="ab"]`);
-           expect(this.item._elements[0].getAttribute("data-scene-id")).to.be.equal("ab");
+           expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equal("ab");
         });
         it("should check 'setSelector' method", () => {
             // Given
@@ -481,28 +479,28 @@ describe("item Test", function() {
 
             // Then
             expect(this.item.options.selector).to.be.equals("div");
-            expect(this.item._elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.state.id);
+            expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.state.id);
         });
         it("should check 'setElement' method", () => {
             // Given
             // When
             this.item.setElement(this.element);
-            const id = this.item._elements[0].getAttribute("data-scene-id");
+            const id = this.item.elements[0].getAttribute("data-scene-id");
             // Then
             expect(this.item.state.id).to.be.equals(id);
             expect(this.item.options.selector).to.be.equals(`[data-scene-id="${id}"]`);
-            expect(this.item._elements[0]).to.be.equals(this.element);
+            expect(this.item.elements[0]).to.be.equals(this.element);
         });
         it("should check 'setElement' method (already has selector)", () => {
             // Given
             this.item.options.selector = "div";
             // When
             this.item.setElement(this.element);
-            const id = this.item._elements[0].getAttribute("data-scene-id");
+            const id = this.item.elements[0].getAttribute("data-scene-id");
             // Then
             expect(this.item.state.id).to.be.equals(id);
             expect(this.item.options.selector).to.be.equals(`div`);
-            expect(this.item._elements[0]).to.be.equals(this.element);
+            expect(this.item.elements[0]).to.be.equals(this.element);
         });
         it("should check 'toKeyframes' method", () => {
             // Given
@@ -551,23 +549,78 @@ describe("item Test", function() {
             
             expect(document.querySelector(`#__SCENEJS_STYLE_${id}`)).to.be.ok;
         });
-        it.only (`should check '_times' method`, () => {
-            const item = new SceneItem({
-                0: {
-                    a: 1,
-                },
-                0.5: {
-                    a: 3,
-                },
-                1: {
-                    display: "block",
-                    a: 2,
-                },
-            }, {
-                iterationCount: 3,
-                
+        const expectations = {
+            "normal": {
+                0.3: {0: 0, 0.3: 0.3},
+                1: {0: 0, 0.5: 0.5, 1: 1},
+                1.3: {0: 0, 0.5: 0.5, 1: 1, [1 + THRESHOLD]: 0, 1.3: 0.3},
+                2: {0: 0, 0.5: 0.5, 1: 1, [1 + THRESHOLD]: 0, 1.5: 0.5, 2: 1},
+                2.3: {0: 0, 0.5: 0.5, 1: 1, [1 + THRESHOLD]: 0, 1.5: 0.5, 2: 1, [2 + THRESHOLD]: 0, 2.3: 0.3},
+            },
+            "reverse": {
+                0.3: {0: 1, 0.3: 0.7},
+                1: {0: 1, 0.5: 0.5, 1: 0},
+                1.3: {0: 1, 0.5: 0.5, 1: 0, [1 + THRESHOLD]: 1, 1.3: 0.7},
+                2: {0: 1, 0.5: 0.5, 1: 0, [1 + THRESHOLD]: 1, 1.5: 0.5, 2: 0},
+                2.3: {0: 1, 0.5: 0.5, 1: 0, [1 + THRESHOLD]: 1, 1.5: 0.5, 2: 0, [2 + THRESHOLD]: 1, 2.3: 0.7},
+            },
+            "alternate": {
+                0.3: {0: 0, 0.3: 0.3},
+                1: {0: 0, 0.5: 0.5, 1: 1},
+                1.3: {0: 0, 0.5: 0.5, 1: 1, 1.3: 0.7},
+                2: {0: 0, 0.5: 0.5, 1: 1, 1.5: 0.5, 2: 0},
+                2.3: {0: 0, 0.5: 0.5, 1: 1, 1.5: 0.5, 2: 0, 2.3: 0.3},
+            },
+            "alternate-reverse": {
+                0.3: {0: 1, 0.3: 0.7},
+                1: {0: 1, 0.5: 0.5, 1: 0},
+                1.3: {0: 1, 0.5: 0.5, 1: 0, 1.3: 0.3},
+                2: {0: 1, 0.5: 0.5, 1: 0, 1.5: 0.5, 2: 1},
+                2.3: {0: 1, 0.5: 0.5, 1: 0, 1.5: 0.5, 2: 1, 2.3: 0.7},
+            },
+        };
+        ["normal" , "reverse", "alternate", "alternate-reverse"].forEach(direction => {
+            [0.3, 1, 1.3, 2, 2.3].forEach(iterationCount => {
+                it (`should check 'getAllTimes()' with direction="${direction}", iterationCount=${iterationCount}`, () => {
+                    const item = new SceneItem({
+                        0: {
+                            a: 1,
+                        },
+                        0.5: {
+                            a: 3,
+                        },
+                        1: {
+                            display: "block",
+                            a: 2,
+                        },
+                    }, {
+                        iterationCount,
+                        direction,
+                    });
+                    
+
+
+                    const times1 = item.getAllTimes();
+                    const times2 = item.getAllTimes(false);
+                    const values1 = expectations[direction][iterationCount];
+                    const values2 = Object.assign({[THRESHOLD]: values1[0]}, values1);
+                    delete values2[0];
+
+                    const keys1 = orderByASC(Object.keys(values1).map(key => parseFloat(key)));
+                    const keys2 = orderByASC(Object.keys(values2).map(key => parseFloat(key)));
+                    const keytimes1 = group(orderByASC(Object.values(values1)));
+                    const keytimes2 = group(orderByASC(Object.values(values2)));
+
+                    expect(orderByASC(times1.times)).to.be.deep.equals(keytimes1);
+                    expect(times1.keys).to.be.deep.equals(keys1);
+                    expect(times1.values).to.be.deep.equals(values1);                
+
+                    // {[THRESHOLD]: 0, ...}
+                    expect(orderByASC(times2.times)).to.be.deep.equals(keytimes2);
+                    expect(times2.keys).to.be.deep.equals(keys2);
+                    expect(times2.values).to.be.deep.equals(values2);
+                });
             });
-            console.log(item._times());
         });
     });
     [true, false].forEach(hasClassList => {
@@ -612,6 +665,8 @@ describe("item Test", function() {
                 this.item.playCSS();
 
                 
+                expect(this.item.getPlayState()).to.be.equals("running");
+			    expect(this.item.getState("playCSS")).to.be.true;
                 this.item.on("ended", e => {
                     // Then
                     expect(play.calledOnce).to.be.true;

@@ -51,11 +51,11 @@ describe("property Test", function() {
             const arr2 = arrayToColorObject([0, 0, 0, 0.5]);
 
             expect(arr.toValue()).to.be.equals("rgba(0,0,0,1)");
-            expect(arr.model).to.be.equals("rgba");
-            expect(arr.type).to.be.equals("color");
+            expect(arr.options.model).to.be.equals("rgba");
+            expect(arr.options.type).to.be.equals("color");
             expect(arr2.toValue()).to.be.equals("rgba(0,0,0,0.5)");
-            expect(arr2.model).to.be.equals("rgba");
-            expect(arr2.type).to.be.equals("color");
+            expect(arr2.options.model).to.be.equals("rgba");
+            expect(arr2.options.type).to.be.equals("color");
         });
         it (`should check 'toColorObject' method`, () => {
             // Given
@@ -64,11 +64,11 @@ describe("property Test", function() {
             const arr2 = toColorObject([0, 0, 0, 0.5]);
             
             expect(arr.toValue()).to.be.equals("rgba(0,0,0,1)");
-            expect(arr.model).to.be.equals("rgba");
-            expect(arr.type).to.be.equals("color");
+            expect(arr.options.model).to.be.equals("rgba");
+            expect(arr.options.type).to.be.equals("color");
             expect(arr2.toValue()).to.be.equals("rgba(0,0,0,0.5)");
-            expect(arr2.model).to.be.equals("rgba");
-            expect(arr2.type).to.be.equals("color");
+            expect(arr2.options.model).to.be.equals("rgba");
+            expect(arr2.options.type).to.be.equals("color");
         });
         it (`should check 'toPropertyObject' method`, () => {
             const obj = toPropertyObject([0, 0, 0]);
@@ -76,7 +76,7 @@ describe("property Test", function() {
             const obj3 = toColorObject("hsla(0, 40%, 50%, 0.4)");
 
             expect(obj.toValue()).to.be.equals("0,0,0");
-            expect(obj.type).to.be.equals("array");
+            expect(obj.options.type).to.be.equals("array");
             expect(obj2.toValue()).to.be.equals("rgba(179,77,77,1)");
             expect(obj3.toValue()).to.be.equals("rgba(179,77,77,0.4)");
         });
