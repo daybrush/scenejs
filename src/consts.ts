@@ -1,5 +1,3 @@
-import cubicBezier from "./cubicBezier";
-
 export type Role = true | RoleInterface;
 export interface RoleInterface {
 	[role: string]: Role;
@@ -11,11 +9,6 @@ export type NameType = string | number;
 
 export const PREFIX = "__SCENEJS_";
 export const SCENE_ROLES: RoleInterface = {transform: true, filter: true};
-export const LINEAR = cubicBezier(0, 0, 1, 1);
-export const EASE = cubicBezier(0.25, 0.1, 0.25, 1);
-export const EASE_IN = cubicBezier(0.42, 0, 1, 1);
-export const EASE_OUT = cubicBezier(0, 0, 0.58, 1);
-export const EASE_IN_OUT = cubicBezier(0.42, 0, 0.58, 1);
 export const MAXIMUM = 1000000;
 export const THRESHOLD = 0.000001;
 
@@ -41,7 +34,3 @@ export const FILTER = checkProperties(["webkit", "ms", "moz", "o"], "filter");
 export const ANIMATION = checkProperties(["webkit", "ms", "moz", "o"], "animation");
 export const KEYFRAMES = ANIMATION.replace("animation", "keyframes");
 export const START_ANIMATION = "startAnimation";
-
-// export const TYPE_PROPERTY_OBJECT = "propertyobject";
-// export const TYPE_ARRAY = "array";
-// export const TYPE_TEXT = "text";

@@ -1,6 +1,6 @@
 import { ObjectInterface } from "./consts";
 import EventTrigger from "./EventTrigger";
-import cubicBezier, { EasingFunctionInterface } from "./cubicBezier";
+import {bezier, EasingFunctionInterface } from "./easing";
 import {defineGetter, defineGetterSetter, toFixed} from "./utils";
 
 let lastTime = 0;
@@ -41,6 +41,10 @@ export interface StateInterface {
 	playState?: PlayStateType;
 	duration?: number;
 	[key: string]: any;
+}
+export function isDirectionReverse(iterationCount: number, direction: DirectionType) {
+	return direction === "reverse" ||
+		direction === (iterationCount % 2 >= 1 ? "alternate" : "alternate-reverse");
 }
 
 /**
@@ -92,13 +96,13 @@ const animator = new Animator({
 		this.setOptions(options);
 	}
 	public setEasing(curveArray: [number, number, number, number] | EasingFunctionInterface): this {
-		if (Array.isArray(curveArray)) {
-			this.state.easingName = `cubic-bezier(${curveArray.join(",")})`;
-			this.state.easing = cubicBezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
-		} else {
-			this.state.easing = curveArray;
-			this.state.easingName = curveArray.easingName || "linear";
-		}
+		this.setState(Array.isArray(curveArray) ? {
+				easingName: `cubic-bezier(${curveArray.join(",")})`,
+				easing: bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]),
+			} : {
+				easing: curveArray,
+				easingName: curveArray.easingName || "linear",
+			});
 		return this;
 	}
 	/**
@@ -142,9 +146,10 @@ animator.({
 		return this;
 	}
 	public setCurrentIterationCount(iterationCount: number): this {
+		const state = this.state;
 		const passIterationCount = Math.floor(iterationCount);
 
-		if (this.state.currentIterationCount < passIterationCount) {
+		if (state.currentIterationCount < passIterationCount) {
 			/**
 			* The event is fired when an iteration of an animation ends.
 			* @event Animator#iteration
@@ -153,11 +158,11 @@ animator.({
 			* @param {Number} param.iterationCount The iteration count that the animator is running.
 			*/
 			this.trigger("iteration", {
-				currentTime: this.state.currentTime,
+				currentTime: state.currentTime,
 				iterationCount: passIterationCount,
 			});
 		}
-		this.state.currentIterationCount = iterationCount;
+		state.currentIterationCount = iterationCount;
 		return this;
 	}
 	public getTotalDuration(): number {
@@ -240,7 +245,7 @@ animator.({
 	* reset animator
 	* @return {Animator} An instance itself.
 	*/
-	public reset(): this {
+	public reset() {
 		this.setTime(0);
 		this.pause();
 		return this;
@@ -254,7 +259,7 @@ animator.setTime(10);
 
 animator.currentTime // 10
 	*/
-	public setTime(time: number): this {
+	public setTime(time: number) {
 		const totalDuration = this.getTotalDuration();
 		let currentTime = time;
 
@@ -285,7 +290,7 @@ animator.currentTime // 10
 	public getState(name: string): any {
 		return this.state[name];
 	}
-	public setState(object: StateInterface): this {
+	public setState(object: StateInterface) {
 		for (const name in object) {
 			this.state[name] = object[name];
 		}
@@ -298,55 +303,34 @@ animator.currentTime // 10
 		return toFixed(Math.max(this.state.currentTime - this.state.delay, 0));
 	}
 	public calculateIterationTime() {
-		const {iterationCount, fillMode, direction} = this.state;
+		const {iterationCount, fillMode, direction, currentTime, delay} = this.state;
 		const duration = this.getDuration();
 		const activeTime = this.getActiveTime();
-		const isDelay = this.state.currentTime - this.state.delay < 0;
+		const isDelay = currentTime - delay < 0;
 		const currentIterationCount = duration === 0 ? 0 : activeTime / duration;
-		const isOdd = currentIterationCount % 2 >= 1;
 		let currentIterationTime = duration ? activeTime % duration : 0;
-		let isAlternate = false;
 
-		if (isDelay) {
+		if (isDelay || !currentIterationCount) {
 			this.setIterationTime(0);
 			return this;
 		}
 		this.setCurrentIterationCount(currentIterationCount);
+
 		// direction : normal, reverse, alternate, alternate-reverse
 		// fillMode : forwards, backwards, both, none
-		switch (direction) {
-			case "reverse":
-				currentIterationTime = duration - currentIterationTime;
-				break;
-			case "alternate":
-				if (isOdd) {
-					currentIterationTime = duration - currentIterationTime;
-				}
-				isAlternate = true;
-				break;
-			case "alternate-reverse":
-				if (!isOdd) {
-					currentIterationTime = duration - currentIterationTime;
-				}
-				isAlternate = true;
-				break;
-			default:
+		const isReverse = isDirectionReverse(currentIterationCount, direction);
+
+		if (isReverse) {
+			currentIterationTime = duration - currentIterationTime;
 		}
+		if (iterationCount !== "infinite") {
+			const isForwards = fillMode === "both" || fillMode === "forwards";
 
-		switch (fillMode) {
-			case "both":
-			case "forwards":
-				if (isAlternate || currentIterationCount !== iterationCount || iterationCount % 1 !== 0) {
-					break;
-				}
-				currentIterationTime = duration - currentIterationTime;
-
-				break;
-			default:
-				if (currentIterationCount !== iterationCount || iterationCount % 1 !== 0) {
-					break;
-				}
-				currentIterationTime = 0;
+			// fill forwards
+			if (currentIterationCount >= iterationCount) {
+				currentIterationTime = duration * (isForwards ? (iterationCount % 1) || 1 : 0);
+				isReverse && (currentIterationTime = duration - currentIterationTime);
+			}
 		}
 		this.setIterationTime(currentIterationTime);
 		return this;
@@ -373,16 +357,16 @@ animator.currentTime // 10
 		return this;
 	}
 	public tick(now: number) {
-		const playSpeed = this.state.playSpeed;
-		const prevTime = this.state.prevTime;
+		const state = this.state;
+		const {playSpeed, prevTime} = state;
 		const currentTime = this.getTime() + Math.min(1000, now * playSpeed - prevTime) / 1000;
 
-		this.state.prevTime = now * playSpeed;
+		state.prevTime = now * playSpeed;
 		this.setTime(currentTime);
 		if (this.isEnded()) {
 			this.end();
 		}
-		if (this.state.playState === "paused") {
+		if (state.playState === "paused") {
 			return;
 		}
 

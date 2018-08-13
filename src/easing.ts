@@ -27,7 +27,7 @@ function solveFromX(x1: number, x2: number, x: number) {
 	}
 	return t;
 }
-export default function(x1: number, y1: number, x2: number, y2: number) {
+export function bezier(x1: number, y1: number, x2: number, y2: number) {
 	/*
 		x = f(t)
 		calculate inverse function by x
@@ -42,3 +42,9 @@ export default function(x1: number, y1: number, x2: number, y2: number) {
 	func.easingName = `cubic-bezier(${x1}, ${y1}, ${x2}, ${y2})`;
 	return func;
 }
+
+export const LINEAR = bezier(0, 0, 1, 1);
+export const EASE = bezier(0.25, 0.1, 0.25, 1);
+export const EASE_IN = bezier(0.42, 0, 1, 1);
+export const EASE_OUT = bezier(0, 0, 0.58, 1);
+export const EASE_IN_OUT = bezier(0.42, 0, 0.58, 1);
