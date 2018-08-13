@@ -1,5 +1,4 @@
 import {isObject, isString} from "./utils";
-import { ObjectInterface } from "./consts";
 
 interface PropertyObjectInterface {
 	prefix?: string;
@@ -75,7 +74,7 @@ console.log(obj1.get(0));
 	* Set the value at that index
 	* @param {Number} index - index
 	* @param {Object} value - text, a number, object to set
-	* @return {Object} one of values at the index
+	* @return {PropertyObject} An instance itself
 	* @example
 const obj1 = new PropertyObject("1,2,3", ",");
 obj1.set(0, 2);
@@ -133,9 +132,7 @@ console.log(obj4.toValue());
 	obj4.join();  // =>   "100,100,100,0.5"
 	 */
 	public join() {
-		const separator = this.options.separator;
-
-		return this.value.map(v => ((v instanceof PropertyObject) ? v.toValue() : v)).join(separator);
+		return this.value.map(v => ((v instanceof PropertyObject) ? v.toValue() : v)).join(this.options.separator);
 	}
 	/**
 	* executes a provided function once per array element.
@@ -143,7 +140,7 @@ console.log(obj4.toValue());
 	* @param {All} [callback.currentValue] The current element being processed in the array.
 	* @param {Number} [callback.index] The index of the current element being processed in the array.
 	* @param {Array} [callback.array] the array.
-	* @return {String} Join the elements of an array into a string
+	* @return {PropertyObject} An instance itself
 	* @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach|MDN Array.forEach()} reference to MDN document.
 	* @example
 //rgba(100, 100, 100, 0.5)

@@ -1,5 +1,5 @@
-import {TRANSFORM, FILTER, SCENE_ROLES, ObjectInterface, NameType} from "./consts";
-import {isObject, isString, isUndefined, isArray, isRole} from "./utils";
+import {TRANSFORM, FILTER, ObjectInterface, NameType} from "./consts";
+import {isObject, isString, isArray, isRole} from "./utils";
 import {toPropertyObject, splitStyle, toObject} from "./utils/property";
 import PropertyObject from "./PropertyObject";
 
@@ -71,8 +71,8 @@ let frame = new Scene.Frame({
 		const length = args.length;
 
 		for (let i = 0; i < length; ++i) {
-			if (isUndefined(properties)) {
-				return properties;
+			if (!isObject(properties)) {
+				return undefined;
 			}
 			properties = properties[args[i]];
 		}
@@ -93,7 +93,7 @@ let frame = new Scene.Frame({
 			return this;
 		}
 		for (let i = 0; i < length - 1; ++i) {
-			if (isUndefined(properties)) {
+			if (!isObject(properties)) {
 				return this;
 			}
 			properties = properties[args[i]];
@@ -135,25 +135,21 @@ frame.set("property", "display", "none");
 		const params = args.slice(0, -1);
 		const value = args[length - 1];
 
-		if (isArray(value)) {
+		if (length === 2 && isArray(params[0])) {
+			this._set(params[0], value);
+		} else if (isArray(value)) {
 			this._set(params, value);
-			return this;
-		}
-		if (isPropertyObject(value)) {
+		} else if (isPropertyObject(value)) {
 			if (isRole(params)) {
 				this.set(...params, toObject(value));
 			} else {
 				this._set(params, value);
 			}
-			return this;
-		}
-		if (isObject(value)) {
+		} else if (isObject(value)) {
 			for (const name in value) {
 				this.set(...params, name, value[name]);
 			}
-			return this;
-		}
-		if (isString(value)) {
+		} else if (isString(value)) {
 			if (isRole(params)) {
 				this.set(...params, toPropertyObject(value));
 				return this;
@@ -167,8 +163,10 @@ frame.set("property", "display", "none");
 					return this;
 				}
 			}
+			this._set(params, value);
+		} else {
+			this._set(params, value);
 		}
-		this._set(params, value);
 		return this;
 	}
 	/**
@@ -181,8 +179,11 @@ frame.set("property", "display", "none");
 		let properties = this.properties;
 		const length = args.length;
 
+		if (!length) {
+			return false;
+		}
 		for (let i = 0; i < length; ++i) {
-			if (!properties || !(args[i] in properties)) {
+			if (!isObject(properties) || !(args[i] in properties)) {
 				return false;
 			}
 			properties = properties[args[i]];
@@ -199,7 +200,6 @@ frame.set("property", "display", "none");
 		const frame = new Frame();
 
 		frame.merge(this);
-
 		return frame;
 	}
 	/**
@@ -232,7 +232,7 @@ frame.set("property", "display", "none");
 		const cssObject: ObjectInterface<string> = {};
 
 		for (const name in properties) {
-			if (SCENE_ROLES[name]) {
+			if (isRole([name])) {
 				continue;
 			}
 			cssObject[name] = properties[name];

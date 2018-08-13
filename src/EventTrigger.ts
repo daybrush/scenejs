@@ -1,4 +1,4 @@
-import {isObject, has} from "./utils";
+import {has} from "./utils";
 type CallbackType = (...args: any[]) => any;
 interface EventParamterType {
 	[name: string]: CallbackType | CallbackType[];

@@ -29,6 +29,13 @@ const config = {
 		new UglifyJSWebpackPlugin({
 			include: /\.min\.js$/,
 			uglifyOptions: {
+				compress: {
+					warnings: false
+				},
+				output: {
+					comments: false,
+					beautify: false
+				},
 			},
 		}),
 		new webpack.BannerPlugin(banner),

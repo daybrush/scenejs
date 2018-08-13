@@ -1,4 +1,4 @@
-import Animator, { StateInterface, EasingType } from "./Animator";
+import Animator, { StateInterface, EasingType, isDirectionReverse } from "./Animator";
 import Frame from "./Frame";
 import {
 	isUndefined,
@@ -14,8 +14,11 @@ import {dotValue} from "./utils/dot";
 import {
 	KEYFRAMES, ANIMATION, START_ANIMATION, PREFIX, THRESHOLD, ObjectInterface, NameType
 } from "./consts";
-import {toId, addClass, removeClass, hasClass, fromCSS} from "./utils/css";
+import {addClass, removeClass, hasClass, fromCSS} from "./utils/css";
 
+function toId(text: string) {
+	return text.match(/[0-9a-zA-Z]+/g).join("");
+}
 function makeId() {
 	for (;;) {
 		const id = `${Math.floor(Math.random() * 100000)}`;
@@ -142,7 +145,7 @@ item.duration; // = item.keyframes.size()
 			this.load(time);
 			return this;
 		}
-		const frame = this.getFrame(time) || this.newFrame(time);
+		const frame = this.newFrame(time);
 
 		frame.set(...args);
 		this.updateFrame(frame);
@@ -444,7 +447,7 @@ const frame = item.getNowFrame(1.7);
 			if (isUndefined(value)) {
 				return;
 			}
-			frame.set(...properties, value);
+			frame.set(properties, value);
 		});
 		return frame;
 	}
@@ -506,7 +509,7 @@ item.load({
 
 		item.setOptions(this.state);
 		item.setOptions(options);
-		this.keyframes.each((frame: Frame, time: number) => item.setFrame(time, frame.clone()));
+		this.keyframes.forEach((frame: Frame, time: number) => item.setFrame(time, frame.clone()));
 		return item;
 	}
 	public setOptions(options: StateInterface) {
@@ -514,15 +517,10 @@ item.load({
 		const selector = options && options.selector;
 		const elements = this.options.elements || this.options.element;
 
-		if (!selector && !elements) {
-			return this;
-		}
 		if (elements) {
 			this.setElement(elements);
-		} else if (selector === true) {
-			this.setSelector(this.state.id);
-		} else {
-			this.setSelector(selector);
+		} else if (selector) {
+			this.setSelector(selector === true ? this.state.id : selector);
 		}
 		return this;
 	}
@@ -548,7 +546,7 @@ item.load({
 		const totalDuration = iterationCount * duration;
 
 		for (let i = 0; i < iterationCount; ++i) {
-			const isReverse = direction === "reverse" || direction === (i % 2 ? "alternate" : "alternate-reverse");
+			const isReverse = isDirectionReverse(i, direction);
 			const start = i * duration;
 
 			for (let j = 0; j < length; ++j) {
@@ -572,8 +570,7 @@ item.load({
 		}
 		if (keys[keys.length - 1] < totalDuration) {
 			// last time === totalDuration
-			const isReverse = direction === "reverse" ||
-				direction === (iterationCount % 2 > 1 ? "alternate" : "alternate-reverse");
+			const isReverse = isDirectionReverse(iterationCount, direction);
 			const keyvalue = toFixed(duration * (isReverse ? 1 - iterationCount % 1 : iterationCount % 1));
 
 			keys.push(totalDuration);
@@ -591,7 +588,8 @@ item.setCSS(0, ["opacity"]);
 item.setCSS(0, ["opacity", "width", "height"]);
 	*/
 	public toCSS(duration = this.getDuration(), options: StateInterface = {}) {
-		const id = this.state.id || this.setId(makeId()).state.id;
+		const state = this.state;
+		const id = state.id || this.setId(makeId()).state.id;
 
 		if (!id) {
 			return "";
@@ -600,12 +598,11 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		const isZeroDuration = duration === 0;
 		const selector = this.options.selector;
 		const playSpeed = (options.playSpeed || 1);
-		const delay = ((typeof options.delay === "undefined" ? this.state.delay : options.delay) || 0) / playSpeed;
-		const easingName = (!isZeroDuration && options.easing && options.easingName) ||
-			this.state.easingName;
-		const count = (!isZeroDuration && options.iterationCount) || this.state.iterationCount;
-		const fillMode = (options.fillMode !== "forwards" && options.fillMode) || this.state.fillMode;
-		const direction = (options.direction !== "normal" && options.direction) || this.state.direction;
+		const delay = ((typeof options.delay === "undefined" ? state.delay : options.delay) || 0) / playSpeed;
+		const easingName = (!isZeroDuration && options.easing && options.easingName) || state.easingName;
+		const count = (!isZeroDuration && options.iterationCount) || state.iterationCount;
+		const fillMode = (options.fillMode !== "forwards" && options.fillMode) || state.fillMode;
+		const direction = (options.direction !== "normal" && options.direction) || state.direction;
 		const cssText = makeAnimationProperties({
 			fillMode,
 			direction,
