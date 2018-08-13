@@ -74,7 +74,7 @@ export default class Keyframes {
 		}
 		return this;
 	}
-	public each(callback: (item: any, time: number, items: ObjectInterface<any>) => void) {
+	public forEach(callback: (item: any, time: number, items: ObjectInterface<any>) => void) {
 		const times = this.times;
 		const items = this.items;
 
@@ -137,9 +137,8 @@ export default class Keyframes {
 		const times = this.times;
 		const length = times.length;
 		let pushIndex = length;
-		let i;
 
-		for (i = 0; i < length; ++i) {
+		for (let i = 0; i < length; ++i) {
 			// if time is smaller than times[i], add time to index
 			if (time === times[i]) {
 				return this;
@@ -182,10 +181,9 @@ export default class Keyframes {
 	public removeTime(time: number) {
 		const index = this.times.indexOf(time);
 
-		if (index === -1) {
-			return this;
+		if (index > -1) {
+			this.times.splice(index, 1);
 		}
-		this.times.splice(index, 1);
 		return this;
 	}
 }
