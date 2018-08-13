@@ -1,9 +1,5 @@
 import { ObjectInterface } from "../consts";
 
-export function toId(text: string) {
-	return text.match(/[0-9a-zA-Z]+/g).join("");
-}
-
 export function hasClass(element: HTMLElement, className: string) {
 	if (element.classList) {
 		return element.classList.contains(className);

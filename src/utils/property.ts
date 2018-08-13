@@ -5,7 +5,7 @@
 
 import PropertyObject from "../PropertyObject";
 import {COLOR_MODELS, hexToRGB, hex3to6, hslToRGB} from "./color";
-import {isString, isObject, isUndefined, isArray} from "../utils";
+import {isString, isUndefined, isArray} from "../utils";
 import { ObjectInterface } from "../consts";
 
 /**
@@ -109,15 +109,13 @@ export function arrayToColorObject(arr: number[]) {
 	if (arr.length === 3) {
 		arr[3] = 1;
 	}
-	const object = new PropertyObject(arr, {
+	return new PropertyObject(arr, {
 		model,
 		separator: ",",
 		type: "color",
 		prefix: `${model}(`,
 		suffix: ")",
 	});
-
-	return object;
 }
 /**
 	* convert text with parentheses to PropertyObject[type=color].
@@ -228,9 +226,10 @@ export function stringToBracketObject(value: string) {
 	}
 }
 
-export function arrayToPropertyObject(arr: any[]) {
+export function arrayToPropertyObject(arr: any[], separator: string) {
 	return new PropertyObject(arr, {
 		type: "array",
+		separator,
 	});
 }
 
@@ -279,23 +278,18 @@ toPropertyObject("1px solid #000");
 export function toPropertyObject(value: any): any {
 	if (!isString(value)) {
 		if (Array.isArray(value)) {
-			return arrayToPropertyObject(value);
+			return arrayToPropertyObject(value, ",");
 		}
 		return value;
 	}
 	let values = splitComma(value);
 
 	if (values.length > 1) {
-		return new PropertyObject(values.map(v => toPropertyObject(v)), {
-			type: "array",
-		});
+		return arrayToPropertyObject(values.map(v => toPropertyObject(v)), ",");
 	}
 	values = splitSpace(value);
 	if (values.length > 1) {
-		return new PropertyObject(values.map(v => toPropertyObject(v)), {
-			separator: " ",
-			type: "array",
-		});
+		return arrayToPropertyObject(values.map(v => toPropertyObject(v)), " ");
 	} else {
 		const chr = value.charAt(0);
 
