@@ -55,8 +55,8 @@ export function dotArray(a1: any[], a2: any, b1: number, b2: number): any {
 * If the values are not RGBA model, change them RGBA mdoel.
 * @memberof Dot
 * @function dotColor
-* @param {PropertyObject|String} a1 value1
-* @param {PropertyObject|String} a2 value2
+* @param {PropertyObject} a1 value1
+* @param {PropertyObject} a2 value2
 * @param {Number} b1 b1 ratio
 * @param {Number} b2 b2 ratio
 * @return {PropertyObject} PropertyObject(type=color).
@@ -176,10 +176,16 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
 		return a1;
 	}
 	// split number and unit of the value.
-	const v1 = splitUnit(a1);
-	const v2 = splitUnit(a2);
 	const r1 = b1 / (b1 + b2);
 	const r2 = 1 - r1;
+
+	if (type1 === "number") {
+		return a1 * r2 + a2 * r1;
+	} else if (type1 !== "string") {
+		return a1;
+	}
+	const v1 = splitUnit(a1);
+	const v2 = splitUnit(a2);
 	let v;
 
 	// 숫자가 아닐경우 첫번째 값을 반환 b2가 0일경우 두번째 값을 반환

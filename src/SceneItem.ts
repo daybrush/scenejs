@@ -96,7 +96,7 @@ console.log(item.getId()); // item
 	public setId(id: string) {
 		const elements = this.elements;
 
-		this.state.id = id;
+		this.setState({id});
 		const sceneId = toId(this.state.id);
 
 		this.options.selector || (this.options.selector = `[data-scene-id="${sceneId}"]`);
@@ -669,7 +669,6 @@ item.playCSS(false, {
 		if (this.isEnded()) {
 			this.setTime(0);
 		}
-		this.setPlayState("running");
 		exportCSS && this.exportCSS();
 		const length = elements.length;
 		const cssText = makeAnimationProperties(properties);
@@ -692,6 +691,7 @@ item.playCSS(false, {
 			}
 		}
 
+		this.setState({playCSS: true});
 		this.setPlayState("running");
 		this.trigger("play");
 

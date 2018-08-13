@@ -248,6 +248,7 @@ scene.playCSS(false, {
 		animationItem.on("iteration", animationiteration);
 		this.setState({playCSS: true});
 		this.setPlayState("running");
+		this.trigger("play");
 		return this;
 	}
 }

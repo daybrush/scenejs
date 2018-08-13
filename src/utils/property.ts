@@ -185,14 +185,14 @@ export function toColorObject(value: PropertyObject | number[] | string) {
 /**
 * convert text with parentheses to object.
 * @memberof Property
-* @function toBracketObject
+* @function stringToBracketObject
 * @param {String} value ex) "rgba(0,0,0,1)"
 * @return {PropertyObject} PropertyObject
 * @example
-toBracketObject("abcde(0, 0, 0,1)")
+stringToBracketObject("abcde(0, 0, 0,1)")
 // => PropertyObject(model="abcde", value=[0, 0, 0,1], separator=",")
 */
-export function toBracketObject(value: string) {
+export function stringToBracketObject(value: string) {
 	// [prefix, value, other]
 	const matches = (/([^(]*)\(([\s\S]*)\)([\s\S]*)/g).exec(value);
 
@@ -206,20 +206,26 @@ export function toBracketObject(value: string) {
 	let separator = ",";
 	let values;
 	// divide comma(,)
-	const result = toPropertyObject(text);
+	const obj = toPropertyObject(text);
 
-	if (result instanceof PropertyObject) {
-		separator = result.getOption("separator");
-		values = result.value;
+	if (obj instanceof PropertyObject) {
+		separator = obj.getOption("separator");
+		values = obj.value;
 	} else {
 		values = [text];
 	}
-	return new PropertyObject(values, {
+	const result = new PropertyObject(values, {
 		separator,
 		model,
 		prefix,
 		suffix,
 	});
+
+	if (COLOR_MODELS.indexOf(model) !== -1) {
+		return toColorObject(result);
+	} else {
+		return result;
+	}
 }
 
 export function arrayToPropertyObject(arr: any[]) {
@@ -239,7 +245,7 @@ export function arrayToPropertyObject(arr: any[]) {
 stringToColorObject("rgba(0, 0, 0,1)")
 // => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")
 */
-export function stringToColorObject(value: string): PropertyObject {
+export function stringToColorObject(value: string): string | PropertyObject {
 	let colorArray: number[];
 
 	if (value.charAt(0) === "#") {
@@ -252,7 +258,8 @@ export function stringToColorObject(value: string): PropertyObject {
 		}
 		return arrayToColorObject(colorArray);
 	} else if (value.indexOf("(") !== -1) {
-		return toColorObject(value);
+		// in bracket.
+		return stringToBracketObject(value);
 	} else {
 		throw new Error(`Invalid Format : Not a Color - ${value}`);
 	}
@@ -296,18 +303,9 @@ export function toPropertyObject(value: any): any {
 			// Quotes
 			return value;
 		} else if (value.indexOf("(") !== -1) {
-			// in bracket.
-			const result = toBracketObject(value);
-			if (!isObject(result)) {
-				return result;
-			}
-			const model = result.getOption("model").toLowerCase();
-
-			if (COLOR_MODELS.indexOf(model) !== -1) {
-				return toColorObject(result);
-			}
-			return result;
-		} else if (value.indexOf("#") === 0) {
+			// color
+			return stringToBracketObject(value);
+		} else if (value.charAt(0) === "#") {
 			return stringToColorObject(value);
 		}
 	}

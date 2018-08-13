@@ -11,17 +11,10 @@ export function isRole(args: any[]) {
 		return false;
 	}
 	for (let i = 0; i < length; ++i) {
-		if (!(args[i] in role)) {
+		if (!role || !isObject(role) || !(args[i] in role)) {
 			return false;
 		}
 		role = role[args[i]];
-
-		if (role[args[i]] === true) {
-			return false;
-		}
-		if (!role) {
-			return false;
-		}
 	}
 	return true;
 }
@@ -41,11 +34,12 @@ export function has(object: object, name: string) {
 	return Object.prototype.hasOwnProperty.call(object, name);
 }
 export function splitUnit(text: string) {
-	const v = `${text}`;
-	const value = v.match(/([0-9]|\.|-|e-|e\+)+/g)[0];
+	const v = text;
+	const matches = v.match(/([0-9]|\.|-|e-|e\+)+/g);
+	const value = matches ? matches[0] : text;
 	const unit = v.replace(value, "") || "";
 
-	return {unit, value: parseFloat(value) || 0};
+	return {unit, value: parseFloat(value)};
 }
 export function camelize(str: string) {
 	return str.replace(/[\s-_]([a-z])/g, (all, letter) => letter.toUpperCase());
