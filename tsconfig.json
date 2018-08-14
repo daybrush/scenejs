@@ -1,8 +1,9 @@
 {
 	"compilerOptions": {
 	  "outDir": "./outjs/",
-	  "esModuleInterop": true,
-	  "sourceMap": true,
+	  "esModuleInterop": false,
+		"sourceMap": true,
+		"removeComments": true,
 	  "noImplicitAny": true,
 	  "module": "commonjs",
 		"target": "es3",
