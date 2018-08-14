@@ -10,3 +10,4 @@ jsdoc/
 doc/
 outjs/
 declaration/
+build/
