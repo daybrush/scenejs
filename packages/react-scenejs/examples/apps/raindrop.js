@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { SceneItem, EASE_IN_OUT } from "../../src/index";
+import {SceneItem, easing} from "../../src/index";
 import "./raindrop.css";
+
 
 class App extends React.Component {
 	renderCircle(delay) {
@@ -10,7 +11,7 @@ class App extends React.Component {
 			to={{ "borderWidth": "0px", opacity: 0.3, transform: "scale(0.7)" }}
 			delay={delay}
 			duration={1.5}
-			easing={EASE_IN_OUT}
+			easing={easing.EASE_IN_OUT}
 			iterationCount="infinite"
 			ref= {e => {e && (window["item" + delay] = e);}}
 			>

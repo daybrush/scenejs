@@ -10,7 +10,7 @@ $ npm install @egjs/react-scenejs  --save
 
 ## How to use
 ```jsx
-import { SceneItem, EASE_IN_OUT } from "react-scenejs";
+import { SceneItem, easing } from "react-scenejs";
 
 <SceneItem keyframes={{
 	0: {opacity: 0, left: "0px"},
@@ -22,7 +22,7 @@ iterationCount={1}
 delay={0}
 direction="normal"
 fillMode="forwards"
-easing={EASE_IN_OUT}
+easing={easing.EASE_IN_OUT}
 onPlay={() => {}}
 onPaused={() => {}}
 onEnded={() => {}}
