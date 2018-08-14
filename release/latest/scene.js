@@ -92,14 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
-var index_1 = __importStar(__webpack_require__(1)), others = index_1;
+var index_1 = __webpack_require__(1), others = index_1;
 for (var name_1 in others) {
     index_1["default"][name_1] = others[name_1];
 }
@@ -112,29 +105,19 @@ module.exports = index_1["default"];
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 exports.__esModule = true;
-var Scene_1 = __importDefault(__webpack_require__(2));
-var SceneItem_1 = __importDefault(__webpack_require__(8));
+var Scene_1 = __webpack_require__(2);
+var SceneItem_1 = __webpack_require__(8);
 exports.SceneItem = SceneItem_1["default"];
-var Frame_1 = __importDefault(__webpack_require__(9));
+var Frame_1 = __webpack_require__(9);
 exports.Frame = Frame_1["default"];
-var Keyframes_1 = __importDefault(__webpack_require__(13));
+var Keyframes_1 = __webpack_require__(13);
 exports.Keyframes = Keyframes_1["default"];
-var PropertyObject_1 = __importDefault(__webpack_require__(11));
+var PropertyObject_1 = __webpack_require__(11);
 exports.PropertyObject = PropertyObject_1["default"];
-var easing = __importStar(__webpack_require__(7));
+var easing = __webpack_require__(7);
 exports.easing = easing;
-var Animator_1 = __importDefault(__webpack_require__(3));
+var Animator_1 = __webpack_require__(3);
 exports.Animator = Animator_1["default"];
 exports["default"] = Scene_1["default"];
 
@@ -158,42 +141,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
-var Animator_1 = __importDefault(__webpack_require__(3));
-var SceneItem_1 = __importDefault(__webpack_require__(8));
+var Animator_1 = __webpack_require__(3);
+var SceneItem_1 = __webpack_require__(8);
 var consts_1 = __webpack_require__(6);
 var utils_1 = __webpack_require__(5);
-/**
-* manage sceneItems and play Scene.
-* @class Scene
-* @extends Scene.Animator
-* @param {Object} [properties] - properties
-* @param {AnimatorOptions} [options] - options
-* @example
-const scene = new Scene({
-    item1: {
-        0: {
-            display: "none",
-        },
-        1: {
-            display: "block",
-            opacity: 0,
-        },
-        2: {
-            opacity: 1,
-        },
-    },
-    item2: {
-        2: {
-            opacity: 1,
-        },
-    }
-});
-*/
-var Scene = /** @class */ (function (_super) {
+var Scene = (function (_super) {
     __extends(Scene, _super);
     function Scene(properties, options) {
         var _this = _super.call(this) || this;
@@ -224,26 +177,9 @@ var Scene = /** @class */ (function (_super) {
         }
         return this;
     };
-    /**
-    * get item in scene by name
-    * @method Scene#getItem
-    * @param {string} name - item's name
-    * @return {Scene.SceneItem} item
-    * @example
-const item = scene.getItem("item1")
-    */
     Scene.prototype.getItem = function (name) {
         return this.items[name];
     };
-    /**
-    * create item in scene
-    * @method Scene#newItem
-    * @param {String} name - name of item to create
-    * @param {StateOptions} options - The option object of SceneItem
-    * @return {Sceme.SceneItem} Newly created item
-    * @example
-const item = scene.newItem("item1")
-    */
     Scene.prototype.newItem = function (name, options) {
         if (options === void 0) { options = {}; }
         if (utils_1.has(this.items, name)) {
@@ -254,13 +190,6 @@ const item = scene.newItem("item1")
         item.setOptions(options);
         return item;
     };
-    /**
-    * add a sceneItem to the scene
-    * @param {String} name - name of item to create
-    * @param {Scene.SceneItem} item - sceneItem
-    * @example
-const item = scene.newItem("item1")
-    */
     Scene.prototype.setItem = function (name, item) {
         item.setId(name);
         this.items[name] = item;
@@ -273,27 +202,10 @@ const item = scene.newItem("item1")
         var easing = this.state.easing;
         for (var id in items) {
             var item = items[id];
-            /**
-             * This event is fired when timeupdate and animate.
-             * @event Scene#animate
-             * @param {Number} param.currentTime The total time that the animator is running.
-             * @param {Number} param.time The iteration time during duration that the animator is running.
-             * @param {Frame} param.frame frame of that time.
-             * @param {Scene.SceneItem} param.target The scene item that timeupdate and animate.
-             */
             item.setTime(iterationTime * item.state.playSpeed, easing, this);
         }
         return this;
     };
-    /**
-     * executes a provided function once for each scene item.
-     * @method Scene#forEach
-     * @param {Function} func Function to execute for each element, taking three arguments
-     * @param {Scene.SceneItem} [func.item] The value of the item being processed in the scene.
-     * @param {string} [func.name] The name of the item being processed in the scene.
-     * @param {object} [func.items] The object that forEach() is being applied to.
-     * @return {Scene} An instance itself
-     */
     Scene.prototype.forEach = function (func) {
         var items = this.items;
         for (var name_1 in items) {
@@ -301,11 +213,6 @@ const item = scene.newItem("item1")
         }
         return this;
     };
-    /**
-     * Export the CSS of the items to the style.
-     * @method Scene#exportCSS
-     * @return {Scene} An instance itself
-     */
     Scene.prototype.exportCSS = function () {
         var items = this.items;
         var duration = this.getDuration();
@@ -318,26 +225,6 @@ const item = scene.newItem("item1")
         }
         return this;
     };
-    /**
-    * Play using the css animation and keyframes.
-    * @method Scene#playCSS
-    * @param {boolean} [exportCSS=true] Check if you want to export css.
-    * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
-    * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
-    * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
-    * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
-    * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
-    * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
-    * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
-    * @return {Scene} An instance itself
-    * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
-    * @example
-scene.playCSS();
-scene.playCSS(false, {
-    direction: "reverse",
-    fillMode: "forwards",
-});
-    */
     Scene.prototype.playCSS = function (exportCSS, properties) {
         var _this = this;
         if (exportCSS === void 0) { exportCSS = true; }
@@ -398,15 +285,6 @@ scene.playCSS(false, {
         }
         this.setOptions(options);
     };
-    /**
-    * version info
-    * @name Scene.VERSION
-    * @memberof Scene
-    * @static
-    * @type {string}
-    * @example
-    * Scene.VERSION // #__VERSION__#
-    */
     Scene.VERSION = "#__VERSION__#";
     return Scene;
 }(Animator_1["default"]));
@@ -432,11 +310,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
-var EventTrigger_1 = __importDefault(__webpack_require__(4));
+var EventTrigger_1 = __webpack_require__(4);
 var easing_1 = __webpack_require__(7);
 var utils_1 = __webpack_require__(5);
 var lastTime = 0;
@@ -459,33 +334,7 @@ function isDirectionReverse(iterationCount, direction) {
         direction === (iterationCount % 2 >= 1 ? "alternate" : "alternate-reverse");
 }
 exports.isDirectionReverse = isDirectionReverse;
-/**
-* @typedef {Object} AnimatorOptions The Animator options. Properties used in css animation.
-* @property {number} [duration] The duration property defines how long an animation should take to complete one cycle.
-* @property {"none"|"forwards"|"backwards"|"both"} [fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
-* @property {"infinite"|number} [iterationCount] The iterationCount property specifies the number of times an animation should be played.
-* @property {array|function} [easing] The easing(timing-function) specifies the speed curve of an animation.
-* @property {number} [delay] The delay property specifies a delay for the start of an animation.
-* @property {"normal"|"reverse"|"alternate"|"alternate-reverse"} [direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
-*/
-/**
-* play video, animation, the others
-* @memberof Scene
-* @class Animator
-* @extends Scene.EventTrigger
-* @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
-* @param {AnimatorOptions} [options] - animator's options
-* @example
-const animator = new Animator({
-    delay: 2,
-    diretion: "alternate",
-    duration: 2,
-    fillMode: "forwards",
-    iterationCount: 3,
-    easing: Scene.eaasing.EASE,
-});
-*/
-var Animator = /** @class */ (function (_super) {
+var Animator = (function (_super) {
     __extends(Animator, _super);
     function Animator(options) {
         var _this = _super.call(this) || this;
@@ -508,21 +357,6 @@ var Animator = /** @class */ (function (_super) {
         _this.setOptions(options);
         return _this;
     }
-    /**
-    * set animator's easing.
-    * @method Scene.Animator#setEasing
-    * @param {array| function} curverArray - The speed curve of an animation.
-    * @return {Scene.Animator} An instance itself.
-    * @example
-animator.({
-    delay: 2,
-    diretion: "alternate",
-    duration: 2,
-    fillMode: "forwards",
-    iterationCount: 3,
-    easing: Scene.easing.EASE,
-});
-    */
     Animator.prototype.setEasing = function (curveArray) {
         this.setState(Array.isArray(curveArray) ? {
             easingName: "cubic-bezier(" + curveArray.join(",") + ")",
@@ -533,22 +367,6 @@ animator.({
         });
         return this;
     };
-    /**
-    * set animator's options.
-    * @method Scene.Animator#setOptions
-    * @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
-    * @param {Object} [AnimatorOptions] - animator's options
-    * @return {Scene.Animator} An instance itself.
-    * @example
-animator.({
-    delay: 2,
-    diretion: "alternate",
-    duration: 2,
-    fillMode: "forwards",
-    iterationCount: 3,
-    easing: Scene.eaasing.EASE,
-});
-    */
     Animator.prototype.setOptions = function (options) {
         if (!options) {
             return this;
@@ -567,39 +385,18 @@ animator.({
         }
         return this;
     };
-    /**
-    * Get the animator's total duration including delay
-    * @method Scene.Animator#getTotalDuration
-    * @return {number} Total duration
-    * @example
-animator.getTotalDuration();
-    */
     Animator.prototype.getTotalDuration = function () {
         if (this.state.iterationCount === "infinite") {
             return Infinity;
         }
         return this.state.delay + this.getActiveDuration();
     };
-    /**
-    * Get the animator's total duration excluding delay
-    * @method Scene.Animator#getActiveDuration
-    * @return {number} Total duration excluding delay
-    * @example
-animator.getTotalDuration();
-    */
     Animator.prototype.getActiveDuration = function () {
         if (this.state.iterationCount === "infinite") {
             return Infinity;
         }
         return this.getDuration() * this.state.iterationCount;
     };
-    /**
-    * Check if the animator has reached the end.
-    * @method Scene.Animator#isEnded
-    * @return {boolean} ended
-    * @example
-animator.isEnded(); // true or false
-    */
     Animator.prototype.isEnded = function () {
         if (this.getTime() === 0 && this.state.playState === "paused") {
             return true;
@@ -609,13 +406,6 @@ animator.isEnded(); // true or false
         }
         return true;
     };
-    /**
-    *Check if the animator is paused:
-    * @method Scene.Animator#isPaused
-    * @return {boolean} paused
-    * @example
-animator.isPaused(); // true or false
-    */
     Animator.prototype.isPaused = function () {
         return this.state.playState === "paused";
     };
@@ -625,11 +415,6 @@ animator.isPaused(); // true or false
         });
         return this;
     };
-    /**
-    * play animator
-    * @method Scene.Animator#play
-    * @return {Scene.Animator} An instance itself.
-    */
     Animator.prototype.play = function () {
         var _this = this;
         if (this.isEnded()) {
@@ -640,61 +425,24 @@ animator.isPaused(); // true or false
             _this.state.prevTime = time;
             _this.tick(time);
         });
-        /**
-         * This event is fired when play animator.
-         * @event Scene.Animator#play
-         */
         this.trigger("play");
         return this;
     };
-    /**
-    * pause animator
-    * @method Scene.Animator#pause
-    * @return {Scene.Animator} An instance itself.
-    */
     Animator.prototype.pause = function () {
         this.state.playState = "paused";
-        /**
-         * This event is fired when animator is paused.
-         * @event Scene.Animator#paused
-         */
         this.trigger("paused");
         return this;
     };
-    /**
-     * end animator
-     * @method Scene.Animator#end
-     * @return {Scene.Animator} An instance itself.
-    */
     Animator.prototype.end = function () {
         this.pause();
-        /**
-         * This event is fired when animator is ended.
-         * @event Scene.Animator#ended
-         */
         this.trigger("ended");
         return this;
     };
-    /**
-    * reset animator
-    * @method Scene.Animator#reset
-    * @return {Scene.Animator} An instance itself.
-    */
     Animator.prototype.reset = function () {
         this.setTime(0);
         this.pause();
         return this;
     };
-    /**
-    * set currentTime
-    * @method Scene.Animator#setTime
-    * @param {Number} time - currentTime
-    * @return {Scene.Animator} An instance itself.
-    * @example
-animator.setTime(10);
-
-animator.getTime() // 10
-    */
     Animator.prototype.setTime = function (time) {
         var totalDuration = this.getTotalDuration();
         var currentTime = time;
@@ -706,14 +454,6 @@ animator.getTime() // 10
         }
         this.state.currentTime = currentTime;
         this.calculateIterationTime();
-        /**
-         * This event is fired when the animator updates the time.
-         * @event Scene.Animator#timeupdate
-         * @param {Object} param The object of data to be sent to an event.
-         * @param {Number} param.currentTime The total time that the animator is running.
-         * @param {Number} param.time The iteration time during duration that the animator is running.
-         * @param {Number} param.iterationCount The iteration count that the animator is running.
-         */
         this.trigger("timeupdate", {
             currentTime: currentTime,
             time: this.getIterationTime(),
@@ -730,33 +470,12 @@ animator.getTime() // 10
         }
         return this;
     };
-    /**
-    * Get the animator's current time
-    * @method Scene.Animator#getTime
-    * @return {number} current time
-    * @example
-animator.getTime();
-    */
     Animator.prototype.getTime = function () {
         return this.state.currentTime;
     };
-    /**
-    * Get the animator's current time excluding delay
-    * @method Scene.Animator#getActiveTime
-    * @return {number} current time excluding delay
-    * @example
-animator.getActiveTime();
-    */
     Animator.prototype.getActiveTime = function () {
         return utils_1.toFixed(Math.max(this.state.currentTime - this.state.delay, 0));
     };
-    /**
-    * Get the animator's current iteration time
-    * @method Scene.Animator#getIterationTime
-    * @return {number} current iteration time
-    * @example
-animator.getIterationTime();
-    */
     Animator.prototype.getIterationTime = function () {
         return this.state.currentIterationTime;
     };
@@ -764,13 +483,6 @@ animator.getIterationTime();
         var state = this.state;
         var passIterationCount = Math.floor(iterationCount);
         if (state.currentIterationCount < passIterationCount) {
-            /**
-            * The event is fired when an iteration of an animation ends.
-            * @event Scene.Animator#iteration
-            * @param {Object} param The object of data to be sent to an event.
-            * @param {Number} param.currentTime The total time that the animator is running.
-            * @param {Number} param.iterationCount The iteration count that the animator is running.
-            */
             this.trigger("iteration", {
                 currentTime: state.currentTime,
                 iterationCount: passIterationCount
@@ -795,15 +507,12 @@ animator.getIterationTime();
             return this;
         }
         this.setCurrentIterationCount(currentIterationCount);
-        // direction : normal, reverse, alternate, alternate-reverse
-        // fillMode : forwards, backwards, both, none
         var isReverse = isDirectionReverse(currentIterationCount, direction);
         if (isReverse) {
             currentIterationTime = duration - currentIterationTime;
         }
         if (iterationCount !== "infinite") {
             var isForwards = fillMode === "both" || fillMode === "forwards";
-            // fill forwards
             if (currentIterationCount >= iterationCount) {
                 currentIterationTime = duration * (isForwards ? (iterationCount % 1) || 1 : 0);
                 isReverse && (currentIterationTime = duration - currentIterationTime);
@@ -841,93 +550,6 @@ animator.getIterationTime();
     };
     return Animator;
 }(EventTrigger_1["default"]));
-/**
- * Set a delay for the start of an animation.
- * @method Scene.Animator#setDelay
- * @param {number} delay - delay
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get a delay for the start of an animation.
- * @method Scene.Animator#getDelay
- * @return {number} delay
- */
-/**
- * Set fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
- * @method Scene.Animator#setFillMode
- * @param {"none"|"forwards"|"backwards"|"both"} fillMode - fillMode
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
- * @method Scene.Animator#getFillMode
- * @return {"none"|"forwards"|"backwards"|"both"} fillMode
- */
-/**
- * Set the number of times an animation should be played.
- * @method Scene.Animator#setIterationCount
- * @param {"inifnite"|number} iterationCount - iterationCount
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get the number of times an animation should be played.
- * @method Scene.Animator#getIterationCount
- * @return {"inifnite"|number} iterationCount
- */
-/**
- * Set whether an animation should be played forwards, backwards or in alternate cycles.
- * @method Scene.Animator#setDirection
- * @param {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction - direction
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get whether an animation should be played forwards, backwards or in alternate cycles.
- * @method Scene.Animator#getDirection
- * @return {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction
- */
-/**
- * Set whether the animation is running or paused.
- * @method Scene.Animator#setPlayState
- * @param {"paused"|"running"} playState - playState
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get whether the animation is running or paused.
- * @method Scene.Animator#getPlayState
- * @return {"paused"|"running"} playState
- */
-/**
- * Set the animator's play speed
- * @method Scene.Animator#setPlaySpeed
- * @param {number} playSpeed - playSpeed
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get the animator's play speed
- * @method Scene.Animator#getPlaySpeed
- * @return {number} playSpeed
- */
-/**
- * Set how long an animation should take to complete one cycle.
- * @method Scene.Animator#setDuration
- * @param {number} duration - duration
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get how long an animation should take to complete one cycle.
- * @method Scene.Animator#getDuration
- * @return {number} duration
- */
-/**
- * Get the speed curve of an animation.
- * @method Scene.Animator#getEasing
- * @return {0|function} easing
- */
-/**
- * Get the speed curve's name
- * @method Scene.Animator#getEasingName
- * @return {string} the curve's name.
- */
 var AnimatorPrototype = Animator.prototype;
 utils_1.defineGetterSetter(AnimatorPrototype, "delay", "state");
 utils_1.defineGetterSetter(AnimatorPrototype, "fillMode", "state");
@@ -949,29 +571,10 @@ exports["default"] = Animator;
 
 exports.__esModule = true;
 var utils_1 = __webpack_require__(5);
-/**
-* attach and trigger event handlers.
-* @memberof Scene
-* @class Scene.EventTrigger
-*/
-var EventTrigger = /** @class */ (function () {
+var EventTrigger = (function () {
     function EventTrigger() {
         this.events = {};
     }
-    /**
-    * Attach an event handler function for one or more events to target
-    * @method Scene.EventTrigger#on
-    * @param {String} name - event's name
-    * @param {Function} callback -  function to execute when the event is triggered.
-    * @return {Scene.EventTrigger} An Instance itself.
-    * @example
-target.on("animate", function() {
-    console.log("animate");
-});
-
-target.trigger("animate");
-
-    */
     EventTrigger.prototype.on = function (name, callback) {
         var _this = this;
         var events = this.events;
@@ -995,22 +598,6 @@ target.trigger("animate");
         event.push(callback);
         return this;
     };
-    /**
-    * Dettach an event handler function for one or more events to target
-    * @method Scene.EventTrigger#off
-    * @param {String} name - event's name
-    * @param {Function} callback -  function to execute when the event is triggered.
-    * @return {Scene.EventTrigger} An Instance itself.
-    * @example
-const callback = function() {
-    console.log("animate");
-};
-target.on("animate", callback);
-
-target.off("animate", callback);
-target.off("animate");
-
-    */
     EventTrigger.prototype.off = function (name, callback) {
         if (!name) {
             this.events = {};
@@ -1030,20 +617,6 @@ target.off("animate");
         }
         return this;
     };
-    /**
-    * execute event handler
-    * @method Scene.EventTrigger#triiger
-    * @param {String} name - event's name
-    * @param {Function} [...data] - event handler's additional parameter
-    * @return {Scene.EventTrigger} An Instance itself.
-    * @example
-target.on("animate", function(a1, a2) {
-    console.log("animate", a1, a2);
-});
-
-target.trigger("animate", [1, 2]); // log => "animate", 1, 2
-
-    */
     EventTrigger.prototype.trigger = function (name) {
         var _this = this;
         var data = [];
@@ -1195,20 +768,15 @@ exports.START_ANIMATION = "startAnimation";
 exports.__esModule = true;
 function cubic(y1, y2, t) {
     var t2 = 1 - t;
-    // Bezier Curve Formula
     return t * t * t + 3 * t * t * t2 * y2 + 3 * t * t2 * t2 * y1;
 }
 function solveFromX(x1, x2, x) {
-    // x  0 ~ 1
-    // t 0 ~ 1
     var t = x;
     var solveX = x;
     var dx = 1;
     while (Math.abs(dx) > 1 / 1000) {
-        // 예상 t초에 의한 _x값
         solveX = cubic(x1, x2, t);
         dx = solveX - x;
-        // 차이가 미세하면 그 값을 t로 지정
         if (Math.abs(dx) < 1 / 1000) {
             return t;
         }
@@ -1216,28 +784,7 @@ function solveFromX(x1, x2, x) {
     }
     return t;
 }
-/**
- * @namespace Scene.easing
- */
-/**
-* Cubic Bezier curve.
-* @memberof Scene.easing
-* @func Scene.easing.bezier
-* @param {number} [x1] - point1's x
-* @param {number} [y1] - point1's y
-* @param {number} [x2] - point2's x
-* @param {number} [y2] - point2's y
-* @return {function} the curve function
-* @example
-Scene.easing.bezier(0, 0, 1, 1) // LINEAR
-Scene.easing.bezier(0.25, 0.1, 0.25, 1) // EASE
-*/
 function bezier(x1, y1, x2, y2) {
-    /*
-        x = f(t)
-        calculate inverse function by x
-        t = f-1(x)
-    */
     var func = function (x) {
         var t = solveFromX(x1, x2, Math.max(Math.min(1, x), 0));
         return cubic(y1, y2, t);
@@ -1246,25 +793,7 @@ function bezier(x1, y1, x2, y2) {
     return func;
 }
 exports.bezier = bezier;
-/**
-* Linear Speed (0, 0, 1, 1)
-* @name Scene.easing.LINEAR
-* @memberof Scene.easing
-* @static
-* @type {function}
-* @example
-Scene.easing.LINEAR
-*/
 exports.LINEAR = bezier(0, 0, 1, 1);
-/**
-* Ease Speed (0.25, 0.1, 0.25, 1)
-* @name Scene.easing.EASE
-* @memberof Scene.easing
-* @static
-* @type {function}
-* @example
-Scene.easing.EASE
-*/
 exports.EASE = bezier(0.25, 0.1, 0.25, 1);
 exports.EASE_IN = bezier(0.42, 0, 1, 1);
 exports.EASE_OUT = bezier(0, 0, 0.58, 1);
@@ -1290,21 +819,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
-var Animator_1 = __importStar(__webpack_require__(3));
-var Frame_1 = __importDefault(__webpack_require__(9));
+var Animator_1 = __webpack_require__(3);
+var Frame_1 = __webpack_require__(9);
 var utils_1 = __webpack_require__(5);
-var Keyframes_1 = __importDefault(__webpack_require__(13));
+var Keyframes_1 = __webpack_require__(13);
 var dot_1 = __webpack_require__(14);
 var consts_1 = __webpack_require__(6);
 var css_1 = __webpack_require__(15);
@@ -1327,27 +846,7 @@ function makeAnimationProperties(properties) {
     }
     return cssArray.join("");
 }
-/**
-* manage Frame Keyframes and play keyframes.
-* @class Scene.SceneItem
-* @param {Object} [properties] - properties
-* @param {AnimatorOptions} [options] - options
-* @extends Scene.Animator
-* @example
-const item = new Scene.SceneItem({
-    0: {
-        display: "none",
-    },
-    1: {
-        display: "block",
-        opacity: 0,
-    },
-    2: {
-        opacity: 1,
-    }
-});
-*/
-var SceneItem = /** @class */ (function (_super) {
+var SceneItem = (function (_super) {
     __extends(SceneItem, _super);
     function SceneItem(properties, options) {
         var _this = _super.call(this) || this;
@@ -1369,17 +868,6 @@ var SceneItem = /** @class */ (function (_super) {
         _super.prototype.setDuration.call(this, duration);
         return this;
     };
-    /**
-    * set the unique indicator of the item.
-    * @method Scene.SceneItem#setId
-    * @param {String} id - the indicator of the item.
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-const item = new SceneItem();
-
-item.setId("item");
-console.log(item.getId()); // item
-    */
     SceneItem.prototype.setId = function (id) {
         var elements = this.elements;
         this.setState({ id: id });
@@ -1397,27 +885,9 @@ console.log(item.getId()); // item
         }
         return this;
     };
-    /**
-    * Specifies the unique indicator of the item.
-    * @method Scene.SceneItem#getId
-    * @return {String} the indicator of the item.
-    * @example
-const item = scene.newItem("item");
-console.log(item.getId()); // item
-    */
     SceneItem.prototype.getId = function () {
         return this.state.id;
     };
-    /**
-    * Set properties to the sceneItem at that time
-    * @method Scene.SceneItem#set
-    * @param {Number} time - time
-    * @param {...String|Object} [properties] - property names or values
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-item.set(0, "a", "b") // item.getFrame(0).set("a", "b")
-console.log(item.get(0, "a")); // "b"
-    */
     SceneItem.prototype.set = function (time) {
         var _this = this;
         var args = [];
@@ -1439,15 +909,6 @@ console.log(item.get(0, "a")); // "b"
         this.updateFrame(frame);
         return this;
     };
-    /**
-    * Get properties of the sceneItem at that time
-    * @param {Number} time - time
-    * @param {...String|Object} args property's name or properties
-    * @return {Number|String|Scene.PropertyObejct} property value
-    * @example
-item.get(0, "a"); // item.getFrame(0).get("a");
-item.get(0, "transform", "translate"); // item.getFrame(0).get("transform", "translate");
-    */
     SceneItem.prototype.get = function (time) {
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -1456,15 +917,6 @@ item.get(0, "transform", "translate"); // item.getFrame(0).get("transform", "tra
         var frame = this.getFrame(time);
         return frame && frame.get.apply(frame, args);
     };
-    /**
-    * remove properties to the sceneItem at that time
-    * @method Scene.SceneItem#remove
-    * @param {Number} time - time
-    * @param {...String|Object} [properties] - property names or values
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-item.remove(0, "a");
-    */
     SceneItem.prototype.remove = function (time) {
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -1474,29 +926,12 @@ item.remove(0, "a");
         frame && frame.remove.apply(frame, args);
         return this;
     };
-    /**
-    * Specifies an element to synchronize items' keyframes.
-    * @method Scene.SceneItem#setSelector
-    * @param {string} selectors - Selectors to find elements in items.
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-item.setSelector("#id.class");
-    */
     SceneItem.prototype.setSelector = function (selector) {
         this.options.selector = selector === true ? this.state.id :
             (selector || "[data-scene-id=\"" + this.state.id + "\"]");
         this.setElement(document.querySelectorAll(this.options.selector));
         return this;
     };
-    /**
-    * Specifies an element to synchronize item's keyframes.
-    * @method Scene.SceneItem#setElement
-    * @param {Element|Array|string} elements - elements to synchronize item's keyframes.
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-item.setElement(document.querySelector("#id.class"));
-item.setElement(document.querySelectorAll(".class"));
-    */
     SceneItem.prototype.setElement = function (elements) {
         if (!elements) {
             return this;
@@ -1509,30 +944,10 @@ item.setElement(document.querySelectorAll(".class"));
         this.setId((!id || id === "null") ? makeId() : id);
         return this;
     };
-    /**
-    * add css styles of items's element to the frame at that time.
-    * @method Scene.SceneItem#setCSS
-    * @param {Array} properties - elements to synchronize item's keyframes.
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-item.setElement(document.querySelector("#id.class"));
-item.setCSS(0, ["opacity"]);
-item.setCSS(0, ["opacity", "width", "height"]);
-    */
     SceneItem.prototype.setCSS = function (time, properties) {
         this.set(time, this.fromCSS(properties));
         return this;
     };
-    /**
-    * get css styles of items's element
-    * @method Scene.SceneItem#fromCSS
-    * @param {Array} properties - elements to synchronize item's keyframes.
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-item.setElement(document.querySelector("#id.class"));
-item.fromCSS(["opacity"]); // {opacity: 1}
-item.fromCSS(["opacity", "width", "height"]); // {opacity: 1, width: "100px", height: "100px"}
-    */
     SceneItem.prototype.fromCSS = function (properties) {
         return css_1.fromCSS(this.elements, properties);
     };
@@ -1541,37 +956,14 @@ item.fromCSS(["opacity", "width", "height"]); // {opacity: 1, width: "100px", he
         this.animate(parentEasing, parent);
         return this;
     };
-    /**
-    * update property names used in frames.
-    * @method Scene.SceneItem#update
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-item.update();
-    */
     SceneItem.prototype.update = function () {
         this.keyframes.update();
         return this;
     };
-    /**
-    * update property names used in frame.
-    * @method Scene.SceneItem#updateFrame
-    * @param {Scene.Frame} [frame] - frame of that time.
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-item.updateFrame(time, this.get(time));
-    */
     SceneItem.prototype.updateFrame = function (frame) {
         this.keyframes.updateFrame(frame);
         return this;
     };
-    /**
-    * Create and add a frame to the sceneItem at that time
-    * @method Scene.SceneItem#newFrame
-    * @param {Number} time - frame's time
-    * @return {Scene.Frame} Created frame.
-    * @example
-item.newFrame(time);
-    */
     SceneItem.prototype.newFrame = function (time) {
         var frame = this.getFrame(time);
         if (frame) {
@@ -1581,69 +973,23 @@ item.newFrame(time);
         this.setFrame(time, frame);
         return frame;
     };
-    /**
-    * Add a frame to the sceneItem at that time
-    * @method Scene.SceneItem#setFrame
-    * @param {Number} time - frame's time
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-item.setFrame(time, frame);
-    */
     SceneItem.prototype.setFrame = function (time, frame) {
         this.keyframes.add(this._getTime(time), frame);
         this.keyframes.update();
         return this;
     };
-    /**
-    * get sceneItem's frame at that time
-    * @method Scene.SceneItem#getFrame
-    * @param {Number} time - frame's time
-    * @return {Scene.Frame} sceneItem's frame at that time
-    * @example
-const frame = item.getFrame(time);
-    */
     SceneItem.prototype.getFrame = function (time) {
         return this.keyframes.get(this._getTime(time));
     };
-    /**
-    * check if the item has a frame at that time
-    * @method Scene.SceneItem#hasFrame
-    * @param {Number} time - frame's time
-    * @return {Boolean} true: the item has a frame // false: not
-    * @example
-if (item.hasFrame(10)) {
-    // has
-} else {
-    // not
-}
-    */
     SceneItem.prototype.hasFrame = function (time) {
         return this.keyframes.has(time);
     };
-    /**
-    * remove sceneItem's frame at that time
-    * @method Scene.SceneItem#removeFrame
-    * @param {Number} time - frame's time
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-item.removeFrame(time);
-    */
     SceneItem.prototype.removeFrame = function (time) {
         var keyframes = this.keyframes;
         keyframes.remove(time);
         keyframes.update();
         return this;
     };
-    /**
-    * Copy frame of the previous time at the next time.
-    * @method Scene.SceneItem#copyFrame
-    * @param {number|string|object} fromTime - the previous time
-    * @param {number} toTime - the next time
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-// getFrame(0) equal getFrame(1)
-item.copyFrame(0, 1);
-    */
     SceneItem.prototype.copyFrame = function (fromTime, toTime) {
         if (utils_1.isObject(fromTime)) {
             for (var time in fromTime) {
@@ -1659,16 +1005,6 @@ item.copyFrame(0, 1);
         this.setFrame(toTime, copyFrame);
         return this;
     };
-    /**
-    * merge frame of the previous time at the next time.
-    * @method Scene.SceneItem#mergeFrame
-    * @param {number|string|object} fromTime - the previous time
-    * @param {number|string} toTime - the next time
-    * @return {Scene.SceneItem} An instance itself
-    * @example
-// getFrame(1) contains getFrame(0)
-item.merge(0, 1);
-    */
     SceneItem.prototype.mergeFrame = function (fromTime, toTime) {
         if (utils_1.isObject(fromTime)) {
             for (var time in fromTime) {
@@ -1684,28 +1020,6 @@ item.merge(0, 1);
         toFrame.merge(frame);
         return this;
     };
-    /**
-    * Get frame of the current time
-    * @method Scene.SceneItem#getNowFrame
-    * @param {Number} time - the current time
-    * @param {function} easing - the speed curve of an animation
-    * @return {Scene.Frame} frame of the current time
-    * @example
-let item = new Scene.SceneItem({
-    0: {
-        display: "none",
-    },
-    1: {
-        display: "block",
-        opacity: 0,
-    },
-    2: {
-        opacity: 1,
-    }
-});
-// opacity: 0.7; display:"block";
-const frame = item.getNowFrame(1.7);
-    */
     SceneItem.prototype.getNowFrame = function (time, easing) {
         var _this = this;
         var frame = new Frame_1["default"]();
@@ -1751,14 +1065,6 @@ const frame = item.getNowFrame(1.7);
         options && this.setOptions(options);
         return this;
     };
-    /**
-     * clone SceneItem.
-     * @method Scene.SceneItem#clone
-     * @param {AnimatorOptions} [options] animator options
-     * @return {Scene.SceneItem} An instance of clone
-     * @example
-     * item.clone();
-     */
     SceneItem.prototype.clone = function (options) {
         if (options === void 0) { options = {}; }
         var item = new SceneItem();
@@ -1804,10 +1110,8 @@ const frame = item.getNowFrame(1.7);
             var start = i * duration;
             for (var j = 0; j < length; ++j) {
                 if (isShuffle && i !== 0 && j === 0) {
-                    // pass duplicate
                     continue;
                 }
-                // isStartZero is keytimes[0] is 0 (i === 0 & j === 0)
                 var threshold = j === 0 && (i === 0 ? !isStartZero : !isShuffle) ? consts_1.THRESHOLD : 0;
                 var keyvalue = isReverse ? times[length - 1 - j] : times[j];
                 var time = utils_1.toFixed(isReverse ? duration - keyvalue : keyvalue);
@@ -1821,7 +1125,6 @@ const frame = item.getNowFrame(1.7);
             }
         }
         if (keys[keys.length - 1] < totalDuration) {
-            // last time === totalDuration
             var isReverse = Animator_1.isDirectionReverse(iterationCount, direction);
             var keyvalue = utils_1.toFixed(duration * (isReverse ? 1 - iterationCount % 1 : iterationCount % 1));
             keys.push(totalDuration);
@@ -1830,14 +1133,6 @@ const frame = item.getNowFrame(1.7);
         }
         return { keys: keys, values: values, times: keytimes };
     };
-    /**
-    * Specifies an css text that coverted the keyframes of the item.
-    * @param {Array} [duration=this.getDuration()] - elements to synchronize item's keyframes.
-    * @param {Array} [options={}] - parent options to unify options of items.
-    * @example
-item.setCSS(0, ["opacity"]);
-item.setCSS(0, ["opacity", "width", "height"]);
-    */
     SceneItem.prototype.toCSS = function (duration, options) {
         if (duration === void 0) { duration = this.getDuration(); }
         if (options === void 0) { options = {}; }
@@ -1882,24 +1177,6 @@ item.setCSS(0, ["opacity", "width", "height"]);
             document.body.insertAdjacentHTML("beforeend", "<style id=\"" + consts_1.PREFIX + "STYLE_" + id + "\">" + css + "</style>");
         }
     };
-    /**
-    * Play using the css animation and keyframes.
-    * @param {boolean} [exportCSS=true] Check if you want to export css.
-    * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
-    * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
-    * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
-    * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
-    * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
-    * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
-    * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
-    * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
-    * @example
-item.playCSS();
-item.playCSS(false, {
-    direction: "reverse",
-    fillMode: "forwards",
-});
-    */
     SceneItem.prototype.playCSS = function (exportCSS, properties) {
         var _this = this;
         if (exportCSS === void 0) { exportCSS = true; }
@@ -1963,13 +1240,6 @@ item.playCSS(false, {
         var easing = this.getEasing() || parentEasing;
         var frame = this.getNowFrame(iterationTime, easing);
         var currentTime = this.getTime();
-        /**
-         * This event is fired when timeupdate and animate.
-         * @event Scene.SceneItem#animate
-         * @param {Number} param.currentTime The total time that the animator is running.
-         * @param {Number} param.time The iteration time during duration that the animator is running.
-         * @param {Scene.Frame} param.frame frame of that time.
-         */
         this.trigger("animate", {
             frame: frame,
             currentTime: currentTime,
@@ -2060,7 +1330,6 @@ item.playCSS(false, {
         });
         var lastTime = keys[length - 1];
         if ((delay + lastTime) / playSpeed < duration) {
-            // not 100%
             keyframes.push("100%{" + frames[values[lastTime]]);
         }
         return "@" + consts_1.KEYFRAMES + " " + consts_1.PREFIX + "KEYFRAMES_" + toId(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
@@ -2129,14 +1398,11 @@ exports["default"] = SceneItem;
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
 var consts_1 = __webpack_require__(6);
 var utils_1 = __webpack_require__(5);
 var property_1 = __webpack_require__(10);
-var PropertyObject_1 = __importDefault(__webpack_require__(11));
+var PropertyObject_1 = __webpack_require__(11);
 function toInnerProperties(obj) {
     if (!obj) {
         return "";
@@ -2150,7 +1416,6 @@ function toInnerProperties(obj) {
 function isPropertyObject(value) {
     return value instanceof PropertyObject_1["default"];
 }
-/* eslint-disable */
 function clone(target, toValue) {
     if (toValue === void 0) { toValue = false; }
     return merge({}, target, toValue);
@@ -2178,34 +1443,12 @@ function merge(to, from, toValue) {
     }
     return to;
 }
-/* eslint-enable */
-/**
-* Animation's Frame
-* @class Scene.Frame
-* @param {Object} properties - properties
-* @example
-const frame = new Scene.Frame({
-    display: "none"
-    transform: {
-        translate: "50px",
-        scale: "5, 5",
-    }
-});
- */
-var Frame = /** @class */ (function () {
+var Frame = (function () {
     function Frame(properties) {
         if (properties === void 0) { properties = {}; }
         this.properties = {};
         this.set(properties);
     }
-    /**
-    * get property value
-    * @method Scene.Frame#get
-    * @param {...Number|String|Scene.PropertyObject} args - property name or value
-    * @example
-    frame.get("display") // => "none", "block", ....
-    frame.get("transform", "translate") // => "10px,10px"
-    */
     Frame.prototype.get = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -2221,14 +1464,6 @@ var Frame = /** @class */ (function () {
         }
         return properties;
     };
-    /**
-    * remove property value
-    * @method Scene.Frame#remove
-    * @param {...String} args - property name
-    * @return {Scene.Frame} An instance itself
-    * @example
-    frame.remove("display")
-    */
     Frame.prototype.remove = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -2248,34 +1483,6 @@ var Frame = /** @class */ (function () {
         delete properties[args[length - 1]];
         return this;
     };
-    /**
-    * set property
-    * @method Scene.Frame#set
-    * @param {...Number|String|Scene.PropertyObject} args - property names or values
-    * @return {Scene.Frame} An instance itself
-    * @example
-// one parameter
-frame.set({
-    display: "none",
-    transform: {
-        translate: "10px, 10px",
-        scale: "1",
-    },
-    filter: {
-        brightness: "50%",
-        grayscale: "100%"
-    }
-});
-
-// two parameters
-frame.set("transform", {
-    translate: "10px, 10px",
-    scale: "1",
-});
-
-// three parameters
-frame.set("transform", "translate", "50px");
-    */
     Frame.prototype.set = function () {
         var _this = this;
         var args = [];
@@ -2325,13 +1532,6 @@ frame.set("transform", "translate", "50px");
         }
         return this;
     };
-    /**
-    * check that has property.
-    * @method Scene.Frame#has
-    * @param {...String} args - property name
-    * @example
-    frame.has("property", "display") // => true or false
-    */
     Frame.prototype.has = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -2350,26 +1550,11 @@ frame.set("transform", "translate", "50px");
         }
         return true;
     };
-    /**
-    * clone frame.
-    * @method Scene.Frame#clone
-    * @return {Scene.Frame} An instance of clone
-    * @example
-    frame.clone();
-    */
     Frame.prototype.clone = function () {
         var frame = new Frame();
         frame.merge(this);
         return frame;
     };
-    /**
-    * merge one frame to other frame.
-    * @method Scene.Frame#merge
-    * @param {Scene.Frame} frame - target frame.
-    * @return {Scene.Frame} An instance itself
-    * @example
-    frame.merge(frame2);
-    */
     Frame.prototype.merge = function (frame) {
         var properties = this.properties;
         var frameProperties = frame.properties;
@@ -2382,11 +1567,6 @@ frame.set("transform", "translate", "50px");
     Frame.prototype.toObject = function () {
         return clone(this.properties, true);
     };
-    /**
-    * Specifies an css object that coverted the frame.
-    * @method Scene.Frame#toCSSObject
-    * @return {object} cssObject
-    */
     Frame.prototype.toCSSObject = function () {
         var properties = this.toObject();
         var cssObject = {};
@@ -2402,11 +1582,6 @@ frame.set("transform", "translate", "50px");
         consts_1.FILTER && filter && (cssObject[consts_1.FILTER] = filter);
         return cssObject;
     };
-    /**
-    * Specifies an css text that coverted the frame.
-    * @method Scene.Frame#toCSS
-    * @return {string} cssText
-    */
     Frame.prototype.toCSS = function () {
         var cssObject = this.toCSSObject();
         var cssArray = [];
@@ -2439,31 +1614,11 @@ exports["default"] = Frame;
 
 "use strict";
 
-/**
-* @namespace
-* @name Property
-*/
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
-var PropertyObject_1 = __importDefault(__webpack_require__(11));
+var PropertyObject_1 = __webpack_require__(11);
 var color_1 = __webpack_require__(12);
 var utils_1 = __webpack_require__(5);
-/**
-* divide text by space.
-* @memberof Property
-* @function splitSpace
-* @param {String} text - text to divide
-* @return {Array} divided texts
-* @example
-console.log(splitSpace("a b c d e f g"));
-// ["a", "b", "c", "d", "e", "f", "g"]
-console.log(splitSpace("'a,b' c 'd,e' f g"));
-// ["'a,b'", "c", "'d,e'", "f", "g"]
-*/
 function splitSpace(text) {
-    // divide comma(,)
     var matches = text.split(/("[^"]*"|'[^']*'|[^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\s+/g);
     var length = matches.length;
     var arr = [];
@@ -2483,21 +1638,7 @@ function splitSpace(text) {
     return arr;
 }
 exports.splitSpace = splitSpace;
-/**
-* divide text by comma.
-* @memberof Property
-* @function splitComma
-* @param {String} text - text to divide
-* @return {Array} divided texts
-* @example
-console.log(splitComma("a,b,c,d,e,f,g"));
-// ["a", "b", "c", "d", "e", "f", "g"]
-console.log(splitComma("'a,b',c,'d,e',f,g"));
-// ["'a,b'", "c", "'d,e'", "f", "g"]
-*/
 function splitComma(text) {
-    // divide comma(,)
-    // "[^"]*"|'[^']*'
     var matches = text.split(/("[^"]*"|'[^']*'|[^,\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^,\s()]*)|\s*,\s*/g);
     var length = matches.length;
     var arr = [];
@@ -2532,17 +1673,6 @@ function splitStyle(str) {
     return obj;
 }
 exports.splitStyle = splitStyle;
-/**
-* convert array to PropertyObject[type=color].
-* default model "rgba"
-* @memberof Property
-* @function arrayToColorObject
-* @param {Array|PropertyObject} value ex) [0, 0, 0, 1]
-* @return {PropertyObject} PropertyObject[type=color]
-* @example
-arrayToColorObject([0, 0, 0])
-// => PropertyObject(type="color", model="rgba", value=[0, 0, 0, 1], separator=",")
-*/
 function arrayToColorObject(arr) {
     var model = "rgba";
     if (arr.length === 3) {
@@ -2557,17 +1687,6 @@ function arrayToColorObject(arr) {
     });
 }
 exports.arrayToColorObject = arrayToColorObject;
-/**
-    * convert text with parentheses to PropertyObject[type=color].
-    * If the values are not RGBA model, change them RGBA mdoel.
-    * @memberof Property
-    * @function toColorObject
-    * @param {String|PropertyObject} value - color value "rgba(0,0,0,1)"
-    * @return {PropertyObject} PropertyObject[type=color]
-    * @example
-toColorObject("rgba(0, 0, 0,1)")
-// => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")
-*/
 function toColorObject(value) {
     var colorObject;
     if (value instanceof PropertyObject_1["default"]) {
@@ -2589,8 +1708,6 @@ function toColorObject(value) {
     }
     colorObject.setOptions({ type: "color" });
     var colorModel = colorObject.getOption("model").toLowerCase();
-    // rgb hsl model to CHANGE rgba hsla
-    // string -> number
     if (colorModel === "rgb") {
         colorObject.setOptions({
             type: "color",
@@ -2613,7 +1730,6 @@ function toColorObject(value) {
                     colorArray[i] = parseFloat(colorArray[i]) / 100;
                 }
             }
-            // hsl, hsla to rgba
             colorArray = color_1.hslToRGB(colorArray);
             return arrayToColorObject(colorArray);
         default:
@@ -2621,18 +1737,7 @@ function toColorObject(value) {
     return colorObject;
 }
 exports.toColorObject = toColorObject;
-/**
-* convert text with parentheses to object.
-* @memberof Property
-* @function stringToBracketObject
-* @param {String} value ex) "rgba(0,0,0,1)"
-* @return {PropertyObject} PropertyObject
-* @example
-stringToBracketObject("abcde(0, 0, 0,1)")
-// => PropertyObject(model="abcde", value=[0, 0, 0,1], separator=",")
-*/
 function stringToBracketObject(value) {
-    // [prefix, value, other]
     var matches = (/([^(]*)\(([\s\S]*)\)([\s\S]*)/g).exec(value);
     if (!matches || matches.length < 4) {
         return value;
@@ -2643,7 +1748,6 @@ function stringToBracketObject(value) {
     var suffix = ")" + matches[3];
     var separator = ",";
     var values;
-    // divide comma(,)
     var obj = toPropertyObject(text);
     if (obj instanceof PropertyObject_1["default"]) {
         separator = obj.getOption("separator");
@@ -2673,17 +1777,6 @@ function arrayToPropertyObject(arr, separator) {
     });
 }
 exports.arrayToPropertyObject = arrayToPropertyObject;
-/**
-* convert text with parentheses to PropertyObject[type=color].
-* If the values are not RGBA model, change them RGBA mdoel.
-* @memberof Property
-* @function stringToColorObject
-* @param {String|PropertyObject} value ex) "rgba(0,0,0,1)"
-* @return {PropertyObject} PropertyObject[type=color]
-* @example
-stringToColorObject("rgba(0, 0, 0,1)")
-// => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")
-*/
 function stringToColorObject(value) {
     var colorArray;
     if (value.charAt(0) === "#") {
@@ -2699,7 +1792,6 @@ function stringToColorObject(value) {
         return arrayToColorObject(colorArray);
     }
     else if (value.indexOf("(") !== -1) {
-        // in bracket.
         return stringToBracketObject(value);
     }
     else {
@@ -2707,18 +1799,6 @@ function stringToColorObject(value) {
     }
 }
 exports.stringToColorObject = stringToColorObject;
-/**
-* convert CSS Value to PropertyObject
-* @memberof Property
-* @function toPropertyObject
-* @param {String} value it's text contains the array.
-* @return {String} Not Array, Not Separator, Only Number & Unit
-* @return {PropertyObject} Array with Separator.
-* @see referenced regular expression {@link http://stackoverflow.com/questions/20215440/parse-css-gradient-rule-with-javascript-regex}
-* @example
-toPropertyObject("1px solid #000");
-// => PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)])
-*/
 function toPropertyObject(value) {
     if (!utils_1.isString(value)) {
         if (Array.isArray(value)) {
@@ -2737,11 +1817,9 @@ function toPropertyObject(value) {
     else {
         var chr = value.charAt(0);
         if (chr && (chr === '"' || chr === "'")) {
-            // Quotes
             return value;
         }
         else if (value.indexOf("(") !== -1) {
-            // color
             return stringToBracketObject(value);
         }
         else if (value.charAt(0) === "#") {
@@ -2779,26 +1857,7 @@ exports.toObject = toObject;
 
 exports.__esModule = true;
 var utils_1 = __webpack_require__(5);
-/**
-* Make string, array to PropertyObject for the dot product
-* @memberof! Scene
-*/
-var PropertyObject = /** @class */ (function () {
-    /**
-    * @param {String|Array} value - This value is in the array format ..
-    * @param {String} separator - Array separator.
-    * @example
-var obj1 = new PropertyObject("1,2,3", ",");
-var obj2 = new PropertyObject([1,2,3], " ");
-var obj3 = new PropertyObject("1$2$3", "$");
-
-// rgba(100, 100, 100, 0.5)
-var obj4 = new PropertyObject([100,100,100,0.5], {
-    "separator" : ",",
-    "prefix" : "rgba(",
-    "suffix" : ")"
-});
-     */
+var PropertyObject = (function () {
     function PropertyObject(value, options) {
         if (options === void 0) { options = {}; }
         this.options = {
@@ -2818,52 +1877,16 @@ var obj4 = new PropertyObject([100,100,100,0.5], {
     PropertyObject.prototype.getOption = function (name) {
         return this.options[name];
     };
-    /**
-    * the number of values.
-    * @example
-const obj1 = new PropertyObject("1,2,3", ",");
-
-console.log(obj1.length);
-// 3
-     */
     PropertyObject.prototype.size = function () {
         return this.value.length;
     };
-    /**
-    * retrieve one of values at the index
-    * @param {Number} index - index
-    * @return {Object} one of values at the index
-    * @example
-const obj1 = new PropertyObject("1,2,3", ",");
-
-console.log(obj1.get(0));
-// 1
-     */
     PropertyObject.prototype.get = function (index) {
         return this.value[index];
     };
-    /**
-    * Set the value at that index
-    * @param {Number} index - index
-    * @param {Object} value - text, a number, object to set
-    * @return {PropertyObject} An instance itself
-    * @example
-const obj1 = new PropertyObject("1,2,3", ",");
-obj1.set(0, 2);
-console.log(obj1.toValue());
-// 2,2,3
-     */
     PropertyObject.prototype.set = function (index, value) {
         this.value[index] = value;
         return this;
     };
-    /**
-    * create a copy of an instance itself.
-    * @return {PropertyObject} clone
-    * @example
-const obj1 = new PropertyObject("1,2,3", ",");
-const obj2 = obj1.clone();
-     */
     PropertyObject.prototype.clone = function () {
         var arr = this.value.map(function (v) { return ((v instanceof PropertyObject) ? v.clone() : v); });
         return new PropertyObject(arr, {
@@ -2874,57 +1897,12 @@ const obj2 = obj1.clone();
             type: this.options.type
         });
     };
-    /**
-    * Make Property Object to String
-    * @return {String} Make Property Object to String
-    * @example
-//rgba(100, 100, 100, 0.5)
-const obj4 = new PropertyObject([100,100,100,0.5], {
-    "separator" : ",",
-    "prefix" : "rgba(",
-    "suffix" : ")",
-});
-console.log(obj4.toValue());
-// "rgba(100,100,100,0.5)"
-    */
     PropertyObject.prototype.toValue = function () {
         return this.options.prefix + this.join() + this.options.suffix;
     };
-    /**
-    * Make Property Object's array to String
-    * @return {String} Join the elements of an array into a string
-    * @example
-    //rgba(100, 100, 100, 0.5)
-    var obj4 = new PropertyObject([100,100,100,0.5], {
-        "separator" : ",",
-        "prefix" : "rgba(",
-        "suffix" : ")"
-    });
-    obj4.join();  // =>   "100,100,100,0.5"
-     */
     PropertyObject.prototype.join = function () {
         return this.value.map(function (v) { return ((v instanceof PropertyObject) ? v.toValue() : v); }).join(this.options.separator);
     };
-    /**
-    * executes a provided function once per array element.
-    * @param {Function} callback - Function to execute for each element, taking three arguments
-    * @param {All} [callback.currentValue] The current element being processed in the array.
-    * @param {Number} [callback.index] The index of the current element being processed in the array.
-    * @param {Array} [callback.array] the array.
-    * @return {PropertyObject} An instance itself
-    * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach|MDN Array.forEach()} reference to MDN document.
-    * @example
-//rgba(100, 100, 100, 0.5)
-var obj4 = new PropertyObject([100,100,100,0.5], {
-    "separator" : ",",
-    "prefix" : "rgba(",
-    "suffix" : ")"
-});
-
-obj4.forEach(t => {
-    console.log(t);
-});  // =>   "100,100,100,0.5"
-    */
     PropertyObject.prototype.forEach = function (func) {
         this.value.forEach(func);
         return this;
@@ -2953,37 +1931,11 @@ exports["default"] = PropertyObject;
 "use strict";
 
 exports.__esModule = true;
-/**
-* @namespace
-* @name Color
-*/
 exports.COLOR_MODELS = ["rgb", "rgba", "hsl", "hsla"];
-/**
-* Remove the # from the hex color.
-* @memberof Color
-* @function cutHex
-* @param {String} hex - hex color
-* @return {String} hex color
-* @example
-console.log(cutHex("#000000"))
-// "000000"
-*/
 function cutHex(hex) {
     return (hex.charAt(0) === "#") ? hex.substring(1) : hex;
 }
 exports.cutHex = cutHex;
-/**
-* convert hex color to rgb color.
-* @memberof Color
-* @function hexToRGB
-* @param {String} hex - hex color
-* @return {Array} rgb color
-* @example
-console.log(hexToRGB("#000000"));
-// [0, 0, 0]
-console.log(hexToRGB("#201045"));
-// [32, 16, 69]
-*/
 function hexToRGB(hex) {
     var h = cutHex(hex);
     var r = parseInt(h.substring(0, 2), 16);
@@ -2996,16 +1948,6 @@ function hexToRGB(hex) {
     return [r, g, b, a];
 }
 exports.hexToRGB = hexToRGB;
-/**
-* convert 3-digit hex color to 6-digit hex color.
-* @memberof Color
-* @function hex3to6
-* @param {String} hex - 3-digit hex color
-* @return {String} 6-digit hex color
-* @example
-console.log(hex3to6("#123"));
-// "#112233"
-*/
 function hex3to6(h) {
     var r = h.charAt(1);
     var g = h.charAt(2);
@@ -3014,16 +1956,6 @@ function hex3to6(h) {
     return arr.join("");
 }
 exports.hex3to6 = hex3to6;
-/**
-* convert hsl color to rgb color.
-* @memberof Color
-* @function hslToRGB
-* @param {Array} hsl - hsl color(hue: 0 ~ 360, saturation: 0 ~ 1, lightness: 0 ~ 1)
-* @return {Array} rgb color
-* @example
-console.log(hslToRGB([150, 0.5, 0.4]));
-// [51, 153, 102]
-*/
 function hslToRGB(hsl) {
     var h = hsl[0];
     var s = hsl[1];
@@ -3073,12 +2005,9 @@ exports.hslToRGB = hslToRGB;
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
 var utils_1 = __webpack_require__(5);
-var PropertyObject_1 = __importDefault(__webpack_require__(11));
+var PropertyObject_1 = __webpack_require__(11);
 function getNames(names, stack) {
     var arr = [];
     for (var name_1 in names) {
@@ -3106,33 +2035,16 @@ function updateFrame(names, properties) {
         updateFrame(names[name_2], properties[name_2]);
     }
 }
-/**
- * @memberof Scene
-* @class Scene.Keyframes
-* a list of objects in chronological order.
-*/
-var Keyframes = /** @class */ (function () {
+var Keyframes = (function () {
     function Keyframes() {
         this.times = [];
         this.items = {};
         this.names = {};
     }
-    /**
-    * A list of names
-    * @method Scene.Keyframes#getNames
-    * @return {string[][]} names
-    * @example
-keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scale"]]
-    */
     Keyframes.prototype.getNames = function () {
         var names = this.names;
         return getNames(names, []);
     };
-    /**
-     * update property names used in frames.
-     * @method Scene.Keyframes#update
-     * @return {Scene.Keyframes} An instance itself
-     */
     Keyframes.prototype.update = function () {
         var items = this.items;
         for (var time in items) {
@@ -3140,15 +2052,6 @@ keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scal
         }
         return this;
     };
-    /**
-     * executes a provided function once for each scene item.
-     * @method Scene.Keyframes#forEach
-     * @param {Function} callback Function to execute for each element, taking three arguments
-     * @param {Scene.Frame} [callback.item] The value of the item being processed in the keyframes.
-     * @param {string} [callback.time] The time of the item being processed in the keyframes.
-     * @param {object} [callback.items] The object that forEach() is being applied to.
-     * @return {Scene.Keyframes} An instance itself
-     */
     Keyframes.prototype.forEach = function (callback) {
         var times = this.times;
         var items = this.items;
@@ -3156,14 +2059,6 @@ keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scal
             callback(items[time], time, items);
         });
     };
-    /**
-    * update property names used in frame.
-    * @method Scene.Keyframes#updateFrame
-    * @param {Scene.Frame} [frame] - frame of that time.
-    * @return {Scene.Keyframes} An instance itself
-    * @example
-keyframes.updateFrame(frame);
-    */
     Keyframes.prototype.updateFrame = function (frame) {
         if (!frame) {
             return this;
@@ -3173,21 +2068,10 @@ keyframes.updateFrame(frame);
         updateFrame(names, properties);
         return this;
     };
-    /**
-     * Get how long an animation should take to complete one cycle.
-     * @method Scene.Keyframes#getDuration
-     * @return {number} duration
-     */
     Keyframes.prototype.getDuration = function () {
         var times = this.times;
         return times.length === 0 ? 0 : times[times.length - 1];
     };
-    /**
-     * Set how long an animation should take to complete one cycle.
-     * @method Scene.Keyframes#setDuration
-     * @param {number} duration - duration
-     * @return {Scene.Keyframes} An instance itself.
-     */
     Keyframes.prototype.setDuration = function (duration, originalDuration) {
         if (originalDuration === void 0) { originalDuration = this.getDuration(); }
         var ratio = duration / originalDuration;
@@ -3200,50 +2084,20 @@ keyframes.updateFrame(frame);
         });
         this.items = obj;
     };
-    /**
-    * get size of list
-    * @method Scene.Keyframes#size
-    * @return {Number} length of list
-    */
     Keyframes.prototype.size = function () {
         return this.times.length;
     };
-    /**
-    * add object in list
-    * @method Scene.Keyframes#add
-    * @param {Number} time - frame's time
-    * @param {Object} object - target
-    * @return {Scene.Keyframes} An instance itself
-    */
     Keyframes.prototype.add = function (time, object) {
         this.items[time] = object;
         this.addTime(time);
         return this;
     };
-    /**
-    * Check if keyframes has object at that time.
-    * @method Scene.Keyframes#has
-    * @param {Number} time - object's time
-    * @return {Boolean} true: if has time, false: not
-    */
     Keyframes.prototype.has = function (time) {
         return time in this.items;
     };
-    /**
-    * get object at that time.
-    * @method Scene.Keyframes#get
-    * @param {Number} time - object's time
-    * @return {Object} object at that time
-    */
     Keyframes.prototype.get = function (time) {
         return this.items[time];
     };
-    /**
-    * remove object at that time.
-    * @method Scene.Keyframes#remove
-    * @param {Number} time - object's time
-    * @return {Keyframes} An instance itself
-    */
     Keyframes.prototype.remove = function (time) {
         var items = this.items;
         delete items[time];
@@ -3255,7 +2109,6 @@ keyframes.updateFrame(frame);
         var length = times.length;
         var pushIndex = length;
         for (var i = 0; i < length; ++i) {
-            // if time is smaller than times[i], add time to index
             if (time === times[i]) {
                 return this;
             }
@@ -3285,16 +2138,9 @@ exports["default"] = Keyframes;
 
 "use strict";
 
-/**
-* @namespace
-* @name Dot
-*/
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 exports.__esModule = true;
 var utils_1 = __webpack_require__(5);
-var PropertyObject_1 = __importDefault(__webpack_require__(11));
+var PropertyObject_1 = __webpack_require__(11);
 function getType(value) {
     var type = typeof value;
     if (type === "object") {
@@ -3307,19 +2153,6 @@ function getType(value) {
     }
     return type;
 }
-/**
-* The dot product of Arrays
-* @memberof Dot
-* @function dotArray
-* @param {Array} a1 value1
-* @param {Array} a2 value2
-* @param {Number} b1 b1 ratio
-* @param {Number} b2 b2 ratio
-* @return {Array|Object} Array.
-* @example
-dotArray([0, 0, 0, 1],[50, 50, 50, 1],0.5, 0.5);
-// => [25, 25, 25, 1]
-*/
 function dotArray(a1, a2, b1, b2) {
     if (b2 === 0) {
         return a2;
@@ -3338,34 +2171,15 @@ function dotArray(a1, a2, b1, b2) {
     });
 }
 exports.dotArray = dotArray;
-/**
-* The dot product of PropertyObject(type=color)
-* If the values are not RGBA model, change them RGBA mdoel.
-* @memberof Dot
-* @function dotColor
-* @param {PropertyObject} a1 value1
-* @param {PropertyObject} a2 value2
-* @param {Number} b1 b1 ratio
-* @param {Number} b2 b2 ratio
-* @return {PropertyObject} PropertyObject(type=color).
-* @example
-var colorObject = ......; //PropertyObject(type=color, model="rgba", value=[254, 254, 254, 1]);
-dotColor("#000",  colorObject, 0.5, 0.5);
-// "#000" => PropertyObject(type=color, model="rgba", value=[0, 0, 0, 1]);
-// return => PropertyObject(type=color, model="rgba", value=[127, 127, 127, 1]);
-*/
 function dotColor(color1, color2, b1, b2) {
     if (b2 === 0) {
         return color2;
     }
-    // convert array to PropertyObject(type=color)
     var value1 = color1.value;
     var value2 = color2.value;
-    // If the model name is not same, the inner product is impossible.
     var model1 = color1.getOption("model");
     var model2 = color2.getOption("model");
     if (model1 !== model2) {
-        // It is recognized as a string.
         return dot(color1.toValue(), color2.toValue(), b1, b2);
     }
     if (value1.length === 3) {
@@ -3388,21 +2202,6 @@ function dotColor(color1, color2, b1, b2) {
     return object;
 }
 exports.dotColor = dotColor;
-/**
-* The dot product of Objects
-* @memberof Dot
-* @function dotObject
-* @param {PropertyObject} a1 value1
-* @param {PropertyObject} a2 value2
-* @param {Number} b1 b1 ratio
-* @param {Number} b2 b2 ratio
-* @return {PropertyObject} Array with Separator.
-* @example
-dotObject(PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)]),
-PropertyObject(["9px", "solid", rgba(50, 50, 50, 1)]),
-0.5, 0.5);
-// => PropertyObject(["5px", "solid", rgba(25, 25, 25, 1)])
-*/
 function dotObject(a1, a2, b1, b2) {
     var a1Type = a1.getOption("type");
     if (a1Type === "color") {
@@ -3420,20 +2219,6 @@ function dotObject(a1, a2, b1, b2) {
     });
 }
 exports.dotObject = dotObject;
-/**
-* The dot product of a1 and a2 for the b1 and b2.
-* @memberof Dot
-* @function dot
-* @param {String|Number|PropertyObject} a1 value1
-* @param {String|Number|PropertyObject} a2 value2
-* @param {Number} b1 b1 ratio
-* @param {Number} b2 b2 ratio
-* @return {String} Not Array, Not Separator, Only Number & Unit
-* @return {PropertyObject} Array with Separator.
-* @example
-dot(1, 3, 0.3, 0.7);
-// => 1.6
-*/
 function dot(a1, a2, b1, b2) {
     if (b2 === 0) {
         return a2;
@@ -3441,7 +2226,6 @@ function dot(a1, a2, b1, b2) {
     else if (b1 === 0) {
         return a1;
     }
-    // dot Object
     var type1 = getType(a1);
     var type2 = getType(a2);
     if (type1 === type2) {
@@ -3458,11 +2242,9 @@ function dot(a1, a2, b1, b2) {
     else {
         return a1;
     }
-    // prevent division by zero.
     if (b1 + b2 === 0) {
         return a1;
     }
-    // split number and unit of the value.
     var r1 = b1 / (b1 + b2);
     var r2 = 1 - r1;
     if (type1 === "number") {
@@ -3474,7 +2256,6 @@ function dot(a1, a2, b1, b2) {
     var v1 = utils_1.splitUnit(a1);
     var v2 = utils_1.splitUnit(a2);
     var v;
-    // 숫자가 아닐경우 첫번째 값을 반환 b2가 0일경우 두번째 값을 반환
     if (isNaN(v1.value) || isNaN(v2.value)) {
         return r1 >= 1 ? a2 : a1;
     }
