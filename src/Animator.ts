@@ -156,26 +156,6 @@ animator.({
 
 		return this;
 	}
-	protected setCurrentIterationCount(iterationCount: number): this {
-		const state = this.state;
-		const passIterationCount = Math.floor(iterationCount);
-
-		if (state.currentIterationCount < passIterationCount) {
-			/**
-			* The event is fired when an iteration of an animation ends.
-			* @event Scene.Animator#iteration
-			* @param {Object} param The object of data to be sent to an event.
-			* @param {Number} param.currentTime The total time that the animator is running.
-			* @param {Number} param.iterationCount The iteration count that the animator is running.
-			*/
-			this.trigger("iteration", {
-				currentTime: state.currentTime,
-				iterationCount: passIterationCount,
-			});
-		}
-		state.currentIterationCount = iterationCount;
-		return this;
-	}
 	/**
 	* Get the animator's total duration including delay
 	* @method Scene.Animator#getTotalDuration
@@ -370,6 +350,26 @@ animator.getIterationTime();
 	public getIterationTime() {
 		return this.state.currentIterationTime;
 	}
+	protected setCurrentIterationCount(iterationCount: number): this {
+		const state = this.state;
+		const passIterationCount = Math.floor(iterationCount);
+
+		if (state.currentIterationCount < passIterationCount) {
+			/**
+			* The event is fired when an iteration of an animation ends.
+			* @event Scene.Animator#iteration
+			* @param {Object} param The object of data to be sent to an event.
+			* @param {Number} param.currentTime The total time that the animator is running.
+			* @param {Number} param.iterationCount The iteration count that the animator is running.
+			*/
+			this.trigger("iteration", {
+				currentTime: state.currentTime,
+				iterationCount: passIterationCount,
+			});
+		}
+		state.currentIterationCount = iterationCount;
+		return this;
+	}
 	protected setIterationTime(time: number) {
 		this.state.currentIterationTime = time;
 
@@ -447,7 +447,7 @@ animator.getIterationTime();
 /**
  * Get a delay for the start of an animation.
  * @method Scene.Animator#getDelay
- * @return {number} delay 
+ * @return {number} delay
  */
 /**
  * Set fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
@@ -458,7 +458,7 @@ animator.getIterationTime();
 /**
  * Get fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
  * @method Scene.Animator#getFillMode
- * @return {"none"|"forwards"|"backwards"|"both"} fillMode 
+ * @return {"none"|"forwards"|"backwards"|"both"} fillMode
  */
 /**
  * Set the number of times an animation should be played.
@@ -469,7 +469,7 @@ animator.getIterationTime();
 /**
  * Get the number of times an animation should be played.
  * @method Scene.Animator#getIterationCount
- * @return {"inifnite"|number} iterationCount 
+ * @return {"inifnite"|number} iterationCount
  */
 /**
  * Set whether an animation should be played forwards, backwards or in alternate cycles.
@@ -480,7 +480,7 @@ animator.getIterationTime();
 /**
  * Get whether an animation should be played forwards, backwards or in alternate cycles.
  * @method Scene.Animator#getDirection
- * @return {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction 
+ * @return {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction
  */
 /**
  * Set whether the animation is running or paused.
@@ -491,7 +491,7 @@ animator.getIterationTime();
 /**
  * Get whether the animation is running or paused.
  * @method Scene.Animator#getPlayState
- * @return {"paused"|"running"} playState 
+ * @return {"paused"|"running"} playState
  */
 /**
  * Set the animator's play speed
@@ -502,7 +502,7 @@ animator.getIterationTime();
 /**
  * Get the animator's play speed
  * @method Scene.Animator#getPlaySpeed
- * @return {number} playSpeed 
+ * @return {number} playSpeed
  */
 /**
  * Set how long an animation should take to complete one cycle.
@@ -513,7 +513,7 @@ animator.getIterationTime();
 /**
  * Get how long an animation should take to complete one cycle.
  * @method Scene.Animator#getDuration
- * @return {number} duration 
+ * @return {number} duration
  */
 /**
  * Get the speed curve of an animation.

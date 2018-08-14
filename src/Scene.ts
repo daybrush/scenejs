@@ -3,7 +3,6 @@ import SceneItem from "./SceneItem";
 import {ANIMATION, ObjectInterface} from "./consts";
 import {has} from "./utils";
 
-
 /**
 * manage sceneItems and play Scene.
 * @class Scene

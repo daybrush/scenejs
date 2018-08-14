@@ -64,7 +64,7 @@ class Frame {
 	/**
 	* get property value
 	* @method Scene.Frame#get
-	* @param {...Number|String|Scene.PropertyObejct} args - property name or value
+	* @param {...Number|String|Scene.PropertyObject} args - property name or value
 	* @example
 	frame.get("display") // => "none", "block", ....
 	frame.get("transform", "translate") // => "10px,10px"
@@ -108,7 +108,7 @@ class Frame {
 	/**
 	* set property
 	* @method Scene.Frame#set
-	* @param {...Number|String|Scene.PropertyObejct} args - property names or values
+	* @param {...Number|String|Scene.PropertyObject} args - property names or values
 	* @return {Scene.Frame} An instance itself
 	* @example
 // one parameter

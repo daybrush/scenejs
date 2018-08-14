@@ -180,49 +180,6 @@ item.remove(0, "a");
 		frame && frame.remove(...args);
 		return this;
 	}
-	protected animate(parentEasing: EasingType, parent: any) {
-		const iterationTime = this.getIterationTime();
-		const easing = this.getEasing() || parentEasing;
-		const frame = this.getNowFrame(iterationTime, easing);
-		const currentTime = this.getTime();
-
-		/**
-		 * This event is fired when timeupdate and animate.
-		 * @event Scene.SceneItem#animate
-		 * @param {Number} param.currentTime The total time that the animator is running.
-		 * @param {Number} param.time The iteration time during duration that the animator is running.
-		 * @param {Scene.Frame} param.frame frame of that time.
-		 */
-		this.trigger("animate", {
-			frame,
-			currentTime,
-			time: iterationTime,
-		});
-
-		parent && parent.trigger("animate", {
-			frame,
-			currentTime,
-			target: this,
-			time: iterationTime,
-		});
-		const elements = this.elements;
-
-		if (!elements || !elements.length) {
-			return frame;
-		}
-		const cssText = frame.toCSS();
-
-		if (this.state.cssText === cssText) {
-			return frame;
-		}
-		this.state.cssText = cssText;
-		const length = elements.length;
-
-		for (let i = 0; i < length; ++i) {
-			elements[i].style.cssText += cssText;
-		}
-		return frame;
-	}
 	/**
 	* Specifies an element to synchronize items' keyframes.
 	* @method Scene.SceneItem#setSelector
@@ -335,7 +292,7 @@ item.newFrame(time);
 	}
 	/**
 	* Add a frame to the sceneItem at that time
-	* @method Scene.SceneItem#setFrame	
+	* @method Scene.SceneItem#setFrame
 	* @param {Number} time - frame's time
 	* @return {Scene.SceneItem} An instance itself
 	* @example
@@ -726,6 +683,49 @@ item.playCSS(false, {
 		animatedElement.addEventListener("animationend", animationend);
 		animatedElement.addEventListener("animationiteration", animationiteration);
 		return this;
+	}
+	protected animate(parentEasing: EasingType, parent: any) {
+		const iterationTime = this.getIterationTime();
+		const easing = this.getEasing() || parentEasing;
+		const frame = this.getNowFrame(iterationTime, easing);
+		const currentTime = this.getTime();
+
+		/**
+		 * This event is fired when timeupdate and animate.
+		 * @event Scene.SceneItem#animate
+		 * @param {Number} param.currentTime The total time that the animator is running.
+		 * @param {Number} param.time The iteration time during duration that the animator is running.
+		 * @param {Scene.Frame} param.frame frame of that time.
+		 */
+		this.trigger("animate", {
+			frame,
+			currentTime,
+			time: iterationTime,
+		});
+
+		parent && parent.trigger("animate", {
+			frame,
+			currentTime,
+			target: this,
+			time: iterationTime,
+		});
+		const elements = this.elements;
+
+		if (!elements || !elements.length) {
+			return frame;
+		}
+		const cssText = frame.toCSS();
+
+		if (this.state.cssText === cssText) {
+			return frame;
+		}
+		this.state.cssText = cssText;
+		const length = elements.length;
+
+		for (let i = 0; i < length; ++i) {
+			elements[i].style.cssText += cssText;
+		}
+		return frame;
 	}
 	private _getTime(time: string | number, options?: StateInterface) {
 		const duration = (options && options.duration) || this.getDuration() || 100;

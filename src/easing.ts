@@ -65,7 +65,7 @@ export function bezier(x1: number, y1: number, x2: number, y2: number) {
 * @static
 * @type {function}
 * @example
-Scene.easing.LINEAR 
+Scene.easing.LINEAR
 */
 export const LINEAR = bezier(0, 0, 1, 1);
 /**
@@ -75,7 +75,7 @@ export const LINEAR = bezier(0, 0, 1, 1);
 * @static
 * @type {function}
 * @example
-Scene.easing.EASE 
+Scene.easing.EASE
 */
 export const EASE = bezier(0.25, 0.1, 0.25, 1);
 export const EASE_IN = bezier(0.42, 0, 1, 1);

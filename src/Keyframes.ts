@@ -111,7 +111,7 @@ keyframes.updateFrame(frame);
 	/**
 	 * Get how long an animation should take to complete one cycle.
 	 * @method Scene.Keyframes#getDuration
-	 * @return {number} duration 
+	 * @return {number} duration
 	 */
 	public getDuration() {
 		const times = this.times;
@@ -158,23 +158,6 @@ keyframes.updateFrame(frame);
 		this.addTime(time);
 		return this;
 	}
-	private addTime(time: number) {
-		const times = this.times;
-		const length = times.length;
-		let pushIndex = length;
-
-		for (let i = 0; i < length; ++i) {
-			// if time is smaller than times[i], add time to index
-			if (time === times[i]) {
-				return this;
-			} else if (time < times[i]) {
-				pushIndex = i;
-				break;
-			}
-		}
-		this.times.splice(pushIndex, 0, time);
-		return this;
-	}
 	/**
 	* Check if keyframes has object at that time.
 	* @method Scene.Keyframes#has
@@ -204,6 +187,23 @@ keyframes.updateFrame(frame);
 
 		delete items[time];
 		this.removeTime(time);
+		return this;
+	}
+	private addTime(time: number) {
+		const times = this.times;
+		const length = times.length;
+		let pushIndex = length;
+
+		for (let i = 0; i < length; ++i) {
+			// if time is smaller than times[i], add time to index
+			if (time === times[i]) {
+				return this;
+			} else if (time < times[i]) {
+				pushIndex = i;
+				break;
+			}
+		}
+		this.times.splice(pushIndex, 0, time);
 		return this;
 	}
 	private removeTime(time: number) {

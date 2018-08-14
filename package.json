@@ -2,7 +2,7 @@
   "name": "scenejs",
   "version": "1.0.0-alpha",
   "description": "Javascript Animation Library",
-  "main": "outjs/index.js",
+  "main": "outjs",
   "types": "declaration/index.d.ts",
   "directories": {
     "test": "test"

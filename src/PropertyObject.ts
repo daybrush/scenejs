@@ -8,12 +8,15 @@ interface PropertyObjectInterface {
 	separator?: string;
 	[key: string]: any;
 }
+/**
+* Make string, array to PropertyObject for the dot product
+* @memberof Scene
+*/
 class PropertyObject {
 	public value: any[];
 	public options: PropertyObjectInterface;
 
 	/**
-	* Make string, array to PropertyObject for the dot product
 	* @param {String|Array} value - This value is in the array format ..
 	* @param {String} separator - Array separator.
 	* @example
