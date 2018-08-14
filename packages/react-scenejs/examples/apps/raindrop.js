@@ -11,7 +11,9 @@ class App extends React.Component {
 			delay={delay}
 			duration={1.5}
 			easing={EASE_IN_OUT}
-			iterationCount="infinite">
+			iterationCount="infinite"
+			ref= {e => {e && (window["item" + delay] = e);}}
+			>
 			{({ styles }) => <div className="raindrop" style={styles}></div>}
 		</SceneItem>;
 	}
