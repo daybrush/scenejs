@@ -33,7 +33,7 @@ function solveFromX(x1: number, x2: number, x: number) {
 /**
 * Cubic Bezier curve.
 * @memberof Scene.easing
-* @func Scene.easing.bezier
+* @func bezier
 * @param {number} [x1] - point1's x
 * @param {number} [y1] - point1's y
 * @param {number} [x2] - point2's x
@@ -60,8 +60,8 @@ export function bezier(x1: number, y1: number, x2: number, y2: number) {
 }
 /**
 * Linear Speed (0, 0, 1, 1)
-* @name Scene.easing.LINEAR
 * @memberof Scene.easing
+* @name LINEAR
 * @static
 * @type {function}
 * @example
@@ -70,14 +70,41 @@ Scene.easing.LINEAR
 export const LINEAR = bezier(0, 0, 1, 1);
 /**
 * Ease Speed (0.25, 0.1, 0.25, 1)
-* @name Scene.easing.EASE
 * @memberof Scene.easing
+* @name EASE
 * @static
 * @type {function}
 * @example
 Scene.easing.EASE
 */
 export const EASE = bezier(0.25, 0.1, 0.25, 1);
+/**
+* Ease In Speed (0.42, 0, 1, 1)
+* @memberof Scene.easing
+* @name EASE_IN
+* @static
+* @type {function}
+* @example
+Scene.easing.EASE_IN
+*/
 export const EASE_IN = bezier(0.42, 0, 1, 1);
+/**
+* Ease Out Speed (0, 0, 0.58, 1)
+* @memberof Scene.easing
+* @name EASE_OUT
+* @static
+* @type {function}
+* @example
+Scene.easing.EASE_OUT
+*/
 export const EASE_OUT = bezier(0, 0, 0.58, 1);
+/**
+* Ease In Out Speed (0.42, 0, 0.58, 1)
+* @memberof Scene.easing
+* @name EASE_IN_OUT
+* @static
+* @type {function}
+* @example
+Scene.easing.EASE_IN_OUT
+*/
 export const EASE_IN_OUT = bezier(0.42, 0, 0.58, 1);
