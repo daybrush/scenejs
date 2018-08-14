@@ -11,3 +11,4 @@ doc/
 outjs/
 declaration/
 build/
+.vscode/
