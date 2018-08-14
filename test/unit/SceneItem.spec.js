@@ -1,6 +1,5 @@
 import SceneItem from "../../src/SceneItem.ts";
 import {THRESHOLD} from "../../src/consts.ts";
-import {toId} from "../../src/utils/css.ts";
 import removeProperty from "./injections/ClassListInjection";
 import { orderByASC, group } from "./TestHelper";
 /* eslint-disable */
@@ -544,7 +543,7 @@ describe("SceneItem Test", function() {
             // Given
             // When
             this.item.exportCSS();
-            const id = toId(this.item.state.id);
+            const id = this.item.state.id.match(/[0-9a-zA-Z]+/g).join("");
             // Then
             
             expect(document.querySelector(`#__SCENEJS_STYLE_${id}`)).to.be.ok;
