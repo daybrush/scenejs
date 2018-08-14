@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>EventTrigger.ts - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,108 +28,145 @@
 
 <div id="main">
     
+    <h1 class="page-title">EventTrigger.ts</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {has} from "./utils";
+type CallbackType = (...args: any[]) => any;
+interface EventParamterType {
+	[name: string]: CallbackType | CallbackType[];
+}
+/**
+* attach and trigger event handlers.
+* @memberof Scene
+* @class Scene.EventTrigger
+*/
+class EventTrigger {
+	private events: {[name: string]: CallbackType[]};
+	constructor() {
+		this.events = {};
+	}
+	/**
+	* Attach an event handler function for one or more events to target
+	* @method Scene.EventTrigger#on
+	* @param {String} name - event's name
+	* @param {Function} callback -  function to execute when the event is triggered.
+	* @return {Scene.EventTrigger} An Instance itself.
+	* @example
+target.on("animate", function() {
+	console.log("animate");
+});
 
+target.trigger("animate");
 
+	*/
+	public on(name: string | EventParamterType, callback?: CallbackType | CallbackType[]) {
+		const events = this.events;
 
+		if (typeof name === "object") {
+			for (const i in name) {
+				this.on(i, name[i]);
+			}
+			return this;
+		}
+		if (!has(events, name)) {
+			events[name] = [];
+		}
+		if (!callback) {
+			return this;
+		}
+		if (typeof callback === "object") {
+			callback.forEach(func => this.on(name, func));
+			return this;
+		}
+		const event = events[name];
 
+		event.push(callback);
+		return this;
+	}
+	/**
+	* Dettach an event handler function for one or more events to target
+	* @method Scene.EventTrigger#off
+	* @param {String} name - event's name
+	* @param {Function} callback -  function to execute when the event is triggered.
+	* @return {Scene.EventTrigger} An Instance itself.
+	* @example
+const callback = function() {
+	console.log("animate");
+};
+target.on("animate", callback);
 
+target.off("animate", callback);
+target.off("animate");
 
+	*/
+	public off(name?: string, callback?: CallbackType) {
+		if (!name) {
+			this.events = {};
+		} else if (!callback) {
+			this.events[name] = [];
+		} else {
+			const callbacks = this.events[name];
 
+			if (!callbacks) {
+				return this;
+			}
+			const index = callbacks.indexOf(callback);
 
+			if (index !== -1) {
+				callbacks.splice(index, 1);
+			}
+		}
+		return this;
+	}
+	/**
+	* execute event handler
+	* @method Scene.EventTrigger#triiger
+	* @param {String} name - event's name
+	* @param {Function} [...data] - event handler's additional parameter
+	* @return {Scene.EventTrigger} An Instance itself.
+	* @example
+target.on("animate", function(a1, a2) {
+	console.log("animate", a1, a2);
+});
 
-    
+target.trigger("animate", [1, 2]); // log => "animate", 1, 2
 
+	*/
+	public trigger(name: string, ...data: any[]) {
+		const events = this.events;
 
-    <section class="readme">
-        <article><h1>Scene.js  <a href="https://badge.fury.io/js/scenejs"><img src="https://badge.fury.io/js/scenejs.svg" alt="npm version"></a> <a href="https://travis-ci.org/daybrush/scenejs"><img src="https://travis-ci.org/daybrush/scenejs.svg?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/github/daybrush/scenejs?branch=master"><img src="https://coveralls.io/repos/github/daybrush/scenejs/badge.svg?branch=master" alt="Coverage Status"></a></h1>
-<p>Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
-<br></p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/motion.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/raindrop.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-</p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/search.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/dissolve.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-</p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/parallax.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/shape.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-</p>
-<h2>Demos</h2>
-<ul>
-<li><a href="https://codepen.io/daybrush/pen/zWMeJW">Circle Burst</a></li>
-<li><a href="https://codepen.io/daybrush/pen/pLxQGY">Motion Effect</a></li>
-<li><a href="https://codepen.io/daybrush/pen/vRrbXG">Raindrop Effect</a></li>
-<li><a href="https://codepen.io/daybrush/pen/ybxwpV">Cube</a></li>
-<li><a href="https://codepen.io/daybrush/pen/VXVgpE">Shape</a></li>
-</ul>
-<p><a href="https://codepen.io/collection/DLWxrd/"><strong>More Examples</strong></a></p>
-<h2>Installation</h2>
-<ul>
-<li><strong>npm</strong></li>
-</ul>
-<pre class="prettyprint source lang-bash"><code>$ npm install scenejs
+		if (!has(events, name)) {
+			return this;
+		}
+
+		const event = events[name];
+
+		if (data.length) {
+			const target = data[0];
+
+			target.type = name;
+			target.currentTarget = this;
+			!target.target &amp;&amp; (target.target = this);
+		}
+		event.forEach(callback => {
+			callback.apply(this, data);
+		});
+
+		return this;
+	}
+}
+export default EventTrigger;
 </code></pre>
-<ul>
-<li><strong>es5</strong></li>
-</ul>
-<pre class="prettyprint source lang-js"><code>&lt;script src=&quot;//daybrush.github.io/scenejs/release/latest/scene.min.js&quot;>&lt;/script>
-</code></pre>
-<h2>Make scene</h2>
-<pre class="prettyprint source lang-javascript"><code>import Scene from &quot;scenejs&quot;;
-
-const scene = new Scene({
-  &quot;.class&quot;: {
-    0: &quot;left: 0px; top: 0px&quot;
-    1: {
-      &quot;left&quot;: &quot;100px&quot;,
-      &quot;top&quot;: &quot;0px&quot;
-    },
-    2: {
-      &quot;left&quot;: &quot;200px&quot;,
-      &quot;top&quot;: &quot;100px&quot;
-    }
-  }
-}, {
-  selector: true
-}).play();
-
-</code></pre>
-<h2>Documents</h2>
-<ul>
-<li><a href="https://daybrush.github.io/scenejs/release/latest/doc/">API documentation</a></li>
-</ul>
-<h2>Support Browser</h2>
-<table>
-<thead>
-<tr>
-<th>Internet Explorer</th>
-<th>Chrome</th>
-<th>FireFox</th>
-<th>Safari</th>
-<th>Opera</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>9+(polyfill 8+)</td>
-<td>latest</td>
-<td>latest</td>
-<td>latest</td>
-<td>latest</td>
-</tr>
-</tbody>
-</table></article>
+        </article>
     </section>
-
-
 
 
 
@@ -137,18 +174,11 @@ const scene = new Scene({
 
 <style>
 
-nav .classes li:first-child:after {
+
+nav li[file="eventtrigger"]:after {
     display: none;
 }
-nav .classes li:first-child h4, nav .classes li:first-child ul {
-    display: block;
-}
-
-
-nav li[file="home"]:after {
-    display: none;
-}
-nav li[file="home"] h4, nav li[file="home"] ul {
+nav li[file="eventtrigger"] h4, nav li[file="eventtrigger"] ul {
     display: block;
 }
 </style>

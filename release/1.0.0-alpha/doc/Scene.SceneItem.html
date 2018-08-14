@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Scene - Documentation</title>
+    <title>SceneItem - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Scene</h1>
+    <h1 class="page-title">SceneItem</h1>
     
 
     
@@ -41,7 +41,9 @@
 <header>
     
         <h2>
-        Scene
+            <span class="ancestors"><a href="Scene.html">Scene</a>.</span>
+        
+        SceneItem
         </h2>
         
     
@@ -54,7 +56,7 @@
 
     
 
-    <h4 class="name" id="Scene"><span class="type-signature"></span>new Scene<span class="signature">(properties<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SceneItem"><span class="type-signature"></span>new SceneItem<span class="signature">(properties<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -66,7 +68,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line6">line 6</a>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -106,7 +108,7 @@
 
 
 <div class="description">
-    manage sceneItems and play Scene.
+    manage Frame Keyframes and play keyframes.
 </div>
 
 
@@ -119,23 +121,16 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const scene = new Scene({
-	item1: {
-		0: {
-			display: "none",
-		},
-		1: {
-			display: "block",
-			opacity: 0,
-		},
-		2: {
-			opacity: 1,
-		},
+    <pre class="prettyprint"><code>const item = new Scene.SceneItem({
+	0: {
+		display: "none",
 	},
-	item2: {
-		2: {
-			opacity: 1,
-		},
+	1: {
+		display: "block",
+		opacity: 0,
+	},
+	2: {
+		opacity: 1,
 	}
 });</code></pre>
 
@@ -269,44 +264,24 @@
     
 
     
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="Scene.Animator.html">Animator</a></dt>
-            <dd></dd>
-        
-            <dt><a href="Scene.EventTrigger.html">EventTrigger</a></dt>
-            <dd></dd>
-        
-            <dt><a href="Scene.Frame.html">Frame</a></dt>
-            <dd></dd>
-        
-            <dt><a href="Scene.PropertyObject.html">PropertyObject</a></dt>
-            <dd></dd>
-        
-            <dt><a href="Scene.SceneItem.html">SceneItem</a></dt>
-            <dd></dd>
-        </dl>
-    
 
      
 
     
-        <h3 class="subsection-title">Namespaces</h3>
 
-        <dl>
-            <dt><a href="Scene.easing.html">easing</a></dt>
-            <dd></dd>
-        </dl>
     
 
     
-        <h3 class="subsection-title">Members</h3>
+        <h3 class="subsection-title" id="methods">Methods</h3>
 
         
             
-<h4 class="name" id=".VERSION"><span class="type-signature">(static) </span>VERSION<span class="type-signature"> :string</span></h4>
 
+    
+
+    <h4 class="name" id="clone"><span class="type-signature"></span>clone<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+
+    
 
 
 
@@ -316,7 +291,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line34">line 34</a>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line469">line 469</a>
     </li></ul></dd>
     
 
@@ -356,20 +331,12 @@
 
 
 <div class="description">
-    version info
+    clone SceneItem.
 </div>
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
 
-
-        </li>
-    </ul>
 
 
 
@@ -377,15 +344,297 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>Scene.VERSION // #__VERSION__#</code></pre>
+    <pre class="prettyprint"><code>item.clone();</code></pre>
 
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#AnimatorOptions">AnimatorOptions</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">animator options</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance of clone
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
+            
+
+    
+
+    <h4 class="name" id="copyFrame"><span class="type-signature"></span>copyFrame<span class="signature">(fromTime, toTime)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line348">line 348</a>
+    </li></ul></dd>
     
 
     
-        <h3 class="subsection-title" id="methods">Methods</h3>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Copy frame of the previous time at the next time.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// getFrame(0) equal getFrame(1)
+item.copyFrame(0, 1);</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fromTime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the previous time</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>toTime</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the next time</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance itself
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
 
         
             
@@ -503,7 +752,7 @@
 
     
 
-    <h4 class="name" id="exportCSS"><span class="type-signature"></span>exportCSS<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Scene.html">Scene</a>}</span></h4>
+    <h4 class="name" id="fromCSS"><span class="type-signature"></span>fromCSS<span class="signature">(properties)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
 
     
 
@@ -515,7 +764,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line160">line 160</a>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line233">line 233</a>
     </li></ul></dd>
     
 
@@ -555,7 +804,7 @@
 
 
 <div class="description">
-    Export the CSS of the items to the style.
+    get css styles of items's element
 </div>
 
 
@@ -566,110 +815,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    An instance itself
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Scene.html">Scene</a></span>
-
-
-    </dd>
-</dl>
-
+    <h5>Example</h5>
     
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="forEach"><span class="type-signature"></span>forEach<span class="signature">(func)</span><span class="type-signature"> &rarr; {<a href="Scene.html">Scene</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line143">line 143</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    executes a provided function once for each scene item.
-</div>
-
-
-
-
-
-
-
+    <pre class="prettyprint"><code>item.setElement(document.querySelector("#id.class"));
+item.fromCSS(["opacity"]); // {opacity: 1}
+item.fromCSS(["opacity", "width", "height"]); // {opacity: 1, width: "100px", height: "100px"}</code></pre>
 
 
 
@@ -699,13 +849,13 @@
 
         <tr>
             
-                <td class="name"><code>func</code></td>
+                <td class="name"><code>properties</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">Array</span>
 
 
             
@@ -715,134 +865,7 @@
 
             
 
-            <td class="description last">Function to execute for each element, taking three arguments
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>item</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The value of the item being processed in the scene.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The name of the item being processed in the scene.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>items</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The object that forEach() is being applied to.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
+            <td class="description last">elements to synchronize item's keyframes.</td>
         </tr>
 
     
@@ -877,7 +900,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Scene.html">Scene</a></span>
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
 
 
     </dd>
@@ -1375,12 +1398,12 @@
     
 
     
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
         <a href="Scene.Animator.html#getDuration">Scene.Animator#getDuration</a>
     </li></ul></dd>
+    
+
     
 
     
@@ -1810,7 +1833,7 @@
 
     
 
-    <h4 class="name" id="getItem"><span class="type-signature"></span>getItem<span class="signature">(name)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+    <h4 class="name" id="getFrame"><span class="type-signature"></span>getFrame<span class="signature">(time)</span><span class="type-signature"> &rarr; {<a href="Scene.Frame.html">Scene.Frame</a>}</span></h4>
 
     
 
@@ -1822,7 +1845,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line79">line 79</a>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line306">line 306</a>
     </li></ul></dd>
     
 
@@ -1862,7 +1885,7 @@
 
 
 <div class="description">
-    get item in scene by name
+    get sceneItem's frame at that time
 </div>
 
 
@@ -1875,7 +1898,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const item = scene.getItem("item1")</code></pre>
+    <pre class="prettyprint"><code>const frame = item.getFrame(time);</code></pre>
 
 
 
@@ -1905,13 +1928,13 @@
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>time</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Number</span>
 
 
             
@@ -1921,7 +1944,7 @@
 
             
 
-            <td class="description last">item's name</td>
+            <td class="description last">frame's time</td>
         </tr>
 
     
@@ -1945,7 +1968,7 @@
 
         
 <div class="param-desc">
-    item
+    sceneItem's frame at that time
 </div>
 
 
@@ -1956,7 +1979,119 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+<span class="param-type"><a href="Scene.Frame.html">Scene.Frame</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getId"><span class="type-signature"></span>getId<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line117">line 117</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Specifies the unique indicator of the item.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const item = scene.newItem("item");
+console.log(item.getId()); // item</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    the indicator of the item.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
 
 
     </dd>
@@ -2187,6 +2322,202 @@
     <dd>
         
 <span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getNowFrame"><span class="type-signature"></span>getNowFrame<span class="signature">(time, easing)</span><span class="type-signature"> &rarr; {<a href="Scene.Frame.html">Scene.Frame</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line402">line 402</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Get frame of the current time
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let item = new Scene.SceneItem({
+	0: {
+		display: "none",
+	},
+	1: {
+		display: "block",
+		opacity: 0,
+	},
+	2: {
+		opacity: 1,
+	}
+});
+// opacity: 0.7; display:"block";
+const frame = item.getNowFrame(1.7);</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the current time</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>easing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the speed curve of an animation</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    frame of the current time
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.Frame.html">Scene.Frame</a></span>
 
 
     </dd>
@@ -2657,6 +2988,170 @@
 
     
 
+    <h4 class="name" id="hasFrame"><span class="type-signature"></span>hasFrame<span class="signature">(time)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line317">line 317</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    check if the item has a frame at that time
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>if (item.hasFrame(10)) {
+	// has
+} else {
+	// not
+}</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">frame's time</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    true: the item has a frame // false: not
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
     <h4 class="name" id="isEnded"><span class="type-signature"></span>isEnded<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
@@ -2889,7 +3384,7 @@
 
     
 
-    <h4 class="name" id="newItem"><span class="type-signature"></span>newItem<span class="signature">(name, options)</span><span class="type-signature"> &rarr; {Sceme.SceneItem}</span></h4>
+    <h4 class="name" id="mergeFrame"><span class="type-signature"></span>mergeFrame<span class="signature">(fromTime, toTime)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
 
     
 
@@ -2901,7 +3396,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line90">line 90</a>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line375">line 375</a>
     </li></ul></dd>
     
 
@@ -2941,7 +3436,7 @@
 
 
 <div class="description">
-    create item in scene
+    merge frame of the previous time at the next time.
 </div>
 
 
@@ -2954,7 +3449,8 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const item = scene.newItem("item1")</code></pre>
+    <pre class="prettyprint"><code>// getFrame(1) contains getFrame(0)
+item.merge(0, 1);</code></pre>
 
 
 
@@ -2984,13 +3480,19 @@
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>fromTime</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">object</span>
 
 
             
@@ -3000,20 +3502,23 @@
 
             
 
-            <td class="description last">name of item to create</td>
+            <td class="description last">the previous time</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>toTime</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">StateOptions</span>
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
 
 
             
@@ -3023,7 +3528,7 @@
 
             
 
-            <td class="description last">The option object of SceneItem</td>
+            <td class="description last">the next time</td>
         </tr>
 
     
@@ -3047,7 +3552,7 @@
 
         
 <div class="param-desc">
-    Newly created item
+    An instance itself
 </div>
 
 
@@ -3058,7 +3563,167 @@
     </dt>
     <dd>
         
-<span class="param-type">Sceme.SceneItem</span>
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="newFrame"><span class="type-signature"></span>newFrame<span class="signature">(time)</span><span class="type-signature"> &rarr; {<a href="Scene.Frame.html">Scene.Frame</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line275">line 275</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Create and add a frame to the sceneItem at that time
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>item.newFrame(time);</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">frame's time</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Created frame.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.Frame.html">Scene.Frame</a></span>
 
 
     </dd>
@@ -3680,7 +4345,7 @@ target.trigger("animate");</code></pre>
 
     
 
-    <h4 class="name" id="playCSS"><span class="type-signature"></span>playCSS<span class="signature">(exportCSS<span class="signature-attributes">opt</span>, properties<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Scene.html">Scene</a>}</span></h4>
+    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(time, properties<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
 
     
 
@@ -3692,7 +4357,7 @@ target.trigger("animate");</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line179">line 179</a>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line168">line 168</a>
     </li></ul></dd>
     
 
@@ -3723,13 +4388,6 @@ target.trigger("animate");</code></pre>
     
 
     
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://www.w3schools.com/cssref/css3_pr_animation.asp">https://www.w3schools.com/cssref/css3_pr_animation.asp</a></li>
-        </ul>
-    </dd>
-    
 
     
 </dl>
@@ -3739,7 +4397,7 @@ target.trigger("animate");</code></pre>
 
 
 <div class="description">
-    Play using the css animation and keyframes.
+    remove properties to the sceneItem at that time
 </div>
 
 
@@ -3752,11 +4410,7 @@ target.trigger("animate");</code></pre>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>scene.playCSS();
-scene.playCSS(false, {
-	direction: "reverse",
-	fillMode: "forwards",
-});</code></pre>
+    <pre class="prettyprint"><code>item.remove(0, "a");</code></pre>
 
 
 
@@ -3778,8 +4432,6 @@ scene.playCSS(false, {
         
 
         
-        <th>Default</th>
-        
 
         <th class="last">Description</th>
     </tr>
@@ -3790,13 +4442,13 @@ scene.playCSS(false, {
 
         <tr>
             
-                <td class="name"><code>exportCSS</code></td>
+                <td class="name"><code>time</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">Number</span>
 
 
             
@@ -3805,8 +4457,6 @@ scene.playCSS(false, {
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -3815,14 +4465,8 @@ scene.playCSS(false, {
             
 
             
-                <td class="default">
-                
-                    <code>true</code>
-                
-                </td>
-            
 
-            <td class="description last">Check if you want to export css.</td>
+            <td class="description last">time</td>
         </tr>
 
     
@@ -3835,198 +4479,9 @@ scene.playCSS(false, {
             <td class="type">
             
                 
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>{}</code>
-                
-                </td>
-            
-
-            <td class="description last">The shorthand properties for six of the animation properties.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>duration</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The duration property defines how long an animation should take to complete one cycle.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>fillMode</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>iterationCount</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The iterationCount property specifies the number of times an animation should be played.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>easing</code></td>
-            
-
-            <td class="type">
-            
-                
 <span class="param-type">String</span>
+|
 
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The easing(timing-function) specifies the speed curve of an animation.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>delay</code></td>
-            
-
-            <td class="type">
-            
-                
 <span class="param-type">Object</span>
 
 
@@ -4047,47 +4502,7 @@ scene.playCSS(false, {
 
             
 
-            <td class="description last">The delay property specifies a delay for the start of an animation.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>direction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
+            <td class="description last">property names or values</td>
         </tr>
 
     
@@ -4122,7 +4537,167 @@ scene.playCSS(false, {
     </dt>
     <dd>
         
-<span class="param-type"><a href="Scene.html">Scene</a></span>
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="removeFrame"><span class="type-signature"></span>removeFrame<span class="signature">(time)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line332">line 332</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    remove sceneItem's frame at that time
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>item.removeFrame(time);</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">frame's time</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance itself
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
 
 
     </dd>
@@ -4234,6 +4809,375 @@ scene.playCSS(false, {
     <dd>
         
 <span class="param-type"><a href="Scene.Animator.html">Scene.Animator</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="set"><span class="type-signature"></span>set<span class="signature">(time, properties<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Set properties to the sceneItem at that time
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>item.set(0, "a", "b") // item.getFrame(0).set("a", "b")
+console.log(item.get(0, "a")); // "b"</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">time</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>properties</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">property names or values</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance itself
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="setCSS"><span class="type-signature"></span>setCSS<span class="signature">(properties)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line219">line 219</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    add css styles of items's element to the frame at that time.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>item.setElement(document.querySelector("#id.class"));
+item.setCSS(0, ["opacity"]);
+item.setCSS(0, ["opacity", "width", "height"]);</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>properties</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">elements to synchronize item's keyframes.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance itself
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
 
 
     </dd>
@@ -4597,12 +5541,12 @@ scene.playCSS(false, {
     
 
     
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
         <a href="Scene.Animator.html#setDuration">Scene.Animator#setDuration</a>
     </li></ul></dd>
+    
+
     
 
     
@@ -4911,6 +5855,173 @@ scene.playCSS(false, {
 
     
 
+    <h4 class="name" id="setElement"><span class="type-signature"></span>setElement<span class="signature">(elements)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line197">line 197</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Specifies an element to synchronize item's keyframes.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>item.setElement(document.querySelector("#id.class"));
+item.setElement(document.querySelectorAll(".class"));</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>elements</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Element</span>
+|
+
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">elements to synchronize item's keyframes.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance itself
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
     <h4 class="name" id="setFillMode"><span class="type-signature"></span>setFillMode<span class="signature">(fillMode)</span><span class="type-signature"> &rarr; {<a href="Scene.Animator.html">Scene.Animator</a>}</span></h4>
 
     
@@ -5080,7 +6191,7 @@ scene.playCSS(false, {
 
     
 
-    <h4 class="name" id="setItem"><span class="type-signature"></span>setItem<span class="signature">(name, item)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="setFrame"><span class="type-signature"></span>setFrame<span class="signature">(time)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
 
     
 
@@ -5092,7 +6203,7 @@ scene.playCSS(false, {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line117">line 117</a>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line293">line 293</a>
     </li></ul></dd>
     
 
@@ -5132,7 +6243,7 @@ scene.playCSS(false, {
 
 
 <div class="description">
-    add a sceneItem to the scene
+    Add a frame to the sceneItem at that time
 </div>
 
 
@@ -5145,7 +6256,7 @@ scene.playCSS(false, {
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const item = scene.newItem("item1")</code></pre>
+    <pre class="prettyprint"><code>item.setFrame(time, frame);</code></pre>
 
 
 
@@ -5175,13 +6286,13 @@ scene.playCSS(false, {
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>time</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Number</span>
 
 
             
@@ -5191,30 +6302,7 @@ scene.playCSS(false, {
 
             
 
-            <td class="description last">name of item to create</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>item</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">sceneItem</td>
+            <td class="description last">frame's time</td>
         </tr>
 
     
@@ -5234,6 +6322,191 @@ scene.playCSS(false, {
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance itself
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="setId"><span class="type-signature"></span>setId<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line85">line 85</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    set the unique indicator of the item.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const item = new SceneItem();
+
+item.setId("item");
+console.log(item.getId()); // item</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the indicator of the item.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance itself
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -5918,6 +7191,166 @@ scene.playCSS(false, {
 
     
 
+    <h4 class="name" id="setSelector"><span class="type-signature"></span>setSelector<span class="signature">(selectors)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line183">line 183</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Specifies an element to synchronize items' keyframes.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>item.setSelector("#id.class");</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>selectors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Selectors to find elements in items.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance itself
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
     <h4 class="name" id="setTime"><span class="type-signature"></span>setTime<span class="signature">(time)</span><span class="type-signature"> &rarr; {<a href="Scene.Animator.html">Scene.Animator</a>}</span></h4>
 
     
@@ -6293,6 +7726,289 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
 
 
         
+            
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line252">line 252</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    update property names used in frames.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>item.update();</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance itself
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="updateFrame"><span class="type-signature"></span>updateFrame<span class="signature">(frame<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line263">line 263</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    update property names used in frame.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>item.updateFrame(time, this.get(time));</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>frame</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Scene.Frame.html">Scene.Frame</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">frame of that time.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An instance itself
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
     
 
     
@@ -6317,7 +8033,7 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line131">line 131</a>
+        <a href="SceneItem.ts.html">SceneItem.ts</a>, <a href="SceneItem.ts.html#line693">line 693</a>
     </li></ul></dd>
     
 
@@ -6447,7 +8163,7 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
             <td class="type">
             
                 
-<span class="param-type">Frame</span>
+<span class="param-type"><a href="Scene.Frame.html">Scene.Frame</a></span>
 
 
             
@@ -6458,29 +8174,6 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
             
 
             <td class="description last">frame of that time.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>param.target</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The scene item that timeupdate and animate.</td>
         </tr>
 
     
@@ -7225,10 +8918,10 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
 <style>
 
 
-nav li[file="scene"]:after {
+nav li[file="sceneitem"]:after {
     display: none;
 }
-nav li[file="scene"] h4, nav li[file="scene"] ul {
+nav li[file="sceneitem"] h4, nav li[file="sceneitem"] ul {
     display: block;
 }
 </style>

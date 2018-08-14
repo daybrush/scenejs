@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>EventTrigger - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,108 +28,723 @@
 
 <div id="main">
     
+    <h1 class="page-title">EventTrigger</h1>
+    
 
     
 
 
 
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="Scene.html">Scene</a>.</span>
+        
+        EventTrigger
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="EventTrigger"><span class="type-signature"></span>new EventTrigger<span class="signature">()</span><span class="type-signature"></span></h4>
+
     
 
 
 
 
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="EventTrigger.ts.html">EventTrigger.ts</a>, <a href="EventTrigger.ts.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    attach and trigger event handlers.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
     
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title" id="methods">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="off"><span class="type-signature"></span>off<span class="signature">(name, callback)</span><span class="type-signature"> &rarr; {<a href="Scene.EventTrigger.html">Scene.EventTrigger</a>}</span></h4>
+
+    
 
 
-    <section class="readme">
-        <article><h1>Scene.js  <a href="https://badge.fury.io/js/scenejs"><img src="https://badge.fury.io/js/scenejs.svg" alt="npm version"></a> <a href="https://travis-ci.org/daybrush/scenejs"><img src="https://travis-ci.org/daybrush/scenejs.svg?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/github/daybrush/scenejs?branch=master"><img src="https://coveralls.io/repos/github/daybrush/scenejs/badge.svg?branch=master" alt="Coverage Status"></a></h1>
-<p>Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
-<br></p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/motion.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/raindrop.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-</p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/search.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/dissolve.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-</p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/parallax.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/shape.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-</p>
-<h2>Demos</h2>
-<ul>
-<li><a href="https://codepen.io/daybrush/pen/zWMeJW">Circle Burst</a></li>
-<li><a href="https://codepen.io/daybrush/pen/pLxQGY">Motion Effect</a></li>
-<li><a href="https://codepen.io/daybrush/pen/vRrbXG">Raindrop Effect</a></li>
-<li><a href="https://codepen.io/daybrush/pen/ybxwpV">Cube</a></li>
-<li><a href="https://codepen.io/daybrush/pen/VXVgpE">Shape</a></li>
-</ul>
-<p><a href="https://codepen.io/collection/DLWxrd/"><strong>More Examples</strong></a></p>
-<h2>Installation</h2>
-<ul>
-<li><strong>npm</strong></li>
-</ul>
-<pre class="prettyprint source lang-bash"><code>$ npm install scenejs
-</code></pre>
-<ul>
-<li><strong>es5</strong></li>
-</ul>
-<pre class="prettyprint source lang-js"><code>&lt;script src=&quot;//daybrush.github.io/scenejs/release/latest/scene.min.js&quot;>&lt;/script>
-</code></pre>
-<h2>Make scene</h2>
-<pre class="prettyprint source lang-javascript"><code>import Scene from &quot;scenejs&quot;;
-
-const scene = new Scene({
-  &quot;.class&quot;: {
-    0: &quot;left: 0px; top: 0px&quot;
-    1: {
-      &quot;left&quot;: &quot;100px&quot;,
-      &quot;top&quot;: &quot;0px&quot;
-    },
-    2: {
-      &quot;left&quot;: &quot;200px&quot;,
-      &quot;top&quot;: &quot;100px&quot;
-    }
-  }
-}, {
-  selector: true
-}).play();
-
-</code></pre>
-<h2>Documents</h2>
-<ul>
-<li><a href="https://daybrush.github.io/scenejs/release/latest/doc/">API documentation</a></li>
-</ul>
-<h2>Support Browser</h2>
-<table>
-<thead>
-<tr>
-<th>Internet Explorer</th>
-<th>Chrome</th>
-<th>FireFox</th>
-<th>Safari</th>
-<th>Opera</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>9+(polyfill 8+)</td>
-<td>latest</td>
-<td>latest</td>
-<td>latest</td>
-<td>latest</td>
-</tr>
-</tbody>
-</table></article>
-    </section>
 
 
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="EventTrigger.ts.html">EventTrigger.ts</a>, <a href="EventTrigger.ts.html#line54">line 54</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Dettach an event handler function for one or more events to target
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const callback = function() {
+	console.log("animate");
+};
+target.on("animate", callback);
+
+target.off("animate", callback);
+target.off("animate");</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">event's name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">function to execute when the event is triggered.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An Instance itself.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.EventTrigger.html">Scene.EventTrigger</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(name, callback)</span><span class="type-signature"> &rarr; {<a href="Scene.EventTrigger.html">Scene.EventTrigger</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="EventTrigger.ts.html">EventTrigger.ts</a>, <a href="EventTrigger.ts.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Attach an event handler function for one or more events to target
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>target.on("animate", function() {
+	console.log("animate");
+});
+
+target.trigger("animate");</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">event's name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">function to execute when the event is triggered.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An Instance itself.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.EventTrigger.html">Scene.EventTrigger</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="triiger"><span class="type-signature"></span>triiger<span class="signature">(name)</span><span class="type-signature"> &rarr; {<a href="Scene.EventTrigger.html">Scene.EventTrigger</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="EventTrigger.ts.html">EventTrigger.ts</a>, <a href="EventTrigger.ts.html#line89">line 89</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    execute event handler
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>target.on("animate", function(a1, a2) {
+	console.log("animate", a1, a2);
+});
+
+target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">event's name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>...data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">event handler's additional parameter</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    An Instance itself.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Scene.EventTrigger.html">Scene.EventTrigger</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -137,18 +752,11 @@ const scene = new Scene({
 
 <style>
 
-nav .classes li:first-child:after {
+
+nav li[file="eventtrigger"]:after {
     display: none;
 }
-nav .classes li:first-child h4, nav .classes li:first-child ul {
-    display: block;
-}
-
-
-nav li[file="home"]:after {
-    display: none;
-}
-nav li[file="home"] h4, nav li[file="home"] ul {
+nav li[file="eventtrigger"] h4, nav li[file="eventtrigger"] ul {
     display: block;
 }
 </style>

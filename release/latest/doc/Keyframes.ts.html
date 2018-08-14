@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>Keyframes.ts - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,108 +28,236 @@
 
 <div id="main">
     
+    <h1 class="page-title">Keyframes.ts</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { ObjectInterface, RoleInterface } from "./consts";
+import {isObject, isArray} from "./utils";
+import PropertyObject from "./PropertyObject";
+import Frame from "./Frame";
 
+function getNames(names: ObjectInterface&lt;any>, stack: string[]) {
+	let arr: string[][] = [];
 
+	for (const name in names) {
+		stack.push(name);
 
+		if (isObject(names[name])) {
+			arr = arr.concat(getNames(names[name], stack));
+		} else {
+			arr.push(stack.slice());
+		}
+		stack.pop();
+	}
+	return arr;
+}
+function updateFrame(names: ObjectInterface&lt;any>, properties: ObjectInterface&lt;any>) {
+	for (const name in properties) {
+		const value = properties[name];
 
+		if (!isObject(value) || isArray(value) || value instanceof PropertyObject) {
+			names[name] = true;
+			continue;
+		}
+		if (!isObject(names[name])) {
+			names[name] = {};
+		}
+		updateFrame(names[name], properties[name]);
+	}
+}
 
+/**
+ * @memberof Scene
+* @class Scene.Keyframes
+* a list of objects in chronological order.
+*/
+export default class Keyframes {
+	public times: number[];
+	public items: ObjectInterface&lt;any>;
+	public names: RoleInterface;
 
+	constructor() {
+		this.times = [];
+		this.items = {};
+		this.names = {};
+	}
+	/**
+	* A list of names
+	* @method Scene.Keyframes#getNames
+	* @return {string[][]} names
+	* @example
+keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scale"]]
+	*/
+	public getNames() {
+		const names = this.names;
 
+		return getNames(names, []);
+	}
+	/**
+	 * update property names used in frames.
+	 * @method Scene.Keyframes#update
+	 * @return {Scene.Keyframes} An instance itself
+	 */
+	public update() {
+		const items = this.items;
 
+		for (const time in items) {
+			this.updateFrame(items[time]);
+		}
+		return this;
+	}
+	/**
+	 * executes a provided function once for each scene item.
+	 * @method Scene.Keyframes#forEach
+	 * @param {Function} callback Function to execute for each element, taking three arguments
+	 * @param {Scene.Frame} [callback.item] The value of the item being processed in the keyframes.
+	 * @param {string} [callback.time] The time of the item being processed in the keyframes.
+	 * @param {object} [callback.items] The object that forEach() is being applied to.
+	 * @return {Scene.Keyframes} An instance itself
+	 */
+	public forEach(callback: (item: any, time: number, items: ObjectInterface&lt;any>) => void) {
+		const times = this.times;
+		const items = this.items;
 
-    
+		times.forEach(time => {
+			callback(items[time], time, items);
+		});
+	}
+	/**
+	* update property names used in frame.
+	* @method Scene.Keyframes#updateFrame
+	* @param {Scene.Frame} [frame] - frame of that time.
+	* @return {Scene.Keyframes} An instance itself
+	* @example
+keyframes.updateFrame(frame);
+	*/
+	public updateFrame(frame: Frame) {
+		if (!frame) {
+			return this;
+		}
+		const properties = frame.properties;
+		const names = this.names;
 
+		updateFrame(names, properties);
+		return this;
+	}
+	/**
+	 * Get how long an animation should take to complete one cycle.
+	 * @method Scene.Keyframes#getDuration
+	 * @return {number} duration
+	 */
+	public getDuration() {
+		const times = this.times;
 
-    <section class="readme">
-        <article><h1>Scene.js  <a href="https://badge.fury.io/js/scenejs"><img src="https://badge.fury.io/js/scenejs.svg" alt="npm version"></a> <a href="https://travis-ci.org/daybrush/scenejs"><img src="https://travis-ci.org/daybrush/scenejs.svg?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/github/daybrush/scenejs?branch=master"><img src="https://coveralls.io/repos/github/daybrush/scenejs/badge.svg?branch=master" alt="Coverage Status"></a></h1>
-<p>Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
-<br></p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/motion.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/raindrop.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-</p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/search.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/dissolve.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-</p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/parallax.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/shape.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-</p>
-<h2>Demos</h2>
-<ul>
-<li><a href="https://codepen.io/daybrush/pen/zWMeJW">Circle Burst</a></li>
-<li><a href="https://codepen.io/daybrush/pen/pLxQGY">Motion Effect</a></li>
-<li><a href="https://codepen.io/daybrush/pen/vRrbXG">Raindrop Effect</a></li>
-<li><a href="https://codepen.io/daybrush/pen/ybxwpV">Cube</a></li>
-<li><a href="https://codepen.io/daybrush/pen/VXVgpE">Shape</a></li>
-</ul>
-<p><a href="https://codepen.io/collection/DLWxrd/"><strong>More Examples</strong></a></p>
-<h2>Installation</h2>
-<ul>
-<li><strong>npm</strong></li>
-</ul>
-<pre class="prettyprint source lang-bash"><code>$ npm install scenejs
+		return times.length === 0 ? 0 : times[times.length - 1];
+	}
+	/**
+	 * Set how long an animation should take to complete one cycle.
+	 * @method Scene.Keyframes#setDuration
+	 * @param {number} duration - duration
+	 * @return {Scene.Keyframes} An instance itself.
+	 */
+	public setDuration(duration: number, originalDuration: number = this.getDuration()) {
+		const ratio = duration / originalDuration;
+		const {times, items} = this;
+		const obj: ObjectInterface&lt;any> = {};
+
+		this.times = times.map(time => {
+			const time2 = time * ratio;
+
+			obj[time2] = items[time];
+
+			return time2;
+		});
+		this.items = obj;
+	}
+	/**
+	* get size of list
+	* @method Scene.Keyframes#size
+	* @return {Number} length of list
+	*/
+	public size() {
+		return this.times.length;
+	}
+	/**
+	* add object in list
+	* @method Scene.Keyframes#add
+	* @param {Number} time - frame's time
+	* @param {Object} object - target
+	* @return {Scene.Keyframes} An instance itself
+	*/
+	public add(time: number, object: any) {
+		this.items[time] = object;
+		this.addTime(time);
+		return this;
+	}
+	/**
+	* Check if keyframes has object at that time.
+	* @method Scene.Keyframes#has
+	* @param {Number} time - object's time
+	* @return {Boolean} true: if has time, false: not
+	*/
+	public has(time: number) {
+		return time in this.items;
+	}
+	/**
+	* get object at that time.
+	* @method Scene.Keyframes#get
+	* @param {Number} time - object's time
+	* @return {Object} object at that time
+	*/
+	public get(time: number) {
+		return this.items[time];
+	}
+	/**
+	* remove object at that time.
+	* @method Scene.Keyframes#remove
+	* @param {Number} time - object's time
+	* @return {Keyframes} An instance itself
+	*/
+	public remove(time: number) {
+		const items = this.items;
+
+		delete items[time];
+		this.removeTime(time);
+		return this;
+	}
+	private addTime(time: number) {
+		const times = this.times;
+		const length = times.length;
+		let pushIndex = length;
+
+		for (let i = 0; i &lt; length; ++i) {
+			// if time is smaller than times[i], add time to index
+			if (time === times[i]) {
+				return this;
+			} else if (time &lt; times[i]) {
+				pushIndex = i;
+				break;
+			}
+		}
+		this.times.splice(pushIndex, 0, time);
+		return this;
+	}
+	private removeTime(time: number) {
+		const index = this.times.indexOf(time);
+
+		if (index > -1) {
+			this.times.splice(index, 1);
+		}
+		return this;
+	}
+}
 </code></pre>
-<ul>
-<li><strong>es5</strong></li>
-</ul>
-<pre class="prettyprint source lang-js"><code>&lt;script src=&quot;//daybrush.github.io/scenejs/release/latest/scene.min.js&quot;>&lt;/script>
-</code></pre>
-<h2>Make scene</h2>
-<pre class="prettyprint source lang-javascript"><code>import Scene from &quot;scenejs&quot;;
-
-const scene = new Scene({
-  &quot;.class&quot;: {
-    0: &quot;left: 0px; top: 0px&quot;
-    1: {
-      &quot;left&quot;: &quot;100px&quot;,
-      &quot;top&quot;: &quot;0px&quot;
-    },
-    2: {
-      &quot;left&quot;: &quot;200px&quot;,
-      &quot;top&quot;: &quot;100px&quot;
-    }
-  }
-}, {
-  selector: true
-}).play();
-
-</code></pre>
-<h2>Documents</h2>
-<ul>
-<li><a href="https://daybrush.github.io/scenejs/release/latest/doc/">API documentation</a></li>
-</ul>
-<h2>Support Browser</h2>
-<table>
-<thead>
-<tr>
-<th>Internet Explorer</th>
-<th>Chrome</th>
-<th>FireFox</th>
-<th>Safari</th>
-<th>Opera</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>9+(polyfill 8+)</td>
-<td>latest</td>
-<td>latest</td>
-<td>latest</td>
-<td>latest</td>
-</tr>
-</tbody>
-</table></article>
+        </article>
     </section>
-
-
 
 
 
@@ -137,18 +265,11 @@ const scene = new Scene({
 
 <style>
 
-nav .classes li:first-child:after {
+
+nav li[file="keyframes"]:after {
     display: none;
 }
-nav .classes li:first-child h4, nav .classes li:first-child ul {
-    display: block;
-}
-
-
-nav li[file="home"]:after {
-    display: none;
-}
-nav li[file="home"] h4, nav li[file="home"] ul {
+nav li[file="keyframes"] h4, nav li[file="keyframes"] ul {
     display: block;
 }
 </style>

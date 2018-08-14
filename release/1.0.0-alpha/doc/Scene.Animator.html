@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Scene - Documentation</title>
+    <title>Animator - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Scene</h1>
+    <h1 class="page-title">Animator</h1>
     
 
     
@@ -41,7 +41,9 @@
 <header>
     
         <h2>
-        Scene
+            <span class="ancestors"><a href="Scene.html">Scene</a>.</span>
+        
+        Animator
         </h2>
         
     
@@ -54,7 +56,7 @@
 
     
 
-    <h4 class="name" id="Scene"><span class="type-signature"></span>new Scene<span class="signature">(properties<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Animator"><span class="type-signature"></span>new Animator<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -66,7 +68,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line6">line 6</a>
+        <a href="Animator.ts.html">Animator.ts</a>, <a href="Animator.ts.html#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -97,6 +99,13 @@
     
 
     
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://www.w3schools.com/css/css3_animations.asp">CSS3 Animation</a></li>
+        </ul>
+    </dd>
+    
 
     
 </dl>
@@ -106,7 +115,7 @@
 
 
 <div class="description">
-    manage sceneItems and play Scene.
+    play video, animation, the others
 </div>
 
 
@@ -119,24 +128,13 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const scene = new Scene({
-	item1: {
-		0: {
-			display: "none",
-		},
-		1: {
-			display: "block",
-			opacity: 0,
-		},
-		2: {
-			opacity: 1,
-		},
-	},
-	item2: {
-		2: {
-			opacity: 1,
-		},
-	}
+    <pre class="prettyprint"><code>const animator = new Animator({
+	delay: 2,
+	diretion: "alternate",
+	duration: 2,
+	fillMode: "forwards",
+	iterationCount: 3,
+	easing: Scene.eaasing.EASE,
 });</code></pre>
 
 
@@ -169,39 +167,6 @@
 
         <tr>
             
-                <td class="name"><code>properties</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">properties</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>options</code></td>
             
 
@@ -228,7 +193,7 @@
 
             
 
-            <td class="description last">options</td>
+            <td class="description last">animator's options</td>
         </tr>
 
     
@@ -260,7 +225,7 @@
 
 
     <ul>
-        <li><a href="Scene.Animator.html">Scene.Animator</a></li>
+        <li><a href="Scene.EventTrigger.html">Scene.EventTrigger</a></li>
     </ul>
 
 
@@ -268,120 +233,12 @@
 
     
 
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="Scene.Animator.html">Animator</a></dt>
-            <dd></dd>
-        
-            <dt><a href="Scene.EventTrigger.html">EventTrigger</a></dt>
-            <dd></dd>
-        
-            <dt><a href="Scene.Frame.html">Frame</a></dt>
-            <dd></dd>
-        
-            <dt><a href="Scene.PropertyObject.html">PropertyObject</a></dt>
-            <dd></dd>
-        
-            <dt><a href="Scene.SceneItem.html">SceneItem</a></dt>
-            <dd></dd>
-        </dl>
     
 
      
 
     
-        <h3 class="subsection-title">Namespaces</h3>
 
-        <dl>
-            <dt><a href="Scene.easing.html">easing</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id=".VERSION"><span class="type-signature">(static) </span>VERSION<span class="type-signature"> :string</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line34">line 34</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    version info
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>Scene.VERSION // #__VERSION__#</code></pre>
-
-
-
-        
     
 
     
@@ -412,11 +269,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#end">Scene.Animator#end</a>
-    </li></ul></dd>
     
 
     
@@ -503,394 +355,6 @@
 
     
 
-    <h4 class="name" id="exportCSS"><span class="type-signature"></span>exportCSS<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Scene.html">Scene</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line160">line 160</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Export the CSS of the items to the style.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    An instance itself
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Scene.html">Scene</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="forEach"><span class="type-signature"></span>forEach<span class="signature">(func)</span><span class="type-signature"> &rarr; {<a href="Scene.html">Scene</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line143">line 143</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    executes a provided function once for each scene item.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>func</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Function to execute for each element, taking three arguments
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>item</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The value of the item being processed in the scene.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The name of the item being processed in the scene.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>items</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The object that forEach() is being applied to.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    An instance itself
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Scene.html">Scene</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
     <h4 class="name" id="getActiveDuration"><span class="type-signature"></span>getActiveDuration<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
 
     
@@ -911,11 +375,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getActiveDuration">Scene.Animator#getActiveDuration</a>
-    </li></ul></dd>
     
 
     
@@ -1028,11 +487,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getActiveTime">Scene.Animator#getActiveTime</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1144,11 +598,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getDelay">Scene.Animator#getDelay</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1254,11 +703,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getDirection">Scene.Animator#getDirection</a>
-    </li></ul></dd>
     
 
     
@@ -1377,11 +821,6 @@
     
 
     
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getDuration">Scene.Animator#getDuration</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1485,11 +924,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getEasing">Scene.Animator#getEasing</a>
-    </li></ul></dd>
     
 
     
@@ -1600,11 +1034,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getEasingName">Scene.Animator#getEasingName</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1711,11 +1140,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getFillMode">Scene.Animator#getFillMode</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1810,166 +1234,6 @@
 
     
 
-    <h4 class="name" id="getItem"><span class="type-signature"></span>getItem<span class="signature">(name)</span><span class="type-signature"> &rarr; {<a href="Scene.SceneItem.html">Scene.SceneItem</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line79">line 79</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    get item in scene by name
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const item = scene.getItem("item1")</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">item's name</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    item
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
     <h4 class="name" id="getIterationCount"><span class="type-signature"></span>getIterationCount<span class="signature">()</span><span class="type-signature"> &rarr; {"inifnite"|number}</span></h4>
 
     
@@ -1990,11 +1254,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getIterationCount">Scene.Animator#getIterationCount</a>
-    </li></ul></dd>
     
 
     
@@ -2104,11 +1363,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getIterationTime">Scene.Animator#getIterationTime</a>
-    </li></ul></dd>
     
 
     
@@ -2221,11 +1475,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getPlaySpeed">Scene.Animator#getPlaySpeed</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2331,11 +1580,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getPlayState">Scene.Animator#getPlayState</a>
-    </li></ul></dd>
     
 
     
@@ -2445,11 +1689,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getTime">Scene.Animator#getTime</a>
-    </li></ul></dd>
     
 
     
@@ -2562,11 +1801,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#getTotalDuration">Scene.Animator#getTotalDuration</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2677,11 +1911,6 @@
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#isEnded">Scene.Animator#isEnded</a>
-    </li></ul></dd>
     
 
     
@@ -2794,11 +2023,6 @@
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#isPaused">Scene.Animator#isPaused</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2876,189 +2100,6 @@
     <dd>
         
 <span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="newItem"><span class="type-signature"></span>newItem<span class="signature">(name, options)</span><span class="type-signature"> &rarr; {Sceme.SceneItem}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line90">line 90</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    create item in scene
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const item = scene.newItem("item1")</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">name of item to create</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">StateOptions</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The option object of SceneItem</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Newly created item
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Sceme.SceneItem</span>
 
 
     </dd>
@@ -3479,11 +2520,6 @@ target.trigger("animate");</code></pre>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#pause">Scene.Animator#pause</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3590,11 +2626,6 @@ target.trigger("animate");</code></pre>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#play">Scene.Animator#play</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3680,462 +2711,6 @@ target.trigger("animate");</code></pre>
 
     
 
-    <h4 class="name" id="playCSS"><span class="type-signature"></span>playCSS<span class="signature">(exportCSS<span class="signature-attributes">opt</span>, properties<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Scene.html">Scene</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line179">line 179</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://www.w3schools.com/cssref/css3_pr_animation.asp">https://www.w3schools.com/cssref/css3_pr_animation.asp</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Play using the css animation and keyframes.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>scene.playCSS();
-scene.playCSS(false, {
-	direction: "reverse",
-	fillMode: "forwards",
-});</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>exportCSS</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>true</code>
-                
-                </td>
-            
-
-            <td class="description last">Check if you want to export css.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>properties</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    <code>{}</code>
-                
-                </td>
-            
-
-            <td class="description last">The shorthand properties for six of the animation properties.
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>duration</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The duration property defines how long an animation should take to complete one cycle.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>fillMode</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>iterationCount</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The iterationCount property specifies the number of times an animation should be played.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>easing</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The easing(timing-function) specifies the speed curve of an animation.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>delay</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The delay property specifies a delay for the start of an animation.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>direction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    An instance itself
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Scene.html">Scene</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
     <h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Scene.Animator.html">Scene.Animator</a>}</span></h4>
 
     
@@ -4156,11 +2731,6 @@ scene.playCSS(false, {
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#reset">Scene.Animator#reset</a>
-    </li></ul></dd>
     
 
     
@@ -4267,11 +2837,6 @@ scene.playCSS(false, {
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#setDelay">Scene.Animator#setDelay</a>
-    </li></ul></dd>
     
 
     
@@ -4427,11 +2992,6 @@ scene.playCSS(false, {
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#setDirection">Scene.Animator#setDirection</a>
-    </li></ul></dd>
     
 
     
@@ -4599,11 +3159,6 @@ scene.playCSS(false, {
     
 
     
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#setDuration">Scene.Animator#setDuration</a>
-    </li></ul></dd>
-    
 
     
 
@@ -4756,11 +3311,6 @@ scene.playCSS(false, {
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#setEasing">Scene.Animator#setEasing</a>
-    </li></ul></dd>
     
 
     
@@ -4932,11 +3482,6 @@ scene.playCSS(false, {
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#setFillMode">Scene.Animator#setFillMode</a>
-    </li></ul></dd>
-    
 
     
 
@@ -5080,167 +3625,6 @@ scene.playCSS(false, {
 
     
 
-    <h4 class="name" id="setItem"><span class="type-signature"></span>setItem<span class="signature">(name, item)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line117">line 117</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    add a sceneItem to the scene
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const item = scene.newItem("item1")</code></pre>
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">name of item to create</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>item</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">sceneItem</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
     <h4 class="name" id="setIterationCount"><span class="type-signature"></span>setIterationCount<span class="signature">(iterationCount)</span><span class="type-signature"> &rarr; {<a href="Scene.Animator.html">Scene.Animator</a>}</span></h4>
 
     
@@ -5261,11 +3645,6 @@ scene.playCSS(false, {
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#setIterationCount">Scene.Animator#setIterationCount</a>
-    </li></ul></dd>
     
 
     
@@ -5424,11 +3803,6 @@ scene.playCSS(false, {
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#setOptions">Scene.Animator#setOptions</a>
-    </li></ul></dd>
     
 
     
@@ -5616,11 +3990,6 @@ scene.playCSS(false, {
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#setPlaySpeed">Scene.Animator#setPlaySpeed</a>
-    </li></ul></dd>
-    
 
     
 
@@ -5775,11 +4144,6 @@ scene.playCSS(false, {
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#setPlayState">Scene.Animator#setPlayState</a>
-    </li></ul></dd>
     
 
     
@@ -5938,11 +4302,6 @@ scene.playCSS(false, {
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#setTime">Scene.Animator#setTime</a>
-    </li></ul></dd>
     
 
     
@@ -6305,208 +4664,6 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
 
     
 
-    <h4 class="name" id="event:animate">animate</h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Scene.ts.html">Scene.ts</a>, <a href="Scene.ts.html#line131">line 131</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    This event is fired when timeupdate and animate.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>param.currentTime</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The total time that the animator is running.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>param.time</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The iteration time during duration that the animator is running.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>param.frame</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Frame</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">frame of that time.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>param.target</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Scene.SceneItem.html">Scene.SceneItem</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The scene item that timeupdate and animate.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
     <h4 class="name" id="event:ended">ended</h4>
 
     
@@ -6527,11 +4684,6 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#event:ended">Scene.Animator#event:ended</a>
-    </li></ul></dd>
     
 
     
@@ -6616,11 +4768,6 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#event:iteration">Scene.Animator#event:iteration</a>
-    </li></ul></dd>
     
 
     
@@ -6827,11 +4974,6 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#event:paused">Scene.Animator#event:paused</a>
-    </li></ul></dd>
-    
 
     
 
@@ -6916,11 +5058,6 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#event:play">Scene.Animator#event:play</a>
-    </li></ul></dd>
-    
 
     
 
@@ -7004,11 +5141,6 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Scene.Animator.html#event:timeupdate">Scene.Animator#event:timeupdate</a>
-    </li></ul></dd>
     
 
     
@@ -7225,10 +5357,10 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
 <style>
 
 
-nav li[file="scene"]:after {
+nav li[file="animator"]:after {
     display: none;
 }
-nav li[file="scene"] h4, nav li[file="scene"] ul {
+nav li[file="animator"] h4, nav li[file="animator"] ul {
     display: block;
 }
 </style>
