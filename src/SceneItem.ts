@@ -8,11 +8,12 @@ import {
 	decamelize,
 	splitUnit,
 	toFixed,
+	isFixed,
 } from "./utils";
 import Keyframes from "./Keyframes";
 import {dotValue} from "./utils/dot";
 import {
-	KEYFRAMES, ANIMATION, START_ANIMATION, PREFIX, THRESHOLD, ObjectInterface, NameType
+	KEYFRAMES, ANIMATION, START_ANIMATION, PREFIX, THRESHOLD, ObjectInterface, NameType, timingFunction
 } from "./consts";
 import {addClass, removeClass, hasClass, fromCSS} from "./utils/css";
 
@@ -136,19 +137,15 @@ item.set(0, "a", "b") // item.getFrame(0).set("a", "b")
 console.log(item.get(0, "a")); // "b"
 	*/
 	public set(time: any[] | number | string | ObjectInterface<any>, ...args: any[]) {
-		if (isArray(time)) {
-			(time as number[]).forEach(t => {
-				this.set(t, ...args);
-			});
-			return this;
-		} else if (isObject(time)) {
+		if (isObject(time)) {
 			this.load(time);
 			return this;
 		} else if (args[0] && args[0] instanceof SceneItem) {
-			const realTime = this._getTime(time);
 			const item: SceneItem = args[0];
-			const isFrame = this.hasFrame(time);
-			const {keys, values, times} = item.getAllTimes(!isFrame);
+			const delay = item.getDelay();
+			const realTime = this._getTime(time) + delay;
+			const {keys, values, times} = item.getAllTimes(!!delay || !this.hasFrame(time));
+			const easing = this.getEasingName() !== item.getEasingName() ? item.getEasing() : 0;
 			const frames: ObjectInterface<Frame> = {};
 
 			times.forEach(t => {
@@ -157,6 +154,10 @@ console.log(item.get(0, "a")); // "b"
 			keys.forEach(t => {
 				this.set(realTime + t, frames[values[t]]);
 			});
+			if (easing) {
+				this.set(realTime, timingFunction, easing);
+				this.set(realTime + keys[keys.length - 1], timingFunction, "initial");
+			}
 			return this;
 		}
 		const frame = this.newFrame(this._getTime(time));
@@ -196,6 +197,12 @@ item.remove(0, "a");
 	}
 	public append(item: SceneItem) {
 		this.set(this.getDuration(), item);
+	}
+	public prepend(item: SceneItem) {
+		const delay = item.getDelay();
+		const duration = item.getIterationCount() === "infinite" ? item.getDuration() : item.getActiveDuration();
+		this.keyframes.unshift(duration + delay);
+		this.set(0, item);
 	}
 	/**
 	* Specifies an element to synchronize items' keyframes.
@@ -440,9 +447,10 @@ const frame = item.getNowFrame(1.7);
 		const frame = new Frame();
 		const names = this.keyframes.getNames();
 		const {left, right} = this._getNearTimeIndex(time);
+		const realEasing = this._getEasing(time, left, right, this.state.easing || easing);
 
 		names.forEach(properties => {
-			const value = this._getNowValue(time, left, right, properties, easing);
+			const value = this._getNowValue(time, left, right, properties, realEasing);
 
 			if (isUndefined(value)) {
 				return;
@@ -456,11 +464,10 @@ const frame = item.getNowFrame(1.7);
 			const length = properties.length;
 
 			for (let i = 0; i < length; ++i) {
-				const time = length === 1 ? 0 : this._getTime(`${i / (length - 1) * 100}%`, options);
+				const time = length === 1 ? 0 : this._getTime(`${i / (length - 1) * 100}%`);
 
 				this.set(time, properties[i]);
 			}
-			return this;
 		} else if (properties.keyframes) {
 			this.set(properties.keyframes);
 		} else {
@@ -499,12 +506,11 @@ const frame = item.getNowFrame(1.7);
 	}
 	public setOptions(options: StateInterface = {}) {
 		super.setOptions(options);
-		const selector = options.selector;
 		const elements = options.elements || options.element;
+		const {id, selector, duration} = options;
 
-		if ("id" in options) {
-			this.setId(options.id);
-		}
+		duration && this.setDuration(duration);
+		id && this.setId(id);
 		if (elements) {
 			this.setElement(elements);
 		} else if (selector) {
@@ -745,8 +751,16 @@ item.playCSS(false, {
 		}
 		return frame;
 	}
-	private _getTime(time: string | number, options?: StateInterface) {
-		const duration = (options && options.duration) || this.getDuration() || 100;
+	private _getEasing(time: number, left: number, right: number, easing: EasingType) {
+		if (this.keyframes.hasName(timingFunction)) {
+			const nowEasing = this._getNowValue(time, left, right, [timingFunction], 0, true);
+
+			return typeof nowEasing === "function" ? nowEasing : easing;
+		}
+		return easing;
+	}
+	private _getTime(time: string | number) {
+		const duration = this.getDuration() || 100;
 
 		if (isString(time)) {
 			if (time === "from") {
@@ -820,6 +834,7 @@ item.playCSS(false, {
 		right: number,
 		properties: string[],
 		easing: EasingType = this.state.easing,
+		usePrevValue: boolean = isFixed(properties),
 	) {
 		const keyframes = this.keyframes;
 		const times = keyframes.times;
@@ -839,6 +854,11 @@ item.playCSS(false, {
 				break;
 			}
 		}
+		const prevValue = prevFrame && prevFrame.get(...properties);
+
+		if (usePrevValue) {
+			return prevValue;
+		}
 		for (let i = right; i < length; ++i) {
 			const frame = keyframes.get(times[i]);
 
@@ -848,8 +868,6 @@ item.playCSS(false, {
 				break;
 			}
 		}
-
-		const prevValue = prevFrame && prevFrame.get(...properties);
 		const nextValue = nextFrame && nextFrame.get(...properties);
 
 		if (!prevFrame || isUndefined(prevValue)) {
@@ -861,9 +879,7 @@ item.playCSS(false, {
 		if (prevTime < 0) {
 			prevTime = 0;
 		}
-		const easingFunction = this.state.easing || easing;
-
-		return dotValue(time, prevTime,	nextTime, prevValue, nextValue,	easingFunction);
+		return dotValue(time, prevTime,	nextTime, prevValue, nextValue,	easing);
 	}
 	private _getNearTimeIndex(time: number) {
 		const keyframes = this.keyframes;
