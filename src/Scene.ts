@@ -114,7 +114,13 @@ const item = scene.newItem("item1")
 	* @example
 const item = scene.newItem("item1")
 	*/
-	public setItem(name: string, item: SceneItem) {
+	public setItem(name: string | SceneItem, item?: SceneItem) {
+		if (name instanceof SceneItem) {
+			const id = !name.getId() || name.setId().getId();
+
+			this.items[id] = name;
+			return this;
+		}
 		item.setId(name);
 		this.items[name] = item;
 		return this;
@@ -175,6 +181,10 @@ const item = scene.newItem("item1")
 			item.exportCSS(duration, this.state);
 		}
 		return this;
+	}
+	public append(item: SceneItem) {
+		item.setDelay(item.getDelay() + this.getDuration());
+		this.setItem(item);
 	}
 	/**
 	* Play using the css animation and keyframes.

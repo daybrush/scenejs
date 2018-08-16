@@ -19,9 +19,13 @@ import {addClass, removeClass, hasClass, fromCSS} from "./utils/css";
 function toId(text: string) {
 	return text.match(/[0-9a-zA-Z]+/g).join("");
 }
-function makeId() {
+function makeId(selector?: boolean) {
 	for (;;) {
 		const id = `${Math.floor(Math.random() * 100000)}`;
+
+		if (!selector) {
+			return id;
+		}
 		const checkElement = document.querySelector(`[data-scene-id="${id}"]`);
 
 		if (!checkElement) {
@@ -93,18 +97,14 @@ const item = new SceneItem();
 item.setId("item");
 console.log(item.getId()); // item
 	*/
-	public setId(id: string) {
+	public setId(id?: string) {
 		const elements = this.elements;
+		const length = elements && elements.length;
 
-		this.setState({id});
+		this.setState({id: id || makeId(!!length)});
 		const sceneId = toId(this.state.id);
 
 		this.options.selector || (this.options.selector = `[data-scene-id="${sceneId}"]`);
-
-		if (!elements) {
-			return this;
-		}
-		const length = elements.length;
 
 		if (!length) {
 			return this;
@@ -144,8 +144,22 @@ console.log(item.get(0, "a")); // "b"
 		} else if (isObject(time)) {
 			this.load(time);
 			return this;
+		} else if (args[0] && args[0] instanceof SceneItem) {
+			const realTime = this._getTime(time);
+			const item: SceneItem = args[0];
+			const isFrame = this.hasFrame(time);
+			const {keys, values, times} = item.getAllTimes(!isFrame);
+			const frames: ObjectInterface<Frame> = {};
+
+			times.forEach(t => {
+				frames[t] = item.getNowFrame(t);
+			});
+			keys.forEach(t => {
+				this.set(realTime + t, frames[values[t]]);
+			});
+			return this;
 		}
-		const frame = this.newFrame(time);
+		const frame = this.newFrame(this._getTime(time));
 
 		frame.set(...args);
 		this.updateFrame(frame);
@@ -180,6 +194,9 @@ item.remove(0, "a");
 		frame && frame.remove(...args);
 		return this;
 	}
+	public append(item: SceneItem) {
+		this.set(this.getDuration(), item);
+	}
 	/**
 	* Specifies an element to synchronize items' keyframes.
 	* @method Scene.SceneItem#setSelector
@@ -210,10 +227,8 @@ item.setElement(document.querySelectorAll(".class"));
 		if (typeof elements === "string") {
 			return this.setSelector(elements);
 		}
-		const id = this.state.id;
-
 		this.elements = (elements instanceof Element) ? [elements] : elements;
-		this.setId((!id || id === "null") ? makeId() : id);
+		this.setId();
 		return this;
 	}
 	/**
@@ -326,8 +341,8 @@ if (item.hasFrame(10)) {
 	// not
 }
 	*/
-	public hasFrame(time: number) {
-		return this.keyframes.has(time);
+	public hasFrame(time: number | string) {
+		return this.keyframes.has(this._getTime(time));
 	}
 	/**
 	* remove sceneItem's frame at that time
@@ -559,7 +574,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 	*/
 	public toCSS(duration = this.getDuration(), options: StateInterface = {}) {
 		const state = this.state;
-		const id = state.id || this.setId(makeId()).state.id;
+		const id = state.id || this.setId().state.id;
 
 		if (!id) {
 			return "";
@@ -591,7 +606,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		return css;
 	}
 	public exportCSS(duration = this.getDuration(), options = {}) {
-		const id = toId(this.state.id || this.setId(makeId()).state.id || "");
+		const id = toId(this.state.id || this.setId().state.id || "");
 
 		if (!id) {
 			return;
@@ -751,7 +766,7 @@ item.playCSS(false, {
 		}
 	}
 	private _toKeyframes(duration = this.getDuration(), options: StateInterface = {}) {
-		const id = this.state.id || this.setId(makeId()).state.id;
+		const id = this.state.id || this.setId().state.id;
 
 		if (!id) {
 			return "";
