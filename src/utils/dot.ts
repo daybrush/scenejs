@@ -152,7 +152,8 @@ dot(1, 3, 0.3, 0.7);
 export function dot(a1: any, a2: any, b1: number, b2: number): any {
 	if (b2 === 0) {
 		return a2;
-	} else if (b1 === 0) {
+	} else if (b1 === 0 || b1 + b2 === 0) {
+		// prevent division by zero.
 		return a1;
 	}
 	// dot Object
@@ -169,10 +170,6 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
 			return a1;
 		}
 	} else {
-		return a1;
-	}
-	// prevent division by zero.
-	if (b1 + b2 === 0) {
 		return a1;
 	}
 	// split number and unit of the value.
