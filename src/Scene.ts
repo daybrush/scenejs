@@ -63,16 +63,24 @@ class Scene extends Animator {
 		const items = this.items;
 		const sceneDuration = this.getDuration();
 
-		if (!isFinite(sceneDuration)) {
+		if (duration === 0 || !isFinite(sceneDuration)) {
 			return this;
 		}
-		const ratio = duration / sceneDuration;
+		if (sceneDuration === 0) {
+			for (const id in items) {
+				const item = items[id];
 
-		for (const id in items) {
-			const item = items[id];
+				item.setDuration(duration);
+			}
+		} else {
+			const ratio = duration / sceneDuration;
 
-			item.setDelay(item.getDelay() * ratio);
-			item.setDuration(item.getDuration() * ratio);
+			for (const id in items) {
+				const item = items[id];
+
+				item.setDelay(item.getDelay() * ratio);
+				item.setDuration(item.getDuration() * ratio);
+			}
 		}
 		return this;
 	}
