@@ -1,22 +1,31 @@
-import { SCENE_ROLES, ObjectInterface, MAXIMUM } from "./consts";
+import { SCENE_ROLES, ObjectInterface, MAXIMUM, FIXED } from "./consts";
 
 export function toFixed(num: number) {
 	return Math.round(num * MAXIMUM) / MAXIMUM;
 }
-export function isRole(args: any[]) {
+export function isInProperties(roles: ObjectInterface<any>, args: any[]) {
 	const length = args.length;
-	let role: any = SCENE_ROLES;
+	let role: any = roles;
 
 	if (length === 0) {
 		return false;
 	}
 	for (let i = 0; i < length; ++i) {
-		if (!role || !isObject(role) || !(args[i] in role)) {
+		if (role === true) {
 			return false;
 		}
 		role = role[args[i]];
+		if (!role) {
+			return false;
+		}
 	}
 	return true;
+}
+export function isRole(args: any[]) {
+	return isInProperties(SCENE_ROLES, args);
+}
+export function isFixed(args: any[]) {
+	return isInProperties(FIXED, args);
 }
 export function isUndefined(value: any): value is undefined {
 	return (typeof value === "undefined");

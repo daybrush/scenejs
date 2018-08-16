@@ -1,5 +1,5 @@
 import { ObjectInterface, RoleInterface } from "./consts";
-import {isObject, isArray} from "./utils";
+import {isObject, isArray, isInProperties} from "./utils";
 import PropertyObject from "./PropertyObject";
 import Frame from "./Frame";
 
@@ -50,7 +50,7 @@ export default class Keyframes {
 	}
 	/**
 	* A list of names
-	* @method Scene.Keyframes#getNames
+	* @method getNames
 	* @return {string[][]} names
 	* @example
 keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scale"]]
@@ -59,6 +59,17 @@ keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scal
 		const names = this.names;
 
 		return getNames(names, []);
+	}
+	/**
+	* Check if keyframes has propery's name
+	* @method hasName
+	* @param {...string[]} name - property's time
+	* @return {Boolean} true: if has property, false: not
+	* @example
+keyframes.hasName("transform", "translate"); // true or not
+	*/
+	public hasName(...args: string[]) {
+		return isInProperties(this.names, args);
 	}
 	/**
 	 * update property names used in frames.
@@ -75,7 +86,7 @@ keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scal
 	}
 	/**
 	 * executes a provided function once for each scene item.
-	 * @method Scene.Keyframes#forEach
+	 * @method forEach
 	 * @param {Function} callback Function to execute for each element, taking three arguments
 	 * @param {Scene.Frame} [callback.item] The value of the item being processed in the keyframes.
 	 * @param {string} [callback.time] The time of the item being processed in the keyframes.
@@ -92,7 +103,7 @@ keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scal
 	}
 	/**
 	* update property names used in frame.
-	* @method Scene.Keyframes#updateFrame
+	* @method updateFrame
 	* @param {Scene.Frame} [frame] - frame of that time.
 	* @return {Scene.Keyframes} An instance itself
 	* @example
@@ -110,7 +121,7 @@ keyframes.updateFrame(frame);
 	}
 	/**
 	 * Get how long an animation should take to complete one cycle.
-	 * @method Scene.Keyframes#getDuration
+	 * @method getDuration
 	 * @return {number} duration
 	 */
 	public getDuration() {
@@ -120,7 +131,7 @@ keyframes.updateFrame(frame);
 	}
 	/**
 	 * Set how long an animation should take to complete one cycle.
-	 * @method Scene.Keyframes#setDuration
+	 * @method setDuration
 	 * @param {number} duration - duration
 	 * @return {Scene.Keyframes} An instance itself.
 	 */
