@@ -548,6 +548,42 @@ describe("SceneItem Test", function() {
             
             expect(document.querySelector(`#__SCENEJS_STYLE_${id}`)).to.be.ok;
         });
+        it (`should check 'append' method`, () => {
+            this.item.append(new SceneItem({
+                0: {
+                    a: 3,
+                },
+                1: {
+                    a: 5,
+                }
+            }, {
+                iterationCount: 1,
+            }));
+            this.item.append(new SceneItem({
+                0: {
+                    a: 4,
+                },
+                1: {
+                    a: 6,
+                }
+            }, {
+                iterationCount: 2,
+            }));
+
+            // Then
+            expect(this.item.getDuration()).to.be.equals(4);
+            expect(this.item.get(1, "a")).to.be.equals(2);
+            expect(this.item.get(1 + THRESHOLD, "a")).to.be.equals(3);
+            expect(this.item.get("1>", "a")).to.be.equals(3);
+            expect(this.item.get(2, "a")).to.be.equals(5);
+            expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(4);
+            expect(this.item.get("2>", "a")).to.be.equals(4);
+            expect(this.item.get(3, "a")).to.be.equals(6);            
+            expect(this.item.get("3>", "a")).to.be.equals(4);
+            expect(this.item.get("3>", "a")).to.be.equals(4);
+            expect(this.item.get("3>", "a")).to.be.equals(4);
+            expect(this.item.get(4, "a")).to.be.equals(6);
+        });
         const expectations = {
             "normal": {
                 0.3: {0: 0, 0.3: 0.3},

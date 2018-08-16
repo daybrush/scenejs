@@ -1,6 +1,7 @@
 import Scene from "../../src/Scene";
 import { hasClass } from "../../src/utils/css";
 import { START_ANIMATION } from "../../src/consts";
+import SceneItem from "../../src/SceneItem";
 /* eslint-disable */
 
 
@@ -116,7 +117,43 @@ describe("Scene Test", function() {
 
 			// Then
 			expect(scene.getDuration()).to.be.not.finite;
-        });
+		});
+		it(`should check 'append' method`, () => {
+			const scene = new Scene({
+				"item": {
+					0: {
+						a: 1,
+					},
+					1: {
+						display: "block",
+						a: 2,
+					},
+					2: {
+						display: "none",
+						a: 4,
+					},
+					options: {
+						iterationCount: 2,
+					}
+				},
+			});
+			
+			// When
+			scene.append(new SceneItem({
+				0: {
+					display: "none",
+				},
+				1: {
+					diplay: "block",
+				}
+			}, {
+				id: "item2"
+			}));
+
+			// Then
+			expect(scene.getDuration()).to.be.equals(5);
+			expect(scene.getItem("item2").getDuration()).to.be.equals(1);
+		});
 	});
 	describe("test Scene events", function() {
         beforeEach(() => {
