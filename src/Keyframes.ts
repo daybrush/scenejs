@@ -150,6 +150,25 @@ keyframes.updateFrame(frame);
 		this.items = obj;
 	}
 	/**
+	 * Set how much time you want to push ahead.
+	 * @method unshift
+	 * @param {number} time - time
+	 * @return {Scene.Keyframes} An instance itself.
+	 */
+	public unshift(time: number) {
+		const {times, items} = this;
+		const obj: ObjectInterface<any> = {};
+
+		this.times = times.map(t => {
+			const time2 = time + t;
+
+			obj[time2] = items[t];
+			return time2;
+		});
+		this.items = obj;
+		return this;
+	}
+	/**
 	* get size of list
 	* @method Scene.Keyframes#size
 	* @return {Number} length of list
