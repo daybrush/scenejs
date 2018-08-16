@@ -89,7 +89,7 @@ class SceneItem extends Animator {
 	/**
 	* set the unique indicator of the item.
 	* @method Scene.SceneItem#setId
-	* @param {String} id - the indicator of the item.
+	* @param {String} [id] - the indicator of the item.
 	* @return {Scene.SceneItem} An instance itself
 	* @example
 const item = new SceneItem();
@@ -497,11 +497,14 @@ const frame = item.getNowFrame(1.7);
 		this.keyframes.forEach((frame: Frame, time: number) => item.setFrame(time, frame.clone()));
 		return item;
 	}
-	public setOptions(options: StateInterface) {
+	public setOptions(options: StateInterface = {}) {
 		super.setOptions(options);
-		const selector = options && options.selector;
-		const elements = this.options.elements || this.options.element;
+		const selector = options.selector;
+		const elements = options.elements || options.element;
 
+		if ("id" in options) {
+			this.setId(options.id);
+		}
 		if (elements) {
 			this.setElement(elements);
 		} else if (selector) {

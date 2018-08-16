@@ -14,7 +14,7 @@ function toInnerProperties(obj: ObjectInterface<string>) {
 	}
 	return arrObj.join(" ");
 }
-function isPropertyObject(value: any) {
+function isPropertyObject(value: any): value is PropertyObject {
 	return value instanceof PropertyObject;
 }
 /* eslint-disable */
@@ -140,17 +140,21 @@ frame.set("transform", "translate", "50px");
 
 		if (length === 2 && isArray(params[0])) {
 			this._set(params[0], value);
-		} else if (isArray(value)) {
-			this._set(params, value);
-		} else if (isPropertyObject(value)) {
-			if (isRole(params)) {
-				this.set(...params, toObject(value));
-			} else {
-				this._set(params, value);
-			}
 		} else if (isObject(value)) {
-			for (const name in value) {
-				this.set(...params, name, value[name]);
+			if (isArray(value)) {
+				this._set(params, value);
+			} else if (isPropertyObject(value)) {
+				if (isRole(params)) {
+					this.set(...params, toObject(value));
+				} else {
+					this._set(params, value);
+				}
+			} else if (value instanceof Frame) {
+				this.merge(value);
+			} else {
+				for (const name in value) {
+					this.set(...params, name, value[name]);
+				}
 			}
 		} else if (isString(value)) {
 			if (isRole(params)) {
