@@ -183,8 +183,8 @@ describe("SceneItem Test", function() {
             item.set(1, "display", "block");
             item.set(1, "c", 1);
             item.set(1, "d:1;e:2;f:a;transform:translate(10px, 20px);");
-            item.set([0.8, 1, 1.2, 1.4], "c", 1);
-            item.set([0.8, 1, 1.2, 1.4], "g:1;h:5;transform:scale(5);");
+            [0.8, 1, 1.2, 1.4].forEach(time => item.set(time, "c", 1));
+            [0.8, 1, 1.2, 1.4].forEach(time => item.set(time, "g:1;h:5;transform:scale(5);"));
             item.set({
                 5: {
                     a: 1,
