@@ -1,4 +1,4 @@
-import {TRANSFORM, FILTER, ObjectInterface, NameType} from "./consts";
+import {TRANSFORM, FILTER, ObjectInterface, NameType, ANIMATION, timingFunction} from "./consts";
 import {isObject, isString, isArray, isRole} from "./utils";
 import {toPropertyObject, splitStyle, toObject} from "./utils/property";
 import PropertyObject from "./PropertyObject";
@@ -158,7 +158,11 @@ frame.set("transform", "translate", "50px");
 			}
 		} else if (isString(value)) {
 			if (isRole(params)) {
-				this.set(...params, toPropertyObject(value));
+				const obj = toPropertyObject(value);
+
+				if (isObject(obj)) {
+					this.set(...params, obj);
+				}
 				return this;
 			} else {
 				const styles = splitStyle(value);
@@ -246,14 +250,20 @@ frame.set("transform", "translate", "50px");
 			if (isRole([name])) {
 				continue;
 			}
-			cssObject[name] = properties[name];
+			const value = properties[name];
+
+			if (name === timingFunction) {
+				cssObject[timingFunction.replace("animation", ANIMATION)] =
+					(isString(value) ? value : value.easingName) || "initial";
+				continue;
+			}
+			cssObject[name] = value;
 		}
 		const transform = toInnerProperties(properties.transform);
 		const filter = toInnerProperties(properties.filter);
 
 		TRANSFORM && transform && (cssObject[TRANSFORM] = transform);
 		FILTER && filter && (cssObject[FILTER] = filter);
-
 		return cssObject;
 	}
 	/**
