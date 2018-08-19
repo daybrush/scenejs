@@ -1,4 +1,3 @@
-import {has} from "./utils";
 type CallbackType = (...args: any[]) => any;
 interface EventParamterType {
 	[name: string]: CallbackType | CallbackType[];
@@ -6,19 +5,31 @@ interface EventParamterType {
 /**
 * attach and trigger event handlers.
 * @memberof Scene
-* @class Scene.EventTrigger
 */
 class EventTrigger {
 	private events: {[name: string]: CallbackType[]};
+	/**
+	* @example
+const et = new Scene.EventTrigger();
+const scene = new Scene();
+
+scene.on("call", e => {
+	console.log(e.param);
+});
+et.on("call", e => {
+	console.log(e.param);
+});
+scene.trigger("call", {param: 1});
+et.trigger("call", {param: 1});
+	 */
 	constructor() {
 		this.events = {};
 	}
 	/**
 	* Attach an event handler function for one or more events to target
-	* @method Scene.EventTrigger#on
 	* @param {String} name - event's name
 	* @param {Function} callback -  function to execute when the event is triggered.
-	* @return {Scene.EventTrigger} An Instance itself.
+	* @return {EventTrigger} An Instance itself.
 	* @example
 target.on("animate", function() {
 	console.log("animate");
@@ -36,7 +47,7 @@ target.trigger("animate");
 			}
 			return this;
 		}
-		if (!has(events, name)) {
+		if (!(name in events)) {
 			events[name] = [];
 		}
 		if (!callback) {
@@ -53,10 +64,9 @@ target.trigger("animate");
 	}
 	/**
 	* Dettach an event handler function for one or more events to target
-	* @method Scene.EventTrigger#off
 	* @param {String} name - event's name
 	* @param {Function} callback -  function to execute when the event is triggered.
-	* @return {Scene.EventTrigger} An Instance itself.
+	* @return {EventTrigger} An Instance itself.
 	* @example
 const callback = function() {
 	console.log("animate");
@@ -88,10 +98,9 @@ target.off("animate");
 	}
 	/**
 	* execute event handler
-	* @method Scene.EventTrigger#triiger
 	* @param {String} name - event's name
 	* @param {Function} [...data] - event handler's additional parameter
-	* @return {Scene.EventTrigger} An Instance itself.
+	* @return {EventTrigger} An Instance itself.
 	* @example
 target.on("animate", function(a1, a2) {
 	console.log("animate", a1, a2);
@@ -103,7 +112,7 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2
 	public trigger(name: string, ...data: any[]) {
 		const events = this.events;
 
-		if (!has(events, name)) {
+		if (!(name in events)) {
 			return this;
 		}
 
