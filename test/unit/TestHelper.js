@@ -1,5 +1,5 @@
 export function orderByASC(arr) {
-	return arr.sort((a,b) => a - b);
+	return arr.map(v => parseFloat(v)).sort((a,b) => a - b);
 }
 export function group(arr) {
 	const result = [];

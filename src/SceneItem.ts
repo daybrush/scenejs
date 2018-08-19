@@ -46,9 +46,7 @@ function makeAnimationProperties(properties: ObjectInterface<string | number>) {
 type ElementsType = HTMLElement[] | NodeListOf<HTMLElement>;
 /**
 * manage Frame Keyframes and play keyframes.
-* @class Scene.SceneItem
-* @param {Object} [properties] - properties
-* @param {AnimatorOptions} [options] - options
+* @memberof Scene
 * @extends Scene.Animator
 * @example
 const item = new Scene.SceneItem({
@@ -67,6 +65,23 @@ const item = new Scene.SceneItem({
 class SceneItem extends Animator {
 	public keyframes: Keyframes;
 	private elements: ElementsType;
+	/**
+	* @param {Object} [properties] - properties
+	* @param {AnimatorOptions} [options] - options
+	* @example
+	const item = new Scene.SceneItem({
+		0: {
+			display: "none",
+		},
+		1: {
+			display: "block",
+			opacity: 0,
+		},
+		2: {
+			opacity: 1,
+		}
+	});
+	 */
 	constructor(properties?: ObjectInterface<any>, options?: ObjectInterface<any>) {
 		super();
 		this.keyframes = new Keyframes();
@@ -84,7 +99,7 @@ class SceneItem extends Animator {
 		if (originalDuration > 0) {
 			this.keyframes.setDuration(duration, originalDuration);
 		}
-		super.setDuration(duration);
+		super.setDuration(toFixed(duration));
 		return this;
 	}
 	/**
@@ -140,27 +155,30 @@ console.log(item.get(0, "a")); // "b"
 		if (isObject(time)) {
 			this.load(time);
 			return this;
-		} else if (args[0] && args[0] instanceof SceneItem) {
-			const item: SceneItem = args[0];
-			const delay = item.getDelay();
-			const realTime = this._getTime(time) + delay;
-			const {keys, values, times} = item.getAllTimes(!!delay || !this.hasFrame(time));
-			const easing = this.getEasingName() !== item.getEasingName() ? item.getEasing() : 0;
-			const frames: ObjectInterface<Frame> = {};
+		} else if (args[0]) {
+			if (args[0] instanceof SceneItem) {
+				const item: SceneItem = args[0];
+				const delay = item.getDelay();
+				const realTime = this._getTime(time) + delay;
+				const {keys, values, frames} = item.getAllTimes(!!delay || !this.hasFrame(time));
+				const easing = this.getEasingName() !== item.getEasingName() ? item.getEasing() : 0;
 
-			times.forEach(t => {
-				frames[t] = item.getNowFrame(t);
-			});
-			keys.forEach(t => {
-				this.set(realTime + t, frames[values[t]]);
-			});
-			if (easing) {
-				this.set(realTime, timingFunction, easing);
-				this.set(realTime + keys[keys.length - 1], timingFunction, "initial");
+				keys.forEach(t => {
+					this.set(realTime + t, frames[values[t]]);
+				});
+				if (easing) {
+					this.set(realTime, timingFunction, easing);
+					this.set(realTime + keys[keys.length - 1], timingFunction, "initial");
+				}
+				return this;
+			} else if (args.length === 1 && isArray(args[0])) {
+				args[0].forEach((item: any) => {
+					this.set(time, item);
+				});
+				return this;
 			}
-			return this;
 		}
-		const frame = this.newFrame(this._getTime(time));
+		const frame = this.newFrame(time);
 
 		frame.set(...args);
 		this.updateFrame(frame);
@@ -182,7 +200,6 @@ item.get(0, "transform", "translate"); // item.getFrame(0).get("transform", "tra
 	}
 	/**
 	* remove properties to the sceneItem at that time
-	* @method Scene.SceneItem#remove
 	* @param {Number} time - time
 	* @param {...String|Object} [properties] - property names or values
 	* @return {Scene.SceneItem} An instance itself
@@ -195,14 +212,55 @@ item.remove(0, "a");
 		frame && frame.remove(...args);
 		return this;
 	}
-	public append(item: SceneItem) {
-		this.set(this.getDuration(), item);
+	/**
+	* Append the item or object at the last time.
+	* @param {SceneItem | object} item - the scene item or item object
+	* @return {Scene.SceneItem} An instance itself
+	* @example
+item.append(new SceneItem({
+	0: {
+		opacity: 0,
+	},
+	1: {
+		opacity: 1,
 	}
-	public prepend(item: SceneItem) {
-		const delay = item.getDelay();
-		const duration = item.getIterationCount() === "infinite" ? item.getDuration() : item.getActiveDuration();
-		this.keyframes.unshift(duration + delay);
-		this.set(0, item);
+}));
+item.append({
+	0: {
+		opacity: 0,
+	},
+	1: {
+		opacity: 1,
+	}
+});
+item.set(item.getDuration(), {
+	0: {
+		opacity: 0,
+	},
+	1: {
+		opacity: 1,
+	}
+});
+	*/
+	public append(item: SceneItem | object) {
+		this.set(this.getDuration(), item);
+		return this;
+	}
+	/**
+	* Push the front frames for the time and prepend the scene item or item object.
+	* @param {SceneItem | object} item - the scene item or item object
+	* @return {Scene.SceneItem} An instance itself
+	*/
+	public prepend(item: SceneItem | object) {
+		if (item instanceof SceneItem) {
+			const delay = item.getDelay();
+			const duration = item.getIterationCount() === "infinite" ? item.getDuration() : item.getActiveDuration();
+			this.keyframes.unshift(duration + delay);
+			this.set(0, item);
+		} else {
+			this.prepend(new SceneItem(item));
+		}
+		return this;
 	}
 	/**
 	* Specifies an element to synchronize items' keyframes.
@@ -231,9 +289,6 @@ item.setElement(document.querySelectorAll(".class"));
 		if (!elements) {
 			return this;
 		}
-		if (typeof elements === "string") {
-			return this.setSelector(elements);
-		}
 		this.elements = (elements instanceof Element) ? [elements] : elements;
 		this.setId();
 		return this;
@@ -249,21 +304,8 @@ item.setCSS(0, ["opacity"]);
 item.setCSS(0, ["opacity", "width", "height"]);
 	*/
 	public setCSS(time: number, properties: string[]) {
-		this.set(time, this.fromCSS(properties));
+		this.set(time, fromCSS(this.elements, properties));
 		return this;
-	}
-	/**
-	* get css styles of items's element
-	* @method Scene.SceneItem#fromCSS
-	* @param {Array} properties - elements to synchronize item's keyframes.
-	* @return {Scene.SceneItem} An instance itself
-	* @example
-item.setElement(document.querySelector("#id.class"));
-item.fromCSS(["opacity"]); // {opacity: 1}
-item.fromCSS(["opacity", "width", "height"]); // {opacity: 1, width: "100px", height: "100px"}
-	*/
-	public fromCSS(properties: string[]) {
-		return fromCSS(this.elements, properties);
 	}
 	public setTime(time: number, parentEasing?: EasingType, parent?: any) {
 		super.setTime(time);
@@ -506,8 +548,7 @@ const frame = item.getNowFrame(1.7);
 	}
 	public setOptions(options: StateInterface = {}) {
 		super.setOptions(options);
-		const elements = options.elements || options.element;
-		const {id, selector, duration} = options;
+		const {id, selector, duration, elements} = options;
 
 		duration && this.setDuration(duration);
 		id && this.setId(id);
@@ -525,9 +566,9 @@ const frame = item.getNowFrame(1.7);
 		const values: ObjectInterface<number> = {};
 
 		if (!length) {
-			return {keys: [], values: {}, times: []};
+			return {keys: [], values: {}, frames: {}};
 		}
-		const keytimes: number[] = [];
+		const frames: ObjectInterface<Frame> = {};
 		const duration = this.getDuration();
 		const direction = options.direction || this.state.direction;
 		const isShuffle = direction === "alternate" || direction === "alternate-reverse";
@@ -559,7 +600,16 @@ const frame = item.getNowFrame(1.7);
 				}
 				keys.push(keytime);
 				values[keytime] = keyvalue;
-				(keytimes.indexOf(keyvalue) === -1) && keytimes.push(keyvalue);
+
+				if (!frames[keyvalue]) {
+					const frame = this.getFrame(keyvalue);
+
+					if (j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
+						frames[keyvalue] = this.getNowFrame(keyvalue);
+					} else {
+						frames[keyvalue] = frame;
+					}
+				}
 			}
 		}
 		if (keys[keys.length - 1] < totalDuration) {
@@ -569,9 +619,9 @@ const frame = item.getNowFrame(1.7);
 
 			keys.push(totalDuration);
 			values[totalDuration] = keyvalue;
-			(keytimes.indexOf(keyvalue) === -1) && keytimes.push(keyvalue);
+			!frames[keyvalue] && (frames[keyvalue] = this.getNowFrame(keyvalue));
 		}
-		return {keys, values, times: keytimes};
+		return {keys, values, frames};
 	}
 	/**
 	* Specifies an css text that coverted the keyframes of the item.
@@ -583,14 +633,13 @@ item.setCSS(0, ["opacity", "width", "height"]);
 	*/
 	public toCSS(duration = this.getDuration(), options: StateInterface = {}) {
 		const state = this.state;
-		const id = state.id || this.setId().state.id;
+		const selector = state.selector || this.options.selector;
 
-		if (!id) {
+		if (!selector) {
 			return "";
 		}
-
+		const id = this._getId();
 		const isZeroDuration = duration === 0;
-		const selector = this.options.selector;
 		const playSpeed = (options.playSpeed || 1);
 		const delay = ((typeof options.delay === "undefined" ? state.delay : options.delay) || 0) / playSpeed;
 		const easingName = (!isZeroDuration && options.easing && options.easingName) || state.easingName;
@@ -614,12 +663,11 @@ item.setCSS(0, ["opacity", "width", "height"]);
 
 		return css;
 	}
-	public exportCSS(duration = this.getDuration(), options = {}) {
-		const id = toId(this.state.id || this.setId().state.id || "");
-
-		if (!id) {
+	public exportCSS(duration = this.getDuration(), options: StateInterface = {}) {
+		if (!this.elements.length) {
 			return;
 		}
+		const id = this._getId();
 		const styleElement: HTMLElement = document.querySelector(`#${PREFIX}${id}`);
 		const css = this.toCSS(duration, options);
 
@@ -751,6 +799,9 @@ item.playCSS(false, {
 		}
 		return frame;
 	}
+	private _getId() {
+		return this.state.id || this.setId().getId();
+	}
 	private _getEasing(time: number, left: number, right: number, easing: EasingType) {
 		if (this.keyframes.hasName(timingFunction)) {
 			const nowEasing = this._getNowValue(time, left, right, [timingFunction], 0, true);
@@ -779,50 +830,48 @@ item.playCSS(false, {
 				return value;
 			}
 		} else {
-			return time;
+			return toFixed(time);
 		}
 	}
 	private _toKeyframes(duration = this.getDuration(), options: StateInterface = {}) {
-		const id = this.state.id || this.setId().state.id;
-
-		if (!id) {
-			return "";
-		}
-		const playSpeed = this.state.playSpeed;
+		const id = this._getId();
+		const state = this.state;
+		const playSpeed = state.playSpeed;
 		const isParent = typeof options.iterationCount !== "undefined";
-		const iterationCount =  this.state.iterationCount;
-		const delay = isParent ? this.state.delay : 0;
-		const direction = isParent ? this.state.direction : "normal";
-		const frames: ObjectInterface<string> = {};
-		const {keys, values, times} = this.getAllTimes(true, {
+		const iterationCount =  state.iterationCount;
+		const delay = isParent ? state.delay : 0;
+		const direction = isParent ? state.direction : "normal";
+		const {keys, values, frames} = this.getAllTimes(true, {
 			duration,
 			delay,
 			direction,
 			iterationCount: isParent && iterationCount !== "infinite" ? iterationCount : 1,
+			isCSS: true,
 		});
 		const length = keys.length;
+		const css: ObjectInterface<string> = {};
 		const keyframes: string[] = [];
 
+		for (const time in frames) {
+			css[time] = frames[time].toCSS();
+		}
 		if (!keys.length) {
 			return "";
 		}
-		times.forEach(time => {
-			frames[time] = this.getNowFrame(time).toCSS();
-		});
 		if (delay) {
 			keyframes.push(`0%{${frames[0]}}`);
 			if (direction === "reverse" || direction === "alternate-reverse") {
-				keyframes.push(`${delay / playSpeed / duration * 100 - 0.00001}%{${frames[0]}}`);
+				keyframes.push(`${delay / playSpeed / duration * 100 - 0.00001}%{${css[0]}}`);
 			}
 		}
 		keys.forEach(time => {
-			keyframes.push(`${(delay + time)  / playSpeed / duration * 100}%{${frames[values[time]]}}`);
+			keyframes.push(`${(delay + time)  / playSpeed / duration * 100}%{${css[values[time]]}}`);
 		});
 		const lastTime = keys[length - 1];
 
 		if ((delay + lastTime) / playSpeed < duration) {
 			// not 100%
-			keyframes.push(`100%{${frames[values[lastTime]]}`);
+			keyframes.push(`100%{${css[values[lastTime]]}`);
 		}
 		return `@${KEYFRAMES} ${PREFIX}KEYFRAMES_${toId(id)}{
 			${keyframes.join("\n")}
@@ -895,7 +944,6 @@ item.playCSS(false, {
 		}
 		return {left: length - 1, right: length - 1};
 	}
-
 }
 
 export default SceneItem;

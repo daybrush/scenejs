@@ -13,8 +13,8 @@ export const SCENE_ROLES: RoleInterface = {transform: true, filter: true};
 export const FIXED = {"animation-timing-function": true, "contents": true};
 export const MAXIMUM = 1000000;
 export const THRESHOLD = 0.000001;
-
-const checkProperties = (prefixes: string[], property: string) => {
+const prefixes: string[] = ["webkit", "ms", "moz", "o"];
+const checkProperties = (property: string) => {
 	const styles = (document.body || document.documentElement).style as any;
 	const length = prefixes.length;
 
@@ -31,8 +31,8 @@ const checkProperties = (prefixes: string[], property: string) => {
 	return "";
 };
 
-export const TRANSFORM = checkProperties(["webkit", "ms", "moz", "o"], "transform");
-export const FILTER = checkProperties(["webkit", "ms", "moz", "o"], "filter");
-export const ANIMATION = checkProperties(["webkit", "ms", "moz", "o"], "animation");
+export const TRANSFORM = checkProperties("transform");
+export const FILTER = checkProperties("filter");
+export const ANIMATION = checkProperties("animation");
 export const KEYFRAMES = ANIMATION.replace("animation", "keyframes");
 export const START_ANIMATION = "startAnimation";

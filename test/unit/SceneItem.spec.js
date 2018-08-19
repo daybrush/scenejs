@@ -646,12 +646,12 @@ describe("SceneItem Test", function() {
                     const keytimes1 = group(orderByASC(Object.values(values1)));
                     const keytimes2 = group(orderByASC(Object.values(values2)));
 
-                    expect(orderByASC(times1.times)).to.be.deep.equals(keytimes1);
+                    expect(orderByASC(Object.keys(times1.frames))).to.be.deep.equals(keytimes1);
                     expect(times1.keys).to.be.deep.equals(keys1);
                     expect(times1.values).to.be.deep.equals(values1);                
 
                     // {[THRESHOLD]: 0, ...}
-                    expect(orderByASC(times2.times)).to.be.deep.equals(keytimes2);
+                    expect(orderByASC(Object.keys(times2.frames))).to.be.deep.equals(keytimes2);
                     expect(times2.keys).to.be.deep.equals(keys2);
                     expect(times2.values).to.be.deep.equals(values2);
                 });
