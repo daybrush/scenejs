@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Frame.ts - Documentation</title>
+    <title>presets/blink.ts - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Frame.ts</h1>
+    <h1 class="page-title">presets/blink.ts</h1>
     
 
     
@@ -38,305 +38,39 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import {TRANSFORM, FILTER, ObjectInterface, NameType, ANIMATION, timingFunction} from "./consts";
-import {isObject, isString, isArray, isRole} from "./utils";
-import {toPropertyObject, splitStyle, toObject} from "./utils/property";
-import PropertyObject from "./PropertyObject";
+            <pre class="prettyprint source linenums"><code>import set from "./set";
+import { StateInterface } from "../Animator";
 
-function toInnerProperties(obj: ObjectInterface&lt;string>) {
-	if (!obj) {
-		return "";
-	}
-	const arrObj = [];
-
-	for (const name in obj) {
-		arrObj.push(`${name}(${obj[name]})`);
-	}
-	return arrObj.join(" ");
-}
-function isPropertyObject(value: any): value is PropertyObject {
-	return value instanceof PropertyObject;
-}
-/* eslint-disable */
-function clone(target: ObjectInterface&lt;any>, toValue = false) {
-	return merge({}, target, toValue);
-}
-function merge(to: ObjectInterface&lt;any>, from: ObjectInterface&lt;any>, toValue = false) {
-	for (const name in from) {
-		const value = from[name];
-
-		if (isObject(value)) {
-			if (value instanceof PropertyObject) {
-				to[name] = toValue ? value.toValue() : value.clone();
-			} else if (isArray(value)) {
-				to[name] = value.slice();
-			} else if (isObject(to[name]) &amp;&amp; !(to[name] instanceof PropertyObject)) {
-				merge(to[name], value, toValue);
-			} else {
-				to[name] = clone(value, toValue);
-			}
-			continue;
-		}
-		to[name] = from[name];
-	}
-	return to;
-}
-/* eslint-enable */
 /**
-* Animation's Frame
-* @class Scene.Frame
-* @param {Object} properties - properties
-* @example
-const frame = new Scene.Frame({
-	display: "none"
-	transform: {
-		translate: "50px",
-		scale: "5, 5",
+ * Make a blinking effect.
+ * @memberof Scene.presets
+ * @func blink
+ * @param {AnimatorOptions} options
+ * @param {number} [options.from = 0] start opacity
+ * @param {number}[options.to = 1] end opacity
+ * @param {number} options.duration animation's duration
+ * @example
+// import {presets} from "scenejs";
+// presets.blink({duration: 2});
+Scene.presets.blink({duration: 2});
+// Same
+new SceneItem({
+	"0%": {
+		opacity: 0,
+	},
+	"50%": {
+		opacity: 1,
+	},
+	"100%": {
+		opacity: 0,
 	}
+}, {
+	duration: 2,
 });
  */
-class Frame {
-	public properties: ObjectInterface&lt;any>;
-	constructor(properties: ObjectInterface&lt;any> = {}) {
-		this.properties = {};
-		this.set(properties);
-	}
-	/**
-	* get property value
-	* @method Scene.Frame#get
-	* @param {...Number|String|Scene.PropertyObject} args - property name or value
-	* @example
-	frame.get("display") // => "none", "block", ....
-	frame.get("transform", "translate") // => "10px,10px"
-	*/
-	public get(...args: NameType[]) {
-		let properties = this.properties;
-		const length = args.length;
-
-		for (let i = 0; i &lt; length; ++i) {
-			if (!isObject(properties)) {
-				return undefined;
-			}
-			properties = properties[args[i]];
-		}
-		return properties;
-	}
-	/**
-	* remove property value
-	* @method Scene.Frame#remove
-	* @param {...String} args - property name
-	* @return {Scene.Frame} An instance itself
-	* @example
-	frame.remove("display")
-	*/
-	public remove(...args: NameType[]) {
-		let properties = this.properties;
-		const length = args.length;
-
-		if (!length) {
-			return this;
-		}
-		for (let i = 0; i &lt; length - 1; ++i) {
-			if (!isObject(properties)) {
-				return this;
-			}
-			properties = properties[args[i]];
-		}
-		delete properties[args[length - 1]];
-		return this;
-	}
-	/**
-	* set property
-	* @method Scene.Frame#set
-	* @param {...Number|String|Scene.PropertyObject} args - property names or values
-	* @return {Scene.Frame} An instance itself
-	* @example
-// one parameter
-frame.set({
-	display: "none",
-	transform: {
-		translate: "10px, 10px",
-		scale: "1",
-	},
-	filter: {
-		brightness: "50%",
-		grayscale: "100%"
-	}
-});
-
-// two parameters
-frame.set("transform", {
-	translate: "10px, 10px",
-	scale: "1",
-});
-
-// three parameters
-frame.set("transform", "translate", "50px");
-	*/
-	public set(...args: any[]) {
-		const length = args.length;
-		const params = args.slice(0, -1);
-		const value = args[length - 1];
-
-		if (length === 2 &amp;&amp; isArray(params[0])) {
-			this._set(params[0], value);
-		} else if (isObject(value)) {
-			if (isArray(value)) {
-				this._set(params, value);
-			} else if (isPropertyObject(value)) {
-				if (isRole(params)) {
-					this.set(...params, toObject(value));
-				} else {
-					this._set(params, value);
-				}
-			} else if (value instanceof Frame) {
-				this.merge(value);
-			} else {
-				for (const name in value) {
-					this.set(...params, name, value[name]);
-				}
-			}
-		} else if (isString(value)) {
-			if (isRole(params)) {
-				const obj = toPropertyObject(value);
-
-				if (isObject(obj)) {
-					this.set(...params, obj);
-				}
-				return this;
-			} else {
-				const styles = splitStyle(value);
-
-				styles.forEach(style => {
-					this.set(...params, style);
-				});
-				if (styles.length) {
-					return this;
-				}
-			}
-			this._set(params, value);
-		} else {
-			this._set(params, value);
-		}
-		return this;
-	}
-	/**
-	* check that has property.
-	* @method Scene.Frame#has
-	* @param {...String} args - property name
-	* @example
-	frame.has("property", "display") // => true or false
-	*/
-	public has(...args: NameType[]) {
-		let properties = this.properties;
-		const length = args.length;
-
-		if (!length) {
-			return false;
-		}
-		for (let i = 0; i &lt; length; ++i) {
-			if (!isObject(properties) || !(args[i] in properties)) {
-				return false;
-			}
-			properties = properties[args[i]];
-		}
-		return true;
-	}
-	/**
-	* clone frame.
-	* @method Scene.Frame#clone
-	* @return {Scene.Frame} An instance of clone
-	* @example
-	frame.clone();
-	*/
-	public clone() {
-		const frame = new Frame();
-
-		frame.merge(this);
-		return frame;
-	}
-	/**
-	* merge one frame to other frame.
-	* @method Scene.Frame#merge
-	* @param {Scene.Frame} frame - target frame.
-	* @return {Scene.Frame} An instance itself
-	* @example
-	frame.merge(frame2);
-	*/
-	public merge(frame: Frame) {
-		const properties = this.properties;
-		const frameProperties = frame.properties;
-
-		if (!frameProperties) {
-			return this;
-		}
-		merge(properties, frameProperties);
-
-		return this;
-	}
-	public toObject() {
-		return clone(this.properties, true);
-	}
-	/**
-	* Specifies an css object that coverted the frame.
-	* @method Scene.Frame#toCSSObject
-	* @return {object} cssObject
-	*/
-	public toCSSObject() {
-		const properties = this.toObject();
-		const cssObject: ObjectInterface&lt;string> = {};
-
-		for (const name in properties) {
-			if (isRole([name])) {
-				continue;
-			}
-			const value = properties[name];
-
-			if (name === timingFunction) {
-				cssObject[timingFunction.replace("animation", ANIMATION)] =
-					(isString(value) ? value : value.easingName) || "initial";
-				continue;
-			}
-			cssObject[name] = value;
-		}
-		const transform = toInnerProperties(properties.transform);
-		const filter = toInnerProperties(properties.filter);
-
-		TRANSFORM &amp;&amp; transform &amp;&amp; (cssObject[TRANSFORM] = transform);
-		FILTER &amp;&amp; filter &amp;&amp; (cssObject[FILTER] = filter);
-		return cssObject;
-	}
-	/**
-	* Specifies an css text that coverted the frame.
-	* @method Scene.Frame#toCSS
-	* @return {string} cssText
-	*/
-	public toCSS() {
-		const cssObject = this.toCSSObject();
-		const cssArray = [];
-
-		for (const name in cssObject) {
-			cssArray.push(`${name}:${cssObject[name]};`);
-		}
-		return cssArray.join("");
-	}
-	private _set(args: NameType[], value: any) {
-		let properties = this.properties;
-		const length = args.length;
-
-		for (let i = 0; i &lt; length - 1; ++i) {
-			const name = args[i];
-
-			!(name in properties) &amp;&amp; (properties[name] = {});
-			properties = properties[name];
-		}
-		if (!length) {
-			return;
-		}
-		properties[args[length - 1]] = isString(value) ? toPropertyObject(value) : value;
-	}
+export default function blink({from = 0, to = 1}: StateInterface) {
+	return set("opacity", [from, to, from], arguments[0]);
 }
-export default Frame;
 </code></pre>
         </article>
     </section>
@@ -348,10 +82,10 @@ export default Frame;
 <style>
 
 
-nav li[file="frame"]:after {
+nav li[file="presets/blink"]:after {
     display: none;
 }
-nav li[file="frame"] h4, nav li[file="frame"] ul {
+nav li[file="presets/blink"] h4, nav li[file="presets/blink"] ul {
     display: block;
 }
 </style>
