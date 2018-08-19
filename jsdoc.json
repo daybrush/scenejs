@@ -6,7 +6,7 @@
 		"destination": "./doc/"
     },
     "source": {
-		"include": ["./src", "README.md"], 
+		"include": ["./src", "./src/presets", "README.md"], 
         "includePattern": "(.+\\.js(doc|x)?|.+\\.ts(doc|x)?)$",
         "excludePattern": "(^|\\/|\\\\)_"
     },

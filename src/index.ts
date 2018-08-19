@@ -5,6 +5,7 @@ import Keyframes from "./Keyframes";
 import PropertyObject from "./PropertyObject";
 import * as easing from "./easing";
 import Animator from "./Animator";
+import * as presets from "./presets/index";
 
-export {SceneItem, Frame, Animator, Keyframes, PropertyObject, easing};
+export {SceneItem, Frame, Animator, Keyframes, PropertyObject, easing, presets};
 export default Scene;
