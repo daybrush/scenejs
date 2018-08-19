@@ -124,7 +124,7 @@ const item = scene.newItem("item1")
 	*/
 	public setItem(name: string | SceneItem, item?: SceneItem) {
 		if (name instanceof SceneItem) {
-			const id = !name.getId() || name.setId().getId();
+			const id = name.getId() || name.setId().getId();
 
 			this.items[id] = name;
 			return this;
