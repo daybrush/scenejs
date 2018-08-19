@@ -1,0 +1,69 @@
+<div class="container">
+	<div class="rectangle rectangle1">
+		<img src="https://naver.github.io/egjs-infinitegrid/assets/image/4.jpg"/>
+	</div>
+	<div class="rectangle rectangle2">
+		<img src="https://naver.github.io/egjs-infinitegrid/assets/image/1.jpg"/>
+	</div>
+</div>
+<style>
+	body {
+  margin: 0;
+  padding: 0;
+}
+.container {
+	position: absolute;
+	width: 600px;
+	height: 400px;
+	overflow: hidden;
+}
+.rectangle {
+	position: absolute;
+	width: 600px;
+}
+.rectangle img {
+	width: 100%;
+	height: auto;
+}
+
+</style>
+<script src="../release/latest/scene.js"></script>
+<script src="../release/latest/scene.preset.js"></script>
+<script>
+var scene = new Scene({
+	".rectangle1": {options: {easing: Scene.easing.bezier(1, 0, 1, 1)}},
+	".rectangle2": {options: {delay: 0.9, easing: Scene.easing.bezier(0, 0, 0, 1)}},
+}, {
+	iterationCount: "infinite",
+	direction: "alternate",
+	selector: true,
+});
+var item1 = scene.getItem(".rectangle1");
+var item2 = scene.getItem(".rectangle2");
+
+Scene.presets.transition(item1, item2, {
+	from: {
+		transform: {
+			scale: 1.2,
+			rotate: "0deg",
+		},
+	},
+	to: {
+		transform: {
+			scale: 2,
+			rotate: "40deg",
+		},
+	},
+	duration: 1,
+});
+Scene.presets.transition(item1, item2, {
+	from: {
+		opacity: 1,
+	},
+	to: {
+		opacity: 0,
+	},
+	duration: 0.1,
+});
+scene.playCSS();
+</script>
