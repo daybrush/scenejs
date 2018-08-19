@@ -1,5 +1,5 @@
 import { ObjectInterface, RoleInterface } from "./consts";
-import {isObject, isArray, isInProperties} from "./utils";
+import {isObject, isArray, isInProperties, toFixed} from "./utils";
 import PropertyObject from "./PropertyObject";
 import Frame from "./Frame";
 
@@ -160,7 +160,7 @@ keyframes.updateFrame(frame);
 		const obj: ObjectInterface<any> = {};
 
 		this.times = times.map(t => {
-			const time2 = time + t;
+			const time2 = toFixed(time + t);
 
 			obj[time2] = items[t];
 			return time2;
