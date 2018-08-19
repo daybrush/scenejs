@@ -5,7 +5,7 @@
 
 import PropertyObject from "../PropertyObject";
 import {COLOR_MODELS, hexToRGB, hex3to6, hslToRGB} from "./color";
-import {isString, isUndefined, isArray} from "../utils";
+import {isString, isArray} from "../utils";
 import { ObjectInterface } from "../consts";
 
 /**
@@ -22,25 +22,9 @@ console.log(splitSpace("'a,b' c 'd,e' f g"));
 */
 export function splitSpace(text: string) {
 	// divide comma(,)
-	const matches = text.split(/("[^"]*"|'[^']*'|[^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\s+/g);
-	const length = matches.length;
-	const arr: any[] = [];
-	let index = 0;
+	const matches = text.match(/("[^"]*")|('[^']*')|([^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\S+/g);
 
-	for (let i = 0; i < length; ++i) {
-		const value = matches[i];
-
-		if (isUndefined(value)) {
-			arr[index] && ++index;
-			continue;
-		} else if (!value) {
-			continue;
-		}
-		const arrValue = arr[index];
-
-		arr[index] = arrValue ? arrValue + value : value;
-	}
-	return arr;
+	return matches || [];
 }
 /**
 * divide text by comma.
@@ -57,25 +41,9 @@ console.log(splitComma("'a,b',c,'d,e',f,g"));
 export function splitComma(text: string) {
 	// divide comma(,)
 	// "[^"]*"|'[^']*'
-	const matches = text.split(/("[^"]*"|'[^']*'|[^,\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^,\s()]*)|\s*,\s*/g);
-	const length = matches.length;
-	const arr: any[] = [];
-	let index = 0;
+	const matches = text.match(/("[^"]*"|'[^']*'|[^,\s()]*\((?:[^()]*|\([^()]*\))*\)[^,\s()]*|[^,])+/g);
 
-	for (let i = 0; i < length; ++i) {
-		const value = matches[i];
-
-		if (isUndefined(value)) {
-			arr[index] && ++index;
-			continue;
-		} else if (!value) {
-			continue;
-		}
-		const arrValue = arr[index];
-
-		arr[index] = arrValue ? arrValue + value : value;
-	}
-	return arr;
+	return matches ? matches.map(str => str.trim()) : [];
 }
 export function splitStyle(str: string) {
 	const properties = str.split(";");
@@ -250,8 +218,6 @@ export function stringToColorObject(value: string): string | PropertyObject {
 	if (value.charAt(0) === "#") {
 		if (value.length === 4) {
 			colorArray = hexToRGB(hex3to6(value));
-		} else if (value.length === 7) {
-			colorArray = hexToRGB(value);
 		} else {
 			colorArray = hexToRGB(value);
 		}

@@ -542,8 +542,9 @@ describe("SceneItem Test", function() {
         it("should check 'exportCSS' method", () => {
             // Given
             // When
+            this.item.setElement(this.element);
             this.item.exportCSS();
-            const id = this.item.state.id.match(/[0-9a-zA-Z]+/g).join("");
+            const id = this.item.getId().match(/[0-9a-zA-Z]+/g).join("");
             // Then
             
             expect(document.querySelector(`#__SCENEJS_STYLE_${id}`)).to.be.ok;

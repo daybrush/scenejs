@@ -85,6 +85,7 @@ class SceneItem extends Animator {
 	constructor(properties?: ObjectInterface<any>, options?: ObjectInterface<any>) {
 		super();
 		this.keyframes = new Keyframes();
+		this.elements = [];
 		this.load(properties, options);
 	}
 	public getDuration() {
@@ -115,7 +116,7 @@ console.log(item.getId()); // item
 	*/
 	public setId(id?: string) {
 		const elements = this.elements;
-		const length = elements && elements.length;
+		const length = elements.length;
 
 		this.setState({id: id || makeId(!!length)});
 		const sceneId = toId(this.state.id);
@@ -701,15 +702,16 @@ item.playCSS(false, {
 			return this;
 		}
 		const elements = this.elements;
+		const length = elements.length;
 
-		if (!elements || !elements.length) {
+		if (!length) {
 			return this;
 		}
 		if (this.isEnded()) {
 			this.setTime(0);
 		}
 		exportCSS && this.exportCSS();
-		const length = elements.length;
+
 		const cssText = makeAnimationProperties(properties);
 
 		for (let i = 0; i < length; ++i) {
