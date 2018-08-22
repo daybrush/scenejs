@@ -16,6 +16,8 @@ function getType(value: any) {
 		} else if (value instanceof PropertyObject) {
 			return "property";
 		}
+	} else if (type === "string" || type === "number") {
+		return "value";
 	}
 	return type;
 }
@@ -166,7 +168,7 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
 			return dotObject(a1, a2, b1, b2);
 		} else if (type1 === "array") {
 			return dotArray(a1, a2, b1, b2);
-		} else if (type1 === "object" || type1 === "boolean") {
+		} else if (type1 === "object" || type1 === "boolean" || type1 === "function") {
 			return a1;
 		}
 	} else {
@@ -176,27 +178,23 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
 	const r1 = b1 / (b1 + b2);
 	const r2 = 1 - r1;
 
-	if (type1 === "number") {
-		return a1 * r2 + a2 * r1;
-	} else if (type1 !== "string") {
-		return a1;
-	}
-	const v1 = splitUnit(a1);
-	const v2 = splitUnit(a2);
+	const v1 = splitUnit(`${a1}`);
+	const v2 = splitUnit(`${a2}`);
 	let v;
 
 	// 숫자가 아닐경우 첫번째 값을 반환 b2가 0일경우 두번째 값을 반환
 	if (isNaN(v1.value) || isNaN(v2.value)) {
-		return r1 >= 1 ? a2 : a1;
+		return a1;
 	} else {
 		v = v1.value * r2 + v2.value * r1;
 	}
-	const unit = v1.unit || v2.unit || false;
+	const prefix = v1.prefix || v2.prefix;
+	const unit = v1.unit || v2.unit;
 
-	if (unit === false) {
+	if (!prefix && !unit) {
 		return v;
 	}
-	return v + unit.trim();
+	return prefix + v + unit;
 }
 
 export function dotValue(

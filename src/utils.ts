@@ -43,12 +43,17 @@ export function has(object: object, name: string) {
 	return Object.prototype.hasOwnProperty.call(object, name);
 }
 export function splitUnit(text: string) {
-	const v = text;
-	const matches = v.match(/([0-9]|\.|-|e-|e\+)+/g);
-	const value = matches ? matches[0] : text;
-	const unit = v.replace(value, "") || "";
+	const matches = /^([^\d|e|-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
 
-	return {unit, value: parseFloat(value)};
+	// const matches = v.match(/([^\d|\.|-|e-|e\+]*)([\d|\.|-|e-|e\+]+)+([^\d|\.|-|e-|e\+]*)/g);
+	if (!matches) {
+		return {prefix: "", unit: "", value: NaN};
+	}
+	const prefix = matches[1];
+	const value = matches[2];
+	const unit = matches[3];
+
+	return {prefix, unit, value: parseFloat(value)};
 }
 export function camelize(str: string) {
 	return str.replace(/[\s-_]([a-z])/g, (all, letter) => letter.toUpperCase());
