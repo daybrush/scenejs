@@ -762,11 +762,14 @@ function has(object, name) {
 }
 exports.has = has;
 function splitUnit(text) {
-    var v = text;
-    var matches = v.match(/([0-9]|\.|-|e-|e\+)+/g);
-    var value = matches ? matches[0] : text;
-    var unit = v.replace(value, "") || "";
-    return { unit: unit, value: parseFloat(value) };
+    var matches = /^([^\d|e|-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
+    if (!matches) {
+        return { prefix: "", unit: "", value: NaN };
+    }
+    var prefix = matches[1];
+    var value = matches[2];
+    var unit = matches[3];
+    return { prefix: prefix, unit: unit, value: parseFloat(value) };
 }
 exports.splitUnit = splitUnit;
 function camelize(str) {
@@ -2335,11 +2338,12 @@ function dot(a1, a2, b1, b2) {
     else {
         v = v1.value * r2 + v2.value * r1;
     }
-    var unit = v1.unit || v2.unit || false;
-    if (unit === false) {
+    var prefix = v1.prefix || v2.prefix;
+    var unit = v1.unit || v2.unit;
+    if (!prefix && !unit) {
         return v;
     }
-    return v + unit.trim();
+    return prefix + v + unit;
 }
 exports.dot = dot;
 function dotValue(time, prevTime, nextTime, prevValue, nextValue, easing) {
