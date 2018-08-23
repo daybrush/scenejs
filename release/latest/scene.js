@@ -1996,17 +1996,18 @@ function toPropertyObject(value) {
     if (values.length > 1) {
         return arrayToPropertyObject(values.map(function (v) { return toPropertyObject(v); }), " ");
     }
-    else {
-        var chr = value.charAt(0);
-        if (chr && (chr === '"' || chr === "'")) {
-            return value;
-        }
-        else if (value.indexOf("(") !== -1) {
-            return stringToBracketObject(value);
-        }
-        else if (value.charAt(0) === "#") {
-            return stringToColorObject(value);
-        }
+    values = /^(['"])([^'"]*)(['"])$/g.exec(value);
+    if (values && values[1] === values[3]) {
+        return new PropertyObject_1["default"](toPropertyObject(values[2]), {
+            prefix: values[1],
+            suffix: values[1]
+        });
+    }
+    else if (value.indexOf("(") !== -1) {
+        return stringToBracketObject(value);
+    }
+    else if (value.charAt(0) === "#") {
+        return stringToColorObject(value);
     }
     return value;
 }
