@@ -1928,8 +1928,8 @@ function stringToBracketObject(value) {
         return value;
     }
     var model = matches[1] || "";
-    var prefix = model + "(";
     var text = matches[2];
+    var prefix = model + "(";
     var suffix = ")" + matches[3];
     var separator = ",";
     var values;
@@ -1937,6 +1937,8 @@ function stringToBracketObject(value) {
     if (obj instanceof PropertyObject_1["default"]) {
         separator = obj.getOption("separator");
         values = obj.value;
+        prefix += obj.getOption("prefix");
+        suffix = obj.getOption("suffix") + suffix;
     }
     else {
         values = [text];
