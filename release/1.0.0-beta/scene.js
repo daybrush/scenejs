@@ -107,13 +107,13 @@ module.exports = index_1["default"];
 
 exports.__esModule = true;
 var Scene_1 = __webpack_require__(2);
-var SceneItem_1 = __webpack_require__(8);
+var SceneItem_1 = __webpack_require__(9);
 exports.SceneItem = SceneItem_1["default"];
-var Frame_1 = __webpack_require__(9);
+var Frame_1 = __webpack_require__(10);
 exports.Frame = Frame_1["default"];
 var Keyframes_1 = __webpack_require__(13);
 exports.Keyframes = Keyframes_1["default"];
-var PropertyObject_1 = __webpack_require__(11);
+var PropertyObject_1 = __webpack_require__(8);
 exports.PropertyObject = PropertyObject_1["default"];
 var easing = __webpack_require__(5);
 exports.easing = easing;
@@ -145,7 +145,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var Animator_1 = __webpack_require__(3);
-var SceneItem_1 = __webpack_require__(8);
+var SceneItem_1 = __webpack_require__(9);
 var consts_1 = __webpack_require__(7);
 var utils_1 = __webpack_require__(6);
 var Scene = (function (_super) {
@@ -711,11 +711,28 @@ exports.EASE_IN_OUT = bezier(0.42, 0, 0.58, 1);
 
 exports.__esModule = true;
 var consts_1 = __webpack_require__(7);
+var PropertyObject_1 = __webpack_require__(8);
+function getType(value) {
+    var type = typeof value;
+    if (type === "object") {
+        if (isArray(value)) {
+            return "array";
+        }
+        else if (value instanceof PropertyObject_1["default"]) {
+            return "property";
+        }
+    }
+    else if (type === "string" || type === "number") {
+        return "value";
+    }
+    return type;
+}
+exports.getType = getType;
 function toFixed(num) {
     return Math.round(num * consts_1.MAXIMUM) / consts_1.MAXIMUM;
 }
 exports.toFixed = toFixed;
-function isInProperties(roles, args) {
+function isInProperties(roles, args, isCheckTrue) {
     var length = args.length;
     var role = roles;
     if (length === 0) {
@@ -726,19 +743,19 @@ function isInProperties(roles, args) {
             return false;
         }
         role = role[args[i]];
-        if (!role) {
+        if (!role || (!isCheckTrue && role === true)) {
             return false;
         }
     }
     return true;
 }
 exports.isInProperties = isInProperties;
-function isRole(args) {
-    return isInProperties(consts_1.SCENE_ROLES, args);
+function isRole(args, isCheckTrue) {
+    return isInProperties(consts_1.SCENE_ROLES, args, isCheckTrue);
 }
 exports.isRole = isRole;
 function isFixed(args) {
-    return isInProperties(consts_1.FIXED, args);
+    return isInProperties(consts_1.FIXED, args, true);
 }
 exports.isFixed = isFixed;
 function isUndefined(value) {
@@ -809,7 +826,7 @@ exports.defineGetterSetter = defineGetterSetter;
 exports.__esModule = true;
 exports.PREFIX = "__SCENEJS_";
 exports.timingFunction = "animation-timing-function";
-exports.SCENE_ROLES = { transform: true, filter: true };
+exports.SCENE_ROLES = { transform: {}, filter: {}, attribute: {} };
 exports.FIXED = { "animation-timing-function": true, "contents": true };
 exports.MAXIMUM = 1000000;
 exports.THRESHOLD = 0.000001;
@@ -841,6 +858,81 @@ exports.START_ANIMATION = "startAnimation";
 
 "use strict";
 
+exports.__esModule = true;
+var PropertyObject = (function () {
+    function PropertyObject(value, options) {
+        if (options === void 0) { options = {}; }
+        this.options = {
+            prefix: "",
+            suffix: "",
+            model: "",
+            type: "",
+            separator: ","
+        };
+        this.setOptions(options);
+        this.init(value);
+    }
+    PropertyObject.prototype.setOptions = function (options) {
+        Object.assign(this.options, options);
+        return this;
+    };
+    PropertyObject.prototype.getOption = function (name) {
+        return this.options[name];
+    };
+    PropertyObject.prototype.size = function () {
+        return this.value.length;
+    };
+    PropertyObject.prototype.get = function (index) {
+        return this.value[index];
+    };
+    PropertyObject.prototype.set = function (index, value) {
+        this.value[index] = value;
+        return this;
+    };
+    PropertyObject.prototype.clone = function () {
+        var arr = this.value.map(function (v) { return ((v instanceof PropertyObject) ? v.clone() : v); });
+        return new PropertyObject(arr, {
+            separator: this.options.separator,
+            prefix: this.options.prefix,
+            suffix: this.options.suffix,
+            model: this.options.model,
+            type: this.options.type
+        });
+    };
+    PropertyObject.prototype.toValue = function () {
+        return this.options.prefix + this.join() + this.options.suffix;
+    };
+    PropertyObject.prototype.join = function () {
+        return this.value.map(function (v) { return ((v instanceof PropertyObject) ? v.toValue() : v); }).join(this.options.separator);
+    };
+    PropertyObject.prototype.forEach = function (func) {
+        this.value.forEach(func);
+        return this;
+    };
+    PropertyObject.prototype.init = function (value) {
+        var type = typeof value;
+        if (type === "string") {
+            this.value = value.split(this.options.separator);
+        }
+        else if (type === "object") {
+            this.value = value;
+        }
+        else {
+            this.value = [value];
+        }
+        return this;
+    };
+    return PropertyObject;
+}());
+exports["default"] = PropertyObject;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -856,7 +948,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var Animator_1 = __webpack_require__(3);
-var Frame_1 = __webpack_require__(9);
+var Frame_1 = __webpack_require__(10);
 var utils_1 = __webpack_require__(6);
 var Keyframes_1 = __webpack_require__(13);
 var dot_1 = __webpack_require__(14);
@@ -1324,19 +1416,26 @@ var SceneItem = (function (_super) {
             time: iterationTime
         });
         var elements = this.elements;
-        if (!elements || !elements.length) {
+        var length = elements.length;
+        if (!length) {
             return frame;
+        }
+        var attributes = frame.get("attribute");
+        if (attributes) {
+            for (var name_2 in attributes) {
+                for (var i = 0; i < length; ++i) {
+                    elements[i].setAttribute(name_2, attributes[name_2]);
+                }
+            }
         }
         var cssText = frame.toCSS();
-        if (this.state.cssText === cssText) {
+        if (this.state.cssText !== cssText) {
+            this.state.cssText = cssText;
+            for (var i = 0; i < length; ++i) {
+                elements[i].style.cssText += cssText;
+            }
             return frame;
         }
-        this.state.cssText = cssText;
-        var length = elements.length;
-        for (var i = 0; i < length; ++i) {
-            elements[i].style.cssText += cssText;
-        }
-        return frame;
     };
     SceneItem.prototype._getId = function () {
         return this.state.id || this.setId().getId();
@@ -1432,7 +1531,7 @@ var SceneItem = (function (_super) {
                 break;
             }
         }
-        var prevValue = prevFrame && prevFrame.get.apply(prevFrame, properties);
+        var prevValue = prevFrame && prevFrame.raw.apply(prevFrame, properties);
         if (usePrevValue) {
             return prevValue;
         }
@@ -1444,7 +1543,7 @@ var SceneItem = (function (_super) {
                 break;
             }
         }
-        var nextValue = nextFrame && nextFrame.get.apply(nextFrame, properties);
+        var nextValue = nextFrame && nextFrame.raw.apply(nextFrame, properties);
         if (!prevFrame || utils_1.isUndefined(prevValue)) {
             return nextValue;
         }
@@ -1476,7 +1575,7 @@ exports["default"] = SceneItem;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1484,8 +1583,8 @@ exports["default"] = SceneItem;
 exports.__esModule = true;
 var consts_1 = __webpack_require__(7);
 var utils_1 = __webpack_require__(6);
-var property_1 = __webpack_require__(10);
-var PropertyObject_1 = __webpack_require__(11);
+var property_1 = __webpack_require__(11);
+var PropertyObject_1 = __webpack_require__(8);
 function toInnerProperties(obj) {
     if (!obj) {
         return "";
@@ -1507,22 +1606,24 @@ function merge(to, from, toValue) {
     if (toValue === void 0) { toValue = false; }
     for (var name_2 in from) {
         var value = from[name_2];
-        if (utils_1.isObject(value)) {
-            if (value instanceof PropertyObject_1["default"]) {
-                to[name_2] = toValue ? value.toValue() : value.clone();
-            }
-            else if (utils_1.isArray(value)) {
-                to[name_2] = value.slice();
-            }
-            else if (utils_1.isObject(to[name_2]) && !(to[name_2] instanceof PropertyObject_1["default"])) {
+        var type = utils_1.getType(value);
+        if (type === "property") {
+            to[name_2] = toValue ? value.toValue() : value.clone();
+        }
+        else if (type === "array") {
+            to[name_2] = value.slice();
+        }
+        else if (type === "object") {
+            if (utils_1.isObject(to[name_2]) && !(to[name_2] instanceof PropertyObject_1["default"])) {
                 merge(to[name_2], value, toValue);
             }
             else {
                 to[name_2] = clone(value, toValue);
             }
-            continue;
         }
-        to[name_2] = from[name_2];
+        else {
+            to[name_2] = from[name_2];
+        }
     }
     return to;
 }
@@ -1533,6 +1634,23 @@ var Frame = (function () {
         this.set(properties);
     }
     Frame.prototype.get = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        var value = this.raw.apply(this, args);
+        var type = utils_1.getType(value);
+        if (type === "property") {
+            return value.toValue();
+        }
+        else if (type === "object") {
+            return clone(this.properties, true);
+        }
+        else {
+            return value;
+        }
+    };
+    Frame.prototype.raw = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
@@ -1662,7 +1780,7 @@ var Frame = (function () {
         var properties = this.toObject();
         var cssObject = {};
         for (var name_4 in properties) {
-            if (utils_1.isRole([name_4])) {
+            if (utils_1.isRole([name_4], true)) {
                 continue;
             }
             var value = properties[name_4];
@@ -1706,13 +1824,13 @@ exports["default"] = Frame;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 exports.__esModule = true;
-var PropertyObject_1 = __webpack_require__(11);
+var PropertyObject_1 = __webpack_require__(8);
 var color_1 = __webpack_require__(12);
 var utils_1 = __webpack_require__(6);
 function splitSpace(text) {
@@ -1914,81 +2032,6 @@ exports.toObject = toObject;
 
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-var utils_1 = __webpack_require__(6);
-var PropertyObject = (function () {
-    function PropertyObject(value, options) {
-        if (options === void 0) { options = {}; }
-        this.options = {
-            prefix: "",
-            suffix: "",
-            model: "",
-            type: "",
-            separator: ","
-        };
-        this.setOptions(options);
-        this.init(value);
-    }
-    PropertyObject.prototype.setOptions = function (options) {
-        Object.assign(this.options, options);
-        return this;
-    };
-    PropertyObject.prototype.getOption = function (name) {
-        return this.options[name];
-    };
-    PropertyObject.prototype.size = function () {
-        return this.value.length;
-    };
-    PropertyObject.prototype.get = function (index) {
-        return this.value[index];
-    };
-    PropertyObject.prototype.set = function (index, value) {
-        this.value[index] = value;
-        return this;
-    };
-    PropertyObject.prototype.clone = function () {
-        var arr = this.value.map(function (v) { return ((v instanceof PropertyObject) ? v.clone() : v); });
-        return new PropertyObject(arr, {
-            separator: this.options.separator,
-            prefix: this.options.prefix,
-            suffix: this.options.suffix,
-            model: this.options.model,
-            type: this.options.type
-        });
-    };
-    PropertyObject.prototype.toValue = function () {
-        return this.options.prefix + this.join() + this.options.suffix;
-    };
-    PropertyObject.prototype.join = function () {
-        return this.value.map(function (v) { return ((v instanceof PropertyObject) ? v.toValue() : v); }).join(this.options.separator);
-    };
-    PropertyObject.prototype.forEach = function (func) {
-        this.value.forEach(func);
-        return this;
-    };
-    PropertyObject.prototype.init = function (value) {
-        if (utils_1.isString(value)) {
-            this.value = value.split(this.options.separator);
-        }
-        else if (utils_1.isObject(value)) {
-            this.value = value;
-        }
-        else {
-            this.value = [value];
-        }
-        return this;
-    };
-    return PropertyObject;
-}());
-exports["default"] = PropertyObject;
-
-
-/***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2071,7 +2114,7 @@ exports.hslToRGB = hslToRGB;
 
 exports.__esModule = true;
 var utils_1 = __webpack_require__(6);
-var PropertyObject_1 = __webpack_require__(11);
+var PropertyObject_1 = __webpack_require__(8);
 function getNames(names, stack) {
     var arr = [];
     for (var name_1 in names) {
@@ -2114,7 +2157,7 @@ var Keyframes = (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        return utils_1.isInProperties(this.names, args);
+        return utils_1.isInProperties(this.names, args, true);
     };
     Keyframes.prototype.update = function () {
         var items = this.items;
@@ -2222,22 +2265,8 @@ exports["default"] = Keyframes;
 
 exports.__esModule = true;
 var utils_1 = __webpack_require__(6);
-var PropertyObject_1 = __webpack_require__(11);
-function getType(value) {
-    var type = typeof value;
-    if (type === "object") {
-        if (utils_1.isArray(value)) {
-            return "array";
-        }
-        else if (value instanceof PropertyObject_1["default"]) {
-            return "property";
-        }
-    }
-    else if (type === "string" || type === "number") {
-        return "value";
-    }
-    return type;
-}
+var PropertyObject_1 = __webpack_require__(8);
+var utils_2 = __webpack_require__(6);
 function dotArray(a1, a2, b1, b2) {
     if (b2 === 0) {
         return a2;
@@ -2311,8 +2340,8 @@ function dot(a1, a2, b1, b2) {
     else if (b1 === 0 || b1 + b2 === 0) {
         return a1;
     }
-    var type1 = getType(a1);
-    var type2 = getType(a2);
+    var type1 = utils_2.getType(a1);
+    var type2 = utils_2.getType(a2);
     if (type1 === type2) {
         if (type1 === "property") {
             return dotObject(a1, a2, b1, b2);
