@@ -1998,7 +1998,7 @@ function toPropertyObject(value) {
     }
     values = /^(['"])([^'"]*)(['"])$/g.exec(value);
     if (values && values[1] === values[3]) {
-        return new PropertyObject_1["default"](toPropertyObject(values[2]), {
+        return new PropertyObject_1["default"]([toPropertyObject(values[2])], {
             prefix: values[1],
             suffix: values[1]
         });
