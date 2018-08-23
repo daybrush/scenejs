@@ -1644,7 +1644,7 @@ var Frame = (function () {
             return value.toValue();
         }
         else if (type === "object") {
-            return clone(this.properties, true);
+            return clone(value, true);
         }
         else {
             return value;
