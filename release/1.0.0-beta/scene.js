@@ -779,7 +779,7 @@ function has(object, name) {
 }
 exports.has = has;
 function splitUnit(text) {
-    var matches = /^([^\d|e|-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
+    var matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
     if (!matches) {
         return { prefix: "", unit: "", value: NaN };
     }
