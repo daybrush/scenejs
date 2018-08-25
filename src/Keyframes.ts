@@ -69,7 +69,7 @@ keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scal
 keyframes.hasName("transform", "translate"); // true or not
 	*/
 	public hasName(...args: string[]) {
-		return isInProperties(this.names, args);
+		return isInProperties(this.names, args, true);
 	}
 	/**
 	 * update property names used in frames.

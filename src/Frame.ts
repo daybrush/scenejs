@@ -1,5 +1,5 @@
 import {TRANSFORM, FILTER, ObjectInterface, NameType, ANIMATION, timingFunction} from "./consts";
-import {isObject, isString, isArray, isRole} from "./utils";
+import {isObject, isString, isArray, isRole, getType} from "./utils";
 import {toPropertyObject, splitStyle, toObject} from "./utils/property";
 import PropertyObject from "./PropertyObject";
 
@@ -24,20 +24,21 @@ function clone(target: ObjectInterface<any>, toValue = false) {
 function merge(to: ObjectInterface<any>, from: ObjectInterface<any>, toValue = false) {
 	for (const name in from) {
 		const value = from[name];
+		const type = getType(value);
 
-		if (isObject(value)) {
-			if (value instanceof PropertyObject) {
-				to[name] = toValue ? value.toValue() : value.clone();
-			} else if (isArray(value)) {
-				to[name] = value.slice();
-			} else if (isObject(to[name]) && !(to[name] instanceof PropertyObject)) {
+		if (type === "property") {
+			to[name] = toValue ? value.toValue() : value.clone();
+		} else if (type === "array") {
+			to[name] = value.slice();
+		} else if (type === "object") {
+			if (isObject(to[name]) && !(to[name] instanceof PropertyObject)) {
 				merge(to[name], value, toValue);
 			} else {
 				to[name] = clone(value, toValue);
 			}
-			continue;
+		} else {
+			to[name] = from[name];
 		}
-		to[name] = from[name];
 	}
 	return to;
 }
@@ -70,6 +71,19 @@ class Frame {
 	frame.get("transform", "translate") // => "10px,10px"
 	*/
 	public get(...args: NameType[]) {
+		const value = this.raw(...args);
+		const type = getType(value);
+
+		if (type === "property") {
+			return value.toValue();
+		} else if (type === "object") {
+			return clone(value, true);
+		} else {
+			return value;
+		}
+	}
+
+	public raw(...args: NameType[]) {
 		let properties = this.properties;
 		const length = args.length;
 
@@ -247,7 +261,7 @@ frame.set("transform", "translate", "50px");
 		const cssObject: ObjectInterface<string> = {};
 
 		for (const name in properties) {
-			if (isRole([name])) {
+			if (isRole([name], true)) {
 				continue;
 			}
 			const value = properties[name];
