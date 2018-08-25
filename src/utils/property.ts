@@ -166,9 +166,9 @@ export function stringToBracketObject(value: string) {
 		return value;
 	}
 	const model = matches[1] || "";
-	const prefix = `${model}(`;
 	const text = matches[2];
-	const suffix = `)${matches[3]}`;
+	let prefix = `${model}(`;
+	let suffix = `)${matches[3]}`;
 	let separator = ",";
 	let values;
 	// divide comma(,)
@@ -177,6 +177,8 @@ export function stringToBracketObject(value: string) {
 	if (obj instanceof PropertyObject) {
 		separator = obj.getOption("separator");
 		values = obj.value;
+		prefix += obj.getOption("prefix");
+		suffix = obj.getOption("suffix") + suffix;
 	} else {
 		values = [text];
 	}
@@ -241,7 +243,7 @@ export function stringToColorObject(value: string): string | PropertyObject {
 toPropertyObject("1px solid #000");
 // => PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)])
 */
-export function toPropertyObject(value: any): any {
+export function toPropertyObject(value: string | ObjectInterface<any> | any[]): any {
 	if (!isString(value)) {
 		if (Array.isArray(value)) {
 			return arrayToPropertyObject(value, ",");
@@ -256,18 +258,19 @@ export function toPropertyObject(value: any): any {
 	values = splitSpace(value);
 	if (values.length > 1) {
 		return arrayToPropertyObject(values.map(v => toPropertyObject(v)), " ");
-	} else {
-		const chr = value.charAt(0);
-
-		if (chr && (chr === '"' || chr === "'")) {
-			// Quotes
-			return value;
-		} else if (value.indexOf("(") !== -1) {
-			// color
-			return stringToBracketObject(value);
-		} else if (value.charAt(0) === "#") {
-			return stringToColorObject(value);
-		}
+	}
+	values = /^(['"])([^'"]*)(['"])$/g.exec(value);
+	if (values && values[1] === values[3]) {
+		// Quotes
+		return new PropertyObject([toPropertyObject(values[2])], {
+			prefix: values[1],
+			suffix: values[1],
+		});
+	} else if (value.indexOf("(") !== -1) {
+		// color
+		return stringToBracketObject(value);
+	} else if (value.charAt(0) === "#") {
+		return stringToColorObject(value);
 	}
 	return value;
 }
