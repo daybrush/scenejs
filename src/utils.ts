@@ -1,9 +1,24 @@
 import { SCENE_ROLES, ObjectInterface, MAXIMUM, FIXED } from "./consts";
+import PropertyObject from "./PropertyObject";
 
+export function getType(value: any) {
+	const type = typeof value;
+
+	if (type === "object") {
+		if (isArray(value)) {
+			return "array";
+		} else if (value instanceof PropertyObject) {
+			return "property";
+		}
+	} else if (type === "string" || type === "number") {
+		return "value";
+	}
+	return type;
+}
 export function toFixed(num: number) {
 	return Math.round(num * MAXIMUM) / MAXIMUM;
 }
-export function isInProperties(roles: ObjectInterface<any>, args: any[]) {
+export function isInProperties(roles: ObjectInterface<any>, args: any[], isCheckTrue?: boolean) {
 	const length = args.length;
 	let role: any = roles;
 
@@ -15,17 +30,17 @@ export function isInProperties(roles: ObjectInterface<any>, args: any[]) {
 			return false;
 		}
 		role = role[args[i]];
-		if (!role) {
+		if (!role || (!isCheckTrue && role === true)) {
 			return false;
 		}
 	}
 	return true;
 }
-export function isRole(args: any[]) {
-	return isInProperties(SCENE_ROLES, args);
+export function isRole(args: any[], isCheckTrue?: boolean) {
+	return isInProperties(SCENE_ROLES, args, isCheckTrue);
 }
 export function isFixed(args: any[]) {
-	return isInProperties(FIXED, args);
+	return isInProperties(FIXED, args, true);
 }
 export function isUndefined(value: any): value is undefined {
 	return (typeof value === "undefined");
@@ -43,7 +58,7 @@ export function has(object: object, name: string) {
 	return Object.prototype.hasOwnProperty.call(object, name);
 }
 export function splitUnit(text: string) {
-	const matches = /^([^\d|e|-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
+	const matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
 
 	// const matches = v.match(/([^\d|\.|-|e-|e\+]*)([\d|\.|-|e-|e\+]+)+([^\d|\.|-|e-|e\+]*)/g);
 	if (!matches) {

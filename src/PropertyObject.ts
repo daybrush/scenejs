@@ -1,5 +1,3 @@
-import {isObject, isString} from "./utils";
-
 interface PropertyObjectInterface {
 	prefix?: string;
 	suffix?: string;
@@ -162,10 +160,12 @@ obj4.forEach(t => {
 		return this;
 	}
 	private init(value: string | any[]) {
-		if (isString(value)) {
-			this.value = value.split(this.options.separator);
-		} else if (isObject(value)) {
-			this.value = value;
+		const type = typeof value;
+
+		if (type === "string") {
+			this.value = (value as string).split(this.options.separator);
+		} else if (type === "object") {
+			this.value = (value as any[]);
 		} else {
 			this.value = [value];
 		}

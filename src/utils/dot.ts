@@ -3,24 +3,11 @@
 * @name Dot
 */
 
-import {isArray, splitUnit} from "../utils";
+import { isArray, splitUnit } from "../utils";
 import PropertyObject from "../PropertyObject";
 import { EasingType } from "../Animator";
+import { getType } from "../utils";
 
-function getType(value: any) {
-	const type = typeof value;
-
-	if (type === "object") {
-		if (isArray(value)) {
-			return "array";
-		} else if (value instanceof PropertyObject) {
-			return "property";
-		}
-	} else if (type === "string" || type === "number") {
-		return "value";
-	}
-	return type;
-}
 /**
 * The dot product of Arrays
 * @memberof Dot
