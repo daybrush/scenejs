@@ -784,22 +784,30 @@ item.playCSS(false, {
 			time: iterationTime,
 		});
 		const elements = this.elements;
+		const length = elements.length;
 
-		if (!elements || !elements.length) {
+		if (!length) {
 			return frame;
+		}
+		const attributes = frame.get("attribute");
+
+		if (attributes) {
+			for (const name in (attributes as any)) {
+				for (let i = 0; i < length; ++i) {
+					elements[i].setAttribute(name, attributes[name]);
+				}
+			}
 		}
 		const cssText = frame.toCSS();
 
-		if (this.state.cssText === cssText) {
+		if (this.state.cssText !== cssText) {
+			this.state.cssText = cssText;
+
+			for (let i = 0; i < length; ++i) {
+				elements[i].style.cssText += cssText;
+			}
 			return frame;
 		}
-		this.state.cssText = cssText;
-		const length = elements.length;
-
-		for (let i = 0; i < length; ++i) {
-			elements[i].style.cssText += cssText;
-		}
-		return frame;
 	}
 	private _getId() {
 		return this.state.id || this.setId().getId();
@@ -905,7 +913,7 @@ item.playCSS(false, {
 				break;
 			}
 		}
-		const prevValue = prevFrame && prevFrame.get(...properties);
+		const prevValue = prevFrame && prevFrame.raw(...properties);
 
 		if (usePrevValue) {
 			return prevValue;
@@ -919,7 +927,7 @@ item.playCSS(false, {
 				break;
 			}
 		}
-		const nextValue = nextFrame && nextFrame.get(...properties);
+		const nextValue = nextFrame && nextFrame.raw(...properties);
 
 		if (!prevFrame || isUndefined(prevValue)) {
 			return nextValue;
