@@ -712,6 +712,10 @@ exports.EASE_IN_OUT = bezier(0.42, 0, 0.58, 1);
 exports.__esModule = true;
 var consts_1 = __webpack_require__(7);
 var PropertyObject_1 = __webpack_require__(8);
+function setAlias(name, alias) {
+    consts_1.ALIAS[name] = alias;
+}
+exports.setAlias = setAlias;
 function getType(value) {
     var type = typeof value;
     if (type === "object") {
@@ -751,7 +755,7 @@ function isInProperties(roles, args, isCheckTrue) {
 }
 exports.isInProperties = isInProperties;
 function isRole(args, isCheckTrue) {
-    return isInProperties(consts_1.SCENE_ROLES, args, isCheckTrue);
+    return isInProperties(consts_1.ROLES, args, isCheckTrue);
 }
 exports.isRole = isRole;
 function isFixed(args) {
@@ -826,7 +830,8 @@ exports.defineGetterSetter = defineGetterSetter;
 exports.__esModule = true;
 exports.PREFIX = "__SCENEJS_";
 exports.timingFunction = "animation-timing-function";
-exports.SCENE_ROLES = { transform: {}, filter: {}, attribute: {} };
+exports.ROLES = { transform: {}, filter: {}, attribute: {} };
+exports.ALIAS = { easing: ["timing-function"] };
 exports.FIXED = { "animation-timing-function": true, "contents": true };
 exports.MAXIMUM = 1000000;
 exports.THRESHOLD = 0.000001;
@@ -1656,12 +1661,13 @@ var Frame = (function () {
             args[_i] = arguments[_i];
         }
         var properties = this.properties;
-        var length = args.length;
+        var params = args[0] in consts_1.ALIAS ? consts_1.ALIAS[args[0]] : args;
+        var length = params.length;
         for (var i = 0; i < length; ++i) {
             if (!utils_1.isObject(properties)) {
                 return undefined;
             }
-            properties = properties[args[i]];
+            properties = properties[params[i]];
         }
         return properties;
     };
@@ -1671,7 +1677,8 @@ var Frame = (function () {
             args[_i] = arguments[_i];
         }
         var properties = this.properties;
-        var length = args.length;
+        var params = args[0] in consts_1.ALIAS ? consts_1.ALIAS[args[0]] : args;
+        var length = params.length;
         if (!length) {
             return this;
         }
@@ -1679,9 +1686,9 @@ var Frame = (function () {
             if (!utils_1.isObject(properties)) {
                 return this;
             }
-            properties = properties[args[i]];
+            properties = properties[params[i]];
         }
-        delete properties[args[length - 1]];
+        delete properties[params[length - 1]];
         return this;
     };
     Frame.prototype.set = function () {
@@ -1693,7 +1700,10 @@ var Frame = (function () {
         var length = args.length;
         var params = args.slice(0, -1);
         var value = args[length - 1];
-        if (length === 2 && utils_1.isArray(params[0])) {
+        if (params[0] in consts_1.ALIAS) {
+            this._set(consts_1.ALIAS[params[0]], value);
+        }
+        else if (length === 2 && utils_1.isArray(params[0])) {
             this._set(params[0], value);
         }
         else if (utils_1.isObject(value)) {
@@ -1747,15 +1757,16 @@ var Frame = (function () {
             args[_i] = arguments[_i];
         }
         var properties = this.properties;
-        var length = args.length;
+        var params = args[0] in consts_1.ALIAS ? consts_1.ALIAS[args[0]] : args;
+        var length = params.length;
         if (!length) {
             return false;
         }
         for (var i = 0; i < length; ++i) {
-            if (!utils_1.isObject(properties) || !(args[i] in properties)) {
+            if (!utils_1.isObject(properties) || !(params[i] in properties)) {
                 return false;
             }
-            properties = properties[args[i]];
+            properties = properties[params[i]];
         }
         return true;
     };
