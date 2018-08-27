@@ -121,6 +121,9 @@ var Animator_1 = __webpack_require__(3);
 exports.Animator = Animator_1["default"];
 var presets = __webpack_require__(16);
 exports.presets = presets;
+var utils_1 = __webpack_require__(6);
+exports.setRole = utils_1.setRole;
+exports.setAlias = utils_1.setAlias;
 exports["default"] = Scene_1["default"];
 
 
@@ -156,6 +159,14 @@ var Scene = (function (_super) {
         _this.load(properties, options);
         return _this;
     }
+    Scene.prototype.setId = function (id) {
+        if (id === void 0) { id = "scene" + Math.floor(Math.random() * 100000); }
+        this.state.id = id;
+        return this;
+    };
+    Scene.prototype.getId = function () {
+        return this.state.id;
+    };
     Scene.prototype.getDuration = function () {
         var items = this.items;
         var time = 0;
@@ -201,24 +212,19 @@ var Scene = (function (_super) {
         return item;
     };
     Scene.prototype.setItem = function (name, item) {
-        if (name instanceof SceneItem_1["default"]) {
-            var id = name.getId() || name.setId().getId();
-            this.items[id] = name;
-            return this;
+        if (item instanceof Animator_1["default"]) {
+            item.setId(name);
         }
-        item.setId(name);
         this.items[name] = item;
         return this;
     };
-    Scene.prototype.setIterationTime = function (time) {
-        _super.prototype.setIterationTime.call(this, time);
-        var iterationTime = this.getIterationTime();
-        var items = this.items;
-        var easing = this.state.easing;
-        for (var id in items) {
-            var item = items[id];
-            item.setTime(iterationTime * item.state.playSpeed, easing, this);
-        }
+    Scene.prototype.animate = function (time, parentEasing) {
+        _super.prototype.setTime.call(this, time);
+        return this._animate(parentEasing);
+    };
+    Scene.prototype.setTime = function (time, parentEasing) {
+        _super.prototype.setTime.call(this, time);
+        this._animate(parentEasing);
         return this;
     };
     Scene.prototype.forEach = function (func) {
@@ -228,21 +234,22 @@ var Scene = (function (_super) {
         }
         return this;
     };
-    Scene.prototype.exportCSS = function () {
+    Scene.prototype.exportCSS = function (duration, state) {
+        if (duration === void 0) { duration = this.getDuration(); }
         var items = this.items;
-        var duration = this.getDuration();
-        if (!duration || !isFinite(duration)) {
-            duration = 0;
+        var totalDuration = duration;
+        if (!totalDuration || !isFinite(totalDuration)) {
+            totalDuration = 0;
         }
         for (var id in items) {
             var item = items[id];
-            item.exportCSS(duration, this.state);
+            item.exportCSS(totalDuration, this.state);
         }
         return this;
     };
     Scene.prototype.append = function (item) {
         item.setDelay(item.getDelay() + this.getDuration());
-        this.setItem(item);
+        this.setItem(item.getId() || item.setId().getId(), item);
     };
     Scene.prototype.playCSS = function (exportCSS, properties) {
         var _this = this;
@@ -292,7 +299,7 @@ var Scene = (function (_super) {
             }
             var object = properties[name_2];
             var item = void 0;
-            if (object instanceof SceneItem_1["default"]) {
+            if (object instanceof Scene || object instanceof SceneItem_1["default"]) {
                 this.setItem(name_2, object);
                 item = object;
             }
@@ -303,6 +310,28 @@ var Scene = (function (_super) {
             isSelector && item.setSelector(name_2);
         }
         this.setOptions(options);
+    };
+    Scene.prototype.setSelector = function (_) {
+        var isSelector = this.options.selector;
+        this.forEach(function (item, name) {
+            item.setSelector(isSelector ? name : false);
+        });
+    };
+    Scene.prototype._animate = function (parentEasing) {
+        var iterationTime = this.getIterationTime();
+        var items = this.items;
+        var easing = this.getEasing() || parentEasing;
+        var frames = {};
+        for (var id in items) {
+            var item = items[id];
+            frames[id] = item.animate(iterationTime * item.getPlaySpeed(), easing);
+        }
+        this.trigger("animate", {
+            currentTime: this.getTime(),
+            time: iterationTime,
+            frames: frames
+        });
+        return frames;
     };
     Scene.VERSION = "#__VERSION__#";
     return Scene;
@@ -359,6 +388,7 @@ var Animator = (function (_super) {
         var _this = _super.call(this) || this;
         _this.options = {};
         _this.state = {
+            id: "",
             easing: 0,
             easingName: "linear",
             iterationCount: 1,
@@ -716,6 +746,22 @@ function setAlias(name, alias) {
     consts_1.ALIAS[name] = alias;
 }
 exports.setAlias = setAlias;
+function setRole(names, isProperty, isFixedProperty) {
+    var length = names.length;
+    var roles = consts_1.ROLES;
+    var fixed = consts_1.FIXED;
+    for (var i = 0; i < length - 1; ++i) {
+        !roles[names[i]] && (roles[names[i]] = {});
+        roles = roles[names[i]];
+        if (isFixedProperty) {
+            !fixed[names[i]] && (fixed[names[i]] = {});
+            fixed = fixed[names[i]];
+        }
+    }
+    isFixedProperty && (fixed[names[length - 1]] = true);
+    roles[names[length - 1]] = isProperty ? true : {};
+}
+exports.setRole = setRole;
 function getType(value) {
     var type = typeof value;
     if (type === "object") {
@@ -831,7 +877,7 @@ exports.__esModule = true;
 exports.PREFIX = "__SCENEJS_";
 exports.timingFunction = "animation-timing-function";
 exports.ROLES = { transform: {}, filter: {}, attribute: {} };
-exports.ALIAS = { easing: ["timing-function"] };
+exports.ALIAS = { easing: ["animation-timing-function"] };
 exports.FIXED = { "animation-timing-function": true, "contents": true };
 exports.MAXIMUM = 1000000;
 exports.THRESHOLD = 0.000001;
@@ -1008,7 +1054,7 @@ var SceneItem = (function (_super) {
         var elements = this.elements;
         var length = elements.length;
         this.setState({ id: id || makeId(!!length) });
-        var sceneId = toId(this.state.id);
+        var sceneId = toId(this.getId());
         this.options.selector || (this.options.selector = "[data-scene-id=\"" + sceneId + "\"]");
         if (!length) {
             return this;
@@ -1042,8 +1088,8 @@ var SceneItem = (function (_super) {
                     _this.set(realTime_1 + t, frames_1[values_1[t]]);
                 });
                 if (easing) {
-                    this.set(realTime_1, consts_1.timingFunction, easing);
-                    this.set(realTime_1 + keys[keys.length - 1], consts_1.timingFunction, "initial");
+                    this.set(realTime_1 + keys[0], "easing", easing);
+                    this.set(realTime_1 + keys[keys.length - 1], "easing", "initial");
                 }
                 return this;
             }
@@ -1074,6 +1120,7 @@ var SceneItem = (function (_super) {
         }
         var frame = this.getFrame(time);
         frame && frame.remove.apply(frame, args);
+        this.update();
         return this;
     };
     SceneItem.prototype.append = function (item) {
@@ -1084,8 +1131,14 @@ var SceneItem = (function (_super) {
         if (item instanceof SceneItem) {
             var delay = item.getDelay();
             var duration = item.getIterationCount() === "infinite" ? item.getDuration() : item.getActiveDuration();
-            this.keyframes.unshift(duration + delay);
+            var unshiftTime = duration + delay;
+            var firstFrame = this.keyframes.get(0);
+            if (firstFrame) {
+                this.keyframes.remove(0);
+            }
+            this.keyframes.unshift(unshiftTime);
             this.set(0, item);
+            this.set(unshiftTime + consts_1.THRESHOLD, firstFrame);
         }
         else {
             this.prepend(new SceneItem(item));
@@ -1110,9 +1163,13 @@ var SceneItem = (function (_super) {
         this.set(time, css_1.fromCSS(this.elements, properties));
         return this;
     };
-    SceneItem.prototype.setTime = function (time, parentEasing, parent) {
+    SceneItem.prototype.animate = function (time, parentEasing) {
         _super.prototype.setTime.call(this, time);
-        this.animate(parentEasing, parent);
+        return this._animate(parentEasing);
+    };
+    SceneItem.prototype.setTime = function (time, parentEasing) {
+        _super.prototype.setTime.call(this, time);
+        this._animate(parentEasing);
         return this;
     };
     SceneItem.prototype.update = function () {
@@ -1404,44 +1461,6 @@ var SceneItem = (function (_super) {
         animatedElement.addEventListener("animationiteration", animationiteration);
         return this;
     };
-    SceneItem.prototype.animate = function (parentEasing, parent) {
-        var iterationTime = this.getIterationTime();
-        var easing = this.getEasing() || parentEasing;
-        var frame = this.getNowFrame(iterationTime, easing);
-        var currentTime = this.getTime();
-        this.trigger("animate", {
-            frame: frame,
-            currentTime: currentTime,
-            time: iterationTime
-        });
-        parent && parent.trigger("animate", {
-            frame: frame,
-            currentTime: currentTime,
-            target: this,
-            time: iterationTime
-        });
-        var elements = this.elements;
-        var length = elements.length;
-        if (!length) {
-            return frame;
-        }
-        var attributes = frame.get("attribute");
-        if (attributes) {
-            for (var name_2 in attributes) {
-                for (var i = 0; i < length; ++i) {
-                    elements[i].setAttribute(name_2, attributes[name_2]);
-                }
-            }
-        }
-        var cssText = frame.toCSS();
-        if (this.state.cssText !== cssText) {
-            this.state.cssText = cssText;
-            for (var i = 0; i < length; ++i) {
-                elements[i].style.cssText += cssText;
-            }
-            return frame;
-        }
-    };
     SceneItem.prototype._getId = function () {
         return this.state.id || this.setId().getId();
     };
@@ -1573,6 +1592,38 @@ var SceneItem = (function (_super) {
             }
         }
         return { left: length - 1, right: length - 1 };
+    };
+    SceneItem.prototype._animate = function (parentEasing) {
+        var iterationTime = this.getIterationTime();
+        var easing = this.getEasing() || parentEasing;
+        var frame = this.getNowFrame(iterationTime, easing);
+        var currentTime = this.getTime();
+        this.trigger("animate", {
+            frame: frame,
+            currentTime: currentTime,
+            time: iterationTime
+        });
+        var elements = this.elements;
+        var length = elements.length;
+        if (!length) {
+            return frame;
+        }
+        var attributes = frame.get("attribute");
+        if (attributes) {
+            for (var name_2 in attributes) {
+                for (var i = 0; i < length; ++i) {
+                    elements[i].setAttribute(name_2, attributes[name_2]);
+                }
+            }
+        }
+        var cssText = frame.toCSS();
+        if (this.state.cssText !== cssText) {
+            this.state.cssText = cssText;
+            for (var i = 0; i < length; ++i) {
+                elements[i].style.cssText += cssText;
+            }
+            return frame;
+        }
     };
     return SceneItem;
 }(Animator_1["default"]));
@@ -2363,7 +2414,7 @@ function dot(a1, a2, b1, b2) {
         else if (type1 === "array") {
             return dotArray(a1, a2, b1, b2);
         }
-        else if (type1 === "object" || type1 === "boolean" || type1 === "function") {
+        else if (type1 !== "value") {
             return a1;
         }
     }
