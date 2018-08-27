@@ -1,9 +1,6 @@
 import Frame from "../../src/Frame.ts";
-import {SCENE_ROLES} from "../../src/consts.ts";
+import {setAlias} from "../../src/utils.ts";
 /* eslint-disable */
-
-SCENE_ROLES["transform"] = true;
-SCENE_ROLES["filter"] = true;
 
 describe("Frame Test", function() {
     describe("test frame initialize", function() {
@@ -26,7 +23,7 @@ describe("Frame Test", function() {
                 }
             });
 
-            expect(frame.get("transform", "scale").toValue()).to.be.equals("1,2");
+            expect(frame.get("transform", "scale")).to.be.equals("1,2");
             expect(frame.get("filter", "brightness")).to.be.equals("90%");
             expect(frame.get("a")).to.be.equals(1);
             expect(frame.get("b")).to.be.equals(2);
@@ -74,15 +71,16 @@ describe("Frame Test", function() {
             // Given
             // When
             this.frame.set("a :2; b:3 ; c :1;transform:translate(10px, 20px) scale(10px); d: 1; e : 2;");
-            
+            this.frame.set("f", "path(1,4,3,2");
             // Then
             expect(parseFloat(this.frame.get("a"))).to.be.equals(2);
             expect(parseFloat(this.frame.get("b"))).to.be.equals(3);
             expect(parseFloat(this.frame.get("c"))).to.be.equals(1);
             expect(parseFloat(this.frame.get("d"))).to.be.equals(1);
             expect(parseFloat(this.frame.get("e"))).to.be.equals(2);
-            expect(this.frame.get("transform", "translate").toValue()).to.be.equals("10px,20px");
+            expect(this.frame.get("transform", "translate")).to.be.equals("10px,20px");
             expect(this.frame.get("transform", "scale")).to.be.equals("10px");
+            expect(this.frame.get("f")).to.be.equals("path(1,4,3,2");
         });
         it("sholud check clone method", () => {
             const frame2 = this.frame.clone();
@@ -103,8 +101,8 @@ describe("Frame Test", function() {
             expect(frame2.get("a")).to.be.equals(1);
             expect(frame2.get("b")).to.be.equals(2);
             expect(frame2.get("c")).to.be.equals(5);
-            expect(frame2.get("transform", "translate").toValue()).to.be.equals("10px,10px");
-            expect(frame2.get("transform", "scale").toValue()).to.be.equals("1,2");
+            expect(frame2.get("transform", "translate")).to.be.equals("10px,10px");
+            expect(frame2.get("transform", "scale")).to.be.equals("1,2");
             expect(frame2.get("filter", "brightness")).to.be.equals("90%");
             expect(frame2.get("filter", "grayscale")).to.be.equals("50%");
         });
@@ -154,6 +152,27 @@ describe("Frame Test", function() {
                     brightness: "90%",
                 }
             });
+        });
+
+        it (`should check alias test`, () => {
+            setAlias("tx", ["transform", "translateX"]);
+            setAlias("ty", ["transform", "translateY"]);
+            setAlias("tz", ["transform", "translateZ"]);            
+            this.frame.set("easing", 1);
+            this.frame.set("tx", 2);
+            this.frame.set("tz", 2);
+            this.frame.remove("tz");
+
+            expect(this.frame.has("easing")).to.be.true;
+            expect(this.frame.has("animation-timing-function")).to.be.true;
+            expect(this.frame.has("ease")).to.be.false;
+            expect(this.frame.has("ty")).to.be.false;
+            expect(this.frame.has("tz")).to.be.false;
+            expect(this.frame.get("easing")).to.be.equals(1);
+            expect(this.frame.get("animation-timing-function")).to.be.equals(1);
+            expect(this.frame.get("tx")).to.be.equals(2);
+            expect(this.frame.get("transform", "scale")).to.be.equals("1,2");
+            expect(this.frame.get("transform", "translateX")).to.be.equals(2);
         });
     });
     describe("test frame for CSS", function() {

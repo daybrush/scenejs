@@ -74,11 +74,18 @@ describe("property Test", function() {
             const obj = toPropertyObject([0, 0, 0]);
             const obj2 = toColorObject("hsl(0, 0.4, 0.5)");
             const obj3 = toColorObject("hsla(0, 40%, 50%, 0.4)");
+            const obj4 = toColorObject("hsla(0, 40%, 50%, 0.4");
 
             expect(obj.toValue()).to.be.equals("0,0,0");
             expect(obj.options.type).to.be.equals("array");
             expect(obj2.toValue()).to.be.equals("rgba(179,77,77,1)");
             expect(obj3.toValue()).to.be.equals("rgba(179,77,77,0.4)");
+            expect(obj4).to.be.equals("hsla(0, 40%, 50%, 0.4");
+        });
+        it (`should check 'toPropertyObject' method with Quotes`, () => {
+
+            expect(toPropertyObject("'1'").toValue()).to.be.equals("'1'");
+            expect(toPropertyObject("p('1')").toValue()).to.be.equals("p('1')");
         });
         it (`should check 'splitStyle' method`, () => {
             const obj = splitStyle(`a:1; b:2; c: 3;`);

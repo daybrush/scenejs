@@ -1,7 +1,9 @@
 import SceneItem from "../../src/SceneItem.ts";
 import {THRESHOLD} from "../../src/consts.ts";
+import {EASE_IN_OUT} from "../../src/easing";
 import removeProperty from "./injections/ClassListInjection";
 import { orderByASC, group } from "./TestHelper";
+import { setRole } from "../../src/utils";
 /* eslint-disable */
 
 
@@ -537,7 +539,7 @@ describe("SceneItem Test", function() {
             expect(width).to.be.undefined;
             expect(border).to.be.undefined;
             expect(width2).to.be.equals("200px");
-            expect(border2.toValue()).to.be.equals("5px solid rgba(0,0,0,1)");
+            expect(border2).to.be.equals("5px solid rgba(0,0,0,1)");
         });
         it("should check 'exportCSS' method", () => {
             // Given
@@ -548,6 +550,30 @@ describe("SceneItem Test", function() {
             // Then
             
             expect(document.querySelector(`#__SCENEJS_STYLE_${id}`)).to.be.ok;
+        });
+        it (`should check role test`, () => {
+            // Given
+            setRole(["html"], true, true);
+            setRole(["html2"], true, false);
+            setRole(["html3"], false);        
+
+            // When
+            this.item.set(0, "html", "a(1) b(2) c(3)");
+            this.item.set(2, "html", "a(3) b(4) c(5)");
+            this.item.set(0, "html2", "a(1) b(2) c(3)");
+            this.item.set(2, "html2", "a(3) b(4) c(5)");
+            this.item.set(0, "html3", "a(1) b(2) c(3)");
+            this.item.set(2, "html3", "a(3) b(4) c(5)");            
+
+            // Then
+            const frame = this.item.getNowFrame(1);
+
+            expect(frame.get("html")).to.be.equals("a(1) b(2) c(3)");
+            expect(frame.get("html2")).to.be.equals("a(2) b(3) c(4)");
+            expect(frame.get("html3")).to.be.deep.equals({a: 2, b: 3, c: 4});
+            expect(frame.get("html3", "a")).to.be.deep.equals(2);
+            expect(frame.get("html3", "b")).to.be.deep.equals(3);
+            expect(frame.get("html3", "c")).to.be.deep.equals(4);
         });
         it (`should check 'append' method`, () => {
             this.item.append(new SceneItem({
@@ -569,14 +595,17 @@ describe("SceneItem Test", function() {
                 }
             }, {
                 iterationCount: 2,
+                easing: EASE_IN_OUT,
             }));
 
+            
             // Then
             expect(this.item.getDuration()).to.be.equals(4);
             expect(this.item.get(1, "a")).to.be.equals(2);
             expect(this.item.get(1 + THRESHOLD, "a")).to.be.equals(3);
             expect(this.item.get("1>", "a")).to.be.equals(3);
             expect(this.item.get(2, "a")).to.be.equals(5);
+
             expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(4);
             expect(this.item.get("2>", "a")).to.be.equals(4);
             expect(this.item.get(3, "a")).to.be.equals(6);            
@@ -584,6 +613,60 @@ describe("SceneItem Test", function() {
             expect(this.item.get("3>", "a")).to.be.equals(4);
             expect(this.item.get("3>", "a")).to.be.equals(4);
             expect(this.item.get(4, "a")).to.be.equals(6);
+
+            expect(this.item.get(2, "easing")).to.be.not.ok;
+            expect(this.item.get("2>", "easing")).to.be.equals(EASE_IN_OUT);
+            expect(this.item.get("2>", "animation-timing-function")).to.be.equals(EASE_IN_OUT);
+            expect(this.item.get(4, "easing")).to.be.equals("initial");
+        });
+        it (`should check 'prepend' method`, () => {
+            this.item.prepend(new SceneItem({
+                0: {
+                    a: 3,
+                },
+                1: {
+                    a: 5,
+                }
+            }, {
+                iterationCount: 1,
+            }));
+            this.item.prepend(new SceneItem({
+                0: {
+                    a: 4,
+                },
+                1: {
+                    a: 6,
+                }
+            }, {
+                iterationCount: 2,
+                easing: EASE_IN_OUT,
+            }));
+            /*
+            0: {
+                a: 1,
+                display: "block",
+            },
+            1: {
+                display: "none",
+                a: 2,
+            },
+
+            */
+            // Then
+            expect(this.item.getDuration()).to.be.equals(4);
+
+            expect(this.item.get(0, "a")).to.be.equals(4);
+            expect(this.item.get(1, "a")).to.be.equals(6);
+            expect(this.item.get("1>", "a")).to.be.equals(4);
+            expect(this.item.get(2, "a")).to.be.equals(6);
+            expect(this.item.get(0, "easing")).to.be.equals(EASE_IN_OUT);
+            expect(this.item.get(2, "easing")).to.be.equals("initial");
+
+            expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(3);
+            expect(this.item.get(3, "a")).to.be.equals(5);
+
+            expect(this.item.get(3 + THRESHOLD, "a")).to.be.equals(1);
+            expect(this.item.get(4, "a")).to.be.equals(2);
         });
         const expectations = {
             "normal": {
