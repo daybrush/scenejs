@@ -1,6 +1,25 @@
-import { SCENE_ROLES, ObjectInterface, MAXIMUM, FIXED } from "./consts";
+import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS } from "./consts";
 import PropertyObject from "./PropertyObject";
 
+export function setAlias(name: string, alias: string[]) {
+	ALIAS[name] = alias;
+}
+export function setRole(names: string[], isProperty?: boolean, isFixedProperty?: boolean) {
+	const length = names.length;
+	let roles: any = ROLES;
+	let fixed: any  = FIXED;
+
+	for (let i = 0; i < length - 1; ++i) {
+		!roles[names[i]] && (roles[names[i]] = {});
+		roles = roles[names[i]];
+		if (isFixedProperty) {
+			!fixed[names[i]] && (fixed[names[i]] = {});
+			fixed = fixed[names[i]];
+		}
+	}
+	isFixedProperty && (fixed[names[length - 1]] = true);
+	roles[names[length - 1]] = isProperty ? true : {};
+}
 export function getType(value: any) {
 	const type = typeof value;
 
@@ -37,7 +56,7 @@ export function isInProperties(roles: ObjectInterface<any>, args: any[], isCheck
 	return true;
 }
 export function isRole(args: any[], isCheckTrue?: boolean) {
-	return isInProperties(SCENE_ROLES, args, isCheckTrue);
+	return isInProperties(ROLES, args, isCheckTrue);
 }
 export function isFixed(args: any[]) {
 	return isInProperties(FIXED, args, true);

@@ -9,7 +9,8 @@ export type NameType = string | number;
 
 export const PREFIX = "__SCENEJS_";
 export const timingFunction = "animation-timing-function";
-export const SCENE_ROLES: RoleInterface = {transform: {}, filter: {}, attribute: {}};
+export const ROLES: RoleInterface = {transform: {}, filter: {}, attribute: {}};
+export const ALIAS: ObjectInterface<string[]> = {easing: ["animation-timing-function"]};
 export const FIXED = {"animation-timing-function": true, "contents": true};
 export const MAXIMUM = 1000000;
 export const THRESHOLD = 0.000001;

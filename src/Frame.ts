@@ -1,4 +1,4 @@
-import {TRANSFORM, FILTER, ObjectInterface, NameType, ANIMATION, timingFunction} from "./consts";
+import {TRANSFORM, FILTER, ObjectInterface, NameType, ANIMATION, timingFunction, ALIAS} from "./consts";
 import {isObject, isString, isArray, isRole, getType} from "./utils";
 import {toPropertyObject, splitStyle, toObject} from "./utils/property";
 import PropertyObject from "./PropertyObject";
@@ -85,13 +85,14 @@ class Frame {
 
 	public raw(...args: NameType[]) {
 		let properties = this.properties;
-		const length = args.length;
+		const params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+		const length = params.length;
 
 		for (let i = 0; i < length; ++i) {
 			if (!isObject(properties)) {
 				return undefined;
 			}
-			properties = properties[args[i]];
+			properties = properties[params[i]];
 		}
 		return properties;
 	}
@@ -105,7 +106,8 @@ class Frame {
 	*/
 	public remove(...args: NameType[]) {
 		let properties = this.properties;
-		const length = args.length;
+		const params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+		const length = params.length;
 
 		if (!length) {
 			return this;
@@ -114,9 +116,9 @@ class Frame {
 			if (!isObject(properties)) {
 				return this;
 			}
-			properties = properties[args[i]];
+			properties = properties[params[i]];
 		}
-		delete properties[args[length - 1]];
+		delete properties[params[length - 1]];
 		return this;
 	}
 	/**
@@ -152,7 +154,9 @@ frame.set("transform", "translate", "50px");
 		const params = args.slice(0, -1);
 		const value = args[length - 1];
 
-		if (length === 2 && isArray(params[0])) {
+		if (params[0] in ALIAS) {
+			this._set(ALIAS[params[0]], value);
+		} else if (length === 2 && isArray(params[0])) {
 			this._set(params[0], value);
 		} else if (isObject(value)) {
 			if (isArray(value)) {
@@ -203,16 +207,17 @@ frame.set("transform", "translate", "50px");
 	*/
 	public has(...args: NameType[]) {
 		let properties = this.properties;
-		const length = args.length;
+		const params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+		const length = params.length;
 
 		if (!length) {
 			return false;
 		}
 		for (let i = 0; i < length; ++i) {
-			if (!isObject(properties) || !(args[i] in properties)) {
+			if (!isObject(properties) || !(params[i] in properties)) {
 				return false;
 			}
-			properties = properties[args[i]];
+			properties = properties[params[i]];
 		}
 		return true;
 	}

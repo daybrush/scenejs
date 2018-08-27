@@ -155,7 +155,7 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
 			return dotObject(a1, a2, b1, b2);
 		} else if (type1 === "array") {
 			return dotArray(a1, a2, b1, b2);
-		} else if (type1 === "object" || type1 === "boolean" || type1 === "function") {
+		} else if (type1 !== "value") {
 			return a1;
 		}
 	} else {
