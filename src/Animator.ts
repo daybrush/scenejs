@@ -27,6 +27,7 @@ export type DirectionType = "normal" | "reverse" | "alternate" | "alternate-reve
 export type PlayStateType = "paused" | "running";
 
 export interface StateInterface {
+	id?: string;
 	easing?: EasingType;
 	easingName?: string;
 	iterationCount?: IterationCountType;
@@ -80,6 +81,7 @@ class Animator extends EventTrigger {
 		super();
 		this.options = {};
 		this.state = {
+			id: "",
 			easing: 0,
 			easingName: "linear",
 			iterationCount: 1,

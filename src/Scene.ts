@@ -1,7 +1,8 @@
-import Animator from "./Animator";
+import Animator, { StateInterface, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
 import {ANIMATION, ObjectInterface} from "./consts";
 import {has} from "./utils";
+import Frame from "./Frame";
 
 /**
 * manage sceneItems and play Scene.
@@ -41,12 +42,19 @@ class Scene extends Animator {
 	* Scene.VERSION // #__VERSION__#
 	*/
 	public static VERSION = "#__VERSION__#";
-	public items: ObjectInterface<SceneItem>;
+	public items: ObjectInterface<Scene | SceneItem>;
 
 	constructor(properties: object, options: object) {
 		super();
 		this.items = {};
 		this.load(properties, options);
+	}
+	public setId(id: string = `scene${Math.floor(Math.random() * 100000)}`) {
+		this.state.id = id;
+		return this;
+	}
+	public getId() {
+		return this.state.id;
 	}
 	public getDuration() {
 		const items = this.items;
@@ -122,48 +130,32 @@ const item = scene.newItem("item1")
 	* @example
 const item = scene.newItem("item1")
 	*/
-	public setItem(name: string | SceneItem, item?: SceneItem) {
-		if (name instanceof SceneItem) {
-			const id = name.getId() || name.setId().getId();
-
-			this.items[id] = name;
-			return this;
+	public setItem(name: string, item?: Scene | SceneItem) {
+		if (item instanceof Animator) {
+			item.setId(name);
 		}
-		item.setId(name);
 		this.items[name] = item;
 		return this;
 	}
-	public setIterationTime(time: number) {
-		super.setIterationTime(time);
-		const iterationTime = this.getIterationTime();
-		const items = this.items;
-		const easing = this.state.easing;
-
-		for (const id in items) {
-			const item = items[id];
-
-			/**
-			 * This event is fired when timeupdate and animate.
-			 * @event Scene#animate
-			 * @param {Number} param.currentTime The total time that the animator is running.
-			 * @param {Number} param.time The iteration time during duration that the animator is running.
-			 * @param {Frame} param.frame frame of that time.
-			 * @param {Scene.SceneItem} param.target The scene item that timeupdate and animate.
-			 */
-			item.setTime(iterationTime * item.state.playSpeed, easing, this);
-		}
+	public animate(time: number, parentEasing?: EasingType) {
+		super.setTime(time);
+		return this._animate(parentEasing);
+	}
+	public setTime(time: number, parentEasing?: EasingType) {
+		super.setTime(time);
+		this._animate(parentEasing);
 		return this;
 	}
 	/**
 	 * executes a provided function once for each scene item.
 	 * @method Scene#forEach
 	 * @param {Function} func Function to execute for each element, taking three arguments
-	 * @param {Scene.SceneItem} [func.item] The value of the item being processed in the scene.
+	 * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
 	 * @param {string} [func.name] The name of the item being processed in the scene.
 	 * @param {object} [func.items] The object that forEach() is being applied to.
 	 * @return {Scene} An instance itself
 	 */
-	public forEach(func: (item?: SceneItem, name?: string, items?: ObjectInterface<SceneItem>) => void) {
+	public forEach(func: (item?: Scene | SceneItem, name?: string, items?: ObjectInterface<Scene | SceneItem>) => void) {
 		const items = this.items;
 
 		for (const name in items) {
@@ -176,23 +168,23 @@ const item = scene.newItem("item1")
 	 * @method Scene#exportCSS
 	 * @return {Scene} An instance itself
 	 */
-	public exportCSS() {
+	public exportCSS(duration: number = this.getDuration(), state?: StateInterface) {
 		const items = this.items;
-		let duration = this.getDuration();
+		let totalDuration = duration;
 
-		if (!duration || !isFinite(duration)) {
-			duration = 0;
+		if (!totalDuration || !isFinite(totalDuration)) {
+			totalDuration = 0;
 		}
 		for (const id in items) {
 			const item = items[id];
 
-			item.exportCSS(duration, this.state);
+			item.exportCSS(totalDuration, this.state);
 		}
 		return this;
 	}
-	public append(item: SceneItem) {
+	public append(item: SceneItem | Scene) {
 		item.setDelay(item.getDelay() + this.getDuration());
-		this.setItem(item);
+		this.setItem(item.getId() || item.setId().getId(), item);
 	}
 	/**
 	* Play using the css animation and keyframes.
@@ -221,7 +213,7 @@ scene.playCSS(false, {
 		exportCSS && this.exportCSS();
 
 		const items = this.items;
-		let animationItem: SceneItem;
+		let animationItem: Scene | SceneItem;
 
 		for (const id in items) {
 			const item = items[id];
@@ -251,7 +243,7 @@ scene.playCSS(false, {
 		this.trigger("play");
 		return this;
 	}
-	private load(properties: any = {}, options = properties.options) {
+	public load(properties: any = {}, options = properties.options) {
 		const isSelector = options && options.selector;
 
 		for (const name in properties) {
@@ -261,7 +253,7 @@ scene.playCSS(false, {
 			const object = properties[name];
 			let item;
 
-			if (object instanceof SceneItem) {
+			if (object instanceof Scene || object instanceof SceneItem) {
 				this.setItem(name, object);
 				item = object;
 			} else {
@@ -271,6 +263,38 @@ scene.playCSS(false, {
 			isSelector && item.setSelector(name);
 		}
 		this.setOptions(options);
+	}
+	public setSelector(_: string | boolean) {
+		const isSelector = this.options.selector;
+
+		this.forEach((item, name) => {
+			item.setSelector(isSelector ? name : false);
+		});
+	}
+	private _animate(parentEasing?: EasingType) {
+		const iterationTime = this.getIterationTime();
+		const items = this.items;
+		const easing = this.getEasing() || parentEasing;
+		const frames: ObjectInterface<ObjectInterface<any> | Frame> = {};
+
+		for (const id in items) {
+			const item = items[id];
+
+			frames[id] = item.animate(iterationTime * item.getPlaySpeed(), easing);
+		}
+		/**
+		 * This event is fired when timeupdate and animate.
+		 * @event Scene#animate
+		 * @param {Number} param.currentTime The total time that the animator is running.
+		 * @param {Number} param.time The iteration time during duration that the animator is running.
+		 * @param {Frame} param.frames frame of that time.
+		 */
+		this.trigger("animate", {
+			currentTime: this.getTime(),
+			time: iterationTime,
+			frames,
+		});
+		return frames;
 	}
 }
 export default Scene;

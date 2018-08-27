@@ -119,7 +119,7 @@ console.log(item.getId()); // item
 		const length = elements.length;
 
 		this.setState({id: id || makeId(!!length)});
-		const sceneId = toId(this.state.id);
+		const sceneId = toId(this.getId());
 
 		this.options.selector || (this.options.selector = `[data-scene-id="${sceneId}"]`);
 
@@ -168,8 +168,8 @@ console.log(item.get(0, "a")); // "b"
 					this.set(realTime + t, frames[values[t]]);
 				});
 				if (easing) {
-					this.set(realTime, timingFunction, easing);
-					this.set(realTime + keys[keys.length - 1], timingFunction, "initial");
+					this.set(realTime + keys[0], "easing", easing);
+					this.set(realTime + keys[keys.length - 1], "easing", "initial");
 				}
 				return this;
 			} else if (args.length === 1 && isArray(args[0])) {
@@ -211,6 +211,7 @@ item.remove(0, "a");
 		const frame = this.getFrame(time);
 
 		frame && frame.remove(...args);
+		this.update();
 		return this;
 	}
 	/**
@@ -256,8 +257,15 @@ item.set(item.getDuration(), {
 		if (item instanceof SceneItem) {
 			const delay = item.getDelay();
 			const duration = item.getIterationCount() === "infinite" ? item.getDuration() : item.getActiveDuration();
-			this.keyframes.unshift(duration + delay);
+			const unshiftTime = duration + delay;
+			const firstFrame = this.keyframes.get(0);
+
+			if (firstFrame) {
+				this.keyframes.remove(0);
+			}
+			this.keyframes.unshift(unshiftTime);
 			this.set(0, item);
+			this.set(unshiftTime + THRESHOLD, firstFrame);
 		} else {
 			this.prepend(new SceneItem(item));
 		}
@@ -308,10 +316,13 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		this.set(time, fromCSS(this.elements, properties));
 		return this;
 	}
-	public setTime(time: number, parentEasing?: EasingType, parent?: any) {
+	public animate(time: number, parentEasing?: EasingType) {
 		super.setTime(time);
-
-		this.animate(parentEasing, parent);
+		return this._animate(parentEasing);
+	}
+	public setTime(time: number, parentEasing?: EasingType) {
+		super.setTime(time);
+		this._animate(parentEasing);
 		return this;
 	}
 	/**
@@ -758,57 +769,6 @@ item.playCSS(false, {
 		animatedElement.addEventListener("animationiteration", animationiteration);
 		return this;
 	}
-	protected animate(parentEasing: EasingType, parent: any) {
-		const iterationTime = this.getIterationTime();
-		const easing = this.getEasing() || parentEasing;
-		const frame = this.getNowFrame(iterationTime, easing);
-		const currentTime = this.getTime();
-
-		/**
-		 * This event is fired when timeupdate and animate.
-		 * @event Scene.SceneItem#animate
-		 * @param {Number} param.currentTime The total time that the animator is running.
-		 * @param {Number} param.time The iteration time during duration that the animator is running.
-		 * @param {Scene.Frame} param.frame frame of that time.
-		 */
-		this.trigger("animate", {
-			frame,
-			currentTime,
-			time: iterationTime,
-		});
-
-		parent && parent.trigger("animate", {
-			frame,
-			currentTime,
-			target: this,
-			time: iterationTime,
-		});
-		const elements = this.elements;
-		const length = elements.length;
-
-		if (!length) {
-			return frame;
-		}
-		const attributes = frame.get("attribute");
-
-		if (attributes) {
-			for (const name in (attributes as any)) {
-				for (let i = 0; i < length; ++i) {
-					elements[i].setAttribute(name, attributes[name]);
-				}
-			}
-		}
-		const cssText = frame.toCSS();
-
-		if (this.state.cssText !== cssText) {
-			this.state.cssText = cssText;
-
-			for (let i = 0; i < length; ++i) {
-				elements[i].style.cssText += cssText;
-			}
-			return frame;
-		}
-	}
 	private _getId() {
 		return this.state.id || this.setId().getId();
 	}
@@ -953,6 +913,50 @@ item.playCSS(false, {
 			}
 		}
 		return {left: length - 1, right: length - 1};
+	}
+	private _animate(parentEasing?: EasingType) {
+		const iterationTime = this.getIterationTime();
+		const easing = this.getEasing() || parentEasing;
+		const frame = this.getNowFrame(iterationTime, easing);
+		const currentTime = this.getTime();
+
+		/**
+		 * This event is fired when timeupdate and animate.
+		 * @event Scene.SceneItem#animate
+		 * @param {Number} param.currentTime The total time that the animator is running.
+		 * @param {Number} param.time The iteration time during duration that the animator is running.
+		 * @param {Scene.Frame} param.frame frame of that time.
+		 */
+		this.trigger("animate", {
+			frame,
+			currentTime,
+			time: iterationTime,
+		});
+		const elements = this.elements;
+		const length = elements.length;
+
+		if (!length) {
+			return frame;
+		}
+		const attributes = frame.get("attribute");
+
+		if (attributes) {
+			for (const name in (attributes as any)) {
+				for (let i = 0; i < length; ++i) {
+					elements[i].setAttribute(name, attributes[name]);
+				}
+			}
+		}
+		const cssText = frame.toCSS();
+
+		if (this.state.cssText !== cssText) {
+			this.state.cssText = cssText;
+
+			for (let i = 0; i < length; ++i) {
+				elements[i].style.cssText += cssText;
+			}
+			return frame;
+		}
 	}
 }
 

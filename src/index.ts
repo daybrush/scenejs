@@ -8,4 +8,5 @@ import Animator from "./Animator";
 import * as presets from "./presets/index";
 
 export {SceneItem, Frame, Animator, Keyframes, PropertyObject, easing, presets};
+export {setRole, setAlias} from "./utils";
 export default Scene;
