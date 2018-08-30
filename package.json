@@ -1,9 +1,9 @@
 {
   "name": "scenejs",
-  "version": "1.0.0-beta2",
+  "version": "1.0.0-beta3",
   "description": "Javascript Animation Library",
   "main": "dist/scene.js",
-  "module": "outjs",
+  "module": "dist/esm",
   "sideEffects": false,
   "types": "declaration/index.d.ts",
   "directories": {
