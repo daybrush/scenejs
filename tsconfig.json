@@ -6,6 +6,8 @@
 	  "noImplicitAny": true,
 	  "module": "commonjs",
 		"target": "es3",
+		"declaration": true,
+		"declarationDir": "./declaration",
 		"noUnusedLocals": true,
 	  "skipLibCheck": true,
 		"lib": ["es2015", "dom"],
