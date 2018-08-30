@@ -31,17 +31,8 @@ const scene = new Scene({
 	}
 });
 */
-class Scene extends Animator {
-	/**
-	* version info
-	* @name Scene.VERSION
-	* @memberof Scene
-	* @static
-	* @type {string}
-	* @example
-	* Scene.VERSION // #__VERSION__#
-	*/
-	public static VERSION = "#__VERSION__#";
+export default class Scene extends Animator {
+
 	public items: ObjectInterface<Scene | SceneItem>;
 
 	constructor(properties: object, options: object) {
@@ -297,4 +288,3 @@ scene.playCSS(false, {
 		return frames;
 	}
 }
-export default Scene;

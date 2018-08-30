@@ -527,8 +527,6 @@ animator.getIterationTime();
  * @method Scene.Animator#getEasingName
  * @return {string} the curve's name.
  */
-const AnimatorPrototype = Animator.prototype;
-
 interface Animator {
 	setDelay(delay: number): this;
 	getDelay(): number;
@@ -547,14 +545,19 @@ interface Animator {
 	getEasing(): EasingType;
 	getEasingName(): string;
 }
-defineGetterSetter(AnimatorPrototype, "delay", "state");
-defineGetterSetter(AnimatorPrototype, "fillMode", "state");
-defineGetterSetter(AnimatorPrototype, "iterationCount", "state");
-defineGetterSetter(AnimatorPrototype, "direction", "state");
-defineGetterSetter(AnimatorPrototype, "playState", "state");
-defineGetterSetter(AnimatorPrototype, "playSpeed", "state");
-defineGetterSetter(AnimatorPrototype, "duration", "state");
-defineGetter(AnimatorPrototype, "easingName", "state");
-defineGetter(AnimatorPrototype, "easing", "state");
+/*#__PURE__*/
+(() => {
+	const AnimatorPrototype = Animator.prototype;
+
+	defineGetterSetter(AnimatorPrototype, "delay", "state");
+	defineGetterSetter(AnimatorPrototype, "fillMode", "state");
+	defineGetterSetter(AnimatorPrototype, "iterationCount", "state");
+	defineGetterSetter(AnimatorPrototype, "direction", "state");
+	defineGetterSetter(AnimatorPrototype, "playState", "state");
+	defineGetterSetter(AnimatorPrototype, "playSpeed", "state");
+	defineGetterSetter(AnimatorPrototype, "duration", "state");
+	defineGetter(AnimatorPrototype, "easingName", "state");
+	defineGetter(AnimatorPrototype, "easing", "state");
+})();
 
 export default Animator;

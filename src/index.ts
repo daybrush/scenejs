@@ -7,6 +7,16 @@ import * as easing from "./easing";
 import Animator from "./Animator";
 import * as presets from "./presets/index";
 
+/**
+* version info
+* @name Scene.VERSION
+* @memberof Scene
+* @static
+* @type {string}
+* @example
+* Scene.VERSION // #__VERSION__#
+*/
+export const VERSION = "#__VERSION__#";
 export {SceneItem, Frame, Animator, Keyframes, PropertyObject, easing, presets};
 export {setRole, setAlias} from "./utils";
-export default Scene;
+export {Scene as default};

@@ -1,3 +1,32 @@
 {
-    "presets": ["es2015"]
+    "env": {
+        "esm": {
+            "presets": [
+                [
+                    "@babel/preset-env",
+                    {
+                        "modules": false,
+                        "loose": true
+                    }
+                ]
+
+            ],
+            "plugins": [
+                "@babel/plugin-transform-typescript"
+            ]
+        },
+        "umd": {
+            "presets": [
+                [
+                    "@babel/preset-env",
+                    {
+                        "loose": true
+                    }
+                ]
+            ],
+            "plugins": [
+                "@babel/plugin-transform-typescript"
+            ]
+        }
+    }
 }
