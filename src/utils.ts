@@ -79,7 +79,6 @@ export function has(object: object, name: string) {
 export function splitUnit(text: string) {
 	const matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
 
-	// const matches = v.match(/([^\d|\.|-|e-|e\+]*)([\d|\.|-|e-|e\+]+)+([^\d|\.|-|e-|e\+]*)/g);
 	if (!matches) {
 		return {prefix: "", unit: "", value: NaN};
 	}
@@ -89,24 +88,9 @@ export function splitUnit(text: string) {
 
 	return {prefix, unit, value: parseFloat(value)};
 }
-export function camelize(str: string) {
-	return str.replace(/[\s-_]([a-z])/g, (all, letter) => letter.toUpperCase());
-}
+// export function camelize(str: string) {
+// 	return str.replace(/[\s-_]([a-z])/g, (all, letter) => letter.toUpperCase());
+// }
 export function decamelize(str: string) {
 	return str.replace(/([a-z])([A-Z])/g, (all, letter, letter2) => `${letter}-${letter2.toLowerCase()}`);
-}
-export function defineGetter(target: any, name: string, parent?: string) {
-	target[camelize(`get ${name}`)] = function() {
-		return (parent ? this[parent] : this)[name];
-	};
-}
-export function defineSetter(target: any, name: string, parent?: string) {
-	target[camelize(`set ${name}`)] = function(value: any) {
-		parent ? (this[parent][name] = value) : (this[name] = value);
-		return this;
-	};
-}
-export function defineGetterSetter(target: any, name: string, parent?: string) {
-	defineGetter(target, name, parent);
-	defineSetter(target, name, parent);
 }

@@ -1,7 +1,7 @@
 import { ObjectInterface } from "./consts";
 import EventTrigger from "./EventTrigger";
 import {bezier, EasingFunctionInterface } from "./easing";
-import {defineGetter, defineGetterSetter, toFixed} from "./utils";
+import {toFixed} from "./utils";
 
 let lastTime = 0;
 
@@ -73,7 +73,7 @@ const animator = new Animator({
 	easing: Scene.eaasing.EASE,
 });
 */
-class Animator extends EventTrigger {
+export default class Animator extends EventTrigger {
 	public state: StateInterface;
 	public options: ObjectInterface<any>;
 
@@ -352,7 +352,149 @@ animator.getIterationTime();
 	public getIterationTime() {
 		return this.state.currentIterationTime;
 	}
-	protected setCurrentIterationCount(iterationCount: number): this {
+	/**
+	 * Get a delay for the start of an animation.
+	 * @method Scene.Animator#getDelay
+	 * @return {number} delay
+	 */
+	public getDelay() {
+		return this.state.delay;
+	}
+	/**
+	 * Set a delay for the start of an animation.
+	 * @method Scene.Animator#setDelay
+	 * @param {number} delay - delay
+	 * @return {Scene.Animator} An instance itself.
+	 */
+	public setDelay(delay: number) {
+		this.state.delay = delay;
+		return this;
+	}
+	/**
+	 * Get fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
+	 * @method Scene.Animator#getFillMode
+	 * @return {"none"|"forwards"|"backwards"|"both"} fillMode
+	 */
+	public getFillMode() {
+		return this.state.fillMode;
+	}
+	/**
+	 * Set fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
+	 * @method Scene.Animator#setFillMode
+	 * @param {"none"|"forwards"|"backwards"|"both"} fillMode - fillMode
+	 * @return {Scene.Animator} An instance itself.
+	 */
+	public setFillMode(fillMode: FillModeType) {
+		this.state.fillMode = fillMode;
+		return this;
+	}
+	/**
+	 * Get the number of times an animation should be played.
+	 * @method Scene.Animator#getIterationCount
+	 * @return {"inifnite"|number} iterationCount
+	 */
+	public getIterationCount() {
+		return this.state.iterationCount;
+	}
+	/**
+	 * Set the number of times an animation should be played.
+	 * @method Scene.Animator#setIterationCount
+	 * @param {"inifnite"|number} iterationCount - iterationCount
+	 * @return {Scene.Animator} An instance itself.
+	 */
+	public setIterationCount(iterationCount: IterationCountType) {
+		this.state.iterationCount = iterationCount;
+		return this;
+	}
+	/**
+	 * Get whether an animation should be played forwards, backwards or in alternate cycles.
+	 * @method Scene.Animator#getDirection
+	 * @return {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction
+	 */
+	public getDirection() {
+		return this.state.direction;
+	}
+	/**
+	 * Set whether an animation should be played forwards, backwards or in alternate cycles.
+	 * @method Scene.Animator#setDirection
+	 * @param {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction - direction
+	 * @return {Scene.Animator} An instance itself.
+	 */
+	public setDirection(direction: DirectionType) {
+		this.state.direction = direction;
+		return this;
+	}
+	/**
+	 * Get whether the animation is running or paused.
+	 * @method Scene.Animator#getPlayState
+	 * @return {"paused"|"running"} playState
+	 */
+	public getPlayState() {
+		return this.state.playState;
+	}
+	/**
+	 * Set whether the animation is running or paused.
+	 * @method Scene.Animator#setPlayState
+	 * @param {"paused"|"running"} playState - playState
+	 * @return {Scene.Animator} An instance itself.
+	 */
+	public setPlayState(playState: PlayStateType) {
+		this.state.playState = playState;
+		return this;
+	}
+	/**
+	 * Get the animator's play speed
+	 * @method Scene.Animator#getPlaySpeed
+	 * @return {number} playSpeed
+	 */
+	public getPlaySpeed() {
+		return this.state.playSpeed;
+	}
+	/**
+	 * Set the animator's play speed
+	 * @method Scene.Animator#setPlaySpeed
+	 * @param {number} playSpeed - playSpeed
+	 * @return {Scene.Animator} An instance itself.
+	 */
+	public setPlaySpeed(playSpeed: number) {
+		this.state.playSpeed = playSpeed;
+		return this;
+	}
+	/**
+	 * Get how long an animation should take to complete one cycle.
+	 * @method Scene.Animator#getDuration
+	 * @return {number} duration
+	 */
+	public getDuration() {
+		return this.state.duration;
+	}
+	/**
+	 * Set how long an animation should take to complete one cycle.
+	 * @method Scene.Animator#setDuration
+	 * @param {number} duration - duration
+	 * @return {Scene.Animator} An instance itself.
+	 */
+	public setDuration(duration: number) {
+		this.state.duration = duration;
+		return this;
+	}
+	/**
+	 * Get the speed curve of an animation.
+	 * @method Scene.Animator#getEasing
+	 * @return {0|function} easing
+	 */
+	public getEasing() {
+		return this.state.easing;
+	}
+	/**
+	 * Get the speed curve's name
+	 * @method Scene.Animator#getEasingName
+	 * @return {string} the curve's name.
+	 */
+	public getEasingName() {
+		return this.state.easingName;
+	}
+ 	protected setCurrentIterationCount(iterationCount: number): this {
 		const state = this.state;
 		const passIterationCount = Math.floor(iterationCount);
 
@@ -440,124 +582,3 @@ animator.getIterationTime();
 		});
 	}
 }
-/**
- * Set a delay for the start of an animation.
- * @method Scene.Animator#setDelay
- * @param {number} delay - delay
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get a delay for the start of an animation.
- * @method Scene.Animator#getDelay
- * @return {number} delay
- */
-/**
- * Set fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
- * @method Scene.Animator#setFillMode
- * @param {"none"|"forwards"|"backwards"|"both"} fillMode - fillMode
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
- * @method Scene.Animator#getFillMode
- * @return {"none"|"forwards"|"backwards"|"both"} fillMode
- */
-/**
- * Set the number of times an animation should be played.
- * @method Scene.Animator#setIterationCount
- * @param {"inifnite"|number} iterationCount - iterationCount
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get the number of times an animation should be played.
- * @method Scene.Animator#getIterationCount
- * @return {"inifnite"|number} iterationCount
- */
-/**
- * Set whether an animation should be played forwards, backwards or in alternate cycles.
- * @method Scene.Animator#setDirection
- * @param {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction - direction
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get whether an animation should be played forwards, backwards or in alternate cycles.
- * @method Scene.Animator#getDirection
- * @return {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction
- */
-/**
- * Set whether the animation is running or paused.
- * @method Scene.Animator#setPlayState
- * @param {"paused"|"running"} playState - playState
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get whether the animation is running or paused.
- * @method Scene.Animator#getPlayState
- * @return {"paused"|"running"} playState
- */
-/**
- * Set the animator's play speed
- * @method Scene.Animator#setPlaySpeed
- * @param {number} playSpeed - playSpeed
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get the animator's play speed
- * @method Scene.Animator#getPlaySpeed
- * @return {number} playSpeed
- */
-/**
- * Set how long an animation should take to complete one cycle.
- * @method Scene.Animator#setDuration
- * @param {number} duration - duration
- * @return {Scene.Animator} An instance itself.
- */
-/**
- * Get how long an animation should take to complete one cycle.
- * @method Scene.Animator#getDuration
- * @return {number} duration
- */
-/**
- * Get the speed curve of an animation.
- * @method Scene.Animator#getEasing
- * @return {0|function} easing
- */
-/**
- * Get the speed curve's name
- * @method Scene.Animator#getEasingName
- * @return {string} the curve's name.
- */
-interface Animator {
-	setDelay(delay: number): this;
-	getDelay(): number;
-	setFillMode(fillMode: FillModeType): this;
-	getFillMode(): FillModeType;
-	setIterationCount(iterationCount: IterationCountType): this;
-	getIterationCount(): IterationCountType;
-	setDirection(direction: IterationCountType): this;
-	getDirection(): IterationCountType;
-	setPlayState(playState: PlayStateType): this;
-	getPlayState(): PlayStateType;
-	setPlaySpeed(playSpeed: number): this;
-	getPlaySpeed(): number;
-	setDuration(duration: number): this;
-	getDuration(): number;
-	getEasing(): EasingType;
-	getEasingName(): string;
-}
-/*#__PURE__*/
-(() => {
-	const AnimatorPrototype = Animator.prototype;
-
-	defineGetterSetter(AnimatorPrototype, "delay", "state");
-	defineGetterSetter(AnimatorPrototype, "fillMode", "state");
-	defineGetterSetter(AnimatorPrototype, "iterationCount", "state");
-	defineGetterSetter(AnimatorPrototype, "direction", "state");
-	defineGetterSetter(AnimatorPrototype, "playState", "state");
-	defineGetterSetter(AnimatorPrototype, "playSpeed", "state");
-	defineGetterSetter(AnimatorPrototype, "duration", "state");
-	defineGetter(AnimatorPrototype, "easingName", "state");
-	defineGetter(AnimatorPrototype, "easing", "state");
-})();
-
-export default Animator;
