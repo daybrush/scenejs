@@ -1,5 +1,6 @@
+import * as React from "react";
 
-export type Easing = (time?: number) => number;
+export type Easing = (time?: number) => number | number[];
 export type Callback = (e?: object) => void;
 
 interface SceneItemProps {

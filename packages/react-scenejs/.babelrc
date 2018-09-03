@@ -1,9 +1,37 @@
 {
-	"presets": [[
-		"env",
-		{
-			"loose": true
-		}
-	], "react", "stage-2"],
-	"plugins": ["add-module-exports"]
+    "env": {
+        "esm": {
+            "presets": [
+                [
+                    "@babel/preset-env",
+                    {
+                        "modules": false,
+                        "loose": true
+                    }
+                ],
+                "@babel/preset-react"
+
+            ],
+            "plugins": [
+                ["@daybrush/babel-plugin-no-side-effect-class-properties"],
+                ["@babel/plugin-proposal-class-properties", { "loose": true }],
+                "@babel/plugin-proposal-object-rest-spread"
+            ]
+        },
+        "umd": {
+            "presets": [
+                [
+                    "@babel/preset-env",
+                    {
+                        "loose": true
+                    }
+                ],
+                "@babel/preset-react"
+            ],
+            "plugins": [
+                ["@babel/plugin-proposal-class-properties", { "loose": true }],
+                "@babel/plugin-proposal-object-rest-spread"
+            ]
+        }
+    }
 }
