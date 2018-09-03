@@ -1,6 +1,6 @@
 {
   "name": "react-scenejs",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "A react component that can easily use scenejs",
   "types": "declaration/index.d.ts",
   "module": "dist/esm/",
@@ -56,8 +56,8 @@
     "write-file-webpack-plugin": "^4.2.0"
   },
   "scripts": {
-    "start": "webpack-dev-server --host=0.0.0.0 ",
-    "build": "npm run build:esm",
+    "start": "BABEL_ENV=umd webpack-dev-server --host=0.0.0.0",
+    "build": "npm run build:umd && npm run build:esm",
     "build:esm": "BABEL_ENV=esm babel src --out-dir dist/esm",
     "build:umd": "BABEL_ENV=umd babel src --out-dir dist/",
     "build:example": "BABEL_ENV=umd webpack",
