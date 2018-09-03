@@ -16,7 +16,6 @@
     "test:chrome": "karma start --chrome",
     "build": "webpack && npm run release:latest && npm run build:esm",
     "build:esm": "BABEL_ENV=esm babel ./src --out-dir ./dist/esm --ignore ./src/index.umd.ts --extensions '.ts' && npm run build:version",
-    "build:outjs2": "tsc -p tsconfig.es6.json && npm run build:version",
     "build:version": "replace-in-file '#__VERSION__#' $npm_package_version dist/esm/index.js",
     "deploy": "gh-pages -d ./demo --dest=./ --add",
     "coveralls": "cat ./coverage/lcov.info | coveralls",

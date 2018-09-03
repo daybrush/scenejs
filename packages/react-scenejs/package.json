@@ -1,6 +1,6 @@
 {
   "name": "react-scenejs",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "A react component that can easily use scenejs",
   "types": "declaration/index.d.ts",
   "module": "dist/esm/",
@@ -35,7 +35,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@daybrush/babel-plugin-no-side-effect-class-properties": "0.0.3",
+    "@daybrush/babel-plugin-no-side-effect-class-properties": "0.0.4",
     "babel-eslint": "^8.2.2",
     "babel-loader": "^8.0.0",
     "babel-polyfill": "^6.26.0",
