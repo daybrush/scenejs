@@ -13,7 +13,7 @@ import * as presets from "./presets/index";
 * @static
 * @type {string}
 * @example
-* Scene.VERSION // 1.0.0-beta2
+* Scene.VERSION // 1.0.0-beta3
 */
 
 export var VERSION = "#__VERSION__#";
