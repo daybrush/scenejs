@@ -7,7 +7,6 @@ export const COLOR_MODELS = ["rgb", "rgba", "hsl", "hsla"];
 /**
 * Remove the # from the hex color.
 * @memberof Color
-* @function cutHex
 * @param {String} hex - hex color
 * @return {String} hex color
 * @example
@@ -20,7 +19,6 @@ export function cutHex(hex: string) {
 /**
 * convert hex color to rgb color.
 * @memberof Color
-* @function hexToRGB
 * @param {String} hex - hex color
 * @return {Array} rgb color
 * @example
@@ -45,7 +43,6 @@ export function hexToRGB(hex: string) {
 /**
 * convert 3-digit hex color to 6-digit hex color.
 * @memberof Color
-* @function hex3to6
 * @param {String} hex - 3-digit hex color
 * @return {String} 6-digit hex color
 * @example
@@ -63,7 +60,6 @@ export function hex3to6(h: string) {
 /**
 * convert hsl color to rgb color.
 * @memberof Color
-* @function hslToRGB
 * @param {Array} hsl - hsl color(hue: 0 ~ 360, saturation: 0 ~ 1, lightness: 0 ~ 1)
 * @return {Array} rgb color
 * @example

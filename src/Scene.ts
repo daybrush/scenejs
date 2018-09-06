@@ -6,8 +6,12 @@ import Frame from "./Frame";
 
 /**
 * manage sceneItems and play Scene.
-* @class Scene
 * @extends Scene.Animator
+*/
+class Scene extends Animator {
+
+	public items: ObjectInterface<Scene | SceneItem>;
+/**
 * @param {Object} [properties] - properties
 * @param {AnimatorOptions} [options] - options
 * @example
@@ -30,11 +34,7 @@ const scene = new Scene({
 		},
 	}
 });
-*/
-export default class Scene extends Animator {
-
-	public items: ObjectInterface<Scene | SceneItem>;
-
+ */
 	constructor(properties: object, options: object) {
 		super();
 		this.items = {};
@@ -139,7 +139,6 @@ const item = scene.newItem("item1")
 	}
 	/**
 	 * executes a provided function once for each scene item.
-	 * @method Scene#forEach
 	 * @param {Function} func Function to execute for each element, taking three arguments
 	 * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
 	 * @param {string} [func.name] The name of the item being processed in the scene.
@@ -156,7 +155,6 @@ const item = scene.newItem("item1")
 	}
 	/**
 	 * Export the CSS of the items to the style.
-	 * @method Scene#exportCSS
 	 * @return {Scene} An instance itself
 	 */
 	public exportCSS(duration: number = this.getDuration(), state?: StateInterface) {
@@ -179,7 +177,6 @@ const item = scene.newItem("item1")
 	}
 	/**
 	* Play using the css animation and keyframes.
-	* @method Scene#playCSS
 	* @param {boolean} [exportCSS=true] Check if you want to export css.
 	* @param {Object} [properties={}] The shorthand properties for six of the animation properties.
 	* @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
@@ -275,7 +272,6 @@ scene.playCSS(false, {
 		}
 		/**
 		 * This event is fired when timeupdate and animate.
-		 * @event Scene#animate
 		 * @param {Number} param.currentTime The total time that the animator is running.
 		 * @param {Number} param.time The iteration time during duration that the animator is running.
 		 * @param {Frame} param.frames frame of that time.
@@ -288,3 +284,5 @@ scene.playCSS(false, {
 		return frames;
 	}
 }
+
+export default Scene;

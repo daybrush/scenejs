@@ -32,17 +32,16 @@ function updateFrame(names: ObjectInterface<any>, properties: ObjectInterface<an
 		updateFrame(names[name], properties[name]);
 	}
 }
-
 /**
- * @memberof Scene
-* @class Scene.Keyframes
 * a list of objects in chronological order.
+* @memberof Scene
 */
-export default class Keyframes {
+class Keyframes {
 	public times: number[];
 	public items: ObjectInterface<any>;
 	public names: RoleInterface;
-
+	/**
+	 */
 	constructor() {
 		this.times = [];
 		this.items = {};
@@ -50,7 +49,6 @@ export default class Keyframes {
 	}
 	/**
 	* A list of names
-	* @method getNames
 	* @return {string[][]} names
 	* @example
 keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scale"]]
@@ -62,7 +60,6 @@ keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scal
 	}
 	/**
 	* Check if keyframes has propery's name
-	* @method hasName
 	* @param {...string[]} name - property's time
 	* @return {Boolean} true: if has property, false: not
 	* @example
@@ -73,7 +70,6 @@ keyframes.hasName("transform", "translate"); // true or not
 	}
 	/**
 	 * update property names used in frames.
-	 * @method Scene.Keyframes#update
 	 * @return {Scene.Keyframes} An instance itself
 	 */
 	public update() {
@@ -86,7 +82,6 @@ keyframes.hasName("transform", "translate"); // true or not
 	}
 	/**
 	 * executes a provided function once for each scene item.
-	 * @method forEach
 	 * @param {Function} callback Function to execute for each element, taking three arguments
 	 * @param {Scene.Frame} [callback.item] The value of the item being processed in the keyframes.
 	 * @param {string} [callback.time] The time of the item being processed in the keyframes.
@@ -103,7 +98,6 @@ keyframes.hasName("transform", "translate"); // true or not
 	}
 	/**
 	* update property names used in frame.
-	* @method updateFrame
 	* @param {Scene.Frame} [frame] - frame of that time.
 	* @return {Scene.Keyframes} An instance itself
 	* @example
@@ -121,7 +115,6 @@ keyframes.updateFrame(frame);
 	}
 	/**
 	 * Get how long an animation should take to complete one cycle.
-	 * @method getDuration
 	 * @return {number} duration
 	 */
 	public getDuration() {
@@ -131,7 +124,6 @@ keyframes.updateFrame(frame);
 	}
 	/**
 	 * Set how long an animation should take to complete one cycle.
-	 * @method setDuration
 	 * @param {number} duration - duration
 	 * @return {Scene.Keyframes} An instance itself.
 	 */
@@ -151,7 +143,6 @@ keyframes.updateFrame(frame);
 	}
 	/**
 	 * Set how much time you want to push ahead.
-	 * @method unshift
 	 * @param {number} time - time
 	 * @return {Scene.Keyframes} An instance itself.
 	 */
@@ -170,7 +161,6 @@ keyframes.updateFrame(frame);
 	}
 	/**
 	* get size of list
-	* @method Scene.Keyframes#size
 	* @return {Number} length of list
 	*/
 	public size() {
@@ -178,7 +168,6 @@ keyframes.updateFrame(frame);
 	}
 	/**
 	* add object in list
-	* @method Scene.Keyframes#add
 	* @param {Number} time - frame's time
 	* @param {Object} object - target
 	* @return {Scene.Keyframes} An instance itself
@@ -190,7 +179,6 @@ keyframes.updateFrame(frame);
 	}
 	/**
 	* Check if keyframes has object at that time.
-	* @method Scene.Keyframes#has
 	* @param {Number} time - object's time
 	* @return {Boolean} true: if has time, false: not
 	*/
@@ -199,7 +187,6 @@ keyframes.updateFrame(frame);
 	}
 	/**
 	* get object at that time.
-	* @method Scene.Keyframes#get
 	* @param {Number} time - object's time
 	* @return {Object} object at that time
 	*/
@@ -208,7 +195,6 @@ keyframes.updateFrame(frame);
 	}
 	/**
 	* remove object at that time.
-	* @method Scene.Keyframes#remove
 	* @param {Number} time - object's time
 	* @return {Keyframes} An instance itself
 	*/
@@ -245,3 +231,4 @@ keyframes.updateFrame(frame);
 		return this;
 	}
 }
+export default Keyframes;
