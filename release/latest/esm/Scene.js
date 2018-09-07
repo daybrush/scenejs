@@ -7,36 +7,37 @@ import { has } from "./utils";
 
 /**
 * manage sceneItems and play Scene.
-* @class Scene
 * @extends Scene.Animator
-* @param {Object} [properties] - properties
-* @param {AnimatorOptions} [options] - options
-* @example
-const scene = new Scene({
-	item1: {
-		0: {
-			display: "none",
-		},
-		1: {
-			display: "block",
-			opacity: 0,
-		},
-		2: {
-			opacity: 1,
-		},
-	},
-	item2: {
-		2: {
-			opacity: 1,
-		},
-	}
-});
 */
 var Scene =
 /*#__PURE__*/
 function (_Animator) {
   _inheritsLoose(Scene, _Animator);
 
+  /**
+  * @param {Object} [properties] - properties
+  * @param {AnimatorOptions} [options] - options
+  * @example
+  const scene = new Scene({
+  	item1: {
+  		0: {
+  			display: "none",
+  		},
+  		1: {
+  			display: "block",
+  			opacity: 0,
+  		},
+  		2: {
+  			opacity: 1,
+  		},
+  	},
+  	item2: {
+  		2: {
+  			opacity: 1,
+  		},
+  	}
+  });
+   */
   function Scene(properties, options) {
     var _this;
 
@@ -173,7 +174,6 @@ function (_Animator) {
   };
   /**
    * executes a provided function once for each scene item.
-   * @method Scene#forEach
    * @param {Function} func Function to execute for each element, taking three arguments
    * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
    * @param {string} [func.name] The name of the item being processed in the scene.
@@ -193,7 +193,6 @@ function (_Animator) {
   };
   /**
    * Export the CSS of the items to the style.
-   * @method Scene#exportCSS
    * @return {Scene} An instance itself
    */
 
@@ -224,7 +223,6 @@ function (_Animator) {
   };
   /**
   * Play using the css animation and keyframes.
-  * @method Scene#playCSS
   * @param {boolean} [exportCSS=true] Check if you want to export css.
   * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
   * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
@@ -357,7 +355,6 @@ function (_Animator) {
     }
     /**
      * This event is fired when timeupdate and animate.
-     * @event Scene#animate
      * @param {Number} param.currentTime The total time that the animator is running.
      * @param {Number} param.time The iteration time during duration that the animator is running.
      * @param {Frame} param.frames frame of that time.
@@ -375,4 +372,4 @@ function (_Animator) {
   return Scene;
 }(Animator);
 
-export { Scene as default };
+export default Scene;

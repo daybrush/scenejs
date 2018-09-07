@@ -36,15 +36,16 @@ function _updateFrame(names, properties) {
   }
 }
 /**
- * @memberof Scene
-* @class Scene.Keyframes
 * a list of objects in chronological order.
+* @memberof Scene
 */
 
 
 var Keyframes =
 /*#__PURE__*/
 function () {
+  /**
+   */
   function Keyframes() {
     this.times = [];
     this.items = {};
@@ -52,7 +53,6 @@ function () {
   }
   /**
   * A list of names
-  * @method getNames
   * @return {string[][]} names
   * @example
   keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scale"]]
@@ -67,7 +67,6 @@ function () {
   };
   /**
   * Check if keyframes has propery's name
-  * @method hasName
   * @param {...string[]} name - property's time
   * @return {Boolean} true: if has property, false: not
   * @example
@@ -84,7 +83,6 @@ function () {
   };
   /**
    * update property names used in frames.
-   * @method Scene.Keyframes#update
    * @return {Scene.Keyframes} An instance itself
    */
 
@@ -100,7 +98,6 @@ function () {
   };
   /**
    * executes a provided function once for each scene item.
-   * @method forEach
    * @param {Function} callback Function to execute for each element, taking three arguments
    * @param {Scene.Frame} [callback.item] The value of the item being processed in the keyframes.
    * @param {string} [callback.time] The time of the item being processed in the keyframes.
@@ -118,7 +115,6 @@ function () {
   };
   /**
   * update property names used in frame.
-  * @method updateFrame
   * @param {Scene.Frame} [frame] - frame of that time.
   * @return {Scene.Keyframes} An instance itself
   * @example
@@ -140,7 +136,6 @@ function () {
   };
   /**
    * Get how long an animation should take to complete one cycle.
-   * @method getDuration
    * @return {number} duration
    */
 
@@ -151,7 +146,6 @@ function () {
   };
   /**
    * Set how long an animation should take to complete one cycle.
-   * @method setDuration
    * @param {number} duration - duration
    * @return {Scene.Keyframes} An instance itself.
    */
@@ -175,7 +169,6 @@ function () {
   };
   /**
    * Set how much time you want to push ahead.
-   * @method unshift
    * @param {number} time - time
    * @return {Scene.Keyframes} An instance itself.
    */
@@ -195,7 +188,6 @@ function () {
   };
   /**
   * get size of list
-  * @method Scene.Keyframes#size
   * @return {Number} length of list
   */
 
@@ -205,7 +197,6 @@ function () {
   };
   /**
   * add object in list
-  * @method Scene.Keyframes#add
   * @param {Number} time - frame's time
   * @param {Object} object - target
   * @return {Scene.Keyframes} An instance itself
@@ -219,7 +210,6 @@ function () {
   };
   /**
   * Check if keyframes has object at that time.
-  * @method Scene.Keyframes#has
   * @param {Number} time - object's time
   * @return {Boolean} true: if has time, false: not
   */
@@ -230,7 +220,6 @@ function () {
   };
   /**
   * get object at that time.
-  * @method Scene.Keyframes#get
   * @param {Number} time - object's time
   * @return {Object} object at that time
   */
@@ -241,7 +230,6 @@ function () {
   };
   /**
   * remove object at that time.
-  * @method Scene.Keyframes#remove
   * @param {Number} time - object's time
   * @return {Keyframes} An instance itself
   */
@@ -286,4 +274,4 @@ function () {
   return Keyframes;
 }();
 
-export { Keyframes as default };
+export default Keyframes;
