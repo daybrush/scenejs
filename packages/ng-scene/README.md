@@ -1,4 +1,7 @@
 # ng-scene [![npm version](https://badge.fury.io/js/ng-scene.svg)](https://badge.fury.io/js/ng-scene)
+It is an angular component of scenejs animation library.
+
+This supports @angular 5.x, 6.x.
 
 * [Raindrop Demo](https://codesandbox.io/s/6vmzwl9nvz)
 
@@ -8,12 +11,12 @@ $ npm install ng-scene  --save
 ```
 
 ## How to use
-* App Module
+* Module
 ```js
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { NgSceneModule, easing } from 'ng-scene';
+import { NgSceneModule } from 'ng-scene';
 
 @NgModule({
   declarations: [
@@ -27,6 +30,25 @@ import { NgSceneModule, easing } from 'ng-scene';
   bootstrap: [AppComponent]
 })
 export class AppModule {}
+```
+* Component
+```ts
+import { Component } from '@angular/core';
+import { easing } from 'ng-scene';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  easing = easing.EASE_IN_OUT;
+  keyframes = {
+    '0': {'border-width': '150px', opacity: 1, transform: 'scale(0)'},
+    '1': {'border-width': '0px', opacity: '0.3', transform: 'scale(0.7)'},
+  };
+}
+
 ```
 * Template
 ```html
@@ -48,7 +70,7 @@ export class AppModule {}
 |autoplay|boolean|false|Check to play automatically|
 |from|object||Start properties|
 |to|object||End properties|
-|keyframes|object||specify properties by time|
+|keyframes|object||Specify properties by time. If not keyframes, use **from**, **to**, and **duration**.|
 |...options|||[Check out the options](https://daybrush.github.io/scenejs/release/latest/doc/global.html#AnimatorOptions)|
 
 ### Events
