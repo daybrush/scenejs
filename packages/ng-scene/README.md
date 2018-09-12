@@ -13,21 +13,14 @@ $ npm install ng-scene  --save
 ## How to use
 * Module
 ```js
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
 import { NgSceneModule } from 'ng-scene';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
   imports: [
-    BrowserModule,
+    ...
     NgSceneModule,
+    ...
   ],
-  providers: [],
-  bootstrap: [AppComponent]
 })
 export class AppModule {}
 ```
@@ -53,8 +46,12 @@ export class AppComponent {
 * Template
 ```html
 <ng-scene iterationCount="infinite" [easing]="easing.EASE_IN_OUT" css autoplay>
-    <div class="raindrop" from="{'left': 0, 'top': }" ng-scene-item>
-    </div>
+    <ng-scene-item
+      [duration]=1
+      [from]="{'border-width': '150px', opacity: 1, transform: 'scale(0)'}"
+      [to]="{'border-width': '0px', opacity: 0, transform: 'scale(1)'}">
+      <div class="raindrop"></div>
+    </ng-scene-item>
     <div class="raindrop" [keyframes]="keyframes" [delay]=0.4 ng-scene-item>
     </div>
     <div class="raindrop" [keyframes]="keyframes" [delay]=0.8 ng-scene-item>
@@ -68,15 +65,15 @@ export class AppComponent {
 |---|---|---|---|
 |css|boolean|false|Check to play with CSS|
 |autoplay|boolean|false|Check to play automatically|
-|from|object||Start properties|
-|to|object||End properties|
-|keyframes|object||Specify properties by time. If not keyframes, use **from**, **to**, and **duration**.|
+|from(ng-scene-item)|object||Start properties. only |
+|tofrom(ng-scene-item)|object||End properties|
+|keyframesfrom(ng-scene-item)|object||Specify properties by time. If not keyframes, use **from**, **to**, and **duration**.|
 |...options|||[Check out the options](https://daybrush.github.io/scenejs/release/latest/doc/global.html#AnimatorOptions)|
 
 ### Events
 The event prefix is **ng**
 ```html
-<ng-scene-item [delay]=1 [duration]=2 (nganimate)="animate($event)" (ngplay)="play($event)" ngpaused="paused($event">
+<ng-scene-item [delay]=1 [duration]=2 (nganimate)="animate($event)" (ngplay)="play($event)" ngpaused="paused($event)">
   <div class="item"></div>
   <div class="item"></div>
   <div class="item"></div>

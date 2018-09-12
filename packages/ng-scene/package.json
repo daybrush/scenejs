@@ -1,6 +1,6 @@
 {
   "name": "ng-scene",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/common/index.js",
   "module": "dist/esm/index.js",
   "sideEffects": false,
@@ -23,6 +23,21 @@
     "type": "git",
     "url": "https://github.com/daybrush/scenejs/tree/master/packages/ng-scene"
   },
+  "keywords": [
+    "scene",
+    "scenejs",
+    "animate",
+    "animation",
+    "css",
+    "requestAnimationFrame",
+    "motion",
+    "angular",
+    "angular 6",
+    "angular 5",
+    "ng"
+  ],
+  "author": "Daybrush",
+  "license": "MIT",
   "dependencies": {
     "scenejs": "^1.0.0-beta3"
   },
