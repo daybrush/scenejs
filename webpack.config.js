@@ -11,6 +11,7 @@ repository: ${pkg.repository.url}
 
 const config = {
 	entry: {
+		"common/scene": `./src/index.ts`,
 		"scene": `./src/index.umd.ts`,
 		"scene.min": `./src/index.umd.ts`,
 	},
