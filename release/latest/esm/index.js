@@ -15,8 +15,8 @@ import * as presets from "./presets/index";
 * @example
 * Scene.VERSION // 1.0.0-beta3
 */
-
 export var VERSION = "#__VERSION__#";
 export { SceneItem, Frame, Animator, Keyframes, PropertyObject, easing, presets };
 export { setRole, setAlias } from "./utils";
 export { Scene as default };
+//# sourceMappingURL=index.js.map
