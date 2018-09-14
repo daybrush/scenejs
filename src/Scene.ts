@@ -132,7 +132,7 @@ const item = scene.newItem("item1")
 		super.setTime(time, true);
 		return this._animate(parentEasing);
 	}
-	public setTime(time: number, isNumber?: boolean, parentEasing?: EasingType) {
+	public setTime(time: number | string, isNumber?: boolean, parentEasing?: EasingType) {
 		super.setTime(time, isNumber);
 		this._animate(parentEasing);
 		return this;
@@ -268,7 +268,7 @@ scene.playCSS(false, {
 		for (const id in items) {
 			const item = items[id];
 
-			frames[id] = item.animate(iterationTime * item.getPlaySpeed(), easing);
+			frames[id] = item.animate(Math.max(iterationTime * item.getPlaySpeed() - item.getDelay(), 0), easing);
 		}
 		/**
 		 * This event is fired when timeupdate and animate.

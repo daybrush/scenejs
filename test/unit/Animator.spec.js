@@ -101,7 +101,7 @@ describe("Animator Test", function() {
 			expect(animator.isPaused()).to.be.equals(false);
 
 			animator.setTime(5);
-			expect(animator.isEnded()).to.be.equals(false);
+			expect(animator.isEnded()).to.be.equals(true);
 			animator.setTime(6);
 			expect(animator.isEnded()).to.be.equals(true);
 		});
@@ -131,9 +131,9 @@ describe("Animator Test", function() {
 
 			// Then
 			expect(time).to.be.equals(0);
-			expect(time2).to.be.equals(3);
-			expect(time3).to.be.equals(2);
-			expect(time4).to.be.equals(1);
+			expect(time2).to.be.equals(4);
+			expect(time3).to.be.equals(3);
+			expect(time4).to.be.equals(2);
 		});
 		it ("should check direction", function () {
 			const animator = new Animator({
@@ -165,20 +165,20 @@ describe("Animator Test", function() {
 
 
 			// Then
-			expect(reversTime).to.be.equals(0);
-			expect(reversTime2).to.be.equals(2);
-			expect(reversTime3).to.be.equals(3);
-			expect(reversTime4).to.be.equals(4);
+			expect(reversTime).to.be.equals(5);
+			expect(reversTime2).to.be.equals(1);
+			expect(reversTime3).to.be.equals(2);
+			expect(reversTime4).to.be.equals(3);
 
 			expect(alternateTime).to.be.equals(0);
-			expect(alternateTime2).to.be.equals(3);
-			expect(alternateTime3).to.be.equals(3);
-			expect(alternateTime4).to.be.equals(1);
+			expect(alternateTime2).to.be.equals(4);
+			expect(alternateTime3).to.be.equals(2);
+			expect(alternateTime4).to.be.equals(2);
 
-			expect(alternateReverseTime).to.be.equals(0);
-			expect(alternateReverseTime2).to.be.equals(2);
-			expect(alternateReverseTime3).to.be.equals(2);
-			expect(alternateReverseTime4).to.be.equals(4);
+			expect(alternateReverseTime).to.be.equals(5);
+			expect(alternateReverseTime2).to.be.equals(1);
+			expect(alternateReverseTime3).to.be.equals(3);
+			expect(alternateReverseTime4).to.be.equals(3);
 		});
 		it ("should check fillMode", function () {
 			const animator = new Animator({
@@ -191,24 +191,24 @@ describe("Animator Test", function() {
 			// When
 			const time = animator.setTime(0).getIterationTime();
 			const time2 = animator.setTime(3).getIterationTime();
-			const time3 = animator.setTime(6).getIterationTime();
-			const time4 = animator.setTime(16).getIterationTime();
+			const time3 = animator.setTime(5).getIterationTime();
+			const time4 = animator.setTime(15).getIterationTime();
 
 			animator.setFillMode("both");
 			const bothTime = animator.setTime(-1).getIterationTime();
 			const bothTime2 = animator.setTime(3).getIterationTime();
 			const bothTime3 = animator.setTime(6).getIterationTime();
-			const bothTime4 = animator.setTime(16).getIterationTime();
+			const bothTime4 = animator.setTime(15).getIterationTime();
 
 			// Then
 			expect(time).to.be.equals(0);
-			expect(time2).to.be.equals(2);
+			expect(time2).to.be.equals(3);
 			expect(time3).to.be.equals(0);
 			expect(time4).to.be.equals(0);
 
 			expect(bothTime).to.be.equals(0);
-			expect(bothTime2).to.be.equals(2);
-			expect(bothTime3).to.be.equals(0);
+			expect(bothTime2).to.be.equals(3);
+			expect(bothTime3).to.be.equals(1);
 			expect(bothTime4).to.be.equals(5);
 		});
 	});
@@ -241,14 +241,68 @@ describe("Animator Test", function() {
 			animator.on("paused", paused);
 			animator.play();
 
+
 			setTimeout(function() {
 				animator.pause();
 				expect(timeupdate.callCount).to.be.ok;
 				expect(paused.calledOnce).to.be.true;
 				expect(animator.isPaused()).to.be.true;
 				expect(animator.isEnded()).to.be.false;
+				animator.off();
 				done();
-			}, 1000);
+			}, 1200);
+		});
+		it("should check ended (no delay)", function(done) {
+			const animator = new Animator({
+				fillMode: "forwards",
+				direction: "none",
+				duration: 2,
+			});
+
+			animator.on("ended", e => {
+				expect(animator.isEnded()).to.be.true;
+				expect(animator.isPaused()).to.be.true;
+				expect(animator.isDelay()).to.be.false;
+				animator.off();
+				done();
+			});
+			animator.on("timeupdate", ({currentTime}) => {
+				if (currentTime < animator.getActiveDuration()) {
+					expect(animator.isEnded()).to.be.false;
+					expect(animator.isPaused()).to.be.false;
+				}
+				expect(animator.isDelay()).to.be.false;
+			});
+			animator.play();
+		});
+		it("should check ended (delay)", function(done) {
+			const animator = new Animator({
+				delay: 1,
+				fillMode: "forwards",
+				direction: "none",
+				duration: 2,
+			});
+
+			animator.on("ended", e => {
+				expect(animator.isDelay()).to.be.false;
+				expect(animator.isEnded()).to.be.true;
+				expect(animator.isPaused()).to.be.true;
+				animator.off();
+				done();
+			});
+			animator.on("timeupdate", ({currentTime}) => {				
+				if (currentTime < animator.getActiveDuration()) {
+					expect(animator.isEnded()).to.be.false;
+					expect(animator.isPaused()).to.be.false;
+				}			
+				
+				if (currentTime > 0) {
+					expect(animator.isDelay()).to.be.false;
+				} else {
+					expect(animator.isDelay()).to.be.true;
+				}
+			});
+			animator.play();
 		});
 	});
 });

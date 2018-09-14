@@ -92,6 +92,7 @@ export default class Animator extends EventTrigger {
 			currentTime: 0,
 			currentIterationTime: -1,
 			currentIterationCount: 0,
+			tickTime: 0,
 			prevTime: 0,
 			playState: "paused",
 			duration: 0,
@@ -192,9 +193,9 @@ animator.getTotalDuration();
 animator.isEnded(); // true or false
 	*/
 	public isEnded(): boolean {
-		if (this.getTime() === 0 && this.state.playState === "paused") {
+		if (this.state.tickTime === 0 && this.state.playState === "paused") {
 			return true;
-		} else if (this.getTime() < this.getTotalDuration()) {
+		} else if (this.getTime() < this.getActiveDuration()) {
 			return false;
 		}
 		return true;
@@ -221,10 +222,12 @@ animator.isPaused(); // true or false
 	* @return {Scene.Animator} An instance itself.
 	*/
 	public play() {
-		if (this.isEnded()) {
-			this.setTime(0);
-		}
 		this.state.playState = "running";
+		if (this.isEnded()) {
+			this.setTickTime(0);
+		}
+		this.state.tickTime = this.getTime();
+
 		requestAnimFrame((time: number) => {
 			this.state.prevTime = time;
 			this.tick(time);
@@ -271,6 +274,7 @@ animator.isPaused(); // true or false
 	* @return {Scene.Animator} An instance itself.
 	*/
 	public reset() {
+		this.state.tickTime = 0;
 		this.setTime(0);
 		this.pause();
 		return this;
@@ -288,18 +292,22 @@ animator.setTime("50%");
 animator.setTime(10);
 animator.getTime() // 10
 	*/
-	public setTime(time: number | string, isNumber?: boolean) {
-		const totalDuration = this.getTotalDuration();
-		let currentTime = isNumber ? (time as number) : this.getUnitTime(time);
+	public setTime(time: number | string, isTick?: boolean) {
+		const activeDuration = this.getActiveDuration();
+		let currentTime = isTick ? (time as number) : this.getUnitTime(time);
 
+		this.state.tickTime = this.state.delay + currentTime;
 		if (currentTime < 0) {
 			currentTime = 0;
-		} else if (currentTime > totalDuration) {
-			currentTime = totalDuration;
+		} else if (currentTime > activeDuration) {
+			currentTime = activeDuration;
 		}
 		this.state.currentTime = currentTime;
 		this.calculateIterationTime();
 
+		if (this.isDelay()) {
+			return this;
+		}
 		/**
 		 * This event is fired when the animator updates the time.
 		 * @event Scene.Animator#timeupdate
@@ -359,16 +367,6 @@ animator.getTime();
 		}
 	}
 	/**
-	* Get the animator's current time excluding delay
-	* @method Scene.Animator#getActiveTime
-	* @return {number} current time excluding delay
-	* @example
-animator.getActiveTime();
-	*/
-	public getActiveTime() {
-		return toFixed(Math.max(this.state.currentTime - this.state.delay, 0));
-	}
-	/**
 	* Get the animator's current iteration time
 	* @method Scene.Animator#getIterationTime
 	* @return {number} current iteration time
@@ -395,6 +393,16 @@ animator.getIterationTime();
 	public setDelay(delay: number) {
 		this.state.delay = delay;
 		return this;
+	}
+	/**
+	 * Check if the current state of animator is delayed.
+	 * @method Scene.Animator#isDelay
+	 * @return {boolean} check delay state
+	 */
+	public isDelay() {
+		const {delay, tickTime} = this.state;
+
+		return delay > 0 && (tickTime < delay);
 	}
 	/**
 	 * Get fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
@@ -546,14 +554,13 @@ animator.getIterationTime();
 		return this;
 	}
 	protected calculateIterationTime() {
-		const {iterationCount, fillMode, direction, currentTime, delay} = this.state;
+		const {iterationCount, fillMode, direction} = this.state;
 		const duration = this.getDuration();
-		const activeTime = this.getActiveTime();
-		const isDelay = currentTime - delay < 0;
-		const currentIterationCount = duration === 0 ? 0 : activeTime / duration;
-		let currentIterationTime = duration ? activeTime % duration : 0;
+		const time = this.getTime();
+		const currentIterationCount = duration === 0 ? 0 : time / duration;
+		let currentIterationTime = duration ? time % duration : 0;
 
-		if (isDelay || !currentIterationCount) {
+		if (!duration) {
 			this.setIterationTime(0);
 			return this;
 		}
@@ -592,12 +599,13 @@ animator.getIterationTime();
 	protected tick(now: number) {
 		const state = this.state;
 		const {playSpeed, prevTime} = state;
-		const currentTime = this.getTime() + Math.min(1000, now * playSpeed - prevTime) / 1000;
+		const currentTime = this.state.tickTime + Math.min(1000, now - prevTime) / 1000 * playSpeed;
 
-		state.prevTime = now * playSpeed;
-		this.setTime(currentTime, true);
+		state.prevTime = now;
+		this.setTickTime(currentTime);
 		if (this.isEnded()) {
 			this.end();
+			return;
 		}
 		if (state.playState === "paused") {
 			return;
@@ -606,5 +614,8 @@ animator.getIterationTime();
 		requestAnimFrame((time: number) => {
 			this.tick(time);
 		});
+	}
+	private setTickTime(time: number) {
+		this.setTime(time - this.state.delay, true);
 	}
 }
