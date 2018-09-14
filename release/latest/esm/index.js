@@ -13,7 +13,7 @@ import * as presets from "./presets/index";
 * @static
 * @type {string}
 * @example
-* Scene.VERSION // 1.0.0-beta4
+* Scene.VERSION // 1.0.0-beta5
 */
 export var VERSION = "#__VERSION__#";
 export { SceneItem, Frame, Animator, Keyframes, PropertyObject, easing, presets };
