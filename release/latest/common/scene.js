@@ -3,7 +3,7 @@
  * license: MIT
  * author: Daybrush
  * repository: https://github.com/daybrush/scenejs.git
- * @version 1.0.0-beta4
+ * @version 1.0.0-beta5
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -404,7 +404,7 @@ scene.playCSS(false, {
         var frames = {};
         for (var id in items) {
             var item = items[id];
-            frames[id] = item.animate(iterationTime * item.getPlaySpeed(), easing);
+            frames[id] = item.animate(Math.max(iterationTime * item.getPlaySpeed() - item.getDelay(), 0), easing);
         }
         /**
          * This event is fired when timeupdate and animate.
@@ -511,6 +511,7 @@ var Animator = /** @class */ (function (_super) {
             currentTime: 0,
             currentIterationTime: -1,
             currentIterationCount: 0,
+            tickTime: 0,
             prevTime: 0,
             playState: "paused",
             duration: 0
@@ -611,10 +612,10 @@ animator.getTotalDuration();
 animator.isEnded(); // true or false
     */
     Animator.prototype.isEnded = function () {
-        if (this.getTime() === 0 && this.state.playState === "paused") {
+        if (this.state.tickTime === 0 && this.state.playState === "paused") {
             return true;
         }
-        else if (this.getTime() < this.getTotalDuration()) {
+        else if (this.getTime() < this.getActiveDuration()) {
             return false;
         }
         return true;
@@ -642,10 +643,11 @@ animator.isPaused(); // true or false
     */
     Animator.prototype.play = function () {
         var _this = this;
-        if (this.isEnded()) {
-            this.setTime(0);
-        }
         this.state.playState = "running";
+        if (this.isEnded()) {
+            this.setTickTime(0);
+        }
+        this.state.tickTime = this.getTime();
         requestAnimFrame(function (time) {
             _this.state.prevTime = time;
             _this.tick(time);
@@ -691,6 +693,7 @@ animator.isPaused(); // true or false
     * @return {Scene.Animator} An instance itself.
     */
     Animator.prototype.reset = function () {
+        this.state.tickTime = 0;
         this.setTime(0);
         this.pause();
         return this;
@@ -708,17 +711,21 @@ animator.setTime("50%");
 animator.setTime(10);
 animator.getTime() // 10
     */
-    Animator.prototype.setTime = function (time, isNumber) {
-        var totalDuration = this.getTotalDuration();
-        var currentTime = isNumber ? time : this.getUnitTime(time);
+    Animator.prototype.setTime = function (time, isTick) {
+        var activeDuration = this.getActiveDuration();
+        var currentTime = isTick ? time : this.getUnitTime(time);
+        this.state.tickTime = this.state.delay + currentTime;
         if (currentTime < 0) {
             currentTime = 0;
         }
-        else if (currentTime > totalDuration) {
-            currentTime = totalDuration;
+        else if (currentTime > activeDuration) {
+            currentTime = activeDuration;
         }
         this.state.currentTime = currentTime;
         this.calculateIterationTime();
+        if (this.isDelay()) {
+            return this;
+        }
         /**
          * This event is fired when the animator updates the time.
          * @event Scene.Animator#timeupdate
@@ -779,16 +786,6 @@ animator.getTime();
         }
     };
     /**
-    * Get the animator's current time excluding delay
-    * @method Scene.Animator#getActiveTime
-    * @return {number} current time excluding delay
-    * @example
-animator.getActiveTime();
-    */
-    Animator.prototype.getActiveTime = function () {
-        return utils_1.toFixed(Math.max(this.state.currentTime - this.state.delay, 0));
-    };
-    /**
     * Get the animator's current iteration time
     * @method Scene.Animator#getIterationTime
     * @return {number} current iteration time
@@ -815,6 +812,15 @@ animator.getIterationTime();
     Animator.prototype.setDelay = function (delay) {
         this.state.delay = delay;
         return this;
+    };
+    /**
+     * Check if the current state of animator is delayed.
+     * @method Scene.Animator#isDelay
+     * @return {boolean} check delay state
+     */
+    Animator.prototype.isDelay = function () {
+        var _a = this.state, delay = _a.delay, tickTime = _a.tickTime;
+        return delay > 0 && (tickTime < delay);
     };
     /**
      * Get fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
@@ -964,13 +970,12 @@ animator.getIterationTime();
         return this;
     };
     Animator.prototype.calculateIterationTime = function () {
-        var _a = this.state, iterationCount = _a.iterationCount, fillMode = _a.fillMode, direction = _a.direction, currentTime = _a.currentTime, delay = _a.delay;
+        var _a = this.state, iterationCount = _a.iterationCount, fillMode = _a.fillMode, direction = _a.direction;
         var duration = this.getDuration();
-        var activeTime = this.getActiveTime();
-        var isDelay = currentTime - delay < 0;
-        var currentIterationCount = duration === 0 ? 0 : activeTime / duration;
-        var currentIterationTime = duration ? activeTime % duration : 0;
-        if (isDelay || !currentIterationCount) {
+        var time = this.getTime();
+        var currentIterationCount = duration === 0 ? 0 : time / duration;
+        var currentIterationTime = duration ? time % duration : 0;
+        if (!duration) {
             this.setIterationTime(0);
             return this;
         }
@@ -1006,11 +1011,12 @@ animator.getIterationTime();
         var _this = this;
         var state = this.state;
         var playSpeed = state.playSpeed, prevTime = state.prevTime;
-        var currentTime = this.getTime() + Math.min(1000, now * playSpeed - prevTime) / 1000;
-        state.prevTime = now * playSpeed;
-        this.setTime(currentTime, true);
+        var currentTime = this.state.tickTime + Math.min(1000, now - prevTime) / 1000 * playSpeed;
+        state.prevTime = now;
+        this.setTickTime(currentTime);
         if (this.isEnded()) {
             this.end();
+            return;
         }
         if (state.playState === "paused") {
             return;
@@ -1018,6 +1024,9 @@ animator.getIterationTime();
         requestAnimFrame(function (time) {
             _this.tick(time);
         });
+    };
+    Animator.prototype.setTickTime = function (time) {
+        this.setTime(time - this.state.delay, true);
     };
     return Animator;
 }(EventTrigger_1["default"]));
