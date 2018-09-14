@@ -1,7 +1,7 @@
-import { ObjectInterface } from "./consts";
+import { ObjectInterface, THRESHOLD } from "./consts";
 import EventTrigger from "./EventTrigger";
 import {bezier, EasingFunctionInterface } from "./easing";
-import {toFixed} from "./utils";
+import {toFixed, isString, splitUnit} from "./utils";
 
 let lastTime = 0;
 
@@ -278,16 +278,19 @@ animator.isPaused(); // true or false
 	/**
 	* set currentTime
 	* @method Scene.Animator#setTime
-	* @param {Number} time - currentTime
+	* @param {Number|String} time - currentTime
 	* @return {Scene.Animator} An instance itself.
 	* @example
-animator.setTime(10);
 
+animator.setTime("from"); // 0
+animator.setTime("to"); // 100%
+animator.setTime("50%");
+animator.setTime(10);
 animator.getTime() // 10
 	*/
-	public setTime(time: number) {
+	public setTime(time: number | string, isNumber?: boolean) {
 		const totalDuration = this.getTotalDuration();
-		let currentTime = time;
+		let currentTime = isNumber ? (time as number) : this.getUnitTime(time);
 
 		if (currentTime < 0) {
 			currentTime = 0;
@@ -331,6 +334,29 @@ animator.getTime();
 	*/
 	public getTime(): number {
 		return this.state.currentTime;
+	}
+	public getUnitTime(time: string | number) {
+		if (isString(time)) {
+			const duration = this.getDuration() || 100;
+
+			if (time === "from") {
+				return 0;
+			} else if (time === "to") {
+				return duration;
+			}
+			const {unit, value} = splitUnit(time);
+
+			if (unit === "%") {
+				!this.getDuration() && (this.state.duration = duration);
+				return parseFloat(time) / 100 * duration;
+			} else if (unit === ">") {
+				return value + THRESHOLD;
+			} else {
+				return value;
+			}
+		} else {
+			return toFixed(time);
+		}
 	}
 	/**
 	* Get the animator's current time excluding delay
@@ -569,7 +595,7 @@ animator.getIterationTime();
 		const currentTime = this.getTime() + Math.min(1000, now * playSpeed - prevTime) / 1000;
 
 		state.prevTime = now * playSpeed;
-		this.setTime(currentTime);
+		this.setTime(currentTime, true);
 		if (this.isEnded()) {
 			this.end();
 		}

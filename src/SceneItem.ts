@@ -3,10 +3,8 @@ import Frame from "./Frame";
 import {
 	isUndefined,
 	isObject,
-	isString,
 	isArray,
 	decamelize,
-	splitUnit,
 	toFixed,
 	isFixed,
 } from "./utils";
@@ -160,7 +158,7 @@ console.log(item.get(0, "a")); // "b"
 			if (args[0] instanceof SceneItem) {
 				const item: SceneItem = args[0];
 				const delay = item.getDelay();
-				const realTime = this._getTime(time) + delay;
+				const realTime = this.getUnitTime(time) + delay;
 				const {keys, values, frames} = item.getAllTimes(!!delay || !this.hasFrame(time));
 				const easing = this.getEasingName() !== item.getEasingName() ? item.getEasing() : 0;
 
@@ -317,11 +315,11 @@ item.setCSS(0, ["opacity", "width", "height"]);
 		return this;
 	}
 	public animate(time: number, parentEasing?: EasingType) {
-		super.setTime(time);
+		super.setTime(time, true);
 		return this._animate(parentEasing);
 	}
-	public setTime(time: number, parentEasing?: EasingType) {
-		super.setTime(time);
+	public setTime(time: number | string, isNumber?: boolean, parentEasing?: EasingType) {
+		super.setTime(time, isNumber);
 		this._animate(parentEasing);
 		return this;
 	}
@@ -375,7 +373,7 @@ item.newFrame(time);
 item.setFrame(time, frame);
 	*/
 	public setFrame(time: string | number, frame: Frame) {
-		this.keyframes.add(this._getTime(time), frame);
+		this.keyframes.add(this.getUnitTime(time), frame);
 		this.keyframes.update();
 		return this;
 	}
@@ -388,7 +386,7 @@ item.setFrame(time, frame);
 const frame = item.getFrame(time);
 	*/
 	public getFrame(time: number | string) {
-		return this.keyframes.get(this._getTime(time));
+		return this.keyframes.get(this.getUnitTime(time));
 	}
 	/**
 	* check if the item has a frame at that time
@@ -403,7 +401,7 @@ if (item.hasFrame(10)) {
 }
 	*/
 	public hasFrame(time: number | string) {
-		return this.keyframes.has(this._getTime(time));
+		return this.keyframes.has(this.getUnitTime(time));
 	}
 	/**
 	* remove sceneItem's frame at that time
@@ -518,7 +516,7 @@ const frame = item.getNowFrame(1.7);
 			const length = properties.length;
 
 			for (let i = 0; i < length; ++i) {
-				const time = length === 1 ? 0 : this._getTime(`${i / (length - 1) * 100}%`);
+				const time = length === 1 ? 0 : this.getUnitTime(`${i / (length - 1) * 100}%`);
 
 				this.set(time, properties[i]);
 			}
@@ -530,7 +528,7 @@ const frame = item.getNowFrame(1.7);
 					continue;
 				}
 				const value = properties[time];
-				const realTime = this._getTime(time);
+				const realTime = this.getUnitTime(time);
 
 				if (typeof value === "number") {
 					this.mergeFrame(value, realTime);
@@ -779,29 +777,6 @@ item.playCSS(false, {
 			return typeof nowEasing === "function" ? nowEasing : easing;
 		}
 		return easing;
-	}
-	private _getTime(time: string | number) {
-		const duration = this.getDuration() || 100;
-
-		if (isString(time)) {
-			if (time === "from") {
-				return 0;
-			} else if (time === "to") {
-				return duration;
-			}
-			const {unit, value} = splitUnit(time);
-
-			if (unit === "%") {
-				!this.getDuration() && (this.state.duration = duration);
-				return parseFloat(time) / 100 * duration;
-			} else if (unit === ">") {
-				return value + THRESHOLD;
-			} else {
-				return value;
-			}
-		} else {
-			return toFixed(time);
-		}
 	}
 	private _toKeyframes(duration = this.getDuration(), options: StateInterface = {}) {
 		const id = this._getId();

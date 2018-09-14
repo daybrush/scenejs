@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "1.0.0-beta3",
+  "version": "1.0.0-beta4",
   "description": "Javascript Animation Library",
   "main": "dist/common/scene.js",
   "module": "dist/esm/index.js",

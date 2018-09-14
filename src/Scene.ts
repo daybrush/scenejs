@@ -129,11 +129,11 @@ const item = scene.newItem("item1")
 		return this;
 	}
 	public animate(time: number, parentEasing?: EasingType) {
-		super.setTime(time);
+		super.setTime(time, true);
 		return this._animate(parentEasing);
 	}
-	public setTime(time: number, parentEasing?: EasingType) {
-		super.setTime(time);
+	public setTime(time: number, isNumber?: boolean, parentEasing?: EasingType) {
+		super.setTime(time, isNumber);
 		this._animate(parentEasing);
 		return this;
 	}
