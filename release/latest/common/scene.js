@@ -701,8 +701,11 @@ animator.isPaused(); // true or false
     * @param {Number|String} time - currentTime
     * @return {Scene.Animator} An instance itself.
     * @example
-animator.setTime(10);
 
+animator.setTime("from"); // 0
+animator.setTime("to"); // 100%
+animator.setTime("50%");
+animator.setTime(10);
 animator.getTime() // 10
     */
     Animator.prototype.setTime = function (time, isNumber) {

@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 import Animator, { isDirectionReverse } from "./Animator";
 import Frame from "./Frame";
-import { isUndefined, isObject, isString, isArray, decamelize, splitUnit, toFixed, isFixed, } from "./utils";
+import { isUndefined, isObject, isArray, decamelize, toFixed, isFixed, } from "./utils";
 import Keyframes from "./Keyframes";
 import { dotValue } from "./utils/dot";
 import { KEYFRAMES, ANIMATION, START_ANIMATION, PREFIX, THRESHOLD, timingFunction } from "./consts";
@@ -158,7 +158,7 @@ console.log(item.get(0, "a")); // "b"
             if (args[0] instanceof SceneItem) {
                 var item = args[0];
                 var delay = item.getDelay();
-                var realTime_1 = this._getTime(time) + delay;
+                var realTime_1 = this.getUnitTime(time) + delay;
                 var _a = item.getAllTimes(!!delay || !this.hasFrame(time)), keys = _a.keys, values_1 = _a.values, frames_1 = _a.frames;
                 var easing = this.getEasingName() !== item.getEasingName() ? item.getEasing() : 0;
                 keys.forEach(function (t) {
@@ -320,11 +320,11 @@ item.setCSS(0, ["opacity", "width", "height"]);
         return this;
     };
     SceneItem.prototype.animate = function (time, parentEasing) {
-        _super.prototype.setTime.call(this, time);
+        _super.prototype.setTime.call(this, time, true);
         return this._animate(parentEasing);
     };
-    SceneItem.prototype.setTime = function (time, parentEasing) {
-        _super.prototype.setTime.call(this, time);
+    SceneItem.prototype.setTime = function (time, isNumber, parentEasing) {
+        _super.prototype.setTime.call(this, time, isNumber);
         this._animate(parentEasing);
         return this;
     };
@@ -377,7 +377,7 @@ item.newFrame(time);
 item.setFrame(time, frame);
     */
     SceneItem.prototype.setFrame = function (time, frame) {
-        this.keyframes.add(this._getTime(time), frame);
+        this.keyframes.add(this.getUnitTime(time), frame);
         this.keyframes.update();
         return this;
     };
@@ -390,7 +390,7 @@ item.setFrame(time, frame);
 const frame = item.getFrame(time);
     */
     SceneItem.prototype.getFrame = function (time) {
-        return this.keyframes.get(this._getTime(time));
+        return this.keyframes.get(this.getUnitTime(time));
     };
     /**
     * check if the item has a frame at that time
@@ -405,7 +405,7 @@ if (item.hasFrame(10)) {
 }
     */
     SceneItem.prototype.hasFrame = function (time) {
-        return this.keyframes.has(this._getTime(time));
+        return this.keyframes.has(this.getUnitTime(time));
     };
     /**
     * remove sceneItem's frame at that time
@@ -514,7 +514,7 @@ const frame = item.getNowFrame(1.7);
         if (isArray(properties)) {
             var length_1 = properties.length;
             for (var i = 0; i < length_1; ++i) {
-                var time = length_1 === 1 ? 0 : this._getTime(i / (length_1 - 1) * 100 + "%");
+                var time = length_1 === 1 ? 0 : this.getUnitTime(i / (length_1 - 1) * 100 + "%");
                 this.set(time, properties[i]);
             }
         }
@@ -527,7 +527,7 @@ const frame = item.getNowFrame(1.7);
                     continue;
                 }
                 var value = properties[time];
-                var realTime = this._getTime(time);
+                var realTime = this.getUnitTime(time);
                 if (typeof value === "number") {
                     this.mergeFrame(value, realTime);
                     continue;
@@ -764,31 +764,6 @@ item.playCSS(false, {
             return typeof nowEasing === "function" ? nowEasing : easing;
         }
         return easing;
-    };
-    SceneItem.prototype._getTime = function (time) {
-        var duration = this.getDuration() || 100;
-        if (isString(time)) {
-            if (time === "from") {
-                return 0;
-            }
-            else if (time === "to") {
-                return duration;
-            }
-            var _a = splitUnit(time), unit = _a.unit, value = _a.value;
-            if (unit === "%") {
-                !this.getDuration() && (this.state.duration = duration);
-                return parseFloat(time) / 100 * duration;
-            }
-            else if (unit === ">") {
-                return value + THRESHOLD;
-            }
-            else {
-                return value;
-            }
-        }
-        else {
-            return toFixed(time);
-        }
     };
     SceneItem.prototype._toKeyframes = function (duration, options) {
         if (duration === void 0) { duration = this.getDuration(); }

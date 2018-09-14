@@ -135,11 +135,11 @@ const item = scene.newItem("item1")
         return this;
     };
     Scene.prototype.animate = function (time, parentEasing) {
-        _super.prototype.setTime.call(this, time);
+        _super.prototype.setTime.call(this, time, true);
         return this._animate(parentEasing);
     };
-    Scene.prototype.setTime = function (time, parentEasing) {
-        _super.prototype.setTime.call(this, time);
+    Scene.prototype.setTime = function (time, isNumber, parentEasing) {
+        _super.prototype.setTime.call(this, time, isNumber);
         this._animate(parentEasing);
         return this;
     };
