@@ -60,14 +60,14 @@ export class AppComponent {
 </ng-scene>
 ```
 
-### Attributes
+### Props
 |name|type|default|description|
 |---|---|---|---|
 |css|boolean|false|Check to play with CSS|
 |autoplay|boolean|false|Check to play automatically|
 |from(ng-scene-item)|object||Start properties. only |
-|tofrom(ng-scene-item)|object||End properties|
-|keyframesfrom(ng-scene-item)|object||Specify properties by time. If not keyframes, use **from**, **to**, and **duration**.|
+|to(ng-scene-item)|object||End properties|
+|keyframes(ng-scene-item)|object||Specify properties by time. If not keyframes, use **from**, **to**, and **duration**.|
 |...options|||[Check out the options](https://daybrush.github.io/scenejs/release/latest/doc/global.html#AnimatorOptions)|
 
 ### Events

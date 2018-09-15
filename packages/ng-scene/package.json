@@ -1,6 +1,6 @@
 {
   "name": "ng-scene",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "dist/common/index.js",
   "module": "dist/esm/index.js",
   "sideEffects": false,
