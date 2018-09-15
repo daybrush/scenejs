@@ -1,0 +1,47 @@
+{
+  "name": "vue-scene",
+  "version": "0.1.1",
+  "main": "dist/common/index.js",
+  "module": "dist/esm/index.js",
+  "sideEffects": false,
+  "types": "declaration/index.d.ts",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "rm -rf dist/ declaration/ && npm run build:common && npm run build:esm && npm run replace",
+    "build:common": "tsc -p tsconfig.build.json --outDir ./dist/common --module commonjs",
+    "build:esm": "tsc -p tsconfig.build.json",
+    "replace": "replace-in-file '/** @class */' '/*#__PURE__*/' dist/*/*.js",
+    "lint": "vue-cli-service lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daybrush/scenejs/tree/master/packages/vue-scene"
+  },
+  "keywords": [
+    "scene",
+    "scenejs",
+    "animate",
+    "animation",
+    "css",
+    "requestAnimationFrame",
+    "motion",
+    "vue",
+    "component",
+    "vue 2"
+  ],
+  "author": "Daybrush",
+  "license": "MIT",
+  "dependencies": {
+    "scenejs": "^1.0.0-beta5",
+    "vue-class-component": "^6.0.0",
+    "vue-property-decorator": "^7.0.0",
+    "vue": "^2.5.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-typescript": "^3.0.2",
+    "@vue/cli-service": "^3.0.2",
+    "replace-in-file": "^3.4.2",
+    "typescript": "^3.0.0",
+    "vue-template-compiler": "^2.5.17"
+  }
+}
