@@ -18,5 +18,6 @@ import * as presets from "./presets/index";
 */
 export const VERSION = "#__VERSION__#";
 export {SceneItem, Frame, Animator, Keyframes, PropertyObject, easing, presets};
+export {OPTIONS, EVENTS} from "./consts";
 export {setRole, setAlias} from "./utils";
 export {Scene as default};
