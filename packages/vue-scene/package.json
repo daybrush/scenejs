@@ -1,6 +1,6 @@
 {
   "name": "vue-scene",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "dist/common/index.js",
   "module": "dist/esm/index.js",
   "sideEffects": false,

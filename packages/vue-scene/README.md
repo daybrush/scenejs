@@ -59,7 +59,7 @@ export default {
 </scene-item>
 ```
 
-### Attributes
+### Props
 |name|type|default|description|
 |---|---|---|---|
 |css|boolean|false|Check to play with CSS|
