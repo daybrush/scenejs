@@ -3,7 +3,7 @@
  * license: MIT
  * author: Daybrush
  * repository: https://github.com/daybrush/scenejs.git
- * @version 1.0.0-beta5
+ * @version 1.0.0-beta6
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -119,6 +119,9 @@ exports.presets = presets;
 * Scene.VERSION // #__VERSION__#
 */
 exports.VERSION = "#__VERSION__#";
+var consts_1 = __webpack_require__(3);
+exports.OPTIONS = consts_1.OPTIONS;
+exports.EVENTS = consts_1.EVENTS;
 var utils_1 = __webpack_require__(6);
 exports.setRole = utils_1.setRole;
 exports.setAlias = utils_1.setAlias;
@@ -1047,6 +1050,26 @@ exports.ALIAS = { easing: ["animation-timing-function"] };
 exports.FIXED = { "animation-timing-function": true, "contents": true };
 exports.MAXIMUM = 1000000;
 exports.THRESHOLD = 0.000001;
+/**
+* option name list
+* @name Scene.OPTIONS
+* @memberof Scene
+* @static
+* @type {string[]}
+* @example
+* Scene.OPTIONS // ["duration", "fillMode", "direction", "iterationCount", "delay", "easing", "playSpeed"]
+*/
+exports.OPTIONS = ["duration", "fillMode", "direction", "iterationCount", "delay", "easing", "playSpeed"];
+/**
+* Event name list
+* @name Scene.EVENTS
+* @memberof Scene
+* @static
+* @type {string[]}
+* @example
+* Scene.EVENTS // ["paused", "ended", "timeupdate", "animate", "play"];
+*/
+exports.EVENTS = ["paused", "ended", "timeupdate", "animate", "play"];
 var prefixes = ["webkit", "ms", "moz", "o"];
 var checkProperties = function (property) {
     var styles = (document.body || document.documentElement).style;
