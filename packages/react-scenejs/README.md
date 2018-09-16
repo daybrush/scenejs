@@ -1,52 +1,79 @@
 # react-scenejs [![npm version](https://badge.fury.io/js/react-scenejs.svg)](https://badge.fury.io/js/react-scenejs)
 
 
-* [Demo](https://codesandbox.io/s/knz6l89wv)
+* [Raindrop Demo](https://codesandbox.io/s/knz6l89wv)
 
 ## Install
 ```bash
-$ npm install @egjs/react-scenejs  --save
+$ npm install react-scenejs  --save
 ```
 
 ## How to use
+* Scene
 ```jsx
-import { SceneItem, easing } from "react-scenejs";
+import { Scene, easing } from 'react-scenejs';
+
+const keyframes = {
+  0: {opacity: 0, left: "0px"},
+  1: {opacity: 0.3, left: "40px"},
+  2: {opacity: 1, left: "100px"},
+};
+
+<Scene keyframes={{
+  item1: {keyframes: keyframes, options: {delay: 0}},
+  item2: {keyframes: keyframes, options: {delay: 0.4}},
+  item3: {keyframes: keyframes, options: {delay: 0.8}},
+}}
+iterationCount={1}
+easing={easing.EASE_IN_OUT}
+css={true}
+autoplay={true}
+>
+  <div className="item" data-scene-id="item1"></div>
+  <div className="item" data-scene-id="item2"></div>
+  <div className="item" data-scene-id="item3"></div>
+</Scene>
+```
+
+* SceneItem
+```js
+import { SceneItem, easing } from 'react-scenejs';
 
 <SceneItem keyframes={{
-	0: {opacity: 0, left: "0px"},
-	1: {opacity: 0.3, left: "40px"},
-	2: {opacity: 1, left: "100px"},
+  0: {opacity: 0, left: "0px"},
+  1: {opacity: 0.3, left: "40px"},
+  2: {opacity: 1, left: "100px"},
 }}
-playSpeed={1}
-iterationCount={1}
-delay={0}
-direction="normal"
-fillMode="forwards"
+iterationCount="infinite"
 easing={easing.EASE_IN_OUT}
-onPlay={() => {}}
-onPaused={() => {}}
-onEnded={() => {}}
-onTimeUpdate={({currentTime, time, iterationCount}) => {}}
-onIteration={({currentTime, iterationCount}) => {}}
-onAnimate={({currentTime, time, frmae}) => {}}
+css={true}
+autoplay={true}
 >
-	{({styles, time, currentTime, frame}) => (<div style={styles}></div>)}
+  <div className="item"></div>
 </SceneItem>
 ```
 
-* [Events Documentation](https://daybrush.github.io/scenejs/release/latest/doc/SceneItem.html#events)
+### Props
+|name|type|default|description|
+|---|---|---|---|
+|css|boolean|false|Check to play with CSS|
+|autoplay|boolean|false|Check to play automatically|
+|from(SceneItem)|object||Start properties|
+|to(SceneItem)|object||End properties|
+|keyframes|object||Specify properties by time. If not keyframes, use **from**, **to**, and **duration**.|
+|...options|||[Check out the options](https://daybrush.github.io/scenejs/release/latest/doc/global.html#AnimatorOptions)|
 
-## Raindrop Example
+### Events
+The event prefix is **on**
 ```jsx
-import { SceneItem, EASE_IN_OUT } from "react-scenejs";
-
 <SceneItem
-	from={{ "borderWidth": "150px", opacity: 1, transform: "scale(0)" }}
-	to={{ "borderWidth": "0px", opacity: 0.3, transform: "scale(0.7)" }}
-	delay={delay}
-	duration={1.5}
-	easing={EASE_IN_OUT}
-	iterationCount="infinite">
-	{({ styles }) => <div className="raindrop" style={styles}></div>}
+  onPlay={this.onPlay}
+  onPaused={this.onPaused}
+  onAnimate={this.onAnimate}
+  onTimeUpdate={this.onTimeUpdate}
+  onIteration={this.onIteration}
+	>
 </SceneItem>
 ```
+* [Scene events](https://daybrush.github.io/scenejs/release/latest/doc/Scene.html#events)
+* [SceneItem events](https://daybrush.github.io/scenejs/release/latest/doc/Scene.SceneItem.html#events)

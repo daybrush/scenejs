@@ -1,12 +1,14 @@
 {
   "name": "react-scenejs",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "A react component that can easily use scenejs",
+  "main": "dist/common/index.js",
+  "module": "dist/esm/index.js",
+  "sideEffects": false,
   "types": "declaration/index.d.ts",
-  "module": "dist/esm/",
-  "main": "dist/index.js",
   "dependencies": {
-    "scenejs": "^1.0.0-beta3"
+    "scenejs": "^1.0.0-beta6",
+    "typescript": "^3.0.3"
   },
   "peerDependencies": {
     "react": "^15.4.2 || ^16.0.0",
@@ -49,17 +51,22 @@
     "prop-types": "^15.4.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
+    "replace-in-file": "^3.4.2",
     "style-loader": "^0.21.0",
+    "ts-loader": "^5.1.1",
+    "typescript-loader": "^1.1.3",
     "url-loader": "^1.0.1",
-    "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.11.2",
+    "webpack": "^4.19.0",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.8",
     "write-file-webpack-plugin": "^4.2.0"
   },
   "scripts": {
-    "start": "BABEL_ENV=umd webpack-dev-server --host=0.0.0.0",
-    "build": "npm run build:umd && npm run build:esm",
-    "build:esm": "BABEL_ENV=esm babel src --out-dir dist/esm",
-    "build:umd": "BABEL_ENV=umd babel src --out-dir dist/",
+    "start": "BABEL_ENV=umd webpack --watch",
+    "build": "rm -rf dist/ declaration/ && npm run build:common && npm run build:esm && npm run replace",
+    "build:common": "tsc -p tsconfig.build.json --outDir ./dist/common --module commonjs",
+    "build:esm": "tsc -p tsconfig.build.json",
+    "replace": "replace-in-file '/** @class */' '/*#__PURE__*/' dist/*/*.js",
     "build:example": "BABEL_ENV=umd webpack",
     "prepublish": "mkdir -p dist && npm run build"
   }

@@ -1,50 +1,33 @@
-const fs = require("fs");
-const path = require("path");
-const webpack = require("webpack");
-const WriteFilePlugin = require("write-file-webpack-plugin");
-
-const JS_DR = path.resolve(__dirname, "examples/apps");
-
-
-function buildEntries() {
-	return fs.readdirSync(JS_DR).reduce((entries, dir) => {
-		entries[dir] = path.join(JS_DR, dir);
-
-		return entries;
-	}, {});
-}
-
-
 module.exports = {
-	devtool: "inline-source-map",
-	entry: buildEntries(),
-	output: {
-		filename: "[name]",
-		path: `${__dirname}/examples/build/`,
-		publicPath: "/exmaples/build/",
+	devtool: "source-map",
+	entry: "./src/index.tsx",
+	externals: {
+		react: "React",
+		"react-dom": "ReactDOM",
 	},
-	devServer: {
-		contentBase: `${__dirname}/examples`,
+	mode: "development",
+	resolve: {
+		// Add '.ts' and '.tsx' as resolvable extensions.
+		extensions: [".ts", ".tsx", ".js", ".json"],
+	},
+	output: {
+		filename: "bundle.js",
+		path: `${__dirname}/examples`,
+		publicPath: "/exmaples/",
 	},
 	module: {
-		loaders: [
+		rules: [
+			{ test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+			// All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+			{ enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
 			{
-				test: /\.js$/,
-				loader: "babel-loader",
+				test: /\.css$/,
+				loader: "style-loader",
 			},
 			{
 				test: /\.css$/,
-				use: [
-					{loader: "style-loader"},
-					{loader: "css-loader"},
-				],
+				loader: "css-loader",
 			},
 		],
 	},
-	plugins: [
-		new webpack.optimize.CommonsChunkPlugin({
-			name: "commons",
-			filename: "commons.js",
-		}), new WriteFilePlugin(),
-	],
 };
