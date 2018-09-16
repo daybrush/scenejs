@@ -68,9 +68,6 @@ export class SceneItemInterface extends Vue {
     if (this.time !== -1 && (this.autoplay === false || this.item.getPlayState() === 'paused')) {
         this.item.setTime(this.time);
     }
-    if (this.item instanceof Scene) {
-      (window as any).s = this.item;
-    }
   }
   protected beforeDestroy() {
     this.item.off();
