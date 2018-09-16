@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/esm",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "jsx": "react",
+    "declaration": true,
+    "declarationDir": "declaration/",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "target": "es5",
+  },
+  "include": ["./src/react-scenejs"]
+}
