@@ -59,6 +59,9 @@ export class SceneInterface extends Component<PropTypes, {}> {
       this.item.setTime(this.props.time);
     }
   }
+  public componentWillUnmount() {
+    this.item.off();
+  }
   public setTime(time: number | string) {
     this.item.setTime(time);
   }
