@@ -35,7 +35,7 @@ const scene = new Scene({
 	}
 });
  */
-	constructor(properties: object, options: object) {
+	constructor(properties?: ObjectInterface<any>, options?: ObjectInterface<any>) {
 		super();
 		this.items = {};
 		this.load(properties, options);
@@ -232,6 +232,9 @@ scene.playCSS(false, {
 		return this;
 	}
 	public load(properties: any = {}, options = properties.options) {
+		if (!properties) {
+			return this;
+		}
 		const isSelector = options && options.selector;
 
 		for (const name in properties) {

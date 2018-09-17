@@ -4,7 +4,7 @@
 	  "esModuleInterop": false,
 		"sourceMap": true,
 	  "noImplicitAny": true,
-	  "module": "commonjs",
+	  "module": "es2015",
 		"target": "es3",
 		"declaration": true,
 		"declarationDir": "./declaration",

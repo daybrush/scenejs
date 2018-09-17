@@ -1,4 +1,4 @@
-import {SceneItem} from "../index";
+import SceneItem from "../SceneItem";
 import { StateInterface } from "../Animator";
 
 /**
