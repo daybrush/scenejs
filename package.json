@@ -88,9 +88,5 @@
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^4.3.0",
     "webpack-cli": "^3.1.0"
-  },
-  "dependencies": {
-    "@types/react": "^16.4.14",
-    "@types/react-dom": "^16.0.7"
   }
 }
