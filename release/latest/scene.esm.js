@@ -2042,7 +2042,7 @@ var Keyframes = /*#__PURE__*/ (function () {
         var _a = this, times = _a.times, items = _a.items;
         var obj = {};
         this.times = times.map(function (time) {
-            var time2 = time * ratio;
+            var time2 = toFixed(time * ratio);
             obj[time2] = items[time];
             return time2;
         });
@@ -2950,7 +2950,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
                 }
                 // isStartZero is keytimes[0] is 0 (i === 0 & j === 0)
                 var threshold = j === 0 && (i === 0 ? !isStartZero : !isShuffle) ? THRESHOLD : 0;
-                var keyvalue = isReverse ? times[length - 1 - j] : times[j];
+                var keyvalue = toFixed(isReverse ? times[length - 1 - j] : times[j]);
                 var time = toFixed(isReverse ? duration - keyvalue : keyvalue);
                 var keytime = toFixed(start + time + threshold);
                 if (totalDuration < keytime) {
@@ -2960,6 +2960,10 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
                 values[keytime] = keyvalue;
                 if (!frames[keyvalue]) {
                     var frame = this.getFrame(keyvalue);
+                    if (!frame) {
+                        frames[keyvalue] = this.getNowFrame(keyvalue);
+                        continue;
+                    }
                     if (j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
                         frames[keyvalue] = this.getNowFrame(keyvalue);
                     }

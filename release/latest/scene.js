@@ -2309,7 +2309,7 @@ var SceneItem = /** @class */ (function (_super) {
                 }
                 // isStartZero is keytimes[0] is 0 (i === 0 & j === 0)
                 var threshold = j === 0 && (i === 0 ? !isStartZero : !isShuffle) ? consts_1.THRESHOLD : 0;
-                var keyvalue = isReverse ? times[length - 1 - j] : times[j];
+                var keyvalue = utils_1.toFixed(isReverse ? times[length - 1 - j] : times[j]);
                 var time = utils_1.toFixed(isReverse ? duration - keyvalue : keyvalue);
                 var keytime = utils_1.toFixed(start + time + threshold);
                 if (totalDuration < keytime) {
@@ -2320,6 +2320,7 @@ var SceneItem = /** @class */ (function (_super) {
                 if (!frames[keyvalue]) {
                     var frame = this.getFrame(keyvalue);
                     if (!frame) {
+                        frames[keyvalue] = this.getNowFrame(keyvalue);
                         continue;
                     }
                     if (j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
@@ -3522,7 +3523,7 @@ var Keyframes = /** @class */ (function () {
         var _a = this, times = _a.times, items = _a.items;
         var obj = {};
         this.times = times.map(function (time) {
-            var time2 = time * ratio;
+            var time2 = utils_1.toFixed(time * ratio);
             obj[time2] = items[time];
             return time2;
         });
