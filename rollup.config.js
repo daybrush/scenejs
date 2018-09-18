@@ -3,17 +3,18 @@ import typescript from 'rollup-plugin-typescript';
 const env = process.env.ENV || "es";
 
 export default {
-  entry: 'src/index.ts',
-  format: env,
+  input: 'src/index.ts',
   plugins: [typescript({
     "module": "es2015",
     "target": "es3",
     "lib": ["es2015", "dom"],
     "exclude": "node_modules/**",
   })],
-  output: {
+  output: [{
+    format: "es",
     freeze: false,
     exports: "named",
-  },
-  dest: `./dist/scene.${env === "es" ? "esm" : "common"}.js`,
+    interop: false,
+    file: `./dist/scene.esm.js`,
+  }],
 };

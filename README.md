@@ -20,7 +20,7 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 </p>
 
 
-## Demos
+## Examples
 * [Circle Burst](https://codepen.io/daybrush/pen/zWMeJW)
 * [Motion Effect](https://codepen.io/daybrush/pen/pLxQGY)
 * [Raindrop Effect](https://codepen.io/daybrush/pen/vRrbXG)
@@ -30,19 +30,24 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 [**More Examples**](https://codepen.io/collection/DLWxrd/)
 
 
+
 ## Installation
-* **npm**
 ```bash
 $ npm install scenejs
 ```
-* **es5**
 ```js
 <script src="//daybrush.github.io/scenejs/release/latest/scene.min.js"></script>
 ```
 
+## Components
+* [**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs): A React Component that can easily use scenejs
+* [**ng-scene**](https://github.com/daybrush/scenejs/tree/master/packages/ng-scene): A Angular Component that can easily use scenejs
+* [**vue-scene**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scene): A Vue Component that can easily use scenejs
+
+
 ## Make scene
 ```javascript
-import Scene from "scenejs";
+import Scene, {EASE_IN_OUT} from "scenejs";
 
 const scene = new Scene({
   ".class": {
@@ -57,7 +62,8 @@ const scene = new Scene({
     }
   }
 }, {
-  selector: true
+  selector: true,
+  easing: EASE_IN_OUT,
 }).play();
 
 ```
