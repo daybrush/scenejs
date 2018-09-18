@@ -2319,6 +2319,9 @@ var SceneItem = /** @class */ (function (_super) {
                 values[keytime] = keyvalue;
                 if (!frames[keyvalue]) {
                     var frame = this.getFrame(keyvalue);
+                    if (!frame) {
+                        continue;
+                    }
                     if (j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
                         frames[keyvalue] = this.getNowFrame(keyvalue);
                     }
