@@ -28,7 +28,7 @@ function solveFromX(x1: number, x2: number, x: number) {
   return t;
 }
 /**
- * @namespace Scene.easing
+ * @namespace Scene
  */
 /**
 * Cubic Bezier curve.
@@ -40,8 +40,9 @@ function solveFromX(x1: number, x2: number, x: number) {
 * @param {number} [y2] - point2's y
 * @return {function} the curve function
 * @example
-Scene.easing.bezier(0, 0, 1, 1) // LINEAR
-Scene.easing.bezier(0.25, 0.1, 0.25, 1) // EASE
+import {bezier} from "scenejs";
+Scene.bezier(0, 0, 1, 1) // LINEAR
+Scene.bezier(0.25, 0.1, 0.25, 1) // EASE
 */
 export function bezier(x1: number, y1: number, x2: number, y2: number) {
   /*
@@ -61,20 +62,21 @@ export function bezier(x1: number, y1: number, x2: number, y2: number) {
 /**
 * Specifies a stepping function
 * @see {@link https://www.w3schools.com/cssref/css3_pr_animation-timing-function.asp|CSS3 Timing Function}
-* @memberof Scene.easing
+* @memberof Scene
 * @func steps
 * @param {number} count - point1's x
 * @param {"start" | "end"} postion - point1's y
 * @return {function} the curve function
 * @example
-Scene.easing.steps(1, "start") // Scene.easing.stepStart
-Scene.easing.steps(1, "end") // Scene.easing.stepEnd
+import {steps} from "scenejs";
+Scene.steps(1, "start") // Scene.stepStart
+Scene.steps(1, "end") // Scene.stepEnd
 */
 export function steps(count: number, position: "start" | "end") {
   const func: EasingFunctionInterface = (time: number) => {
     const level = 1 / count;
 
-    return (position === "end" ? level : 0) + time % level;
+    return (position === "end" ? level : 0) + Math.floor(time / level) * level;
   };
 
   func.easingName = `steps(${count}, ${position})`;
@@ -84,71 +86,78 @@ export function steps(count: number, position: "start" | "end") {
 
 /**
 * Equivalent to steps(1, start)
-* @memberof Scene.easing
+* @memberof Scene
 * @name stepStart
 * @static
 * @type {function}
 * @example
-Scene.easing.stepStart // steps(1, start)
+import {stepStart} from "scenejs";
+Scene.stepStart // steps(1, start)
 */
 export const stepStart = /*#__PURE__#*/steps(1, "start");
 /**
 * Equivalent to steps(1, end)
-* @memberof Scene.easing
+* @memberof Scene
 * @name stepEnd
 * @static
 * @type {function}
 * @example
-Scene.easing.stepEnd // steps(1, end)
+import {stepEnd} from "scenejs";
+Scene.stepEnd // steps(1, end)
 */
 export const stepEnd = /*#__PURE__#*/steps(1, "end");
 /**
 * Linear Speed (0, 0, 1, 1)
-* @memberof Scene.easing
+* @memberof Scene
 * @name LINEAR
 * @static
 * @type {function}
 * @example
-Scene.easing.LINEAR
+import {LINEAR} from "scenejs";
+Scene.LINEAR
 */
 export const LINEAR = /*#__PURE__#*/bezier(0, 0, 1, 1);
 /**
 * Ease Speed (0.25, 0.1, 0.25, 1)
-* @memberof Scene.easing
+* @memberof Scene
 * @name EASE
 * @static
 * @type {function}
 * @example
-Scene.easing.EASE
+import {EASE} from "scenejs";
+Scene.EASE
 */
 export const EASE = /*#__PURE__#*/bezier(0.25, 0.1, 0.25, 1);
 /**
 * Ease In Speed (0.42, 0, 1, 1)
-* @memberof Scene.easing
+* @memberof Scene
 * @name EASE_IN
 * @static
 * @type {function}
 * @example
-Scene.easing.EASE_IN
+import {EASE_IN} from "scenejs";
+Scene.EASE_IN
 */
 export const EASE_IN = /*#__PURE__#*/bezier(0.42, 0, 1, 1);
 /**
 * Ease Out Speed (0, 0, 0.58, 1)
-* @memberof Scene.easing
+* @memberof Scene
 * @name EASE_OUT
 * @static
 * @type {function}
 * @example
-Scene.easing.EASE_OUT
+import {EASE_OUT} from "scenejs";
+Scene.EASE_OUT
 */
 export const EASE_OUT = /*#__PURE__#*/bezier(0, 0, 0.58, 1);
 /**
 * Ease In Out Speed (0.42, 0, 0.58, 1)
-* @memberof Scene.easing
+* @memberof Scene
 * @name EASE_IN_OUT
 * @static
 * @type {function}
 * @example
-Scene.easing.EASE_IN_OUT
+import {EASE_IN_OUT} from "scenejs";
+Scene.EASE_IN_OUT
 */
 export const EASE_IN_OUT = /*#__PURE__#*/bezier(0.42, 0, 0.58, 1);
