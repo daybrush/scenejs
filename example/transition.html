@@ -30,8 +30,8 @@
 <script src="../release/latest/scene.js"></script>
 <script>
 var scene = new Scene({
-	".rectangle1": {options: {easing: Scene.easing.bezier(1, 0, 1, 1)}},
-	".rectangle2": {options: {delay: 0.9, easing: Scene.easing.bezier(0, 0, 0, 1)}},
+	".rectangle1": {options: {easing: Scene.bezier(1, 0, 1, 1)}},
+	".rectangle2": {options: {delay: 0.9, easing: Scene.bezier(0, 0, 0, 1)}},
 }, {
 	iterationCount: "infinite",
 	direction: "alternate",
@@ -40,7 +40,7 @@ var scene = new Scene({
 var item1 = scene.getItem(".rectangle1");
 var item2 = scene.getItem(".rectangle2");
 
-Scene.presets.transition(item1, item2, {
+Scene.transition(item1, item2, {
 	from: {
 		transform: {
 			scale: 1.2,
@@ -55,7 +55,7 @@ Scene.presets.transition(item1, item2, {
 	},
 	duration: 1,
 });
-Scene.presets.transition(item1, item2, {
+Scene.transition(item1, item2, {
 	from: {
 		opacity: 1,
 	},

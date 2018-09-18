@@ -112,9 +112,9 @@ exports.Animator = Animator_1["default"];
 * @static
 * @type {string}
 * @example
-* Scene.VERSION // #__VERSION__#
+* Scene.VERSION // 1.0.0-beta8
 */
-exports.VERSION = "#__VERSION__#";
+exports.VERSION = "1.0.0-beta8";
 var easing_1 = __webpack_require__(5);
 exports.bezier = easing_1.bezier;
 exports.EASE_IN_OUT = easing_1.EASE_IN_OUT;
@@ -171,7 +171,7 @@ var utils_1 = __webpack_require__(6);
 * manage sceneItems and play Scene.
 * @extends Scene.Animator
 */
-var Scene = /** @class */ (function (_super) {
+var Scene = /*#__PURE__*/ (function (_super) {
     __extends(Scene, _super);
     /**
       * @param {Object} [properties] - properties
@@ -516,7 +516,7 @@ const animator = new Animator({
     easing: Scene.eaasing.EASE,
 });
 */
-var Animator = /** @class */ (function (_super) {
+var Animator = /*#__PURE__*/ (function (_super) {
     __extends(Animator, _super);
     function Animator(options) {
         var _this = _super.call(this) || this;
@@ -1122,7 +1122,7 @@ exports.__esModule = true;
 * attach and trigger event handlers.
 * @memberof Scene
 */
-var EventTrigger = /** @class */ (function () {
+var EventTrigger = /*#__PURE__*/ (function () {
     /**
       * @example
   const et = new Scene.EventTrigger();
@@ -1538,7 +1538,7 @@ exports.__esModule = true;
 * Make string, array to PropertyObject for the dot product
 * @memberof Scene
 */
-var PropertyObject = /** @class */ (function () {
+var PropertyObject = /*#__PURE__*/ (function () {
     /**
       * @param {String|Array} value - This value is in the array format ..
       * @param {String} separator - Array separator.
@@ -1769,7 +1769,7 @@ const item = new Scene.SceneItem({
     }
 });
 */
-var SceneItem = /** @class */ (function (_super) {
+var SceneItem = /*#__PURE__*/ (function (_super) {
     __extends(SceneItem, _super);
     /**
       * @param {Object} [properties] - properties
@@ -2686,7 +2686,7 @@ const frame = new Scene.Frame({
     }
 });
  */
-var Frame = /** @class */ (function () {
+var Frame = /*#__PURE__*/ (function () {
     function Frame(properties) {
         if (properties === void 0) { properties = {}; }
         this.properties = {};
@@ -3426,7 +3426,7 @@ function updateFrame(names, properties) {
 * a list of objects in chronological order.
 * @memberof Scene
 */
-var Keyframes = /** @class */ (function () {
+var Keyframes = /*#__PURE__*/ (function () {
     /**
        */
     function Keyframes() {

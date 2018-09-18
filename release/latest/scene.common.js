@@ -83,7 +83,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4187,20 +4187,6 @@ function blink(_a) {
     return set("opacity", [from, to, from], arguments[0]);
 }
 exports.blink = blink;
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-var index_1 = __webpack_require__(0), others = index_1;
-for (var name_1 in others) {
-    index_1["default"][name_1] = others[name_1];
-}
-module.exports = index_1["default"];
 
 
 /***/ })
