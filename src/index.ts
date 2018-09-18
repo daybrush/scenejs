@@ -3,9 +3,8 @@ import SceneItem from "./SceneItem";
 import Frame from "./Frame";
 import Keyframes from "./Keyframes";
 import PropertyObject from "./PropertyObject";
-import * as easing from "./easing";
 import Animator from "./Animator";
-import * as presets from "./presets/index";
+import * as _presets from "./presets";
 
 /**
 * version info
@@ -17,7 +16,9 @@ import * as presets from "./presets/index";
 * Scene.VERSION // #__VERSION__#
 */
 export const VERSION = "#__VERSION__#";
-export {SceneItem, Frame, Animator, Keyframes, PropertyObject, easing, presets};
-export {OPTIONS, EVENTS} from "./consts";
-export {setRole, setAlias} from "./utils";
-export {Scene as default};
+export { SceneItem, Frame, Animator, Keyframes, PropertyObject };
+export { bezier, EASE_IN_OUT, EASE_IN, EASE_OUT, EASE, LINEAR, steps, stepStart, stepEnd } from "./easing";
+export { set, transition, wipeIn, wipeOut, fadeIn, fadeOut, blink, zoomIn, zoomOut} from "./presets";
+export { OPTIONS, EVENTS } from "./consts";
+export { setRole, setAlias } from "./utils";
+export { Scene as default };
