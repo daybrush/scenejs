@@ -21,10 +21,10 @@ console.log(splitSpace("'a,b' c 'd,e' f g"));
 // ["'a,b'", "c", "'d,e'", "f", "g"]
 */
 export function splitSpace(text: string) {
-	// divide comma(,)
-	const matches = text.match(/("[^"]*")|('[^']*')|([^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\S+/g);
+  // divide comma(,)
+  const matches = text.match(/("[^"]*")|('[^']*')|([^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\S+/g);
 
-	return matches || [];
+  return matches || [];
 }
 /**
 * divide text by comma.
@@ -39,26 +39,26 @@ console.log(splitComma("'a,b',c,'d,e',f,g"));
 // ["'a,b'", "c", "'d,e'", "f", "g"]
 */
 export function splitComma(text: string) {
-	// divide comma(,)
-	// "[^"]*"|'[^']*'
-	const matches = text.match(/("[^"]*"|'[^']*'|[^,\s()]*\((?:[^()]*|\([^()]*\))*\)[^,\s()]*|[^,])+/g);
+  // divide comma(,)
+  // "[^"]*"|'[^']*'
+  const matches = text.match(/("[^"]*"|'[^']*'|[^,\s()]*\((?:[^()]*|\([^()]*\))*\)[^,\s()]*|[^,])+/g);
 
-	return matches ? matches.map(str => str.trim()) : [];
+  return matches ? matches.map(str => str.trim()) : [];
 }
 export function splitStyle(str: string) {
-	const properties = str.split(";");
-	const length = properties.length;
-	const obj = [];
+  const properties = str.split(";");
+  const length = properties.length;
+  const obj = [];
 
-	for (let i = 0; i < length; ++i) {
-		const matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
+  for (let i = 0; i < length; ++i) {
+    const matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
 
-		if (!matches || matches.length < 3 || !matches[1]) {
-			continue;
-		}
-		obj.push({[matches[1].trim()]: toPropertyObject(matches[2].trim())});
-	}
-	return obj;
+    if (!matches || matches.length < 3 || !matches[1]) {
+      continue;
+    }
+    obj.push({[matches[1].trim()]: toPropertyObject(matches[2].trim())});
+  }
+  return obj;
 }
 /**
 * convert array to PropertyObject[type=color].
@@ -72,18 +72,18 @@ arrayToColorObject([0, 0, 0])
 // => PropertyObject(type="color", model="rgba", value=[0, 0, 0, 1], separator=",")
 */
 export function arrayToColorObject(arr: number[]) {
-	const model = "rgba";
+  const model = "rgba";
 
-	if (arr.length === 3) {
-		arr[3] = 1;
-	}
-	return new PropertyObject(arr, {
-		model,
-		separator: ",",
-		type: "color",
-		prefix: `${model}(`,
-		suffix: ")",
-	});
+  if (arr.length === 3) {
+    arr[3] = 1;
+  }
+  return new PropertyObject(arr, {
+    model,
+    separator: ",",
+    type: "color",
+    prefix: `${model}(`,
+    suffix: ")",
+  });
 }
 /**
 	* convert text with parentheses to PropertyObject[type=color].
@@ -97,56 +97,56 @@ toColorObject("rgba(0, 0, 0,1)")
 // => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")
 */
 export function toColorObject(value: PropertyObject | number[] | string) {
-	let colorObject;
+  let colorObject;
 
-	if (value instanceof PropertyObject) {
-		colorObject = value;
-	} else if (isArray(value)) {
-		colorObject = arrayToColorObject(value);
-	} else if (isString(value)) {
-		return stringToColorObject(value);
-	}
-	let colorArray = colorObject.value;
-	const length = colorArray.length;
+  if (value instanceof PropertyObject) {
+    colorObject = value;
+  } else if (isArray(value)) {
+    colorObject = arrayToColorObject(value);
+  } else if (isString(value)) {
+    return stringToColorObject(value);
+  }
+  let colorArray = colorObject.value;
+  const length = colorArray.length;
 
-	if (length === 4) {
-		colorArray[3] = parseFloat(colorArray[3]);
-	} else if (length === 3) {
-		colorArray[3] = 1;
-	}
-	colorObject.setOptions({type: "color"});
-	const colorModel = colorObject.getOption("model").toLowerCase();
+  if (length === 4) {
+    colorArray[3] = parseFloat(colorArray[3]);
+  } else if (length === 3) {
+    colorArray[3] = 1;
+  }
+  colorObject.setOptions({type: "color"});
+  const colorModel = colorObject.getOption("model").toLowerCase();
 
-	// rgb hsl model to CHANGE rgba hsla
-	// string -> number
-	if (colorModel === "rgb") {
-		colorObject.setOptions({
-			type: "color",
-			model: "rgba",
-			prefix: `rgba(`,
-			suffix: ")",
-		});
-	}
-	switch (colorModel) {
-		case "rgb":
-		case "rgba":
-			for (let i = 0; i < 3; ++i) {
-				colorArray[i] = parseInt(colorArray[i], 10);
-			}
-			break;
-		case "hsl":
-		case "hsla":
-			for (let i = 1; i < 3; ++i) {
-				if (colorArray[i].indexOf("%") !== -1) {
-					colorArray[i] = parseFloat(colorArray[i]) / 100;
-				}
-			}
-			// hsl, hsla to rgba
-			colorArray = hslToRGB(colorArray);
-			return arrayToColorObject(colorArray);
-		default:
-	}
-	return colorObject;
+  // rgb hsl model to CHANGE rgba hsla
+  // string -> number
+  if (colorModel === "rgb") {
+    colorObject.setOptions({
+      type: "color",
+      model: "rgba",
+      prefix: `rgba(`,
+      suffix: ")",
+    });
+  }
+  switch (colorModel) {
+    case "rgb":
+    case "rgba":
+      for (let i = 0; i < 3; ++i) {
+        colorArray[i] = parseInt(colorArray[i], 10);
+      }
+      break;
+    case "hsl":
+    case "hsla":
+      for (let i = 1; i < 3; ++i) {
+        if (colorArray[i].indexOf("%") !== -1) {
+          colorArray[i] = parseFloat(colorArray[i]) / 100;
+        }
+      }
+      // hsl, hsla to rgba
+      colorArray = hslToRGB(colorArray);
+      return arrayToColorObject(colorArray);
+    default:
+  }
+  return colorObject;
 }
 /**
 * convert text with parentheses to object.
@@ -159,48 +159,48 @@ stringToBracketObject("abcde(0, 0, 0,1)")
 // => PropertyObject(model="abcde", value=[0, 0, 0,1], separator=",")
 */
 export function stringToBracketObject(value: string) {
-	// [prefix, value, other]
-	const matches = (/([^(]*)\(([\s\S]*)\)([\s\S]*)/g).exec(value);
+  // [prefix, value, other]
+  const matches = (/([^(]*)\(([\s\S]*)\)([\s\S]*)/g).exec(value);
 
-	if (!matches || matches.length < 4) {
-		return value;
-	}
-	const model = matches[1] || "";
-	const text = matches[2];
-	let prefix = `${model}(`;
-	let suffix = `)${matches[3]}`;
-	let separator = ",";
-	let values;
-	// divide comma(,)
-	const obj = toPropertyObject(text);
+  if (!matches || matches.length < 4) {
+    return value;
+  }
+  const model = matches[1] || "";
+  const text = matches[2];
+  let prefix = `${model}(`;
+  let suffix = `)${matches[3]}`;
+  let separator = ",";
+  let values;
+  // divide comma(,)
+  const obj = toPropertyObject(text);
 
-	if (obj instanceof PropertyObject) {
-		separator = obj.getOption("separator");
-		values = obj.value;
-		prefix += obj.getOption("prefix");
-		suffix = obj.getOption("suffix") + suffix;
-	} else {
-		values = [text];
-	}
-	const result = new PropertyObject(values, {
-		separator,
-		model,
-		prefix,
-		suffix,
-	});
+  if (obj instanceof PropertyObject) {
+    separator = obj.getOption("separator");
+    values = obj.value;
+    prefix += obj.getOption("prefix");
+    suffix = obj.getOption("suffix") + suffix;
+  } else {
+    values = [text];
+  }
+  const result = new PropertyObject(values, {
+    separator,
+    model,
+    prefix,
+    suffix,
+  });
 
-	if (COLOR_MODELS.indexOf(model) !== -1) {
-		return toColorObject(result);
-	} else {
-		return result;
-	}
+  if (COLOR_MODELS.indexOf(model) !== -1) {
+    return toColorObject(result);
+  } else {
+    return result;
+  }
 }
 
 export function arrayToPropertyObject(arr: any[], separator: string) {
-	return new PropertyObject(arr, {
-		type: "array",
-		separator,
-	});
+  return new PropertyObject(arr, {
+    type: "array",
+    separator,
+  });
 }
 
 /**
@@ -215,21 +215,21 @@ stringToColorObject("rgba(0, 0, 0,1)")
 // => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")
 */
 export function stringToColorObject(value: string): string | PropertyObject {
-	let colorArray: number[];
+  let colorArray: number[];
 
-	if (value.charAt(0) === "#") {
-		if (value.length === 4) {
-			colorArray = hexToRGB(hex3to6(value));
-		} else {
-			colorArray = hexToRGB(value);
-		}
-		return arrayToColorObject(colorArray);
-	} else if (value.indexOf("(") !== -1) {
-		// in bracket.
-		return stringToBracketObject(value);
-	} else {
-		throw new Error(`Invalid Format : Not a Color - ${value}`);
-	}
+  if (value.charAt(0) === "#") {
+    if (value.length === 4) {
+      colorArray = hexToRGB(hex3to6(value));
+    } else {
+      colorArray = hexToRGB(value);
+    }
+    return arrayToColorObject(colorArray);
+  } else if (value.indexOf("(") !== -1) {
+    // in bracket.
+    return stringToBracketObject(value);
+  } else {
+    throw new Error(`Invalid Format : Not a Color - ${value}`);
+  }
 }
 /**
 * convert CSS Value to PropertyObject
@@ -244,50 +244,50 @@ toPropertyObject("1px solid #000");
 // => PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)])
 */
 export function toPropertyObject(value: string | ObjectInterface<any> | any[]): any {
-	if (!isString(value)) {
-		if (Array.isArray(value)) {
-			return arrayToPropertyObject(value, ",");
-		}
-		return value;
-	}
-	let values = splitComma(value);
+  if (!isString(value)) {
+    if (Array.isArray(value)) {
+      return arrayToPropertyObject(value, ",");
+    }
+    return value;
+  }
+  let values = splitComma(value);
 
-	if (values.length > 1) {
-		return arrayToPropertyObject(values.map(v => toPropertyObject(v)), ",");
-	}
-	values = splitSpace(value);
-	if (values.length > 1) {
-		return arrayToPropertyObject(values.map(v => toPropertyObject(v)), " ");
-	}
-	values = /^(['"])([^'"]*)(['"])$/g.exec(value);
-	if (values && values[1] === values[3]) {
-		// Quotes
-		return new PropertyObject([toPropertyObject(values[2])], {
-			prefix: values[1],
-			suffix: values[1],
-		});
-	} else if (value.indexOf("(") !== -1) {
-		// color
-		return stringToBracketObject(value);
-	} else if (value.charAt(0) === "#") {
-		return stringToColorObject(value);
-	}
-	return value;
+  if (values.length > 1) {
+    return arrayToPropertyObject(values.map(v => toPropertyObject(v)), ",");
+  }
+  values = splitSpace(value);
+  if (values.length > 1) {
+    return arrayToPropertyObject(values.map(v => toPropertyObject(v)), " ");
+  }
+  values = /^(['"])([^'"]*)(['"])$/g.exec(value);
+  if (values && values[1] === values[3]) {
+    // Quotes
+    return new PropertyObject([toPropertyObject(values[2])], {
+      prefix: values[1],
+      suffix: values[1],
+    });
+  } else if (value.indexOf("(") !== -1) {
+    // color
+    return stringToBracketObject(value);
+  } else if (value.charAt(0) === "#") {
+    return stringToColorObject(value);
+  }
+  return value;
 }
 export function toObject(object: PropertyObject, result: ObjectInterface<any> = {}) {
-	const model = object.getOption("model");
+  const model = object.getOption("model");
 
-	if (model) {
-		object.setOptions({
-			model: "",
-			suffix: "",
-			prefix: "",
-		});
-		const value = object.size() > 1 ? object : object.get(0);
+  if (model) {
+    object.setOptions({
+      model: "",
+      suffix: "",
+      prefix: "",
+    });
+    const value = object.size() > 1 ? object : object.get(0);
 
-		result[model] = value;
-	} else {
-		object.forEach(obj => toObject(obj, result));
-	}
-	return result;
+    result[model] = value;
+  } else {
+    object.forEach(obj => toObject(obj, result));
+  }
+  return result;
 }
