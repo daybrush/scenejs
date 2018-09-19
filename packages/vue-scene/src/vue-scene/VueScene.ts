@@ -1,13 +1,11 @@
 import { Component, Vue } from 'vue-property-decorator';
 import NativeScene from 'scenejs';
-import { SceneItemInterface, OPTIONS, EVENTS } from './SceneItemInterface';
-import { StateInterface } from 'scenejs/declaration/Animator';
-import { SceneItem } from './SceneItem';
-import { SceneSlot } from './SceneSlot';
+import { SceneItemInterface } from './SceneItemInterface';
+import { VueSceneItem } from './VueSceneItem';
 
 function find(children: Vue[], list: any[]) {
   children.forEach((component) => {
-    if (component instanceof SceneSlot) {
+    if (component instanceof VueSceneItem) {
       list.push(component.getItem());
     }
     find(component.$children, list);
@@ -16,9 +14,9 @@ function find(children: Vue[], list: any[]) {
 }
 
 @Component({
-  name: 'scene',
+  name: 'vue-scene',
 })
-export class Scene extends SceneItemInterface {
+export class VueScene extends SceneItemInterface {
   public item = new NativeScene({}, {});
   protected mounted() {
     const scene = this.item;

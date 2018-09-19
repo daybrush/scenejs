@@ -12,17 +12,17 @@ $ npm install vue-scene  --save
 
 ## How to use
 ```js
-import {Scene, SceneItem, easing} from "vue-scene";
+import {VueScene, VueSceneItem, EASE, EASE_IN, EASE_IN_OUT, bezier, steps, STEP_START, STEP_END} from "vue-scene";
 
 export default {
   name: "App",
   components: {
-    Scene,
-    SceneItem
+    VueScene,
+    VueSceneItem
   },
   data: function () {
     return {
-      easing: easing.EASE_IN_OUT,
+      easing: EASE_IN_OUT,
       time: 0,
       keyframes: {
         0: {"border-width": "150px", opacity: 1, transform: "scale(0)" },
@@ -34,48 +34,48 @@ export default {
 ```
 * Scene
 ```html
-<scene v-bind:easing='easing' v-bind:time='time'>
+<vue-scene v-bind:easing='easing' v-bind:time='time'>
 	<div class='container'>
-		<scene-item v-bind:keyframes='keyframes'>
+		<vue-scene-item v-bind:keyframes='keyframes'>
 		<div class='raindrop'></div>
-		</scene-item>
-		<scene-item v-bind:keyframes='keyframes' v-bind:delay='0.4'>
+		</vue-scene-item>
+		<vue-scene-item v-bind:keyframes='keyframes' v-bind:delay='0.4'>
 		<div class='raindrop'></div>
-		</scene-item>
-		<scene-item v-bind:keyframes='keyframes' v-bind:delay='0.8'>
+		</vue-scene-item>
+		<vue-scene-item v-bind:keyframes='keyframes' v-bind:delay='0.8'>
 		<div class='raindrop'></div>
-		</scene-item>
+		</vue-scene-item>
 	</div>
-</scene>
+</vue-scene>
   ```
 * SceneItem
 ```html
-<scene-item
+<vue-scene-item
   v-bind:time="time" v-bind:duration=1
   v-bind:from="{'border-width': '150px', opacity: 1, transform: 'scale(0)'}"
   v-bind:to="{'border-width': '0px', opacity: 0, transform: 'scale(1)'}"
   iterationCount='infinite'>
   <div class='raindrop'></div>
-</scene-item>
+</vue-scene-item>
 ```
 
+### easing
+* [easing list](https://daybrush.github.io/scenejs/release/latest/doc/easing.html)
 ### Props
 |name|type|default|description|
 |---|---|---|---|
 |css|boolean|false|Check to play with CSS|
 |autoplay|boolean|false|Check to play automatically|
-|from(scene-item)|object||Start properties. only |
-|to(scene-item)|object||End properties|
-|keyframes(scene-item)|object||Specify properties by time. If not keyframes, use **from**, **to**, and **duration**.|
+|from(vue-scene-item)|object||Start properties. only |
+|to(vue-scene-item)|object||End properties|
+|keyframes(vue-scene-item)|object||Specify properties by time. If not keyframes, use **from**, **to**, and **duration**.|
 |...options|||[Check out the options](https://daybrush.github.io/scenejs/release/latest/doc/global.html#AnimatorOptions)|
 
 ### Events
 ```html
-<scene-item v-on:animate="animate($event)" v-on:play="play($event)" v-on:paused="paused($event)">
+<vue-scene-item v-on:animate="animate($event)" v-on:play="play($event)" v-on:paused="paused($event)">
   <div class="item"></div>
-  <div class="item"></div>
-  <div class="item"></div>
-</scene-item>
+</vue-scene-item>
 ```
-* [scene events](https://daybrush.github.io/scenejs/release/latest/doc/Scene.html#events)
-* [scene-item events](https://daybrush.github.io/scenejs/release/latest/doc/Scene.SceneItem.html#events)
+* [vue-scene events](https://daybrush.github.io/scenejs/release/latest/doc/Scene.html#events)
+* [vue-scene-item events](https://daybrush.github.io/scenejs/release/latest/doc/Scene.SceneItem.html#events)

@@ -1,12 +1,11 @@
 import { Component } from 'vue-property-decorator';
 import { SceneItem as NativeSceneItem } from 'scenejs';
-import { SceneItemInterface, OPTIONS, EVENTS } from './SceneItemInterface';
-import { StateInterface } from 'scenejs/declaration/Animator';
+import { SceneItemInterface } from './SceneItemInterface';
 
 @Component({
-  name: 'scene-slot',
+  name: 'vue-scene-item',
 })
-export class SceneSlot extends SceneItemInterface {
+export class VueSceneItem extends SceneItemInterface {
   public item = new NativeSceneItem();
   protected mounted() {
     const item = this.item;

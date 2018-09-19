@@ -1,6 +1,6 @@
 {
   "name": "vue-scene",
-  "version": "0.1.3",
+  "version": "0.2.1",
   "main": "dist/common/index.js",
   "module": "dist/esm/index.js",
   "sideEffects": false,
@@ -27,15 +27,16 @@
     "motion",
     "vue",
     "component",
-    "vue 2"
+    "vue 2",
+    "vue component"
   ],
   "author": "Daybrush",
   "license": "MIT",
   "dependencies": {
-    "scenejs": "^1.0.0-beta5",
+    "scenejs": "^1.0.0-beta8",
+    "vue": "^2.5.0",
     "vue-class-component": "^6.0.0",
-    "vue-property-decorator": "^7.0.0",
-    "vue": "^2.5.0"
+    "vue-property-decorator": "^7.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-typescript": "^3.0.2",

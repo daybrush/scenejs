@@ -2,11 +2,7 @@ import { Prop, Vue, Component } from 'vue-property-decorator';
 import {
   EasingType, FillModeType, DirectionType, IterationCountType, StateInterface,
 } from 'scenejs/declaration/Animator';
-import Scene, { SceneItem } from 'scenejs';
-
-
-export const OPTIONS = ['duration', 'fillMode', 'direction', 'iterationCount', 'delay', 'easing', 'playSpeed'];
-export const EVENTS = ['play', 'paused', 'ended', 'timeupdate', 'animate', 'iteration'];
+import Scene, { SceneItem, OPTIONS, EVENTS } from 'scenejs';
 
 @Component
 export class SceneItemInterface extends Vue {
