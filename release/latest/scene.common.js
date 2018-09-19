@@ -1281,11 +1281,11 @@ function solveFromX(x1, x2, x) {
     return t;
 }
 /**
- * @namespace Scene
+ * @namespace easing
  */
 /**
 * Cubic Bezier curve.
-* @memberof Scene
+* @memberof easing
 * @func bezier
 * @param {number} [x1] - point1's x
 * @param {number} [y1] - point1's y
@@ -1314,15 +1314,15 @@ exports.bezier = bezier;
 /**
 * Specifies a stepping function
 * @see {@link https://www.w3schools.com/cssref/css3_pr_animation-timing-function.asp|CSS3 Timing Function}
-* @memberof Scene
+* @memberof easing
 * @func steps
 * @param {number} count - point1's x
 * @param {"start" | "end"} postion - point1's y
 * @return {function} the curve function
 * @example
 import {steps} from "scenejs";
-Scene.steps(1, "start") // Scene.stepStart
-Scene.steps(1, "end") // Scene.stepEnd
+Scene.steps(1, "start") // Scene.STEP_START
+Scene.steps(1, "end") // Scene.STEP_END
 */
 function steps(count, position) {
     var func = function (time) {
@@ -1335,29 +1335,29 @@ function steps(count, position) {
 exports.steps = steps;
 /**
 * Equivalent to steps(1, start)
-* @memberof Scene
-* @name stepStart
+* @memberof easing
+* @name STEP_START
 * @static
 * @type {function}
 * @example
-import {stepStart} from "scenejs";
-Scene.stepStart // steps(1, start)
+import {STEP_START} from "scenejs";
+Scene.STEP_START // steps(1, start)
 */
 exports.STEP_START = steps(1, "start");
 /**
 * Equivalent to steps(1, end)
-* @memberof Scene
-* @name stepEnd
+* @memberof easing
+* @name STEP_END
 * @static
 * @type {function}
 * @example
-import {stepEnd} from "scenejs";
-Scene.stepEnd // steps(1, end)
+import {STEP_END} from "scenejs";
+Scene.STEP_END // steps(1, end)
 */
 exports.STEP_END = steps(1, "end");
 /**
 * Linear Speed (0, 0, 1, 1)
-* @memberof Scene
+* @memberof easing
 * @name LINEAR
 * @static
 * @type {function}
@@ -1368,7 +1368,7 @@ Scene.LINEAR
 exports.LINEAR = bezier(0, 0, 1, 1);
 /**
 * Ease Speed (0.25, 0.1, 0.25, 1)
-* @memberof Scene
+* @memberof easing
 * @name EASE
 * @static
 * @type {function}
@@ -1379,7 +1379,7 @@ Scene.EASE
 exports.EASE = bezier(0.25, 0.1, 0.25, 1);
 /**
 * Ease In Speed (0.42, 0, 1, 1)
-* @memberof Scene
+* @memberof easing
 * @name EASE_IN
 * @static
 * @type {function}
@@ -1390,7 +1390,7 @@ Scene.EASE_IN
 exports.EASE_IN = bezier(0.42, 0, 1, 1);
 /**
 * Ease Out Speed (0, 0, 0.58, 1)
-* @memberof Scene
+* @memberof easing
 * @name EASE_OUT
 * @static
 * @type {function}
@@ -1401,7 +1401,7 @@ Scene.EASE_OUT
 exports.EASE_OUT = bezier(0, 0, 0.58, 1);
 /**
 * Ease In Out Speed (0.42, 0, 0.58, 1)
-* @memberof Scene
+* @memberof easing
 * @name EASE_IN_OUT
 * @static
 * @type {function}
@@ -3890,8 +3890,11 @@ exports.fromCSS = fromCSS;
 exports.__esModule = true;
 var SceneItem_1 = __webpack_require__(8);
 /**
+ * @namespace presets
+ */
+/**
  * Use the property to create an effect.
- * @memberof Scene
+ * @memberof presets
  * @func set
  * @param {string | string[]} property - property to set effect
  * @param {any[]} values - values of 100%
@@ -3930,7 +3933,7 @@ function set(property, values, options) {
 exports.set = set;
 /**
  * Make a zoom in effect.
- * @memberof Scene
+ * @memberof presets
  * @func zoomIn
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 0] start zoom
@@ -3959,7 +3962,7 @@ function zoomIn(_a) {
 exports.zoomIn = zoomIn;
 /**
  * Make a zoom out effect.
- * @memberof Scene
+ * @memberof presets
  * @func zoomOut
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 1] start zoom
@@ -3988,7 +3991,7 @@ function zoomOut(_a) {
 exports.zoomOut = zoomOut;
 /**
  * Make a wipe in effect.
- * @memberof Scene
+ * @memberof presets
  * @func wipeIn
  * @param {AnimatorOptions} options
  * @param {string|string[]} [options.property = "left"] position property
@@ -4018,7 +4021,7 @@ function wipeIn(_a) {
 exports.wipeIn = wipeIn;
 /**
  * Make a wipe out effect.
- * @memberof Scene
+ * @memberof presets
  * @func wipeOut
  * @param {AnimatorOptions} options
  * @param {string|string[]} [options.property = "left"] position property
@@ -4048,7 +4051,7 @@ function wipeOut(_a) {
 exports.wipeOut = wipeOut;
 /**
  * Use the property to create an effect.
- * @memberof Scene
+ * @memberof presets
  * @func transition
  * @param {Scene.SceneItem} item1 - Item that end effect
  * @param {Scene.SceneItem} item2 - Item that start effect
@@ -4103,7 +4106,7 @@ function transition(item1, item2, _a) {
 exports.transition = transition;
 /**
  * Make a fade in effect.
- * @memberof Scene
+ * @memberof presets
  * @func fadeIn
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 0] start opacity
@@ -4132,7 +4135,7 @@ function fadeIn(_a) {
 exports.fadeIn = fadeIn;
 /**
  * Make a fade out effect.
- * @memberof Scene
+ * @memberof presets
  * @func fadeOut
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 1] start opacity
@@ -4161,7 +4164,7 @@ function fadeOut(_a) {
 exports.fadeOut = fadeOut;
 /**
  * Make a blinking effect.
- * @memberof Scene
+ * @memberof presets
  * @func blink
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 0] start opacity

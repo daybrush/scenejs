@@ -229,11 +229,11 @@ function solveFromX(x1, x2, x) {
     return t;
 }
 /**
- * @namespace Scene
+ * @namespace easing
  */
 /**
 * Cubic Bezier curve.
-* @memberof Scene
+* @memberof easing
 * @func bezier
 * @param {number} [x1] - point1's x
 * @param {number} [y1] - point1's y
@@ -261,7 +261,7 @@ function bezier(x1, y1, x2, y2) {
 /**
 * Specifies a stepping function
 * @see {@link https://www.w3schools.com/cssref/css3_pr_animation-timing-function.asp|CSS3 Timing Function}
-* @memberof Scene
+* @memberof easing
 * @func steps
 * @param {number} count - point1's x
 * @param {"start" | "end"} postion - point1's y
@@ -281,7 +281,7 @@ function steps(count, position) {
 }
 /**
 * Equivalent to steps(1, start)
-* @memberof Scene
+* @memberof easing
 * @name stepStart
 * @static
 * @type {function}
@@ -292,7 +292,7 @@ Scene.stepStart // steps(1, start)
 var STEP_START = /*#__PURE__#*/ steps(1, "start");
 /**
 * Equivalent to steps(1, end)
-* @memberof Scene
+* @memberof easing
 * @name stepEnd
 * @static
 * @type {function}
@@ -303,7 +303,7 @@ Scene.stepEnd // steps(1, end)
 var STEP_END = /*#__PURE__#*/ steps(1, "end");
 /**
 * Linear Speed (0, 0, 1, 1)
-* @memberof Scene
+* @memberof easing
 * @name LINEAR
 * @static
 * @type {function}
@@ -314,7 +314,7 @@ Scene.LINEAR
 var LINEAR = /*#__PURE__#*/ bezier(0, 0, 1, 1);
 /**
 * Ease Speed (0.25, 0.1, 0.25, 1)
-* @memberof Scene
+* @memberof easing
 * @name EASE
 * @static
 * @type {function}
@@ -325,7 +325,7 @@ Scene.EASE
 var EASE = /*#__PURE__#*/ bezier(0.25, 0.1, 0.25, 1);
 /**
 * Ease In Speed (0.42, 0, 1, 1)
-* @memberof Scene
+* @memberof easing
 * @name EASE_IN
 * @static
 * @type {function}
@@ -336,7 +336,7 @@ Scene.EASE_IN
 var EASE_IN = /*#__PURE__#*/ bezier(0.42, 0, 1, 1);
 /**
 * Ease Out Speed (0, 0, 0.58, 1)
-* @memberof Scene
+* @memberof easing
 * @name EASE_OUT
 * @static
 * @type {function}
@@ -347,7 +347,7 @@ Scene.EASE_OUT
 var EASE_OUT = /*#__PURE__#*/ bezier(0, 0, 0.58, 1);
 /**
 * Ease In Out Speed (0.42, 0, 0.58, 1)
-* @memberof Scene
+* @memberof easing
 * @name EASE_IN_OUT
 * @static
 * @type {function}
