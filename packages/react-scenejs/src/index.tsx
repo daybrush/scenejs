@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { SceneItem, easing, Scene } from './react-scenejs';
+import { SceneItem, EASE_IN_OUT, Scene } from './react-scenejs';
 import './raindrop.css';
 
 class App extends React.Component<{}, { time: string | number }> {
@@ -13,7 +13,6 @@ class App extends React.Component<{}, { time: string | number }> {
   }
   public render() {
     const time = this.state.time;
-    const EASE_IN_OUT = easing.EASE_IN_OUT;
     const keyframes = {
       0: { 'border-width': '150px', 'opacity': 1, 'transform': 'scale(0)' },
       1: { 'border-width': '0px', 'opacity': 0.3, 'transform': 'scale(0.7)' }

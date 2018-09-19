@@ -11,7 +11,7 @@ $ npm install react-scenejs  --save
 ## How to use
 * Scene
 ```jsx
-import { Scene, easing } from 'react-scenejs';
+import { Scene, EASE, EASE_IN, EASE_IN_OUT, bezier, steps, STEP_START, STEP_END } from 'react-scenejs';
 
 const keyframes = {
   0: {opacity: 0, left: "0px"},
@@ -25,7 +25,7 @@ const keyframes = {
   item3: {keyframes: keyframes, options: {delay: 0.8}},
 }}
 iterationCount={1}
-easing={easing.EASE_IN_OUT}
+easing={EASE_IN_OUT}
 css={true}
 autoplay={true}
 >
@@ -37,7 +37,7 @@ autoplay={true}
 
 * SceneItem
 ```js
-import { SceneItem, easing } from 'react-scenejs';
+import { SceneItem, EASE, EASE_IN, EASE_IN_OUT, bezier, steps, STEP_START, STEP_END } from 'react-scenejs';
 
 <SceneItem keyframes={{
   0: {opacity: 0, left: "0px"},
@@ -52,6 +52,8 @@ autoplay={true}
   <div className="item"></div>
 </SceneItem>
 ```
+### easing
+* [easing list](https://daybrush.github.io/scenejs/release/latest/doc/easing.html)
 
 ### Props
 |name|type|default|description|

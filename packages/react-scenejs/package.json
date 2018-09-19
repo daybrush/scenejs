@@ -1,13 +1,13 @@
 {
   "name": "react-scenejs",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "A react component that can easily use scenejs",
   "main": "dist/common/index.js",
   "module": "dist/esm/index.js",
   "sideEffects": false,
   "types": "declaration/index.d.ts",
   "dependencies": {
-    "scenejs": "^1.0.0-beta6",
+    "scenejs": "^1.0.0-beta8",
     "typescript": "^3.0.3"
   },
   "peerDependencies": {
@@ -38,6 +38,8 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@daybrush/babel-plugin-no-side-effect-class-properties": "0.0.4",
+    "@types/react": "^16.4.14",
+    "@types/react-dom": "^16.0.7",
     "babel-eslint": "^8.2.2",
     "babel-loader": "^8.0.0",
     "babel-polyfill": "^6.26.0",
