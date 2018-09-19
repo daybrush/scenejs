@@ -27,7 +27,7 @@ export class AppModule {}
 * Component
 ```ts
 import { Component } from '@angular/core';
-import { easing } from 'ng-scene';
+import { EASE, EASE_IN, EASE_IN_OUT, bezier, steps, STEP_START, STEP_END } from 'ng-scene';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +35,7 @@ import { easing } from 'ng-scene';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  easing = easing.EASE_IN_OUT;
+  easing = EASE_IN_OUT;
   keyframes = {
     '0': {'border-width': '150px', opacity: 1, transform: 'scale(0)'},
     '1': {'border-width': '0px', opacity: '0.3', transform: 'scale(0.7)'},
@@ -45,7 +45,7 @@ export class AppComponent {
 ```
 * Template
 ```html
-<ng-scene iterationCount="infinite" [easing]="easing.EASE_IN_OUT" css autoplay>
+<ng-scene iterationCount="infinite" [easing]="easing" css autoplay>
     <ng-scene-item
       [duration]=1
       [from]="{'border-width': '150px', opacity: 1, transform: 'scale(0)'}"
@@ -59,6 +59,10 @@ export class AppComponent {
   </div>
 </ng-scene>
 ```
+
+
+### easing
+* [easing list](https://daybrush.github.io/scenejs/release/latest/doc/easing.html)
 
 ### Props
 |name|type|default|description|

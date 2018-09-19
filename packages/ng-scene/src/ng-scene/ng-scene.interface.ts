@@ -1,10 +1,8 @@
-import { Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { FillModeType, DirectionType, IterationCountType, EasingType } from 'scenejs/declaration/Animator';
-import Scene, { SceneItem } from 'scenejs';
+import { Input, Output, EventEmitter, OnDestroy, AfterContentChecked, Component, AfterViewChecked } from '@angular/core';
+import { FillModeType, DirectionType, IterationCountType, EasingType, StateInterface } from 'scenejs/declaration/Animator';
+import Scene, { SceneItem, OPTIONS } from 'scenejs';
 
-export const OPTIONS = ['duration', 'fillMode', 'direction', 'iterationCount', 'delay', 'easing', 'playSpeed'];
-export const EVENTS = ['paused', 'ended', 'timeupdate', 'animate'];
-export class NgSceneInterface implements OnDestroy {
+export class NgSceneInterface implements OnDestroy, AfterViewChecked {
   @Input() public from: { [key: string]: any } = {};
   @Input() public to: { [key: string]: any } = {};
   @Input() public keyframes: any[] | { [key: string]: any };
@@ -17,6 +15,7 @@ export class NgSceneInterface implements OnDestroy {
   @Input() public easing: EasingType = 0;
   @Input() public autoplay = false;
   @Input() public css = false;
+  @Input() public time = -1;
   @Output() ngpaused: EventEmitter<any> = new EventEmitter<any>();
   @Output() ngended: EventEmitter<any> = new EventEmitter<any>();
   @Output() ngtimeupdate: EventEmitter<any> = new EventEmitter<any>();
@@ -26,7 +25,20 @@ export class NgSceneInterface implements OnDestroy {
 
   protected item: Scene | SceneItem;
 
-  public setTime(time: number) {
+  public init() {
+    const itemOptions: StateInterface = {};
+
+    OPTIONS.forEach(name => {
+      itemOptions[name] = this[name];
+    });
+    this.item.setOptions(itemOptions);
+
+
+    if (this.autoplay !== false) {
+      this.play();
+    }
+  }
+  public setTime(time: string | number) {
     this.item.setTime(time);
   }
   public getTime() {
@@ -46,5 +58,10 @@ export class NgSceneInterface implements OnDestroy {
   }
   ngOnDestroy() {
     this.item.off();
+  }
+  ngAfterViewChecked() {
+    if (this.time !== -1 && (this.autoplay === false || this.item.getPlayState() === 'paused')) {
+      this.setTime(this.time);
+    }
   }
 }

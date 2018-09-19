@@ -1,59 +1,65 @@
 <style>
-  .container {
-    position: relative;
-    width: 500px;
-    height: 500px;
-  }
+	.wrapper {
+		text-align: center;
+	}
 
-  .raindrop {
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    border: 100px solid black;
-    border-radius: 50%;
-    box-sizing: border-box;
-    transform: scale(0);
-  }
-  .test {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: #333;
-  }
+	.container {
+		position: relative;
+		display: inline-block;
+		width: 300px;
+		height: 300px;
+	}
+
+	.raindrop {
+		position: absolute;
+		width: 300px;
+		height: 300px;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		margin: auto;
+		border: 100px solid black;
+		border-radius: 50%;
+		box-sizing: border-box;
+		transform: scale(0);
+	}
+
+	.test {
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		background: #333;
+	}
 </style>
-<ng-scene iterationCount="infinite" [easing]="easing" css autoplay>
-  <div class="container">
-    <div class="raindrop" [keyframes]="keyframes" ng-scene-item>
-    </div>
-    <div class="raindrop" [keyframes]="keyframes" [delay]=0.4 ng-scene-item>
-    </div>
-    <div class="raindrop" [keyframes]="keyframes" [delay]=0.8 ng-scene-item>
-    </div>
-  </div>
-</ng-scene>
-
-<div class="container">
-  <div class="raindrop" [keyframes]="keyframes" iterationCount="infinite" autoplay ng-scene-item>
-  </div>
-  <div class="raindrop" [keyframes]="keyframes" iterationCount="infinite" autoplay [delay]=0.4 ng-scene-item>
-  </div>
-  <div class="raindrop" [keyframes]="keyframes" [delay]=0.8 iterationCount="infinite" autoplay [duration]=1
-    ng-scene-item>
-  </div>
+<div class="wrapper">
+	<div class="container">
+		<ng-scene iterationCount="infinite" [easing]="easing" css autoplay>
+			<div class="raindrop" [keyframes]="keyframes" ng-scene-item>
+			</div>
+			<div class="raindrop" [keyframes]="keyframes" [delay]=0.4 ng-scene-item>
+			</div>
+			<div class="raindrop" [keyframes]="keyframes" [delay]=0.8 ng-scene-item>
+			</div>
+		</ng-scene>
+	</div>
+	<br/>
+	<input type="range" value="0" (input)="update($event)" />
+	<br/>
+	<div class="container">
+		<ng-scene iterationCount="infinite" [easing]="easing" [time]="time">
+			<div class="raindrop" [keyframes]="keyframes" ng-scene-item>
+			</div>
+			<div class="raindrop" [keyframes]="keyframes" [delay]=0.4 ng-scene-item>
+			</div>
+			<div class="raindrop" [keyframes]="keyframes" [delay]=0.8 ng-scene-item>
+			</div>
+		</ng-scene>
+	</div>
+	<div class="container">
+		<ng-scene-item [duration]=1 [from]="{'border-width': '150px', opacity: 1, transform: 'scale(0)'}" [to]="{'border-width': '0px', opacity: 0, transform: 'scale(1)'}"
+		 iterationCount="infinite" [time]="time">
+			<div class="raindrop"></div>
+		</ng-scene-item>
+	</div>
 </div>
-
-<div class="container">
-    <ng-scene-item [from]="{'left': '0px'}" [to]="{'left': '100px'}" ng-scene-item #test>
-        <div class="test"></div>
-        <div class="test test2"></div>
-    </ng-scene-item>
-    <input type="range" (change)= "update($event)"/>
-    
-      
-    
-  </div>
