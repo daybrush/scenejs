@@ -268,8 +268,8 @@ function bezier(x1, y1, x2, y2) {
 * @return {function} the curve function
 * @example
 import {steps} from "scenejs";
-Scene.steps(1, "start") // Scene.stepStart
-Scene.steps(1, "end") // Scene.stepEnd
+Scene.steps(1, "start") // Scene.STEP_START
+Scene.steps(1, "end") // Scene.STEP_END
 */
 function steps(count, position) {
     var func = function (time) {
@@ -282,23 +282,23 @@ function steps(count, position) {
 /**
 * Equivalent to steps(1, start)
 * @memberof easing
-* @name stepStart
+* @name STEP_START
 * @static
 * @type {function}
 * @example
-import {stepStart} from "scenejs";
-Scene.stepStart // steps(1, start)
+import {STEP_START} from "scenejs";
+Scene.STEP_START // steps(1, start)
 */
 var STEP_START = /*#__PURE__#*/ steps(1, "start");
 /**
 * Equivalent to steps(1, end)
 * @memberof easing
-* @name stepEnd
+* @name STEP_END
 * @static
 * @type {function}
 * @example
-import {stepEnd} from "scenejs";
-Scene.stepEnd // steps(1, end)
+import {STEP_END} from "scenejs";
+Scene.STEP_END // steps(1, end)
 */
 var STEP_END = /*#__PURE__#*/ steps(1, "end");
 /**
@@ -3539,8 +3539,11 @@ var Scene = /*#__PURE__*/ (function (_super) {
 }(Animator));
 
 /**
+ * @namespace presets
+ */
+/**
  * Use the property to create an effect.
- * @memberof Scene
+ * @memberof presets
  * @func set
  * @param {string | string[]} property - property to set effect
  * @param {any[]} values - values of 100%
@@ -3578,7 +3581,7 @@ function set(property, values, options) {
 }
 /**
  * Make a zoom in effect.
- * @memberof Scene
+ * @memberof presets
  * @func zoomIn
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 0] start zoom
@@ -3606,7 +3609,7 @@ function zoomIn(_a) {
 }
 /**
  * Make a zoom out effect.
- * @memberof Scene
+ * @memberof presets
  * @func zoomOut
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 1] start zoom
@@ -3634,7 +3637,7 @@ function zoomOut(_a) {
 }
 /**
  * Make a wipe in effect.
- * @memberof Scene
+ * @memberof presets
  * @func wipeIn
  * @param {AnimatorOptions} options
  * @param {string|string[]} [options.property = "left"] position property
@@ -3663,7 +3666,7 @@ function wipeIn(_a) {
 }
 /**
  * Make a wipe out effect.
- * @memberof Scene
+ * @memberof presets
  * @func wipeOut
  * @param {AnimatorOptions} options
  * @param {string|string[]} [options.property = "left"] position property
@@ -3692,7 +3695,7 @@ function wipeOut(_a) {
 }
 /**
  * Use the property to create an effect.
- * @memberof Scene
+ * @memberof presets
  * @func transition
  * @param {Scene.SceneItem} item1 - Item that end effect
  * @param {Scene.SceneItem} item2 - Item that start effect
@@ -3746,7 +3749,7 @@ function transition(item1, item2, _a) {
 }
 /**
  * Make a fade in effect.
- * @memberof Scene
+ * @memberof presets
  * @func fadeIn
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 0] start opacity
@@ -3774,7 +3777,7 @@ function fadeIn(_a) {
 }
 /**
  * Make a fade out effect.
- * @memberof Scene
+ * @memberof presets
  * @func fadeOut
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 1] start opacity
@@ -3802,7 +3805,7 @@ function fadeOut(_a) {
 }
 /**
  * Make a blinking effect.
- * @memberof Scene
+ * @memberof presets
  * @func blink
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 0] start opacity
