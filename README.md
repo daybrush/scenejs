@@ -44,6 +44,8 @@ $ npm install scenejs
 * [**ng-scene**](https://github.com/daybrush/scenejs/tree/master/packages/ng-scene): A Angular Component that can easily use scenejs
 * [**vue-scene**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scene): A Vue Component that can easily use scenejs
 
+## Documents
+* [API documentation](https://daybrush.github.io/scenejs/release/latest/doc/)
 
 ## Make scene
 ```javascript
@@ -68,8 +70,27 @@ const scene = new Scene({
 
 ```
 
-## Documents
-* [API documentation](https://daybrush.github.io/scenejs/release/latest/doc/)
+## easing
+* [EASE](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.EASE)
+* [EASE_IN](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.EASE_IN)
+* [EASE_OUT](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.EASE_OUT)
+* [EASE_IN_OUT](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.EASE_IN_OUT)
+* [STEP_START](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.STEP_START)
+* [STEP_END](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.STEP_END)
+* [bezier(x1, y1, x2, y2)](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.bezier)
+* [steps(count, "start" | "end")](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.steps)
+
+
+## presets
+* [wipeIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.wipeIn)
+* [wipeOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.wipeOut)
+* [zoomIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.zoomIn)
+* [zoomOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.zoomOut)
+* [blink](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.blink)
+* [fadeIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.fadeIn)
+* [fadeOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.fadeOut)
+* [set](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.set)
+* [transition](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.transition)
 
 ## Support Browser
 

@@ -133,7 +133,7 @@ keyframes.updateFrame(frame);
     const obj: ObjectInterface<any> = {};
 
     this.times = times.map(time => {
-      const time2 = time * ratio;
+      const time2 = toFixed(time * ratio);
 
       obj[time2] = items[time];
 

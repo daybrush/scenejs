@@ -601,7 +601,7 @@ const frame = item.getNowFrame(1.7);
         }
         // isStartZero is keytimes[0] is 0 (i === 0 & j === 0)
         const threshold = j === 0 && (i === 0 ? !isStartZero : !isShuffle) ? THRESHOLD : 0;
-        const keyvalue = isReverse ? times[length - 1 - j] : times[j];
+        const keyvalue = toFixed(isReverse ? times[length - 1 - j] : times[j]);
         const time = toFixed(isReverse ? duration - keyvalue : keyvalue);
         const keytime = toFixed(start + time + threshold);
 
@@ -614,6 +614,10 @@ const frame = item.getNowFrame(1.7);
         if (!frames[keyvalue]) {
           const frame = this.getFrame(keyvalue);
 
+          if (!frame) {
+            frames[keyvalue] = this.getNowFrame(keyvalue);
+            continue;
+          }
           if (j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
             frames[keyvalue] = this.getNowFrame(keyvalue);
           } else {
