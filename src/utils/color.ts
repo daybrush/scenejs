@@ -1,8 +1,10 @@
+import { RGBA } from "../consts";
+
 /**
 * @namespace
 * @name Color
 */
-export const COLOR_MODELS = ["rgb", "rgba", "hsl", "hsla"];
+export const COLOR_MODELS = ["rgb", RGBA, "hsl", "hsla"];
 
 /**
 * Remove the # from the hex color.

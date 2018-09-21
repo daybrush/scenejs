@@ -11,7 +11,10 @@ import {
 import Keyframes from "./Keyframes";
 import { dotValue } from "./utils/dot";
 import {
-  KEYFRAMES, ANIMATION, START_ANIMATION, PREFIX, THRESHOLD, ObjectInterface, NameType, timingFunction
+  KEYFRAMES, ANIMATION, START_ANIMATION,
+  PREFIX, THRESHOLD, ObjectInterface, NameType,
+  timingFunction, ALTERNATE, ALTERNATE_REVERSE, NORMAL, INFINITE,
+  REVERSE, EASING, RUNNING, PLAY, FILL_MODE, DIRECTION, ITERATION_COUNT, EASING_NAME, DELAY, PLAY_SPEED, DURATION
 } from "./consts";
 import { addClass, removeClass, hasClass, fromCSS } from "./utils/css";
 
@@ -87,7 +90,7 @@ class SceneItem extends Animator {
     this.load(properties, options);
   }
   public getDuration() {
-    return Math.max(this.state.duration, this.keyframes.getDuration());
+    return Math.max(this.state[DURATION], this.keyframes.getDuration());
   }
   public setDuration(duration: number) {
     if (duration === 0) {
@@ -166,8 +169,8 @@ console.log(item.get(0, "a")); // "b"
           this.set(realTime + t, frames[values[t]]);
         });
         if (easing) {
-          this.set(realTime + keys[0], "easing", easing);
-          this.set(realTime + keys[keys.length - 1], "easing", "initial");
+          this.set(realTime + keys[0], EASING, easing);
+          this.set(realTime + keys[keys.length - 1], EASING, "initial");
         }
         return this;
       } else if (args.length === 1 && isArray(args[0])) {
@@ -254,7 +257,7 @@ item.set(item.getDuration(), {
   public prepend(item: SceneItem | object) {
     if (item instanceof SceneItem) {
       const delay = item.getDelay();
-      const duration = item.getIterationCount() === "infinite" ? item.getDuration() : item.getActiveDuration();
+      const duration = item.getIterationCount() === INFINITE ? item.getDuration() : item.getActiveDuration();
       const unshiftTime = duration + delay;
       const firstFrame = this.keyframes.get(0);
 
@@ -499,7 +502,7 @@ const frame = item.getNowFrame(1.7);
     const frame = new Frame();
     const names = this.keyframes.getNames();
     const { left, right } = this._getNearTimeIndex(time);
-    const realEasing = this._getEasing(time, left, right, this.state.easing || easing);
+    const realEasing = this._getEasing(time, left, right, this.getEasing() || easing);
 
     names.forEach(properties => {
       const value = this._getNowValue(time, left, right, properties, realEasing);
@@ -580,14 +583,14 @@ const frame = item.getNowFrame(1.7);
     }
     const frames: ObjectInterface<Frame> = {};
     const duration = this.getDuration();
-    const direction = options.direction || this.state.direction;
-    const isShuffle = direction === "alternate" || direction === "alternate-reverse";
+    const direction = options[DIRECTION] || this.state[DIRECTION];
+    const isShuffle = direction === ALTERNATE || direction === ALTERNATE_REVERSE;
     (!this.getFrame(0)) && times.unshift(0);
     (!this.getFrame(duration)) && times.push(duration);
     length = times.length;
-    let iterationCount = options.iterationCount || this.state.iterationCount;
+    let iterationCount = options[ITERATION_COUNT] || this.state[ITERATION_COUNT];
 
-    iterationCount = iterationCount !== "infinite" ? iterationCount : 1;
+    iterationCount = iterationCount !== INFINITE ? iterationCount : 1;
     const totalDuration = iterationCount * duration;
 
     for (let i = 0; i < iterationCount; ++i) {
@@ -653,27 +656,29 @@ item.setCSS(0, ["opacity", "width", "height"]);
       return "";
     }
     const id = this._getId();
+    // infinity or zero
+    const isParent = typeof options[ITERATION_COUNT] === "undefined";
     const isZeroDuration = duration === 0;
-    const playSpeed = (options.playSpeed || 1);
-    const delay = ((typeof options.delay === "undefined" ? state.delay : options.delay) || 0) / playSpeed;
-    const easingName = (!isZeroDuration && options.easing && options.easingName) || state.easingName;
-    const count = (!isZeroDuration && options.iterationCount) || state.iterationCount;
-    const fillMode = (options.fillMode !== "forwards" && options.fillMode) || state.fillMode;
-    const direction = (options.direction !== "normal" && options.direction) || state.direction;
+    const playSpeed = (options[PLAY_SPEED] || 1);
+    const delay = ((isParent ? state[DELAY] : options[DELAY]) || 0) / playSpeed;
+    const easingName = (!isZeroDuration && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
+    const iterationCount = (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
+    const fillMode = (options[FILL_MODE] !== "forwards" && options[FILL_MODE]) || state[FILL_MODE];
+    const direction = (options[DIRECTION] !== NORMAL && options[DIRECTION]) || state[DIRECTION];
     const cssText = makeAnimationProperties({
       fillMode,
       direction,
+      iterationCount,
       delay: `${delay}s`,
       name: `${PREFIX}KEYFRAMES_${toId(id)}`,
       duration: `${duration / playSpeed}s`,
       timingFunction: easingName,
-      iterationCount: count,
     });
 
     const css = `${selector}.${START_ANIMATION} {
 			${cssText}
 		}
-		${this._toKeyframes(duration, options)}`;
+		${this._toKeyframes(duration, isParent)}`;
 
     return css;
   }
@@ -711,7 +716,7 @@ item.playCSS(false, {
 });
 	*/
   public playCSS(exportCSS = true, properties = {}) {
-    if (!ANIMATION || this.getPlayState() === "running") {
+    if (!ANIMATION || this.getPlayState() === RUNNING) {
       return this;
     }
     const elements = this.elements;
@@ -746,8 +751,8 @@ item.playCSS(false, {
     }
 
     this.setState({ playCSS: true });
-    this.setPlayState("running");
-    this.trigger("play");
+    this.setPlayState(RUNNING);
+    this.trigger(PLAY);
 
     const duration = this.getDuration();
     const animatedElement = elements[0];
@@ -782,19 +787,18 @@ item.playCSS(false, {
     }
     return easing;
   }
-  private _toKeyframes(duration = this.getDuration(), options: StateInterface = {}) {
+  private _toKeyframes(duration = this.getDuration(), isParent: boolean) {
     const id = this._getId();
     const state = this.state;
-    const playSpeed = state.playSpeed;
-    const isParent = typeof options.iterationCount !== "undefined";
-    const iterationCount = state.iterationCount;
-    const delay = isParent ? state.delay : 0;
-    const direction = isParent ? state.direction : "normal";
+    const playSpeed = state[PLAY_SPEED];
+    const iterationCount = state[ITERATION_COUNT];
+    const delay = isParent ? state[DELAY] : 0;
+    const direction = isParent ? state[DIRECTION] : NORMAL;
     const { keys, values, frames } = this.getAllTimes(true, {
       duration,
       delay,
       direction,
-      iterationCount: isParent && iterationCount !== "infinite" ? iterationCount : 1,
+      iterationCount: isParent && iterationCount !== INFINITE ? iterationCount : 1,
       isCSS: true,
     });
     const length = keys.length;
@@ -809,7 +813,7 @@ item.playCSS(false, {
     }
     if (delay) {
       keyframes.push(`0%{${frames[0]}}`);
-      if (direction === "reverse" || direction === "alternate-reverse") {
+      if (direction === REVERSE || direction === ALTERNATE_REVERSE) {
         keyframes.push(`${delay / playSpeed / duration * 100 - 0.00001}%{${css[0]}}`);
       }
     }
@@ -831,7 +835,7 @@ item.playCSS(false, {
     left: number,
     right: number,
     properties: string[],
-    easing: EasingType = this.state.easing,
+    easing: EasingType = this.getEasing(),
     usePrevValue: boolean = isFixed(properties),
   ) {
     const keyframes = this.keyframes;

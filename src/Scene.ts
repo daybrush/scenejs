@@ -1,6 +1,6 @@
 import Animator, { StateInterface, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
-import { ANIMATION, ObjectInterface } from "./consts";
+import { ANIMATION, ObjectInterface, RUNNING, ENDED, PLAY, ITERATION, ANIMATE } from "./consts";
 import { has } from "./utils";
 import Frame from "./Frame";
 
@@ -195,7 +195,7 @@ scene.playCSS(false, {
 });
 	*/
   public playCSS(exportCSS = true, properties = {}) {
-    if (!ANIMATION || this.getPlayState() === "running") {
+    if (!ANIMATION || this.getPlayState() === RUNNING) {
       return this;
     }
     exportCSS && this.exportCSS();
@@ -221,14 +221,14 @@ scene.playCSS(false, {
     const animationend = () => {
       this.end();
       this.setState({ playCSS: false });
-      animationItem.off("ended", animationend);
-      animationItem.off("iteration", animationiteration);
+      animationItem.off(ENDED, animationend);
+      animationItem.off(ITERATION, animationiteration);
     };
-    animationItem.on("ended", animationend);
-    animationItem.on("iteration", animationiteration);
+    animationItem.on(ENDED, animationend);
+    animationItem.on(ITERATION, animationiteration);
     this.setState({ playCSS: true });
-    this.setPlayState("running");
-    this.trigger("play");
+    this.setPlayState(RUNNING);
+    this.trigger(PLAY);
     return this;
   }
   public load(properties: any = {}, options = properties.options) {
@@ -279,7 +279,7 @@ scene.playCSS(false, {
 		 * @param {Number} param.time The iteration time during duration that the animator is running.
 		 * @param {Frame} param.frames frame of that time.
 		 */
-    this.trigger("animate", {
+    this.trigger(ANIMATE, {
       currentTime: this.getTime(),
       time: iterationTime,
       frames,

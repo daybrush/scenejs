@@ -56,7 +56,7 @@ export function bezier(x1: number, y1: number, x2: number, y2: number) {
     return cubic(y1, y2, t);
   };
 
-  func.easingName = `cubic-bezier(${x1}, ${y1}, ${x2}, ${y2})`;
+  func.easingName = `cubic-bezier(${x1},${y1},${x2},${y2})`;
   return func;
 }
 /**

@@ -6,7 +6,7 @@
 import PropertyObject from "../PropertyObject";
 import {COLOR_MODELS, hexToRGB, hex3to6, hslToRGB} from "./color";
 import {isString, isArray} from "../utils";
-import { ObjectInterface } from "../consts";
+import { ObjectInterface, RGBA } from "../consts";
 
 /**
 * divide text by space.
@@ -72,7 +72,7 @@ arrayToColorObject([0, 0, 0])
 // => PropertyObject(type="color", model="rgba", value=[0, 0, 0, 1], separator=",")
 */
 export function arrayToColorObject(arr: number[]) {
-  const model = "rgba";
+  const model = RGBA;
 
   if (arr.length === 3) {
     arr[3] = 1;
@@ -122,14 +122,14 @@ export function toColorObject(value: PropertyObject | number[] | string) {
   if (colorModel === "rgb") {
     colorObject.setOptions({
       type: "color",
-      model: "rgba",
-      prefix: `rgba(`,
+      model: RGBA,
+      prefix: `${RGBA}(`,
       suffix: ")",
     });
   }
   switch (colorModel) {
     case "rgb":
-    case "rgba":
+    case RGBA:
       for (let i = 0; i < 3; ++i) {
         colorArray[i] = parseInt(colorArray[i], 10);
       }
