@@ -27,6 +27,13 @@ function __extends(d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
 
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
 var PREFIX = "__SCENEJS_";
 var timingFunction = "animation-timing-function";
 var ROLES = { transform: {}, filter: {}, attribute: {} };
@@ -34,6 +41,30 @@ var ALIAS = { easing: ["animation-timing-function"] };
 var FIXED = { "animation-timing-function": true, "contents": true };
 var MAXIMUM = 1000000;
 var THRESHOLD = 0.000001;
+var DURATION = "duration";
+var FILL_MODE = "fillMode";
+var DIRECTION = "direction";
+var ITERATION_COUNT = "iterationCount";
+var DELAY = "delay";
+var EASING = "easing";
+var PLAY_SPEED = "playSpeed";
+var EASING_NAME = "easingName";
+var ITERATION_TIME = "iterationTime";
+var PAUSED = "paused";
+var ENDED = "ended";
+var TIMEUPDATE = "timeupdate";
+var ANIMATE = "animate";
+var PLAY = "play";
+var RUNNING = "running";
+var ITERATION = "iteration";
+var RGBA = "rgba";
+var START_ANIMATION = "startAnimation";
+var ALTERNATE = "alternate";
+var REVERSE = "reverse";
+var ALTERNATE_REVERSE = "alternate-reverse";
+var NORMAL = "normal";
+var INFINITE = "infinite";
+var PLAY_STATE = "playState";
 /**
 * option name list
 * @name Scene.OPTIONS
@@ -43,7 +74,7 @@ var THRESHOLD = 0.000001;
 * @example
 * Scene.OPTIONS // ["duration", "fillMode", "direction", "iterationCount", "delay", "easing", "playSpeed"]
 */
-var OPTIONS = ["duration", "fillMode", "direction", "iterationCount", "delay", "easing", "playSpeed"];
+var OPTIONS = [DURATION, FILL_MODE, DIRECTION, ITERATION_COUNT, DELAY, EASING, PLAY_SPEED];
 /**
 * Event name list
 * @name Scene.EVENTS
@@ -51,9 +82,9 @@ var OPTIONS = ["duration", "fillMode", "direction", "iterationCount", "delay", "
 * @static
 * @type {string[]}
 * @example
-* Scene.EVENTS // ["paused", "ended", "timeupdate", "animate", "play"];
+* Scene.EVENTS // ["paused", "ended", "timeupdate", "animate", "play", "iteration"];
 */
-var EVENTS = ["paused", "ended", "timeupdate", "animate", "play"];
+var EVENTS = [PAUSED, ENDED, TIMEUPDATE, ANIMATE, PLAY, ITERATION];
 var prefixes = ["webkit", "ms", "moz", "o"];
 var checkProperties = function (property) {
     var styles = (document.body || document.documentElement).style;
@@ -69,11 +100,10 @@ var checkProperties = function (property) {
     }
     return "";
 };
-var TRANSFORM = checkProperties("transform");
-var FILTER = checkProperties("filter");
-var ANIMATION = checkProperties("animation");
-var KEYFRAMES = ANIMATION.replace("animation", "keyframes");
-var START_ANIMATION = "startAnimation";
+var TRANSFORM = /*#__PURE__*/ checkProperties("transform");
+var FILTER = /*#__PURE__*/ checkProperties("filter");
+var ANIMATION = /*#__PURE__*/ checkProperties("animation");
+var KEYFRAMES = /*#__PURE__*/ ANIMATION.replace("animation", "keyframes");
 
 /**
 * attach and trigger event handlers.
@@ -255,7 +285,7 @@ function bezier(x1, y1, x2, y2) {
         var t = solveFromX(x1, x2, Math.max(Math.min(1, x), 0));
         return cubic(y1, y2, t);
     };
-    func.easingName = "cubic-bezier(" + x1 + ", " + y1 + ", " + x2 + ", " + y2 + ")";
+    func.easingName = "cubic-bezier(" + x1 + "," + y1 + "," + x2 + "," + y2 + ")";
     return func;
 }
 /**
@@ -615,7 +645,26 @@ function decamelize(str) {
 }
 
 var lastTime = 0;
-var requestAnimFrame = (function () {
+function camelize(str) {
+    return str.replace(/[\s-_]([a-z])/g, function (all, letter) { return letter.toUpperCase(); });
+}
+function GetterSetter(getter, setter, parent) {
+    return function (constructor) {
+        var prototype = constructor.prototype;
+        getter.forEach(function (name) {
+            prototype[camelize("get " + name)] = function () {
+                return this[parent][name];
+            };
+        });
+        setter.forEach(function (name) {
+            prototype[camelize("set " + name)] = function (value) {
+                this[parent][name] = value;
+                return this;
+            };
+        });
+    };
+}
+var requestAnimFrame = /*#__PURE__*/ (function () {
     return window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
         window.mozRequestAnimationFrame ||
@@ -630,8 +679,8 @@ var requestAnimFrame = (function () {
         });
 })();
 function isDirectionReverse(iterationCount, direction) {
-    return direction === "reverse" ||
-        direction === (iterationCount % 2 >= 1 ? "alternate" : "alternate-reverse");
+    return direction === REVERSE ||
+        direction === (iterationCount % 2 >= 1 ? ALTERNATE : ALTERNATE_REVERSE);
 }
 /**
 * @typedef {Object} AnimatorOptions The Animator options. Properties used in css animation.
@@ -659,6 +708,9 @@ const animator = new Animator({
     easing: Scene.eaasing.EASE,
 });
 */
+var setters = [ITERATION_COUNT, DELAY, FILL_MODE,
+    DIRECTION, PLAY_SPEED, DURATION, PLAY_SPEED, ITERATION_TIME, PLAY_STATE];
+var getters = setters.concat([EASING, EASING_NAME]);
 var Animator = /*#__PURE__*/ (function (_super) {
     __extends(Animator, _super);
     function Animator(options) {
@@ -671,14 +723,14 @@ var Animator = /*#__PURE__*/ (function (_super) {
             iterationCount: 1,
             delay: 0,
             fillMode: "forwards",
-            direction: "normal",
+            direction: NORMAL,
             playSpeed: 1,
             currentTime: 0,
-            currentIterationTime: -1,
+            iterationTime: -1,
             currentIterationCount: 0,
             tickTime: 0,
             prevTime: 0,
-            playState: "paused",
+            playState: PAUSED,
             duration: 0
         };
         _this.setOptions(options);
@@ -700,13 +752,10 @@ var Animator = /*#__PURE__*/ (function (_super) {
   });
       */
     Animator.prototype.setEasing = function (curveArray) {
-        this.setState(Array.isArray(curveArray) ? {
-            easingName: "cubic-bezier(" + curveArray.join(",") + ")",
-            easing: bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3])
-        } : {
-            easing: curveArray,
-            easingName: curveArray.easingName || "linear"
-        });
+        var easing = Array.isArray(curveArray) ?
+            bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]) : curveArray;
+        var easingName = easing[EASING_NAME] || "linear";
+        this.setState({ easing: easing, easingName: easingName });
         return this;
     };
     /**
@@ -726,16 +775,14 @@ var Animator = /*#__PURE__*/ (function (_super) {
   });
       */
     Animator.prototype.setOptions = function (options) {
-        if (!options) {
-            return this;
-        }
+        if (options === void 0) { options = {}; }
         for (var name in options) {
             var value = options[name];
-            if (name === "easing") {
+            if (name === EASING) {
                 this.setEasing(value);
                 continue;
             }
-            else if (name === "duration") {
+            else if (name === DURATION) {
                 value && this.setDuration(value);
                 continue;
             }
@@ -751,10 +798,10 @@ var Animator = /*#__PURE__*/ (function (_super) {
   animator.getTotalDuration();
       */
     Animator.prototype.getTotalDuration = function () {
-        if (this.state.iterationCount === "infinite") {
+        if (this.state[ITERATION_COUNT] === INFINITE) {
             return Infinity;
         }
-        return this.state.delay + this.getActiveDuration();
+        return this.state[DELAY] + this.getActiveDuration();
     };
     /**
       * Get the animator's total duration excluding delay
@@ -764,10 +811,10 @@ var Animator = /*#__PURE__*/ (function (_super) {
   animator.getTotalDuration();
       */
     Animator.prototype.getActiveDuration = function () {
-        if (this.state.iterationCount === "infinite") {
+        if (this.state[ITERATION_COUNT] === INFINITE) {
             return Infinity;
         }
-        return this.getDuration() * this.state.iterationCount;
+        return this.getDuration() * this.state[ITERATION_COUNT];
     };
     /**
       * Check if the animator has reached the end.
@@ -777,7 +824,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
   animator.isEnded(); // true or false
       */
     Animator.prototype.isEnded = function () {
-        if (this.state.tickTime === 0 && this.state.playState === "paused") {
+        if (this.state.tickTime === 0 && this.state[PLAY_STATE] === PAUSED) {
             return true;
         }
         else if (this.getTime() < this.getActiveDuration()) {
@@ -793,10 +840,10 @@ var Animator = /*#__PURE__*/ (function (_super) {
   animator.isPaused(); // true or false
       */
     Animator.prototype.isPaused = function () {
-        return this.state.playState === "paused";
+        return this.state[PLAY_STATE] === PAUSED;
     };
     Animator.prototype.setNext = function (animator) {
-        this.on("ended", function () {
+        this.on(ENDED, function () {
             animator.play();
         });
         return this;
@@ -808,7 +855,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
       */
     Animator.prototype.play = function () {
         var _this = this;
-        this.state.playState = "running";
+        this.state[PLAY_STATE] = RUNNING;
         if (this.isEnded()) {
             this.setTickTime(0);
         }
@@ -821,7 +868,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
              * This event is fired when play animator.
              * @event Scene.Animator#play
              */
-        this.trigger("play");
+        this.trigger(PLAY);
         return this;
     };
     /**
@@ -830,12 +877,12 @@ var Animator = /*#__PURE__*/ (function (_super) {
       * @return {Scene.Animator} An instance itself.
       */
     Animator.prototype.pause = function () {
-        this.state.playState = "paused";
+        this.state[PLAY_STATE] = PAUSED;
         /**
              * This event is fired when animator is paused.
              * @event Scene.Animator#paused
              */
-        this.trigger("paused");
+        this.trigger(PAUSED);
         return this;
     };
     /**
@@ -849,7 +896,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
              * This event is fired when animator is ended.
              * @event Scene.Animator#ended
              */
-        this.trigger("ended");
+        this.trigger(ENDED);
         return this;
     };
     /**
@@ -899,7 +946,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
              * @param {Number} param.time The iteration time during duration that the animator is running.
              * @param {Number} param.iterationCount The iteration count that the animator is running.
              */
-        this.trigger("timeupdate", {
+        this.trigger(TIMEUPDATE, {
             currentTime: currentTime,
             time: this.getIterationTime(),
             iterationCount: this.getIterationCount()
@@ -951,34 +998,6 @@ var Animator = /*#__PURE__*/ (function (_super) {
         }
     };
     /**
-      * Get the animator's current iteration time
-      * @method Scene.Animator#getIterationTime
-      * @return {number} current iteration time
-      * @example
-  animator.getIterationTime();
-      */
-    Animator.prototype.getIterationTime = function () {
-        return this.state.currentIterationTime;
-    };
-    /**
-       * Get a delay for the start of an animation.
-       * @method Scene.Animator#getDelay
-       * @return {number} delay
-       */
-    Animator.prototype.getDelay = function () {
-        return this.state.delay;
-    };
-    /**
-       * Set a delay for the start of an animation.
-       * @method Scene.Animator#setDelay
-       * @param {number} delay - delay
-       * @return {Scene.Animator} An instance itself.
-       */
-    Animator.prototype.setDelay = function (delay) {
-        this.state.delay = delay;
-        return this;
-    };
-    /**
        * Check if the current state of animator is delayed.
        * @method Scene.Animator#isDelay
        * @return {boolean} check delay state
@@ -986,130 +1005,6 @@ var Animator = /*#__PURE__*/ (function (_super) {
     Animator.prototype.isDelay = function () {
         var _a = this.state, delay = _a.delay, tickTime = _a.tickTime;
         return delay > 0 && (tickTime < delay);
-    };
-    /**
-       * Get fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
-       * @method Scene.Animator#getFillMode
-       * @return {"none"|"forwards"|"backwards"|"both"} fillMode
-       */
-    Animator.prototype.getFillMode = function () {
-        return this.state.fillMode;
-    };
-    /**
-       * Set fill mode for the item when the animation is not playing (before it starts, after it ends, or both)
-       * @method Scene.Animator#setFillMode
-       * @param {"none"|"forwards"|"backwards"|"both"} fillMode - fillMode
-       * @return {Scene.Animator} An instance itself.
-       */
-    Animator.prototype.setFillMode = function (fillMode) {
-        this.state.fillMode = fillMode;
-        return this;
-    };
-    /**
-       * Get the number of times an animation should be played.
-       * @method Scene.Animator#getIterationCount
-       * @return {"inifnite"|number} iterationCount
-       */
-    Animator.prototype.getIterationCount = function () {
-        return this.state.iterationCount;
-    };
-    /**
-       * Set the number of times an animation should be played.
-       * @method Scene.Animator#setIterationCount
-       * @param {"inifnite"|number} iterationCount - iterationCount
-       * @return {Scene.Animator} An instance itself.
-       */
-    Animator.prototype.setIterationCount = function (iterationCount) {
-        this.state.iterationCount = iterationCount;
-        return this;
-    };
-    /**
-       * Get whether an animation should be played forwards, backwards or in alternate cycles.
-       * @method Scene.Animator#getDirection
-       * @return {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction
-       */
-    Animator.prototype.getDirection = function () {
-        return this.state.direction;
-    };
-    /**
-       * Set whether an animation should be played forwards, backwards or in alternate cycles.
-       * @method Scene.Animator#setDirection
-       * @param {"normal"|"reverse"|"alternate"|"alternate-reverse"} direction - direction
-       * @return {Scene.Animator} An instance itself.
-       */
-    Animator.prototype.setDirection = function (direction) {
-        this.state.direction = direction;
-        return this;
-    };
-    /**
-       * Get whether the animation is running or paused.
-       * @method Scene.Animator#getPlayState
-       * @return {"paused"|"running"} playState
-       */
-    Animator.prototype.getPlayState = function () {
-        return this.state.playState;
-    };
-    /**
-       * Set whether the animation is running or paused.
-       * @method Scene.Animator#setPlayState
-       * @param {"paused"|"running"} playState - playState
-       * @return {Scene.Animator} An instance itself.
-       */
-    Animator.prototype.setPlayState = function (playState) {
-        this.state.playState = playState;
-        return this;
-    };
-    /**
-       * Get the animator's play speed
-       * @method Scene.Animator#getPlaySpeed
-       * @return {number} playSpeed
-       */
-    Animator.prototype.getPlaySpeed = function () {
-        return this.state.playSpeed;
-    };
-    /**
-       * Set the animator's play speed
-       * @method Scene.Animator#setPlaySpeed
-       * @param {number} playSpeed - playSpeed
-       * @return {Scene.Animator} An instance itself.
-       */
-    Animator.prototype.setPlaySpeed = function (playSpeed) {
-        this.state.playSpeed = playSpeed;
-        return this;
-    };
-    /**
-       * Get how long an animation should take to complete one cycle.
-       * @method Scene.Animator#getDuration
-       * @return {number} duration
-       */
-    Animator.prototype.getDuration = function () {
-        return this.state.duration;
-    };
-    /**
-       * Set how long an animation should take to complete one cycle.
-       * @method Scene.Animator#setDuration
-       * @param {number} duration - duration
-       * @return {Scene.Animator} An instance itself.
-       */
-    Animator.prototype.setDuration = function (duration) {
-        this.state.duration = duration;
-        return this;
-    };
-    /**
-       * Get the speed curve of an animation.
-       * @method Scene.Animator#getEasing
-       * @return {0|function} easing
-       */
-    Animator.prototype.getEasing = function () {
-        return this.state.easing;
-    };
-    /**
-       * Get the speed curve's name
-       * @method Scene.Animator#getEasingName
-       * @return {string} the curve's name.
-       */
-    Animator.prototype.getEasingName = function () {
-        return this.state.easingName;
     };
     Animator.prototype.setCurrentIterationCount = function (iterationCount) {
         var state = this.state;
@@ -1130,10 +1025,6 @@ var Animator = /*#__PURE__*/ (function (_super) {
         state.currentIterationCount = iterationCount;
         return this;
     };
-    Animator.prototype.setIterationTime = function (time) {
-        this.state.currentIterationTime = time;
-        return this;
-    };
     Animator.prototype.calculateIterationTime = function () {
         var _a = this.state, iterationCount = _a.iterationCount, fillMode = _a.fillMode, direction = _a.direction;
         var duration = this.getDuration();
@@ -1151,7 +1042,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
         if (isReverse) {
             currentIterationTime = duration - currentIterationTime;
         }
-        if (iterationCount !== "infinite") {
+        if (iterationCount !== INFINITE) {
             var isForwards = fillMode === "both" || fillMode === "forwards";
             // fill forwards
             if (currentIterationCount >= iterationCount) {
@@ -1161,16 +1052,6 @@ var Animator = /*#__PURE__*/ (function (_super) {
         }
         this.setIterationTime(currentIterationTime);
         return this;
-    };
-    Animator.prototype.caculateEasing = function (time) {
-        if (!this.state.easing) {
-            return time;
-        }
-        var duration = this.getDuration();
-        var easing = this.state.easing;
-        var ratio = duration === 0 ? 0 : time / duration;
-        var easingTime = easing(ratio) * time;
-        return easingTime;
     };
     Animator.prototype.tick = function (now) {
         var _this = this;
@@ -1183,7 +1064,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
             this.end();
             return;
         }
-        if (state.playState === "paused") {
+        if (state[PLAY_STATE] === PAUSED) {
             return;
         }
         requestAnimFrame(function (time) {
@@ -1193,6 +1074,9 @@ var Animator = /*#__PURE__*/ (function (_super) {
     Animator.prototype.setTickTime = function (time) {
         this.setTime(time - this.state.delay, true);
     };
+    Animator = __decorate([
+        GetterSetter(getters, setters, "state")
+    ], Animator);
     return Animator;
 }(EventTrigger));
 
@@ -1200,7 +1084,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
 * @namespace
 * @name Color
 */
-var COLOR_MODELS = ["rgb", "rgba", "hsl", "hsla"];
+var COLOR_MODELS = ["rgb", RGBA, "hsl", "hsla"];
 /**
 * Remove the # from the hex color.
 * @memberof Color
@@ -1366,7 +1250,7 @@ arrayToColorObject([0, 0, 0])
 // => PropertyObject(type="color", model="rgba", value=[0, 0, 0, 1], separator=",")
 */
 function arrayToColorObject(arr) {
-    var model = "rgba";
+    var model = RGBA;
     if (arr.length === 3) {
         arr[3] = 1;
     }
@@ -1415,14 +1299,14 @@ function toColorObject(value) {
     if (colorModel === "rgb") {
         colorObject.setOptions({
             type: "color",
-            model: "rgba",
-            prefix: "rgba(",
+            model: RGBA,
+            prefix: RGBA + "(",
             suffix: ")"
         });
     }
     switch (colorModel) {
         case "rgb":
-        case "rgba":
+        case RGBA:
             for (var i = 0; i < 3; ++i) {
                 colorArray[i] = parseInt(colorArray[i], 10);
             }
@@ -2437,7 +2321,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         return _this;
     }
     SceneItem.prototype.getDuration = function () {
-        return Math.max(this.state.duration, this.keyframes.getDuration());
+        return Math.max(this.state[DURATION], this.keyframes.getDuration());
     };
     SceneItem.prototype.setDuration = function (duration) {
         if (duration === 0) {
@@ -2517,8 +2401,8 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
                     _this.set(realTime_1 + t, frames_1[values_1[t]]);
                 });
                 if (easing) {
-                    this.set(realTime_1 + keys[0], "easing", easing);
-                    this.set(realTime_1 + keys[keys.length - 1], "easing", "initial");
+                    this.set(realTime_1 + keys[0], EASING, easing);
+                    this.set(realTime_1 + keys[keys.length - 1], EASING, "initial");
                 }
                 return this;
             }
@@ -2611,7 +2495,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
     SceneItem.prototype.prepend = function (item) {
         if (item instanceof SceneItem) {
             var delay = item.getDelay();
-            var duration = item.getIterationCount() === "infinite" ? item.getDuration() : item.getActiveDuration();
+            var duration = item.getIterationCount() === INFINITE ? item.getDuration() : item.getActiveDuration();
             var unshiftTime = duration + delay;
             var firstFrame = this.keyframes.get(0);
             if (firstFrame) {
@@ -2850,7 +2734,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         var frame = new Frame();
         var names = this.keyframes.getNames();
         var _a = this._getNearTimeIndex(time), left = _a.left, right = _a.right;
-        var realEasing = this._getEasing(time, left, right, this.state.easing || easing);
+        var realEasing = this._getEasing(time, left, right, this.getEasing() || easing);
         names.forEach(function (properties) {
             var value = _this._getNowValue(time, left, right, properties, realEasing);
             if (isUndefined(value)) {
@@ -2932,13 +2816,13 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         }
         var frames = {};
         var duration = this.getDuration();
-        var direction = options.direction || this.state.direction;
-        var isShuffle = direction === "alternate" || direction === "alternate-reverse";
+        var direction = options[DIRECTION] || this.state[DIRECTION];
+        var isShuffle = direction === ALTERNATE || direction === ALTERNATE_REVERSE;
         (!this.getFrame(0)) && times.unshift(0);
         (!this.getFrame(duration)) && times.push(duration);
         length = times.length;
-        var iterationCount = options.iterationCount || this.state.iterationCount;
-        iterationCount = iterationCount !== "infinite" ? iterationCount : 1;
+        var iterationCount = options[ITERATION_COUNT] || this.state[ITERATION_COUNT];
+        iterationCount = iterationCount !== INFINITE ? iterationCount : 1;
         var totalDuration = iterationCount * duration;
         for (var i = 0; i < iterationCount; ++i) {
             var isReverse = isDirectionReverse(i, direction);
@@ -3000,23 +2884,25 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
             return "";
         }
         var id = this._getId();
+        // infinity or zero
+        var isParent = typeof options[ITERATION_COUNT] === "undefined";
         var isZeroDuration = duration === 0;
-        var playSpeed = (options.playSpeed || 1);
-        var delay = ((typeof options.delay === "undefined" ? state.delay : options.delay) || 0) / playSpeed;
-        var easingName = (!isZeroDuration && options.easing && options.easingName) || state.easingName;
-        var count = (!isZeroDuration && options.iterationCount) || state.iterationCount;
-        var fillMode = (options.fillMode !== "forwards" && options.fillMode) || state.fillMode;
-        var direction = (options.direction !== "normal" && options.direction) || state.direction;
+        var playSpeed = (options[PLAY_SPEED] || 1);
+        var delay = ((isParent ? state[DELAY] : options[DELAY]) || 0) / playSpeed;
+        var easingName = (!isZeroDuration && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
+        var iterationCount = (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
+        var fillMode = (options[FILL_MODE] !== "forwards" && options[FILL_MODE]) || state[FILL_MODE];
+        var direction = (options[DIRECTION] !== NORMAL && options[DIRECTION]) || state[DIRECTION];
         var cssText = makeAnimationProperties({
             fillMode: fillMode,
             direction: direction,
+            iterationCount: iterationCount,
             delay: delay + "s",
             name: PREFIX + "KEYFRAMES_" + toId(id),
             duration: duration / playSpeed + "s",
-            timingFunction: easingName,
-            iterationCount: count
+            timingFunction: easingName
         });
-        var css = selector + "." + START_ANIMATION + " {\n\t\t\t" + cssText + "\n\t\t}\n\t\t" + this._toKeyframes(duration, options);
+        var css = selector + "." + START_ANIMATION + " {\n\t\t\t" + cssText + "\n\t\t}\n\t\t" + this._toKeyframes(duration, isParent);
         return css;
     };
     SceneItem.prototype.exportCSS = function (duration, options) {
@@ -3057,7 +2943,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         var _this = this;
         if (exportCSS === void 0) { exportCSS = true; }
         if (properties === void 0) { properties = {}; }
-        if (!ANIMATION || this.getPlayState() === "running") {
+        if (!ANIMATION || this.getPlayState() === RUNNING) {
             return this;
         }
         var elements = this.elements;
@@ -3088,8 +2974,8 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
             }
         }
         this.setState({ playCSS: true });
-        this.setPlayState("running");
-        this.trigger("play");
+        this.setPlayState(RUNNING);
+        this.trigger(PLAY);
         var duration = this.getDuration();
         var animatedElement = elements[0];
         var animationend = function () {
@@ -3121,21 +3007,19 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         }
         return easing;
     };
-    SceneItem.prototype._toKeyframes = function (duration, options) {
+    SceneItem.prototype._toKeyframes = function (duration, isParent) {
         if (duration === void 0) { duration = this.getDuration(); }
-        if (options === void 0) { options = {}; }
         var id = this._getId();
         var state = this.state;
-        var playSpeed = state.playSpeed;
-        var isParent = typeof options.iterationCount !== "undefined";
-        var iterationCount = state.iterationCount;
-        var delay = isParent ? state.delay : 0;
-        var direction = isParent ? state.direction : "normal";
+        var playSpeed = state[PLAY_SPEED];
+        var iterationCount = state[ITERATION_COUNT];
+        var delay = isParent ? state[DELAY] : 0;
+        var direction = isParent ? state[DIRECTION] : NORMAL;
         var _a = this.getAllTimes(true, {
             duration: duration,
             delay: delay,
             direction: direction,
-            iterationCount: isParent && iterationCount !== "infinite" ? iterationCount : 1,
+            iterationCount: isParent && iterationCount !== INFINITE ? iterationCount : 1,
             isCSS: true
         }), keys = _a.keys, values = _a.values, frames = _a.frames;
         var length = keys.length;
@@ -3149,7 +3033,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         }
         if (delay) {
             keyframes.push("0%{" + frames[0] + "}");
-            if (direction === "reverse" || direction === "alternate-reverse") {
+            if (direction === REVERSE || direction === ALTERNATE_REVERSE) {
                 keyframes.push(delay / playSpeed / duration * 100 - 0.00001 + "%{" + css[0] + "}");
             }
         }
@@ -3164,7 +3048,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         return "@" + KEYFRAMES + " " + PREFIX + "KEYFRAMES_" + toId(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
     };
     SceneItem.prototype._getNowValue = function (time, left, right, properties, easing, usePrevValue) {
-        if (easing === void 0) { easing = this.state.easing; }
+        if (easing === void 0) { easing = this.getEasing(); }
         if (usePrevValue === void 0) { usePrevValue = isFixed(properties); }
         var keyframes = this.keyframes;
         var times = keyframes.times;
@@ -3448,7 +3332,7 @@ var Scene = /*#__PURE__*/ (function (_super) {
         var _this = this;
         if (exportCSS === void 0) { exportCSS = true; }
         if (properties === void 0) { properties = {}; }
-        if (!ANIMATION || this.getPlayState() === "running") {
+        if (!ANIMATION || this.getPlayState() === RUNNING) {
             return this;
         }
         exportCSS && this.exportCSS();
@@ -3472,14 +3356,14 @@ var Scene = /*#__PURE__*/ (function (_super) {
         var animationend = function () {
             _this.end();
             _this.setState({ playCSS: false });
-            animationItem.off("ended", animationend);
-            animationItem.off("iteration", animationiteration);
+            animationItem.off(ENDED, animationend);
+            animationItem.off(ITERATION, animationiteration);
         };
-        animationItem.on("ended", animationend);
-        animationItem.on("iteration", animationiteration);
+        animationItem.on(ENDED, animationend);
+        animationItem.on(ITERATION, animationiteration);
         this.setState({ playCSS: true });
-        this.setPlayState("running");
-        this.trigger("play");
+        this.setPlayState(RUNNING);
+        this.trigger(PLAY);
         return this;
     };
     Scene.prototype.load = function (properties, options) {
@@ -3528,7 +3412,7 @@ var Scene = /*#__PURE__*/ (function (_super) {
              * @param {Number} param.time The iteration time during duration that the animator is running.
              * @param {Frame} param.frames frame of that time.
              */
-        this.trigger("animate", {
+        this.trigger(ANIMATE, {
             currentTime: this.getTime(),
             time: iterationTime,
             frames: frames
@@ -3848,3 +3732,4 @@ var VERSION = "1.0.0-beta8";
 
 export default Scene;
 export { VERSION, SceneItem, Frame, Animator, Keyframes, PropertyObject, bezier, EASE_IN_OUT, EASE_IN, EASE_OUT, EASE, LINEAR, steps, STEP_START, STEP_END, set, transition, wipeIn, wipeOut, fadeIn, fadeOut, blink, zoomIn, zoomOut, OPTIONS, EVENTS, setRole, setAlias };
+//# sourceMappingURL=scene.esm.js.map
