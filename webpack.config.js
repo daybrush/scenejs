@@ -3,16 +3,18 @@ const UglifyJSWebpackPlugin = require("uglifyjs-webpack-plugin");
 const StringReplacePlugin = require("string-replace-webpack-plugin");
 const pkg = require("./package.json");
 const TSLintPlugin = require("tslint-webpack-plugin");
- const banner = `Copyright (c) 2018 ${pkg.author}
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const banner = `Copyright (c) 2018 ${pkg.author}
 license: ${pkg.license}
 author: ${pkg.author}
 repository: ${pkg.repository.url}
 @version ${pkg.version}`;
 
 const config = {
+	devtool: "source-map",
 	entry: {
-		"scene.common": `./src/index.ts`,
-		"scene": `./src/index.umd.ts`,
+		// "scene.common": `./src/index.ts`,
+		// "scene": `./src/index.umd.ts`,
 		"scene.min": `./src/index.umd.ts`,
 	},
 	output: {
@@ -20,15 +22,23 @@ const config = {
 		path: `${__dirname}/dist/`,
 		libraryTarget: "umd",
 		umdNamedDefine: true,
+		libraryExport: "default",
 		library: "Scene",
 	},
+	mode: "production",
+	optimization: {
+		minimize: false,
+		concatenateModules: false,
+	},
 	plugins: [
+		new BundleAnalyzerPlugin({analyzerMode: "static"}),
 		new TSLintPlugin({
 			files: ["./src/**/*.ts"],
 			project: "./tsconfig.json",
 		}),
 		new UglifyJSWebpackPlugin({
 			include: /\.min\.js$/,
+			sourceMap: true,
 			uglifyOptions: {
 				compress: {
 					warnings: false
@@ -40,9 +50,8 @@ const config = {
 			},
 		}),
 		new webpack.BannerPlugin(banner),
-		new StringReplacePlugin()
+		new StringReplacePlugin(),
 	],
-	mode: "none",
 	resolve: {
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},

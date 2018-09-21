@@ -12,3 +12,4 @@ outjs/
 declaration/
 build/
 .vscode/
+rollup-plugin-visualizer/

@@ -14,7 +14,7 @@
     "coverage": "karma start --coverage && print-coveralls --sort=desc",
     "test": "karma start",
     "test:chrome": "karma start --chrome",
-    "build": "webpack && npm run release:latest && npm run build:rollup",
+    "build": "npm run build:rollup && npm run release:latest",
     "build:rollup": "rollup -c && npm run build:replace && npm run build:version",
     "build:replace": "replace-in-file '/** @class */' '/*#__PURE__*/' dist/*.js",
     "build:version": "replace-in-file --configFile replace.config.js",
@@ -79,6 +79,7 @@
     "replace-in-file": "^3.4.0",
     "rollup": "^0.66.0",
     "rollup-plugin-typescript": "^1.0.0",
+    "rollup-plugin-uglify": "^6.0.0",
     "sinon": "^4.1.2",
     "source-map-loader": "^0.2.4",
     "string-replace-webpack-plugin": "^0.1.3",
@@ -89,10 +90,7 @@
     "typescript-compiler": "^1.4.1-2",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^4.3.0",
+    "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.1.0"
-  },
-  "dependencies": {
-    "ts-loader": "^5.1.1",
-    "typescript-loader": "^1.1.3"
   }
 }
