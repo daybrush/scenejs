@@ -10,7 +10,7 @@ function toInnerProperties(obj: ObjectInterface<string>) {
   const arrObj = [];
 
   for (const name in obj) {
-    arrObj.push(`${name}(${obj[name]})`);
+    arrObj.push(`${name.replace(/\d/g, "")}(${obj[name]})`);
   }
   return arrObj.join(" ");
 }

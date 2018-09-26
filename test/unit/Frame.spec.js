@@ -200,5 +200,12 @@ filter:brightness(90%) grayscale(40%);`.split("\n");
             });
             expect(this.frame.toCSS()).to.be.deep.equal(result.join(""));
         });
+        it("should check 'toCSS' method(multiple porperty)", () => {
+            this.frame.set("transform", "scale2", "3, 4");
+            this.frame.set("transform", "translateX2", "100px");
+            const css = this.frame.toCSS();
+
+            expect(css).to.have.string("scale(1,2) translateX(100px) translateY(200px) scale(3,4) translateX(100px)");
+        });
     });
 });
