@@ -657,10 +657,10 @@ item.setCSS(0, ["opacity", "width", "height"]);
     }
     const id = this._getId();
     // infinity or zero
-    const isParent = typeof options[ITERATION_COUNT] === "undefined";
+    const isParent = typeof options[ITERATION_COUNT] !== "undefined";
     const isZeroDuration = duration === 0;
     const playSpeed = (options[PLAY_SPEED] || 1);
-    const delay = ((isParent ? state[DELAY] : options[DELAY]) || 0) / playSpeed;
+    const delay = ((isParent ? options[DELAY] : state[DELAY]) || 0) / playSpeed;
     const easingName = (!isZeroDuration && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
     const iterationCount = (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
     const fillMode = (options[FILL_MODE] !== "forwards" && options[FILL_MODE]) || state[FILL_MODE];
