@@ -7,6 +7,8 @@ import { isArray, splitUnit } from "../utils";
 import PropertyObject from "../PropertyObject";
 import { EasingType } from "../Animator";
 import { getType } from "../utils";
+import { PROPERTY, FUNCTION } from "../consts";
+import { toPropertyObject } from "./property";
 
 /**
 * The dot product of Arrays
@@ -149,9 +151,15 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
 
   const type1 = getType(a1);
   const type2 = getType(a2);
+  const isFunction1 = type1 === FUNCTION;
+  const isFunction2 = type2 === FUNCTION;
 
-  if (type1 === type2) {
-    if (type1 === "property") {
+  if (isFunction1 || isFunction2) {
+    return () => {
+      return dot(isFunction1 ? toPropertyObject(a1()) : a1, isFunction2 ? toPropertyObject(a2()) : a2, b1, b2);
+    };
+  } else if (type1 === type2) {
+    if (type1 === PROPERTY) {
       return dotObject(a1, a2, b1, b2);
     } else if (type1 === "array") {
       return dotArray(a1, a2, b1, b2);

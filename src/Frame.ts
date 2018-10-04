@@ -1,4 +1,6 @@
-import {TRANSFORM, FILTER, ObjectInterface, NameType, ANIMATION, timingFunction, ALIAS} from "./consts";
+import {
+  TRANSFORM, FILTER, ObjectInterface, NameType,
+  ANIMATION, ALIAS, TIMING_FUNCTION, PROPERTY, FUNCTION} from "./consts";
 import {isObject, isString, isArray, isRole, getType} from "./utils";
 import {toPropertyObject, splitStyle, toObject} from "./utils/property";
 import PropertyObject from "./PropertyObject";
@@ -26,12 +28,14 @@ function merge(to: ObjectInterface<any>, from: ObjectInterface<any>, toValue = f
     const value = from[name];
     const type = getType(value);
 
-    if (type === "property") {
+    if (type === PROPERTY) {
       to[name] = toValue ? value.toValue() : value.clone();
+    } else if (type === FUNCTION) {
+      to[name] = toValue ? getValue([name], value()) : value;
     } else if (type === "array") {
       to[name] = value.slice();
     } else if (type === "object") {
-      if (isObject(to[name]) && !(to[name] instanceof PropertyObject)) {
+      if (isObject(to[name]) && !isPropertyObject(to[name])) {
         merge(to[name], value, toValue);
       } else {
         to[name] = clone(value, toValue);
@@ -43,6 +47,21 @@ function merge(to: ObjectInterface<any>, from: ObjectInterface<any>, toValue = f
   return to;
 }
 /* eslint-enable */
+
+function getValue(names: NameType[], value: any): any {
+  const type = getType(value);
+
+  if (type === PROPERTY) {
+    return value.toValue();
+  } else if (type === FUNCTION) {
+    if (names[0] !== TIMING_FUNCTION) {
+      return getValue(names, value());
+    }
+  } else if (type === "object") {
+    return clone(value, true);
+  }
+  return value;
+}
 /**
 * Animation's Frame
 * @class Scene.Frame
@@ -72,15 +91,8 @@ class Frame {
 	*/
   public get(...args: NameType[]) {
     const value = this.raw(...args);
-    const type = getType(value);
 
-    if (type === "property") {
-      return value.toValue();
-    } else if (type === "object") {
-      return clone(value, true);
-    } else {
-      return value;
-    }
+    return getValue(args[0] in ALIAS ? ALIAS[args[0]] : args, value);
   }
 
   public raw(...args: NameType[]) {
@@ -271,8 +283,8 @@ frame.set("transform", "translate", "50px");
       }
       const value = properties[name];
 
-      if (name === timingFunction) {
-        cssObject[timingFunction.replace("animation", ANIMATION)] =
+      if (name === TIMING_FUNCTION) {
+        cssObject[TIMING_FUNCTION.replace("animation", ANIMATION)] =
           (isString(value) ? value : value.easingName) || "initial";
         continue;
       }

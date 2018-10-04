@@ -176,6 +176,42 @@ describe("SceneItem Test", function() {
             expect(item.hasFrame("1")).to.be.false;
             expect(item.getDuration()).to.be.equals(0.5);
         });
+        it("should check dot function", () => {
+            let vari = 0;
+
+            const item = new SceneItem({
+                0: {
+                    a: "rgb(0, 0, 0)",
+                    b: 0,
+                    c: function () {
+                        return vari;
+                    }
+                },
+                1: {
+                    a: function () {
+                        return "rgb(200, 200, 200)";
+                    },
+                    b: function () {
+                        return vari;
+                    },
+                    c: function () {
+                        return vari + 2;
+                    }
+                },
+            });
+			[0, 0.2, 0.5, 0.7, 1].forEach((t, i) => {
+                const frame = item.getNowFrame(t);
+                if (t !== 1) {
+                    expect(frame.get("a")).to.be.equals(`rgba(${200 * t},${200 * t},${200 * t},1)`);
+                    expect(frame.get("b")).to.be.equals(i * t);
+                } else {
+                    expect(frame.get("a")).to.be.equals(`rgb(200, 200, 200)`);   
+                }
+                expect(frame.get("c")).to.be.closeTo(i + 2 * t, 0.001);
+                expect(frame.get("b")).to.be.equals(i * t);
+                ++vari;
+			})
+		});
         it("should check 'set' method", () => {
             const item = this.item;
 
