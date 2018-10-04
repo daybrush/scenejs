@@ -1,7 +1,8 @@
 import typescript from 'rollup-plugin-typescript';
+import PrototypeMinify from "rollup-plugin-prototype-minify";
 import { uglify } from "rollup-plugin-uglify";
 
-// const visualizer = require('./rollup-plugin-visualizer').visualizer;
+const visualizer = require('./rollup-plugin-visualizer');
 const plugin = typescript({
   "module": "es2015",
   "target": "es3",
@@ -13,7 +14,7 @@ const plugin = typescript({
 
 export default [{
   input: 'src/index.ts',
-  plugins: [plugin],
+  plugins: [plugin, PrototypeMinify({sourcemap: true})],
   output: [{
     format: "es",
     freeze: false,
@@ -31,7 +32,7 @@ export default [{
   }],
 }, {
   input: 'src/index.umd.ts',
-  plugins: [plugin],
+  plugins: [plugin, PrototypeMinify({sourcemap: true})],
   output: [{
     format: "umd",
     name: "Scene",
@@ -43,7 +44,7 @@ export default [{
   }],
 }, {
   input: 'src/index.umd.ts',
-  plugins: [plugin, uglify({ sourcemap: true })],//, visualizer()
+  plugins: [plugin, PrototypeMinify({sourcemap: true}), uglify({ sourcemap: true }), visualizer()], //
   output: [{
     format: "umd",
     name: "Scene",
