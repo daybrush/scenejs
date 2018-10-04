@@ -1,0 +1,140 @@
+
+<style>
+html, body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.item {
+  position: absolute;
+  background: rgba(200, 50, 50, 0.4);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+header {
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  height: 100%;
+}
+header h2 {
+  position: absolute;
+  left: -100px;
+  right: -100px;
+  top: -100px;
+  bottom: -100px;
+  margin: auto;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+}
+header.subdir {
+  position: relative;
+  width: 100%;
+  height: 20%;
+  max-height: 100px;
+}
+.wrapper {
+  position: relative;
+  width: calc(100% - 10px);
+  margin: 5px;
+  flex: auto;
+}
+</style>
+<body>
+  <div class="tooltip">
+    <p><span>name</span>: <span class="tooltip_name"></span></p>
+    <p><span>size</span>: <span class="tooltip_space"></span></p>
+    <p><span>size</span>: <span class="tooltip_space"></span></p>
+    <p><span>percent</span>: <span class="tooltip_percent"></span></p>    
+    <p><span>path</span>: <span class="tooltip_path"></span></p>
+  </div>
+</body>
+<script src="../rollup-plugin-visualizer/node_modules/@egjs/infinitegrid/dist/infinitegrid.pkgd.min.js"></script>
+<script>
+const items = [{"name":"scene.min.js","path":"/","bundleSize":119001,"originalSize":121260,"percent":100.00000000000001,"dirs":[{"name":"src","path":"/src","percent":98.41000000000001,"bundleSize":117112,"originalSize":112213,"dirs":[{"name":"SceneItem.ts","path":"/src/SceneItem.ts","bundleSize":32578,"originalSize":28140,"percent":27.38,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>SceneItem.ts(32578)</span></h2></header>\n    \n  </div>","orgSize":{"width":32578,"height":32578},"size":{"width":32578,"height":32578}},{"name":"utils","path":"/src/utils","percent":14.82,"bundleSize":17641,"originalSize":17707,"dirs":[{"name":"property.ts","path":"/src/utils/property.ts","bundleSize":8525,"originalSize":8249,"percent":7.16,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>property.ts(8525)</span></h2></header>\n    \n  </div>","orgSize":{"width":8525,"height":8525},"size":{"width":8525,"height":8525}},{"name":"dot.ts","path":"/src/utils/dot.ts","bundleSize":5541,"originalSize":5747,"percent":4.66,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>dot.ts(5541)</span></h2></header>\n    \n  </div>","orgSize":{"width":5541,"height":5541},"size":{"width":5541,"height":5541}},{"name":"color.ts","path":"/src/utils/color.ts","bundleSize":2349,"originalSize":2353,"percent":1.97,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>color.ts(2349)</span></h2></header>\n    \n  </div>","orgSize":{"width":2349,"height":2349},"size":{"width":2349,"height":2349}},{"name":"css.ts","path":"/src/utils/css.ts","bundleSize":1226,"originalSize":1358,"percent":1.03,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>css.ts(1226)</span></h2></header>\n    \n  </div>","orgSize":{"width":1226,"height":1226},"size":{"width":1226,"height":1226}}],"content":"<div class=\"item\">\n    <header class=\"subdir\"><h2><span>utils(17641)</span></h2></header>\n    <div class=\"wrapper\"></div>\n  </div>","orgSize":{"width":17641,"height":17641},"size":{"width":17641,"height":17641}},{"name":"Animator.ts","path":"/src/Animator.ts","bundleSize":15228,"originalSize":18012,"percent":12.8,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>Animator.ts(15228)</span></h2></header>\n    \n  </div>","orgSize":{"width":15228,"height":15228},"size":{"width":15228,"height":15228}},{"name":"Frame.ts","path":"/src/Frame.ts","bundleSize":10189,"originalSize":8401,"percent":8.56,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>Frame.ts(10189)</span></h2></header>\n    \n  </div>","orgSize":{"width":10189,"height":10189},"size":{"width":10189,"height":10189}},{"name":"Scene.ts","path":"/src/Scene.ts","bundleSize":9994,"originalSize":8693,"percent":8.4,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>Scene.ts(9994)</span></h2></header>\n    \n  </div>","orgSize":{"width":9994,"height":9994},"size":{"width":9994,"height":9994}},{"name":"presets.ts","path":"/src/presets.ts","bundleSize":7506,"originalSize":6844,"percent":6.31,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>presets.ts(7506)</span></h2></header>\n    \n  </div>","orgSize":{"width":7506,"height":7506},"size":{"width":7506,"height":7506}},{"name":"Keyframes.ts","path":"/src/Keyframes.ts","bundleSize":6693,"originalSize":6006,"percent":5.62,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>Keyframes.ts(6693)</span></h2></header>\n    \n  </div>","orgSize":{"width":6693,"height":6693},"size":{"width":6693,"height":6693}},{"name":"PropertyObject.ts","path":"/src/PropertyObject.ts","bundleSize":5164,"originalSize":4711,"percent":4.34,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>PropertyObject.ts(5164)</span></h2></header>\n    \n  </div>","orgSize":{"width":5164,"height":5164},"size":{"width":5164,"height":5164}},{"name":"EventTrigger.ts","path":"/src/EventTrigger.ts","bundleSize":3562,"originalSize":3129,"percent":2.99,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>EventTrigger.ts(3562)</span></h2></header>\n    \n  </div>","orgSize":{"width":3562,"height":3562},"size":{"width":3562,"height":3562}},{"name":"easing.ts","path":"/src/easing.ts","bundleSize":3539,"originalSize":3724,"percent":2.97,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>easing.ts(3539)</span></h2></header>\n    \n  </div>","orgSize":{"width":3539,"height":3539},"size":{"width":3539,"height":3539}},{"name":"utils.ts","path":"/src/utils.ts","bundleSize":2478,"originalSize":2760,"percent":2.08,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>utils.ts(2478)</span></h2></header>\n    \n  </div>","orgSize":{"width":2478,"height":2478},"size":{"width":2478,"height":2478}},{"name":"consts.ts","path":"/src/consts.ts","bundleSize":2317,"originalSize":3118,"percent":1.95,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>consts.ts(2317)</span></h2></header>\n    \n  </div>","orgSize":{"width":2317,"height":2317},"size":{"width":2317,"height":2317}},{"name":"index.ts","path":"/src/index.ts","bundleSize":163,"originalSize":823,"percent":0.14,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>index.ts(163)</span></h2></header>\n    \n  </div>","orgSize":{"width":163,"height":163},"size":{"width":163,"height":163}},{"name":"index.umd.ts","path":"/src/index.umd.ts","bundleSize":60,"originalSize":145,"percent":0.05,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>index.umd.ts(60)</span></h2></header>\n    \n  </div>","orgSize":{"width":60,"height":60},"size":{"width":60,"height":60}}],"content":"<div class=\"item\">\n    <header class=\"subdir\"><h2><span>src(117112)</span></h2></header>\n    <div class=\"wrapper\"></div>\n  </div>","orgSize":{"width":117112,"height":117112},"size":{"width":117112,"height":117112}},{"name":"\u0000tslib","path":"\u0000tslib","bundleSize":1889,"originalSize":9047,"percent":1.59,"dirs":[],"content":"<div class=\"item\">\n    <header class=\"file\"><h2><span>\u0000tslib(1889)</span></h2></header>\n    \n  </div>","orgSize":{"width":1889,"height":1889},"size":{"width":1889,"height":1889}}],"content":"<div class=\"item\">\n    <header class=\"subdir\"><h2><span>scene.min.js(119001)</span></h2></header>\n    <div class=\"wrapper\"></div>\n  </div>","orgSize":{"width":119001,"height":119001},"size":{"width":119001,"height":119001}}];
+const PackingLayout = eg.InfiniteGrid.PackingLayout;
+const DOMRenderer = eg.InfiniteGrid.DOMRenderer;
+const layout = new PackingLayout({
+  aspectRatio: 1.5,
+  sizeWeight: 100,
+  margin: 5,
+});
+function runa(wrapper, items) {
+  DOMRenderer.createElements(items);
+  items.forEach(item => {
+    wrapper.appendChild(item.el);
+  })
+  items.forEach(item => {
+    wrapper.appendChild(item.el);
+    if (item.dirs.length) {
+      item.wrapper = item.el.querySelector(".wrapper");
+      runa(item.wrapper, item.dirs);
+    }
+  });
+}
+function runb(wrapper, items) {
+  if (!wrapper) {
+    return;
+  }
+  const width = wrapper.offsetWidth;
+  const height = wrapper.offsetHeight;
+
+  layout.options.aspectRatio = width / height;
+  layout.setSize(width);
+  layout.layout([{items: items}]);
+  DOMRenderer.renderItems(items);
+
+  items.forEach(item => {
+    const header = item.el.querySelector("header");
+    const h2 = header.querySelector("h2");
+    const span = header.querySelector("span");
+    const headerWidth = header.offsetWidth;
+    const headerHeight = header.offsetHeight;
+    const spanWidth = span.offsetWidth;
+    const spanHeight = span.offsetHeight;
+
+    const scale = Math.min((headerWidth - 10) / spanWidth, (headerHeight - 10) / spanHeight, 2);
+
+    h2.style.lineHeight = (200 + headerHeight) + "px";
+    h2.style.transform = "scale(" + scale + ")";
+    runb(item.wrapper, item.dirs);
+  });
+}
+runa(document.body, items);
+
+
+function resize() {
+  runb(document.body, items);
+}
+
+function getItemParent(target) {
+  if (target === document.body) {
+    return;
+  }
+  if (target.classList && target.classList.has("item")) {
+    return target;
+  }
+
+  return getItemParent(target.parentNode);
+}
+document.body.addEventListener("mousemove", e => {
+  const item = getItemParent(e.target);
+
+  if (!item) {
+    return;
+  }
+});
+window.addEventListener("resize", resize);
+
+resize();
+</script>

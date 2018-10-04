@@ -39,9 +39,9 @@ function __decorate(decorators, target, key, desc) {
 }
 
 var PREFIX = "__SCENEJS_";
-var timingFunction = "animation-timing-function";
+var TIMING_FUNCTION = "animation-timing-function";
 var ROLES = { transform: {}, filter: {}, attribute: {} };
-var ALIAS = { easing: ["animation-timing-function"] };
+var ALIAS = { easing: [TIMING_FUNCTION] };
 var FIXED = { "animation-timing-function": true, "contents": true };
 var MAXIMUM = 1000000;
 var THRESHOLD = 0.000001;
@@ -69,6 +69,8 @@ var ALTERNATE_REVERSE = "alternate-reverse";
 var NORMAL = "normal";
 var INFINITE = "infinite";
 var PLAY_STATE = "playState";
+var FUNCTION = "function";
+var PROPERTY = "property";
 /**
 * option name list
 * @name Scene.OPTIONS
@@ -110,6 +112,260 @@ var ANIMATION = /*#__PURE__*/ checkProperties("animation");
 var KEYFRAMES = /*#__PURE__*/ ANIMATION.replace("animation", "keyframes");
 
 /**
+* Make string, array to PropertyObject for the dot product
+* @memberof Scene
+*/
+var PropertyObject = /*#__PURE__*/ (function () {
+    /**
+      * @param {String|Array} value - This value is in the array format ..
+      * @param {String} separator - Array separator.
+      * @example
+  var obj1 = new PropertyObject("1,2,3", ",");
+  var obj2 = new PropertyObject([1,2,3], " ");
+  var obj3 = new PropertyObject("1$2$3", "$");
+  
+  // rgba(100, 100, 100, 0.5)
+  var obj4 = new PropertyObject([100,100,100,0.5], {
+      "separator" : ",",
+      "prefix" : "rgba(",
+      "suffix" : ")"
+  });
+       */
+    function PropertyObject(value, options) {
+        if (options === void 0) { options = {}; }
+        this.options = {
+            prefix: "",
+            suffix: "",
+            model: "",
+            type: "",
+            separator: ","
+        };
+        this.setOptions(options);
+        this.init(value);
+    }
+    var __proto = PropertyObject.prototype;__proto.setOptions = function (options) {
+        Object.assign(this.options, options);
+        return this;
+    };
+    __proto.getOption = function (name) {
+        return this.options[name];
+    };
+    /**
+      * the number of values.
+      * @example
+  const obj1 = new PropertyObject("1,2,3", ",");
+  
+  console.log(obj1.length);
+  // 3
+       */
+    __proto.size = function () {
+        return this.value.length;
+    };
+    /**
+      * retrieve one of values at the index
+      * @param {Number} index - index
+      * @return {Object} one of values at the index
+      * @example
+  const obj1 = new PropertyObject("1,2,3", ",");
+  
+  console.log(obj1.get(0));
+  // 1
+       */
+    __proto.get = function (index) {
+        return this.value[index];
+    };
+    /**
+      * Set the value at that index
+      * @param {Number} index - index
+      * @param {Object} value - text, a number, object to set
+      * @return {PropertyObject} An instance itself
+      * @example
+  const obj1 = new PropertyObject("1,2,3", ",");
+  obj1.set(0, 2);
+  console.log(obj1.toValue());
+  // 2,2,3
+       */
+    __proto.set = function (index, value) {
+        this.value[index] = value;
+        return this;
+    };
+    /**
+      * create a copy of an instance itself.
+      * @return {PropertyObject} clone
+      * @example
+  const obj1 = new PropertyObject("1,2,3", ",");
+  const obj2 = obj1.clone();
+       */
+    __proto.clone = function () {
+        var arr = this.value.map(function (v) { return ((v instanceof PropertyObject) ? v.clone() : v); });
+        return new PropertyObject(arr, {
+            separator: this.options.separator,
+            prefix: this.options.prefix,
+            suffix: this.options.suffix,
+            model: this.options.model,
+            type: this.options.type
+        });
+    };
+    /**
+      * Make Property Object to String
+      * @return {String} Make Property Object to String
+      * @example
+  //rgba(100, 100, 100, 0.5)
+  const obj4 = new PropertyObject([100,100,100,0.5], {
+      "separator" : ",",
+      "prefix" : "rgba(",
+      "suffix" : ")",
+  });
+  console.log(obj4.toValue());
+  // "rgba(100,100,100,0.5)"
+      */
+    __proto.toValue = function () {
+        return this.options.prefix + this.join() + this.options.suffix;
+    };
+    /**
+      * Make Property Object's array to String
+      * @return {String} Join the elements of an array into a string
+      * @example
+      //rgba(100, 100, 100, 0.5)
+      var obj4 = new PropertyObject([100,100,100,0.5], {
+          "separator" : ",",
+          "prefix" : "rgba(",
+          "suffix" : ")"
+      });
+      obj4.join();  // =>   "100,100,100,0.5"
+       */
+    __proto.join = function () {
+        return this.value.map(function (v) { return ((v instanceof PropertyObject) ? v.toValue() : v); }).join(this.options.separator);
+    };
+    /**
+      * executes a provided function once per array element.
+      * @param {Function} callback - Function to execute for each element, taking three arguments
+      * @param {All} [callback.currentValue] The current element being processed in the array.
+      * @param {Number} [callback.index] The index of the current element being processed in the array.
+      * @param {Array} [callback.array] the array.
+      * @return {PropertyObject} An instance itself
+      * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach|MDN Array.forEach()} reference to MDN document.
+      * @example
+  //rgba(100, 100, 100, 0.5)
+  var obj4 = new PropertyObject([100,100,100,0.5], {
+      "separator" : ",",
+      "prefix" : "rgba(",
+      "suffix" : ")"
+  });
+  
+  obj4.forEach(t => {
+      console.log(t);
+  });  // =>   "100,100,100,0.5"
+      */
+    __proto.forEach = function (func) {
+        this.value.forEach(func);
+        return this;
+    };
+    __proto.init = function (value) {
+        var type = typeof value;
+        if (type === "string") {
+            this.value = value.split(this.options.separator);
+        }
+        else if (type === "object") {
+            this.value = value;
+        }
+        else {
+            this.value = [value];
+        }
+        return this;
+    };
+    return PropertyObject;
+}());
+
+function setAlias(name, alias) {
+    ALIAS[name] = alias;
+}
+function setRole(names, isProperty, isFixedProperty) {
+    var length = names.length;
+    var roles = ROLES;
+    var fixed = FIXED;
+    for (var i = 0; i < length - 1; ++i) {
+        !roles[names[i]] && (roles[names[i]] = {});
+        roles = roles[names[i]];
+        if (isFixedProperty) {
+            !fixed[names[i]] && (fixed[names[i]] = {});
+            fixed = fixed[names[i]];
+        }
+    }
+    isFixedProperty && (fixed[names[length - 1]] = true);
+    roles[names[length - 1]] = isProperty ? true : {};
+}
+function getType(value) {
+    var type = typeof value;
+    if (type === "object") {
+        if (isArray(value)) {
+            return "array";
+        }
+        else if (value instanceof PropertyObject) {
+            return "property";
+        }
+    }
+    else if (type === "string" || type === "number") {
+        return "value";
+    }
+    return type;
+}
+function toFixed(num) {
+    return Math.round(num * MAXIMUM) / MAXIMUM;
+}
+function isInProperties(roles, args, isCheckTrue) {
+    var length = args.length;
+    var role = roles;
+    if (length === 0) {
+        return false;
+    }
+    for (var i = 0; i < length; ++i) {
+        if (role === true) {
+            return false;
+        }
+        role = role[args[i]];
+        if (!role || (!isCheckTrue && role === true)) {
+            return false;
+        }
+    }
+    return true;
+}
+function isRole(args, isCheckTrue) {
+    return isInProperties(ROLES, args, isCheckTrue);
+}
+function isFixed(args) {
+    return isInProperties(FIXED, args, true);
+}
+function isUndefined(value) {
+    return (typeof value === "undefined");
+}
+function isObject(value) {
+    return value && (typeof value === "object");
+}
+function isArray(value) {
+    return Array.isArray(value);
+}
+function isString(value) {
+    return typeof value === "string";
+}
+function splitUnit(text) {
+    var matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
+    if (!matches) {
+        return { prefix: "", unit: "", value: NaN };
+    }
+    var prefix = matches[1];
+    var value = matches[2];
+    var unit = matches[3];
+    return { prefix: prefix, unit: unit, value: parseFloat(value) };
+}
+// export function camelize(str: string) {
+// 	return str.replace(/[\s-_]([a-z])/g, (all, letter) => letter.toUpperCase());
+// }
+function decamelize(str) {
+    return str.replace(/([a-z])([A-Z])/g, function (all, letter, letter2) { return letter + "-" + letter2.toLowerCase(); });
+}
+
+/**
 * attach and trigger event handlers.
 * @memberof Scene
 */
@@ -144,10 +400,10 @@ var EventTrigger = /*#__PURE__*/ (function () {
   target.trigger("animate");
   
       */
-    EventTrigger.prototype.on = function (name, callback) {
+    var __proto = EventTrigger.prototype;__proto.on = function (name, callback) {
         var _this = this;
         var events = this.events;
-        if (typeof name === "object") {
+        if (isObject(name)) {
             for (var i in name) {
                 this.on(i, name[i]);
             }
@@ -159,7 +415,7 @@ var EventTrigger = /*#__PURE__*/ (function () {
         if (!callback) {
             return this;
         }
-        if (typeof callback === "object") {
+        if (isObject(callback)) {
             callback.forEach(function (func) { return _this.on(name, func); });
             return this;
         }
@@ -182,7 +438,7 @@ var EventTrigger = /*#__PURE__*/ (function () {
   target.off("animate");
   
       */
-    EventTrigger.prototype.off = function (name, callback) {
+    __proto.off = function (name, callback) {
         if (!name) {
             this.events = {};
         }
@@ -214,7 +470,7 @@ var EventTrigger = /*#__PURE__*/ (function () {
   target.trigger("animate", [1, 2]); // log => "animate", 1, 2
   
       */
-    EventTrigger.prototype.trigger = function (name) {
+    __proto.trigger = function (name) {
         var _this = this;
         var data = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -391,263 +647,6 @@ Scene.EASE_IN_OUT
 */
 var EASE_IN_OUT = /*#__PURE__#*/ bezier(0.42, 0, 0.58, 1);
 
-/**
-* Make string, array to PropertyObject for the dot product
-* @memberof Scene
-*/
-var PropertyObject = /*#__PURE__*/ (function () {
-    /**
-      * @param {String|Array} value - This value is in the array format ..
-      * @param {String} separator - Array separator.
-      * @example
-  var obj1 = new PropertyObject("1,2,3", ",");
-  var obj2 = new PropertyObject([1,2,3], " ");
-  var obj3 = new PropertyObject("1$2$3", "$");
-  
-  // rgba(100, 100, 100, 0.5)
-  var obj4 = new PropertyObject([100,100,100,0.5], {
-      "separator" : ",",
-      "prefix" : "rgba(",
-      "suffix" : ")"
-  });
-       */
-    function PropertyObject(value, options) {
-        if (options === void 0) { options = {}; }
-        this.options = {
-            prefix: "",
-            suffix: "",
-            model: "",
-            type: "",
-            separator: ","
-        };
-        this.setOptions(options);
-        this.init(value);
-    }
-    PropertyObject.prototype.setOptions = function (options) {
-        Object.assign(this.options, options);
-        return this;
-    };
-    PropertyObject.prototype.getOption = function (name) {
-        return this.options[name];
-    };
-    /**
-      * the number of values.
-      * @example
-  const obj1 = new PropertyObject("1,2,3", ",");
-  
-  console.log(obj1.length);
-  // 3
-       */
-    PropertyObject.prototype.size = function () {
-        return this.value.length;
-    };
-    /**
-      * retrieve one of values at the index
-      * @param {Number} index - index
-      * @return {Object} one of values at the index
-      * @example
-  const obj1 = new PropertyObject("1,2,3", ",");
-  
-  console.log(obj1.get(0));
-  // 1
-       */
-    PropertyObject.prototype.get = function (index) {
-        return this.value[index];
-    };
-    /**
-      * Set the value at that index
-      * @param {Number} index - index
-      * @param {Object} value - text, a number, object to set
-      * @return {PropertyObject} An instance itself
-      * @example
-  const obj1 = new PropertyObject("1,2,3", ",");
-  obj1.set(0, 2);
-  console.log(obj1.toValue());
-  // 2,2,3
-       */
-    PropertyObject.prototype.set = function (index, value) {
-        this.value[index] = value;
-        return this;
-    };
-    /**
-      * create a copy of an instance itself.
-      * @return {PropertyObject} clone
-      * @example
-  const obj1 = new PropertyObject("1,2,3", ",");
-  const obj2 = obj1.clone();
-       */
-    PropertyObject.prototype.clone = function () {
-        var arr = this.value.map(function (v) { return ((v instanceof PropertyObject) ? v.clone() : v); });
-        return new PropertyObject(arr, {
-            separator: this.options.separator,
-            prefix: this.options.prefix,
-            suffix: this.options.suffix,
-            model: this.options.model,
-            type: this.options.type
-        });
-    };
-    /**
-      * Make Property Object to String
-      * @return {String} Make Property Object to String
-      * @example
-  //rgba(100, 100, 100, 0.5)
-  const obj4 = new PropertyObject([100,100,100,0.5], {
-      "separator" : ",",
-      "prefix" : "rgba(",
-      "suffix" : ")",
-  });
-  console.log(obj4.toValue());
-  // "rgba(100,100,100,0.5)"
-      */
-    PropertyObject.prototype.toValue = function () {
-        return this.options.prefix + this.join() + this.options.suffix;
-    };
-    /**
-      * Make Property Object's array to String
-      * @return {String} Join the elements of an array into a string
-      * @example
-      //rgba(100, 100, 100, 0.5)
-      var obj4 = new PropertyObject([100,100,100,0.5], {
-          "separator" : ",",
-          "prefix" : "rgba(",
-          "suffix" : ")"
-      });
-      obj4.join();  // =>   "100,100,100,0.5"
-       */
-    PropertyObject.prototype.join = function () {
-        return this.value.map(function (v) { return ((v instanceof PropertyObject) ? v.toValue() : v); }).join(this.options.separator);
-    };
-    /**
-      * executes a provided function once per array element.
-      * @param {Function} callback - Function to execute for each element, taking three arguments
-      * @param {All} [callback.currentValue] The current element being processed in the array.
-      * @param {Number} [callback.index] The index of the current element being processed in the array.
-      * @param {Array} [callback.array] the array.
-      * @return {PropertyObject} An instance itself
-      * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach|MDN Array.forEach()} reference to MDN document.
-      * @example
-  //rgba(100, 100, 100, 0.5)
-  var obj4 = new PropertyObject([100,100,100,0.5], {
-      "separator" : ",",
-      "prefix" : "rgba(",
-      "suffix" : ")"
-  });
-  
-  obj4.forEach(t => {
-      console.log(t);
-  });  // =>   "100,100,100,0.5"
-      */
-    PropertyObject.prototype.forEach = function (func) {
-        this.value.forEach(func);
-        return this;
-    };
-    PropertyObject.prototype.init = function (value) {
-        var type = typeof value;
-        if (type === "string") {
-            this.value = value.split(this.options.separator);
-        }
-        else if (type === "object") {
-            this.value = value;
-        }
-        else {
-            this.value = [value];
-        }
-        return this;
-    };
-    return PropertyObject;
-}());
-
-function setAlias(name, alias) {
-    ALIAS[name] = alias;
-}
-function setRole(names, isProperty, isFixedProperty) {
-    var length = names.length;
-    var roles = ROLES;
-    var fixed = FIXED;
-    for (var i = 0; i < length - 1; ++i) {
-        !roles[names[i]] && (roles[names[i]] = {});
-        roles = roles[names[i]];
-        if (isFixedProperty) {
-            !fixed[names[i]] && (fixed[names[i]] = {});
-            fixed = fixed[names[i]];
-        }
-    }
-    isFixedProperty && (fixed[names[length - 1]] = true);
-    roles[names[length - 1]] = isProperty ? true : {};
-}
-function getType(value) {
-    var type = typeof value;
-    if (type === "object") {
-        if (isArray(value)) {
-            return "array";
-        }
-        else if (value instanceof PropertyObject) {
-            return "property";
-        }
-    }
-    else if (type === "string" || type === "number") {
-        return "value";
-    }
-    return type;
-}
-function toFixed(num) {
-    return Math.round(num * MAXIMUM) / MAXIMUM;
-}
-function isInProperties(roles, args, isCheckTrue) {
-    var length = args.length;
-    var role = roles;
-    if (length === 0) {
-        return false;
-    }
-    for (var i = 0; i < length; ++i) {
-        if (role === true) {
-            return false;
-        }
-        role = role[args[i]];
-        if (!role || (!isCheckTrue && role === true)) {
-            return false;
-        }
-    }
-    return true;
-}
-function isRole(args, isCheckTrue) {
-    return isInProperties(ROLES, args, isCheckTrue);
-}
-function isFixed(args) {
-    return isInProperties(FIXED, args, true);
-}
-function isUndefined(value) {
-    return (typeof value === "undefined");
-}
-function isObject(value) {
-    return value && (typeof value === "object");
-}
-function isArray(value) {
-    return Array.isArray(value);
-}
-function isString(value) {
-    return typeof value === "string";
-}
-function has(object, name) {
-    return Object.prototype.hasOwnProperty.call(object, name);
-}
-function splitUnit(text) {
-    var matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
-    if (!matches) {
-        return { prefix: "", unit: "", value: NaN };
-    }
-    var prefix = matches[1];
-    var value = matches[2];
-    var unit = matches[3];
-    return { prefix: prefix, unit: unit, value: parseFloat(value) };
-}
-// export function camelize(str: string) {
-// 	return str.replace(/[\s-_]([a-z])/g, (all, letter) => letter.toUpperCase());
-// }
-function decamelize(str) {
-    return str.replace(/([a-z])([A-Z])/g, function (all, letter, letter2) { return letter + "-" + letter2.toLowerCase(); });
-}
-
 var lastTime = 0;
 function camelize(str) {
     return str.replace(/[\s-_]([a-z])/g, function (all, letter) { return letter.toUpperCase(); });
@@ -755,7 +754,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
       easing: Scene.easing.EASE,
   });
       */
-    Animator.prototype.setEasing = function (curveArray) {
+    var __proto = Animator.prototype;__proto.setEasing = function (curveArray) {
         var easing = Array.isArray(curveArray) ?
             bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]) : curveArray;
         var easingName = easing[EASING_NAME] || "linear";
@@ -778,7 +777,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
       easing: Scene.eaasing.EASE,
   });
       */
-    Animator.prototype.setOptions = function (options) {
+    __proto.setOptions = function (options) {
         if (options === void 0) { options = {}; }
         for (var name in options) {
             var value = options[name];
@@ -801,7 +800,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
       * @example
   animator.getTotalDuration();
       */
-    Animator.prototype.getTotalDuration = function () {
+    __proto.getTotalDuration = function () {
         if (this.state[ITERATION_COUNT] === INFINITE) {
             return Infinity;
         }
@@ -814,7 +813,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
       * @example
   animator.getTotalDuration();
       */
-    Animator.prototype.getActiveDuration = function () {
+    __proto.getActiveDuration = function () {
         if (this.state[ITERATION_COUNT] === INFINITE) {
             return Infinity;
         }
@@ -827,7 +826,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
       * @example
   animator.isEnded(); // true or false
       */
-    Animator.prototype.isEnded = function () {
+    __proto.isEnded = function () {
         if (this.state.tickTime === 0 && this.state[PLAY_STATE] === PAUSED) {
             return true;
         }
@@ -843,10 +842,10 @@ var Animator = /*#__PURE__*/ (function (_super) {
       * @example
   animator.isPaused(); // true or false
       */
-    Animator.prototype.isPaused = function () {
+    __proto.isPaused = function () {
         return this.state[PLAY_STATE] === PAUSED;
     };
-    Animator.prototype.setNext = function (animator) {
+    __proto.setNext = function (animator) {
         this.on(ENDED, function () {
             animator.play();
         });
@@ -857,7 +856,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
       * @method Scene.Animator#play
       * @return {Scene.Animator} An instance itself.
       */
-    Animator.prototype.play = function () {
+    __proto.play = function () {
         var _this = this;
         this.state[PLAY_STATE] = RUNNING;
         if (this.isEnded()) {
@@ -880,7 +879,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
       * @method Scene.Animator#pause
       * @return {Scene.Animator} An instance itself.
       */
-    Animator.prototype.pause = function () {
+    __proto.pause = function () {
         this.state[PLAY_STATE] = PAUSED;
         /**
              * This event is fired when animator is paused.
@@ -894,7 +893,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
        * @method Scene.Animator#end
        * @return {Scene.Animator} An instance itself.
       */
-    Animator.prototype.end = function () {
+    __proto.end = function () {
         this.pause();
         /**
              * This event is fired when animator is ended.
@@ -908,7 +907,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
       * @method Scene.Animator#reset
       * @return {Scene.Animator} An instance itself.
       */
-    Animator.prototype.reset = function () {
+    __proto.reset = function () {
         this.state.tickTime = 0;
         this.setTime(0);
         this.pause();
@@ -927,7 +926,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
   animator.setTime(10);
   animator.getTime() // 10
       */
-    Animator.prototype.setTime = function (time, isTick) {
+    __proto.setTime = function (time, isTick) {
         var activeDuration = this.getActiveDuration();
         var currentTime = isTick ? time : this.getUnitTime(time);
         this.state.tickTime = this.state.delay + currentTime;
@@ -957,10 +956,10 @@ var Animator = /*#__PURE__*/ (function (_super) {
         });
         return this;
     };
-    Animator.prototype.getState = function (name) {
+    __proto.getState = function (name) {
         return this.state[name];
     };
-    Animator.prototype.setState = function (object) {
+    __proto.setState = function (object) {
         for (var name in object) {
             this.state[name] = object[name];
         }
@@ -973,10 +972,10 @@ var Animator = /*#__PURE__*/ (function (_super) {
       * @example
   animator.getTime();
       */
-    Animator.prototype.getTime = function () {
+    __proto.getTime = function () {
         return this.state.currentTime;
     };
-    Animator.prototype.getUnitTime = function (time) {
+    __proto.getUnitTime = function (time) {
         if (isString(time)) {
             var duration = this.getDuration() || 100;
             if (time === "from") {
@@ -1006,11 +1005,11 @@ var Animator = /*#__PURE__*/ (function (_super) {
        * @method Scene.Animator#isDelay
        * @return {boolean} check delay state
        */
-    Animator.prototype.isDelay = function () {
+    __proto.isDelay = function () {
         var _a = this.state, delay = _a.delay, tickTime = _a.tickTime;
         return delay > 0 && (tickTime < delay);
     };
-    Animator.prototype.setCurrentIterationCount = function (iterationCount) {
+    __proto.setCurrentIterationCount = function (iterationCount) {
         var state = this.state;
         var passIterationCount = Math.floor(iterationCount);
         if (state.currentIterationCount < passIterationCount) {
@@ -1029,7 +1028,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
         state.currentIterationCount = iterationCount;
         return this;
     };
-    Animator.prototype.calculateIterationTime = function () {
+    __proto.calculateIterationTime = function () {
         var _a = this.state, iterationCount = _a.iterationCount, fillMode = _a.fillMode, direction = _a.direction;
         var duration = this.getDuration();
         var time = this.getTime();
@@ -1057,7 +1056,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
         this.setIterationTime(currentIterationTime);
         return this;
     };
-    Animator.prototype.tick = function (now) {
+    __proto.tick = function (now) {
         var _this = this;
         var state = this.state;
         var playSpeed = state.playSpeed, prevTime = state.prevTime;
@@ -1075,7 +1074,7 @@ var Animator = /*#__PURE__*/ (function (_super) {
             _this.tick(time);
         });
     };
-    Animator.prototype.setTickTime = function (time) {
+    __proto.setTickTime = function (time) {
         this.setTime(time - this.state.delay, true);
     };
     Animator = __decorate([
@@ -1496,14 +1495,17 @@ function merge(to, from, toValue) {
     for (var name in from) {
         var value = from[name];
         var type = getType(value);
-        if (type === "property") {
+        if (type === PROPERTY) {
             to[name] = toValue ? value.toValue() : value.clone();
+        }
+        else if (type === FUNCTION) {
+            to[name] = toValue ? getValue([name], value()) : value;
         }
         else if (type === "array") {
             to[name] = value.slice();
         }
         else if (type === "object") {
-            if (isObject(to[name]) && !(to[name] instanceof PropertyObject)) {
+            if (isObject(to[name]) && !isPropertyObject(to[name])) {
                 merge(to[name], value, toValue);
             }
             else {
@@ -1517,6 +1519,21 @@ function merge(to, from, toValue) {
     return to;
 }
 /* eslint-enable */
+function getValue(names, value) {
+    var type = getType(value);
+    if (type === PROPERTY) {
+        return value.toValue();
+    }
+    else if (type === FUNCTION) {
+        if (names[0] !== TIMING_FUNCTION) {
+            return getValue(names, value());
+        }
+    }
+    else if (type === "object") {
+        return clone(value, true);
+    }
+    return value;
+}
 /**
 * Animation's Frame
 * @class Scene.Frame
@@ -1544,24 +1561,15 @@ var Frame = /*#__PURE__*/ (function () {
       frame.get("display") // => "none", "block", ....
       frame.get("transform", "translate") // => "10px,10px"
       */
-    Frame.prototype.get = function () {
+    var __proto = Frame.prototype;__proto.get = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
         var value = this.raw.apply(this, args);
-        var type = getType(value);
-        if (type === "property") {
-            return value.toValue();
-        }
-        else if (type === "object") {
-            return clone(value, true);
-        }
-        else {
-            return value;
-        }
+        return getValue(args[0] in ALIAS ? ALIAS[args[0]] : args, value);
     };
-    Frame.prototype.raw = function () {
+    __proto.raw = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
@@ -1585,7 +1593,7 @@ var Frame = /*#__PURE__*/ (function () {
       * @example
       frame.remove("display")
       */
-    Frame.prototype.remove = function () {
+    __proto.remove = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
@@ -1633,7 +1641,7 @@ var Frame = /*#__PURE__*/ (function () {
   // three parameters
   frame.set("transform", "translate", "50px");
       */
-    Frame.prototype.set = function () {
+    __proto.set = function () {
         var _this = this;
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -1700,7 +1708,7 @@ var Frame = /*#__PURE__*/ (function () {
       * @example
       frame.has("property", "display") // => true or false
       */
-    Frame.prototype.has = function () {
+    __proto.has = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
@@ -1726,7 +1734,7 @@ var Frame = /*#__PURE__*/ (function () {
       * @example
       frame.clone();
       */
-    Frame.prototype.clone = function () {
+    __proto.clone = function () {
         var frame = new Frame();
         frame.merge(this);
         return frame;
@@ -1739,7 +1747,7 @@ var Frame = /*#__PURE__*/ (function () {
       * @example
       frame.merge(frame2);
       */
-    Frame.prototype.merge = function (frame) {
+    __proto.merge = function (frame) {
         var properties = this.properties;
         var frameProperties = frame.properties;
         if (!frameProperties) {
@@ -1748,7 +1756,7 @@ var Frame = /*#__PURE__*/ (function () {
         merge(properties, frameProperties);
         return this;
     };
-    Frame.prototype.toObject = function () {
+    __proto.toObject = function () {
         return clone(this.properties, true);
     };
     /**
@@ -1756,7 +1764,7 @@ var Frame = /*#__PURE__*/ (function () {
       * @method Scene.Frame#toCSSObject
       * @return {object} cssObject
       */
-    Frame.prototype.toCSSObject = function () {
+    __proto.toCSSObject = function () {
         var properties = this.toObject();
         var cssObject = {};
         for (var name in properties) {
@@ -1764,8 +1772,8 @@ var Frame = /*#__PURE__*/ (function () {
                 continue;
             }
             var value = properties[name];
-            if (name === timingFunction) {
-                cssObject[timingFunction.replace("animation", ANIMATION)] =
+            if (name === TIMING_FUNCTION) {
+                cssObject[TIMING_FUNCTION.replace("animation", ANIMATION)] =
                     (isString(value) ? value : value.easingName) || "initial";
                 continue;
             }
@@ -1782,7 +1790,7 @@ var Frame = /*#__PURE__*/ (function () {
       * @method Scene.Frame#toCSS
       * @return {string} cssText
       */
-    Frame.prototype.toCSS = function () {
+    __proto.toCSS = function () {
         var cssObject = this.toCSSObject();
         var cssArray = [];
         for (var name in cssObject) {
@@ -1790,7 +1798,7 @@ var Frame = /*#__PURE__*/ (function () {
         }
         return cssArray.join("");
     };
-    Frame.prototype._set = function (args, value) {
+    __proto._set = function (args, value) {
         var properties = this.properties;
         var length = args.length;
         for (var i = 0; i < length - 1; ++i) {
@@ -1851,7 +1859,7 @@ var Keyframes = /*#__PURE__*/ (function () {
       * @example
   keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scale"]]
       */
-    Keyframes.prototype.getNames = function () {
+    var __proto = Keyframes.prototype;__proto.getNames = function () {
         var names = this.names;
         return getNames(names, []);
     };
@@ -1862,7 +1870,7 @@ var Keyframes = /*#__PURE__*/ (function () {
       * @example
   keyframes.hasName("transform", "translate"); // true or not
       */
-    Keyframes.prototype.hasName = function () {
+    __proto.hasName = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
@@ -1873,7 +1881,7 @@ var Keyframes = /*#__PURE__*/ (function () {
        * update property names used in frames.
        * @return {Scene.Keyframes} An instance itself
        */
-    Keyframes.prototype.update = function () {
+    __proto.update = function () {
         var items = this.items;
         for (var time in items) {
             this.updateFrame(items[time]);
@@ -1888,7 +1896,7 @@ var Keyframes = /*#__PURE__*/ (function () {
        * @param {object} [callback.items] The object that forEach() is being applied to.
        * @return {Scene.Keyframes} An instance itself
        */
-    Keyframes.prototype.forEach = function (callback) {
+    __proto.forEach = function (callback) {
         var times = this.times;
         var items = this.items;
         times.forEach(function (time) {
@@ -1902,7 +1910,7 @@ var Keyframes = /*#__PURE__*/ (function () {
       * @example
   keyframes.updateFrame(frame);
       */
-    Keyframes.prototype.updateFrame = function (frame) {
+    __proto.updateFrame = function (frame) {
         if (!frame) {
             return this;
         }
@@ -1915,7 +1923,7 @@ var Keyframes = /*#__PURE__*/ (function () {
        * Get how long an animation should take to complete one cycle.
        * @return {number} duration
        */
-    Keyframes.prototype.getDuration = function () {
+    __proto.getDuration = function () {
         var times = this.times;
         return times.length === 0 ? 0 : times[times.length - 1];
     };
@@ -1924,7 +1932,7 @@ var Keyframes = /*#__PURE__*/ (function () {
        * @param {number} duration - duration
        * @return {Scene.Keyframes} An instance itself.
        */
-    Keyframes.prototype.setDuration = function (duration, originalDuration) {
+    __proto.setDuration = function (duration, originalDuration) {
         if (originalDuration === void 0) { originalDuration = this.getDuration(); }
         var ratio = duration / originalDuration;
         var _a = this, times = _a.times, items = _a.items;
@@ -1941,7 +1949,7 @@ var Keyframes = /*#__PURE__*/ (function () {
        * @param {number} time - time
        * @return {Scene.Keyframes} An instance itself.
        */
-    Keyframes.prototype.unshift = function (time) {
+    __proto.unshift = function (time) {
         var _a = this, times = _a.times, items = _a.items;
         var obj = {};
         this.times = times.map(function (t) {
@@ -1956,7 +1964,7 @@ var Keyframes = /*#__PURE__*/ (function () {
       * get size of list
       * @return {Number} length of list
       */
-    Keyframes.prototype.size = function () {
+    __proto.size = function () {
         return this.times.length;
     };
     /**
@@ -1965,7 +1973,7 @@ var Keyframes = /*#__PURE__*/ (function () {
       * @param {Object} object - target
       * @return {Scene.Keyframes} An instance itself
       */
-    Keyframes.prototype.add = function (time, object) {
+    __proto.add = function (time, object) {
         this.items[time] = object;
         this.addTime(time);
         return this;
@@ -1975,7 +1983,7 @@ var Keyframes = /*#__PURE__*/ (function () {
       * @param {Number} time - object's time
       * @return {Boolean} true: if has time, false: not
       */
-    Keyframes.prototype.has = function (time) {
+    __proto.has = function (time) {
         return time in this.items;
     };
     /**
@@ -1983,7 +1991,7 @@ var Keyframes = /*#__PURE__*/ (function () {
       * @param {Number} time - object's time
       * @return {Object} object at that time
       */
-    Keyframes.prototype.get = function (time) {
+    __proto.get = function (time) {
         return this.items[time];
     };
     /**
@@ -1991,13 +1999,13 @@ var Keyframes = /*#__PURE__*/ (function () {
       * @param {Number} time - object's time
       * @return {Keyframes} An instance itself
       */
-    Keyframes.prototype.remove = function (time) {
+    __proto.remove = function (time) {
         var items = this.items;
         delete items[time];
         this.removeTime(time);
         return this;
     };
-    Keyframes.prototype.addTime = function (time) {
+    __proto.addTime = function (time) {
         var times = this.times;
         var length = times.length;
         var pushIndex = length;
@@ -2014,7 +2022,7 @@ var Keyframes = /*#__PURE__*/ (function () {
         this.times.splice(pushIndex, 0, time);
         return this;
     };
-    Keyframes.prototype.removeTime = function (time) {
+    __proto.removeTime = function (time) {
         var index = this.times.indexOf(time);
         if (index > -1) {
             this.times.splice(index, 1);
@@ -2163,8 +2171,15 @@ function dot(a1, a2, b1, b2) {
     // dot Object
     var type1 = getType(a1);
     var type2 = getType(a2);
-    if (type1 === type2) {
-        if (type1 === "property") {
+    var isFunction1 = type1 === FUNCTION;
+    var isFunction2 = type2 === FUNCTION;
+    if (isFunction1 || isFunction2) {
+        return function () {
+            return dot(isFunction1 ? toPropertyObject(a1()) : a1, isFunction2 ? toPropertyObject(a2()) : a2, b1, b2);
+        };
+    }
+    else if (type1 === type2) {
+        if (type1 === PROPERTY) {
             return dotObject(a1, a2, b1, b2);
         }
         else if (type1 === "array") {
@@ -2324,10 +2339,10 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         _this.load(properties, options);
         return _this;
     }
-    SceneItem.prototype.getDuration = function () {
+    var __proto = SceneItem.prototype;__proto.getDuration = function () {
         return Math.max(this.state[DURATION], this.keyframes.getDuration());
     };
-    SceneItem.prototype.setDuration = function (duration) {
+    __proto.setDuration = function (duration) {
         if (duration === 0) {
             return this;
         }
@@ -2349,7 +2364,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
   item.setId("item");
   console.log(item.getId()); // item
       */
-    SceneItem.prototype.setId = function (id) {
+    __proto.setId = function (id) {
         var elements = this.elements;
         var length = elements.length;
         this.setState({ id: id || makeId(!!length) });
@@ -2371,7 +2386,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
   const item = scene.newItem("item");
   console.log(item.getId()); // item
       */
-    SceneItem.prototype.getId = function () {
+    __proto.getId = function () {
         return this.state.id;
     };
     /**
@@ -2384,7 +2399,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
   item.set(0, "a", "b") // item.getFrame(0).set("a", "b")
   console.log(item.get(0, "a")); // "b"
       */
-    SceneItem.prototype.set = function (time) {
+    __proto.set = function (time) {
         var _this = this;
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -2431,7 +2446,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
   item.get(0, "a"); // item.getFrame(0).get("a");
   item.get(0, "transform", "translate"); // item.getFrame(0).get("transform", "translate");
       */
-    SceneItem.prototype.get = function (time) {
+    __proto.get = function (time) {
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
@@ -2447,7 +2462,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       * @example
   item.remove(0, "a");
       */
-    SceneItem.prototype.remove = function (time) {
+    __proto.remove = function (time) {
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
@@ -2487,7 +2502,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       }
   });
       */
-    SceneItem.prototype.append = function (item) {
+    __proto.append = function (item) {
         this.set(this.getDuration(), item);
         return this;
     };
@@ -2496,7 +2511,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       * @param {SceneItem | object} item - the scene item or item object
       * @return {Scene.SceneItem} An instance itself
       */
-    SceneItem.prototype.prepend = function (item) {
+    __proto.prepend = function (item) {
         if (item instanceof SceneItem) {
             var delay = item.getDelay();
             var duration = item.getIterationCount() === INFINITE ? item.getDuration() : item.getActiveDuration();
@@ -2522,7 +2537,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       * @example
   item.setSelector("#id.class");
       */
-    SceneItem.prototype.setSelector = function (selector) {
+    __proto.setSelector = function (selector) {
         this.options.selector = selector === true ? this.state.id :
             (selector || "[data-scene-id=\"" + this.state.id + "\"]");
         this.setElement(document.querySelectorAll(this.options.selector));
@@ -2537,7 +2552,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
   item.setElement(document.querySelector("#id.class"));
   item.setElement(document.querySelectorAll(".class"));
       */
-    SceneItem.prototype.setElement = function (elements) {
+    __proto.setElement = function (elements) {
         if (!elements) {
             return this;
         }
@@ -2555,15 +2570,15 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
   item.setCSS(0, ["opacity"]);
   item.setCSS(0, ["opacity", "width", "height"]);
       */
-    SceneItem.prototype.setCSS = function (time, properties) {
+    __proto.setCSS = function (time, properties) {
         this.set(time, fromCSS(this.elements, properties));
         return this;
     };
-    SceneItem.prototype.animate = function (time, parentEasing) {
+    __proto.animate = function (time, parentEasing) {
         _super.prototype.setTime.call(this, time, true);
         return this._animate(parentEasing);
     };
-    SceneItem.prototype.setTime = function (time, isNumber, parentEasing) {
+    __proto.setTime = function (time, isNumber, parentEasing) {
         _super.prototype.setTime.call(this, time, isNumber);
         this._animate(parentEasing);
         return this;
@@ -2575,7 +2590,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       * @example
   item.update();
       */
-    SceneItem.prototype.update = function () {
+    __proto.update = function () {
         this.keyframes.update();
         return this;
     };
@@ -2587,7 +2602,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       * @example
   item.updateFrame(time, this.get(time));
       */
-    SceneItem.prototype.updateFrame = function (frame) {
+    __proto.updateFrame = function (frame) {
         this.keyframes.updateFrame(frame);
         return this;
     };
@@ -2599,7 +2614,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       * @example
   item.newFrame(time);
       */
-    SceneItem.prototype.newFrame = function (time) {
+    __proto.newFrame = function (time) {
         var frame = this.getFrame(time);
         if (frame) {
             return frame;
@@ -2616,7 +2631,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       * @example
   item.setFrame(time, frame);
       */
-    SceneItem.prototype.setFrame = function (time, frame) {
+    __proto.setFrame = function (time, frame) {
         this.keyframes.add(this.getUnitTime(time), frame);
         this.keyframes.update();
         return this;
@@ -2629,7 +2644,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       * @example
   const frame = item.getFrame(time);
       */
-    SceneItem.prototype.getFrame = function (time) {
+    __proto.getFrame = function (time) {
         return this.keyframes.get(this.getUnitTime(time));
     };
     /**
@@ -2644,7 +2659,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       // not
   }
       */
-    SceneItem.prototype.hasFrame = function (time) {
+    __proto.hasFrame = function (time) {
         return this.keyframes.has(this.getUnitTime(time));
     };
     /**
@@ -2655,7 +2670,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       * @example
   item.removeFrame(time);
       */
-    SceneItem.prototype.removeFrame = function (time) {
+    __proto.removeFrame = function (time) {
         var keyframes = this.keyframes;
         keyframes.remove(time);
         keyframes.update();
@@ -2671,7 +2686,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
   // getFrame(0) equal getFrame(1)
   item.copyFrame(0, 1);
       */
-    SceneItem.prototype.copyFrame = function (fromTime, toTime) {
+    __proto.copyFrame = function (fromTime, toTime) {
         if (isObject(fromTime)) {
             for (var time in fromTime) {
                 this.copyFrame(time, fromTime[time]);
@@ -2696,7 +2711,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
   // getFrame(1) contains getFrame(0)
   item.merge(0, 1);
       */
-    SceneItem.prototype.mergeFrame = function (fromTime, toTime) {
+    __proto.mergeFrame = function (fromTime, toTime) {
         if (isObject(fromTime)) {
             for (var time in fromTime) {
                 this.mergeFrame(time, fromTime[time]);
@@ -2733,7 +2748,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
   // opacity: 0.7; display:"block";
   const frame = item.getNowFrame(1.7);
       */
-    SceneItem.prototype.getNowFrame = function (time, easing) {
+    __proto.getNowFrame = function (time, easing) {
         var _this = this;
         var frame = new Frame();
         var names = this.keyframes.getNames();
@@ -2748,7 +2763,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         });
         return frame;
     };
-    SceneItem.prototype.load = function (properties, options) {
+    __proto.load = function (properties, options) {
         if (properties === void 0) { properties = {}; }
         if (options === void 0) { options = properties.options; }
         if (isArray(properties)) {
@@ -2786,7 +2801,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
        * @example
        * item.clone();
        */
-    SceneItem.prototype.clone = function (options) {
+    __proto.clone = function (options) {
         if (options === void 0) { options = {}; }
         var item = new SceneItem();
         item.setOptions(this.state);
@@ -2794,7 +2809,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         this.keyframes.forEach(function (frame, time) { return item.setFrame(time, frame.clone()); });
         return item;
     };
-    SceneItem.prototype.setOptions = function (options) {
+    __proto.setOptions = function (options) {
         if (options === void 0) { options = {}; }
         _super.prototype.setOptions.call(this, options);
         var id = options.id, selector = options.selector, duration = options.duration, elements = options.elements;
@@ -2808,7 +2823,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         }
         return this;
     };
-    SceneItem.prototype.getAllTimes = function (isStartZero, options) {
+    __proto.getAllTimes = function (isStartZero, options) {
         if (isStartZero === void 0) { isStartZero = true; }
         if (options === void 0) { options = {}; }
         var times = this.keyframes.times.slice();
@@ -2848,11 +2863,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
                 values[keytime] = keyvalue;
                 if (!frames[keyvalue]) {
                     var frame = this.getFrame(keyvalue);
-                    if (!frame) {
-                        frames[keyvalue] = this.getNowFrame(keyvalue);
-                        continue;
-                    }
-                    if (j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
+                    if (!frame || j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
                         frames[keyvalue] = this.getNowFrame(keyvalue);
                     }
                     else {
@@ -2879,7 +2890,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
   item.setCSS(0, ["opacity"]);
   item.setCSS(0, ["opacity", "width", "height"]);
       */
-    SceneItem.prototype.toCSS = function (duration, options) {
+    __proto.toCSS = function (duration, options) {
         if (duration === void 0) { duration = this.getDuration(); }
         if (options === void 0) { options = {}; }
         var state = this.state;
@@ -2889,7 +2900,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         }
         var id = this._getId();
         // infinity or zero
-        var isParent = typeof options[ITERATION_COUNT] !== "undefined";
+        var isParent = !isUndefined(options[ITERATION_COUNT]);
         var isZeroDuration = duration === 0;
         var playSpeed = (options[PLAY_SPEED] || 1);
         var delay = ((isParent ? options[DELAY] : state[DELAY]) || 0) / playSpeed;
@@ -2909,7 +2920,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         var css = selector + "." + START_ANIMATION + " {\n\t\t\t" + cssText + "\n\t\t}\n\t\t" + this._toKeyframes(duration, isParent);
         return css;
     };
-    SceneItem.prototype.exportCSS = function (duration, options) {
+    __proto.exportCSS = function (duration, options) {
         if (duration === void 0) { duration = this.getDuration(); }
         if (options === void 0) { options = {}; }
         if (!this.elements.length) {
@@ -2943,7 +2954,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
       fillMode: "forwards",
   });
       */
-    SceneItem.prototype.playCSS = function (exportCSS, properties) {
+    __proto.playCSS = function (exportCSS, properties) {
         var _this = this;
         if (exportCSS === void 0) { exportCSS = true; }
         if (properties === void 0) { properties = {}; }
@@ -3001,17 +3012,17 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         animatedElement.addEventListener("animationiteration", animationiteration);
         return this;
     };
-    SceneItem.prototype._getId = function () {
+    __proto._getId = function () {
         return this.state.id || this.setId().getId();
     };
-    SceneItem.prototype._getEasing = function (time, left, right, easing) {
-        if (this.keyframes.hasName(timingFunction)) {
-            var nowEasing = this._getNowValue(time, left, right, [timingFunction], 0, true);
+    __proto._getEasing = function (time, left, right, easing) {
+        if (this.keyframes.hasName(TIMING_FUNCTION)) {
+            var nowEasing = this._getNowValue(time, left, right, [TIMING_FUNCTION], 0, true);
             return typeof nowEasing === "function" ? nowEasing : easing;
         }
         return easing;
     };
-    SceneItem.prototype._toKeyframes = function (duration, isParent) {
+    __proto._toKeyframes = function (duration, isParent) {
         if (duration === void 0) { duration = this.getDuration(); }
         var id = this._getId();
         var state = this.state;
@@ -3051,7 +3062,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         }
         return "@" + KEYFRAMES + " " + PREFIX + "KEYFRAMES_" + toId(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
     };
-    SceneItem.prototype._getNowValue = function (time, left, right, properties, easing, usePrevValue) {
+    __proto._getNowValue = function (time, left, right, properties, easing, usePrevValue) {
         if (easing === void 0) { easing = this.getEasing(); }
         if (usePrevValue === void 0) { usePrevValue = isFixed(properties); }
         var keyframes = this.keyframes;
@@ -3093,7 +3104,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         }
         return dotValue(time, prevTime, nextTime, prevValue, nextValue, easing);
     };
-    SceneItem.prototype._getNearTimeIndex = function (time) {
+    __proto._getNearTimeIndex = function (time) {
         var keyframes = this.keyframes;
         var times = keyframes.times;
         var length = times.length;
@@ -3107,7 +3118,7 @@ var SceneItem = /*#__PURE__*/ (function (_super) {
         }
         return { left: length - 1, right: length - 1 };
     };
-    SceneItem.prototype._animate = function (parentEasing) {
+    __proto._animate = function (parentEasing) {
         var iterationTime = this.getIterationTime();
         var easing = this.getEasing() || parentEasing;
         var frame = this.getNowFrame(iterationTime, easing);
@@ -3185,15 +3196,15 @@ var Scene = /*#__PURE__*/ (function (_super) {
         _this.load(properties, options);
         return _this;
     }
-    Scene.prototype.setId = function (id) {
+    var __proto = Scene.prototype;__proto.setId = function (id) {
         if (id === void 0) { id = "scene" + Math.floor(Math.random() * 100000); }
         this.state.id = id;
         return this;
     };
-    Scene.prototype.getId = function () {
+    __proto.getId = function () {
         return this.state.id;
     };
-    Scene.prototype.getDuration = function () {
+    __proto.getDuration = function () {
         var items = this.items;
         var time = 0;
         for (var id in items) {
@@ -3202,7 +3213,7 @@ var Scene = /*#__PURE__*/ (function (_super) {
         }
         return time;
     };
-    Scene.prototype.setDuration = function (duration) {
+    __proto.setDuration = function (duration) {
         var items = this.items;
         var sceneDuration = this.getDuration();
         if (duration === 0 || !isFinite(sceneDuration)) {
@@ -3232,7 +3243,7 @@ var Scene = /*#__PURE__*/ (function (_super) {
       * @example
   const item = scene.getItem("item1")
       */
-    Scene.prototype.getItem = function (name) {
+    __proto.getItem = function (name) {
         return this.items[name];
     };
     /**
@@ -3244,9 +3255,9 @@ var Scene = /*#__PURE__*/ (function (_super) {
       * @example
   const item = scene.newItem("item1")
       */
-    Scene.prototype.newItem = function (name, options) {
+    __proto.newItem = function (name, options) {
         if (options === void 0) { options = {}; }
-        if (has(this.items, name)) {
+        if (name in this.items) {
             return this.items[name];
         }
         var item = new SceneItem();
@@ -3261,18 +3272,18 @@ var Scene = /*#__PURE__*/ (function (_super) {
       * @example
   const item = scene.newItem("item1")
       */
-    Scene.prototype.setItem = function (name, item) {
+    __proto.setItem = function (name, item) {
         if (item instanceof Animator) {
             item.setId(name);
         }
         this.items[name] = item;
         return this;
     };
-    Scene.prototype.animate = function (time, parentEasing) {
+    __proto.animate = function (time, parentEasing) {
         _super.prototype.setTime.call(this, time, true);
         return this._animate(parentEasing);
     };
-    Scene.prototype.setTime = function (time, isNumber, parentEasing) {
+    __proto.setTime = function (time, isNumber, parentEasing) {
         _super.prototype.setTime.call(this, time, isNumber);
         this._animate(parentEasing);
         return this;
@@ -3285,7 +3296,7 @@ var Scene = /*#__PURE__*/ (function (_super) {
        * @param {object} [func.items] The object that forEach() is being applied to.
        * @return {Scene} An instance itself
        */
-    Scene.prototype.forEach = function (func) {
+    __proto.forEach = function (func) {
         var items = this.items;
         for (var name in items) {
             func(items[name], name, items);
@@ -3296,7 +3307,7 @@ var Scene = /*#__PURE__*/ (function (_super) {
        * Export the CSS of the items to the style.
        * @return {Scene} An instance itself
        */
-    Scene.prototype.exportCSS = function (duration, state) {
+    __proto.exportCSS = function (duration, state) {
         if (duration === void 0) { duration = this.getDuration(); }
         var items = this.items;
         var totalDuration = duration;
@@ -3309,7 +3320,7 @@ var Scene = /*#__PURE__*/ (function (_super) {
         }
         return this;
     };
-    Scene.prototype.append = function (item) {
+    __proto.append = function (item) {
         item.setDelay(item.getDelay() + this.getDuration());
         this.setItem(item.getId() || item.setId().getId(), item);
     };
@@ -3332,7 +3343,7 @@ var Scene = /*#__PURE__*/ (function (_super) {
       fillMode: "forwards",
   });
       */
-    Scene.prototype.playCSS = function (exportCSS, properties) {
+    __proto.playCSS = function (exportCSS, properties) {
         var _this = this;
         if (exportCSS === void 0) { exportCSS = true; }
         if (properties === void 0) { properties = {}; }
@@ -3370,7 +3381,7 @@ var Scene = /*#__PURE__*/ (function (_super) {
         this.trigger(PLAY);
         return this;
     };
-    Scene.prototype.load = function (properties, options) {
+    __proto.load = function (properties, options) {
         if (properties === void 0) { properties = {}; }
         if (options === void 0) { options = properties.options; }
         if (!properties) {
@@ -3395,13 +3406,13 @@ var Scene = /*#__PURE__*/ (function (_super) {
         }
         this.setOptions(options);
     };
-    Scene.prototype.setSelector = function (_) {
+    __proto.setSelector = function (_) {
         var isSelector = this.options.selector;
         this.forEach(function (item, name) {
             item.setSelector(isSelector ? name : false);
         });
     };
-    Scene.prototype._animate = function (parentEasing) {
+    __proto._animate = function (parentEasing) {
         var iterationTime = this.getIterationTime();
         var items = this.items;
         var easing = this.getEasing() || parentEasing;
