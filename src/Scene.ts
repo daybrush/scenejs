@@ -1,7 +1,6 @@
 import Animator, { StateInterface, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
 import { ANIMATION, ObjectInterface, RUNNING, ENDED, PLAY, ITERATION, ANIMATE } from "./consts";
-import { has } from "./utils";
 import Frame from "./Frame";
 
 /**
@@ -104,7 +103,7 @@ const item = scene.getItem("item1")
 const item = scene.newItem("item1")
 	*/
   public newItem(name: string, options = {}) {
-    if (has(this.items, name)) {
+    if (name in this.items) {
       return this.items[name];
     }
     const item = new SceneItem();

@@ -8,9 +8,9 @@ export interface ObjectInterface<T> {
 export type NameType = string | number;
 
 export const PREFIX = "__SCENEJS_";
-export const timingFunction = "animation-timing-function";
+export const TIMING_FUNCTION = "animation-timing-function";
 export const ROLES: RoleInterface = { transform: {}, filter: {}, attribute: {} };
-export const ALIAS: ObjectInterface<string[]> = { easing: ["animation-timing-function"] };
+export const ALIAS: ObjectInterface<string[]> = { easing: [TIMING_FUNCTION] };
 export const FIXED = { "animation-timing-function": true, "contents": true };
 export const MAXIMUM = 1000000;
 export const THRESHOLD = 0.000001;
@@ -41,6 +41,9 @@ export const ALTERNATE_REVERSE = "alternate-reverse";
 export const NORMAL = "normal";
 export const INFINITE = "infinite";
 export const PLAY_STATE = "playState";
+export const FUNCTION = "function";
+export const PROPERTY = "property";
+
 /**
 * option name list
 * @name Scene.OPTIONS

@@ -73,9 +73,6 @@ export function isArray(value: any): value is any[] {
 export function isString(value: any): value is string {
   return typeof value === "string";
 }
-export function has(object: object, name: string) {
-  return Object.prototype.hasOwnProperty.call(object, name);
-}
 export function splitUnit(text: string) {
   const matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
 

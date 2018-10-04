@@ -1,3 +1,5 @@
+import { isObject } from "./utils";
+
 type CallbackType = (...args: any[]) => any;
 interface EventParamterType {
   [name: string]: CallbackType | CallbackType[];
@@ -41,7 +43,7 @@ target.trigger("animate");
   public on(name: string | EventParamterType, callback?: CallbackType | CallbackType[]) {
     const events = this.events;
 
-    if (typeof name === "object") {
+    if (isObject(name)) {
       for (const i in name) {
         this.on(i, name[i]);
       }
@@ -53,8 +55,8 @@ target.trigger("animate");
     if (!callback) {
       return this;
     }
-    if (typeof callback === "object") {
-      callback.forEach(func => this.on(name, func));
+    if (isObject(callback)) {
+      (callback as CallbackType[]).forEach(func => this.on(name, func));
       return this;
     }
     const event = events[name];

@@ -13,7 +13,7 @@ import { dotValue } from "./utils/dot";
 import {
   KEYFRAMES, ANIMATION, START_ANIMATION,
   PREFIX, THRESHOLD, ObjectInterface, NameType,
-  timingFunction, ALTERNATE, ALTERNATE_REVERSE, NORMAL, INFINITE,
+  TIMING_FUNCTION, ALTERNATE, ALTERNATE_REVERSE, NORMAL, INFINITE,
   REVERSE, EASING, RUNNING, PLAY, FILL_MODE, DIRECTION, ITERATION_COUNT, EASING_NAME, DELAY, PLAY_SPEED, DURATION
 } from "./consts";
 import { addClass, removeClass, hasClass, fromCSS } from "./utils/css";
@@ -617,11 +617,7 @@ const frame = item.getNowFrame(1.7);
         if (!frames[keyvalue]) {
           const frame = this.getFrame(keyvalue);
 
-          if (!frame) {
-            frames[keyvalue] = this.getNowFrame(keyvalue);
-            continue;
-          }
-          if (j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
+          if (!frame || j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
             frames[keyvalue] = this.getNowFrame(keyvalue);
           } else {
             frames[keyvalue] = frame;
@@ -657,7 +653,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
     }
     const id = this._getId();
     // infinity or zero
-    const isParent = typeof options[ITERATION_COUNT] !== "undefined";
+    const isParent = !isUndefined(options[ITERATION_COUNT]);
     const isZeroDuration = duration === 0;
     const playSpeed = (options[PLAY_SPEED] || 1);
     const delay = ((isParent ? options[DELAY] : state[DELAY]) || 0) / playSpeed;
@@ -780,8 +776,8 @@ item.playCSS(false, {
     return this.state.id || this.setId().getId();
   }
   private _getEasing(time: number, left: number, right: number, easing: EasingType) {
-    if (this.keyframes.hasName(timingFunction)) {
-      const nowEasing = this._getNowValue(time, left, right, [timingFunction], 0, true);
+    if (this.keyframes.hasName(TIMING_FUNCTION)) {
+      const nowEasing = this._getNowValue(time, left, right, [TIMING_FUNCTION], 0, true);
 
       return typeof nowEasing === "function" ? nowEasing : easing;
     }
