@@ -14,7 +14,7 @@ const config = {
 	devtool: "source-map",
 	entry: {
 		// "scene.common": `./src/index.ts`,
-		// "scene": `./src/index.umd.ts`,
+		"scene": `./src/index.umd.ts`,
 		"scene.min": `./src/index.umd.ts`,
 	},
 	output: {
@@ -28,7 +28,7 @@ const config = {
 	mode: "production",
 	optimization: {
 		minimize: false,
-		concatenateModules: false,
+		concatenateModules: true,
 	},
 	plugins: [
 		new BundleAnalyzerPlugin({analyzerMode: "static"}),
