@@ -13,10 +13,27 @@ const plugin = typescript({
   "exclude": "node_modules/**",
   "sourceMap": true,
 });
+const uglifyCode = uglify({
+  sourcemap: true,
+  output: {
+    comments: function (node, comment) {
+      var text = comment.value;
+      var type = comment.type;
+      if (type === "comment2") {
+        // multiline comment
+        return /@version/.test(text);
+      }
+    },
+  },
+});
 const defaultConfig = {
   plugins: [
     plugin,
-    replace({ "#__VERSION__#": pkg.version, delimiters: ["", ""] }),
+    replace({
+      "#__VERSION__#": pkg.version,
+      "/** @class */": "/*#__PURE__*/",
+      delimiters: ["", ""],
+    }),
     PrototypeMinify({ sourcemap: true })
   ],
   output: {
@@ -51,19 +68,7 @@ export default [
     },
   }, {
     input: 'src/index.umd.ts',
-    plugins: [uglify({
-      sourcemap: true,
-      output: {
-        comments: function (node, comment) {
-          var text = comment.value;
-          var type = comment.type;
-          if (type == "comment2") {
-            // multiline comment
-            return /@version/.test(text);
-          }
-        },
-      },
-    })], // , visualizer()
+    plugins: [uglifyCode],
     output: {
       format: "umd",
       name: "Scene",
