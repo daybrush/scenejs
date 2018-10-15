@@ -657,7 +657,8 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const isZeroDuration = duration === 0;
     const playSpeed = (options[PLAY_SPEED] || 1);
     const delay = ((isParent ? options[DELAY] : state[DELAY]) || 0) / playSpeed;
-    const easingName = (!isZeroDuration && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
+    const easingName = (state[EASING] && state[EASING_NAME]) ||
+      (isParent && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
     const iterationCount = (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
     const fillMode = (options[FILL_MODE] !== "forwards" && options[FILL_MODE]) || state[FILL_MODE];
     const direction = (options[DIRECTION] !== NORMAL && options[DIRECTION]) || state[DIRECTION];

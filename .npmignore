@@ -16,3 +16,4 @@ demo/
 coverage/
 dist/report.html
 rollup-plugin-visualizer/
+outjs/
