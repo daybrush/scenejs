@@ -15,7 +15,7 @@ import * as _presets from "./presets";
 * @example
 * Scene.VERSION // #__VERSION__#
 */
-export const VERSION = "#__VERSION__#";
+export const VERSION: string = "#__VERSION__#";
 export { SceneItem, Frame, Animator, Keyframes, PropertyObject };
 export { bezier, EASE_IN_OUT, EASE_IN, EASE_OUT, EASE, LINEAR, steps, STEP_START, STEP_END } from "./easing";
 export { set, transition, wipeIn, wipeOut, fadeIn, fadeOut, blink, zoomIn, zoomOut} from "./presets";
