@@ -828,8 +828,14 @@ repository: https://github.com/daybrush/scenejs.git
       };
     }();
 
-    function isDirectionReverse(iterationCount, direction) {
-      return direction === REVERSE || direction === (iterationCount % 2 >= 1 ? ALTERNATE : ALTERNATE_REVERSE);
+    function isDirectionReverse(currentIterationCount, iteraiontCount, direction) {
+      if (direction === REVERSE) {
+        return true;
+      } else if (iteraiontCount !== "infinite" && currentIterationCount === iteraiontCount && iteraiontCount % 1 === 0) {
+        return direction === (currentIterationCount % 2 >= 1 ? ALTERNATE_REVERSE : ALTERNATE);
+      }
+
+      return direction === (currentIterationCount % 2 >= 1 ? ALTERNATE : ALTERNATE_REVERSE);
     }
     /**
     * @typedef {Object} AnimatorOptions The Animator options. Properties used in css animation.
@@ -1259,7 +1265,7 @@ repository: https://github.com/daybrush/scenejs.git
         this.setCurrentIterationCount(currentIterationCount); // direction : normal, reverse, alternate, alternate-reverse
         // fillMode : forwards, backwards, both, none
 
-        var isReverse = isDirectionReverse(currentIterationCount, direction);
+        var isReverse = isDirectionReverse(currentIterationCount, iterationCount, direction);
 
         if (isReverse) {
           currentIterationTime = duration - currentIterationTime;
@@ -3408,7 +3414,7 @@ repository: https://github.com/daybrush/scenejs.git
         var totalDuration = iterationCount * duration;
 
         for (var i = 0; i < iterationCount; ++i) {
-          var isReverse = isDirectionReverse(i, direction);
+          var isReverse = isDirectionReverse(i, iterationCount, direction);
           var start = i * duration;
 
           for (var j = 0; j < length; ++j) {
@@ -3444,7 +3450,7 @@ repository: https://github.com/daybrush/scenejs.git
 
         if (keys[keys.length - 1] < totalDuration) {
           // last time === totalDuration
-          var isReverse = isDirectionReverse(iterationCount, direction);
+          var isReverse = isDirectionReverse(iterationCount, iterationCount, direction);
           var keyvalue = toFixed(duration * (isReverse ? 1 - iterationCount % 1 : iterationCount % 1));
           keys.push(totalDuration);
           values[totalDuration] = keyvalue;
