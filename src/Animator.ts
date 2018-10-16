@@ -68,9 +68,14 @@ export interface StateInterface {
   duration?: number;
   [key: string]: any;
 }
-export function isDirectionReverse(iterationCount: number, direction: DirectionType) {
-  return direction === REVERSE ||
-    direction === (iterationCount % 2 >= 1 ? ALTERNATE : ALTERNATE_REVERSE);
+export function isDirectionReverse(currentIterationCount: number,
+                                   iteraiontCount: IterationCountType, direction: DirectionType) {
+  if (direction === REVERSE) {
+    return true;
+  } else if (iteraiontCount !== "infinite" && currentIterationCount === iteraiontCount && iteraiontCount % 1 === 0) {
+    return  direction === (currentIterationCount % 2 >= 1 ? ALTERNATE_REVERSE : ALTERNATE);
+  }
+  return  direction === (currentIterationCount % 2 >= 1 ? ALTERNATE : ALTERNATE_REVERSE);
 }
 /**
 * @typedef {Object} AnimatorOptions The Animator options. Properties used in css animation.
@@ -437,7 +442,7 @@ animator.getTime();
 
     // direction : normal, reverse, alternate, alternate-reverse
     // fillMode : forwards, backwards, both, none
-    const isReverse = isDirectionReverse(currentIterationCount, direction);
+    const isReverse = isDirectionReverse(currentIterationCount, iterationCount, direction);
 
     if (isReverse) {
       currentIterationTime = duration - currentIterationTime;

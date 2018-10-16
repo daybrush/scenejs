@@ -594,7 +594,7 @@ const frame = item.getNowFrame(1.7);
     const totalDuration = iterationCount * duration;
 
     for (let i = 0; i < iterationCount; ++i) {
-      const isReverse = isDirectionReverse(i, direction);
+      const isReverse = isDirectionReverse(i, iterationCount, direction);
       const start = i * duration;
 
       for (let j = 0; j < length; ++j) {
@@ -627,7 +627,7 @@ const frame = item.getNowFrame(1.7);
     }
     if (keys[keys.length - 1] < totalDuration) {
       // last time === totalDuration
-      const isReverse = isDirectionReverse(iterationCount, direction);
+      const isReverse = isDirectionReverse(iterationCount, iterationCount, direction);
       const keyvalue = toFixed(duration * (isReverse ? 1 - iterationCount % 1 : iterationCount % 1));
 
       keys.push(totalDuration);

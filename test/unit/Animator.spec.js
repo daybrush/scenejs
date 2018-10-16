@@ -1,4 +1,4 @@
-import Animator from "../../src/Animator";
+import Animator, { isDirectionReverse } from "../../src/Animator";
 /* eslint-disable */
 
 
@@ -134,6 +134,25 @@ describe("Animator Test", function() {
 			expect(time2).to.be.equals(4);
 			expect(time3).to.be.equals(3);
 			expect(time4).to.be.equals(2);
+		});
+		it ("should check isDirectionReverse function", function () {
+			expect(isDirectionReverse(1, 1, "alternate")).to.be.equals(false);
+			expect(isDirectionReverse(2, 2, "alternate")).to.be.equals(true);
+			expect(isDirectionReverse(1, "infintie", "alternate")).to.be.equals(true);
+			expect(isDirectionReverse(2, "infintie", "alternate")).to.be.equals(false);
+			expect(isDirectionReverse(1, 1.1, "alternate")).to.be.equals(true);
+			expect(isDirectionReverse(2, 2.1, "alternate")).to.be.equals(false);
+			expect(isDirectionReverse(1.1, 1.1, "alternate")).to.be.equals(true);
+			expect(isDirectionReverse(2.2, 2.1, "alternate")).to.be.equals(false);
+
+			expect(isDirectionReverse(1, 1, "alternate-reverse")).to.be.equals(true);
+			expect(isDirectionReverse(2, 2, "alternate-reverse")).to.be.equals(false);
+			expect(isDirectionReverse(1, "infintie", "alternate-reverse")).to.be.equals(false);
+			expect(isDirectionReverse(2, "infintie", "alternate-reverse")).to.be.equals(true);
+			expect(isDirectionReverse(1, 1.1, "alternate-reverse")).to.be.equals(false);
+			expect(isDirectionReverse(2, 2.1, "alternate-reverse")).to.be.equals(true);
+			expect(isDirectionReverse(1.1, 1.1, "alternate-reverse")).to.be.equals(false);
+			expect(isDirectionReverse(2.2, 2.1, "alternate-reverse")).to.be.equals(true);
 		});
 		it ("should check direction", function () {
 			const animator = new Animator({
