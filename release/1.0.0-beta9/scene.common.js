@@ -3494,7 +3494,7 @@ function (_super) {
     var isZeroDuration = parentDuration === 0;
     var duration = isZeroDuration ? this.getDuration() : parentDuration;
     var playSpeed = options[PLAY_SPEED] || 1;
-    var delay = ((isParent ? options[DELAY] : state[DELAY]) || 0) / playSpeed;
+    var delay = ((options[DELAY] || 0) + (isZeroDuration ? state[DELAY] : 0)) / playSpeed;
     var easingName = state[EASING] && state[EASING_NAME] || isParent && options[EASING] && options[EASING_NAME] || state[EASING_NAME];
     var iterationCount = !isZeroDuration && options[ITERATION_COUNT] || state[ITERATION_COUNT];
     var fillMode = options[FILL_MODE] !== "forwards" && options[FILL_MODE] || state[FILL_MODE];
@@ -3509,7 +3509,7 @@ function (_super) {
       timingFunction: easingName
     });
 
-    var css = selector + "." + START_ANIMATION + " {\n\t\t\t" + cssText + "\n\t\t}\n\t\t" + this._toKeyframes(duration, isParent);
+    var css = selector + "." + START_ANIMATION + " {\n\t\t\t" + cssText + "\n\t\t}\n\t\t" + this._toKeyframes(duration, !isZeroDuration && isParent);
 
     return css;
   };
@@ -3690,7 +3690,7 @@ function (_super) {
     }
 
     if (delay) {
-      keyframes.push("0%{" + frames[0] + "}");
+      keyframes.push("0%{" + css[0] + "}");
 
       if (direction === REVERSE || direction === ALTERNATE_REVERSE) {
         keyframes.push(delay / playSpeed / duration * 100 - 0.00001 + "%{" + css[0] + "}");
@@ -4043,7 +4043,7 @@ function (_super) {
     }
 
     var items = this.items;
-    var totalDuration = duration;
+    var totalDuration = state ? this.getDuration() : duration;
 
     if (!totalDuration || !isFinite(totalDuration)) {
       totalDuration = 0;
