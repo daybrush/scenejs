@@ -3473,9 +3473,9 @@ repository: https://github.com/daybrush/scenejs.git
         */
 
 
-      __proto.toCSS = function (duration, options) {
-        if (duration === void 0) {
-          duration = this.getDuration();
+      __proto.toCSS = function (parentDuration, options) {
+        if (parentDuration === void 0) {
+          parentDuration = this.getDuration();
         }
 
         if (options === void 0) {
@@ -3493,7 +3493,8 @@ repository: https://github.com/daybrush/scenejs.git
 
 
         var isParent = !isUndefined(options[ITERATION_COUNT]);
-        var isZeroDuration = duration === 0;
+        var isZeroDuration = parentDuration === 0;
+        var duration = isZeroDuration ? this.getDuration() : parentDuration;
         var playSpeed = options[PLAY_SPEED] || 1;
         var delay = ((isParent ? options[DELAY] : state[DELAY]) || 0) / playSpeed;
         var easingName = state[EASING] && state[EASING_NAME] || isParent && options[EASING] && options[EASING_NAME] || state[EASING_NAME];
@@ -3536,7 +3537,7 @@ repository: https://github.com/daybrush/scenejs.git
         if (styleElement) {
           styleElement.innerText = css;
         } else {
-          document.body.insertAdjacentHTML("beforeend", "<style id=\"" + PREFIX + "STYLE_" + id + "\">" + css + "</style>");
+          document.body.insertAdjacentHTML("beforeend", "<style id=\"" + PREFIX + "STYLE_" + toId(id) + "\">" + css + "</style>");
         }
       };
       /**
