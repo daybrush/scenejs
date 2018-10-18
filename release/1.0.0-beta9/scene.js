@@ -3042,7 +3042,7 @@ repository: https://github.com/daybrush/scenejs.git
         }
 
         this.elements = elements instanceof Element ? [elements] : elements;
-        this.setId();
+        this.setId(this.getId());
         return this;
       };
       /**
