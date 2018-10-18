@@ -158,7 +158,7 @@ const item = scene.newItem("item1")
 	 */
   public exportCSS(duration: number = this.getDuration(), state?: StateInterface) {
     const items = this.items;
-    let totalDuration = duration;
+    let totalDuration = state ? this.getDuration() : duration;
 
     if (!totalDuration || !isFinite(totalDuration)) {
       totalDuration = 0;

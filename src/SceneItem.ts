@@ -300,7 +300,7 @@ item.setElement(document.querySelectorAll(".class"));
       return this;
     }
     this.elements = (elements instanceof Element) ? [elements] : elements;
-    this.setId();
+    this.setId(this.getId());
     return this;
   }
   /**
@@ -644,7 +644,7 @@ const frame = item.getNowFrame(1.7);
 item.setCSS(0, ["opacity"]);
 item.setCSS(0, ["opacity", "width", "height"]);
 	*/
-  public toCSS(duration = this.getDuration(), options: StateInterface = {}) {
+  public toCSS(parentDuration = this.getDuration(), options: StateInterface = {}) {
     const state = this.state;
     const selector = state.selector || this.options.selector;
 
@@ -654,9 +654,10 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const id = this._getId();
     // infinity or zero
     const isParent = !isUndefined(options[ITERATION_COUNT]);
-    const isZeroDuration = duration === 0;
+    const isZeroDuration = parentDuration === 0;
+    const duration = isZeroDuration ? this.getDuration() : parentDuration;
     const playSpeed = (options[PLAY_SPEED] || 1);
-    const delay = ((isParent ? options[DELAY] : state[DELAY]) || 0) / playSpeed;
+    const delay = ((options[DELAY] || 0) + (isZeroDuration ? state[DELAY] : 0)) / playSpeed;
     const easingName = (state[EASING] && state[EASING_NAME]) ||
       (isParent && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
     const iterationCount = (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
@@ -675,7 +676,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const css = `${selector}.${START_ANIMATION} {
 			${cssText}
 		}
-		${this._toKeyframes(duration, isParent)}`;
+		${this._toKeyframes(duration, !isZeroDuration && isParent)}`;
 
     return css;
   }
@@ -691,7 +692,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
       styleElement.innerText = css;
     } else {
       document.body.insertAdjacentHTML("beforeend",
-        `<style id="${PREFIX}STYLE_${id}">${css}</style>`);
+        `<style id="${PREFIX}STYLE_${toId(id)}">${css}</style>`);
     }
   }
   /**
@@ -809,7 +810,7 @@ item.playCSS(false, {
       return "";
     }
     if (delay) {
-      keyframes.push(`0%{${frames[0]}}`);
+      keyframes.push(`0%{${css[0]}}`);
       if (direction === REVERSE || direction === ALTERNATE_REVERSE) {
         keyframes.push(`${delay / playSpeed / duration * 100 - 0.00001}%{${css[0]}}`);
       }
