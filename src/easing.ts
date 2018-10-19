@@ -76,7 +76,10 @@ export function steps(count: number, position: "start" | "end") {
   const func: EasingFunctionInterface = (time: number) => {
     const level = 1 / count;
 
-    return (position === "end" ? level : 0) + Math.floor(time / level) * level;
+    if (time >= 1) {
+      return 1;
+    }
+    return (position === "start" ? level : 0) + Math.floor(time / level) * level;
   };
 
   func.easingName = `steps(${count}, ${position})`;

@@ -528,6 +528,17 @@ describe("SceneItem Test", function() {
             expect(this.item.options.selector).to.be.equals(`[data-scene-id="${id}"]`);
             expect(this.item.elements[0]).to.be.equals(this.element);
         });
+        it("should check 'setElement' method  with 'attribute'", () => {
+            // Given
+            this.item.setElement(this.element);
+            const id = this.item.elements[0].getAttribute("data-scene-id");
+            this.item.set(1, "attribute", "a", 1);
+            // When
+            this.item.setTime(1);
+            
+            // Then
+            expect(this.item.elements[0].getAttribute("a")).to.be.equals("1");
+        });
         it("should check 'setElement' method (already has id)", () => {
             // Given
             this.item.state.id = "id123";

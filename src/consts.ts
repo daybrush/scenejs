@@ -35,6 +35,7 @@ export const RUNNING = "running";
 export const ITERATION = "iteration";
 export const RGBA = "rgba";
 export const START_ANIMATION = "startAnimation";
+export const PAUSE_ANIMATION = "pauseAnimation";
 export const ALTERNATE = "alternate";
 export const REVERSE = "reverse";
 export const ALTERNATE_REVERSE = "alternate-reverse";
