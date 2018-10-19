@@ -7,6 +7,7 @@ import {
   decamelize,
   toFixed,
   isFixed,
+  playCSS,
 } from "./utils";
 import Keyframes from "./Keyframes";
 import { dotValue } from "./utils/dot";
@@ -14,7 +15,8 @@ import {
   KEYFRAMES, ANIMATION, START_ANIMATION,
   PREFIX, THRESHOLD, ObjectInterface, NameType,
   TIMING_FUNCTION, ALTERNATE, ALTERNATE_REVERSE, NORMAL, INFINITE,
-  REVERSE, EASING, RUNNING, PLAY, FILL_MODE, DIRECTION, ITERATION_COUNT, EASING_NAME, DELAY, PLAY_SPEED, DURATION
+  REVERSE, EASING, FILL_MODE, DIRECTION, ITERATION_COUNT,
+  EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION
 } from "./consts";
 import { addClass, removeClass, hasClass, fromCSS } from "./utils/css";
 
@@ -662,7 +664,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
       (isParent && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
     const iterationCount = (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
     const fillMode = (options[FILL_MODE] !== "forwards" && options[FILL_MODE]) || state[FILL_MODE];
-    const direction = (options[DIRECTION] !== NORMAL && options[DIRECTION]) || state[DIRECTION];
+    const direction = options[DIRECTION] || state[DIRECTION];
     const cssText = makeAnimationProperties({
       fillMode,
       direction,
@@ -675,7 +677,9 @@ item.setCSS(0, ["opacity", "width", "height"]);
 
     const css = `${selector}.${START_ANIMATION} {
 			${cssText}
-		}
+		}${selector}.${PAUSE_ANIMATION} {
+      ${ANIMATION}-play-state: paused;
+    }
 		${this._toKeyframes(duration, !isZeroDuration && isParent)}`;
 
     return css;
@@ -694,6 +698,45 @@ item.setCSS(0, ["opacity", "width", "height"]);
       document.body.insertAdjacentHTML("beforeend",
         `<style id="${PREFIX}STYLE_${toId(id)}">${css}</style>`);
     }
+  }
+  public pause() {
+    super.pause();
+    this.isPausedCSS() && this.pauseCSS();
+    return this;
+  }
+  public isPausedCSS() {
+    return this.state.playCSS && this.isPaused();
+  }
+  public pauseCSS() {
+    const elements = this.elements;
+    const length = elements.length;
+
+    if (!length) {
+      return this;
+    }
+    for (let i = 0; i < length; ++i) {
+      addClass(elements[i], PAUSE_ANIMATION);
+    }
+  }
+  public endCSS() {
+    const elements = this.elements;
+    const length = elements.length;
+
+    if (!length) {
+      return this;
+    }
+    for (let i = 0; i < length; ++i) {
+      const element = elements[i];
+
+      removeClass(element, PAUSE_ANIMATION);
+      removeClass(element, START_ANIMATION);
+    }
+    this.setState({ playCSS: false });
+  }
+  public end() {
+    !this.isEnded() && this.state.playCSS && this.endCSS();
+    super.end();
+    return this;
   }
   /**
 	* Play using the css animation and keyframes.
@@ -714,65 +757,41 @@ item.playCSS(false, {
 });
 	*/
   public playCSS(exportCSS = true, properties = {}) {
-    if (!ANIMATION || this.getPlayState() === RUNNING) {
-      return this;
-    }
+    playCSS(this, exportCSS, properties);
+    return this;
+  }
+  public addPlayClass(isPaused: boolean, properties = {}) {
     const elements = this.elements;
     const length = elements.length;
-
-    if (!length) {
-      return this;
-    }
-    if (this.isEnded()) {
-      this.setTime(0);
-    }
-    exportCSS && this.exportCSS();
-
     const cssText = makeAnimationProperties(properties);
 
-    for (let i = 0; i < length; ++i) {
-      const element = elements[i];
+    if (!length) {
+      return;
+    }
+    if (isPaused) {
+      for (let i = 0; i < length; ++i) {
+        removeClass(elements[i], PAUSE_ANIMATION);
+      }
+    } else {
+      for (let i = 0; i < length; ++i) {
+        const element = elements[i];
 
-      element.style.cssText += cssText;
-      if (hasClass(element, START_ANIMATION)) {
-        removeClass(element, START_ANIMATION);
-        (el => {
-          requestAnimationFrame(() => {
+        element.style.cssText += cssText;
+        if (hasClass(element, START_ANIMATION)) {
+          removeClass(element, START_ANIMATION);
+          (el => {
             requestAnimationFrame(() => {
-              addClass(el, START_ANIMATION);
+              requestAnimationFrame(() => {
+                addClass(el, START_ANIMATION);
+              });
             });
-          });
-        })(element);
-      } else {
-        addClass(element, START_ANIMATION);
+          })(element);
+        } else {
+          addClass(element, START_ANIMATION);
+        }
       }
     }
-
-    this.setState({ playCSS: true });
-    this.setPlayState(RUNNING);
-    this.trigger(PLAY);
-
-    const duration = this.getDuration();
-    const animatedElement = elements[0];
-    const animationend = () => {
-      this.end();
-
-      if (!animatedElement) {
-        return;
-      }
-      animatedElement.removeEventListener("animationend", animationend);
-      animatedElement.removeEventListener("animationiteration", animationiteration);
-    };
-    const animationiteration = ({ elapsedTime }: any) => {
-      const currentTime = elapsedTime;
-      const iterationCount = currentTime / duration;
-
-      this.state.currentTime = currentTime;
-      this.setCurrentIterationCount(iterationCount);
-    };
-    animatedElement.addEventListener("animationend", animationend);
-    animatedElement.addEventListener("animationiteration", animationiteration);
-    return this;
+    return elements[0];
   }
   private _getId() {
     return this.state.id || this.setId().getId();
@@ -790,8 +809,10 @@ item.playCSS(false, {
     const state = this.state;
     const playSpeed = state[PLAY_SPEED];
     const iterationCount = state[ITERATION_COUNT];
+    const fillMode = state[FILL_MODE];
     const delay = isParent ? state[DELAY] : 0;
     const direction = isParent ? state[DIRECTION] : NORMAL;
+    const isReverse = direction === REVERSE || direction === ALTERNATE_REVERSE;
     const { keys, values, frames } = this.getAllTimes(true, {
       duration,
       delay,
@@ -803,27 +824,32 @@ item.playCSS(false, {
     const css: ObjectInterface<string> = {};
     const keyframes: string[] = [];
 
-    for (const time in frames) {
-      css[time] = frames[time].toCSS();
-    }
     if (!keys.length) {
       return "";
     }
+    for (const time in frames) {
+      css[time] = frames[time].toCSS();
+    }
+    const lastTime = keys[length - 1];
+    const lastCSS = css[values[lastTime]];
+
     if (delay) {
-      keyframes.push(`0%{${css[0]}}`);
-      if (direction === REVERSE || direction === ALTERNATE_REVERSE) {
-        keyframes.push(`${delay / playSpeed / duration * 100 - 0.00001}%{${css[0]}}`);
-      }
+      const delayCSS = isReverse && (fillMode === "both" || fillMode === "backwards") ? lastCSS : css[0];
+      keyframes.push(`0%{${delayCSS}}`);
+      isReverse && keyframes.push(`${delay / playSpeed / duration * 100 - THRESHOLD}%{${delayCSS}}`);
     }
     keys.forEach(time => {
       keyframes.push(`${(delay + time) / playSpeed / duration * 100}%{${css[values[time]]}}`);
     });
-    const lastTime = keys[length - 1];
-
+    // if (afterDelay) {
+    //   keyframes.push(`${lastTime / playSpeed / duration * 100 + THRESHOLD}%{${lastCSS}}`);
+    //   keyframes.push(`100%{${lastCSS}`);
+    // } else {
     if ((delay + lastTime) / playSpeed < duration) {
       // not 100%
-      keyframes.push(`100%{${css[values[lastTime]]}`);
+      keyframes.push(`100%{${lastCSS}`);
     }
+    // }
     return `@${KEYFRAMES} ${PREFIX}KEYFRAMES_${toId(id)}{
 			${keyframes.join("\n")}
 		}`;

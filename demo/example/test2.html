@@ -13,23 +13,23 @@
 </style>
 <script src="../release/latest/scene.js"></script>
 <script>
-	var scene = new Scene({
-		".rectangle": {
-			0: {
-				transform: "translate(0px, 0px)",
-			},
-			2: {
-				transform: "translate(200px, 0px)",
-			},
-			"options": {
-				easing: Scene.EASE_IN_OUT,
-				direction: "alternate-reverse",
-				fillMode: "both",
-				delay: 2,
-				iterationCount: 2,
-			}
+var scene = new Scene({
+	".rectangle": {
+		0: {
+			transform: "translate(0px, 0px)",
+		},
+		2: {
+			transform: "translate(200px, 0px)",
+		},
+		"options": {
+			easing: Scene.EASE_IN_OUT,
+			direction: "alternate-reverse",
+			fillMode: "both",
+			delay: 2,
+			iterationCount: 2,
 		}
-	}, {
+	}
+}, {
 	easing: Scene.EASE_IN_OUT,
 	fillMode: "both",
 	iterationCount: 2,
@@ -44,5 +44,5 @@ scene.on("ended", e => {
 scene.on("iteration", e => {
 	console.log("iteration", e);
 });
-scene.play();
+scene.playCSS();
 </script>

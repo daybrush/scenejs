@@ -1,7 +1,8 @@
 import Animator, { StateInterface, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
-import { ANIMATION, ObjectInterface, RUNNING, ENDED, PLAY, ITERATION, ANIMATE } from "./consts";
+import { ObjectInterface, ANIMATE } from "./consts";
 import Frame from "./Frame";
+import { playCSS } from "./utils";
 
 /**
 * manage sceneItems and play Scene.
@@ -174,6 +175,45 @@ const item = scene.newItem("item1")
     item.setDelay(item.getDelay() + this.getDuration());
     this.setItem(item.getId() || item.setId().getId(), item);
   }
+  public isPausedCSS() {
+    return this.state.playCSS && this.isPaused();
+  }
+  public pauseCSS() {
+    const items = this.items;
+
+    for (const id in items) {
+      items[id].pauseCSS();
+    }
+  }
+  public pause() {
+    super.pause();
+    this.isPausedCSS() && this.pauseCSS();
+    return this;
+  }
+  public endCSS() {
+    const items = this.items;
+
+    for (const id in items) {
+      items[id].endCSS();
+    }
+    this.setState({ playCSS: false });
+  }
+  public end() {
+    !this.isEnded() && this.state.playCSS && this.endCSS();
+    super.end();
+    return this;
+  }
+  public addPlayClass(isPaused: boolean, properties = {}) {
+    const items = this.items;
+    let animtionElement: HTMLElement;
+
+    for (const id in items) {
+      const el = items[id].addPlayClass(isPaused, properties);
+
+      !animtionElement && (animtionElement = el);
+    }
+    return animtionElement;
+  }
   /**
 	* Play using the css animation and keyframes.
 	* @param {boolean} [exportCSS=true] Check if you want to export css.
@@ -194,40 +234,7 @@ scene.playCSS(false, {
 });
 	*/
   public playCSS(exportCSS = true, properties = {}) {
-    if (!ANIMATION || this.getPlayState() === RUNNING) {
-      return this;
-    }
-    exportCSS && this.exportCSS();
-
-    const items = this.items;
-    let animationItem: Scene | SceneItem;
-
-    for (const id in items) {
-      const item = items[id];
-
-      item.playCSS(false, properties);
-      if (item.getState("playCSS")) {
-        animationItem = item;
-      }
-    }
-    if (!animationItem) {
-      return this;
-    }
-    const animationiteration = ({ currentTime, iterationCount }: { currentTime: number, iterationCount: number }) => {
-      this.state.currentTime = currentTime;
-      this.setCurrentIterationCount(iterationCount);
-    };
-    const animationend = () => {
-      this.end();
-      this.setState({ playCSS: false });
-      animationItem.off(ENDED, animationend);
-      animationItem.off(ITERATION, animationiteration);
-    };
-    animationItem.on(ENDED, animationend);
-    animationItem.on(ITERATION, animationiteration);
-    this.setState({ playCSS: true });
-    this.setPlayState(RUNNING);
-    this.trigger(PLAY);
+    playCSS(this, exportCSS, properties);
     return this;
   }
   public load(properties: any = {}, options = properties.options) {

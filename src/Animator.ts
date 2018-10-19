@@ -287,10 +287,19 @@ animator.isPaused(); // true or false
   }
   /**
 	 * end animator
+	 * @method Scene.Animator#finish
+	 * @return {Scene.Animator} An instance itself.
+	*/
+  public finish() {
+    this.end();
+    return this;
+  }
+  /**
+	 * end animator
 	 * @method Scene.Animator#end
 	 * @return {Scene.Animator} An instance itself.
 	*/
-  public end(): this {
+  public end() {
     this.pause();
     /**
 		 * This event is fired when animator is ended.
@@ -407,7 +416,7 @@ animator.getTime();
 
     return delay > 0 && (tickTime < delay);
   }
-  protected setCurrentIterationCount(iterationCount: number): this {
+  public setCurrentIterationCount(iterationCount: number): this {
     const state = this.state;
     const passIterationCount = Math.floor(iterationCount);
 

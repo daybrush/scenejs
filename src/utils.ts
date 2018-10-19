@@ -1,5 +1,7 @@
-import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS } from "./consts";
+import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS, PAUSED, RUNNING, PLAY, ANIMATION, ENDED } from "./consts";
 import PropertyObject from "./PropertyObject";
+import Scene from "./Scene";
+import SceneItem from "./SceneItem";
 
 export function setAlias(name: string, alias: string[]) {
   ALIAS[name] = alias;
@@ -90,4 +92,60 @@ export function splitUnit(text: string) {
 // }
 export function decamelize(str: string) {
   return str.replace(/([a-z])([A-Z])/g, (all, letter, letter2) => `${letter}-${letter2.toLowerCase()}`);
+}
+
+export interface IterationInterface {
+  currentTime: number;
+  iterationCount: number;
+  elapsedTime: number;
+}
+export function isPausedCSS(item: Scene | SceneItem) {
+  return item.state.playCSS && item.getPlayState() === PAUSED;
+}
+export function playCSS(item: Scene | SceneItem, exportCSS: boolean, properties = {}) {
+  if (!ANIMATION || item.getPlayState() === RUNNING) {
+    return;
+  }
+  if (isPausedCSS(item)) {
+    item.addPlayClass(true, properties);
+  } else {
+    if (item.isEnded()) {
+      item.setTime(0);
+    }
+    exportCSS && item.exportCSS();
+    const el = item.addPlayClass(false, properties);
+
+    if (!el) {
+      return;
+    }
+    addAnimationEvent(item, el);
+    item.setState({ playCSS: true });
+  }
+  item.setPlayState(RUNNING);
+  item.trigger(PLAY);
+}
+
+export function addAnimationEvent(item: Scene | SceneItem, el: HTMLElement) {
+  const duration = item.getDuration();
+  const isZeroDuration = !duration || !isFinite(duration);
+
+  const animationend = () => {
+    if (!isZeroDuration) {
+      item.setState({ playCSS: false });
+      item.finish();
+    }
+  };
+  item.on(ENDED, () => {
+    el.removeEventListener("animationend", animationend);
+    el.removeEventListener("animationiteration", animationiteration);
+  });
+  const animationiteration = ({elapsedTime}: any) => {
+    const currentTime = elapsedTime;
+    const iterationCount = isZeroDuration ? 0 : (currentTime / duration);
+
+    item.state.currentTime = currentTime;
+    item.setCurrentIterationCount(iterationCount);
+  };
+  el.addEventListener("animationend", animationend);
+  el.addEventListener("animationiteration", animationiteration);
 }
