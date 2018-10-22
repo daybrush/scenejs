@@ -55,7 +55,8 @@ export function hex3to6(h: string) {
   const r = h.charAt(1);
   const g = h.charAt(2);
   const b = h.charAt(3);
-  const arr = ["#", r, r, g, g, b, b];
+  const a = h.charAt(4);
+  const arr = ["#", r, r, g, g, b, b, a, a];
 
   return arr.join("");
 }
