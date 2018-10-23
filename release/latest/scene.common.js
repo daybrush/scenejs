@@ -9,6 +9,8 @@ repository: https://github.com/daybrush/scenejs.git
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+var utils = require('@daybrush/utils');
+
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -119,363 +121,6 @@ var OPTIONS = [DURATION, FILL_MODE, DIRECTION, ITERATION_COUNT, DELAY, EASING, P
 
 var EVENTS = [PAUSED, ENDED, TIMEUPDATE, ANIMATE, PLAY, ITERATION];
 
-var prefixes = ["webkit", "ms", "moz", "o"];
-
-var checkProperties =
-/*#__PURE__*/
-function (property) {
-  var styles = (document.body || document.documentElement).style;
-  var length = prefixes.length;
-
-  if (typeof styles[property] !== "undefined") {
-    return property;
-  }
-
-  for (var i = 0; i < length; ++i) {
-    var name = "-" + prefixes[i] + "-" + property;
-
-    if (typeof styles[name] !== "undefined") {
-      return name;
-    }
-  }
-
-  return "";
-};
-
-var RGB = "rgb";
-var RGBA = "rgba";
-var HSL = "hsl";
-var HSLA = "hsla";
-var TRANSFORM =
-/*#__PURE__*/
-checkProperties("transform");
-var FILTER =
-/*#__PURE__*/
-checkProperties("filter");
-var ANIMATION =
-/*#__PURE__*/
-checkProperties("animation");
-var KEYFRAMES =
-/*#__PURE__*/
-ANIMATION.replace("animation", "keyframes");
-
-function isUndefined(value) {
-  return typeof value === "undefined";
-}
-
-function isObject(value) {
-  return value && typeof value === "object";
-}
-
-function isArray(value) {
-  return Array.isArray(value);
-}
-
-function isString(value) {
-  return typeof value === "string";
-}
-/**
-* divide text by space.
-* @memberof Property
-* @function splitSpace
-* @param {String} text - text to divide
-* @return {Array} divided texts
-* @example
-console.log(splitSpace("a b c d e f g"));
-// ["a", "b", "c", "d", "e", "f", "g"]
-console.log(splitSpace("'a,b' c 'd,e' f g"));
-// ["'a,b'", "c", "'d,e'", "f", "g"]
-*/
-
-
-function splitSpace(text) {
-  // divide comma(,)
-  var matches = text.match(/("[^"]*")|('[^']*')|([^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\S+/g);
-  return matches || [];
-}
-/**
-* divide text by comma.
-* @memberof Property
-* @function splitComma
-* @param {String} text - text to divide
-* @return {Array} divided texts
-* @example
-console.log(splitComma("a,b,c,d,e,f,g"));
-// ["a", "b", "c", "d", "e", "f", "g"]
-console.log(splitComma("'a,b',c,'d,e',f,g"));
-// ["'a,b'", "c", "'d,e'", "f", "g"]
-*/
-
-
-function splitComma(text) {
-  // divide comma(,)
-  // "[^"]*"|'[^']*'
-  var matches = text.match(/("[^"]*"|'[^']*'|[^,\s()]*\((?:[^()]*|\([^()]*\))*\)[^,\s()]*|[^,])+/g);
-  return matches ? matches.map(function (str) {
-    return str.trim();
-  }) : [];
-}
-
-function splitBracket(text) {
-  var matches = /([^(]*)\(([\s\S]*)\)([\s\S]*)/g.exec(text);
-
-  if (!matches || matches.length < 4) {
-    return {};
-  } else {
-    return {
-      prefix: matches[1],
-      value: matches[2],
-      suffix: matches[3]
-    };
-  }
-}
-
-function splitUnit(text) {
-  var matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
-
-  if (!matches) {
-    return {
-      prefix: "",
-      unit: "",
-      value: NaN
-    };
-  }
-
-  var prefix = matches[1];
-  var value = matches[2];
-  var unit = matches[3];
-  return {
-    prefix: prefix,
-    unit: unit,
-    value: parseFloat(value)
-  };
-}
-
-function camelize(str) {
-  return str.replace(/[\s-_]([a-z])/g, function (all, letter) {
-    return letter.toUpperCase();
-  });
-}
-
-function decamelize(str) {
-  return str.replace(/([a-z])([A-Z])/g, function (all, letter, letter2) {
-    return letter + "-" + letter2.toLowerCase();
-  });
-}
-/**
-* @namespace
-* @name Color
-*/
-
-
-var COLOR_MODELS = [RGB, RGBA, HSL, HSLA];
-/**
-* Remove the # from the hex color.
-* @memberof Color
-* @param {String} hex - hex color
-* @return {String} hex color
-* @example
-console.log(cutHex("#000000"))
-// "000000"
-*/
-
-function cutHex(hex) {
-  return hex.charAt(0) === "#" ? hex.substring(1) : hex;
-}
-/**
-* convert hex color to rgb color.
-* @memberof Color
-* @param {String} hex - hex color
-* @return {Array} rgb color
-* @example
-console.log(hexToRGB("#000000"));
-// [0, 0, 0]
-console.log(hexToRGB("#201045"));
-// [32, 16, 69]
-*/
-
-
-function hexToRGBA(hex) {
-  var h = cutHex(hex);
-  var r = parseInt(h.substring(0, 2), 16);
-  var g = parseInt(h.substring(2, 4), 16);
-  var b = parseInt(h.substring(4, 6), 16);
-  var a = parseInt(h.substring(6, 8), 16) / 255;
-
-  if (isNaN(a)) {
-    a = 1;
-  }
-
-  return [r, g, b, a];
-}
-/**
-* convert 3-digit hex color to 6-digit hex color.
-* @memberof Color
-* @param {String} hex - 3-digit hex color
-* @return {String} 6-digit hex color
-* @example
-console.log(hex3to6("#123"));
-// "#112233"
-*/
-
-
-function hex3to6(h) {
-  var r = h.charAt(1);
-  var g = h.charAt(2);
-  var b = h.charAt(3);
-  var arr = ["#", r, r, g, g, b, b];
-  return arr.join("");
-}
-/**
-* convert hsl color to rgb color.
-* @memberof Color
-* @param {Array} hsl(a) - hsl color(hue: 0 ~ 360, saturation: 0 ~ 1, lightness: 0 ~ 1, alpha: 0 ~ 1)
-* @return {Array} rgb color
-* @example
-console.log(hslToRGB([150, 0.5, 0.4]));
-// [51, 153, 102]
-*/
-
-
-function hslToRGBA(hsl) {
-  var h = hsl[0];
-  var s = hsl[1];
-  var l = hsl[2];
-
-  if (h < 0) {
-    h += Math.floor((Math.abs(h) + 360) / 360) * 360;
-  }
-
-  h %= 360;
-  var c = (1 - Math.abs(2 * l - 1)) * s;
-  var x = c * (1 - Math.abs(h / 60 % 2 - 1));
-  var m = l - c / 2;
-  var rgb;
-
-  if (h < 60) {
-    rgb = [c, x, 0];
-  } else if (h < 120) {
-    rgb = [x, c, 0];
-  } else if (h < 180) {
-    rgb = [0, c, x];
-  } else if (h < 240) {
-    rgb = [0, x, c];
-  } else if (h < 300) {
-    rgb = [x, 0, c];
-  } else if (h < 360) {
-    rgb = [c, 0, x];
-  }
-
-  var result = [Math.round((rgb[0] + m) * 255), Math.round((rgb[1] + m) * 255), Math.round((rgb[2] + m) * 255), hsl.length > 3 ? hsl[3] : 1];
-  return result;
-}
-/**
-* convert string to rgba color.
-* @memberof Color
-* @param {String} - Hex(rgb, rgba) or RGB(A), or HSL(A)
-* @return {Array} rgba color
-*/
-
-
-function stringToRGBA(color) {
-  if (color.charAt(0) === "#") {
-    if (color.length === 4) {
-      return hexToRGBA(hex3to6(color));
-    } else {
-      return hexToRGBA(color);
-    }
-  } else if (color.indexOf("(") !== -1) {
-    // in bracket.
-    var _a = splitBracket(color),
-        prefix = _a.prefix,
-        value = _a.value;
-
-    if (!prefix || !value) {
-      return;
-    }
-
-    var arr = splitComma(value);
-    var colorArr = [];
-    var length = arr.length;
-
-    switch (prefix) {
-      case RGB:
-      case RGBA:
-        for (var i = 0; i < length; ++i) {
-          colorArr[i] = parseFloat(arr[i]);
-        }
-
-        return colorArr;
-
-      case HSL:
-      case HSLA:
-        for (var i = 0; i < length; ++i) {
-          if (arr[i].indexOf("%") !== -1) {
-            colorArr[i] = parseFloat(arr[i]) / 100;
-          } else {
-            colorArr[i] = parseFloat(arr[i]);
-          }
-        } // hsl, hsla to rgba
-
-
-        return hslToRGBA(colorArr);
-    }
-  }
-
-  return;
-}
-
-function hasClass(element, className) {
-  if (element.classList) {
-    return element.classList.contains(className);
-  }
-
-  return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
-}
-
-function addClass(element, className) {
-  if (element.classList) {
-    element.classList.add(className);
-  } else {
-    element.className += " " + className;
-  }
-}
-
-function removeClass(element, className) {
-  if (element.classList) {
-    element.classList.remove(className);
-  } else {
-    var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
-    element.className = element.className.replace(reg, " ");
-  }
-}
-
-function fromCSS(elements, properties) {
-  if (!elements || !properties || !properties.length) {
-    return {};
-  }
-
-  var element;
-
-  if (elements instanceof Element) {
-    element = elements;
-  } else if (elements.length) {
-    element = elements[0];
-  } else {
-    return {};
-  }
-
-  var cssObject = {};
-  var styles = window.getComputedStyle(element);
-  var length = properties.length;
-
-  for (var i = 0; i < length; ++i) {
-    cssObject[properties[i]] = styles[properties[i]];
-  }
-
-  return cssObject;
-}
-
 /**
 * attach and trigger event handlers.
 * @memberof Scene
@@ -520,7 +165,7 @@ function () {
 
     var events = this.events;
 
-    if (isObject(name)) {
+    if (utils.isObject(name)) {
       for (var i in name) {
         this.on(i, name[i]);
       }
@@ -536,7 +181,7 @@ function () {
       return this;
     }
 
-    if (isObject(callback)) {
+    if (utils.isObject(callback)) {
       callback.forEach(function (func) {
         return _this.on(name, func);
       });
@@ -1033,7 +678,7 @@ function getType(value) {
   var type = typeof value;
 
   if (type === "object") {
-    if (isArray(value)) {
+    if (utils.isArray(value)) {
       return "array";
     } else if (value instanceof PropertyObject) {
       return "property";
@@ -1083,7 +728,7 @@ function playCSS(item, exportCSS, properties) {
     properties = {};
   }
 
-  if (!ANIMATION || item.getPlayState() === RUNNING) {
+  if (!utils.ANIMATION || item.getPlayState() === RUNNING) {
     return;
   }
 
@@ -1146,12 +791,12 @@ function GetterSetter(getter, setter, parent) {
   return function (constructor) {
     var prototype = constructor.prototype;
     getter.forEach(function (name) {
-      prototype[camelize("get " + name)] = function () {
+      prototype[utils.camelize("get " + name)] = function () {
         return this[parent][name];
       };
     });
     setter.forEach(function (name) {
-      prototype[camelize("set " + name)] = function (value) {
+      prototype[utils.camelize("set " + name)] = function (value) {
         this[parent][name] = value;
         return this;
       };
@@ -1542,7 +1187,7 @@ function (_super) {
   };
 
   __proto.getUnitTime = function (time) {
-    if (isString(time)) {
+    if (utils.isString(time)) {
       var duration = this.getDuration() || 100;
 
       if (time === "from") {
@@ -1551,7 +1196,7 @@ function (_super) {
         return duration;
       }
 
-      var _a = splitUnit(time),
+      var _a = utils.splitUnit(time),
           unit = _a.unit,
           value = _a.value;
 
@@ -1708,7 +1353,7 @@ arrayToColorObject([0, 0, 0])
 */
 
 function arrayToColorObject(arr) {
-  var model = RGBA;
+  var model = utils.RGBA;
 
   if (arr.length === 3) {
     arr[3] = 1;
@@ -1735,7 +1380,7 @@ stringToBracketObject("abcde(0, 0, 0,1)")
 
 function stringToBracketObject(text) {
   // [prefix, value, other]
-  var _a = splitBracket(text),
+  var _a = utils.splitBracket(text),
       model = _a.prefix,
       value = _a.value,
       afterModel = _a.suffix;
@@ -1744,8 +1389,8 @@ function stringToBracketObject(text) {
     return text;
   }
 
-  if (COLOR_MODELS.indexOf(model) !== -1) {
-    return arrayToColorObject(stringToRGBA(text));
+  if (utils.COLOR_MODELS.indexOf(model) !== -1) {
+    return arrayToColorObject(utils.stringToRGBA(text));
   } // divide comma(,)
 
 
@@ -1788,7 +1433,7 @@ stringToColorObject("rgba(0, 0, 0,1)")
 */
 
 function stringToColorObject(value) {
-  var result = stringToRGBA(value);
+  var result = utils.stringToRGBA(value);
   return result ? arrayToColorObject(result) : value;
 }
 /**
@@ -1805,7 +1450,7 @@ toPropertyObject("1px solid #000");
 */
 
 function toPropertyObject(value) {
-  if (!isString(value)) {
+  if (!utils.isString(value)) {
     if (Array.isArray(value)) {
       return arrayToPropertyObject(value, ",");
     }
@@ -1813,7 +1458,7 @@ function toPropertyObject(value) {
     return value;
   }
 
-  var values = splitComma(value);
+  var values = utils.splitComma(value);
 
   if (values.length > 1) {
     return arrayToPropertyObject(values.map(function (v) {
@@ -1821,7 +1466,7 @@ function toPropertyObject(value) {
     }), ",");
   }
 
-  values = splitSpace(value);
+  values = utils.splitSpace(value);
 
   if (values.length > 1) {
     return arrayToPropertyObject(values.map(function (v) {
@@ -1914,7 +1559,7 @@ function merge(to, from, toValue) {
     } else if (type === "array") {
       to[name] = value.slice();
     } else if (type === "object") {
-      if (isObject(to[name]) && !isPropertyObject(to[name])) {
+      if (utils.isObject(to[name]) && !isPropertyObject(to[name])) {
         merge(to[name], value, toValue);
       } else {
         to[name] = clone(value, toValue);
@@ -2005,7 +1650,7 @@ function () {
     var length = params.length;
 
     for (var i = 0; i < length; ++i) {
-      if (!isObject(properties)) {
+      if (!utils.isObject(properties)) {
         return undefined;
       }
 
@@ -2040,7 +1685,7 @@ function () {
     }
 
     for (var i = 0; i < length - 1; ++i) {
-      if (!isObject(properties)) {
+      if (!utils.isObject(properties)) {
         return this;
       }
 
@@ -2093,10 +1738,10 @@ function () {
 
     if (params[0] in ALIAS) {
       this._set(ALIAS[params[0]], value);
-    } else if (length === 2 && isArray(params[0])) {
+    } else if (length === 2 && utils.isArray(params[0])) {
       this._set(params[0], value);
-    } else if (isObject(value)) {
-      if (isArray(value)) {
+    } else if (utils.isObject(value)) {
+      if (utils.isArray(value)) {
         this._set(params, value);
       } else if (isPropertyObject(value)) {
         if (isRole(params)) {
@@ -2111,11 +1756,11 @@ function () {
           this.set.apply(this, params.concat([name, value[name]]));
         }
       }
-    } else if (isString(value)) {
+    } else if (utils.isString(value)) {
       if (isRole(params)) {
         var obj = toPropertyObject(value);
 
-        if (isObject(obj)) {
+        if (utils.isObject(obj)) {
           this.set.apply(this, params.concat([obj]));
         }
 
@@ -2163,7 +1808,7 @@ function () {
     }
 
     for (var i = 0; i < length; ++i) {
-      if (!isObject(properties) || !(params[i] in properties)) {
+      if (!utils.isObject(properties) || !(params[i] in properties)) {
         return false;
       }
 
@@ -2230,7 +1875,7 @@ function () {
       var value = properties[name];
 
       if (name === TIMING_FUNCTION) {
-        cssObject[TIMING_FUNCTION.replace("animation", ANIMATION)] = (isString(value) ? value : value.easingName) || "initial";
+        cssObject[TIMING_FUNCTION.replace("animation", utils.ANIMATION)] = (utils.isString(value) ? value : value.easingName) || "initial";
         continue;
       }
 
@@ -2239,8 +1884,8 @@ function () {
 
     var transform = toInnerProperties(properties.transform);
     var filter = toInnerProperties(properties.filter);
-    TRANSFORM && transform && (cssObject[TRANSFORM] = transform);
-    FILTER && filter && (cssObject[FILTER] = filter);
+    utils.TRANSFORM && transform && (cssObject[utils.TRANSFORM] = transform);
+    utils.FILTER && filter && (cssObject[utils.FILTER] = filter);
     return cssObject;
   };
   /**
@@ -2275,7 +1920,7 @@ function () {
       return;
     }
 
-    properties[args[length - 1]] = isString(value) ? toPropertyObject(value) : value;
+    properties[args[length - 1]] = utils.isString(value) ? toPropertyObject(value) : value;
   };
 
   return Frame;
@@ -2287,7 +1932,7 @@ function getNames(names, stack) {
   for (var name in names) {
     stack.push(name);
 
-    if (isObject(names[name])) {
+    if (utils.isObject(names[name])) {
       arr = arr.concat(getNames(names[name], stack));
     } else {
       arr.push(stack.slice());
@@ -2303,12 +1948,12 @@ function updateFrame(names, properties) {
   for (var name in properties) {
     var value = properties[name];
 
-    if (!isObject(value) || isArray(value) || value instanceof PropertyObject) {
+    if (!utils.isObject(value) || utils.isArray(value) || value instanceof PropertyObject) {
       names[name] = true;
       continue;
     }
 
-    if (!isObject(names[name])) {
+    if (!utils.isObject(names[name])) {
       names[name] = {};
     }
 
@@ -2582,7 +2227,7 @@ function dotArray(a1, a2, b1, b2) {
     return a2;
   }
 
-  if (!isArray(a2)) {
+  if (!utils.isArray(a2)) {
     return a1;
   }
 
@@ -2734,8 +2379,8 @@ function dot(a1, a2, b1, b2) {
 
   var r1 = b1 / (b1 + b2);
   var r2 = 1 - r1;
-  var v1 = splitUnit("" + a1);
-  var v2 = splitUnit("" + a2);
+  var v1 = utils.splitUnit("" + a1);
+  var v2 = utils.splitUnit("" + a2);
   var v; // 숫자가 아닐경우 첫번째 값을 반환 b2가 0일경우 두번째 값을 반환
 
   if (isNaN(v1.value) || isNaN(v2.value)) {
@@ -2791,7 +2436,7 @@ function makeAnimationProperties(properties) {
   var cssArray = [];
 
   for (var name in properties) {
-    cssArray.push(ANIMATION + "-" + decamelize(name) + " : " + properties[name] + ";");
+    cssArray.push(utils.ANIMATION + "-" + utils.decamelize(name) + " : " + properties[name] + ";");
   }
 
   return cssArray.join("");
@@ -2936,7 +2581,7 @@ function (_super) {
       args[_i - 1] = arguments[_i];
     }
 
-    if (isObject(time)) {
+    if (utils.isObject(time)) {
       this.load(time);
       return this;
     } else if (args[0]) {
@@ -2961,7 +2606,7 @@ function (_super) {
         }
 
         return this;
-      } else if (args.length === 1 && isArray(args[0])) {
+      } else if (args.length === 1 && utils.isArray(args[0])) {
         args[0].forEach(function (item) {
           _this.set(time, item);
         });
@@ -3128,7 +2773,7 @@ function (_super) {
 
 
   __proto.setCSS = function (time, properties) {
-    this.set(time, fromCSS(this.elements, properties));
+    this.set(time, utils.fromCSS(this.elements, properties));
     return this;
   };
 
@@ -3267,7 +2912,7 @@ function (_super) {
 
 
   __proto.copyFrame = function (fromTime, toTime) {
-    if (isObject(fromTime)) {
+    if (utils.isObject(fromTime)) {
       for (var time in fromTime) {
         this.copyFrame(time, fromTime[time]);
       }
@@ -3298,7 +2943,7 @@ function (_super) {
 
 
   __proto.mergeFrame = function (fromTime, toTime) {
-    if (isObject(fromTime)) {
+    if (utils.isObject(fromTime)) {
       for (var time in fromTime) {
         this.mergeFrame(time, fromTime[time]);
       }
@@ -3355,7 +3000,7 @@ function (_super) {
     names.forEach(function (properties) {
       var value = _this._getNowValue(time, left, right, properties, realEasing);
 
-      if (isUndefined(value)) {
+      if (utils.isUndefined(value)) {
         return;
       }
 
@@ -3373,7 +3018,7 @@ function (_super) {
       options = properties.options;
     }
 
-    if (isArray(properties)) {
+    if (utils.isArray(properties)) {
       var length = properties.length;
 
       for (var i = 0; i < length; ++i) {
@@ -3562,7 +3207,7 @@ function (_super) {
     var id = this._getId(); // infinity or zero
 
 
-    var isParent = !isUndefined(options[ITERATION_COUNT]);
+    var isParent = !utils.isUndefined(options[ITERATION_COUNT]);
     var isZeroDuration = parentDuration === 0;
     var duration = isZeroDuration ? this.getDuration() : parentDuration;
     var playSpeed = options[PLAY_SPEED] || 1;
@@ -3581,7 +3226,7 @@ function (_super) {
       timingFunction: easingName
     });
 
-    var css = selector + "." + START_ANIMATION + " {\n\t\t\t" + cssText + "\n\t\t}" + selector + "." + PAUSE_ANIMATION + " {\n      " + ANIMATION + "-play-state: paused;\n    }\n\t\t" + this._toKeyframes(duration, !isZeroDuration && isParent);
+    var css = selector + "." + START_ANIMATION + " {\n\t\t\t" + cssText + "\n\t\t}" + selector + "." + PAUSE_ANIMATION + " {\n      " + utils.ANIMATION + "-play-state: paused;\n    }\n\t\t" + this._toKeyframes(duration, !isZeroDuration && isParent);
 
     return css;
   };
@@ -3630,7 +3275,7 @@ function (_super) {
     }
 
     for (var i = 0; i < length; ++i) {
-      addClass(elements[i], PAUSE_ANIMATION);
+      utils.addClass(elements[i], PAUSE_ANIMATION);
     }
   };
 
@@ -3644,8 +3289,8 @@ function (_super) {
 
     for (var i = 0; i < length; ++i) {
       var element = elements[i];
-      removeClass(element, PAUSE_ANIMATION);
-      removeClass(element, START_ANIMATION);
+      utils.removeClass(element, PAUSE_ANIMATION);
+      utils.removeClass(element, START_ANIMATION);
     }
 
     this.setState({
@@ -3708,25 +3353,25 @@ function (_super) {
 
     if (isPaused) {
       for (var i = 0; i < length; ++i) {
-        removeClass(elements[i], PAUSE_ANIMATION);
+        utils.removeClass(elements[i], PAUSE_ANIMATION);
       }
     } else {
       for (var i = 0; i < length; ++i) {
         var element = elements[i];
         element.style.cssText += cssText;
 
-        if (hasClass(element, START_ANIMATION)) {
-          removeClass(element, START_ANIMATION);
+        if (utils.hasClass(element, START_ANIMATION)) {
+          utils.removeClass(element, START_ANIMATION);
 
           (function (el) {
             requestAnimationFrame(function () {
               requestAnimationFrame(function () {
-                addClass(el, START_ANIMATION);
+                utils.addClass(el, START_ANIMATION);
               });
             });
           })(element);
         } else {
-          addClass(element, START_ANIMATION);
+          utils.addClass(element, START_ANIMATION);
         }
       }
     }
@@ -3808,7 +3453,7 @@ function (_super) {
     } // }
 
 
-    return "@" + KEYFRAMES + " " + PREFIX + "KEYFRAMES_" + toId(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
+    return "@" + utils.KEYFRAMES + " " + PREFIX + "KEYFRAMES_" + toId(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
   };
 
   __proto._getNowValue = function (time, left, right, properties, easing, usePrevValue) {
@@ -3856,11 +3501,11 @@ function (_super) {
 
     var nextValue = nextFrame && nextFrame.raw.apply(nextFrame, properties);
 
-    if (!prevFrame || isUndefined(prevValue)) {
+    if (!prevFrame || utils.isUndefined(prevValue)) {
       return nextValue;
     }
 
-    if (!nextFrame || isUndefined(nextValue) || prevValue === nextValue) {
+    if (!nextFrame || utils.isUndefined(nextValue) || prevValue === nextValue) {
       return prevValue;
     }
 
