@@ -2,6 +2,7 @@ import typescript from 'rollup-plugin-typescript';
 import PrototypeMinify from "rollup-plugin-prototype-minify";
 import replace from "rollup-plugin-replace";
 import { uglify } from "rollup-plugin-uglify";
+import resolve from "rollup-plugin-node-resolve";
 
 const pkg = require("./package.json");
 const banner = require("./config/banner");
@@ -60,6 +61,7 @@ export default [
     },
   }, {
     input: 'src/index.umd.ts',
+    plugins: [resolve()],
     output: {
       format: "umd",
       name: "Scene",
@@ -68,7 +70,7 @@ export default [
     },
   }, {
     input: 'src/index.umd.ts',
-    plugins: [uglifyCode],
+    plugins: [resolve(), uglifyCode],
     output: {
       format: "umd",
       name: "Scene",

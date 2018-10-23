@@ -1,4 +1,4 @@
-import {hex3to6, cutHex, hexToRGB, hslToRGB} from "../../../src/utils/color";
+import {hex3to6, cutHex, hexToRGBA, hslToRGBA} from "@daybrush/utils";
 
 /* eslint-disable */
 
@@ -25,11 +25,11 @@ describe("color Test", function() {
 			expect(hex).to.be.equals("#aabbcc");
             
 		});
-		it("should check 'hexToRGB'", () => {
-			const rgb1 = hexToRGB("#000000");
-			const rgb2 = hexToRGB("#ffffff");
-			const rgb3 = hexToRGB("#00000000");
-			const rgb4 = hexToRGB("#00000005");
+		it("should check 'hexToRGBA'", () => {
+			const rgb1 = hexToRGBA("#000000");
+			const rgb2 = hexToRGBA("#ffffff");
+			const rgb3 = hexToRGBA("#00000000");
+			const rgb4 = hexToRGBA("#00000005");
 
 
 			expect(rgb1).to.be.deep.equals([0, 0, 0, 1]);
@@ -37,26 +37,26 @@ describe("color Test", function() {
 			expect(rgb3).to.be.deep.equals([0, 0, 0, 0]);
 			expect(rgb4).to.be.deep.equals([0, 0, 0, 5 / 255]);
 		});
-		it("should check 'hslToRGB'", () => {
+		it("should check 'hslToRGBA'", () => {
 			// Given, When
-			const rgb1 = hslToRGB([0, 0.4, 0.5]);
-			const rgb2 = hslToRGB([80, 0.4, 0.5]);
-			const rgb3 = hslToRGB([150, 0.4, 0.5]);
-			const rgb4 = hslToRGB([215, 0.4, 0.5]);
-			const rgb5 = hslToRGB([260, 0.4, 0.5]);
-			const rgb6 = hslToRGB([320, 0.4, 0.5]);
-			const rgb7 = hslToRGB([320, 0.4, 0.5, 0.4]);
-			const rgb8 = hslToRGB([-40, 0.4, 0.5]);
+			const rgb1 = hslToRGBA([0, 0.4, 0.5]);
+			const rgb2 = hslToRGBA([80, 0.4, 0.5]);
+			const rgb3 = hslToRGBA([150, 0.4, 0.5]);
+			const rgb4 = hslToRGBA([215, 0.4, 0.5]);
+			const rgb5 = hslToRGBA([260, 0.4, 0.5]);
+			const rgb6 = hslToRGBA([320, 0.4, 0.5]);
+			const rgb7 = hslToRGBA([320, 0.4, 0.5, 0.4]);
+			const rgb8 = hslToRGBA([-40, 0.4, 0.5]);
 
 			// Then
-			expect(rgb1).to.be.deep.equals([179, 77, 77]);
-			expect(rgb2).to.be.deep.equals([145, 179, 77]);
-			expect(rgb3).to.be.deep.equals([77, 179, 128]);
-			expect(rgb4).to.be.deep.equals([77, 119, 179]);
-			expect(rgb5).to.be.deep.equals([110, 77, 179]);
-			expect(rgb6).to.be.deep.equals([179, 77, 145]);
+			expect(rgb1).to.be.deep.equals([179, 77, 77, 1]);
+			expect(rgb2).to.be.deep.equals([145, 179, 77, 1]);
+			expect(rgb3).to.be.deep.equals([77, 179, 128, 1]);
+			expect(rgb4).to.be.deep.equals([77, 119, 179, 1]);
+			expect(rgb5).to.be.deep.equals([110, 77, 179, 1]);
+			expect(rgb6).to.be.deep.equals([179, 77, 145, 1]);
 			expect(rgb7).to.be.deep.equals([179, 77, 145, 0.4]);
-			expect(rgb8).to.be.deep.equals([179, 77, 145]);
+			expect(rgb8).to.be.deep.equals([179, 77, 145, 1]);
 		});
     });  
 });

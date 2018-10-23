@@ -1,7 +1,8 @@
 import { ObjectInterface, RoleInterface } from "./consts";
-import { isObject, isArray, isInProperties, toFixed } from "./utils";
+import { isInProperties, toFixed } from "./utils";
 import PropertyObject from "./PropertyObject";
 import Frame from "./Frame";
+import { isObject, isArray } from "@daybrush/utils";
 
 function getNames(names: ObjectInterface<any>, stack: string[]) {
   let arr: string[][] = [];

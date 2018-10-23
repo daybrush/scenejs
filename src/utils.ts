@@ -1,7 +1,8 @@
-import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS, PAUSED, RUNNING, PLAY, ANIMATION, ENDED } from "./consts";
+import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS, PAUSED, RUNNING, PLAY, ENDED } from "./consts";
 import PropertyObject from "./PropertyObject";
 import Scene from "./Scene";
 import SceneItem from "./SceneItem";
+import { isArray, ANIMATION } from "@daybrush/utils";
 
 export function setAlias(name: string, alias: string[]) {
   ALIAS[name] = alias;
@@ -62,36 +63,6 @@ export function isRole(args: any[], isCheckTrue?: boolean) {
 }
 export function isFixed(args: any[]) {
   return isInProperties(FIXED, args, true);
-}
-export function isUndefined(value: any): value is undefined {
-  return (typeof value === "undefined");
-}
-export function isObject(value: any): value is ObjectInterface<any> {
-  return value && (typeof value === "object");
-}
-export function isArray(value: any): value is any[] {
-  return Array.isArray(value);
-}
-export function isString(value: any): value is string {
-  return typeof value === "string";
-}
-export function splitUnit(text: string) {
-  const matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
-
-  if (!matches) {
-    return { prefix: "", unit: "", value: NaN };
-  }
-  const prefix = matches[1];
-  const value = matches[2];
-  const unit = matches[3];
-
-  return { prefix, unit, value: parseFloat(value) };
-}
-// export function camelize(str: string) {
-// 	return str.replace(/[\s-_]([a-z])/g, (all, letter) => letter.toUpperCase());
-// }
-export function decamelize(str: string) {
-  return str.replace(/([a-z])([A-Z])/g, (all, letter, letter2) => `${letter}-${letter2.toLowerCase()}`);
 }
 
 export interface IterationInterface {

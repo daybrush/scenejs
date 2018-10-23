@@ -1,4 +1,5 @@
-import {stringToColorObject, splitSpace, toColorObject, arrayToColorObject, toPropertyObject, splitStyle, toObject} from "../../../src/utils/property";
+import {stringToColorObject, arrayToColorObject, toPropertyObject, splitStyle, toObject} from "../../../src/utils/property";
+import {splitSpace, hexToRGBA} from "@daybrush/utils";
 
 /* eslint-disable */
 
@@ -57,24 +58,11 @@ describe("property Test", function() {
             expect(arr2.options.model).to.be.equals("rgba");
             expect(arr2.options.type).to.be.equals("color");
         });
-        it (`should check 'toColorObject' method`, () => {
-            // Given
-            // When
-            const arr = toColorObject([0, 0, 0]);
-            const arr2 = toColorObject([0, 0, 0, 0.5]);
-            
-            expect(arr.toValue()).to.be.equals("rgba(0,0,0,1)");
-            expect(arr.options.model).to.be.equals("rgba");
-            expect(arr.options.type).to.be.equals("color");
-            expect(arr2.toValue()).to.be.equals("rgba(0,0,0,0.5)");
-            expect(arr2.options.model).to.be.equals("rgba");
-            expect(arr2.options.type).to.be.equals("color");
-        });
         it (`should check 'toPropertyObject' method`, () => {
             const obj = toPropertyObject([0, 0, 0]);
-            const obj2 = toColorObject("hsl(0, 0.4, 0.5)");
-            const obj3 = toColorObject("hsla(0, 40%, 50%, 0.4)");
-            const obj4 = toColorObject("hsla(0, 40%, 50%, 0.4");
+            const obj2 = stringToColorObject("hsl(0, 0.4, 0.5)");
+            const obj3 = stringToColorObject("hsla(0, 40%, 50%, 0.4)");
+            const obj4 = stringToColorObject("hsla(0, 40%, 50%, 0.4");
 
             expect(obj.toValue()).to.be.equals("0,0,0");
             expect(obj.options.type).to.be.equals("array");

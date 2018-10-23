@@ -3,12 +3,12 @@
 * @name Dot
 */
 
-import { isArray, splitUnit } from "../utils";
 import PropertyObject from "../PropertyObject";
 import { EasingType } from "../Animator";
 import { getType } from "../utils";
 import { PROPERTY, FUNCTION } from "../consts";
 import { toPropertyObject } from "./property";
+import { isArray, splitUnit } from "@daybrush/utils";
 
 /**
 * The dot product of Arrays

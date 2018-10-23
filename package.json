@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "1.0.0-beta10",
+  "version": "1.0.0-beta11",
   "description": "Javascript Animation Library",
   "main": "dist/scene.common.js",
   "module": "dist/scene.esm.js",
@@ -78,6 +78,7 @@
     "print-coveralls": "^1.2.0",
     "replace-in-file": "^3.4.0",
     "rollup": "^0.66.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-prototype-minify": "^1.0.4",
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-typescript": "^1.0.0",
@@ -94,5 +95,8 @@
     "webpack": "^4.3.0",
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {
+    "@daybrush/utils": "0.0.5"
   }
 }

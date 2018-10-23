@@ -1,5 +1,5 @@
 import Scene from "../../src/Scene";
-import { hasClass } from "../../src/utils/css";
+import { hasClass } from "@daybrush/utils";
 import { START_ANIMATION, PAUSE_ANIMATION } from "../../src/consts";
 import SceneItem from "../../src/SceneItem";
 /* eslint-disable */
