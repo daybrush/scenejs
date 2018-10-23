@@ -4,47 +4,9 @@
 */
 
 import PropertyObject from "../PropertyObject";
-import {COLOR_MODELS, hexToRGB, hex3to6, hslToRGB} from "./color";
-import {isString, isArray} from "../utils";
-import { ObjectInterface, RGBA } from "../consts";
+import { COLOR_MODELS, isString, splitComma, splitSpace, stringToRGBA, RGBA, splitBracket } from "@daybrush/utils";
+import { ObjectInterface } from "../consts";
 
-/**
-* divide text by space.
-* @memberof Property
-* @function splitSpace
-* @param {String} text - text to divide
-* @return {Array} divided texts
-* @example
-console.log(splitSpace("a b c d e f g"));
-// ["a", "b", "c", "d", "e", "f", "g"]
-console.log(splitSpace("'a,b' c 'd,e' f g"));
-// ["'a,b'", "c", "'d,e'", "f", "g"]
-*/
-export function splitSpace(text: string) {
-  // divide comma(,)
-  const matches = text.match(/("[^"]*")|('[^']*')|([^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\S+/g);
-
-  return matches || [];
-}
-/**
-* divide text by comma.
-* @memberof Property
-* @function splitComma
-* @param {String} text - text to divide
-* @return {Array} divided texts
-* @example
-console.log(splitComma("a,b,c,d,e,f,g"));
-// ["a", "b", "c", "d", "e", "f", "g"]
-console.log(splitComma("'a,b',c,'d,e',f,g"));
-// ["'a,b'", "c", "'d,e'", "f", "g"]
-*/
-export function splitComma(text: string) {
-  // divide comma(,)
-  // "[^"]*"|'[^']*'
-  const matches = text.match(/("[^"]*"|'[^']*'|[^,\s()]*\((?:[^()]*|\([^()]*\))*\)[^,\s()]*|[^,])+/g);
-
-  return matches ? matches.map(str => str.trim()) : [];
-}
 export function splitStyle(str: string) {
   const properties = str.split(";");
   const length = properties.length;
@@ -56,7 +18,7 @@ export function splitStyle(str: string) {
     if (!matches || matches.length < 3 || !matches[1]) {
       continue;
     }
-    obj.push({[matches[1].trim()]: toPropertyObject(matches[2].trim())});
+    obj.push({ [matches[1].trim()]: toPropertyObject(matches[2].trim()) });
   }
   return obj;
 }
@@ -86,69 +48,6 @@ export function arrayToColorObject(arr: number[]) {
   });
 }
 /**
-	* convert text with parentheses to PropertyObject[type=color].
-	* If the values are not RGBA model, change them RGBA mdoel.
-	* @memberof Property
-	* @function toColorObject
-	* @param {String|PropertyObject} value - color value "rgba(0,0,0,1)"
-	* @return {PropertyObject} PropertyObject[type=color]
-	* @example
-toColorObject("rgba(0, 0, 0,1)")
-// => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")
-*/
-export function toColorObject(value: PropertyObject | number[] | string) {
-  let colorObject;
-
-  if (value instanceof PropertyObject) {
-    colorObject = value;
-  } else if (isArray(value)) {
-    colorObject = arrayToColorObject(value);
-  } else if (isString(value)) {
-    return stringToColorObject(value);
-  }
-  let colorArray = colorObject.value;
-  const length = colorArray.length;
-
-  if (length === 4) {
-    colorArray[3] = parseFloat(colorArray[3]);
-  } else if (length === 3) {
-    colorArray[3] = 1;
-  }
-  colorObject.setOptions({type: "color"});
-  const colorModel = colorObject.getOption("model").toLowerCase();
-
-  // rgb hsl model to CHANGE rgba hsla
-  // string -> number
-  if (colorModel === "rgb") {
-    colorObject.setOptions({
-      type: "color",
-      model: RGBA,
-      prefix: `${RGBA}(`,
-      suffix: ")",
-    });
-  }
-  switch (colorModel) {
-    case "rgb":
-    case RGBA:
-      for (let i = 0; i < 3; ++i) {
-        colorArray[i] = parseInt(colorArray[i], 10);
-      }
-      break;
-    case "hsl":
-    case "hsla":
-      for (let i = 1; i < 3; ++i) {
-        if (colorArray[i].indexOf("%") !== -1) {
-          colorArray[i] = parseFloat(colorArray[i]) / 100;
-        }
-      }
-      // hsl, hsla to rgba
-      colorArray = hslToRGB(colorArray);
-      return arrayToColorObject(colorArray);
-    default:
-  }
-  return colorObject;
-}
-/**
 * convert text with parentheses to object.
 * @memberof Property
 * @function stringToBracketObject
@@ -158,42 +57,36 @@ export function toColorObject(value: PropertyObject | number[] | string) {
 stringToBracketObject("abcde(0, 0, 0,1)")
 // => PropertyObject(model="abcde", value=[0, 0, 0,1], separator=",")
 */
-export function stringToBracketObject(value: string) {
+export function stringToBracketObject(text: string) {
   // [prefix, value, other]
-  const matches = (/([^(]*)\(([\s\S]*)\)([\s\S]*)/g).exec(value);
+  const { prefix: model, value, suffix: afterModel } = splitBracket(text);
 
-  if (!matches || matches.length < 4) {
-    return value;
+  if (typeof value === "undefined") {
+    return text;
   }
-  const model = matches[1] || "";
-  const text = matches[2];
-  let prefix = `${model}(`;
-  let suffix = `)${matches[3]}`;
-  let separator = ",";
-  let values;
+  if (COLOR_MODELS.indexOf(model) !== -1) {
+    return arrayToColorObject(stringToRGBA(text));
+  }
   // divide comma(,)
-  const obj = toPropertyObject(text);
+  const obj = toPropertyObject(value);
+
+  let arr = [value];
+  let separator = ",";
+  let prefix = `${model}(`;
+  let suffix = `)${afterModel}`;
 
   if (obj instanceof PropertyObject) {
     separator = obj.getOption("separator");
-    values = obj.value;
+    arr = obj.value;
     prefix += obj.getOption("prefix");
     suffix = obj.getOption("suffix") + suffix;
-  } else {
-    values = [text];
   }
-  const result = new PropertyObject(values, {
+  return new PropertyObject(arr, {
     separator,
     model,
     prefix,
     suffix,
   });
-
-  if (COLOR_MODELS.indexOf(model) !== -1) {
-    return toColorObject(result);
-  } else {
-    return result;
-  }
 }
 
 export function arrayToPropertyObject(arr: any[], separator: string) {
@@ -215,25 +108,9 @@ stringToColorObject("rgba(0, 0, 0,1)")
 // => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")
 */
 export function stringToColorObject(value: string): string | PropertyObject {
-  let colorArray: number[];
+  const result = stringToRGBA(value);
 
-  if (value.charAt(0) === "#") {
-    const length = value.length;
-
-    if (length < 4 || length > 9 || length === 6) {
-      return value;
-    } else if (length < 6) {
-      colorArray = hexToRGB(hex3to6(value));
-    } else {
-      colorArray = hexToRGB(value);
-    }
-    return arrayToColorObject(colorArray);
-  } else if (value.indexOf("(") !== -1) {
-    // in bracket.
-    return stringToBracketObject(value);
-  } else {
-    throw new Error(`Invalid Format : Not a Color - ${value}`);
-  }
+  return result ? arrayToColorObject(result) : value;
 }
 /**
 * convert CSS Value to PropertyObject

@@ -33,7 +33,6 @@ export const ANIMATE = "animate";
 export const PLAY = "play";
 export const RUNNING = "running";
 export const ITERATION = "iteration";
-export const RGBA = "rgba";
 export const START_ANIMATION = "startAnimation";
 export const PAUSE_ANIMATION = "pauseAnimation";
 export const ALTERNATE = "alternate";
@@ -66,26 +65,3 @@ export const OPTIONS: OptionType = [DURATION, FILL_MODE, DIRECTION, ITERATION_CO
 * Scene.EVENTS // ["paused", "ended", "timeupdate", "animate", "play", "iteration"];
 */
 export const EVENTS: EventType = [PAUSED, ENDED, TIMEUPDATE, ANIMATE, PLAY, ITERATION];
-
-const prefixes: string[] = ["webkit", "ms", "moz", "o"];
-const checkProperties = (property: string) => {
-  const styles = (document.body || document.documentElement).style as any;
-  const length = prefixes.length;
-
-  if (typeof styles[property] !== "undefined") {
-    return property;
-  }
-  for (let i = 0; i < length; ++i) {
-    const name = `-${prefixes[i]}-${property}`;
-
-    if (typeof styles[name] !== "undefined") {
-      return name;
-    }
-  }
-  return "";
-};
-
-export const TRANSFORM = /*#__PURE__*/checkProperties("transform");
-export const FILTER = /*#__PURE__*/checkProperties("filter");
-export const ANIMATION = /*#__PURE__*/checkProperties("animation");
-export const KEYFRAMES = /*#__PURE__*/ANIMATION.replace("animation", "keyframes");

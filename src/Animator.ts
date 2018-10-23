@@ -5,12 +5,11 @@ import {
   DURATION, EASING, ITERATION_TIME, EASING_NAME, PAUSED, RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE } from "./consts";
 import EventTrigger from "./EventTrigger";
 import { bezier, EasingFunctionInterface } from "./easing";
-import { toFixed, isString, splitUnit } from "./utils";
+import { toFixed } from "./utils";
+import { splitUnit, isString, camelize } from "@daybrush/utils";
 
 let lastTime = 0;
-function camelize(str: string) {
-  return str.replace(/[\s-_]([a-z])/g, (all, letter) => letter.toUpperCase());
-}
+
 function GetterSetter<T extends { new(...args: any[]): {} }>(
   getter: string[], setter: string[], parent: string) {
   return (constructor: T) => {

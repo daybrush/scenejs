@@ -1,4 +1,4 @@
-import { isObject } from "./utils";
+import { isObject } from "@daybrush/utils";
 
 type CallbackType = (...args: any[]) => any;
 interface EventParamterType {

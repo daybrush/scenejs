@@ -1,6 +1,6 @@
 /* eslint-disable */
 import "./injections/PrefixInjection";
-import {TRANSFORM, FILTER, ANIMATION, KEYFRAMES} from "../../src/consts";
+import {TRANSFORM, FILTER, ANIMATION, KEYFRAMES} from "@daybrush/utils";
 
 
 describe("Prefix Test", function() {

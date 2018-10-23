@@ -1,9 +1,11 @@
 import {
-  TRANSFORM, FILTER, ObjectInterface, NameType,
-  ANIMATION, ALIAS, TIMING_FUNCTION, PROPERTY, FUNCTION} from "./consts";
-import {isObject, isString, isArray, isRole, getType} from "./utils";
-import {toPropertyObject, splitStyle, toObject} from "./utils/property";
+  ObjectInterface, NameType,
+  ALIAS, TIMING_FUNCTION, PROPERTY, FUNCTION
+} from "./consts";
+import { isRole, getType } from "./utils";
+import { toPropertyObject, splitStyle, toObject } from "./utils/property";
 import PropertyObject from "./PropertyObject";
+import { isObject, isArray, isString, ANIMATION, TRANSFORM, FILTER } from "@daybrush/utils";
 
 function toInnerProperties(obj: ObjectInterface<string>) {
   if (!obj) {

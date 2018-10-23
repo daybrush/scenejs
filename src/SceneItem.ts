@@ -1,10 +1,6 @@
 import Animator, { StateInterface, EasingType, isDirectionReverse } from "./Animator";
 import Frame from "./Frame";
 import {
-  isUndefined,
-  isObject,
-  isArray,
-  decamelize,
   toFixed,
   isFixed,
   playCSS,
@@ -12,13 +8,14 @@ import {
 import Keyframes from "./Keyframes";
 import { dotValue } from "./utils/dot";
 import {
-  KEYFRAMES, ANIMATION, START_ANIMATION,
+  START_ANIMATION,
   PREFIX, THRESHOLD, ObjectInterface, NameType,
   TIMING_FUNCTION, ALTERNATE, ALTERNATE_REVERSE, NORMAL, INFINITE,
   REVERSE, EASING, FILL_MODE, DIRECTION, ITERATION_COUNT,
   EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION
 } from "./consts";
-import { addClass, removeClass, hasClass, fromCSS } from "./utils/css";
+import { isObject, isArray, isUndefined, decamelize,
+  ANIMATION, fromCSS, addClass, removeClass, hasClass, KEYFRAMES } from "@daybrush/utils";
 
 function toId(text: string) {
   return text.match(/[0-9a-zA-Z]+/g).join("");
