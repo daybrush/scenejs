@@ -218,7 +218,11 @@ export function stringToColorObject(value: string): string | PropertyObject {
   let colorArray: number[];
 
   if (value.charAt(0) === "#") {
-    if (value.length === 4) {
+    const length = value.length;
+
+    if (length < 4 || length > 9 || length === 6) {
+      return value;
+    } else if (length < 6) {
       colorArray = hexToRGB(hex3to6(value));
     } else {
       colorArray = hexToRGB(value);
