@@ -688,15 +688,15 @@ item.setCSS(0, ["opacity", "width", "height"]);
     if (!this.elements.length) {
       return;
     }
-    const id = this._getId();
-    const styleElement: HTMLElement = document.querySelector(`#${PREFIX}${id}`);
+    const id = `${PREFIX}STYLE_${toId(this._getId())}`;
+    const styleElement: HTMLElement = document.querySelector(`#${id}`);
     const css = this.toCSS(duration, options);
 
     if (styleElement) {
       styleElement.innerText = css;
     } else {
       document.body.insertAdjacentHTML("beforeend",
-        `<style id="${PREFIX}STYLE_${toId(id)}">${css}</style>`);
+        `<style id="${id}">${css}</style>`);
     }
   }
   public pause() {
