@@ -723,7 +723,20 @@ function isFixed(args) {
 function isPausedCSS(item) {
   return item.state.playCSS && item.getPlayState() === PAUSED;
 }
-function playCSS(item, exportCSS, properties) {
+function exportCSS(id, css) {
+  var styleId = PREFIX + "STYLE_" + toId(id);
+  var styleElement = document.querySelector("#" + styleId);
+
+  if (styleElement) {
+    styleElement.innerText = css;
+  } else {
+    document.body.insertAdjacentHTML("beforeend", "<style id=\"" + styleId + "\">" + css + "</style>");
+  }
+}
+function toId(text) {
+  return text.match(/[0-9a-zA-Z]+/g).join("");
+}
+function playCSS(item, isExportCSS, properties) {
   if (properties === void 0) {
     properties = {};
   }
@@ -739,14 +752,14 @@ function playCSS(item, exportCSS, properties) {
       item.setTime(0);
     }
 
-    exportCSS && item.exportCSS();
+    isExportCSS && item.exportCSS();
     var el = item.addPlayClass(false, properties);
 
     if (!el) {
       return;
     }
 
-    addAnimationEvent(item, el);
+    !item.state.peusdo && addAnimationEvent(item, el);
     item.setState({
       playCSS: true
     });
@@ -1080,6 +1093,8 @@ function (_super) {
 
 
   __proto.finish = function () {
+    this.state.tickTime = 0;
+    this.setTime(0);
     this.end();
     return this;
   };
@@ -1098,19 +1113,6 @@ function (_super) {
          */
 
     this.trigger(ENDED);
-    return this;
-  };
-  /**
-    * reset animator
-    * @method Scene.Animator#reset
-    * @return {Scene.Animator} An instance itself.
-    */
-
-
-  __proto.reset = function () {
-    this.state.tickTime = 0;
-    this.setTime(0);
-    this.pause();
     return this;
   };
   /**
@@ -2412,10 +2414,6 @@ function dotValue(time, prevTime, nextTime, prevValue, nextValue, easing) {
   return value;
 }
 
-function toId(text) {
-  return text.match(/[0-9a-zA-Z]+/g).join("");
-}
-
 function makeId(selector) {
   for (;;) {
     var id = "" + Math.floor(Math.random() * 100000);
@@ -2535,7 +2533,7 @@ function (_super) {
       id: id || makeId(!!length)
     });
     var sceneId = toId(this.getId());
-    this.options.selector || (this.options.selector = "[data-scene-id=\"" + sceneId + "\"]");
+    this.state.selector || (this.state.selector = "[data-scene-id=\"" + sceneId + "\"]");
 
     if (!length) {
       return this;
@@ -2736,8 +2734,15 @@ function (_super) {
 
 
   __proto.setSelector = function (selector) {
-    this.options.selector = selector === true ? this.state.id : selector || "[data-scene-id=\"" + this.state.id + "\"]";
-    this.setElement(document.querySelectorAll(this.options.selector));
+    this.state.selector = selector === true ? this.state.id : selector || "[data-scene-id=\"" + this.state.id + "\"]";
+    var matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(this.state.selector);
+
+    if (matches) {
+      this.state.selector = matches[1];
+      this.state.peusdo = matches[2];
+    }
+
+    this.setElement(document.querySelectorAll(this.state.selector));
     return this;
   };
   /**
@@ -3204,6 +3209,8 @@ function (_super) {
       return "";
     }
 
+    var peusdo = state.peusdo || "";
+
     var id = this._getId(); // infinity or zero
 
 
@@ -3226,7 +3233,7 @@ function (_super) {
       timingFunction: easingName
     });
 
-    var css = selector + "." + START_ANIMATION + " {\n\t\t\t" + cssText + "\n\t\t}" + selector + "." + PAUSE_ANIMATION + " {\n      " + utils.ANIMATION + "-play-state: paused;\n    }\n\t\t" + this._toKeyframes(duration, !isZeroDuration && isParent);
+    var css = selector + "." + START_ANIMATION + peusdo + " {\n\t\t\t" + cssText + "\n\t\t}" + selector + "." + PAUSE_ANIMATION + peusdo + " {\n      " + utils.ANIMATION + "-play-state: paused;\n    }\n\t\t" + this._toKeyframes(duration, !isZeroDuration && isParent);
 
     return css;
   };
@@ -3241,18 +3248,13 @@ function (_super) {
     }
 
     if (!this.elements.length) {
-      return;
+      return "";
     }
 
-    var id = PREFIX + "STYLE_" + toId(this._getId());
-    var styleElement = document.querySelector("#" + id);
     var css = this.toCSS(duration, options);
-
-    if (styleElement) {
-      styleElement.innerText = css;
-    } else {
-      document.body.insertAdjacentHTML("beforeend", "<style id=\"" + id + "\">" + css + "</style>");
-    }
+    var isParent = !utils.isUndefined(options[ITERATION_COUNT]);
+    !isParent && exportCSS(this._getId(), css);
+    return css;
   };
 
   __proto.pause = function () {
@@ -3325,16 +3327,16 @@ function (_super) {
     */
 
 
-  __proto.playCSS = function (exportCSS, properties) {
-    if (exportCSS === void 0) {
-      exportCSS = true;
+  __proto.playCSS = function (isExportCSS, properties) {
+    if (isExportCSS === void 0) {
+      isExportCSS = true;
     }
 
     if (properties === void 0) {
       properties = {};
     }
 
-    playCSS(this, exportCSS, properties);
+    playCSS(this, isExportCSS, properties);
     return this;
   };
 
@@ -3449,7 +3451,7 @@ function (_super) {
 
     if ((delay + lastTime) / playSpeed < duration) {
       // not 100%
-      keyframes.push("100%{" + lastCSS);
+      keyframes.push("100%{" + lastCSS + "}");
     } // }
 
 
@@ -3562,7 +3564,7 @@ function (_super) {
     var elements = this.elements;
     var length = elements.length;
 
-    if (!length) {
+    if (!length || this.state.peusdo) {
       return frame;
     }
 
@@ -3719,7 +3721,7 @@ function (_super) {
     }
 
     if (name in this.items) {
-      return this.items[name];
+      return;
     }
 
     var item = new SceneItem();
@@ -3795,12 +3797,17 @@ function (_super) {
       totalDuration = 0;
     }
 
+    var isParent = !!state;
+    var styles = [];
+
     for (var id in items) {
       var item = items[id];
-      item.exportCSS(totalDuration, this.state);
+      styles.push(item.exportCSS(totalDuration, this.state));
     }
 
-    return this;
+    var css = styles.join("");
+    !isParent && exportCSS(this.getId() || this.setId().getId(), css);
+    return css;
   };
 
   __proto.append = function (item) {
@@ -3883,17 +3890,25 @@ function (_super) {
     */
 
 
-  __proto.playCSS = function (exportCSS, properties) {
-    if (exportCSS === void 0) {
-      exportCSS = true;
+  __proto.playCSS = function (isExportCSS, properties) {
+    if (isExportCSS === void 0) {
+      isExportCSS = true;
     }
 
     if (properties === void 0) {
       properties = {};
     }
 
-    playCSS(this, exportCSS, properties);
+    playCSS(this, isExportCSS, properties);
     return this;
+  };
+
+  __proto.set = function (properties) {
+    if (properties === void 0) {
+      properties = {};
+    }
+
+    this.load(properties);
   };
 
   __proto.load = function (properties, options) {
