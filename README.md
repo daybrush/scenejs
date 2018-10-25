@@ -5,18 +5,18 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 <br>
 
 
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/motion.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/raindrop.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-</p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/search.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/dissolve.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
+<p align="middle" style="max-width: 1000px; margin: 0px auto;" >
+  <img src="https://daybrush.github.io/scenejs/example/logo.gif" width="400" style="min-width:200px;max-width:320px;width: 32%;"/>
+  <img src="https://daybrush.github.io/scenejs/example/scenejs.gif" width="400" style="min-width:200px;max-width:320px;width: 32%;"/>
+  <img src="https://daybrush.github.io/scenejs/example/main.gif" width="400" style="min-width:200px;max-width:320px;width: 32%;"/>
+  <img src="https://daybrush.github.io/scenejs/example/dissolve.gif" width="400" style="min-width:200px;max-width:320px;width: 32%;"/>
+  <img src="https://daybrush.github.io/scenejs/example/motion.gif" width="400" style="min-width:200px;max-width:320px;width: 32%;"/>
+  <img src="https://daybrush.github.io/scenejs/example/parallax.gif" width="400" style="min-width:200px;max-width:320px;width: 32%;"/>
   
-</p>
-<p align="middle">
-  <img src="https://daybrush.github.io/scenejs/example/parallax.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
-  <img src="https://daybrush.github.io/scenejs/example/shape.gif" width="400" style="min-width:300px;max-width:450px;width: 48%;"/>
+  <img src="https://daybrush.github.io/scenejs/example/raindrop.gif" width="400" style="min-width:200px;max-width:320px;width: 32%;"/>
+  <img src="https://daybrush.github.io/scenejs/example/search.gif" width="400" style="min-width:200px;max-width:320px;width: 32%;"/>
+  
+  <img src="https://daybrush.github.io/scenejs/example/shape.gif" width="400" style="min-width:200px;max-width:320px;width: 32%;"/>
 </p>
 
 
