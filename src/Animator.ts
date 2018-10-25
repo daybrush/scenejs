@@ -290,6 +290,8 @@ animator.isPaused(); // true or false
 	 * @return {Scene.Animator} An instance itself.
 	*/
   public finish() {
+    this.state.tickTime = 0;
+    this.setTime(0);
     this.end();
     return this;
   }
@@ -305,17 +307,6 @@ animator.isPaused(); // true or false
 		 * @event Scene.Animator#ended
 		 */
     this.trigger(ENDED);
-    return this;
-  }
-  /**
-	* reset animator
-	* @method Scene.Animator#reset
-	* @return {Scene.Animator} An instance itself.
-	*/
-  public reset() {
-    this.state.tickTime = 0;
-    this.setTime(0);
-    this.pause();
     return this;
   }
   /**
