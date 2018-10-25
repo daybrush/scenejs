@@ -940,7 +940,7 @@ item.playCSS(false, {
     const elements = this.elements;
     const length = elements.length;
 
-    if (!length && this.state.peusdo) {
+    if (!length || this.state.peusdo) {
       return frame;
     }
     const attributes = frame.get("attribute");

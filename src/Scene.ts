@@ -105,7 +105,7 @@ const item = scene.newItem("item1")
 	*/
   public newItem(name: string, options = {}) {
     if (name in this.items) {
-      return this.items[name];
+      return;
     }
     const item = new SceneItem();
 
@@ -241,6 +241,9 @@ scene.playCSS(false, {
   public playCSS(isExportCSS = true, properties = {}) {
     playCSS(this, isExportCSS, properties);
     return this;
+  }
+  public set(properties: any = {}) {
+    this.load(properties);
   }
   public load(properties: any = {}, options = properties.options) {
     if (!properties) {
