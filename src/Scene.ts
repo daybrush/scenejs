@@ -2,7 +2,7 @@ import Animator, { StateInterface, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
 import { ObjectInterface, ANIMATE } from "./consts";
 import Frame from "./Frame";
-import { playCSS } from "./utils";
+import { playCSS, exportCSS } from "./utils";
 
 /**
 * manage sceneItems and play Scene.
@@ -105,7 +105,7 @@ const item = scene.newItem("item1")
 	*/
   public newItem(name: string, options = {}) {
     if (name in this.items) {
-      return this.items[name];
+      return;
     }
     const item = new SceneItem();
 
@@ -164,12 +164,17 @@ const item = scene.newItem("item1")
     if (!totalDuration || !isFinite(totalDuration)) {
       totalDuration = 0;
     }
+    const isParent = !!state;
+    const styles = [];
+
     for (const id in items) {
       const item = items[id];
 
-      item.exportCSS(totalDuration, this.state);
+      styles.push(item.exportCSS(totalDuration, this.state));
     }
-    return this;
+    const css: string = styles.join("");
+    !isParent && exportCSS(this.getId() || this.setId().getId(), css);
+    return css;
   }
   public append(item: SceneItem | Scene) {
     item.setDelay(item.getDelay() + this.getDuration());
@@ -233,9 +238,12 @@ scene.playCSS(false, {
 	fillMode: "forwards",
 });
 	*/
-  public playCSS(exportCSS = true, properties = {}) {
-    playCSS(this, exportCSS, properties);
+  public playCSS(isExportCSS = true, properties = {}) {
+    playCSS(this, isExportCSS, properties);
     return this;
+  }
+  public set(properties: any = {}) {
+    this.load(properties);
   }
   public load(properties: any = {}, options = properties.options) {
     if (!properties) {

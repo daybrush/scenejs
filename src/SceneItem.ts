@@ -4,6 +4,8 @@ import {
   toFixed,
   isFixed,
   playCSS,
+  toId,
+  exportCSS,
 } from "./utils";
 import Keyframes from "./Keyframes";
 import { dotValue } from "./utils/dot";
@@ -17,9 +19,6 @@ import {
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass, KEYFRAMES } from "@daybrush/utils";
 
-function toId(text: string) {
-  return text.match(/[0-9a-zA-Z]+/g).join("");
-}
 function makeId(selector?: boolean) {
   for (; ;) {
     const id = `${Math.floor(Math.random() * 100000)}`;
@@ -121,7 +120,7 @@ console.log(item.getId()); // item
     this.setState({ id: id || makeId(!!length) });
     const sceneId = toId(this.getId());
 
-    this.options.selector || (this.options.selector = `[data-scene-id="${sceneId}"]`);
+    this.state.selector || (this.state.selector = `[data-scene-id="${sceneId}"]`);
 
     if (!length) {
       return this;
@@ -280,9 +279,16 @@ item.set(item.getDuration(), {
 item.setSelector("#id.class");
 	*/
   public setSelector(selector: boolean | string) {
-    this.options.selector = selector === true ? this.state.id :
+    this.state.selector = selector === true ? this.state.id :
       (selector || `[data-scene-id="${this.state.id}"]`);
-    this.setElement(document.querySelectorAll(this.options.selector));
+
+    const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(this.state.selector);
+
+    if (matches) {
+      this.state.selector = matches[1];
+      this.state.peusdo = matches[2];
+    }
+    this.setElement(document.querySelectorAll(this.state.selector));
     return this;
   }
   /**
@@ -646,10 +652,10 @@ item.setCSS(0, ["opacity", "width", "height"]);
   public toCSS(parentDuration = this.getDuration(), options: StateInterface = {}) {
     const state = this.state;
     const selector = state.selector || this.options.selector;
-
     if (!selector) {
       return "";
     }
+    const peusdo = state.peusdo || "";
     const id = this._getId();
     // infinity or zero
     const isParent = !isUndefined(options[ITERATION_COUNT]);
@@ -672,9 +678,9 @@ item.setCSS(0, ["opacity", "width", "height"]);
       timingFunction: easingName,
     });
 
-    const css = `${selector}.${START_ANIMATION} {
+    const css = `${selector}.${START_ANIMATION}${peusdo} {
 			${cssText}
-		}${selector}.${PAUSE_ANIMATION} {
+		}${selector}.${PAUSE_ANIMATION}${peusdo} {
       ${ANIMATION}-play-state: paused;
     }
 		${this._toKeyframes(duration, !isZeroDuration && isParent)}`;
@@ -683,18 +689,13 @@ item.setCSS(0, ["opacity", "width", "height"]);
   }
   public exportCSS(duration = this.getDuration(), options: StateInterface = {}) {
     if (!this.elements.length) {
-      return;
+      return "";
     }
-    const id = `${PREFIX}STYLE_${toId(this._getId())}`;
-    const styleElement: HTMLElement = document.querySelector(`#${id}`);
     const css = this.toCSS(duration, options);
+    const isParent = !isUndefined(options[ITERATION_COUNT]);
 
-    if (styleElement) {
-      styleElement.innerText = css;
-    } else {
-      document.body.insertAdjacentHTML("beforeend",
-        `<style id="${id}">${css}</style>`);
-    }
+    !isParent && exportCSS(this._getId(), css);
+    return css;
   }
   public pause() {
     super.pause();
@@ -753,8 +754,8 @@ item.playCSS(false, {
 	fillMode: "forwards",
 });
 	*/
-  public playCSS(exportCSS = true, properties = {}) {
-    playCSS(this, exportCSS, properties);
+  public playCSS(isExportCSS = true, properties = {}) {
+    playCSS(this, isExportCSS, properties);
     return this;
   }
   public addPlayClass(isPaused: boolean, properties = {}) {
@@ -844,7 +845,7 @@ item.playCSS(false, {
     // } else {
     if ((delay + lastTime) / playSpeed < duration) {
       // not 100%
-      keyframes.push(`100%{${lastCSS}`);
+      keyframes.push(`100%{${lastCSS}}`);
     }
     // }
     return `@${KEYFRAMES} ${PREFIX}KEYFRAMES_${toId(id)}{
@@ -939,7 +940,7 @@ item.playCSS(false, {
     const elements = this.elements;
     const length = elements.length;
 
-    if (!length) {
+    if (!length || this.state.peusdo) {
       return frame;
     }
     const attributes = frame.get("attribute");

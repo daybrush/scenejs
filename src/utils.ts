@@ -1,4 +1,4 @@
-import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS, PAUSED, RUNNING, PLAY, ENDED } from "./consts";
+import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS, PAUSED, RUNNING, PLAY, ENDED, PREFIX } from "./consts";
 import PropertyObject from "./PropertyObject";
 import Scene from "./Scene";
 import SceneItem from "./SceneItem";
@@ -73,7 +73,21 @@ export interface IterationInterface {
 export function isPausedCSS(item: Scene | SceneItem) {
   return item.state.playCSS && item.getPlayState() === PAUSED;
 }
-export function playCSS(item: Scene | SceneItem, exportCSS: boolean, properties = {}) {
+export function exportCSS(id: string, css: string) {
+  const styleId = `${PREFIX}STYLE_${toId(id)}`;
+  const styleElement: HTMLElement = document.querySelector(`#${styleId}`);
+
+  if (styleElement) {
+    styleElement.innerText = css;
+  } else {
+    document.body.insertAdjacentHTML("beforeend",
+      `<style id="${styleId}">${css}</style>`);
+  }
+}
+export function toId(text: string) {
+  return text.match(/[0-9a-zA-Z]+/g).join("");
+}
+export function playCSS(item: Scene | SceneItem, isExportCSS: boolean, properties = {}) {
   if (!ANIMATION || item.getPlayState() === RUNNING) {
     return;
   }
@@ -83,13 +97,13 @@ export function playCSS(item: Scene | SceneItem, exportCSS: boolean, properties 
     if (item.isEnded()) {
       item.setTime(0);
     }
-    exportCSS && item.exportCSS();
+    isExportCSS && item.exportCSS();
     const el = item.addPlayClass(false, properties);
 
     if (!el) {
       return;
     }
-    addAnimationEvent(item, el);
+    !item.state.peusdo && addAnimationEvent(item, el);
     item.setState({ playCSS: true });
   }
   item.setPlayState(RUNNING);
