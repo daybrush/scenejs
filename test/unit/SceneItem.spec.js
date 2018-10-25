@@ -505,7 +505,7 @@ describe("SceneItem Test", function() {
 
            // Then
            expect(this.item.state.id).to.be.equals(".a .b");
-           expect(this.item.options.selector).to.be.equals(`[data-scene-id="ab"]`);
+           expect(this.item.state.selector).to.be.equals(`[data-scene-id="ab"]`);
            expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equal("ab");
         });
         it("should check 'setSelector' method", () => {
@@ -515,7 +515,18 @@ describe("SceneItem Test", function() {
             this.item.setSelector("div");
 
             // Then
-            expect(this.item.options.selector).to.be.equals("div");
+            expect(this.item.state.selector).to.be.equals("div");
+            expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.state.id);
+        });
+        it("should check 'setSelector' method(peusdo)", () => {
+            // Given
+            document.body.appendChild(this.element);
+            // When
+            this.item.setSelector("div:before");
+
+            // Then
+            expect(this.item.state.selector).to.be.equals("div");
+            expect(this.item.state.peusdo).to.be.equals(":before");
             expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.state.id);
         });
         it("should check 'setElement' method", () => {
@@ -525,7 +536,7 @@ describe("SceneItem Test", function() {
             const id = this.item.elements[0].getAttribute("data-scene-id");
             // Then
             expect(this.item.state.id).to.be.equals(id);
-            expect(this.item.options.selector).to.be.equals(`[data-scene-id="${id}"]`);
+            expect(this.item.state.selector).to.be.equals(`[data-scene-id="${id}"]`);
             expect(this.item.elements[0]).to.be.equals(this.element);
         });
         it("should check 'setElement' method  with 'attribute'", () => {
