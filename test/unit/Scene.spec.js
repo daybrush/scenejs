@@ -36,7 +36,7 @@ describe("Scene Test", function() {
 			const item2 = scene.newItem("item2");
 			const duplicateItem2 = scene.newItem("item2");
 
-			expect(item2).to.be.equal(duplicateItem2);
+			expect(duplicateItem2).to.be.not.ok;
 		});
         it("should check 'getDuration' method", function() {
             const scene = new Scene({
