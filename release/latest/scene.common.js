@@ -2997,7 +2997,7 @@ function (_super) {
     var realEasing = this._getEasing(time, left, right, this.getEasing() || easing);
 
     names.forEach(function (properties) {
-      var value = _this._getNowValue(time, left, right, properties, realEasing);
+      var value = _this._getNowValue(time, properties, left, right, realEasing);
 
       if (utils.isUndefined(value)) {
         return;
@@ -3153,10 +3153,18 @@ function (_super) {
         if (!frames[keyvalue]) {
           var frame = this.getFrame(keyvalue);
 
-          if (!frame || j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
+          if (!frame || j === 0 || j === length - 1) {
             frames[keyvalue] = this.getNowFrame(keyvalue);
           } else {
-            frames[keyvalue] = frame;
+            frames[keyvalue] = frame.clone();
+            var isTransform = frame.has("transform");
+            var isFilter = frame.has("filter");
+
+            if (isTransform || isFilter) {
+              var nowFrame = this.getNowFrame(keyvalue);
+              isTransform && frames[keyvalue].set("transform", nowFrame.raw("transform"));
+              isFilter && frames[keyvalue].set("filter", nowFrame.raw("filter"));
+            }
           }
         }
       }
@@ -3381,7 +3389,7 @@ function (_super) {
 
   __proto._getEasing = function (time, left, right, easing) {
     if (this.keyframes.hasName(TIMING_FUNCTION)) {
-      var nowEasing = this._getNowValue(time, left, right, [TIMING_FUNCTION], 0, true);
+      var nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
 
       return typeof nowEasing === "function" ? nowEasing : easing;
     }
@@ -3453,7 +3461,7 @@ function (_super) {
     return "@" + utils.KEYFRAMES + " " + PREFIX + "KEYFRAMES_" + toId(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
   };
 
-  __proto._getNowValue = function (time, left, right, properties, easing, usePrevValue) {
+  __proto._getNowValue = function (time, properties, left, right, easing, usePrevValue) {
     if (easing === void 0) {
       easing = this.getEasing();
     }
