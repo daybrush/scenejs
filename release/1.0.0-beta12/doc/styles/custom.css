@@ -1,0 +1,28 @@
+.readme table {
+	border-spacing: 0;
+    border-collapse: collapse;
+}
+.readme * {
+	box-sizing: border-box;
+}
+.readme table th, .readme table td {
+	padding: 6px 13px;
+    border: 1px solid #ddd;
+}
+
+nav>ul>li:after {
+	content: "";
+	position: absolute;
+	right: 10px;
+	top: 0;
+	bottom: 0;
+	width: 0;
+	height: 0;
+	margin: auto 0px;
+	border-top: 7px solid #ccc;
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+}
+nav li h4, nav li ul {
+	display: none;
+}
