@@ -4,7 +4,6 @@ interface PropertyObjectInterface {
   model?: string;
   type?: string;
   separator?: string;
-  [key: string]: any;
 }
 /**
 * Make string, array to PropertyObject for the dot product
@@ -29,7 +28,7 @@ var obj4 = new PropertyObject([100,100,100,0.5], {
 	"suffix" : ")"
 });
 	 */
-  constructor(value: string | any[], options: PropertyObjectInterface = {}) {
+  constructor(value: string | any[], options: PropertyObjectInterface) {
     this.options = {
       prefix: "",
       suffix: "",
@@ -37,14 +36,19 @@ var obj4 = new PropertyObject([100,100,100,0.5], {
       type: "",
       separator: ",",
     };
-    this.setOptions(options);
+    options && this.setOptions(options);
     this.init(value);
   }
-  public setOptions(options: PropertyObjectInterface) {
-    (Object as any).assign(this.options, options);
+  public setOptions(newOptions: PropertyObjectInterface) {
+    const options = this.options;
+
+    for (const name in newOptions) {
+      options[name as keyof PropertyObjectInterface] = newOptions[name as keyof PropertyObjectInterface];
+    }
+    options && (this.options = {...this.options, ...options});
     return this;
   }
-  public getOption(name: string) {
+  public getOption(name: keyof PropertyObjectInterface) {
     return this.options[name];
   }
   /**
@@ -95,14 +99,7 @@ const obj2 = obj1.clone();
 	 */
   public clone(): PropertyObject {
     const arr = this.value.map(v => ((v instanceof PropertyObject) ? v.clone() : v));
-
-    return new PropertyObject(arr, {
-      separator: this.options.separator,
-      prefix: this.options.prefix,
-      suffix: this.options.suffix,
-      model: this.options.model,
-      type: this.options.type,
-    });
+    return new PropertyObject(arr, this.options);
   }
   /**
 	* Make Property Object to String

@@ -6,9 +6,7 @@ import {
 import EventTrigger from "./EventTrigger";
 import { bezier, EasingFunctionInterface } from "./easing";
 import { toFixed } from "./utils";
-import { splitUnit, isString, camelize } from "@daybrush/utils";
-
-let lastTime = 0;
+import { splitUnit, isString, camelize, requestAnimationFrame } from "@daybrush/utils";
 
 function GetterSetter<T extends { new(...args: any[]): {} }>(
   getter: string[], setter: string[], parent: string) {
@@ -28,20 +26,6 @@ function GetterSetter<T extends { new(...args: any[]): {} }>(
     });
   };
 }
-const requestAnimFrame = /*#__PURE__*/(() => {
-  return (window as any).requestAnimationFrame ||
-    (window as any).webkitRequestAnimationFrame ||
-    (window as any).mozRequestAnimationFrame ||
-    ((callback: (time: number) => void) => {
-      const currTime = Date.now();
-      const timeToCall = Math.max(0, 16 - (currTime - lastTime));
-      const id = window.setTimeout(() => {
-        callback(currTime + timeToCall);
-      }, 1000 / 60);
-      lastTime = currTime + timeToCall;
-      return id;
-    });
-})();
 
 export type FillModeType = "forwards" | "backwards" | "both";
 export type IterationCountType = number | "infinite";
@@ -258,7 +242,7 @@ animator.isPaused(); // true or false
     }
     this.state.tickTime = this.getTime();
 
-    requestAnimFrame((time: number) => {
+    requestAnimationFrame((time: number) => {
       this.state.prevTime = time;
       this.tick(time);
     });
@@ -473,7 +457,7 @@ animator.getTime();
       return;
     }
 
-    requestAnimFrame((time: number) => {
+    requestAnimationFrame((time: number) => {
       this.tick(time);
     });
   }
