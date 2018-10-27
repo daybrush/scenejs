@@ -17,7 +17,7 @@ import {
   EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
-  ANIMATION, fromCSS, addClass, removeClass, hasClass, KEYFRAMES } from "@daybrush/utils";
+  ANIMATION, fromCSS, addClass, removeClass, hasClass, KEYFRAMES, requestAnimationFrame } from "@daybrush/utils";
 
 function makeId(selector?: boolean) {
   for (; ;) {
