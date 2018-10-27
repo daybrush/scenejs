@@ -277,6 +277,23 @@ repository: https://github.com/daybrush/scenejs.git
         return letter + "-" + letter2.toLowerCase();
       });
     }
+
+    function now() {
+      return Date.now ? Date.now() : new Date().getTime();
+    }
+
+    var requestAnimationFrame$1 =
+    /*#__PURE__*/
+    function () {
+      var firstTime = now();
+      return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
+        var currTime = now();
+        var id = window.setTimeout(function () {
+          callback(currTime - firstTime);
+        }, 1000 / 60);
+        return id;
+      };
+    }();
     /**
     * @namespace
     * @name Color
@@ -1165,8 +1182,6 @@ repository: https://github.com/daybrush/scenejs.git
       el.addEventListener("animationiteration", animationiteration);
     }
 
-    var lastTime = 0;
-
     function GetterSetter(getter, setter, parent) {
       return function (constructor) {
         var prototype = constructor.prototype;
@@ -1183,20 +1198,6 @@ repository: https://github.com/daybrush/scenejs.git
         });
       };
     }
-
-    var requestAnimFrame =
-    /*#__PURE__*/
-    function () {
-      return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-        var currTime = Date.now();
-        var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-        var id = window.setTimeout(function () {
-          callback(currTime + timeToCall);
-        }, 1000 / 60);
-        lastTime = currTime + timeToCall;
-        return id;
-      };
-    }();
 
     function isDirectionReverse(currentIterationCount, iteraiontCount, direction) {
       if (direction === REVERSE) {
@@ -1422,7 +1423,7 @@ repository: https://github.com/daybrush/scenejs.git
         }
 
         this.state.tickTime = this.getTime();
-        requestAnimFrame(function (time) {
+        requestAnimationFrame$1(function (time) {
           _this.state.prevTime = time;
 
           _this.tick(time);
@@ -1654,14 +1655,14 @@ repository: https://github.com/daybrush/scenejs.git
         return this;
       };
 
-      __proto.tick = function (now) {
+      __proto.tick = function (now$$1) {
         var _this = this;
 
         var state = this.state;
         var playSpeed = state.playSpeed,
             prevTime = state.prevTime;
-        var currentTime = this.state.tickTime + Math.min(1000, now - prevTime) / 1000 * playSpeed;
-        state.prevTime = now;
+        var currentTime = this.state.tickTime + Math.min(1000, now$$1 - prevTime) / 1000 * playSpeed;
+        state.prevTime = now$$1;
         this.setTickTime(currentTime);
 
         if (this.isEnded()) {
@@ -1673,7 +1674,7 @@ repository: https://github.com/daybrush/scenejs.git
           return;
         }
 
-        requestAnimFrame(function (time) {
+        requestAnimationFrame$1(function (time) {
           _this.tick(time);
         });
       };

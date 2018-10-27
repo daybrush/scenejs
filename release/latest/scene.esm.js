@@ -5,7 +5,7 @@ author: Daybrush
 repository: https://github.com/daybrush/scenejs.git
 @version 1.0.0-beta12
 */
-import { isObject, isArray, ANIMATION, splitUnit, isString, camelize, COLOR_MODELS, splitComma, splitSpace, stringToRGBA, RGBA, splitBracket, TRANSFORM, FILTER, isUndefined, decamelize, fromCSS, addClass, removeClass, hasClass, KEYFRAMES } from '@daybrush/utils';
+import { isObject, isArray, ANIMATION, splitUnit, isString, camelize, requestAnimationFrame as requestAnimationFrame$1, COLOR_MODELS, splitComma, splitSpace, stringToRGBA, RGBA, splitBracket, TRANSFORM, FILTER, isUndefined, decamelize, fromCSS, addClass, removeClass, hasClass, KEYFRAMES } from '@daybrush/utils';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -804,8 +804,6 @@ function addAnimationEvent(item, el) {
   el.addEventListener("animationiteration", animationiteration);
 }
 
-var lastTime = 0;
-
 function GetterSetter(getter, setter, parent) {
   return function (constructor) {
     var prototype = constructor.prototype;
@@ -822,20 +820,6 @@ function GetterSetter(getter, setter, parent) {
     });
   };
 }
-
-var requestAnimFrame =
-/*#__PURE__*/
-function () {
-  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-    var currTime = Date.now();
-    var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-    var id = window.setTimeout(function () {
-      callback(currTime + timeToCall);
-    }, 1000 / 60);
-    lastTime = currTime + timeToCall;
-    return id;
-  };
-}();
 
 function isDirectionReverse(currentIterationCount, iteraiontCount, direction) {
   if (direction === REVERSE) {
@@ -1061,7 +1045,7 @@ function (_super) {
     }
 
     this.state.tickTime = this.getTime();
-    requestAnimFrame(function (time) {
+    requestAnimationFrame$1(function (time) {
       _this.state.prevTime = time;
 
       _this.tick(time);
@@ -1312,7 +1296,7 @@ function (_super) {
       return;
     }
 
-    requestAnimFrame(function (time) {
+    requestAnimationFrame$1(function (time) {
       _this.tick(time);
     });
   };
