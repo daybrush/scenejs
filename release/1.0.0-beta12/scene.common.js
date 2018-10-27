@@ -3448,12 +3448,13 @@ function (_super) {
 
     if (delay) {
       var delayCSS = isReverse && (fillMode === "both" || fillMode === "backwards") ? lastCSS : css[0];
-      keyframes.push("0%{" + delayCSS + "}");
+      keyframes.push("0%{}");
       isReverse && keyframes.push(delay / playSpeed / duration * 100 - THRESHOLD + "%{" + delayCSS + "}");
     }
 
     keys.forEach(function (time) {
-      keyframes.push((delay + time) / playSpeed / duration * 100 + "%{" + css[values[time]] + "}");
+      var keyTime = (delay + time) / playSpeed / duration * 100;
+      keyframes.push(keyTime + "%{" + (keyTime === 0 ? "" : css[values[time]]) + "}");
     }); // if (afterDelay) {
     //   keyframes.push(`${lastTime / playSpeed / duration * 100 + THRESHOLD}%{${lastCSS}}`);
     //   keyframes.push(`100%{${lastCSS}`);
