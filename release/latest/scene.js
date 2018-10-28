@@ -3541,8 +3541,8 @@ repository: https://github.com/daybrush/scenejs.git
 
                 if (isTransform || isFilter) {
                   var nowFrame = this.getNowFrame(keyvalue);
-                  isTransform && frames[keyvalue].set("transform", nowFrame.raw("transform"));
-                  isFilter && frames[keyvalue].set("filter", nowFrame.raw("filter"));
+                  isTransform && frames[keyvalue].remove("transform").set("transform", nowFrame.raw("transform"));
+                  isFilter && frames[keyvalue].remove("filter").set("filter", nowFrame.raw("filter"));
                 }
               }
             }
