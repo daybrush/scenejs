@@ -39,7 +39,7 @@ function updateFrame(names: ObjectInterface<any>, properties: ObjectInterface<an
 */
 class Keyframes {
   public times: number[];
-  public items: ObjectInterface<any>;
+  public items: ObjectInterface<Frame>;
   public names: RoleInterface;
   /**
 	 */

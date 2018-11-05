@@ -510,7 +510,7 @@ const frame = item.getNowFrame(1.7);
     const realEasing = this._getEasing(time, left, right, this.getEasing() || easing);
 
     names.forEach(properties => {
-      const value = this._getNowValue(time, left, right, properties, realEasing);
+      const value = this._getNowValue(time, properties, left, right, realEasing);
 
       if (isUndefined(value)) {
         return;
@@ -622,10 +622,18 @@ const frame = item.getNowFrame(1.7);
         if (!frames[keyvalue]) {
           const frame = this.getFrame(keyvalue);
 
-          if (!frame || j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
+          if (!frame || j === 0 || j === length - 1) {
             frames[keyvalue] = this.getNowFrame(keyvalue);
           } else {
-            frames[keyvalue] = frame;
+            frames[keyvalue] = frame.clone();
+            const isTransform = frame.has("transform");
+            const isFilter = frame.has("filter");
+            if (isTransform || isFilter) {
+              const nowFrame = this.getNowFrame(keyvalue);
+
+              isTransform && frames[keyvalue].remove("transform").set("transform", nowFrame.raw("transform"));
+              isFilter && frames[keyvalue].remove("filter").set("filter", nowFrame.raw("filter"));
+            }
           }
         }
       }
@@ -796,7 +804,7 @@ item.playCSS(false, {
   }
   private _getEasing(time: number, left: number, right: number, easing: EasingType) {
     if (this.keyframes.hasName(TIMING_FUNCTION)) {
-      const nowEasing = this._getNowValue(time, left, right, [TIMING_FUNCTION], 0, true);
+      const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
 
       return typeof nowEasing === "function" ? nowEasing : easing;
     }
@@ -855,9 +863,9 @@ item.playCSS(false, {
   }
   private _getNowValue(
     time: number,
+    properties: string[],
     left: number,
     right: number,
-    properties: string[],
     easing: EasingType = this.getEasing(),
     usePrevValue: boolean = isFixed(properties),
   ) {
@@ -865,10 +873,10 @@ item.playCSS(false, {
     const times = keyframes.times;
     const length = times.length;
 
-    let prevTime;
-    let nextTime;
-    let prevFrame;
-    let nextFrame;
+    let prevTime: number;
+    let nextTime: number;
+    let prevFrame: Frame;
+    let nextFrame: Frame;
 
     for (let i = left; i >= 0; --i) {
       const frame = keyframes.get(times[i]);
