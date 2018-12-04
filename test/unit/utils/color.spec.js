@@ -1,4 +1,4 @@
-import {hex3to6, cutHex, hexToRGBA, hslToRGBA} from "@daybrush/utils";
+import {toFullHex, cutHex, hexToRGBA, hslToRGBA} from "@daybrush/utils";
 
 /* eslint-disable */
 
@@ -15,15 +15,13 @@ describe("color Test", function() {
 			expect(hex1).to.be.equals("abc");
 			expect(hex2).to.be.equals("aabbcc");
 			expect(hex3).to.be.equals("aabbccdd");
-			expect(hex4).to.be.equals("abcdef");
-            
-        });
-        it("should check 'hex3to6'", ()=> {
-            const hex = hex3to6("#abc");
+			expect(hex4).to.be.equals("abcdef"); 
+		});
+		it("should check 'toFullHex'", ()=> {
+			const hex = toFullHex("#abc");
 
 			// Then
-			expect(hex).to.be.equals("#aabbcc");
-            
+			expect(hex).to.be.equals("#aabbcc");     
 		});
 		it("should check 'hexToRGBA'", () => {
 			const rgb1 = hexToRGBA("#000000");
