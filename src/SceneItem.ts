@@ -6,6 +6,7 @@ import {
   playCSS,
   toId,
   exportCSS,
+  getRealId,
 } from "./utils";
 import Keyframes from "./Keyframes";
 import { dotValue } from "./utils/dot";
@@ -243,7 +244,7 @@ item.set(item.getDuration(), {
 	}
 });
 	*/
-  public append(item: SceneItem | object) {
+  public append(item: SceneItem | ObjectInterface<any>) {
     this.set(this.getDuration(), item);
     return this;
   }
@@ -252,7 +253,7 @@ item.set(item.getDuration(), {
 	* @param {SceneItem | object} item - the scene item or item object
 	* @return {Scene.SceneItem} An instance itself
 	*/
-  public prepend(item: SceneItem | object) {
+  public prepend(item: SceneItem | ObjectInterface<any>) {
     if (item instanceof SceneItem) {
       const delay = item.getDelay();
       const duration = item.getIterationCount() === INFINITE ? item.getDuration() : item.getActiveDuration();
@@ -279,16 +280,18 @@ item.set(item.getDuration(), {
 item.setSelector("#id.class");
 	*/
   public setSelector(selector: boolean | string) {
-    this.state.selector = selector === true ? this.state.id :
-      (selector || `[data-scene-id="${this.state.id}"]`);
+    const state = this.state;
 
-    const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(this.state.selector);
+    state.selector = selector === true ? state.id :
+      (selector || `[data-scene-id="${state.id}"]`);
+
+    const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(state.selector);
 
     if (matches) {
-      this.state.selector = matches[1];
-      this.state.peusdo = matches[2];
+      state.selector = matches[1];
+      state.peusdo = matches[2];
     }
-    this.setElement(document.querySelectorAll(this.state.selector));
+    this.setElement(document.querySelectorAll(state.selector));
     return this;
   }
   /**
@@ -664,7 +667,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
       return "";
     }
     const peusdo = state.peusdo || "";
-    const id = this._getId();
+    const id = getRealId(this);
     // infinity or zero
     const isParent = !isUndefined(options[ITERATION_COUNT]);
     const isZeroDuration = parentDuration === 0;
@@ -702,7 +705,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const css = this.toCSS(duration, options);
     const isParent = !isUndefined(options[ITERATION_COUNT]);
 
-    !isParent && exportCSS(this._getId(), css);
+    !isParent && exportCSS(getRealId(this), css);
     return css;
   }
   public pause() {
@@ -799,9 +802,6 @@ item.playCSS(false, {
     }
     return elements[0];
   }
-  private _getId() {
-    return this.state.id || this.setId().getId();
-  }
   private _getEasing(time: number, left: number, right: number, easing: EasingType) {
     if (this.keyframes.hasName(TIMING_FUNCTION)) {
       const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
@@ -811,7 +811,7 @@ item.playCSS(false, {
     return easing;
   }
   private _toKeyframes(duration = this.getDuration(), isParent: boolean) {
-    const id = this._getId();
+    const id = getRealId(this);
     const state = this.state;
     const playSpeed = state[PLAY_SPEED];
     const iterationCount = state[ITERATION_COUNT];

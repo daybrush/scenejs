@@ -2,7 +2,7 @@ import Animator, { StateInterface, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
 import { ObjectInterface, ANIMATE } from "./consts";
 import Frame from "./Frame";
-import { playCSS, exportCSS } from "./utils";
+import { playCSS, exportCSS, getRealId } from "./utils";
 
 /**
 * manage sceneItems and play Scene.
@@ -121,10 +121,8 @@ const item = scene.newItem("item1")
 	* @example
 const item = scene.newItem("item1")
 	*/
-  public setItem(name: string, item?: Scene | SceneItem) {
-    if (item instanceof Animator) {
-      item.setId(name);
-    }
+  public setItem(name: string, item: Scene | SceneItem) {
+    item.setId(name);
     this.items[name] = item;
     return this;
   }
@@ -168,17 +166,15 @@ const item = scene.newItem("item1")
     const styles = [];
 
     for (const id in items) {
-      const item = items[id];
-
-      styles.push(item.exportCSS(totalDuration, this.state));
+      styles.push(items[id].exportCSS(totalDuration, this.state));
     }
     const css: string = styles.join("");
-    !isParent && exportCSS(this.getId() || this.setId().getId(), css);
+    !isParent && exportCSS(getRealId(this), css);
     return css;
   }
   public append(item: SceneItem | Scene) {
     item.setDelay(item.getDelay() + this.getDuration());
-    this.setItem(item.getId() || item.setId().getId(), item);
+    this.setItem(getRealId(item), item);
   }
   public isPausedCSS() {
     return this.state.playCSS && this.isPaused();
