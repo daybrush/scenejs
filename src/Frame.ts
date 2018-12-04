@@ -1,11 +1,11 @@
 import {
   ObjectInterface, NameType,
-  ALIAS, TIMING_FUNCTION, PROPERTY, FUNCTION
+  ALIAS, TIMING_FUNCTION
 } from "./consts";
-import { isRole, getType } from "./utils";
+import { isRole, getType, isPropertyObject } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
-import PropertyObject from "./PropertyObject";
-import { isObject, isArray, isString, ANIMATION, TRANSFORM, FILTER } from "@daybrush/utils";
+import { isObject, isArray, isString,
+  ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT } from "@daybrush/utils";
 
 function toInnerProperties(obj: ObjectInterface<string>) {
   if (!obj) {
@@ -18,9 +18,7 @@ function toInnerProperties(obj: ObjectInterface<string>) {
   }
   return arrObj.join(" ");
 }
-function isPropertyObject(value: any): value is PropertyObject {
-  return value instanceof PropertyObject;
-}
+
 /* eslint-disable */
 function clone(target: ObjectInterface<any>, toValue = false) {
   return merge({}, target, toValue);
@@ -34,9 +32,9 @@ function merge(to: ObjectInterface<any>, from: ObjectInterface<any>, toValue = f
       to[name] = toValue ? value.toValue() : value.clone();
     } else if (type === FUNCTION) {
       to[name] = toValue ? getValue([name], value()) : value;
-    } else if (type === "array") {
+    } else if (type === ARRAY) {
       to[name] = value.slice();
-    } else if (type === "object") {
+    } else if (type === OBJECT) {
       if (isObject(to[name]) && !isPropertyObject(to[name])) {
         merge(to[name], value, toValue);
       } else {
@@ -50,6 +48,9 @@ function merge(to: ObjectInterface<any>, from: ObjectInterface<any>, toValue = f
 }
 /* eslint-enable */
 
+function getPropertyName(args: NameType[]) {
+  return args[0] in ALIAS ? ALIAS[args[0]] : args;
+}
 function getValue(names: NameType[], value: any): any {
   const type = getType(value);
 
@@ -59,7 +60,7 @@ function getValue(names: NameType[], value: any): any {
     if (names[0] !== TIMING_FUNCTION) {
       return getValue(names, value());
     }
-  } else if (type === "object") {
+  } else if (type === OBJECT) {
     return clone(value, true);
   }
   return value;
@@ -94,12 +95,12 @@ class Frame {
   public get(...args: NameType[]) {
     const value = this.raw(...args);
 
-    return getValue(args[0] in ALIAS ? ALIAS[args[0]] : args, value);
+    return getValue(getPropertyName(args), value);
   }
 
   public raw(...args: NameType[]) {
     let properties = this.properties;
-    const params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+    const params = getPropertyName(args);
     const length = params.length;
 
     for (let i = 0; i < length; ++i) {
@@ -120,7 +121,7 @@ class Frame {
 	*/
   public remove(...args: NameType[]) {
     let properties = this.properties;
-    const params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+    const params = getPropertyName(args);
     const length = params.length;
 
     if (!length) {
@@ -221,7 +222,7 @@ frame.set("transform", "translate", "50px");
 	*/
   public has(...args: NameType[]) {
     let properties = this.properties;
-    const params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+    const params = getPropertyName(args);
     const length = params.length;
 
     if (!length) {
@@ -245,8 +246,7 @@ frame.set("transform", "translate", "50px");
   public clone() {
     const frame = new Frame();
 
-    frame.merge(this);
-    return frame;
+    return frame.merge(this);
   }
   /**
 	* merge one frame to other frame.

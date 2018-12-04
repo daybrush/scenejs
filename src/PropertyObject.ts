@@ -1,3 +1,5 @@
+import { OBJECT, STRING } from "@daybrush/utils";
+
 interface PropertyObjectInterface {
   prefix?: string;
   suffix?: string;
@@ -159,9 +161,9 @@ obj4.forEach(t => {
   private init(value: string | any[]) {
     const type = typeof value;
 
-    if (type === "string") {
+    if (type === STRING) {
       this.value = (value as string).split(this.options.separator);
-    } else if (type === "object") {
+    } else if (type === OBJECT) {
       this.value = (value as any[]);
     } else {
       this.value = [value];
