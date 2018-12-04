@@ -1,9 +1,13 @@
-import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS, PAUSED, RUNNING, PLAY, ENDED, PREFIX } from "./consts";
+import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS,
+  PAUSED, RUNNING, PLAY, ENDED, PREFIX } from "./consts";
 import PropertyObject from "./PropertyObject";
 import Scene from "./Scene";
 import SceneItem from "./SceneItem";
-import { isArray, ANIMATION } from "@daybrush/utils";
+import { isArray, ANIMATION, ARRAY, OBJECT, PROPERTY, STRING, NUMBER } from "@daybrush/utils";
 
+export function isPropertyObject(value: any): value is PropertyObject {
+  return value instanceof PropertyObject;
+}
 export function setAlias(name: string, alias: string[]) {
   ALIAS[name] = alias;
 }
@@ -26,13 +30,13 @@ export function setRole(names: string[], isProperty?: boolean, isFixedProperty?:
 export function getType(value: any) {
   const type = typeof value;
 
-  if (type === "object") {
+  if (type === OBJECT) {
     if (isArray(value)) {
-      return "array";
-    } else if (value instanceof PropertyObject) {
-      return "property";
+      return ARRAY;
+    } else if (isPropertyObject(value)) {
+      return PROPERTY;
     }
-  } else if (type === "string" || type === "number") {
+  } else if (type === STRING || type === NUMBER) {
     return "value";
   }
   return type;
@@ -83,6 +87,9 @@ export function exportCSS(id: string, css: string) {
     document.body.insertAdjacentHTML("beforeend",
       `<style id="${styleId}">${css}</style>`);
   }
+}
+export function getRealId(item: Scene | SceneItem) {
+  return item.state.id || item.setId().getId();
 }
 export function toId(text: string) {
   return text.match(/[0-9a-zA-Z]+/g).join("");

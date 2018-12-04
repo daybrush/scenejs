@@ -41,8 +41,6 @@ export const ALTERNATE_REVERSE = "alternate-reverse";
 export const NORMAL = "normal";
 export const INFINITE = "infinite";
 export const PLAY_STATE = "playState";
-export const FUNCTION = "function";
-export const PROPERTY = "property";
 
 /**
 * option name list
