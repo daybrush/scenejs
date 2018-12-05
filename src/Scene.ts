@@ -2,7 +2,8 @@ import Animator, { StateInterface, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
 import { ObjectInterface, ANIMATE } from "./consts";
 import Frame from "./Frame";
-import { playCSS, exportCSS, getRealId } from "./utils";
+import { playCSS, exportCSS, getRealId, makeId } from "./utils";
+import { isFunction } from "@daybrush/utils";
 
 /**
 * manage sceneItems and play Scene.
@@ -40,7 +41,7 @@ class Scene extends Animator {
     this.items = {};
     this.load(properties, options);
   }
-  public setId(id: string = `scene${Math.floor(Math.random() * 100000)}`) {
+  public setId(id: number | string = `scene${Math.floor(Math.random() * 100000)}`) {
     this.state.id = id;
     return this;
   }
@@ -86,12 +87,13 @@ class Scene extends Animator {
   /**
 	* get item in scene by name
 	* @method Scene#getItem
-	* @param {string} name - item's name
-	* @return {Scene.SceneItem} item
-	* @example
+  * @param {string} name - The item's name
+  * @param {number} [index] - If item is added as function, it can be imported via index.
+  * @return {Scene | Scene.SceneItem} item
+  * @example
 const item = scene.getItem("item1")
-	*/
-  public getItem(name: string) {
+  */
+  public getItem(name: number | string) {
     return this.items[name];
   }
   /**
@@ -102,8 +104,8 @@ const item = scene.getItem("item1")
 	* @return {Sceme.SceneItem} Newly created item
 	* @example
 const item = scene.newItem("item1")
-	*/
-  public newItem(name: string, options = {}) {
+  */
+  public newItem(name: number | string, options = {}) {
     if (name in this.items) {
       return;
     }
@@ -121,7 +123,7 @@ const item = scene.newItem("item1")
 	* @example
 const item = scene.newItem("item1")
 	*/
-  public setItem(name: string, item: Scene | SceneItem) {
+  public setItem(name: number | string, item: Scene | SceneItem) {
     item.setId(name);
     this.items[name] = item;
     return this;
@@ -166,7 +168,7 @@ const item = scene.newItem("item1")
     const styles = [];
 
     for (const id in items) {
-      styles.push(items[id].exportCSS(totalDuration, this.state));
+      styles.push(items[id].exportCSS(totalDuration, {...state, ...this.state}));
     }
     const css: string = styles.join("");
     !isParent && exportCSS(getRealId(this), css);
@@ -257,6 +259,22 @@ scene.playCSS(false, {
       if (object instanceof Scene || object instanceof SceneItem) {
         this.setItem(name, object);
         item = object;
+      } else if (isFunction(object) && isSelector) {
+        const elements = document.querySelectorAll(name);
+        const length = elements.length;
+        const scene = new Scene();
+
+        for (let i = 0; i < length; ++i) {
+          const id = makeId();
+
+          scene.newItem(`${i}`, {
+            id,
+            selector: `[data-scene-id="${id}"]`,
+            elements: elements[i],
+          }).load(object(i));
+        }
+        this.setItem(name, scene);
+        continue;
       } else {
         item = this.newItem(name);
         item.load(object);
