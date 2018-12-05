@@ -4726,8 +4726,10 @@ repository: https://github.com/daybrush/scenejs.git
             var scene = new Scene();
 
             for (var i = 0; i < length; ++i) {
+              var id = makeId();
               scene.newItem("" + i, {
-                id: makeId(),
+                id: id,
+                selector: "[data-scene-id=\"" + id + "\"]",
                 elements: elements[i]
               }).load(object(i));
             }
