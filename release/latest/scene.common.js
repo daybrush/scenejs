@@ -744,6 +744,21 @@ function exportCSS(id, css) {
     document.body.insertAdjacentHTML("beforeend", "<style id=\"" + styleId + "\">" + css + "</style>");
   }
 }
+function makeId(selector) {
+  for (;;) {
+    var id = "" + Math.floor(Math.random() * 10000000);
+
+    if (!selector) {
+      return id;
+    }
+
+    var checkElement = document.querySelector("[data-scene-id=\"" + id + "\"]");
+
+    if (!checkElement) {
+      return id;
+    }
+  }
+}
 function getRealId(item) {
   return item.state.id || item.setId().getId();
 }
@@ -2411,22 +2426,6 @@ function dotValue(time, prevTime, nextTime, prevValue, nextValue, easing) {
   return value;
 }
 
-function makeId(selector) {
-  for (;;) {
-    var id = "" + Math.floor(Math.random() * 100000);
-
-    if (!selector) {
-      return id;
-    }
-
-    var checkElement = document.querySelector("[data-scene-id=\"" + id + "\"]");
-
-    if (!checkElement) {
-      return id;
-    }
-  }
-}
-
 function makeAnimationProperties(properties) {
   var cssArray = [];
 
@@ -3713,7 +3712,7 @@ function (_super) {
     * @return {Sceme.SceneItem} Newly created item
     * @example
   const item = scene.newItem("item1")
-    */
+  */
 
 
   __proto.newItem = function (name, options) {
@@ -3941,6 +3940,7 @@ function (_super) {
 
         for (var i = 0; i < length; ++i) {
           scene.newItem("" + i, {
+            id: makeId(),
             elements: elements[i]
           }).load(object(i));
         }
