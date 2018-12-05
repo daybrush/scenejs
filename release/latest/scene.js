@@ -6,10 +6,10 @@ repository: https://github.com/daybrush/scenejs.git
 @version 1.0.0-beta12
 */
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('util')) :
-    typeof define === 'function' && define.amd ? define(['util'], factory) :
-    (global.Scene = factory(global.util));
-}(this, (function (util) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global.Scene = factory());
+}(this, (function () { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -137,7 +137,7 @@ repository: https://github.com/daybrush/scenejs.git
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 0.2.0
+    @version 0.3.0
     */
 
     /**
@@ -430,6 +430,25 @@ repository: https://github.com/daybrush/scenejs.git
 
     function isString(value) {
       return typeof value === STRING;
+    }
+    /**
+    * Check the type that the value is function.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {boolean} true if the type is correct, false otherwise
+    * @example
+    import {isFunction} from "@daybrush/utils";
+
+    console.log(isFunction(function a() {})); // true
+    console.log(isFunction(() => {})); // true
+    console.log(isFunction("1234")); // false
+    console.log(isFunction(1)); // false
+    console.log(isFunction(null)); // false
+    */
+
+
+    function isFunction(value) {
+      return typeof value === FUNCTION;
     }
     /**
     * divide text by space.
@@ -4157,7 +4176,7 @@ repository: https://github.com/daybrush/scenejs.git
         if (this.keyframes.hasName(TIMING_FUNCTION)) {
           var nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
 
-          return typeof nowEasing === "function" ? nowEasing : easing;
+          return isFunction(nowEasing) ? nowEasing : easing;
         }
 
         return easing;
@@ -4702,7 +4721,7 @@ repository: https://github.com/daybrush/scenejs.git
           if (object instanceof Scene || object instanceof SceneItem) {
             this.setItem(name, object);
             item = object;
-          } else if (util.isFunction(object) && isSelector) {
+          } else if (isFunction(object) && isSelector) {
             var elements = document.querySelectorAll(name);
             var length = elements.length;
             var scene = new Scene();

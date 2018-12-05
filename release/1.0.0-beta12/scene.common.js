@@ -10,7 +10,6 @@ repository: https://github.com/daybrush/scenejs.git
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var utils = require('@daybrush/utils');
-var util = require('util');
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -3390,7 +3389,7 @@ function (_super) {
     if (this.keyframes.hasName(TIMING_FUNCTION)) {
       var nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
 
-      return typeof nowEasing === "function" ? nowEasing : easing;
+      return utils.isFunction(nowEasing) ? nowEasing : easing;
     }
 
     return easing;
@@ -3935,7 +3934,7 @@ function (_super) {
       if (object instanceof Scene || object instanceof SceneItem) {
         this.setItem(name, object);
         item = object;
-      } else if (util.isFunction(object) && isSelector) {
+      } else if (utils.isFunction(object) && isSelector) {
         var elements = document.querySelectorAll(name);
         var length = elements.length;
         var scene = new Scene();

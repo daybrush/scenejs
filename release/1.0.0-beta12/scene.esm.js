@@ -5,8 +5,7 @@ author: Daybrush
 repository: https://github.com/daybrush/scenejs.git
 @version 1.0.0-beta12
 */
-import { isObject, OBJECT, STRING, isArray, ANIMATION, ARRAY, PROPERTY, NUMBER, splitUnit, isString, camelize, requestAnimationFrame, COLOR_MODELS, splitComma, splitSpace, stringToRGBA, RGBA, splitBracket, TRANSFORM, FILTER, FUNCTION, isUndefined, decamelize, fromCSS, addClass, removeClass, hasClass, KEYFRAMES } from '@daybrush/utils';
-import { isFunction } from 'util';
+import { isObject, OBJECT, STRING, isArray, ANIMATION, ARRAY, PROPERTY, NUMBER, splitUnit, isString, camelize, requestAnimationFrame, COLOR_MODELS, splitComma, splitSpace, stringToRGBA, RGBA, splitBracket, TRANSFORM, FILTER, FUNCTION, isUndefined, decamelize, fromCSS, addClass, removeClass, hasClass, KEYFRAMES, isFunction } from '@daybrush/utils';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -3386,7 +3385,7 @@ function (_super) {
     if (this.keyframes.hasName(TIMING_FUNCTION)) {
       var nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
 
-      return typeof nowEasing === "function" ? nowEasing : easing;
+      return isFunction(nowEasing) ? nowEasing : easing;
     }
 
     return easing;
