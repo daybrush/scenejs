@@ -10,6 +10,7 @@ repository: https://github.com/daybrush/scenejs.git
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var utils = require('@daybrush/utils');
+var util = require('util');
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -109,8 +110,6 @@ var ALTERNATE_REVERSE = "alternate-reverse";
 var NORMAL = "normal";
 var INFINITE = "infinite";
 var PLAY_STATE = "playState";
-var FUNCTION = "function";
-var PROPERTY = "property";
 /**
 * option name list
 * @name Scene.OPTIONS
@@ -649,9 +648,9 @@ function () {
   __proto.init = function (value) {
     var type = typeof value;
 
-    if (type === "string") {
+    if (type === utils.STRING) {
       this.value = value.split(this.options.separator);
-    } else if (type === "object") {
+    } else if (type === utils.OBJECT) {
       this.value = value;
     } else {
       this.value = [value];
@@ -663,6 +662,9 @@ function () {
   return PropertyObject;
 }();
 
+function isPropertyObject(value) {
+  return value instanceof PropertyObject;
+}
 function setAlias(name, alias) {
   ALIAS[name] = alias;
 }
@@ -687,13 +689,13 @@ function setRole(names, isProperty, isFixedProperty) {
 function getType(value) {
   var type = typeof value;
 
-  if (type === "object") {
+  if (type === utils.OBJECT) {
     if (utils.isArray(value)) {
-      return "array";
-    } else if (value instanceof PropertyObject) {
-      return "property";
+      return utils.ARRAY;
+    } else if (isPropertyObject(value)) {
+      return utils.PROPERTY;
     }
-  } else if (type === "string" || type === "number") {
+  } else if (type === utils.STRING || type === utils.NUMBER) {
     return "value";
   }
 
@@ -743,8 +745,11 @@ function exportCSS(id, css) {
     document.body.insertAdjacentHTML("beforeend", "<style id=\"" + styleId + "\">" + css + "</style>");
   }
 }
+function getRealId(item) {
+  return item.state.id || item.setId().getId();
+}
 function toId(text) {
-  return text.match(/[0-9a-zA-Z]+/g).join("");
+  return ("" + text).match(/[0-9a-zA-Z]+/g).join("");
 }
 function playCSS(item, isExportCSS, properties) {
   if (properties === void 0) {
@@ -1524,10 +1529,6 @@ function toInnerProperties(obj) {
 
   return arrObj.join(" ");
 }
-
-function isPropertyObject(value) {
-  return value instanceof PropertyObject;
-}
 /* eslint-disable */
 
 
@@ -1548,13 +1549,13 @@ function merge(to, from, toValue) {
     var value = from[name];
     var type = getType(value);
 
-    if (type === PROPERTY) {
+    if (type === utils.PROPERTY) {
       to[name] = toValue ? value.toValue() : value.clone();
-    } else if (type === FUNCTION) {
+    } else if (type === utils.FUNCTION) {
       to[name] = toValue ? getValue([name], value()) : value;
-    } else if (type === "array") {
+    } else if (type === utils.ARRAY) {
       to[name] = value.slice();
-    } else if (type === "object") {
+    } else if (type === utils.OBJECT) {
       if (utils.isObject(to[name]) && !isPropertyObject(to[name])) {
         merge(to[name], value, toValue);
       } else {
@@ -1570,16 +1571,20 @@ function merge(to, from, toValue) {
 /* eslint-enable */
 
 
+function getPropertyName(args) {
+  return args[0] in ALIAS ? ALIAS[args[0]] : args;
+}
+
 function getValue(names, value) {
   var type = getType(value);
 
-  if (type === PROPERTY) {
+  if (type === utils.PROPERTY) {
     return value.toValue();
-  } else if (type === FUNCTION) {
+  } else if (type === utils.FUNCTION) {
     if (names[0] !== TIMING_FUNCTION) {
       return getValue(names, value());
     }
-  } else if (type === "object") {
+  } else if (type === utils.OBJECT) {
     return clone(value, true);
   }
 
@@ -1631,7 +1636,7 @@ function () {
     }
 
     var value = this.raw.apply(this, args);
-    return getValue(args[0] in ALIAS ? ALIAS[args[0]] : args, value);
+    return getValue(getPropertyName(args), value);
   };
 
   __proto.raw = function () {
@@ -1642,7 +1647,7 @@ function () {
     }
 
     var properties = this.properties;
-    var params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+    var params = getPropertyName(args);
     var length = params.length;
 
     for (var i = 0; i < length; ++i) {
@@ -1673,7 +1678,7 @@ function () {
     }
 
     var properties = this.properties;
-    var params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+    var params = getPropertyName(args);
     var length = params.length;
 
     if (!length) {
@@ -1796,7 +1801,7 @@ function () {
     }
 
     var properties = this.properties;
-    var params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+    var params = getPropertyName(args);
     var length = params.length;
 
     if (!length) {
@@ -1824,8 +1829,7 @@ function () {
 
   __proto.clone = function () {
     var frame = new Frame();
-    frame.merge(this);
-    return frame;
+    return frame.merge(this);
   };
   /**
     * merge one frame to other frame.
@@ -2353,15 +2357,15 @@ function dot(a1, a2, b1, b2) {
 
   var type1 = getType(a1);
   var type2 = getType(a2);
-  var isFunction1 = type1 === FUNCTION;
-  var isFunction2 = type2 === FUNCTION;
+  var isFunction1 = type1 === utils.FUNCTION;
+  var isFunction2 = type2 === utils.FUNCTION;
 
   if (isFunction1 || isFunction2) {
     return function () {
       return dot(isFunction1 ? toPropertyObject(a1()) : a1, isFunction2 ? toPropertyObject(a2()) : a2, b1, b2);
     };
   } else if (type1 === type2) {
-    if (type1 === PROPERTY) {
+    if (type1 === utils.PROPERTY) {
       return dotObject(a1, a2, b1, b2);
     } else if (type1 === "array") {
       return dotArray(a1, a2, b1, b2);
@@ -2728,15 +2732,16 @@ function (_super) {
 
 
   __proto.setSelector = function (selector) {
-    this.state.selector = selector === true ? this.state.id : selector || "[data-scene-id=\"" + this.state.id + "\"]";
-    var matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(this.state.selector);
+    var state = this.state;
+    state.selector = selector === true ? state.id : selector || "[data-scene-id=\"" + state.id + "\"]";
+    var matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(state.selector);
 
     if (matches) {
-      this.state.selector = matches[1];
-      this.state.peusdo = matches[2];
+      state.selector = matches[1];
+      state.peusdo = matches[2];
     }
 
-    this.setElement(document.querySelectorAll(this.state.selector));
+    this.setElement(document.querySelectorAll(state.selector));
     return this;
   };
   /**
@@ -3212,9 +3217,7 @@ function (_super) {
     }
 
     var peusdo = state.peusdo || "";
-
-    var id = this._getId(); // infinity or zero
-
+    var id = getRealId(this); // infinity or zero
 
     var isParent = !utils.isUndefined(options[ITERATION_COUNT]);
     var isZeroDuration = parentDuration === 0;
@@ -3255,7 +3258,7 @@ function (_super) {
 
     var css = this.toCSS(duration, options);
     var isParent = !utils.isUndefined(options[ITERATION_COUNT]);
-    !isParent && exportCSS(this._getId(), css);
+    !isParent && exportCSS(getRealId(this), css);
     return css;
   };
 
@@ -3383,10 +3386,6 @@ function (_super) {
     return elements[0];
   };
 
-  __proto._getId = function () {
-    return this.state.id || this.setId().getId();
-  };
-
   __proto._getEasing = function (time, left, right, easing) {
     if (this.keyframes.hasName(TIMING_FUNCTION)) {
       var nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
@@ -3402,8 +3401,7 @@ function (_super) {
       duration = this.getDuration();
     }
 
-    var id = this._getId();
-
+    var id = getRealId(this);
     var state = this.state;
     var playSpeed = state[PLAY_SPEED];
     var iterationCount = state[ITERATION_COUNT];
@@ -3697,11 +3695,12 @@ function (_super) {
   /**
     * get item in scene by name
     * @method Scene#getItem
-    * @param {string} name - item's name
-    * @return {Scene.SceneItem} item
-    * @example
+  * @param {string} name - The item's name
+  * @param {number} [index] - If item is added as function, it can be imported via index.
+  * @return {Scene | Scene.SceneItem} item
+  * @example
   const item = scene.getItem("item1")
-    */
+  */
 
 
   __proto.getItem = function (name) {
@@ -3742,10 +3741,7 @@ function (_super) {
 
 
   __proto.setItem = function (name, item) {
-    if (item instanceof Animator) {
-      item.setId(name);
-    }
-
+    item.setId(name);
     this.items[name] = item;
     return this;
   };
@@ -3804,18 +3800,17 @@ function (_super) {
     var styles = [];
 
     for (var id in items) {
-      var item = items[id];
-      styles.push(item.exportCSS(totalDuration, this.state));
+      styles.push(items[id].exportCSS(totalDuration, this.state));
     }
 
     var css = styles.join("");
-    !isParent && exportCSS(this.getId() || this.setId().getId(), css);
+    !isParent && exportCSS(getRealId(this), css);
     return css;
   };
 
   __proto.append = function (item) {
     item.setDelay(item.getDelay() + this.getDuration());
-    this.setItem(item.getId() || item.setId().getId(), item);
+    this.setItem(getRealId(item), item);
   };
 
   __proto.isPausedCSS = function () {
@@ -3940,6 +3935,19 @@ function (_super) {
       if (object instanceof Scene || object instanceof SceneItem) {
         this.setItem(name, object);
         item = object;
+      } else if (util.isFunction(object) && isSelector) {
+        var elements = document.querySelectorAll(name);
+        var length = elements.length;
+        var scene = new Scene();
+
+        for (var i = 0; i < length; ++i) {
+          scene.newItem("" + i, {
+            elements: elements[i]
+          }).load(object(i));
+        }
+
+        this.setItem(name, scene);
+        continue;
       } else {
         item = this.newItem(name);
         item.load(object);
