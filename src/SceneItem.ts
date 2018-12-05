@@ -7,6 +7,7 @@ import {
   toId,
   exportCSS,
   getRealId,
+  makeId,
 } from "./utils";
 import Keyframes from "./Keyframes";
 import { dotValue } from "./utils/dot";
@@ -18,22 +19,9 @@ import {
   EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
-  ANIMATION, fromCSS, addClass, removeClass, hasClass, KEYFRAMES, requestAnimationFrame } from "@daybrush/utils";
+  ANIMATION, fromCSS, addClass, removeClass, hasClass,
+  KEYFRAMES, requestAnimationFrame, isFunction } from "@daybrush/utils";
 
-function makeId(selector?: boolean) {
-  for (; ;) {
-    const id = `${Math.floor(Math.random() * 100000)}`;
-
-    if (!selector) {
-      return id;
-    }
-    const checkElement = document.querySelector(`[data-scene-id="${id}"]`);
-
-    if (!checkElement) {
-      return id;
-    }
-  }
-}
 function makeAnimationProperties(properties: ObjectInterface<string | number>) {
   const cssArray = [];
 
@@ -114,7 +102,7 @@ const item = new SceneItem();
 item.setId("item");
 console.log(item.getId()); // item
 	*/
-  public setId(id?: string) {
+  public setId(id?: number | string) {
     const elements = this.elements;
     const length = elements.length;
 
@@ -806,7 +794,7 @@ item.playCSS(false, {
     if (this.keyframes.hasName(TIMING_FUNCTION)) {
       const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
 
-      return typeof nowEasing === "function" ? nowEasing : easing;
+      return isFunction(nowEasing) ? nowEasing : easing;
     }
     return easing;
   }

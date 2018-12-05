@@ -77,7 +77,7 @@ export interface IterationInterface {
 export function isPausedCSS(item: Scene | SceneItem) {
   return item.state.playCSS && item.getPlayState() === PAUSED;
 }
-export function exportCSS(id: string, css: string) {
+export function exportCSS(id: number | string, css: string) {
   const styleId = `${PREFIX}STYLE_${toId(id)}`;
   const styleElement: HTMLElement = document.querySelector(`#${styleId}`);
 
@@ -88,11 +88,25 @@ export function exportCSS(id: string, css: string) {
       `<style id="${styleId}">${css}</style>`);
   }
 }
+export function makeId(selector?: boolean) {
+  for (; ;) {
+    const id = `${Math.floor(Math.random() * 10000000)}`;
+
+    if (!selector) {
+      return id;
+    }
+    const checkElement = document.querySelector(`[data-scene-id="${id}"]`);
+
+    if (!checkElement) {
+      return id;
+    }
+  }
+}
 export function getRealId(item: Scene | SceneItem) {
   return item.state.id || item.setId().getId();
 }
-export function toId(text: string) {
-  return text.match(/[0-9a-zA-Z]+/g).join("");
+export function toId(text: number | string) {
+  return `${text}`.match(/[0-9a-zA-Z]+/g).join("");
 }
 export function playCSS(item: Scene | SceneItem, isExportCSS: boolean, properties = {}) {
   if (!ANIMATION || item.getPlayState() === RUNNING) {
