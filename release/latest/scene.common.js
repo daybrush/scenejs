@@ -3226,7 +3226,7 @@ function (_super) {
     var easingName = state[EASING] && state[EASING_NAME] || isParent && options[EASING] && options[EASING_NAME] || state[EASING_NAME];
     var iterationCount = !isZeroDuration && options[ITERATION_COUNT] || state[ITERATION_COUNT];
     var fillMode = options[FILL_MODE] !== "forwards" && options[FILL_MODE] || state[FILL_MODE];
-    var direction = iterationCount === "infinite" ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
+    var direction = state[ITERATION_COUNT] === "infinite" ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
     var cssText = makeAnimationProperties({
       fillMode: fillMode,
       direction: direction,
