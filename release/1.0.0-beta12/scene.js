@@ -4005,15 +4005,16 @@ repository: https://github.com/daybrush/scenejs.git
         var peusdo = state.peusdo || "";
         var id = getRealId(this); // infinity or zero
 
+        var isInfinite = state[ITERATION_COUNT] === "infinite";
         var isParent = !isUndefined(options[ITERATION_COUNT]);
         var isZeroDuration = parentDuration === 0;
         var duration = isZeroDuration ? this.getDuration() : parentDuration;
         var playSpeed = options[PLAY_SPEED] || 1;
         var delay = ((options[DELAY] || 0) + (isZeroDuration ? state[DELAY] : 0)) / playSpeed;
         var easingName = state[EASING] && state[EASING_NAME] || isParent && options[EASING] && options[EASING_NAME] || state[EASING_NAME];
-        var iterationCount = !isZeroDuration && options[ITERATION_COUNT] || state[ITERATION_COUNT];
+        var iterationCount = isInfinite ? "infinite" : !isZeroDuration && options[ITERATION_COUNT] || state[ITERATION_COUNT];
         var fillMode = options[FILL_MODE] !== "forwards" && options[FILL_MODE] || state[FILL_MODE];
-        var direction = state[ITERATION_COUNT] === "infinite" ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
+        var direction = isInfinite ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
         var cssText = makeAnimationProperties({
           fillMode: fillMode,
           direction: direction,
