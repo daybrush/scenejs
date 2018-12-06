@@ -3936,7 +3936,7 @@ function (_super) {
       return this;
     }
 
-    var isSelector = options && options.selector;
+    var isSelector = options && options.selector || this.options.selector;
 
     for (var name in properties) {
       if (name === "options") {
