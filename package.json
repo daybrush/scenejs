@@ -98,6 +98,6 @@
     "webpack-cli": "^3.1.0"
   },
   "dependencies": {
-    "@daybrush/utils": "^0.2.0"
+    "@daybrush/utils": "^0.3.0"
   }
 }

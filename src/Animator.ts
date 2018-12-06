@@ -427,10 +427,11 @@ animator.getTime();
     // fillMode : forwards, backwards, both, none
     const isReverse = isDirectionReverse(currentIterationCount, iterationCount, direction);
 
-    if (isReverse) {
+    const isFiniteDuration = isFinite(duration);
+    if (isFiniteDuration && isReverse) {
       currentIterationTime = duration - currentIterationTime;
     }
-    if (iterationCount !== INFINITE) {
+    if (isFiniteDuration && iterationCount !== INFINITE) {
       const isForwards = fillMode === "both" || fillMode === "forwards";
 
       // fill forwards

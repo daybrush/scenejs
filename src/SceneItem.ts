@@ -657,6 +657,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const peusdo = state.peusdo || "";
     const id = getRealId(this);
     // infinity or zero
+    const isInfinite = state[ITERATION_COUNT] === "infinite";
     const isParent = !isUndefined(options[ITERATION_COUNT]);
     const isZeroDuration = parentDuration === 0;
     const duration = isZeroDuration ? this.getDuration() : parentDuration;
@@ -664,9 +665,10 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const delay = ((options[DELAY] || 0) + (isZeroDuration ? state[DELAY] : 0)) / playSpeed;
     const easingName = (state[EASING] && state[EASING_NAME]) ||
       (isParent && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
-    const iterationCount = (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
+    const iterationCount = isInfinite ? "infinite" :
+      (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
     const fillMode = (options[FILL_MODE] !== "forwards" && options[FILL_MODE]) || state[FILL_MODE];
-    const direction = options[DIRECTION] || state[DIRECTION];
+    const direction = isInfinite ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
     const cssText = makeAnimationProperties({
       fillMode,
       direction,

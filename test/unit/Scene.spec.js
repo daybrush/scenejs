@@ -298,7 +298,7 @@ describe("Scene Test", function () {
 				}),
 			}, {
 				selector: true,
-			});
+			}).playCSS();
 			const item0 = scene.getItem(".test").getItem(0);
 			const item1 = scene.getItem(".test").getItem(1);
 
@@ -357,6 +357,50 @@ describe("Scene Test", function () {
 				expect(scene.getState("playCSS")).to.be.false;
 				done();
 			});
+		});
+		it(`should check playCSS method with function`, done => {
+			// Given
+			const scene = new Scene({
+				".test": (i) => ({
+					0: {
+						width: `${i * 100}px`,
+						height: "100px",
+					},
+					0.1: {
+						width: "200px",
+						height: "200px",
+					},
+					options: {
+						iterationCount: "infinite",
+					}
+				}),
+				".testf": {
+					0: {
+						width: "0px",
+					},
+					0.1: {
+						height: "1px",
+					},
+					options: {
+						// iterationCount: "infinite",
+					}
+				}
+			}, {
+				selector: true,
+			});
+			
+
+			// When
+			scene.playCSS();
+
+			setTimeout(() => {
+				// Then
+				expect(scene.isEnded()).to.be.false;
+				scene.finish();
+				done();
+			}, 300);
+
+			// Then
 		});
 		it(`should check playCSS & pauseCSS method`, () => {
 			const scene = new Scene({

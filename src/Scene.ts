@@ -1,6 +1,6 @@
 import Animator, { StateInterface, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
-import { ObjectInterface, ANIMATE } from "./consts";
+import { ObjectInterface, ANIMATE, ITERATION_COUNT, EASING, EASING_NAME } from "./consts";
 import Frame from "./Frame";
 import { playCSS, exportCSS, getRealId, makeId } from "./utils";
 import { isFunction } from "@daybrush/utils";
@@ -157,18 +157,36 @@ const item = scene.newItem("item1")
 	 * Export the CSS of the items to the style.
 	 * @return {Scene} An instance itself
 	 */
-  public exportCSS(duration: number = this.getDuration(), state?: StateInterface) {
+  public exportCSS(duration: number = this.getDuration(), parentState?: StateInterface) {
     const items = this.items;
-    let totalDuration = state ? this.getDuration() : duration;
+    let totalDuration = parentState ? this.getDuration() : duration;
 
     if (!totalDuration || !isFinite(totalDuration)) {
       totalDuration = 0;
     }
-    const isParent = !!state;
+    const isParent = !!parentState;
     const styles = [];
 
+    const state = {
+      ...this.state,
+    };
+
+    if (parentState) {
+      const stateIterations = state[ITERATION_COUNT];
+      const parentIterations = parentState[ITERATION_COUNT];
+
+      if (parentIterations === "infinite") {
+        state[ITERATION_COUNT] = "infinite";
+      } else if (stateIterations !== "infinite") {
+        state[ITERATION_COUNT] = stateIterations * parentIterations;
+      }
+      if (!state[EASING]) {
+        state[EASING] = parentState[EASING];
+        state[EASING_NAME] = parentState[EASING_NAME];
+      }
+    }
     for (const id in items) {
-      styles.push(items[id].exportCSS(totalDuration, {...state, ...this.state}));
+      styles.push(items[id].exportCSS(totalDuration, state));
     }
     const css: string = styles.join("");
     !isParent && exportCSS(getRealId(this), css);
@@ -247,7 +265,7 @@ scene.playCSS(false, {
     if (!properties) {
       return this;
     }
-    const isSelector = options && options.selector;
+    const isSelector = options && options.selector || this.options.selector;
 
     for (const name in properties) {
       if (name === "options") {
