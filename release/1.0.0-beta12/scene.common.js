@@ -1282,12 +1282,13 @@ function (_super) {
     // fillMode : forwards, backwards, both, none
 
     var isReverse = isDirectionReverse(currentIterationCount, iterationCount, direction);
+    var isFiniteDuration = isFinite(duration);
 
-    if (isReverse) {
+    if (isFiniteDuration && isReverse) {
       currentIterationTime = duration - currentIterationTime;
     }
 
-    if (iterationCount !== INFINITE) {
+    if (isFiniteDuration && iterationCount !== INFINITE) {
       var isForwards = fillMode === "both" || fillMode === "forwards"; // fill forwards
 
       if (currentIterationCount >= iterationCount) {
@@ -3225,7 +3226,7 @@ function (_super) {
     var easingName = state[EASING] && state[EASING_NAME] || isParent && options[EASING] && options[EASING_NAME] || state[EASING_NAME];
     var iterationCount = !isZeroDuration && options[ITERATION_COUNT] || state[ITERATION_COUNT];
     var fillMode = options[FILL_MODE] !== "forwards" && options[FILL_MODE] || state[FILL_MODE];
-    var direction = options[DIRECTION] || state[DIRECTION];
+    var direction = iterationCount === "infinite" ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
     var cssText = makeAnimationProperties({
       fillMode: fillMode,
       direction: direction,
@@ -3782,23 +3783,41 @@ function (_super) {
      */
 
 
-  __proto.exportCSS = function (duration, state) {
+  __proto.exportCSS = function (duration, parentState) {
     if (duration === void 0) {
       duration = this.getDuration();
     }
 
     var items = this.items;
-    var totalDuration = state ? this.getDuration() : duration;
+    var totalDuration = parentState ? this.getDuration() : duration;
 
     if (!totalDuration || !isFinite(totalDuration)) {
       totalDuration = 0;
     }
 
-    var isParent = !!state;
+    var isParent = !!parentState;
     var styles = [];
 
+    var state = __assign({}, this.state);
+
+    if (parentState) {
+      var stateIterations = state[ITERATION_COUNT];
+      var parentIterations = parentState[ITERATION_COUNT];
+
+      if (parentIterations === "infinite") {
+        state[ITERATION_COUNT] = "infinite";
+      } else if (stateIterations !== "infinite") {
+        state[ITERATION_COUNT] = stateIterations * parentIterations;
+      }
+
+      if (!state[EASING]) {
+        state[EASING] = parentState[EASING];
+        state[EASING_NAME] = parentState[EASING_NAME];
+      }
+    }
+
     for (var id in items) {
-      styles.push(items[id].exportCSS(totalDuration, this.state));
+      styles.push(items[id].exportCSS(totalDuration, state));
     }
 
     var css = styles.join("");
