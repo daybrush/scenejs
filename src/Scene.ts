@@ -188,7 +188,7 @@ class Scene extends Animator {
    * Export the CSS of the items to the style.
    * @return {Scene} An instance itself
    */
-  public exportCSS(duration: number, parentState?: StateInterface) {
+  public exportCSS(duration?: number, parentState?: StateInterface) {
     const css = this.toCSS(duration, parentState);
 
     !parentState && exportCSS(getRealId(this), css);

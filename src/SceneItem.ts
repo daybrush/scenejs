@@ -688,7 +688,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 
     return css;
   }
-  public exportCSS(duration: number, options?: StateInterface) {
+  public exportCSS(duration?: number, options?: StateInterface) {
     if (!this.elements.length) {
       return "";
     }
