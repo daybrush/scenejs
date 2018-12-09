@@ -3,9 +3,9 @@ Copyright (c) 2018 Daybrush
 license: MIT
 author: Daybrush
 repository: https://github.com/daybrush/scenejs.git
-@version 1.0.0-beta12
+@version 1.0.0-beta13
 */
-import { isObject, OBJECT, STRING, isArray, ANIMATION, ARRAY, PROPERTY, NUMBER, splitUnit, isString, camelize, requestAnimationFrame, COLOR_MODELS, splitComma, splitSpace, stringToRGBA, RGBA, splitBracket, TRANSFORM, FILTER, FUNCTION, isUndefined, decamelize, fromCSS, addClass, removeClass, hasClass, KEYFRAMES, isFunction } from '@daybrush/utils';
+import { isObject, OBJECT, STRING, isArray, ANIMATION, ARRAY, PROPERTY, NUMBER, IS_WINDOW, splitUnit, isString, camelize, requestAnimationFrame, COLOR_MODELS, splitComma, splitSpace, stringToRGBA, RGBA, splitBracket, TRANSFORM, FILTER, FUNCTION, isUndefined, decamelize, fromCSS, addClass, removeClass, hasClass, KEYFRAMES, isFunction } from '@daybrush/utils';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -744,7 +744,7 @@ function makeId(selector) {
   for (;;) {
     var id = "" + Math.floor(Math.random() * 10000000);
 
-    if (!selector) {
+    if (!IS_WINDOW || !selector) {
       return id;
     }
 
@@ -2736,7 +2736,7 @@ function (_super) {
       state.peusdo = matches[2];
     }
 
-    this.setElement(document.querySelectorAll(state.selector));
+    IS_WINDOW && this.setElement(document.querySelectorAll(state.selector));
     return this;
   };
   /**
@@ -3240,20 +3240,12 @@ function (_super) {
   };
 
   __proto.exportCSS = function (duration, options) {
-    if (duration === void 0) {
-      duration = this.getDuration();
-    }
-
-    if (options === void 0) {
-      options = {};
-    }
-
     if (!this.elements.length) {
       return "";
     }
 
     var css = this.toCSS(duration, options);
-    var isParent = !isUndefined(options[ITERATION_COUNT]);
+    var isParent = options && !isUndefined(options[ITERATION_COUNT]);
     !isParent && exportCSS(getRealId(this), css);
     return css;
   };
@@ -3601,29 +3593,29 @@ var Scene =
 function (_super) {
   __extends(Scene, _super);
   /**
-    * @param {Object} [properties] - properties
-    * @param {AnimatorOptions} [options] - options
-    * @example
-    const scene = new Scene({
-        item1: {
-            0: {
-                display: "none",
-            },
-            1: {
-                display: "block",
-                opacity: 0,
-            },
-            2: {
-                opacity: 1,
-            },
-        },
-        item2: {
-            2: {
-                opacity: 1,
-            },
-        }
-    });
-     */
+  * @param {Object} [properties] - properties
+  * @param {AnimatorOptions} [options] - options
+  * @example
+  const scene = new Scene({
+    item1: {
+      0: {
+        display: "none",
+      },
+      1: {
+        display: "block",
+        opacity: 0,
+      },
+      2: {
+        opacity: 1,
+      },
+    },
+    item2: {
+      2: {
+        opacity: 1,
+      },
+    }
+  });
+    */
 
 
   function Scene(properties, options) {
@@ -3689,8 +3681,8 @@ function (_super) {
     return this;
   };
   /**
-    * get item in scene by name
-    * @method Scene#getItem
+  * get item in scene by name
+  * @method Scene#getItem
   * @param {string} name - The item's name
   * @param {number} [index] - If item is added as function, it can be imported via index.
   * @return {Scene | Scene.SceneItem} item
@@ -3703,12 +3695,12 @@ function (_super) {
     return this.items[name];
   };
   /**
-    * create item in scene
-    * @method Scene#newItem
-    * @param {String} name - name of item to create
-    * @param {StateOptions} options - The option object of SceneItem
-    * @return {Sceme.SceneItem} Newly created item
-    * @example
+  * create item in scene
+  * @method Scene#newItem
+  * @param {String} name - name of item to create
+  * @param {StateOptions} options - The option object of SceneItem
+  * @return {Sceme.SceneItem} Newly created item
+  * @example
   const item = scene.newItem("item1")
   */
 
@@ -3728,12 +3720,12 @@ function (_super) {
     return item;
   };
   /**
-    * add a sceneItem to the scene
-    * @param {String} name - name of item to create
-    * @param {Scene.SceneItem} item - sceneItem
-    * @example
+  * add a sceneItem to the scene
+  * @param {String} name - name of item to create
+  * @param {Scene.SceneItem} item - sceneItem
+  * @example
   const item = scene.newItem("item1")
-    */
+  */
 
 
   __proto.setItem = function (name, item) {
@@ -3756,13 +3748,13 @@ function (_super) {
     return this;
   };
   /**
-     * executes a provided function once for each scene item.
-     * @param {Function} func Function to execute for each element, taking three arguments
-     * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
-     * @param {string} [func.name] The name of the item being processed in the scene.
-     * @param {object} [func.items] The object that forEach() is being applied to.
-     * @return {Scene} An instance itself
-     */
+   * executes a provided function once for each scene item.
+   * @param {Function} func Function to execute for each element, taking three arguments
+   * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
+   * @param {string} [func.name] The name of the item being processed in the scene.
+   * @param {object} [func.items] The object that forEach() is being applied to.
+   * @return {Scene} An instance itself
+   */
 
 
   __proto.forEach = function (func) {
@@ -3774,13 +3766,8 @@ function (_super) {
 
     return this;
   };
-  /**
-     * Export the CSS of the items to the style.
-     * @return {Scene} An instance itself
-     */
 
-
-  __proto.exportCSS = function (duration, parentState) {
+  __proto.toCSS = function (duration, parentState) {
     if (duration === void 0) {
       duration = this.getDuration();
     }
@@ -3792,7 +3779,6 @@ function (_super) {
       totalDuration = 0;
     }
 
-    var isParent = !!parentState;
     var styles = [];
 
     var state = __assign({}, this.state);
@@ -3814,11 +3800,20 @@ function (_super) {
     }
 
     for (var id in items) {
-      styles.push(items[id].exportCSS(totalDuration, state));
+      styles.push(items[id].toCSS(totalDuration, state));
     }
 
-    var css = styles.join("");
-    !isParent && exportCSS(getRealId(this), css);
+    return styles.join("");
+  };
+  /**
+   * Export the CSS of the items to the style.
+   * @return {Scene} An instance itself
+   */
+
+
+  __proto.exportCSS = function (duration, parentState) {
+    var css = this.toCSS(duration, parentState);
+    !parentState && exportCSS(getRealId(this), css);
     return css;
   };
 
@@ -3882,24 +3877,24 @@ function (_super) {
     return animtionElement;
   };
   /**
-    * Play using the css animation and keyframes.
-    * @param {boolean} [exportCSS=true] Check if you want to export css.
-    * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
-    * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
-    * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
-    * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
-    * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
-    * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
-    * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
-    * @return {Scene} An instance itself
-    * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
-    * @example
+  * Play using the css animation and keyframes.
+  * @param {boolean} [exportCSS=true] Check if you want to export css.
+  * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
+  * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
+  * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
+  * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
+  * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
+  * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
+  * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+  * @return {Scene} An instance itself
+  * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
+  * @example
   scene.playCSS();
   scene.playCSS(false, {
-    direction: "reverse",
-    fillMode: "forwards",
+  direction: "reverse",
+  fillMode: "forwards",
   });
-    */
+  */
 
 
   __proto.playCSS = function (isExportCSS, properties) {
@@ -3950,7 +3945,7 @@ function (_super) {
         this.setItem(name, object);
         item = object;
       } else if (isFunction(object) && isSelector) {
-        var elements = document.querySelectorAll(name);
+        var elements = IS_WINDOW ? document.querySelectorAll(name) : [];
         var length = elements.length;
         var scene = new Scene();
 
@@ -3994,11 +3989,11 @@ function (_super) {
       frames[id] = item.animate(Math.max(iterationTime * item.getPlaySpeed() - item.getDelay(), 0), easing);
     }
     /**
-         * This event is fired when timeupdate and animate.
-         * @param {Number} param.currentTime The total time that the animator is running.
-         * @param {Number} param.time The iteration time during duration that the animator is running.
-         * @param {Frame} param.frames frame of that time.
-         */
+     * This event is fired when timeupdate and animate.
+     * @param {Number} param.currentTime The total time that the animator is running.
+     * @param {Number} param.time The iteration time during duration that the animator is running.
+     * @param {Frame} param.frames frame of that time.
+     */
 
 
     this.trigger(ANIMATE, {
@@ -4355,10 +4350,10 @@ function blink(_a) {
 * @static
 * @type {string}
 * @example
-* Scene.VERSION // 1.0.0-beta12
+* Scene.VERSION // 1.0.0-beta13
 */
 
-var VERSION = "1.0.0-beta12";
+var VERSION = "1.0.0-beta13";
 
 export default Scene;
 export { VERSION, SceneItem, Frame, Animator, Keyframes, PropertyObject, bezier, EASE_IN_OUT, EASE_IN, EASE_OUT, EASE, LINEAR, steps, STEP_START, STEP_END, set, transition, wipeIn, wipeOut, fadeIn, fadeOut, blink, zoomIn, zoomOut, OPTIONS, EVENTS, setRole, setAlias };

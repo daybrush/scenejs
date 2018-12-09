@@ -49,6 +49,8 @@ import {
   playCSS,
   toId,
   exportCSS,
+  getRealId,
+  makeId,
 } from "./utils";
 import Keyframes from "./Keyframes";
 import { dotValue } from "./utils/dot";
@@ -60,22 +62,9 @@ import {
   EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
-  ANIMATION, fromCSS, addClass, removeClass, hasClass, KEYFRAMES, requestAnimationFrame } from "@daybrush/utils";
+  ANIMATION, fromCSS, addClass, removeClass, hasClass,
+  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW } from "@daybrush/utils";
 
-function makeId(selector?: boolean) {
-  for (; ;) {
-    const id = `${Math.floor(Math.random() * 100000)}`;
-
-    if (!selector) {
-      return id;
-    }
-    const checkElement = document.querySelector(`[data-scene-id="${id}"]`);
-
-    if (!checkElement) {
-      return id;
-    }
-  }
-}
 function makeAnimationProperties(properties: ObjectInterface&lt;string | number>) {
   const cssArray = [];
 
@@ -156,7 +145,7 @@ const item = new SceneItem();
 item.setId("item");
 console.log(item.getId()); // item
 	*/
-  public setId(id?: string) {
+  public setId(id?: number | string) {
     const elements = this.elements;
     const length = elements.length;
 
@@ -286,7 +275,7 @@ item.set(item.getDuration(), {
 	}
 });
 	*/
-  public append(item: SceneItem | object) {
+  public append(item: SceneItem | ObjectInterface&lt;any>) {
     this.set(this.getDuration(), item);
     return this;
   }
@@ -295,7 +284,7 @@ item.set(item.getDuration(), {
 	* @param {SceneItem | object} item - the scene item or item object
 	* @return {Scene.SceneItem} An instance itself
 	*/
-  public prepend(item: SceneItem | object) {
+  public prepend(item: SceneItem | ObjectInterface&lt;any>) {
     if (item instanceof SceneItem) {
       const delay = item.getDelay();
       const duration = item.getIterationCount() === INFINITE ? item.getDuration() : item.getActiveDuration();
@@ -322,16 +311,18 @@ item.set(item.getDuration(), {
 item.setSelector("#id.class");
 	*/
   public setSelector(selector: boolean | string) {
-    this.state.selector = selector === true ? this.state.id :
-      (selector || `[data-scene-id="${this.state.id}"]`);
+    const state = this.state;
 
-    const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(this.state.selector);
+    state.selector = selector === true ? state.id :
+      (selector || `[data-scene-id="${state.id}"]`);
+
+    const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(state.selector);
 
     if (matches) {
-      this.state.selector = matches[1];
-      this.state.peusdo = matches[2];
+      state.selector = matches[1];
+      state.peusdo = matches[2];
     }
-    this.setElement(document.querySelectorAll(this.state.selector));
+    IS_WINDOW &amp;&amp; this.setElement(document.querySelectorAll(state.selector));
     return this;
   }
   /**
@@ -553,7 +544,7 @@ const frame = item.getNowFrame(1.7);
     const realEasing = this._getEasing(time, left, right, this.getEasing() || easing);
 
     names.forEach(properties => {
-      const value = this._getNowValue(time, left, right, properties, realEasing);
+      const value = this._getNowValue(time, properties, left, right, realEasing);
 
       if (isUndefined(value)) {
         return;
@@ -665,10 +656,18 @@ const frame = item.getNowFrame(1.7);
         if (!frames[keyvalue]) {
           const frame = this.getFrame(keyvalue);
 
-          if (!frame || j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
+          if (!frame || j === 0 || j === length - 1) {
             frames[keyvalue] = this.getNowFrame(keyvalue);
           } else {
-            frames[keyvalue] = frame;
+            frames[keyvalue] = frame.clone();
+            const isTransform = frame.has("transform");
+            const isFilter = frame.has("filter");
+            if (isTransform || isFilter) {
+              const nowFrame = this.getNowFrame(keyvalue);
+
+              isTransform &amp;&amp; frames[keyvalue].remove("transform").set("transform", nowFrame.raw("transform"));
+              isFilter &amp;&amp; frames[keyvalue].remove("filter").set("filter", nowFrame.raw("filter"));
+            }
           }
         }
       }
@@ -699,8 +698,9 @@ item.setCSS(0, ["opacity", "width", "height"]);
       return "";
     }
     const peusdo = state.peusdo || "";
-    const id = this._getId();
+    const id = getRealId(this);
     // infinity or zero
+    const isInfinite = state[ITERATION_COUNT] === "infinite";
     const isParent = !isUndefined(options[ITERATION_COUNT]);
     const isZeroDuration = parentDuration === 0;
     const duration = isZeroDuration ? this.getDuration() : parentDuration;
@@ -708,9 +708,10 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const delay = ((options[DELAY] || 0) + (isZeroDuration ? state[DELAY] : 0)) / playSpeed;
     const easingName = (state[EASING] &amp;&amp; state[EASING_NAME]) ||
       (isParent &amp;&amp; options[EASING] &amp;&amp; options[EASING_NAME]) || state[EASING_NAME];
-    const iterationCount = (!isZeroDuration &amp;&amp; options[ITERATION_COUNT]) || state[ITERATION_COUNT];
+    const iterationCount = isInfinite ? "infinite" :
+      (!isZeroDuration &amp;&amp; options[ITERATION_COUNT]) || state[ITERATION_COUNT];
     const fillMode = (options[FILL_MODE] !== "forwards" &amp;&amp; options[FILL_MODE]) || state[FILL_MODE];
-    const direction = options[DIRECTION] || state[DIRECTION];
+    const direction = isInfinite ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
     const cssText = makeAnimationProperties({
       fillMode,
       direction,
@@ -730,14 +731,14 @@ item.setCSS(0, ["opacity", "width", "height"]);
 
     return css;
   }
-  public exportCSS(duration = this.getDuration(), options: StateInterface = {}) {
+  public exportCSS(duration?: number, options?: StateInterface) {
     if (!this.elements.length) {
       return "";
     }
     const css = this.toCSS(duration, options);
-    const isParent = !isUndefined(options[ITERATION_COUNT]);
+    const isParent = options &amp;&amp; !isUndefined(options[ITERATION_COUNT]);
 
-    !isParent &amp;&amp; exportCSS(this._getId(), css);
+    !isParent &amp;&amp; exportCSS(getRealId(this), css);
     return css;
   }
   public pause() {
@@ -834,19 +835,16 @@ item.playCSS(false, {
     }
     return elements[0];
   }
-  private _getId() {
-    return this.state.id || this.setId().getId();
-  }
   private _getEasing(time: number, left: number, right: number, easing: EasingType) {
     if (this.keyframes.hasName(TIMING_FUNCTION)) {
-      const nowEasing = this._getNowValue(time, left, right, [TIMING_FUNCTION], 0, true);
+      const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
 
-      return typeof nowEasing === "function" ? nowEasing : easing;
+      return isFunction(nowEasing) ? nowEasing : easing;
     }
     return easing;
   }
   private _toKeyframes(duration = this.getDuration(), isParent: boolean) {
-    const id = this._getId();
+    const id = getRealId(this);
     const state = this.state;
     const playSpeed = state[PLAY_SPEED];
     const iterationCount = state[ITERATION_COUNT];
@@ -898,9 +896,9 @@ item.playCSS(false, {
   }
   private _getNowValue(
     time: number,
+    properties: string[],
     left: number,
     right: number,
-    properties: string[],
     easing: EasingType = this.getEasing(),
     usePrevValue: boolean = isFixed(properties),
   ) {
@@ -908,10 +906,10 @@ item.playCSS(false, {
     const times = keyframes.times;
     const length = times.length;
 
-    let prevTime;
-    let nextTime;
-    let prevFrame;
-    let nextFrame;
+    let prevTime: number;
+    let nextTime: number;
+    let prevFrame: Frame;
+    let nextFrame: Frame;
 
     for (let i = left; i >= 0; --i) {
       const frame = keyframes.get(times[i]);
@@ -1034,7 +1032,7 @@ nav li[file="sceneitem"] h4, nav li[file="sceneitem"] ul {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 0.2.1</a> on Sun Oct 28 2018 00:50:35 GMT+0900 (KST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 0.2.1</a> on Sun Dec 09 2018 15:19:01 GMT+0900 (Korean Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

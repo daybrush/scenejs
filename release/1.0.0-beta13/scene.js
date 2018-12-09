@@ -3,7 +3,7 @@ Copyright (c) 2018 Daybrush
 license: MIT
 author: Daybrush
 repository: https://github.com/daybrush/scenejs.git
-@version 1.0.0-beta12
+@version 1.0.0-beta13
 */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -109,8 +109,6 @@ repository: https://github.com/daybrush/scenejs.git
     var NORMAL = "normal";
     var INFINITE = "infinite";
     var PLAY_STATE = "playState";
-    var FUNCTION = "function";
-    var PROPERTY = "property";
     /**
     * option name list
     * @name Scene.OPTIONS
@@ -134,72 +132,343 @@ repository: https://github.com/daybrush/scenejs.git
 
     var EVENTS = [PAUSED, ENDED, TIMEUPDATE, ANIMATE, PLAY, ITERATION];
 
-    var prefixes = ["webkit", "ms", "moz", "o"];
+    /*
+    Copyright (c) 2018 Daybrush
+    license: MIT
+    author: Daybrush
+    repository: https://github.com/daybrush/utils
+    @version 0.4.0
+    */
 
-    var checkProperties =
+    /**
+    * @namespace
+    * @name Consts
+    */
+
+    /**
+    * get string "rgb"
+    * @memberof Color
+    * @example
+    import {RGB} from "@daybrush/utils";
+
+    console.log(RGB); // "rgb"
+    */
+    var RGB = "rgb";
+    /**
+    * get string "rgba"
+    * @memberof Color
+    * @example
+    import {RGBA} from "@daybrush/utils";
+
+    console.log(RGBA); // "rgba"
+    */
+
+    var RGBA = "rgba";
+    /**
+    * get string "hsl"
+    * @memberof Color
+    * @example
+    import {HSL} from "@daybrush/utils";
+
+    console.log(HSL); // "hsl"
+    */
+
+    var HSL = "hsl";
+    /**
+    * get string "hsla"
+    * @memberof Color
+    * @example
+    import {HSLA} from "@daybrush/utils";
+
+    console.log(HSLA); // "hsla"
+    */
+
+    var HSLA = "hsla";
+    /**
+    * gets an array of color models.
+    * @memberof Color
+    * @example
+    import {COLOR_MODELS} from "@daybrush/utils";
+
+    console.log(COLOR_MODELS); // ["rgb", "rgba", "hsl", "hsla"];
+    */
+
+    var COLOR_MODELS = [RGB, RGBA, HSL, HSLA];
+    /**
+    * get string "function"
+    * @memberof Consts
+    * @example
+    import {FUNCTION} from "@daybrush/utils";
+
+    console.log(FUNCTION); // "function"
+    */
+
+    var FUNCTION = "function";
+    /**
+    * get string "property"
+    * @memberof Consts
+    * @example
+    import {PROPERTY} from "@daybrush/utils";
+
+    console.log(PROPERTY); // "property"
+    */
+
+    var PROPERTY = "property";
+    /**
+    * get string "array"
+    * @memberof Consts
+    * @example
+    import {ARRAY} from "@daybrush/utils";
+
+    console.log(ARRAY); // "array"
+    */
+
+    var ARRAY = "array";
+    /**
+    * get string "object"
+    * @memberof Consts
+    * @example
+    import {OBJECT} from "@daybrush/utils";
+
+    console.log(OBJECT); // "object"
+    */
+
+    var OBJECT = "object";
+    /**
+    * get string "string"
+    * @memberof Consts
+    * @example
+    import {STRING} from "@daybrush/utils";
+
+    console.log(STRING); // "string"
+    */
+
+    var STRING = "string";
+    /**
+    * get string "number"
+    * @memberof Consts
+    * @example
+    import {NUMBER} from "@daybrush/utils";
+
+    console.log(NUMBER); // "number"
+    */
+
+    var NUMBER = "number";
+    /**
+    * get string "undefined"
+    * @memberof Consts
+    * @example
+    import {UNDEFINED} from "@daybrush/utils";
+
+    console.log(UNDEFINED); // "undefined"
+    */
+
+    var UNDEFINED = "undefined";
+    /**
+    * Check whether the environment is window or node.js.
+    * @memberof Consts
+    * @example
+    import {IS_WINDOW} from "@daybrush/utils";
+
+    console.log(IS_WINDOW); // false in node.js
+    console.log(IS_WINDOW); // true in browser
+    */
+
+    var IS_WINDOW = typeof window !== UNDEFINED;
+    var prefixes = ["webkit", "ms", "moz", "o"];
+    /**
+     * @namespace CrossBrowser
+     */
+
+    /**
+    * Get a CSS property with a vendor prefix that supports cross browser.
+    * @function
+    * @param {string} property - A CSS property
+    * @return {string} CSS property with cross-browser vendor prefix
+    * @memberof CrossBrowser
+    * @example
+    import {getCrossBrowserProperty} from "@daybrush/utils";
+
+    console.log(getCrossBrowserProperty("transform")); // "transform", "-ms-transform", "-webkit-transform"
+    console.log(getCrossBrowserProperty("filter")); // "filter", "-webkit-filter"
+    */
+
+    var getCrossBrowserProperty =
     /*#__PURE__*/
     function (property) {
-      if (typeof document === "undefined") {
+      if (typeof document === UNDEFINED) {
         return "";
       }
 
       var styles = (document.body || document.documentElement).style;
       var length = prefixes.length;
 
-      if (typeof styles[property] !== "undefined") {
+      if (typeof styles[property] !== UNDEFINED) {
         return property;
       }
 
       for (var i = 0; i < length; ++i) {
         var name = "-" + prefixes[i] + "-" + property;
 
-        if (typeof styles[name] !== "undefined") {
+        if (typeof styles[name] !== UNDEFINED) {
           return name;
         }
       }
 
       return "";
     };
+    /**
+    * get string "transfrom" with the vendor prefix.
+    * @memberof CrossBrowser
+    * @example
+    import {TRANSFORM} from "@daybrush/utils";
 
-    var RGB = "rgb";
-    var RGBA = "rgba";
-    var HSL = "hsl";
-    var HSLA = "hsla";
+    console.log(TRANSFORM); // "transform", "-ms-transform", "-webkit-transform"
+    */
+
+
     var TRANSFORM =
     /*#__PURE__*/
-    checkProperties("transform");
+    getCrossBrowserProperty("transform");
+    /**
+    * get string "filter" with the vendor prefix.
+    * @memberof CrossBrowser
+    * @example
+    import {FILTER} from "@daybrush/utils";
+
+    console.log(FILTER); // "filter", "-ms-filter", "-webkit-filter"
+    */
+
     var FILTER =
     /*#__PURE__*/
-    checkProperties("filter");
+    getCrossBrowserProperty("filter");
+    /**
+    * get string "animation" with the vendor prefix.
+    * @memberof CrossBrowser
+    * @example
+    import {ANIMATION} from "@daybrush/utils";
+
+    console.log(ANIMATION); // "animation", "-ms-animation", "-webkit-animation"
+    */
+
     var ANIMATION =
     /*#__PURE__*/
-    checkProperties("animation");
+    getCrossBrowserProperty("animation");
+    /**
+    * get string "keyframes" with the vendor prefix.
+    * @memberof CrossBrowser
+    * @example
+    import {KEYFRAMES} from "@daybrush/utils";
+
+    console.log(KEYFRAMES); // "keyframes", "-ms-keyframes", "-webkit-keyframes"
+    */
+
     var KEYFRAMES =
     /*#__PURE__*/
     ANIMATION.replace("animation", "keyframes");
+    /**
+    * @namespace
+    * @name Utils
+    */
+
+    /**
+    * Check the type that the value is undefined.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {boolean} true if the type is correct, false otherwise
+    * @example
+    import {isUndefined} from "@daybrush/utils";
+
+    console.log(isUndefined(undefined)); // true
+    console.log(isUndefined("")); // false
+    console.log(isUndefined(1)); // false
+    console.log(isUndefined(null)); // false
+    */
 
     function isUndefined(value) {
-      return typeof value === "undefined";
+      return typeof value === UNDEFINED;
     }
+    /**
+    * Check the type that the value is object.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {boolean} true if the type is correct, false otherwise
+    * @example
+    import {isObject} from "@daybrush/utils";
+
+    console.log(isObject({})); // true
+    console.log(isObject(undefined)); // false
+    console.log(isObject("")); // false
+    console.log(isObject(null)); // false
+    */
+
 
     function isObject(value) {
-      return value && typeof value === "object";
+      return value && typeof value === OBJECT;
     }
+    /**
+    * Check the type that the value is isArray.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {boolean} true if the type is correct, false otherwise
+    * @example
+    import {isArray} from "@daybrush/utils";
+
+    console.log(isArray([])); // true
+    console.log(isArray({})); // false
+    console.log(isArray(undefined)); // false
+    console.log(isArray(null)); // false
+    */
+
 
     function isArray(value) {
       return Array.isArray(value);
     }
+    /**
+    * Check the type that the value is string.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {boolean} true if the type is correct, false otherwise
+    * @example
+    import {isString} from "@daybrush/utils";
+
+    console.log(isString("1234")); // true
+    console.log(isString(undefined)); // false
+    console.log(isString(1)); // false
+    console.log(isString(null)); // false
+    */
+
 
     function isString(value) {
-      return typeof value === "string";
+      return typeof value === STRING;
+    }
+    /**
+    * Check the type that the value is function.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {boolean} true if the type is correct, false otherwise
+    * @example
+    import {isFunction} from "@daybrush/utils";
+
+    console.log(isFunction(function a() {})); // true
+    console.log(isFunction(() => {})); // true
+    console.log(isFunction("1234")); // false
+    console.log(isFunction(1)); // false
+    console.log(isFunction(null)); // false
+    */
+
+
+    function isFunction(value) {
+      return typeof value === FUNCTION;
     }
     /**
     * divide text by space.
-    * @memberof Property
-    * @function splitSpace
-    * @param {String} text - text to divide
+    * @memberof Utils
+    * @param {string} text - text to divide
     * @return {Array} divided texts
     * @example
+    import {spliceSpace} from "@daybrush/utils";
+
     console.log(splitSpace("a b c d e f g"));
     // ["a", "b", "c", "d", "e", "f", "g"]
     console.log(splitSpace("'a,b' c 'd,e' f g"));
@@ -214,11 +483,12 @@ repository: https://github.com/daybrush/scenejs.git
     }
     /**
     * divide text by comma.
-    * @memberof Property
-    * @function splitComma
-    * @param {String} text - text to divide
+    * @memberof Utils
+    * @param {string} text - text to divide
     * @return {Array} divided texts
     * @example
+    import {splitComma} from "@daybrush/utils";
+
     console.log(splitComma("a,b,c,d,e,f,g"));
     // ["a", "b", "c", "d", "e", "f", "g"]
     console.log(splitComma("'a,b',c,'d,e',f,g"));
@@ -234,6 +504,20 @@ repository: https://github.com/daybrush/scenejs.git
         return str.trim();
       }) : [];
     }
+    /**
+    * divide text by bracket "(", ")".
+    * @memberof Utils
+    * @param {string} text - text to divide
+    * @return {object} divided texts
+    * @example
+    import {splitBracket} from "@daybrush/utils";
+
+    console.log(splitBracket("a(1, 2)"));
+    // {prefix: "a", value: "1, 2", suffix: ""}
+    console.log(splitBracket("a(1, 2)b"));
+    // {prefix: "a", value: "1, 2", suffix: "b"}
+    */
+
 
     function splitBracket(text) {
       var matches = /([^(]*)\(([\s\S]*)\)([\s\S]*)/g.exec(text);
@@ -248,6 +532,22 @@ repository: https://github.com/daybrush/scenejs.git
         };
       }
     }
+    /**
+    * divide text by number and unit.
+    * @memberof Utils
+    * @param {string} text - text to divide
+    * @return {object} divided texts
+    * @example
+    import {splitUnit} from "@daybrush/utils";
+
+    console.log(splitUnit("10px"));
+    // {prefix: "", value: 10, unit: "px"}
+    console.log(splitUnit("-10px"));
+    // {prefix: "", value: -10, unit: "px"}
+    console.log(splitUnit("a10%"));
+    // {prefix: "a", value: 10, unit: "%"}
+    */
+
 
     function splitUnit(text) {
       var matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
@@ -269,28 +569,82 @@ repository: https://github.com/daybrush/scenejs.git
         value: parseFloat(value)
       };
     }
+    /**
+    * transform strings to camel-case
+    * @memberof Utils
+    * @param {String} text - string
+    * @return {String} camel-case string
+    * @example
+    import {camelize} from "@daybrush/utils";
+
+    console.log(camelize("transform-origin")); // transformOrigin
+    console.log(camelize("abcd_efg")); // abcdEfg
+    console.log(camelize("abcd efg")); // abcdEfg
+    */
+
 
     function camelize(str) {
       return str.replace(/[\s-_]([a-z])/g, function (all, letter) {
         return letter.toUpperCase();
       });
     }
+    /**
+    * transform a camelized string into a lowercased string.
+    * @memberof Utils
+    * @param {string} text - a camel-cased string
+    * @param {string} [separator="-"] - a separator
+    * @return {string}  a lowercased string
+    * @example
+    import {decamelize} from "@daybrush/utils";
 
-    function decamelize(str) {
+    console.log(decamelize("transformOrigin")); // transform-origin
+    console.log(decamelize("abcdEfg", "_")); // abcd_efg
+    */
+
+
+    function decamelize(str, separator) {
+      if (separator === void 0) {
+        separator = "-";
+      }
+
       return str.replace(/([a-z])([A-Z])/g, function (all, letter, letter2) {
-        return letter + "-" + letter2.toLowerCase();
+        return "" + letter + separator + letter2.toLowerCase();
       });
     }
+    /**
+    * Date.now() method
+    * @memberof CrossBrowser
+    * @return {number} milliseconds
+    * @example
+    import {now} from "@daybrush/utils";
+
+    console.log(now()); // 12121324241(milliseconds)
+    */
+
 
     function now() {
       return Date.now ? Date.now() : new Date().getTime();
     }
+    /**
+    * window.requestAnimationFrame() method with cross browser.
+    * @function
+    * @memberof CrossBrowser
+    * @param {FrameRequestCallback} callback - The function to call when it's time to update your animation for the next repaint.
+    * @return {number} id
+    * @example
+    import {requestAnimationFrame} from "@daybrush/utils";
+
+    requestAnimationFrame((timestamp) => {
+      console.log(timestamp);
+    });
+    */
+
 
     var requestAnimationFrame =
     /*#__PURE__*/
     function () {
       var firstTime = now();
-      var raf = typeof window !== "undefined" && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame);
+      var raf = IS_WINDOW && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame);
       return raf ? raf.bind(window) : function (callback) {
         var currTime = now();
         var id = window.setTimeout(function () {
@@ -304,20 +658,20 @@ repository: https://github.com/daybrush/scenejs.git
     * @name Color
     */
 
-
-    var COLOR_MODELS = [RGB, RGBA, HSL, HSLA];
     /**
     * Remove the # from the hex color.
     * @memberof Color
-    * @param {String} hex - hex color
-    * @return {String} hex color
+    * @param {string} hex - hex color
+    * @return {string} hex color
     * @example
-    console.log(cutHex("#000000"))
-    // "000000"
+    import {cutHex} from "@daybrush/utils";
+
+    console.log(cutHex("#000000")) // "000000"
     */
 
+
     function cutHex(hex) {
-      return hex.charAt(0) === "#" ? hex.substring(1) : hex;
+      return hex.replace("#", "");
     }
     /**
     * convert hex color to rgb color.
@@ -325,10 +679,12 @@ repository: https://github.com/daybrush/scenejs.git
     * @param {String} hex - hex color
     * @return {Array} rgb color
     * @example
-    console.log(hexToRGB("#000000"));
-    // [0, 0, 0]
-    console.log(hexToRGB("#201045"));
-    // [32, 16, 69]
+    import {hexToRGBA} from "@daybrush/utils";
+
+    console.log(hexToRGBA("#00000005"));
+    // [0, 0, 0, 1]
+    console.log(hexToRGBA("#201045"));
+    // [32, 16, 69, 1]
     */
 
 
@@ -346,31 +702,36 @@ repository: https://github.com/daybrush/scenejs.git
       return [r, g, b, a];
     }
     /**
-    * convert 3-digit hex color to 6-digit hex color.
+    * convert 3(or 4)-digit hex color to 6(or 8)-digit hex color.
     * @memberof Color
-    * @param {String} hex - 3-digit hex color
-    * @return {String} 6-digit hex color
+    * @param {String} hex - 3(or 4)-digit hex color
+    * @return {String} 6(or 8)-digit hex color
     * @example
-    console.log(hex3to6("#123"));
-    // "#112233"
+    import {toFullHex} from "@daybrush/utils";
+
+    console.log(toFullHex("#123")); // "#112233"
+    console.log(toFullHex("#123a")); // "#112233aa"
     */
 
 
-    function hex3to6(h) {
+    function toFullHex(h) {
       var r = h.charAt(1);
       var g = h.charAt(2);
       var b = h.charAt(3);
-      var arr = ["#", r, r, g, g, b, b];
+      var a = h.charAt(4);
+      var arr = ["#", r, r, g, g, b, b, a, a];
       return arr.join("");
     }
     /**
-    * convert hsl color to rgb color.
+    * convert hsl color to rgba color.
     * @memberof Color
     * @param {Array} hsl(a) - hsl color(hue: 0 ~ 360, saturation: 0 ~ 1, lightness: 0 ~ 1, alpha: 0 ~ 1)
-    * @return {Array} rgb color
+    * @return {Array} rgba color
     * @example
-    console.log(hslToRGB([150, 0.5, 0.4]));
-    // [51, 153, 102]
+    import {hslToRGBA} from "@daybrush/utils";
+
+    console.log(hslToRGBA([150, 0.5, 0.4]));
+    // [51, 153, 102, 1]
     */
 
 
@@ -409,15 +770,21 @@ repository: https://github.com/daybrush/scenejs.git
     /**
     * convert string to rgba color.
     * @memberof Color
-    * @param {String} - Hex(rgb, rgba) or RGB(A), or HSL(A)
+    * @param {String} - 3-hex(#000), 4-hex(#0000) 6-hex(#000000), 8-hex(#00000000) or RGB(A), or HSL(A)
     * @return {Array} rgba color
+    * @example
+    import {stringToRGBA} from "@daybrush/utils";
+
+    console.log(stringToRGBA("#000000")); // [0, 0, 0, 1]
+    console.log(stringToRGBA("rgb(100, 100, 100)")); // [100, 100, 100, 1]
+    console.log(stringToRGBA("hsl(150, 0.5, 0.4)")); // [51, 153, 102, 1]
     */
 
 
     function stringToRGBA(color) {
       if (color.charAt(0) === "#") {
-        if (color.length === 4) {
-          return hexToRGBA(hex3to6(color));
+        if (color.length === 4 || color.length === 5) {
+          return hexToRGBA(toFullHex(color));
         } else {
           return hexToRGBA(color);
         }
@@ -461,6 +828,22 @@ repository: https://github.com/daybrush/scenejs.git
 
       return;
     }
+    /**
+     * @namespace DOM
+     */
+
+    /**
+    * Checks if the specified class value exists in the element's class attribute.
+    * @memberof DOM
+    * @param {HTMLElement} element - target
+    * @param {string} className - the class name to search
+    * @return {boolean} return false if the class is not found.
+    * @example
+    import {hasClass} from "@daybrush/utils";
+
+    console.log(hasClass(element, "start")); // true or false
+    */
+
 
     function hasClass(element, className) {
       if (element.classList) {
@@ -469,6 +852,17 @@ repository: https://github.com/daybrush/scenejs.git
 
       return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
     }
+    /**
+    * Add the specified class value. If these classe already exist in the element's class attribute they are ignored.
+    * @memberof DOM
+    * @param {HTMLElement} element - target
+    * @param {string} className - the class name to add
+    * @example
+    import {addClass} from "@daybrush/utils";
+
+    addClass(element, "start");
+    */
+
 
     function addClass(element, className) {
       if (element.classList) {
@@ -477,6 +871,17 @@ repository: https://github.com/daybrush/scenejs.git
         element.className += " " + className;
       }
     }
+    /**
+    * Removes the specified class value.
+    * @memberof DOM
+    * @param {HTMLElement} element - target
+    * @param {string} className - the class name to remove
+    * @example
+    import {removeClass} from "@daybrush/utils";
+
+    removeClass(element, "start");
+    */
+
 
     function removeClass(element, className) {
       if (element.classList) {
@@ -486,6 +891,18 @@ repository: https://github.com/daybrush/scenejs.git
         element.className = element.className.replace(reg, " ");
       }
     }
+    /**
+    * Gets the CSS properties from the element.
+    * @memberof DOM
+    * @param {HTMLElement | HTMLElement[]} elements - elements
+    * @param {string[]} properites - the CSS properties
+    * @return {object} returns CSS properties and values.
+    * @example
+    import {fromCSS} from "@daybrush/utils";
+
+    console.log(fromCSS(element, ["left", "opacity", "top"])); // {"left": "10px", "opacity": 1, "top": "10px"}
+    */
+
 
     function fromCSS(elements, properties) {
       if (!elements || !properties || !properties.length) {
@@ -1028,9 +1445,9 @@ repository: https://github.com/daybrush/scenejs.git
       __proto.init = function (value) {
         var type = typeof value;
 
-        if (type === "string") {
+        if (type === STRING) {
           this.value = value.split(this.options.separator);
-        } else if (type === "object") {
+        } else if (type === OBJECT) {
           this.value = value;
         } else {
           this.value = [value];
@@ -1042,6 +1459,9 @@ repository: https://github.com/daybrush/scenejs.git
       return PropertyObject;
     }();
 
+    function isPropertyObject(value) {
+      return value instanceof PropertyObject;
+    }
     function setAlias(name, alias) {
       ALIAS[name] = alias;
     }
@@ -1066,13 +1486,13 @@ repository: https://github.com/daybrush/scenejs.git
     function getType(value) {
       var type = typeof value;
 
-      if (type === "object") {
+      if (type === OBJECT) {
         if (isArray(value)) {
-          return "array";
-        } else if (value instanceof PropertyObject) {
-          return "property";
+          return ARRAY;
+        } else if (isPropertyObject(value)) {
+          return PROPERTY;
         }
-      } else if (type === "string" || type === "number") {
+      } else if (type === STRING || type === NUMBER) {
         return "value";
       }
 
@@ -1122,8 +1542,26 @@ repository: https://github.com/daybrush/scenejs.git
         document.body.insertAdjacentHTML("beforeend", "<style id=\"" + styleId + "\">" + css + "</style>");
       }
     }
+    function makeId(selector) {
+      for (;;) {
+        var id = "" + Math.floor(Math.random() * 10000000);
+
+        if (!IS_WINDOW || !selector) {
+          return id;
+        }
+
+        var checkElement = document.querySelector("[data-scene-id=\"" + id + "\"]");
+
+        if (!checkElement) {
+          return id;
+        }
+      }
+    }
+    function getRealId(item) {
+      return item.state.id || item.setId().getId();
+    }
     function toId(text) {
-      return text.match(/[0-9a-zA-Z]+/g).join("");
+      return ("" + text).match(/[0-9a-zA-Z]+/g).join("");
     }
     function playCSS(item, isExportCSS, properties) {
       if (properties === void 0) {
@@ -1642,12 +2080,13 @@ repository: https://github.com/daybrush/scenejs.git
         // fillMode : forwards, backwards, both, none
 
         var isReverse = isDirectionReverse(currentIterationCount, iterationCount, direction);
+        var isFiniteDuration = isFinite(duration);
 
-        if (isReverse) {
+        if (isFiniteDuration && isReverse) {
           currentIterationTime = duration - currentIterationTime;
         }
 
-        if (iterationCount !== INFINITE) {
+        if (isFiniteDuration && iterationCount !== INFINITE) {
           var isForwards = fillMode === "both" || fillMode === "forwards"; // fill forwards
 
           if (currentIterationCount >= iterationCount) {
@@ -1903,10 +2342,6 @@ repository: https://github.com/daybrush/scenejs.git
 
       return arrObj.join(" ");
     }
-
-    function isPropertyObject(value) {
-      return value instanceof PropertyObject;
-    }
     /* eslint-disable */
 
 
@@ -1931,9 +2366,9 @@ repository: https://github.com/daybrush/scenejs.git
           to[name] = toValue ? value.toValue() : value.clone();
         } else if (type === FUNCTION) {
           to[name] = toValue ? getValue([name], value()) : value;
-        } else if (type === "array") {
+        } else if (type === ARRAY) {
           to[name] = value.slice();
-        } else if (type === "object") {
+        } else if (type === OBJECT) {
           if (isObject(to[name]) && !isPropertyObject(to[name])) {
             merge(to[name], value, toValue);
           } else {
@@ -1949,6 +2384,10 @@ repository: https://github.com/daybrush/scenejs.git
     /* eslint-enable */
 
 
+    function getPropertyName(args) {
+      return args[0] in ALIAS ? ALIAS[args[0]] : args;
+    }
+
     function getValue(names, value) {
       var type = getType(value);
 
@@ -1958,7 +2397,7 @@ repository: https://github.com/daybrush/scenejs.git
         if (names[0] !== TIMING_FUNCTION) {
           return getValue(names, value());
         }
-      } else if (type === "object") {
+      } else if (type === OBJECT) {
         return clone(value, true);
       }
 
@@ -2010,7 +2449,7 @@ repository: https://github.com/daybrush/scenejs.git
         }
 
         var value = this.raw.apply(this, args);
-        return getValue(args[0] in ALIAS ? ALIAS[args[0]] : args, value);
+        return getValue(getPropertyName(args), value);
       };
 
       __proto.raw = function () {
@@ -2021,7 +2460,7 @@ repository: https://github.com/daybrush/scenejs.git
         }
 
         var properties = this.properties;
-        var params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+        var params = getPropertyName(args);
         var length = params.length;
 
         for (var i = 0; i < length; ++i) {
@@ -2052,7 +2491,7 @@ repository: https://github.com/daybrush/scenejs.git
         }
 
         var properties = this.properties;
-        var params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+        var params = getPropertyName(args);
         var length = params.length;
 
         if (!length) {
@@ -2175,7 +2614,7 @@ repository: https://github.com/daybrush/scenejs.git
         }
 
         var properties = this.properties;
-        var params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+        var params = getPropertyName(args);
         var length = params.length;
 
         if (!length) {
@@ -2203,8 +2642,7 @@ repository: https://github.com/daybrush/scenejs.git
 
       __proto.clone = function () {
         var frame = new Frame();
-        frame.merge(this);
-        return frame;
+        return frame.merge(this);
       };
       /**
         * merge one frame to other frame.
@@ -2787,22 +3225,6 @@ repository: https://github.com/daybrush/scenejs.git
       return value;
     }
 
-    function makeId(selector) {
-      for (;;) {
-        var id = "" + Math.floor(Math.random() * 100000);
-
-        if (!selector) {
-          return id;
-        }
-
-        var checkElement = document.querySelector("[data-scene-id=\"" + id + "\"]");
-
-        if (!checkElement) {
-          return id;
-        }
-      }
-    }
-
     function makeAnimationProperties(properties) {
       var cssArray = [];
 
@@ -3107,15 +3529,16 @@ repository: https://github.com/daybrush/scenejs.git
 
 
       __proto.setSelector = function (selector) {
-        this.state.selector = selector === true ? this.state.id : selector || "[data-scene-id=\"" + this.state.id + "\"]";
-        var matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(this.state.selector);
+        var state = this.state;
+        state.selector = selector === true ? state.id : selector || "[data-scene-id=\"" + state.id + "\"]";
+        var matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(state.selector);
 
         if (matches) {
-          this.state.selector = matches[1];
-          this.state.peusdo = matches[2];
+          state.selector = matches[1];
+          state.peusdo = matches[2];
         }
 
-        this.setElement(document.querySelectorAll(this.state.selector));
+        IS_WINDOW && this.setElement(document.querySelectorAll(state.selector));
         return this;
       };
       /**
@@ -3376,7 +3799,7 @@ repository: https://github.com/daybrush/scenejs.git
         var realEasing = this._getEasing(time, left, right, this.getEasing() || easing);
 
         names.forEach(function (properties) {
-          var value = _this._getNowValue(time, left, right, properties, realEasing);
+          var value = _this._getNowValue(time, properties, left, right, realEasing);
 
           if (isUndefined(value)) {
             return;
@@ -3532,10 +3955,18 @@ repository: https://github.com/daybrush/scenejs.git
             if (!frames[keyvalue]) {
               var frame = this.getFrame(keyvalue);
 
-              if (!frame || j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
+              if (!frame || j === 0 || j === length - 1) {
                 frames[keyvalue] = this.getNowFrame(keyvalue);
               } else {
-                frames[keyvalue] = frame;
+                frames[keyvalue] = frame.clone();
+                var isTransform = frame.has("transform");
+                var isFilter = frame.has("filter");
+
+                if (isTransform || isFilter) {
+                  var nowFrame = this.getNowFrame(keyvalue);
+                  isTransform && frames[keyvalue].remove("transform").set("transform", nowFrame.raw("transform"));
+                  isFilter && frames[keyvalue].remove("filter").set("filter", nowFrame.raw("filter"));
+                }
               }
             }
           }
@@ -3583,19 +4014,18 @@ repository: https://github.com/daybrush/scenejs.git
         }
 
         var peusdo = state.peusdo || "";
+        var id = getRealId(this); // infinity or zero
 
-        var id = this._getId(); // infinity or zero
-
-
+        var isInfinite = state[ITERATION_COUNT] === "infinite";
         var isParent = !isUndefined(options[ITERATION_COUNT]);
         var isZeroDuration = parentDuration === 0;
         var duration = isZeroDuration ? this.getDuration() : parentDuration;
         var playSpeed = options[PLAY_SPEED] || 1;
         var delay = ((options[DELAY] || 0) + (isZeroDuration ? state[DELAY] : 0)) / playSpeed;
         var easingName = state[EASING] && state[EASING_NAME] || isParent && options[EASING] && options[EASING_NAME] || state[EASING_NAME];
-        var iterationCount = !isZeroDuration && options[ITERATION_COUNT] || state[ITERATION_COUNT];
+        var iterationCount = isInfinite ? "infinite" : !isZeroDuration && options[ITERATION_COUNT] || state[ITERATION_COUNT];
         var fillMode = options[FILL_MODE] !== "forwards" && options[FILL_MODE] || state[FILL_MODE];
-        var direction = options[DIRECTION] || state[DIRECTION];
+        var direction = isInfinite ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
         var cssText = makeAnimationProperties({
           fillMode: fillMode,
           direction: direction,
@@ -3612,21 +4042,13 @@ repository: https://github.com/daybrush/scenejs.git
       };
 
       __proto.exportCSS = function (duration, options) {
-        if (duration === void 0) {
-          duration = this.getDuration();
-        }
-
-        if (options === void 0) {
-          options = {};
-        }
-
         if (!this.elements.length) {
           return "";
         }
 
         var css = this.toCSS(duration, options);
-        var isParent = !isUndefined(options[ITERATION_COUNT]);
-        !isParent && exportCSS(this._getId(), css);
+        var isParent = options && !isUndefined(options[ITERATION_COUNT]);
+        !isParent && exportCSS(getRealId(this), css);
         return css;
       };
 
@@ -3754,15 +4176,11 @@ repository: https://github.com/daybrush/scenejs.git
         return elements[0];
       };
 
-      __proto._getId = function () {
-        return this.state.id || this.setId().getId();
-      };
-
       __proto._getEasing = function (time, left, right, easing) {
         if (this.keyframes.hasName(TIMING_FUNCTION)) {
-          var nowEasing = this._getNowValue(time, left, right, [TIMING_FUNCTION], 0, true);
+          var nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
 
-          return typeof nowEasing === "function" ? nowEasing : easing;
+          return isFunction(nowEasing) ? nowEasing : easing;
         }
 
         return easing;
@@ -3773,8 +4191,7 @@ repository: https://github.com/daybrush/scenejs.git
           duration = this.getDuration();
         }
 
-        var id = this._getId();
-
+        var id = getRealId(this);
         var state = this.state;
         var playSpeed = state[PLAY_SPEED];
         var iterationCount = state[ITERATION_COUNT];
@@ -3832,7 +4249,7 @@ repository: https://github.com/daybrush/scenejs.git
         return "@" + KEYFRAMES + " " + PREFIX + "KEYFRAMES_" + toId(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
       };
 
-      __proto._getNowValue = function (time, left, right, properties, easing, usePrevValue) {
+      __proto._getNowValue = function (time, properties, left, right, easing, usePrevValue) {
         if (easing === void 0) {
           easing = this.getEasing();
         }
@@ -3978,29 +4395,29 @@ repository: https://github.com/daybrush/scenejs.git
     function (_super) {
       __extends(Scene, _super);
       /**
-        * @param {Object} [properties] - properties
-        * @param {AnimatorOptions} [options] - options
-        * @example
-        const scene = new Scene({
-            item1: {
-                0: {
-                    display: "none",
-                },
-                1: {
-                    display: "block",
-                    opacity: 0,
-                },
-                2: {
-                    opacity: 1,
-                },
-            },
-            item2: {
-                2: {
-                    opacity: 1,
-                },
-            }
-        });
-         */
+      * @param {Object} [properties] - properties
+      * @param {AnimatorOptions} [options] - options
+      * @example
+      const scene = new Scene({
+        item1: {
+          0: {
+            display: "none",
+          },
+          1: {
+            display: "block",
+            opacity: 0,
+          },
+          2: {
+            opacity: 1,
+          },
+        },
+        item2: {
+          2: {
+            opacity: 1,
+          },
+        }
+      });
+        */
 
 
       function Scene(properties, options) {
@@ -4066,27 +4483,28 @@ repository: https://github.com/daybrush/scenejs.git
         return this;
       };
       /**
-        * get item in scene by name
-        * @method Scene#getItem
-        * @param {string} name - item's name
-        * @return {Scene.SceneItem} item
-        * @example
+      * get item in scene by name
+      * @method Scene#getItem
+      * @param {string} name - The item's name
+      * @param {number} [index] - If item is added as function, it can be imported via index.
+      * @return {Scene | Scene.SceneItem} item
+      * @example
       const item = scene.getItem("item1")
-        */
+      */
 
 
       __proto.getItem = function (name) {
         return this.items[name];
       };
       /**
-        * create item in scene
-        * @method Scene#newItem
-        * @param {String} name - name of item to create
-        * @param {StateOptions} options - The option object of SceneItem
-        * @return {Sceme.SceneItem} Newly created item
-        * @example
+      * create item in scene
+      * @method Scene#newItem
+      * @param {String} name - name of item to create
+      * @param {StateOptions} options - The option object of SceneItem
+      * @return {Sceme.SceneItem} Newly created item
+      * @example
       const item = scene.newItem("item1")
-        */
+      */
 
 
       __proto.newItem = function (name, options) {
@@ -4104,19 +4522,16 @@ repository: https://github.com/daybrush/scenejs.git
         return item;
       };
       /**
-        * add a sceneItem to the scene
-        * @param {String} name - name of item to create
-        * @param {Scene.SceneItem} item - sceneItem
-        * @example
+      * add a sceneItem to the scene
+      * @param {String} name - name of item to create
+      * @param {Scene.SceneItem} item - sceneItem
+      * @example
       const item = scene.newItem("item1")
-        */
+      */
 
 
       __proto.setItem = function (name, item) {
-        if (item instanceof Animator) {
-          item.setId(name);
-        }
-
+        item.setId(name);
         this.items[name] = item;
         return this;
       };
@@ -4135,13 +4550,13 @@ repository: https://github.com/daybrush/scenejs.git
         return this;
       };
       /**
-         * executes a provided function once for each scene item.
-         * @param {Function} func Function to execute for each element, taking three arguments
-         * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
-         * @param {string} [func.name] The name of the item being processed in the scene.
-         * @param {object} [func.items] The object that forEach() is being applied to.
-         * @return {Scene} An instance itself
-         */
+       * executes a provided function once for each scene item.
+       * @param {Function} func Function to execute for each element, taking three arguments
+       * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
+       * @param {string} [func.name] The name of the item being processed in the scene.
+       * @param {object} [func.items] The object that forEach() is being applied to.
+       * @return {Scene} An instance itself
+       */
 
 
       __proto.forEach = function (func) {
@@ -4153,40 +4568,60 @@ repository: https://github.com/daybrush/scenejs.git
 
         return this;
       };
-      /**
-         * Export the CSS of the items to the style.
-         * @return {Scene} An instance itself
-         */
 
-
-      __proto.exportCSS = function (duration, state) {
+      __proto.toCSS = function (duration, parentState) {
         if (duration === void 0) {
           duration = this.getDuration();
         }
 
         var items = this.items;
-        var totalDuration = state ? this.getDuration() : duration;
+        var totalDuration = parentState ? this.getDuration() : duration;
 
         if (!totalDuration || !isFinite(totalDuration)) {
           totalDuration = 0;
         }
 
-        var isParent = !!state;
         var styles = [];
 
-        for (var id in items) {
-          var item = items[id];
-          styles.push(item.exportCSS(totalDuration, this.state));
+        var state = __assign({}, this.state);
+
+        if (parentState) {
+          var stateIterations = state[ITERATION_COUNT];
+          var parentIterations = parentState[ITERATION_COUNT];
+
+          if (parentIterations === "infinite") {
+            state[ITERATION_COUNT] = "infinite";
+          } else if (stateIterations !== "infinite") {
+            state[ITERATION_COUNT] = stateIterations * parentIterations;
+          }
+
+          if (!state[EASING]) {
+            state[EASING] = parentState[EASING];
+            state[EASING_NAME] = parentState[EASING_NAME];
+          }
         }
 
-        var css = styles.join("");
-        !isParent && exportCSS(this.getId() || this.setId().getId(), css);
+        for (var id in items) {
+          styles.push(items[id].toCSS(totalDuration, state));
+        }
+
+        return styles.join("");
+      };
+      /**
+       * Export the CSS of the items to the style.
+       * @return {Scene} An instance itself
+       */
+
+
+      __proto.exportCSS = function (duration, parentState) {
+        var css = this.toCSS(duration, parentState);
+        !parentState && exportCSS(getRealId(this), css);
         return css;
       };
 
       __proto.append = function (item) {
         item.setDelay(item.getDelay() + this.getDuration());
-        this.setItem(item.getId() || item.setId().getId(), item);
+        this.setItem(getRealId(item), item);
       };
 
       __proto.isPausedCSS = function () {
@@ -4244,24 +4679,24 @@ repository: https://github.com/daybrush/scenejs.git
         return animtionElement;
       };
       /**
-        * Play using the css animation and keyframes.
-        * @param {boolean} [exportCSS=true] Check if you want to export css.
-        * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
-        * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
-        * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
-        * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
-        * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
-        * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
-        * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
-        * @return {Scene} An instance itself
-        * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
-        * @example
+      * Play using the css animation and keyframes.
+      * @param {boolean} [exportCSS=true] Check if you want to export css.
+      * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
+      * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
+      * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
+      * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
+      * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
+      * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
+      * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+      * @return {Scene} An instance itself
+      * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
+      * @example
       scene.playCSS();
       scene.playCSS(false, {
-        direction: "reverse",
-        fillMode: "forwards",
+      direction: "reverse",
+      fillMode: "forwards",
       });
-        */
+      */
 
 
       __proto.playCSS = function (isExportCSS, properties) {
@@ -4298,7 +4733,7 @@ repository: https://github.com/daybrush/scenejs.git
           return this;
         }
 
-        var isSelector = options && options.selector;
+        var isSelector = options && options.selector || this.options.selector;
 
         for (var name in properties) {
           if (name === "options") {
@@ -4311,6 +4746,22 @@ repository: https://github.com/daybrush/scenejs.git
           if (object instanceof Scene || object instanceof SceneItem) {
             this.setItem(name, object);
             item = object;
+          } else if (isFunction(object) && isSelector) {
+            var elements = IS_WINDOW ? document.querySelectorAll(name) : [];
+            var length = elements.length;
+            var scene = new Scene();
+
+            for (var i = 0; i < length; ++i) {
+              var id = makeId();
+              scene.newItem("" + i, {
+                id: id,
+                selector: "[data-scene-id=\"" + id + "\"]",
+                elements: elements[i]
+              }).load(object(i));
+            }
+
+            this.setItem(name, scene);
+            continue;
           } else {
             item = this.newItem(name);
             item.load(object);
@@ -4340,11 +4791,11 @@ repository: https://github.com/daybrush/scenejs.git
           frames[id] = item.animate(Math.max(iterationTime * item.getPlaySpeed() - item.getDelay(), 0), easing);
         }
         /**
-             * This event is fired when timeupdate and animate.
-             * @param {Number} param.currentTime The total time that the animator is running.
-             * @param {Number} param.time The iteration time during duration that the animator is running.
-             * @param {Frame} param.frames frame of that time.
-             */
+         * This event is fired when timeupdate and animate.
+         * @param {Number} param.currentTime The total time that the animator is running.
+         * @param {Number} param.time The iteration time during duration that the animator is running.
+         * @param {Frame} param.frames frame of that time.
+         */
 
 
         this.trigger(ANIMATE, {
@@ -4701,10 +5152,10 @@ repository: https://github.com/daybrush/scenejs.git
     * @static
     * @type {string}
     * @example
-    * Scene.VERSION // 1.0.0-beta12
+    * Scene.VERSION // 1.0.0-beta13
     */
 
-    var VERSION = "1.0.0-beta12";
+    var VERSION = "1.0.0-beta13";
 
     var others = ({
         VERSION: VERSION,

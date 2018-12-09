@@ -3,7 +3,7 @@ Copyright (c) 2018 Daybrush
 license: MIT
 author: Daybrush
 repository: https://github.com/daybrush/scenejs.git
-@version 1.0.0-beta12
+@version 1.0.0-beta13
 */
 'use strict';
 
@@ -109,8 +109,6 @@ var ALTERNATE_REVERSE = "alternate-reverse";
 var NORMAL = "normal";
 var INFINITE = "infinite";
 var PLAY_STATE = "playState";
-var FUNCTION = "function";
-var PROPERTY = "property";
 /**
 * option name list
 * @name Scene.OPTIONS
@@ -649,9 +647,9 @@ function () {
   __proto.init = function (value) {
     var type = typeof value;
 
-    if (type === "string") {
+    if (type === utils.STRING) {
       this.value = value.split(this.options.separator);
-    } else if (type === "object") {
+    } else if (type === utils.OBJECT) {
       this.value = value;
     } else {
       this.value = [value];
@@ -663,6 +661,9 @@ function () {
   return PropertyObject;
 }();
 
+function isPropertyObject(value) {
+  return value instanceof PropertyObject;
+}
 function setAlias(name, alias) {
   ALIAS[name] = alias;
 }
@@ -687,13 +688,13 @@ function setRole(names, isProperty, isFixedProperty) {
 function getType(value) {
   var type = typeof value;
 
-  if (type === "object") {
+  if (type === utils.OBJECT) {
     if (utils.isArray(value)) {
-      return "array";
-    } else if (value instanceof PropertyObject) {
-      return "property";
+      return utils.ARRAY;
+    } else if (isPropertyObject(value)) {
+      return utils.PROPERTY;
     }
-  } else if (type === "string" || type === "number") {
+  } else if (type === utils.STRING || type === utils.NUMBER) {
     return "value";
   }
 
@@ -743,8 +744,26 @@ function exportCSS(id, css) {
     document.body.insertAdjacentHTML("beforeend", "<style id=\"" + styleId + "\">" + css + "</style>");
   }
 }
+function makeId(selector) {
+  for (;;) {
+    var id = "" + Math.floor(Math.random() * 10000000);
+
+    if (!utils.IS_WINDOW || !selector) {
+      return id;
+    }
+
+    var checkElement = document.querySelector("[data-scene-id=\"" + id + "\"]");
+
+    if (!checkElement) {
+      return id;
+    }
+  }
+}
+function getRealId(item) {
+  return item.state.id || item.setId().getId();
+}
 function toId(text) {
-  return text.match(/[0-9a-zA-Z]+/g).join("");
+  return ("" + text).match(/[0-9a-zA-Z]+/g).join("");
 }
 function playCSS(item, isExportCSS, properties) {
   if (properties === void 0) {
@@ -1263,12 +1282,13 @@ function (_super) {
     // fillMode : forwards, backwards, both, none
 
     var isReverse = isDirectionReverse(currentIterationCount, iterationCount, direction);
+    var isFiniteDuration = isFinite(duration);
 
-    if (isReverse) {
+    if (isFiniteDuration && isReverse) {
       currentIterationTime = duration - currentIterationTime;
     }
 
-    if (iterationCount !== INFINITE) {
+    if (isFiniteDuration && iterationCount !== INFINITE) {
       var isForwards = fillMode === "both" || fillMode === "forwards"; // fill forwards
 
       if (currentIterationCount >= iterationCount) {
@@ -1524,10 +1544,6 @@ function toInnerProperties(obj) {
 
   return arrObj.join(" ");
 }
-
-function isPropertyObject(value) {
-  return value instanceof PropertyObject;
-}
 /* eslint-disable */
 
 
@@ -1548,13 +1564,13 @@ function merge(to, from, toValue) {
     var value = from[name];
     var type = getType(value);
 
-    if (type === PROPERTY) {
+    if (type === utils.PROPERTY) {
       to[name] = toValue ? value.toValue() : value.clone();
-    } else if (type === FUNCTION) {
+    } else if (type === utils.FUNCTION) {
       to[name] = toValue ? getValue([name], value()) : value;
-    } else if (type === "array") {
+    } else if (type === utils.ARRAY) {
       to[name] = value.slice();
-    } else if (type === "object") {
+    } else if (type === utils.OBJECT) {
       if (utils.isObject(to[name]) && !isPropertyObject(to[name])) {
         merge(to[name], value, toValue);
       } else {
@@ -1570,16 +1586,20 @@ function merge(to, from, toValue) {
 /* eslint-enable */
 
 
+function getPropertyName(args) {
+  return args[0] in ALIAS ? ALIAS[args[0]] : args;
+}
+
 function getValue(names, value) {
   var type = getType(value);
 
-  if (type === PROPERTY) {
+  if (type === utils.PROPERTY) {
     return value.toValue();
-  } else if (type === FUNCTION) {
+  } else if (type === utils.FUNCTION) {
     if (names[0] !== TIMING_FUNCTION) {
       return getValue(names, value());
     }
-  } else if (type === "object") {
+  } else if (type === utils.OBJECT) {
     return clone(value, true);
   }
 
@@ -1631,7 +1651,7 @@ function () {
     }
 
     var value = this.raw.apply(this, args);
-    return getValue(args[0] in ALIAS ? ALIAS[args[0]] : args, value);
+    return getValue(getPropertyName(args), value);
   };
 
   __proto.raw = function () {
@@ -1642,7 +1662,7 @@ function () {
     }
 
     var properties = this.properties;
-    var params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+    var params = getPropertyName(args);
     var length = params.length;
 
     for (var i = 0; i < length; ++i) {
@@ -1673,7 +1693,7 @@ function () {
     }
 
     var properties = this.properties;
-    var params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+    var params = getPropertyName(args);
     var length = params.length;
 
     if (!length) {
@@ -1796,7 +1816,7 @@ function () {
     }
 
     var properties = this.properties;
-    var params = args[0] in ALIAS ? ALIAS[args[0]] : args;
+    var params = getPropertyName(args);
     var length = params.length;
 
     if (!length) {
@@ -1824,8 +1844,7 @@ function () {
 
   __proto.clone = function () {
     var frame = new Frame();
-    frame.merge(this);
-    return frame;
+    return frame.merge(this);
   };
   /**
     * merge one frame to other frame.
@@ -2353,15 +2372,15 @@ function dot(a1, a2, b1, b2) {
 
   var type1 = getType(a1);
   var type2 = getType(a2);
-  var isFunction1 = type1 === FUNCTION;
-  var isFunction2 = type2 === FUNCTION;
+  var isFunction1 = type1 === utils.FUNCTION;
+  var isFunction2 = type2 === utils.FUNCTION;
 
   if (isFunction1 || isFunction2) {
     return function () {
       return dot(isFunction1 ? toPropertyObject(a1()) : a1, isFunction2 ? toPropertyObject(a2()) : a2, b1, b2);
     };
   } else if (type1 === type2) {
-    if (type1 === PROPERTY) {
+    if (type1 === utils.PROPERTY) {
       return dotObject(a1, a2, b1, b2);
     } else if (type1 === "array") {
       return dotArray(a1, a2, b1, b2);
@@ -2406,22 +2425,6 @@ function dotValue(time, prevTime, nextTime, prevValue, nextValue, easing) {
   var ratio = easing((time - prevTime) / (nextTime - prevTime));
   var value = dot(prevValue, nextValue, ratio, 1 - ratio);
   return value;
-}
-
-function makeId(selector) {
-  for (;;) {
-    var id = "" + Math.floor(Math.random() * 100000);
-
-    if (!selector) {
-      return id;
-    }
-
-    var checkElement = document.querySelector("[data-scene-id=\"" + id + "\"]");
-
-    if (!checkElement) {
-      return id;
-    }
-  }
 }
 
 function makeAnimationProperties(properties) {
@@ -2728,15 +2731,16 @@ function (_super) {
 
 
   __proto.setSelector = function (selector) {
-    this.state.selector = selector === true ? this.state.id : selector || "[data-scene-id=\"" + this.state.id + "\"]";
-    var matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(this.state.selector);
+    var state = this.state;
+    state.selector = selector === true ? state.id : selector || "[data-scene-id=\"" + state.id + "\"]";
+    var matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(state.selector);
 
     if (matches) {
-      this.state.selector = matches[1];
-      this.state.peusdo = matches[2];
+      state.selector = matches[1];
+      state.peusdo = matches[2];
     }
 
-    this.setElement(document.querySelectorAll(this.state.selector));
+    utils.IS_WINDOW && this.setElement(document.querySelectorAll(state.selector));
     return this;
   };
   /**
@@ -2997,7 +3001,7 @@ function (_super) {
     var realEasing = this._getEasing(time, left, right, this.getEasing() || easing);
 
     names.forEach(function (properties) {
-      var value = _this._getNowValue(time, left, right, properties, realEasing);
+      var value = _this._getNowValue(time, properties, left, right, realEasing);
 
       if (utils.isUndefined(value)) {
         return;
@@ -3153,10 +3157,18 @@ function (_super) {
         if (!frames[keyvalue]) {
           var frame = this.getFrame(keyvalue);
 
-          if (!frame || j === 0 || j === length - 1 || frame.has("transform") || frame.has("filter")) {
+          if (!frame || j === 0 || j === length - 1) {
             frames[keyvalue] = this.getNowFrame(keyvalue);
           } else {
-            frames[keyvalue] = frame;
+            frames[keyvalue] = frame.clone();
+            var isTransform = frame.has("transform");
+            var isFilter = frame.has("filter");
+
+            if (isTransform || isFilter) {
+              var nowFrame = this.getNowFrame(keyvalue);
+              isTransform && frames[keyvalue].remove("transform").set("transform", nowFrame.raw("transform"));
+              isFilter && frames[keyvalue].remove("filter").set("filter", nowFrame.raw("filter"));
+            }
           }
         }
       }
@@ -3204,19 +3216,18 @@ function (_super) {
     }
 
     var peusdo = state.peusdo || "";
+    var id = getRealId(this); // infinity or zero
 
-    var id = this._getId(); // infinity or zero
-
-
+    var isInfinite = state[ITERATION_COUNT] === "infinite";
     var isParent = !utils.isUndefined(options[ITERATION_COUNT]);
     var isZeroDuration = parentDuration === 0;
     var duration = isZeroDuration ? this.getDuration() : parentDuration;
     var playSpeed = options[PLAY_SPEED] || 1;
     var delay = ((options[DELAY] || 0) + (isZeroDuration ? state[DELAY] : 0)) / playSpeed;
     var easingName = state[EASING] && state[EASING_NAME] || isParent && options[EASING] && options[EASING_NAME] || state[EASING_NAME];
-    var iterationCount = !isZeroDuration && options[ITERATION_COUNT] || state[ITERATION_COUNT];
+    var iterationCount = isInfinite ? "infinite" : !isZeroDuration && options[ITERATION_COUNT] || state[ITERATION_COUNT];
     var fillMode = options[FILL_MODE] !== "forwards" && options[FILL_MODE] || state[FILL_MODE];
-    var direction = options[DIRECTION] || state[DIRECTION];
+    var direction = isInfinite ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
     var cssText = makeAnimationProperties({
       fillMode: fillMode,
       direction: direction,
@@ -3233,21 +3244,13 @@ function (_super) {
   };
 
   __proto.exportCSS = function (duration, options) {
-    if (duration === void 0) {
-      duration = this.getDuration();
-    }
-
-    if (options === void 0) {
-      options = {};
-    }
-
     if (!this.elements.length) {
       return "";
     }
 
     var css = this.toCSS(duration, options);
-    var isParent = !utils.isUndefined(options[ITERATION_COUNT]);
-    !isParent && exportCSS(this._getId(), css);
+    var isParent = options && !utils.isUndefined(options[ITERATION_COUNT]);
+    !isParent && exportCSS(getRealId(this), css);
     return css;
   };
 
@@ -3375,15 +3378,11 @@ function (_super) {
     return elements[0];
   };
 
-  __proto._getId = function () {
-    return this.state.id || this.setId().getId();
-  };
-
   __proto._getEasing = function (time, left, right, easing) {
     if (this.keyframes.hasName(TIMING_FUNCTION)) {
-      var nowEasing = this._getNowValue(time, left, right, [TIMING_FUNCTION], 0, true);
+      var nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
 
-      return typeof nowEasing === "function" ? nowEasing : easing;
+      return utils.isFunction(nowEasing) ? nowEasing : easing;
     }
 
     return easing;
@@ -3394,8 +3393,7 @@ function (_super) {
       duration = this.getDuration();
     }
 
-    var id = this._getId();
-
+    var id = getRealId(this);
     var state = this.state;
     var playSpeed = state[PLAY_SPEED];
     var iterationCount = state[ITERATION_COUNT];
@@ -3453,7 +3451,7 @@ function (_super) {
     return "@" + utils.KEYFRAMES + " " + PREFIX + "KEYFRAMES_" + toId(id) + "{\n\t\t\t" + keyframes.join("\n") + "\n\t\t}";
   };
 
-  __proto._getNowValue = function (time, left, right, properties, easing, usePrevValue) {
+  __proto._getNowValue = function (time, properties, left, right, easing, usePrevValue) {
     if (easing === void 0) {
       easing = this.getEasing();
     }
@@ -3599,29 +3597,29 @@ var Scene =
 function (_super) {
   __extends(Scene, _super);
   /**
-    * @param {Object} [properties] - properties
-    * @param {AnimatorOptions} [options] - options
-    * @example
-    const scene = new Scene({
-        item1: {
-            0: {
-                display: "none",
-            },
-            1: {
-                display: "block",
-                opacity: 0,
-            },
-            2: {
-                opacity: 1,
-            },
-        },
-        item2: {
-            2: {
-                opacity: 1,
-            },
-        }
-    });
-     */
+  * @param {Object} [properties] - properties
+  * @param {AnimatorOptions} [options] - options
+  * @example
+  const scene = new Scene({
+    item1: {
+      0: {
+        display: "none",
+      },
+      1: {
+        display: "block",
+        opacity: 0,
+      },
+      2: {
+        opacity: 1,
+      },
+    },
+    item2: {
+      2: {
+        opacity: 1,
+      },
+    }
+  });
+    */
 
 
   function Scene(properties, options) {
@@ -3687,27 +3685,28 @@ function (_super) {
     return this;
   };
   /**
-    * get item in scene by name
-    * @method Scene#getItem
-    * @param {string} name - item's name
-    * @return {Scene.SceneItem} item
-    * @example
+  * get item in scene by name
+  * @method Scene#getItem
+  * @param {string} name - The item's name
+  * @param {number} [index] - If item is added as function, it can be imported via index.
+  * @return {Scene | Scene.SceneItem} item
+  * @example
   const item = scene.getItem("item1")
-    */
+  */
 
 
   __proto.getItem = function (name) {
     return this.items[name];
   };
   /**
-    * create item in scene
-    * @method Scene#newItem
-    * @param {String} name - name of item to create
-    * @param {StateOptions} options - The option object of SceneItem
-    * @return {Sceme.SceneItem} Newly created item
-    * @example
+  * create item in scene
+  * @method Scene#newItem
+  * @param {String} name - name of item to create
+  * @param {StateOptions} options - The option object of SceneItem
+  * @return {Sceme.SceneItem} Newly created item
+  * @example
   const item = scene.newItem("item1")
-    */
+  */
 
 
   __proto.newItem = function (name, options) {
@@ -3725,19 +3724,16 @@ function (_super) {
     return item;
   };
   /**
-    * add a sceneItem to the scene
-    * @param {String} name - name of item to create
-    * @param {Scene.SceneItem} item - sceneItem
-    * @example
+  * add a sceneItem to the scene
+  * @param {String} name - name of item to create
+  * @param {Scene.SceneItem} item - sceneItem
+  * @example
   const item = scene.newItem("item1")
-    */
+  */
 
 
   __proto.setItem = function (name, item) {
-    if (item instanceof Animator) {
-      item.setId(name);
-    }
-
+    item.setId(name);
     this.items[name] = item;
     return this;
   };
@@ -3756,13 +3752,13 @@ function (_super) {
     return this;
   };
   /**
-     * executes a provided function once for each scene item.
-     * @param {Function} func Function to execute for each element, taking three arguments
-     * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
-     * @param {string} [func.name] The name of the item being processed in the scene.
-     * @param {object} [func.items] The object that forEach() is being applied to.
-     * @return {Scene} An instance itself
-     */
+   * executes a provided function once for each scene item.
+   * @param {Function} func Function to execute for each element, taking three arguments
+   * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
+   * @param {string} [func.name] The name of the item being processed in the scene.
+   * @param {object} [func.items] The object that forEach() is being applied to.
+   * @return {Scene} An instance itself
+   */
 
 
   __proto.forEach = function (func) {
@@ -3774,40 +3770,60 @@ function (_super) {
 
     return this;
   };
-  /**
-     * Export the CSS of the items to the style.
-     * @return {Scene} An instance itself
-     */
 
-
-  __proto.exportCSS = function (duration, state) {
+  __proto.toCSS = function (duration, parentState) {
     if (duration === void 0) {
       duration = this.getDuration();
     }
 
     var items = this.items;
-    var totalDuration = state ? this.getDuration() : duration;
+    var totalDuration = parentState ? this.getDuration() : duration;
 
     if (!totalDuration || !isFinite(totalDuration)) {
       totalDuration = 0;
     }
 
-    var isParent = !!state;
     var styles = [];
 
-    for (var id in items) {
-      var item = items[id];
-      styles.push(item.exportCSS(totalDuration, this.state));
+    var state = __assign({}, this.state);
+
+    if (parentState) {
+      var stateIterations = state[ITERATION_COUNT];
+      var parentIterations = parentState[ITERATION_COUNT];
+
+      if (parentIterations === "infinite") {
+        state[ITERATION_COUNT] = "infinite";
+      } else if (stateIterations !== "infinite") {
+        state[ITERATION_COUNT] = stateIterations * parentIterations;
+      }
+
+      if (!state[EASING]) {
+        state[EASING] = parentState[EASING];
+        state[EASING_NAME] = parentState[EASING_NAME];
+      }
     }
 
-    var css = styles.join("");
-    !isParent && exportCSS(this.getId() || this.setId().getId(), css);
+    for (var id in items) {
+      styles.push(items[id].toCSS(totalDuration, state));
+    }
+
+    return styles.join("");
+  };
+  /**
+   * Export the CSS of the items to the style.
+   * @return {Scene} An instance itself
+   */
+
+
+  __proto.exportCSS = function (duration, parentState) {
+    var css = this.toCSS(duration, parentState);
+    !parentState && exportCSS(getRealId(this), css);
     return css;
   };
 
   __proto.append = function (item) {
     item.setDelay(item.getDelay() + this.getDuration());
-    this.setItem(item.getId() || item.setId().getId(), item);
+    this.setItem(getRealId(item), item);
   };
 
   __proto.isPausedCSS = function () {
@@ -3865,24 +3881,24 @@ function (_super) {
     return animtionElement;
   };
   /**
-    * Play using the css animation and keyframes.
-    * @param {boolean} [exportCSS=true] Check if you want to export css.
-    * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
-    * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
-    * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
-    * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
-    * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
-    * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
-    * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
-    * @return {Scene} An instance itself
-    * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
-    * @example
+  * Play using the css animation and keyframes.
+  * @param {boolean} [exportCSS=true] Check if you want to export css.
+  * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
+  * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
+  * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
+  * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
+  * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
+  * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
+  * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+  * @return {Scene} An instance itself
+  * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
+  * @example
   scene.playCSS();
   scene.playCSS(false, {
-    direction: "reverse",
-    fillMode: "forwards",
+  direction: "reverse",
+  fillMode: "forwards",
   });
-    */
+  */
 
 
   __proto.playCSS = function (isExportCSS, properties) {
@@ -3919,7 +3935,7 @@ function (_super) {
       return this;
     }
 
-    var isSelector = options && options.selector;
+    var isSelector = options && options.selector || this.options.selector;
 
     for (var name in properties) {
       if (name === "options") {
@@ -3932,6 +3948,22 @@ function (_super) {
       if (object instanceof Scene || object instanceof SceneItem) {
         this.setItem(name, object);
         item = object;
+      } else if (utils.isFunction(object) && isSelector) {
+        var elements = utils.IS_WINDOW ? document.querySelectorAll(name) : [];
+        var length = elements.length;
+        var scene = new Scene();
+
+        for (var i = 0; i < length; ++i) {
+          var id = makeId();
+          scene.newItem("" + i, {
+            id: id,
+            selector: "[data-scene-id=\"" + id + "\"]",
+            elements: elements[i]
+          }).load(object(i));
+        }
+
+        this.setItem(name, scene);
+        continue;
       } else {
         item = this.newItem(name);
         item.load(object);
@@ -3961,11 +3993,11 @@ function (_super) {
       frames[id] = item.animate(Math.max(iterationTime * item.getPlaySpeed() - item.getDelay(), 0), easing);
     }
     /**
-         * This event is fired when timeupdate and animate.
-         * @param {Number} param.currentTime The total time that the animator is running.
-         * @param {Number} param.time The iteration time during duration that the animator is running.
-         * @param {Frame} param.frames frame of that time.
-         */
+     * This event is fired when timeupdate and animate.
+     * @param {Number} param.currentTime The total time that the animator is running.
+     * @param {Number} param.time The iteration time during duration that the animator is running.
+     * @param {Frame} param.frames frame of that time.
+     */
 
 
     this.trigger(ANIMATE, {
@@ -4322,10 +4354,10 @@ function blink(_a) {
 * @static
 * @type {string}
 * @example
-* Scene.VERSION // 1.0.0-beta12
+* Scene.VERSION // 1.0.0-beta13
 */
 
-var VERSION = "1.0.0-beta12";
+var VERSION = "1.0.0-beta13";
 
 exports.VERSION = VERSION;
 exports.SceneItem = SceneItem;

@@ -3,7 +3,7 @@ Copyright (c) 2018 Daybrush
 license: MIT
 author: Daybrush
 repository: https://github.com/daybrush/scenejs.git
-@version 1.0.0-beta12
+@version 1.0.0-beta13
 */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -137,7 +137,7 @@ repository: https://github.com/daybrush/scenejs.git
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 0.3.0
+    @version 0.4.0
     */
 
     /**
@@ -264,6 +264,17 @@ repository: https://github.com/daybrush/scenejs.git
     */
 
     var UNDEFINED = "undefined";
+    /**
+    * Check whether the environment is window or node.js.
+    * @memberof Consts
+    * @example
+    import {IS_WINDOW} from "@daybrush/utils";
+
+    console.log(IS_WINDOW); // false in node.js
+    console.log(IS_WINDOW); // true in browser
+    */
+
+    var IS_WINDOW = typeof window !== UNDEFINED;
     var prefixes = ["webkit", "ms", "moz", "o"];
     /**
      * @namespace CrossBrowser
@@ -633,7 +644,7 @@ repository: https://github.com/daybrush/scenejs.git
     /*#__PURE__*/
     function () {
       var firstTime = now();
-      var raf = typeof window !== UNDEFINED && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame);
+      var raf = IS_WINDOW && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame);
       return raf ? raf.bind(window) : function (callback) {
         var currTime = now();
         var id = window.setTimeout(function () {
@@ -1535,7 +1546,7 @@ repository: https://github.com/daybrush/scenejs.git
       for (;;) {
         var id = "" + Math.floor(Math.random() * 10000000);
 
-        if (!selector) {
+        if (!IS_WINDOW || !selector) {
           return id;
         }
 
@@ -3527,7 +3538,7 @@ repository: https://github.com/daybrush/scenejs.git
           state.peusdo = matches[2];
         }
 
-        this.setElement(document.querySelectorAll(state.selector));
+        IS_WINDOW && this.setElement(document.querySelectorAll(state.selector));
         return this;
       };
       /**
@@ -4031,20 +4042,12 @@ repository: https://github.com/daybrush/scenejs.git
       };
 
       __proto.exportCSS = function (duration, options) {
-        if (duration === void 0) {
-          duration = this.getDuration();
-        }
-
-        if (options === void 0) {
-          options = {};
-        }
-
         if (!this.elements.length) {
           return "";
         }
 
         var css = this.toCSS(duration, options);
-        var isParent = !isUndefined(options[ITERATION_COUNT]);
+        var isParent = options && !isUndefined(options[ITERATION_COUNT]);
         !isParent && exportCSS(getRealId(this), css);
         return css;
       };
@@ -4392,29 +4395,29 @@ repository: https://github.com/daybrush/scenejs.git
     function (_super) {
       __extends(Scene, _super);
       /**
-        * @param {Object} [properties] - properties
-        * @param {AnimatorOptions} [options] - options
-        * @example
-        const scene = new Scene({
-            item1: {
-                0: {
-                    display: "none",
-                },
-                1: {
-                    display: "block",
-                    opacity: 0,
-                },
-                2: {
-                    opacity: 1,
-                },
-            },
-            item2: {
-                2: {
-                    opacity: 1,
-                },
-            }
-        });
-         */
+      * @param {Object} [properties] - properties
+      * @param {AnimatorOptions} [options] - options
+      * @example
+      const scene = new Scene({
+        item1: {
+          0: {
+            display: "none",
+          },
+          1: {
+            display: "block",
+            opacity: 0,
+          },
+          2: {
+            opacity: 1,
+          },
+        },
+        item2: {
+          2: {
+            opacity: 1,
+          },
+        }
+      });
+        */
 
 
       function Scene(properties, options) {
@@ -4480,8 +4483,8 @@ repository: https://github.com/daybrush/scenejs.git
         return this;
       };
       /**
-        * get item in scene by name
-        * @method Scene#getItem
+      * get item in scene by name
+      * @method Scene#getItem
       * @param {string} name - The item's name
       * @param {number} [index] - If item is added as function, it can be imported via index.
       * @return {Scene | Scene.SceneItem} item
@@ -4494,12 +4497,12 @@ repository: https://github.com/daybrush/scenejs.git
         return this.items[name];
       };
       /**
-        * create item in scene
-        * @method Scene#newItem
-        * @param {String} name - name of item to create
-        * @param {StateOptions} options - The option object of SceneItem
-        * @return {Sceme.SceneItem} Newly created item
-        * @example
+      * create item in scene
+      * @method Scene#newItem
+      * @param {String} name - name of item to create
+      * @param {StateOptions} options - The option object of SceneItem
+      * @return {Sceme.SceneItem} Newly created item
+      * @example
       const item = scene.newItem("item1")
       */
 
@@ -4519,12 +4522,12 @@ repository: https://github.com/daybrush/scenejs.git
         return item;
       };
       /**
-        * add a sceneItem to the scene
-        * @param {String} name - name of item to create
-        * @param {Scene.SceneItem} item - sceneItem
-        * @example
+      * add a sceneItem to the scene
+      * @param {String} name - name of item to create
+      * @param {Scene.SceneItem} item - sceneItem
+      * @example
       const item = scene.newItem("item1")
-        */
+      */
 
 
       __proto.setItem = function (name, item) {
@@ -4547,13 +4550,13 @@ repository: https://github.com/daybrush/scenejs.git
         return this;
       };
       /**
-         * executes a provided function once for each scene item.
-         * @param {Function} func Function to execute for each element, taking three arguments
-         * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
-         * @param {string} [func.name] The name of the item being processed in the scene.
-         * @param {object} [func.items] The object that forEach() is being applied to.
-         * @return {Scene} An instance itself
-         */
+       * executes a provided function once for each scene item.
+       * @param {Function} func Function to execute for each element, taking three arguments
+       * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
+       * @param {string} [func.name] The name of the item being processed in the scene.
+       * @param {object} [func.items] The object that forEach() is being applied to.
+       * @return {Scene} An instance itself
+       */
 
 
       __proto.forEach = function (func) {
@@ -4565,13 +4568,8 @@ repository: https://github.com/daybrush/scenejs.git
 
         return this;
       };
-      /**
-         * Export the CSS of the items to the style.
-         * @return {Scene} An instance itself
-         */
 
-
-      __proto.exportCSS = function (duration, parentState) {
+      __proto.toCSS = function (duration, parentState) {
         if (duration === void 0) {
           duration = this.getDuration();
         }
@@ -4583,7 +4581,6 @@ repository: https://github.com/daybrush/scenejs.git
           totalDuration = 0;
         }
 
-        var isParent = !!parentState;
         var styles = [];
 
         var state = __assign({}, this.state);
@@ -4605,11 +4602,20 @@ repository: https://github.com/daybrush/scenejs.git
         }
 
         for (var id in items) {
-          styles.push(items[id].exportCSS(totalDuration, state));
+          styles.push(items[id].toCSS(totalDuration, state));
         }
 
-        var css = styles.join("");
-        !isParent && exportCSS(getRealId(this), css);
+        return styles.join("");
+      };
+      /**
+       * Export the CSS of the items to the style.
+       * @return {Scene} An instance itself
+       */
+
+
+      __proto.exportCSS = function (duration, parentState) {
+        var css = this.toCSS(duration, parentState);
+        !parentState && exportCSS(getRealId(this), css);
         return css;
       };
 
@@ -4673,24 +4679,24 @@ repository: https://github.com/daybrush/scenejs.git
         return animtionElement;
       };
       /**
-        * Play using the css animation and keyframes.
-        * @param {boolean} [exportCSS=true] Check if you want to export css.
-        * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
-        * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
-        * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
-        * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
-        * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
-        * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
-        * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
-        * @return {Scene} An instance itself
-        * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
-        * @example
+      * Play using the css animation and keyframes.
+      * @param {boolean} [exportCSS=true] Check if you want to export css.
+      * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
+      * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
+      * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
+      * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
+      * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
+      * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
+      * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+      * @return {Scene} An instance itself
+      * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
+      * @example
       scene.playCSS();
       scene.playCSS(false, {
-        direction: "reverse",
-        fillMode: "forwards",
+      direction: "reverse",
+      fillMode: "forwards",
       });
-        */
+      */
 
 
       __proto.playCSS = function (isExportCSS, properties) {
@@ -4741,7 +4747,7 @@ repository: https://github.com/daybrush/scenejs.git
             this.setItem(name, object);
             item = object;
           } else if (isFunction(object) && isSelector) {
-            var elements = document.querySelectorAll(name);
+            var elements = IS_WINDOW ? document.querySelectorAll(name) : [];
             var length = elements.length;
             var scene = new Scene();
 
@@ -4785,11 +4791,11 @@ repository: https://github.com/daybrush/scenejs.git
           frames[id] = item.animate(Math.max(iterationTime * item.getPlaySpeed() - item.getDelay(), 0), easing);
         }
         /**
-             * This event is fired when timeupdate and animate.
-             * @param {Number} param.currentTime The total time that the animator is running.
-             * @param {Number} param.time The iteration time during duration that the animator is running.
-             * @param {Frame} param.frames frame of that time.
-             */
+         * This event is fired when timeupdate and animate.
+         * @param {Number} param.currentTime The total time that the animator is running.
+         * @param {Number} param.time The iteration time during duration that the animator is running.
+         * @param {Frame} param.frames frame of that time.
+         */
 
 
         this.trigger(ANIMATE, {
@@ -5146,10 +5152,10 @@ repository: https://github.com/daybrush/scenejs.git
     * @static
     * @type {string}
     * @example
-    * Scene.VERSION // 1.0.0-beta12
+    * Scene.VERSION // 1.0.0-beta13
     */
 
-    var VERSION = "1.0.0-beta12";
+    var VERSION = "1.0.0-beta13";
 
     var others = ({
         VERSION: VERSION,
