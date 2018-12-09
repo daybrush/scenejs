@@ -3,7 +3,7 @@ import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS,
 import PropertyObject from "./PropertyObject";
 import Scene from "./Scene";
 import SceneItem from "./SceneItem";
-import { isArray, ANIMATION, ARRAY, OBJECT, PROPERTY, STRING, NUMBER } from "@daybrush/utils";
+import { isArray, ANIMATION, ARRAY, OBJECT, PROPERTY, STRING, NUMBER, IS_WINDOW } from "@daybrush/utils";
 
 export function isPropertyObject(value: any): value is PropertyObject {
   return value instanceof PropertyObject;
@@ -92,7 +92,7 @@ export function makeId(selector?: boolean) {
   for (; ;) {
     const id = `${Math.floor(Math.random() * 10000000)}`;
 
-    if (!selector) {
+    if (!IS_WINDOW || !selector) {
       return id;
     }
     const checkElement = document.querySelector(`[data-scene-id="${id}"]`);

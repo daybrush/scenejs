@@ -580,10 +580,33 @@ describe("SceneItem Test", function() {
         });
         it("should check 'toCSS' method", () => {
             // Given
+            
             // When
             // Then
             // console.log(this.item.toCSS());
         });
+        it(`should check toCSS method with no element`, () => {
+			const scene = new SceneItem({
+                0: {
+                    width: "100px",
+                    height: "100px",
+                },
+                0.1: {
+                    width: "200px",
+                    height: "200px",
+                }
+			}, {
+				selector: ".noelement",
+			});
+
+			// when
+			const css = scene.toCSS();
+
+			// then
+			expect(css).to.be.have.string(".noelement.startAnimation");
+			expect(css).to.be.have.string(".noelement.pauseAnimation");
+			expect(css).to.be.have.string("width:200px;");
+		});
         it("should check 'setCSS' method", () => {
             // Given
             this.element.style.width = "200px";

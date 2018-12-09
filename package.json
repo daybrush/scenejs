@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "1.0.0-beta12",
+  "version": "1.0.0-beta13",
   "description": "Javascript Animation Library",
   "main": "dist/scene.common.js",
   "module": "dist/scene.esm.js",
@@ -98,6 +98,6 @@
     "webpack-cli": "^3.1.0"
   },
   "dependencies": {
-    "@daybrush/utils": "^0.3.0"
+    "@daybrush/utils": "^0.4.0"
   }
 }

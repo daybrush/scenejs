@@ -433,6 +433,30 @@ describe("Scene Test", function () {
 
 			scene.finish();
 		});
+		it(`should check toCSS method with no element`, () => {
+			const scene = new Scene({
+				".noelement": {
+					0: {
+						width: "100px",
+						height: "100px",
+					},
+					0.1: {
+						width: "200px",
+						height: "200px",
+					}
+				},
+			}, {
+				selector: true
+			});
+
+			// when
+			const css = scene.toCSS();
+
+			// then
+			expect(css).to.be.have.string(".noelement.startAnimation");
+			expect(css).to.be.have.string(".noelement.pauseAnimation");
+			expect(css).to.be.have.string("width:200px;");
+		});
 		it(`should check playCSS & finish method`, () => {
 			const scene = new Scene({
 				".test": {

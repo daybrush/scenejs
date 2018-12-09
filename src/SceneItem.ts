@@ -20,7 +20,7 @@ import {
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
-  KEYFRAMES, requestAnimationFrame, isFunction } from "@daybrush/utils";
+  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW } from "@daybrush/utils";
 
 function makeAnimationProperties(properties: ObjectInterface<string | number>) {
   const cssArray = [];
@@ -279,7 +279,7 @@ item.setSelector("#id.class");
       state.selector = matches[1];
       state.peusdo = matches[2];
     }
-    this.setElement(document.querySelectorAll(state.selector));
+    IS_WINDOW && this.setElement(document.querySelectorAll(state.selector));
     return this;
   }
   /**
@@ -688,12 +688,12 @@ item.setCSS(0, ["opacity", "width", "height"]);
 
     return css;
   }
-  public exportCSS(duration = this.getDuration(), options: StateInterface = {}) {
+  public exportCSS(duration: number, options?: StateInterface) {
     if (!this.elements.length) {
       return "";
     }
     const css = this.toCSS(duration, options);
-    const isParent = !isUndefined(options[ITERATION_COUNT]);
+    const isParent = options && !isUndefined(options[ITERATION_COUNT]);
 
     !isParent && exportCSS(getRealId(this), css);
     return css;
