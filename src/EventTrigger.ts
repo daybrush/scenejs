@@ -1,15 +1,12 @@
-import { isObject } from "@daybrush/utils";
+import { isObject, isArray } from "@daybrush/utils";
+import { EventInterface, CallbackType, EventParamterType, eachObjectF, eachArrayF } from "fjx";
 
-type CallbackType = (...args: any[]) => any;
-interface EventParamterType {
-  [name: string]: CallbackType | CallbackType[];
-}
 /**
 * attach and trigger event handlers.
 * @memberof Scene
 */
-class EventTrigger {
-  private events: { [name: string]: CallbackType[] };
+class EventTrigger implements EventInterface {
+  public events: { [name: string]: CallbackType[] };
   /**
 	* @example
 const et = new Scene.EventTrigger();
@@ -27,6 +24,31 @@ et.trigger("call", {param: 1});
   constructor() {
     this.events = {};
   }
+  public _on(name: string | EventParamterType, callback?: CallbackType | CallbackType[], once?: boolean) {
+    const events = this.events;
+
+    if (isObject(name)) {
+      eachObjectF((f, i) => {
+        this.on(i, f, once);
+      }, name);
+      return;
+    }
+    if (!(name in events)) {
+      events[name] = [];
+    }
+    if (!callback) {
+      return;
+    }
+    if (isArray(callback)) {
+      eachArrayF(func => this.on(name, func, once), callback);
+      return;
+    }
+    const event = events[name];
+    event.push(once ? function callback2(...args) {
+      callback(...args);
+      this.off(name, callback2);
+    } : callback);
+  }
   /**
 	* Attach an event handler function for one or more events to target
 	* @param {String} name - event's name
@@ -39,29 +61,9 @@ target.on("animate", function() {
 
 target.trigger("animate");
 
-	*/
-  public on(name: string | EventParamterType, callback?: CallbackType | CallbackType[]) {
-    const events = this.events;
-
-    if (isObject(name)) {
-      for (const i in name) {
-        this.on(i, name[i]);
-      }
-      return this;
-    }
-    if (!(name in events)) {
-      events[name] = [];
-    }
-    if (!callback) {
-      return this;
-    }
-    if (isObject(callback)) {
-      (callback as CallbackType[]).forEach(func => this.on(name, func));
-      return this;
-    }
-    const event = events[name];
-
-    event.push(callback);
+  */
+  public on(name: string | EventParamterType, callback?: CallbackType | CallbackType[], once?: boolean) {
+    this._on(name, callback);
     return this;
   }
   /**
@@ -117,7 +119,6 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2
     if (!(name in events)) {
       return this;
     }
-
     const event = events[name];
 
     if (data.length) {
@@ -127,10 +128,14 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2
       target.currentTarget = this;
       !target.target && (target.target = this);
     }
-    event.forEach(callback => {
+    eachArrayF(callback => {
       callback.apply(this, data);
-    });
+    }, event);
 
+    return this;
+  }
+  public once(name: string | EventParamterType, callback?: CallbackType | CallbackType[]) {
+    this._on(name, callback, true);
     return this;
   }
 }
