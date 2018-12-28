@@ -1,11 +1,5 @@
-export type Role = true | RoleInterface;
-export interface RoleInterface {
-  [role: string]: Role;
-}
-export interface ObjectInterface<T> {
-  [name: string]: T;
-}
-export type NameType = string | number;
+import { ObjectInterface } from "@daybrush/utils";
+import { RoleInterface, OptionType, EventType } from "./types";
 
 export const PREFIX = "__SCENEJS_";
 export const TIMING_FUNCTION = "animation-timing-function";
@@ -14,8 +8,6 @@ export const ALIAS: ObjectInterface<string[]> = { easing: [TIMING_FUNCTION] };
 export const FIXED = { "animation-timing-function": true, "contents": true };
 export const MAXIMUM = 1000000;
 export const THRESHOLD = 0.000001;
-type OptionType = ["duration", "fillMode", "direction", "iterationCount", "delay", "easing", "playSpeed"];
-type EventType = ["paused", "ended", "timeupdate", "animate", "play", "iteration"];
 
 export const DURATION = "duration";
 export const FILL_MODE = "fillMode";
