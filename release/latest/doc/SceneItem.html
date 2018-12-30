@@ -61,7 +61,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="SceneItem"><span class="type-signature"></span>new SceneItem<span class="signature">(properties, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SceneItem"><span class="type-signature"></span>new SceneItem<span class="signature">(properties<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -144,7 +144,7 @@
 
         <tr>
             
-                <td class="name"><code>properties</code></td>
+                <td class="name"><code>properties</code>?</td>
             
 
             <td class="type">
@@ -167,7 +167,7 @@
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>options</code>?</td>
             
 
             <td class="type">
@@ -508,9 +508,9 @@ item.set(item.getDuration(), {
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -522,7 +522,7 @@ item.set(item.getDuration(), {
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>options</code>?</td>
             
 
             <td class="type">
@@ -535,17 +535,13 @@ item.set(item.getDuration(), {
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
+            
+                <td class="default">
                 
-
+                    <code>{}</code>
                 
                 </td>
-            
-
             
 
             <td class="description last">animator options</td>
@@ -2555,7 +2551,7 @@ console.log(item.getId()); // item</code></pre>
 
     
 
-    <h4 class="name" id="getNowFrame"><span class="type-signature"></span>getNowFrame<span class="signature">(time, easing)</span><span class="type-signature"> &rarr; {<a href="Frame.html">Frame</a>}</span></h4>
+    <h4 class="name" id="getNowFrame"><span class="type-signature"></span>getNowFrame<span class="signature">(time, easing<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Frame.html">Frame</a>}</span></h4>
 
     
 
@@ -2665,7 +2661,7 @@ console.log(item.getId()); // item</code></pre>
 
         <tr>
             
-                <td class="name"><code>easing</code></td>
+                <td class="name"><code>easing</code>?</td>
             
 
             <td class="type">
@@ -4094,7 +4090,7 @@ item.merge(0, 1);</code></pre>
 
     
 
-    <h4 class="name" id="off"><span class="type-signature"></span>off<span class="signature">(name, callback)</span><span class="type-signature"> &rarr; {<a href="EventTrigger.html">EventTrigger</a>}</span></h4>
+    <h4 class="name" id="off"><span class="type-signature"></span>off<span class="signature">(name<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="EventTrigger.html">EventTrigger</a>}</span></h4>
 
     
 
@@ -4186,7 +4182,7 @@ item.merge(0, 1);</code></pre>
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>name</code>?</td>
             
 
             <td class="type">
@@ -4209,7 +4205,7 @@ item.merge(0, 1);</code></pre>
 
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>callback</code>?</td>
             
 
             <td class="type">
@@ -4290,7 +4286,7 @@ target.off("animate");</code></pre>
 
     
 
-    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(name, callback)</span><span class="type-signature"> &rarr; {<a href="EventTrigger.html">EventTrigger</a>}</span></h4>
+    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(name, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="EventTrigger.html">EventTrigger</a>}</span></h4>
 
     
 
@@ -4405,7 +4401,7 @@ target.off("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>callback</code>?</td>
             
 
             <td class="type">
@@ -4794,8 +4790,6 @@ target.trigger("animate");</code></pre>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
         <th>Default</th>
@@ -4810,7 +4804,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>exportCSS</code></td>
+                <td class="name"><code>exportCSS</code>?</td>
             
 
             <td class="type">
@@ -4822,16 +4816,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -4849,7 +4833,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>properties</code></td>
+                <td class="name"><code>properties</code>?</td>
             
 
             <td class="type">
@@ -4861,16 +4845,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -4895,8 +4869,6 @@ target.trigger("animate");</code></pre>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -4909,7 +4881,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>duration</code></td>
+                <td class="name"><code>duration</code>?</td>
             
 
             <td class="type">
@@ -4921,16 +4893,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -4942,7 +4904,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>fillMode</code></td>
+                <td class="name"><code>fillMode</code>?</td>
             
 
             <td class="type">
@@ -4954,16 +4916,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -4975,7 +4927,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>iterationCount</code></td>
+                <td class="name"><code>iterationCount</code>?</td>
             
 
             <td class="type">
@@ -4988,16 +4940,6 @@ target.trigger("animate");</code></pre>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
@@ -5008,7 +4950,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>easing</code></td>
+                <td class="name"><code>easing</code>?</td>
             
 
             <td class="type">
@@ -5021,16 +4963,6 @@ target.trigger("animate");</code></pre>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
@@ -5041,7 +4973,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>delay</code></td>
+                <td class="name"><code>delay</code>?</td>
             
 
             <td class="type">
@@ -5053,16 +4985,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -5074,7 +4996,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>direction</code></td>
+                <td class="name"><code>direction</code>?</td>
             
 
             <td class="type">
@@ -5086,16 +5008,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -5368,8 +5280,6 @@ item.playCSS(false, {
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -5395,14 +5305,6 @@ item.playCSS(false, {
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
 
@@ -5413,7 +5315,7 @@ item.playCSS(false, {
 
         <tr>
             
-                <td class="name"><code>properties</code></td>
+                <td class="name"><code>properties</code>?</td>
             
 
             <td class="type">
@@ -5428,16 +5330,6 @@ item.playCSS(false, {
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -5738,8 +5630,6 @@ item.playCSS(false, {
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -5765,14 +5655,6 @@ item.playCSS(false, {
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
 
@@ -5783,7 +5665,7 @@ item.playCSS(false, {
 
         <tr>
             
-                <td class="name"><code>properties</code></td>
+                <td class="name"><code>properties</code>?</td>
             
 
             <td class="type">
@@ -5798,16 +5680,6 @@ item.playCSS(false, {
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -7310,8 +7182,6 @@ item.setElement(document.querySelectorAll(".class"));</code></pre>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -7324,7 +7194,7 @@ item.setElement(document.querySelectorAll(".class"));</code></pre>
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>id</code>?</td>
             
 
             <td class="type">
@@ -7336,16 +7206,6 @@ item.setElement(document.querySelectorAll(".class"));</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -7574,7 +7434,7 @@ console.log(item.getId()); // item</code></pre>
 
     
 
-    <h4 class="name" id="setOptions"><span class="type-signature"></span>setOptions<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="Animator.html">Animator</a>}</span></h4>
+    <h4 class="name" id="setOptions"><span class="type-signature"></span>setOptions<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Animator.html">Animator</a>}</span></h4>
 
     
 
@@ -7663,6 +7523,8 @@ console.log(item.getId()); // item</code></pre>
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -7673,13 +7535,13 @@ console.log(item.getId()); // item</code></pre>
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>options</code>?</td>
             
 
             <td class="type">
             
                 
-<span class="param-type"></span>
+<span class="param-type"><a href="global.html#StateInterface">StateInterface</a></span>
 
 
             
@@ -7687,6 +7549,12 @@ console.log(item.getId()); // item</code></pre>
 
             
 
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
             
 
             <td class="description last">animator's options</td>
@@ -8241,7 +8109,7 @@ console.log(item.getId()); // item</code></pre>
 
     
 
-    <h4 class="name" id="setTime"><span class="type-signature"></span>setTime<span class="signature">(time, isTick)</span><span class="type-signature"> &rarr; {<a href="Animator.html">Animator</a>}</span></h4>
+    <h4 class="name" id="setTime"><span class="type-signature"></span>setTime<span class="signature">(time, isTick<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Animator.html">Animator</a>}</span></h4>
 
     
 
@@ -8359,7 +8227,7 @@ console.log(item.getId()); // item</code></pre>
 
         <tr>
             
-                <td class="name"><code>isTick</code></td>
+                <td class="name"><code>isTick</code>?</td>
             
 
             <td class="type">
@@ -8513,8 +8381,6 @@ animator.getTime() // 10</code></pre>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
         <th>Default</th>
@@ -8529,7 +8395,7 @@ animator.getTime() // 10</code></pre>
 
         <tr>
             
-                <td class="name"><code>duration</code></td>
+                <td class="name"><code>duration</code>?</td>
             
 
             <td class="type">
@@ -8541,16 +8407,6 @@ animator.getTime() // 10</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -8568,7 +8424,7 @@ animator.getTime() // 10</code></pre>
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>options</code>?</td>
             
 
             <td class="type">
@@ -8580,16 +8436,6 @@ animator.getTime() // 10</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -9021,8 +8867,6 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -9035,7 +8879,7 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
 
         <tr>
             
-                <td class="name"><code>frame</code></td>
+                <td class="name"><code>frame</code>?</td>
             
 
             <td class="type">
@@ -9047,16 +8891,6 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -10053,7 +9887,7 @@ nav li[file="sceneitem"] h4, nav li[file="sceneitem"] ul {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 0.2.1</a> on Mon Dec 31 2018 03:47:46 GMT+0900 (Korean Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 0.2.1</a> on Mon Dec 31 2018 04:31:10 GMT+0900 (Korean Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

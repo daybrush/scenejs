@@ -61,7 +61,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="Scene"><span class="type-signature"></span>new Scene<span class="signature">(properties, options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Scene"><span class="type-signature"></span>new Scene<span class="signature">(properties<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -151,7 +151,7 @@
 
         <tr>
             
-                <td class="name"><code>properties</code></td>
+                <td class="name"><code>properties</code>?</td>
             
 
             <td class="type">
@@ -174,7 +174,7 @@
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>options</code>?</td>
             
 
             <td class="type">
@@ -626,7 +626,7 @@
 
     
 
-    <h4 class="name" id="exportCSS"><span class="type-signature"></span>exportCSS<span class="signature">(duration, parentState)</span><span class="type-signature"> &rarr; {<a href="Scene.html">Scene</a>}</span></h4>
+    <h4 class="name" id="exportCSS"><span class="type-signature"></span>exportCSS<span class="signature">(duration<span class="signature-attributes">opt</span>, parentState<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Scene.html">Scene</a>}</span></h4>
 
     
 
@@ -713,7 +713,7 @@
 
         <tr>
             
-                <td class="name"><code>duration</code></td>
+                <td class="name"><code>duration</code>?</td>
             
 
             <td class="type">
@@ -736,7 +736,7 @@
 
         <tr>
             
-                <td class="name"><code>parentState</code></td>
+                <td class="name"><code>parentState</code>?</td>
             
 
             <td class="type">
@@ -1880,7 +1880,7 @@
 
     
 
-    <h4 class="name" id="getItem"><span class="type-signature"></span>getItem<span class="signature">(name, index)</span><span class="type-signature"> &rarr; {<a href="Scene.html">Scene</a>|<a href="SceneItem.html">SceneItem</a>}</span></h4>
+    <h4 class="name" id="getItem"><span class="type-signature"></span>getItem<span class="signature">(name, index<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Scene.html">Scene</a>|<a href="SceneItem.html">SceneItem</a>}</span></h4>
 
     
 
@@ -1990,7 +1990,7 @@
 
         <tr>
             
-                <td class="name"><code>index</code></td>
+                <td class="name"><code>index</code>?</td>
             
 
             <td class="type">
@@ -3250,7 +3250,7 @@
 
     
 
-    <h4 class="name" id="newItem"><span class="type-signature"></span>newItem<span class="signature">(name, options)</span><span class="type-signature"> &rarr; {Sceme.SceneItem}</span></h4>
+    <h4 class="name" id="newItem"><span class="type-signature"></span>newItem<span class="signature">(name, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Sceme.SceneItem}</span></h4>
 
     
 
@@ -3327,6 +3327,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -3352,6 +3354,10 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
             <td class="description last">name of item to create</td>
         </tr>
@@ -3360,13 +3366,13 @@
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>options</code>?</td>
             
 
             <td class="type">
             
                 
-<span class="param-type">StateOptions</span>
+<span class="param-type"><a href="global.html#StateInterface">StateInterface</a></span>
 
 
             
@@ -3374,6 +3380,12 @@
 
             
 
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
             
 
             <td class="description last">The option object of SceneItem</td>
@@ -3435,7 +3447,7 @@
 
     
 
-    <h4 class="name" id="off"><span class="type-signature"></span>off<span class="signature">(name, callback)</span><span class="type-signature"> &rarr; {<a href="EventTrigger.html">EventTrigger</a>}</span></h4>
+    <h4 class="name" id="off"><span class="type-signature"></span>off<span class="signature">(name<span class="signature-attributes">opt</span>, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="EventTrigger.html">EventTrigger</a>}</span></h4>
 
     
 
@@ -3527,7 +3539,7 @@
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>name</code>?</td>
             
 
             <td class="type">
@@ -3550,7 +3562,7 @@
 
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>callback</code>?</td>
             
 
             <td class="type">
@@ -3631,7 +3643,7 @@ target.off("animate");</code></pre>
 
     
 
-    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(name, callback)</span><span class="type-signature"> &rarr; {<a href="EventTrigger.html">EventTrigger</a>}</span></h4>
+    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(name, callback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="EventTrigger.html">EventTrigger</a>}</span></h4>
 
     
 
@@ -3746,7 +3758,7 @@ target.off("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>callback</code>?</td>
             
 
             <td class="type">
@@ -4135,8 +4147,6 @@ target.trigger("animate");</code></pre>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
         <th>Default</th>
@@ -4151,7 +4161,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>exportCSS</code></td>
+                <td class="name"><code>exportCSS</code>?</td>
             
 
             <td class="type">
@@ -4163,16 +4173,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -4190,7 +4190,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>properties</code></td>
+                <td class="name"><code>properties</code>?</td>
             
 
             <td class="type">
@@ -4202,16 +4202,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -4236,8 +4226,6 @@ target.trigger("animate");</code></pre>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -4250,7 +4238,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>duration</code></td>
+                <td class="name"><code>duration</code>?</td>
             
 
             <td class="type">
@@ -4262,16 +4250,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -4283,7 +4261,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>fillMode</code></td>
+                <td class="name"><code>fillMode</code>?</td>
             
 
             <td class="type">
@@ -4295,16 +4273,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -4316,7 +4284,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>iterationCount</code></td>
+                <td class="name"><code>iterationCount</code>?</td>
             
 
             <td class="type">
@@ -4329,16 +4297,6 @@ target.trigger("animate");</code></pre>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
@@ -4349,7 +4307,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>easing</code></td>
+                <td class="name"><code>easing</code>?</td>
             
 
             <td class="type">
@@ -4362,16 +4320,6 @@ target.trigger("animate");</code></pre>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
@@ -4382,7 +4330,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>delay</code></td>
+                <td class="name"><code>delay</code>?</td>
             
 
             <td class="type">
@@ -4394,16 +4342,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -4415,7 +4353,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>direction</code></td>
+                <td class="name"><code>direction</code>?</td>
             
 
             <td class="type">
@@ -4427,16 +4365,6 @@ target.trigger("animate");</code></pre>
             
             </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
             
 
             
@@ -5658,7 +5586,7 @@ target.trigger("animate");</code></pre>
 
     
 
-    <h4 class="name" id="setOptions"><span class="type-signature"></span>setOptions<span class="signature">(options)</span><span class="type-signature"> &rarr; {<a href="Animator.html">Animator</a>}</span></h4>
+    <h4 class="name" id="setOptions"><span class="type-signature"></span>setOptions<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Animator.html">Animator</a>}</span></h4>
 
     
 
@@ -5747,6 +5675,8 @@ target.trigger("animate");</code></pre>
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -5757,13 +5687,13 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>options</code>?</td>
             
 
             <td class="type">
             
                 
-<span class="param-type"></span>
+<span class="param-type"><a href="global.html#StateInterface">StateInterface</a></span>
 
 
             
@@ -5771,6 +5701,12 @@ target.trigger("animate");</code></pre>
 
             
 
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
             
 
             <td class="description last">animator's options</td>
@@ -6163,7 +6099,7 @@ target.trigger("animate");</code></pre>
 
     
 
-    <h4 class="name" id="setTime"><span class="type-signature"></span>setTime<span class="signature">(time, isTick)</span><span class="type-signature"> &rarr; {<a href="Animator.html">Animator</a>}</span></h4>
+    <h4 class="name" id="setTime"><span class="type-signature"></span>setTime<span class="signature">(time, isTick<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Animator.html">Animator</a>}</span></h4>
 
     
 
@@ -6281,7 +6217,7 @@ target.trigger("animate");</code></pre>
 
         <tr>
             
-                <td class="name"><code>isTick</code></td>
+                <td class="name"><code>isTick</code>?</td>
             
 
             <td class="type">
@@ -7306,7 +7242,7 @@ nav li[file="scene"] h4, nav li[file="scene"] ul {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 0.2.1</a> on Mon Dec 31 2018 03:47:46 GMT+0900 (Korean Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 0.2.1</a> on Mon Dec 31 2018 04:31:10 GMT+0900 (Korean Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
