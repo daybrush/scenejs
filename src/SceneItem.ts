@@ -52,7 +52,7 @@ const item = new SceneItem({
 */
 class SceneItem extends Animator {
   public keyframes: Keyframes;
-  private elements: ElementsType;
+  public elements: ElementsType;
   /**
 	* @param - properties
 	* @param - options
@@ -137,7 +137,7 @@ console.log(item.getId()); // item
 item.set(0, "a", "b") // item.getFrame(0).set("a", "b")
 console.log(item.get(0, "a")); // "b"
 	*/
-  public set(time: any[] | number | string | ObjectInterface<any>, ...args: any[]) {
+  public set(time: any, ...args: any[]) {
     if (isObject(time)) {
       this.load(time);
       return this;
@@ -179,7 +179,7 @@ console.log(item.get(0, "a")); // "b"
 item.get(0, "a"); // item.getFrame(0).get("a");
 item.get(0, "transform", "translate"); // item.getFrame(0).get("transform", "translate");
 	*/
-  public get(time: number, ...args: NameType[]) {
+  public get(time: string | number, ...args: NameType[]) {
     const frame = this.getFrame(time);
 
     return frame && frame.get(...args);

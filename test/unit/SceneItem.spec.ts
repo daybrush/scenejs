@@ -1,15 +1,15 @@
-import SceneItem from "../../src/SceneItem.ts";
-import {THRESHOLD} from "../../src/consts.ts";
-import {EASE_IN_OUT} from "../../src/easing";
+import SceneItem from "../../src/SceneItem";
+import { THRESHOLD } from "../../src/consts";
+import { EASE_IN_OUT } from "../../src/easing";
 import removeProperty from "./injections/ClassListInjection";
 import { orderByASC, group } from "./TestHelper";
 import { setRole } from "../../src/utils";
-/* eslint-disable */
+import { DirectionType } from "../../src/Animator";
+import * as sinon from "sinon";
 
-
-describe("SceneItem Test", function() {
-    describe("test item initialize", function() {
-        it("should check default item", function() {
+describe("SceneItem Test", () => {
+    describe("test item initialize", () => {
+        it("should check default item", () => {
             const item = new SceneItem({
                 0: {
                     a: 1,
@@ -26,7 +26,7 @@ describe("SceneItem Test", function() {
             expect(item.get(1, "a")).to.be.equals(2);
             expect(item.get(2, "a")).to.be.equals(1);
         });
-        it("should check array item", function() {
+        it("should check array item", () => {
             const item = new SceneItem([{
                 a: 1,
             }]);
@@ -39,7 +39,7 @@ describe("SceneItem Test", function() {
                 },
                 {
                     a: 3,
-                }
+                },
             ]);
             const item3 = new SceneItem([
                 {
@@ -50,10 +50,10 @@ describe("SceneItem Test", function() {
                 },
                 {
                     a: 3,
-                }
+                },
             ], {
-                duration: 2
-            });
+                    duration: 2,
+                });
 
             expect(item.get(0, "a")).to.be.equals(1);
             expect(item.getDuration()).to.be.equals(0);
@@ -74,22 +74,22 @@ describe("SceneItem Test", function() {
             expect(item2.get("to", "a")).to.be.equals(3);
             expect(item3.getDuration()).to.be.equals(2);
         });
-        it("should check array item", function() {
-            const item = new SceneItem({keyframes: {0: {opacity: 0}, 1: {opacity: 1}}});
+        it("should check array item", () => {
+            const item = new SceneItem({ keyframes: { 0: { opacity: 0 }, 1: { opacity: 1 } } });
 
             expect(item.getDuration()).to.be.equals(1);
             expect(item.get(0, "opacity")).to.be.equals(0);
             expect(item.get(1, "opacity")).to.be.equals(1);
         });
     });
-    describe("test item method", function() {
+    describe("test item method", () => {
         beforeEach(() => {
             this.item = new SceneItem({
                 0: {
                     a: 1,
                     display: "block",
                 },
-                "0.5": {
+                0.5: {
                     a: 1.5,
                 },
                 1: {
@@ -118,19 +118,19 @@ describe("SceneItem Test", function() {
         });
         it("should check 'getNowFrame' method (no 0%)", () => {
             const item = new SceneItem({
-                "0.5": {
+                0.5: {
                     display: "none",
                     a: 1.5,
-                    filter: {"hue-rotate": "0deg"},
+                    filter: { "hue-rotate": "0deg" },
                 },
                 1: {
                     display: "block",
                     a: 2,
-                    filter: {"hue-rotate": "100deg"},
+                    filter: { "hue-rotate": "100deg" },
                 },
                 1.2: {
 
-                }
+                },
             });
 
             expect(item.getNowFrame(0).get("display")).to.be.equals("none");
@@ -141,7 +141,7 @@ describe("SceneItem Test", function() {
             expect(item.getNowFrame(0.75).get("filter", "hue-rotate")).to.be.equals("50deg");
             expect(item.getNowFrame(0.6).get("a")).to.be.equals(1.6);
             expect(item.getNowFrame(1).get("display")).to.be.equals("block");
-            expect(item.getNowFrame(1).get("a")).to.be.equals(2);            
+            expect(item.getNowFrame(1).get("a")).to.be.equals(2);
         });
         it("should check 'getNowFrame' method(getDuration < time <= duration)", () => {
             const item = this.item;
@@ -183,35 +183,35 @@ describe("SceneItem Test", function() {
                 0: {
                     a: "rgb(0, 0, 0)",
                     b: 0,
-                    c: function () {
+                    c: () => {
                         return vari;
-                    }
+                    },
                 },
                 1: {
-                    a: function () {
+                    a: () => {
                         return "rgb(200, 200, 200)";
                     },
-                    b: function () {
+                    b: () => {
                         return vari;
                     },
-                    c: function () {
+                    c: () => {
                         return vari + 2;
-                    }
+                    },
                 },
             });
-			[0, 0.2, 0.5, 0.7, 1].forEach((t, i) => {
+            [0, 0.2, 0.5, 0.7, 1].forEach((t, i) => {
                 const frame = item.getNowFrame(t);
                 if (t !== 1) {
                     expect(frame.get("a")).to.be.equals(`rgba(${200 * t},${200 * t},${200 * t},1)`);
                     expect(frame.get("b")).to.be.equals(i * t);
                 } else {
-                    expect(frame.get("a")).to.be.equals(`rgb(200, 200, 200)`);   
+                    expect(frame.get("a")).to.be.equals(`rgb(200, 200, 200)`);
                 }
                 expect(frame.get("c")).to.be.closeTo(i + 2 * t, 0.001);
                 expect(frame.get("b")).to.be.equals(i * t);
                 ++vari;
-			})
-		});
+            });
+        });
         it("should check 'set' method", () => {
             const item = this.item;
 
@@ -231,7 +231,7 @@ describe("SceneItem Test", function() {
                 10: {
                     a: 4,
                     b: 5,
-                }
+                },
             });
             expect(item.getFrame(0.5).get("a")).to.be.equals(1);
             expect(item.getFrame(0.6).get("transform", "a")).to.be.equals(1);
@@ -258,7 +258,7 @@ describe("SceneItem Test", function() {
 
             // Then
             expect(item.get(0, "a")).to.be.not.equals(1);
-            
+
         });
         it("should check 'getDuration' method", () => {
             // Given
@@ -268,7 +268,7 @@ describe("SceneItem Test", function() {
             expect(this.item.getDuration()).to.be.equals(10);
             expect(this.item.getActiveDuration()).to.be.equals(10);
             expect(this.item.getTotalDuration()).to.be.equals(10);
-            
+
             // When
             this.item.setDelay(5);
             // Then
@@ -277,14 +277,14 @@ describe("SceneItem Test", function() {
             expect(this.item.getTotalDuration()).to.be.equals(15);
         });
         it("should check 'setDuration' with no frame", () => {
-            var item = new SceneItem({});
+            const item = new SceneItem({});
 
             item.setDuration(0);
 
             expect(item.getDuration()).to.be.equals(0);
         });
         it("should check 'setDuration' option", () => {
-            var item = new SceneItem({
+            const item = new SceneItem({
                 "0%": {
                     transform: "translate(0px, 0px) rotate(0deg)",
                 },
@@ -301,27 +301,27 @@ describe("SceneItem Test", function() {
                     transform: "translate(0px, 0px) rotate(360deg)",
                 },
             }, {
-                duration: 3,
-            });
-            var item2 = new SceneItem({
-                "0": {
+                    duration: 3,
+                });
+            const item2 = new SceneItem({
+                0: {
                     transform: "translate(0px, 0px) rotate(0deg)",
                 },
-                "1": {
+                1: {
                     transform: "translate(200px, 0px) rotate(90deg)",
                 },
-                "2": {
+                2: {
                     transform: "translate(200px, 200px) rotate(180deg)",
                 },
-                "3": {
+                3: {
                     transform: "translate(0px, 200px) rotate(270deg)",
                 },
-                "4": {
+                4: {
                     transform: "translate(0px, 0px) rotate(360deg)",
                 },
             }, {
-                duration: 3,
-            });
+                    duration: 3,
+                });
             expect(item.getDuration()).to.be.equals(3);
             expect(item2.getDuration()).to.be.equals(3);
         });
@@ -354,12 +354,12 @@ describe("SceneItem Test", function() {
             // When
             this.item.setDuration(10);
             this.item.load({
-                "from": {
+                from: {
                     a: 1,
                 },
-                "to": {
+                to: {
                     a: 2,
-                }
+                },
             });
             // Then
             expect(this.item.getDuration()).to.be.equals(10);
@@ -370,9 +370,9 @@ describe("SceneItem Test", function() {
         it("should check 'clone' method", () => {
             // Given
             const item = this.item.clone();
-            const item2 = this.item.clone({delay: 1});
+            const item2 = this.item.clone({ delay: 1 });
             // When
-            
+
             // Then
             expect(this.item.getDuration()).to.be.equals(1);
             expect(item.getDuration()).to.be.equals(1);
@@ -392,7 +392,7 @@ describe("SceneItem Test", function() {
             expect(item2.getDelay()).to.be.equal(1);
             expect(this.item.constructor).to.be.equals(item.constructor);
         });
-        it (`should check 'copyFrame' method`, () => {
+        it(`should check 'copyFrame' method`, () => {
             // Given
             // When
             this.item.copyFrame(0.5, 1.5);
@@ -406,7 +406,7 @@ describe("SceneItem Test", function() {
             expect(this.item.getFrame(1.5).properties).to.be.deep.equals(this.item.getFrame(0.5).properties);
             expect(this.item.getFrame(1.5).properties).to.be.deep.equals(this.item.getFrame(1.8).properties);
         });
-        it (`should check 'mergeFrame' method`, () => {
+        it(`should check 'mergeFrame' method`, () => {
             /*
             0: {
                     a: 1,
@@ -426,7 +426,7 @@ describe("SceneItem Test", function() {
             // When
             this.item.mergeFrame(0.5, 1.5);
             this.item.mergeFrame(1, 1.5);
-            this.item.mergeFrame({0.7: 1.5});
+            this.item.mergeFrame({ 0.7: 1.5 });
             this.item.mergeFrame(0.8, 1.5);
 
             expect(this.item.getFrame(1.5).get("a")).to.be.deep.equals(2);
@@ -435,14 +435,14 @@ describe("SceneItem Test", function() {
             expect(this.item.getFrame(1.5).get("display")).to.be.deep.equals("none");
         });
         it("should check no frame", () => {
-            var item = new SceneItem({});
+            const item = new SceneItem({});
 
             item.setTime(0);
             expect(item.getDuration()).to.be.equals(0);
             expect(item.getTime()).to.be.equals(0);
         });
     });
-    describe("test item events", function() {
+    describe("test item events", () => {
         beforeEach(() => {
             this.item = new SceneItem({
                 0: {
@@ -454,8 +454,8 @@ describe("SceneItem Test", function() {
                     a: 2,
                 },
             }, {
-               iterationCount: 4, 
-            });
+                    iterationCount: 4,
+                });
         });
         afterEach(() => {
             this.item = null;
@@ -463,7 +463,7 @@ describe("SceneItem Test", function() {
         it("should check 'animate' event", done => {
             const item = this.item;
 
-            item.on("animate", ({time, frame, currentTime}) => {
+            item.on("animate", ({ time, frame, currentTime }) => {
                 expect(time).to.be.equals(0.5);
                 expect(currentTime).to.be.equals(1.5);
                 expect(frame.get("a")).to.be.equals(1.5);
@@ -472,9 +472,9 @@ describe("SceneItem Test", function() {
             });
 
             item.setTime(1.5);
-        });   
+        });
     });
-    describe("test frame for CSS", function() {
+    describe("test frame for CSS", () => {
         beforeEach(() => {
             this.element = document.createElement("div");
             this.item = new SceneItem({
@@ -493,20 +493,20 @@ describe("SceneItem Test", function() {
         afterEach(() => {
             this.element = "";
             document.body.innerHTML = "";
-        })
+        });
         it("should check 'setId' method (Element)", () => {
             // Given
             const element = document.createElement("div");
 
             this.item.elements = [element];
             // When
-            
+
             this.item.setId(".a .b");
 
-           // Then
-           expect(this.item.state.id).to.be.equals(".a .b");
-           expect(this.item.state.selector).to.be.equals(`[data-scene-id="ab"]`);
-           expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equal("ab");
+            // Then
+            expect(this.item.state.id).to.be.equals(".a .b");
+            expect(this.item.state.selector).to.be.equals(`[data-scene-id="ab"]`);
+            expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equal("ab");
         });
         it("should check 'setSelector' method", () => {
             // Given
@@ -542,11 +542,11 @@ describe("SceneItem Test", function() {
         it("should check 'setElement' method  with 'attribute'", () => {
             // Given
             this.item.setElement(this.element);
-            const id = this.item.elements[0].getAttribute("data-scene-id");
+
             this.item.set(1, "attribute", "a", 1);
             // When
             this.item.setTime(1);
-            
+
             // Then
             expect(this.item.elements[0].getAttribute("a")).to.be.equals("1");
         });
@@ -580,13 +580,13 @@ describe("SceneItem Test", function() {
         });
         it("should check 'toCSS' method", () => {
             // Given
-            
+
             // When
             // Then
             // console.log(this.item.toCSS());
         });
         it(`should check toCSS method with no element`, () => {
-			const scene = new SceneItem({
+            const scene = new SceneItem({
                 0: {
                     width: "100px",
                     height: "100px",
@@ -594,19 +594,19 @@ describe("SceneItem Test", function() {
                 0.1: {
                     width: "200px",
                     height: "200px",
-                }
-			}, {
-				selector: ".noelement",
-			});
+                },
+            }, {
+                    selector: ".noelement",
+                });
 
-			// when
-			const css = scene.toCSS();
+            // when
+            const css = scene.toCSS();
 
-			// then
-			expect(css).to.be.have.string(".noelement.startAnimation");
-			expect(css).to.be.have.string(".noelement.pauseAnimation");
-			expect(css).to.be.have.string("width:200px;");
-		});
+            // then
+            expect(css).to.be.have.string(".noelement.startAnimation");
+            expect(css).to.be.have.string(".noelement.pauseAnimation");
+            expect(css).to.be.have.string("width:200px;");
+        });
         it("should check 'setCSS' method", () => {
             // Given
             this.element.style.width = "200px";
@@ -618,10 +618,9 @@ describe("SceneItem Test", function() {
             const border = this.item.get(0, "border");
             this.item.setCSS(0);
 
-
             document.body.appendChild(this.element);
             this.item.setElement(this.element);
-            
+
             this.item.setCSS(0, ["width"]);
             const width2 = this.item.get(0, "width");
             this.item.setCSS(0, ["border"]);
@@ -640,14 +639,14 @@ describe("SceneItem Test", function() {
             this.item.exportCSS();
             const id = this.item.getId().match(/[0-9a-zA-Z]+/g).join("");
             // Then
-            
+
             expect(document.querySelector(`#__SCENEJS_STYLE_${id}`)).to.be.ok;
         });
-        it (`should check role test`, () => {
+        it(`should check role test`, () => {
             // Given
             setRole(["html"], true, true);
             setRole(["html2"], true, false);
-            setRole(["html3"], false);        
+            setRole(["html3"], false);
 
             // When
             this.item.set(0, "html", "a(1) b(2) c(3)");
@@ -655,42 +654,41 @@ describe("SceneItem Test", function() {
             this.item.set(0, "html2", "a(1) b(2) c(3)");
             this.item.set(2, "html2", "a(3) b(4) c(5)");
             this.item.set(0, "html3", "a(1) b(2) c(3)");
-            this.item.set(2, "html3", "a(3) b(4) c(5)");            
+            this.item.set(2, "html3", "a(3) b(4) c(5)");
 
             // Then
             const frame = this.item.getNowFrame(1);
 
             expect(frame.get("html")).to.be.equals("a(1) b(2) c(3)");
             expect(frame.get("html2")).to.be.equals("a(2) b(3) c(4)");
-            expect(frame.get("html3")).to.be.deep.equals({a: 2, b: 3, c: 4});
+            expect(frame.get("html3")).to.be.deep.equals({ a: 2, b: 3, c: 4 });
             expect(frame.get("html3", "a")).to.be.deep.equals(2);
             expect(frame.get("html3", "b")).to.be.deep.equals(3);
             expect(frame.get("html3", "c")).to.be.deep.equals(4);
         });
-        it (`should check 'append' method`, () => {
+        it(`should check 'append' method`, () => {
             this.item.append(new SceneItem({
                 0: {
                     a: 3,
                 },
                 1: {
                     a: 5,
-                }
+                },
             }, {
-                iterationCount: 1,
-            }));
+                    iterationCount: 1,
+                }));
             this.item.append(new SceneItem({
                 0: {
                     a: 4,
                 },
                 1: {
                     a: 6,
-                }
+                },
             }, {
-                iterationCount: 2,
-                easing: EASE_IN_OUT,
-            }));
+                    iterationCount: 2,
+                    easing: EASE_IN_OUT,
+                }));
 
-            
             // Then
             expect(this.item.getDuration()).to.be.equals(4);
             expect(this.item.get(1, "a")).to.be.equals(2);
@@ -700,7 +698,7 @@ describe("SceneItem Test", function() {
 
             expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(4);
             expect(this.item.get("2>", "a")).to.be.equals(4);
-            expect(this.item.get(3, "a")).to.be.equals(6);            
+            expect(this.item.get(3, "a")).to.be.equals(6);
             expect(this.item.get("3>", "a")).to.be.equals(4);
             expect(this.item.get("3>", "a")).to.be.equals(4);
             expect(this.item.get("3>", "a")).to.be.equals(4);
@@ -711,28 +709,28 @@ describe("SceneItem Test", function() {
             expect(this.item.get("2>", "animation-timing-function")).to.be.equals(EASE_IN_OUT);
             expect(this.item.get(4, "easing")).to.be.equals("initial");
         });
-        it (`should check 'prepend' method`, () => {
+        it(`should check 'prepend' method`, () => {
             this.item.prepend(new SceneItem({
                 0: {
                     a: 3,
                 },
                 1: {
                     a: 5,
-                }
+                },
             }, {
-                iterationCount: 1,
-            }));
+                    iterationCount: 1,
+                }));
             this.item.prepend(new SceneItem({
                 0: {
                     a: 4,
                 },
                 1: {
                     a: 6,
-                }
+                },
             }, {
-                iterationCount: 2,
-                easing: EASE_IN_OUT,
-            }));
+                    iterationCount: 2,
+                    easing: EASE_IN_OUT,
+                }));
             /*
             0: {
                 a: 1,
@@ -762,37 +760,38 @@ describe("SceneItem Test", function() {
         });
         const expectations = {
             "normal": {
-                0.3: {0: 0, 0.3: 0.3},
-                1: {0: 0, 0.5: 0.5, 1: 1},
-                1.3: {0: 0, 0.5: 0.5, 1: 1, [1 + THRESHOLD]: 0, 1.3: 0.3},
-                2: {0: 0, 0.5: 0.5, 1: 1, [1 + THRESHOLD]: 0, 1.5: 0.5, 2: 1},
-                2.3: {0: 0, 0.5: 0.5, 1: 1, [1 + THRESHOLD]: 0, 1.5: 0.5, 2: 1, [2 + THRESHOLD]: 0, 2.3: 0.3},
+                0.3: { 0: 0, 0.3: 0.3 },
+                1: { 0: 0, 0.5: 0.5, 1: 1 },
+                1.3: { 0: 0, 0.5: 0.5, 1: 1, [1 + THRESHOLD]: 0, 1.3: 0.3 },
+                2: { 0: 0, 0.5: 0.5, 1: 1, [1 + THRESHOLD]: 0, 1.5: 0.5, 2: 1 },
+                2.3: { 0: 0, 0.5: 0.5, 1: 1, [1 + THRESHOLD]: 0, 1.5: 0.5, 2: 1, [2 + THRESHOLD]: 0, 2.3: 0.3 },
             },
             "reverse": {
-                0.3: {0: 1, 0.3: 0.7},
-                1: {0: 1, 0.5: 0.5, 1: 0},
-                1.3: {0: 1, 0.5: 0.5, 1: 0, [1 + THRESHOLD]: 1, 1.3: 0.7},
-                2: {0: 1, 0.5: 0.5, 1: 0, [1 + THRESHOLD]: 1, 1.5: 0.5, 2: 0},
-                2.3: {0: 1, 0.5: 0.5, 1: 0, [1 + THRESHOLD]: 1, 1.5: 0.5, 2: 0, [2 + THRESHOLD]: 1, 2.3: 0.7},
+                0.3: { 0: 1, 0.3: 0.7 },
+                1: { 0: 1, 0.5: 0.5, 1: 0 },
+                1.3: { 0: 1, 0.5: 0.5, 1: 0, [1 + THRESHOLD]: 1, 1.3: 0.7 },
+                2: { 0: 1, 0.5: 0.5, 1: 0, [1 + THRESHOLD]: 1, 1.5: 0.5, 2: 0 },
+                2.3: { 0: 1, 0.5: 0.5, 1: 0, [1 + THRESHOLD]: 1, 1.5: 0.5, 2: 0, [2 + THRESHOLD]: 1, 2.3: 0.7 },
             },
             "alternate": {
-                0.3: {0: 0, 0.3: 0.3},
-                1: {0: 0, 0.5: 0.5, 1: 1},
-                1.3: {0: 0, 0.5: 0.5, 1: 1, 1.3: 0.7},
-                2: {0: 0, 0.5: 0.5, 1: 1, 1.5: 0.5, 2: 0},
-                2.3: {0: 0, 0.5: 0.5, 1: 1, 1.5: 0.5, 2: 0, 2.3: 0.3},
+                0.3: { 0: 0, 0.3: 0.3 },
+                1: { 0: 0, 0.5: 0.5, 1: 1 },
+                1.3: { 0: 0, 0.5: 0.5, 1: 1, 1.3: 0.7 },
+                2: { 0: 0, 0.5: 0.5, 1: 1, 1.5: 0.5, 2: 0 },
+                2.3: { 0: 0, 0.5: 0.5, 1: 1, 1.5: 0.5, 2: 0, 2.3: 0.3 },
             },
             "alternate-reverse": {
-                0.3: {0: 1, 0.3: 0.7},
-                1: {0: 1, 0.5: 0.5, 1: 0},
-                1.3: {0: 1, 0.5: 0.5, 1: 0, 1.3: 0.3},
-                2: {0: 1, 0.5: 0.5, 1: 0, 1.5: 0.5, 2: 1},
-                2.3: {0: 1, 0.5: 0.5, 1: 0, 1.5: 0.5, 2: 1, 2.3: 0.7},
+                0.3: { 0: 1, 0.3: 0.7 },
+                1: { 0: 1, 0.5: 0.5, 1: 0 },
+                1.3: { 0: 1, 0.5: 0.5, 1: 0, 1.3: 0.3 },
+                2: { 0: 1, 0.5: 0.5, 1: 0, 1.5: 0.5, 2: 1 },
+                2.3: { 0: 1, 0.5: 0.5, 1: 0, 1.5: 0.5, 2: 1, 2.3: 0.7 },
             },
         };
-        ["normal" , "reverse", "alternate", "alternate-reverse"].forEach(direction => {
+        ["normal", "reverse", "alternate", "alternate-reverse"].forEach((direction: DirectionType) => {
             [0.3, 1, 1.3, 2, 2.3].forEach(iterationCount => {
-                it (`should check 'getAllTimes()' with direction="${direction}", iterationCount=${iterationCount}`, () => {
+                it(`should check 'getAllTimes()' with direction="${direction}",
+                    iterationCount=${iterationCount}`, () => {
                     const item = new SceneItem({
                         0: {
                             a: 1,
@@ -805,26 +804,24 @@ describe("SceneItem Test", function() {
                             a: 2,
                         },
                     }, {
-                        iterationCount,
-                        direction,
-                    });
-                    
-
+                            iterationCount,
+                            direction,
+                        });
 
                     const times1 = item.getAllTimes();
                     const times2 = item.getAllTimes(false);
                     const values1 = expectations[direction][iterationCount];
-                    const values2 = Object.assign({[THRESHOLD]: values1[0]}, values1);
+                    const values2 = Object.assign({ [THRESHOLD]: values1[0] }, values1);
                     delete values2[0];
 
                     const keys1 = orderByASC(Object.keys(values1).map(key => parseFloat(key)));
                     const keys2 = orderByASC(Object.keys(values2).map(key => parseFloat(key)));
-                    const keytimes1 = group(orderByASC(Object.values(values1)));
-                    const keytimes2 = group(orderByASC(Object.values(values2)));
+                    const keytimes1 = group(orderByASC(Object.keys(values1).map(v => values1[v])));
+                    const keytimes2 = group(orderByASC(Object.keys(values2).map(v => values2[v])));
 
                     expect(orderByASC(Object.keys(times1.frames))).to.be.deep.equals(keytimes1);
                     expect(times1.keys).to.be.deep.equals(keys1);
-                    expect(times1.values).to.be.deep.equals(values1);                
+                    expect(times1.values).to.be.deep.equals(values1);
 
                     // {[THRESHOLD]: 0, ...}
                     expect(orderByASC(Object.keys(times2.frames))).to.be.deep.equals(keytimes2);
@@ -835,7 +832,7 @@ describe("SceneItem Test", function() {
         });
     });
     [true, false].forEach(hasClassList => {
-        describe(`test SceneItem events(hasClassList = ${hasClassList})`, function() {
+        describe(`test SceneItem events(hasClassList = ${hasClassList})`, () => {
             beforeEach(() => {
                 this.element = document.createElement("div");
                 !hasClassList && removeProperty(this.element, "classList");
@@ -859,7 +856,7 @@ describe("SceneItem Test", function() {
                 this.item.off();
                 this.item = null;
             });
-            it (`should check "playCSS" and event order `, done => {
+            it(`should check "playCSS" and event order `, done => {
                 // Given
                 this.item.setElement(this.element);
                 const play = sinon.spy();
@@ -875,9 +872,8 @@ describe("SceneItem Test", function() {
                 this.item.playCSS();
                 this.item.playCSS();
 
-                
                 expect(this.item.getPlayState()).to.be.equals("running");
-			    expect(this.item.getState("playCSS")).to.be.true;
+                expect(this.item.getState("playCSS")).to.be.true;
                 this.item.on("ended", e => {
                     // Then
                     expect(play.calledOnce).to.be.true;
@@ -887,7 +883,7 @@ describe("SceneItem Test", function() {
                     done();
                 });
             });
-            it (`should check "playCSS" and replay`, done => {
+            it(`should check "playCSS" and replay`, done => {
                 // Given
                 this.item.setElement(this.element);
                 const play = sinon.spy();
@@ -898,7 +894,6 @@ describe("SceneItem Test", function() {
                 // When
                 this.item.playCSS();
 
-                
                 this.item.on("ended", e => {
                     // Then
                     if (play.callCount === 1) {
@@ -910,7 +905,7 @@ describe("SceneItem Test", function() {
                     }
                 });
             });
-            it (`should check "iteration" event `, done => {
+            it(`should check "iteration" event `, done => {
                 // Given
                 this.item.setElement(this.element);
                 const play = sinon.spy();
@@ -926,7 +921,6 @@ describe("SceneItem Test", function() {
                 this.item.setIterationCount(2);
                 this.item.playCSS();
 
-                
                 this.item.on("ended", e => {
                     // Then
                     expect(play.calledOnce).to.be.true;
@@ -936,7 +930,7 @@ describe("SceneItem Test", function() {
                     done();
                 });
             });
-            it (`should check "playCSS" and no elements `, () => {
+            it(`should check "playCSS" and no elements `, () => {
                 // Given
                 // When
                 this.item.playCSS();

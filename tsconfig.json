@@ -4,7 +4,7 @@
 	  "esModuleInterop": false,
 		"sourceMap": true,
 	  "noImplicitAny": true,
-	  "module": "es2015",
+	  "module": "commonjs",
 		"target": "es5",
 		"experimentalDecorators": true,
 		"noUnusedLocals": true,
@@ -12,6 +12,5 @@
 		"moduleResolution": "node",
 		"lib": ["es2015", "dom"],
 	},
-	"include": ["./src/**/*.ts"],
-	"exclude": ["node_modules"]
+	"include": ["./src/**/*.ts"]
   }

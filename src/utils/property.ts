@@ -12,13 +12,14 @@ import {
 
 export function splitStyle(str: string) {
   const properties = str.split(";");
-  const length = properties.length;
   const obj: ObjectInterface<string | PropertyObject> = {};
+  let length = properties.length;
 
   for (let i = 0; i < length; ++i) {
     const matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
 
     if (!matches || matches.length < 3 || !matches[1]) {
+      --length;
       continue;
     }
     obj[matches[1].trim()] = toPropertyObject(matches[2].trim());

@@ -22,12 +22,15 @@ const uglifyCode = uglify({
       var type = comment.type;
       if (type === "comment2") {
         // multiline comment
-        return /@version/.test(text);
+        return /@name:\Sscenejs/.test(text);
       }
     },
   },
 });
 const defaultConfig = {
+  treeshake: {
+    pureExternalModules: true,
+  },
   plugins: [
     plugin,
     replace({

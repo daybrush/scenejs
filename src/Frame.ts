@@ -199,7 +199,7 @@ frame.set("transform", "translate", "50px");
         const {styles, length: stylesLength} = splitStyle(value);
 
         for (const name in styles) {
-          this.set(...params, styles[name]);
+          this.set(...params, name, styles[name]);
         }
         if (stylesLength) {
           return this;

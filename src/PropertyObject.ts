@@ -27,7 +27,7 @@ var obj = new PropertyObject([100,100,100,0.5], {
 	"suffix" : ")"
 });
 	 */
-  constructor(value: string | any[], options: PropertyObjectInterface) {
+  constructor(value: string | any[], options?: PropertyObjectInterface) {
     this.options = {
       prefix: "",
       suffix: "",

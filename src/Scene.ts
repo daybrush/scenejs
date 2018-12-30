@@ -265,7 +265,7 @@ class Scene extends Animator implements ForEachInterface<Scene | SceneItem> {
     playCSS(this, isExportCSS, properties);
     return this;
   }
-  public set(properties: any = {}) {
+  public set(properties: any = {}, ...args: any[]) {
     this.load(properties);
   }
   public load(properties: any = {}, options = properties.options) {
