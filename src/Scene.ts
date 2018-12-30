@@ -1,20 +1,27 @@
 import Animator, { StateInterface, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
-import { ObjectInterface, ANIMATE, ITERATION_COUNT, EASING, EASING_NAME } from "./consts";
+import { ANIMATE, ITERATION_COUNT, EASING, EASING_NAME } from "./consts";
 import Frame from "./Frame";
 import { playCSS, exportCSS, getRealId, makeId } from "./utils";
-import { isFunction, IS_WINDOW } from "@daybrush/utils";
+import { isFunction, IS_WINDOW, ObjectInterface } from "@daybrush/utils";
+import { eachObjectF, ForEachInterface } from "fjx";
 
 /**
 * manage sceneItems and play Scene.
-* @extends Scene.Animator
 */
-class Scene extends Animator {
-
+class Scene extends Animator implements ForEachInterface<Scene | SceneItem> {
+  /**
+  * version info
+  * @type {string}
+  * @example
+  * Scene.VERSION // #__VERSION__#
+  */
+  public static VERSION: string = "#__VERSION__#";
   public items: ObjectInterface<Scene | SceneItem>;
   /**
-  * @param {Object} [properties] - properties
-  * @param {AnimatorOptions} [options] - options
+  * @sort 1
+  * @param - properties
+  * @param - options
   * @example
   const scene = new Scene({
     item1: {
@@ -36,7 +43,7 @@ class Scene extends Animator {
     }
   });
     */
-  constructor(properties?: ObjectInterface<any>, options?: ObjectInterface<any>) {
+  constructor(properties?: ObjectInterface<any>, options?: StateInterface) {
     super();
     this.items = {};
     this.load(properties, options);
@@ -84,21 +91,24 @@ class Scene extends Animator {
     }
     return this;
   }
+  public getItem<T extends (Scene | SceneItem) = Scene | SceneItem>(name: number | string): T;
+  public getItem(name: number | string, index: number): SceneItem;
   /**
   * get item in scene by name
-  * @method Scene#getItem
-  * @param {string} name - The item's name
-  * @param {number} [index] - If item is added as function, it can be imported via index.
-  * @return {Scene | Scene.SceneItem} item
+  * @param - The item's name
+  * @param - If item is added as function, it can be imported via index.
+  * @return {Scene | SceneItem} item
   * @example
   const item = scene.getItem("item1")
   */
-  public getItem(name: number | string) {
+  public getItem(name: number | string, index?: number) {
+    if (index != null) {
+      return (this.items[name] as Scene).getItem(index) as SceneItem;
+    }
     return this.items[name];
   }
   /**
   * create item in scene
-  * @method Scene#newItem
   * @param {String} name - name of item to create
   * @param {StateOptions} options - The option object of SceneItem
   * @return {Sceme.SceneItem} Newly created item
@@ -118,8 +128,8 @@ class Scene extends Animator {
   }
   /**
   * add a sceneItem to the scene
-  * @param {String} name - name of item to create
-  * @param {Scene.SceneItem} item - sceneItem
+  * @param - name of item to create
+  * @param - sceneItem
   * @example
   const item = scene.newItem("item1")
   */
@@ -139,18 +149,13 @@ class Scene extends Animator {
   }
   /**
    * executes a provided function once for each scene item.
-   * @param {Function} func Function to execute for each element, taking three arguments
-   * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
-   * @param {string} [func.name] The name of the item being processed in the scene.
-   * @param {object} [func.items] The object that forEach() is being applied to.
+   * @param - Function to execute for each element, taking three arguments
    * @return {Scene} An instance itself
    */
   public forEach(func: (item?: Scene | SceneItem, name?: string, items?: ObjectInterface<Scene | SceneItem>) => void) {
     const items = this.items;
 
-    for (const name in items) {
-      func(items[name], name, items);
-    }
+    eachObjectF(func, items);
     return this;
   }
   public toCSS(duration: number = this.getDuration(), parentState?: StateInterface) {

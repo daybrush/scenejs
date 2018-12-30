@@ -3,7 +3,6 @@ import { EventInterface, CallbackType, EventParamterType, eachObjectF, eachArray
 
 /**
 * attach and trigger event handlers.
-* @memberof Scene
 */
 class EventTrigger implements EventInterface {
   public events: { [name: string]: CallbackType[] };
@@ -29,7 +28,7 @@ et.trigger("call", {param: 1});
 
     if (isObject(name)) {
       eachObjectF((f, i) => {
-        this.on(i, f, once);
+        this._on(i, f, once);
       }, name);
       return;
     }
@@ -40,7 +39,7 @@ et.trigger("call", {param: 1});
       return;
     }
     if (isArray(callback)) {
-      eachArrayF(func => this.on(name, func, once), callback);
+      eachArrayF(func => this._on(name, func, once), callback);
       return;
     }
     const event = events[name];
@@ -51,8 +50,8 @@ et.trigger("call", {param: 1});
   }
   /**
 	* Attach an event handler function for one or more events to target
-	* @param {String} name - event's name
-	* @param {Function} callback -  function to execute when the event is triggered.
+	* @param - event's name
+	* @param - function to execute when the event is triggered.
 	* @return {EventTrigger} An Instance itself.
 	* @example
 target.on("animate", function() {
@@ -62,14 +61,14 @@ target.on("animate", function() {
 target.trigger("animate");
 
   */
-  public on(name: string | EventParamterType, callback?: CallbackType | CallbackType[], once?: boolean) {
+  public on(name: string | EventParamterType, callback?: CallbackType | CallbackType[]) {
     this._on(name, callback);
     return this;
   }
   /**
 	* Dettach an event handler function for one or more events to target
-	* @param {String} name - event's name
-	* @param {Function} callback -  function to execute when the event is triggered.
+	* @param - event's name
+	* @param -  function to execute when the event is triggered.
 	* @return {EventTrigger} An Instance itself.
 	* @example
 const callback = function() {
@@ -102,8 +101,8 @@ target.off("animate");
   }
   /**
 	* execute event handler
-	* @param {String} name - event's name
-	* @param {Function} [...data] - event handler's additional parameter
+	* @param - event's name
+	* @param - event handler's additional parameter
 	* @return {EventTrigger} An Instance itself.
 	* @example
 target.on("animate", function(a1, a2) {

@@ -39,7 +39,7 @@ export const PLAY_STATE = "playState";
 * @name Scene.OPTIONS
 * @memberof Scene
 * @static
-* @type {string[]}
+* @type {$ts:OptionType}
 * @example
 * Scene.OPTIONS // ["duration", "fillMode", "direction", "iterationCount", "delay", "easing", "playSpeed"]
 */
@@ -50,7 +50,7 @@ export const OPTIONS: OptionType = [DURATION, FILL_MODE, DIRECTION, ITERATION_CO
 * @name Scene.EVENTS
 * @memberof Scene
 * @static
-* @type {string[]}
+* @type {$ts:EventType}
 * @example
 * Scene.EVENTS // ["paused", "ended", "timeupdate", "animate", "play", "iteration"];
 */

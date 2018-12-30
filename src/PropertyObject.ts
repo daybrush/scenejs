@@ -1,5 +1,8 @@
 import { OBJECT, STRING } from "@daybrush/utils";
 
+/**
+ * @typedef
+ */
 interface PropertyObjectInterface {
   prefix?: string;
   suffix?: string;
@@ -9,22 +12,16 @@ interface PropertyObjectInterface {
 }
 /**
 * Make string, array to PropertyObject for the dot product
-* @memberof Scene
 */
 class PropertyObject {
   public value: any[];
   public options: PropertyObjectInterface;
 
   /**
-	* @param {String|Array} value - This value is in the array format ..
-	* @param {String} separator - Array separator.
+	* @param - This value is in the array format.
+	* @param - options
 	* @example
-var obj1 = new PropertyObject("1,2,3", ",");
-var obj2 = new PropertyObject([1,2,3], " ");
-var obj3 = new PropertyObject("1$2$3", "$");
-
-// rgba(100, 100, 100, 0.5)
-var obj4 = new PropertyObject([100,100,100,0.5], {
+var obj = new PropertyObject([100,100,100,0.5], {
 	"separator" : ",",
 	"prefix" : "rgba(",
 	"suffix" : ")"

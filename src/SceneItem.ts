@@ -13,14 +13,15 @@ import Keyframes from "./Keyframes";
 import { dotValue } from "./utils/dot";
 import {
   START_ANIMATION,
-  PREFIX, THRESHOLD, ObjectInterface, NameType,
+  PREFIX, THRESHOLD,
   TIMING_FUNCTION, ALTERNATE, ALTERNATE_REVERSE, NORMAL, INFINITE,
   REVERSE, EASING, FILL_MODE, DIRECTION, ITERATION_COUNT,
   EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
-  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW } from "@daybrush/utils";
+  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, ObjectInterface } from "@daybrush/utils";
+import { NameType } from "./types";
 
 function makeAnimationProperties(properties: ObjectInterface<string | number>) {
   const cssArray = [];
@@ -34,10 +35,9 @@ function makeAnimationProperties(properties: ObjectInterface<string | number>) {
 type ElementsType = HTMLElement[] | NodeListOf<HTMLElement>;
 /**
 * manage Frame Keyframes and play keyframes.
-* @memberof Scene
-* @extends Scene.Animator
+* @extends Animator
 * @example
-const item = new Scene.SceneItem({
+const item = new SceneItem({
 	0: {
 		display: "none",
 	},
@@ -54,10 +54,10 @@ class SceneItem extends Animator {
   public keyframes: Keyframes;
   private elements: ElementsType;
   /**
-	* @param {Object} [properties] - properties
-	* @param {AnimatorOptions} [options] - options
+	* @param - properties
+	* @param - options
 	* @example
-	const item = new Scene.SceneItem({
+	const item = new SceneItem({
 		0: {
 			display: "none",
 		},
@@ -70,7 +70,7 @@ class SceneItem extends Animator {
 		}
 	});
 	 */
-  constructor(properties?: ObjectInterface<any>, options?: ObjectInterface<any>) {
+  constructor(properties?: ObjectInterface<any>, options?: StateInterface) {
     super();
     this.keyframes = new Keyframes();
     this.elements = [];
@@ -93,9 +93,8 @@ class SceneItem extends Animator {
   }
   /**
 	* set the unique indicator of the item.
-	* @method Scene.SceneItem#setId
 	* @param {String} [id] - the indicator of the item.
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 const item = new SceneItem();
 
@@ -121,7 +120,6 @@ console.log(item.getId()); // item
   }
   /**
 	* Specifies the unique indicator of the item.
-	* @method Scene.SceneItem#getId
 	* @return {String} the indicator of the item.
 	* @example
 const item = scene.newItem("item");
@@ -132,10 +130,9 @@ console.log(item.getId()); // item
   }
   /**
 	* Set properties to the sceneItem at that time
-	* @method Scene.SceneItem#set
 	* @param {Number} time - time
 	* @param {...String|Object} [properties] - property names or values
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 item.set(0, "a", "b") // item.getFrame(0).set("a", "b")
 console.log(item.get(0, "a")); // "b"
@@ -177,7 +174,7 @@ console.log(item.get(0, "a")); // "b"
 	* Get properties of the sceneItem at that time
 	* @param {Number} time - time
 	* @param {...String|Object} args property's name or properties
-	* @return {Number|String|Scene.PropertyObejct} property value
+	* @return {Number|String|PropertyObejct} property value
 	* @example
 item.get(0, "a"); // item.getFrame(0).get("a");
 item.get(0, "transform", "translate"); // item.getFrame(0).get("transform", "translate");
@@ -191,7 +188,7 @@ item.get(0, "transform", "translate"); // item.getFrame(0).get("transform", "tra
 	* remove properties to the sceneItem at that time
 	* @param {Number} time - time
 	* @param {...String|Object} [properties] - property names or values
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 item.remove(0, "a");
 	*/
@@ -204,8 +201,8 @@ item.remove(0, "a");
   }
   /**
 	* Append the item or object at the last time.
-	* @param {SceneItem | object} item - the scene item or item object
-	* @return {Scene.SceneItem} An instance itself
+	* @param - the scene item or item object
+	* @return An instance itself
 	* @example
 item.append(new SceneItem({
 	0: {
@@ -238,8 +235,8 @@ item.set(item.getDuration(), {
   }
   /**
 	* Push the front frames for the time and prepend the scene item or item object.
-	* @param {SceneItem | object} item - the scene item or item object
-	* @return {Scene.SceneItem} An instance itself
+	* @param - the scene item or item object
+	* @return An instance itself
 	*/
   public prepend(item: SceneItem | ObjectInterface<any>) {
     if (item instanceof SceneItem) {
@@ -261,9 +258,8 @@ item.set(item.getDuration(), {
   }
   /**
 	* Specifies an element to synchronize items' keyframes.
-	* @method Scene.SceneItem#setSelector
 	* @param {string} selectors - Selectors to find elements in items.
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 item.setSelector("#id.class");
 	*/
@@ -284,9 +280,8 @@ item.setSelector("#id.class");
   }
   /**
 	* Specifies an element to synchronize item's keyframes.
-	* @method Scene.SceneItem#setElement
 	* @param {Element|Array|string} elements - elements to synchronize item's keyframes.
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 item.setElement(document.querySelector("#id.class"));
 item.setElement(document.querySelectorAll(".class"));
@@ -301,9 +296,8 @@ item.setElement(document.querySelectorAll(".class"));
   }
   /**
 	* add css styles of items's element to the frame at that time.
-	* @method Scene.SceneItem#setCSS
 	* @param {Array} properties - elements to synchronize item's keyframes.
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 item.setElement(document.querySelector("#id.class"));
 item.setCSS(0, ["opacity"]);
@@ -324,8 +318,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
   }
   /**
 	* update property names used in frames.
-	* @method Scene.SceneItem#update
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 item.update();
 	*/
@@ -335,9 +328,8 @@ item.update();
   }
   /**
 	* update property names used in frame.
-	* @method Scene.SceneItem#updateFrame
-	* @param {Scene.Frame} [frame] - frame of that time.
-	* @return {Scene.SceneItem} An instance itself
+	* @param {Frame} [frame] - frame of that time.
+	* @return {SceneItem} An instance itself
 	* @example
 item.updateFrame(time, this.get(time));
 	*/
@@ -347,9 +339,8 @@ item.updateFrame(time, this.get(time));
   }
   /**
 	* Create and add a frame to the sceneItem at that time
-	* @method Scene.SceneItem#newFrame
 	* @param {Number} time - frame's time
-	* @return {Scene.Frame} Created frame.
+	* @return {Frame} Created frame.
 	* @example
 item.newFrame(time);
 	*/
@@ -365,9 +356,8 @@ item.newFrame(time);
   }
   /**
 	* Add a frame to the sceneItem at that time
-	* @method Scene.SceneItem#setFrame
 	* @param {Number} time - frame's time
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 item.setFrame(time, frame);
 	*/
@@ -378,9 +368,8 @@ item.setFrame(time, frame);
   }
   /**
 	* get sceneItem's frame at that time
-	* @method Scene.SceneItem#getFrame
 	* @param {Number} time - frame's time
-	* @return {Scene.Frame} sceneItem's frame at that time
+	* @return {Frame} sceneItem's frame at that time
 	* @example
 const frame = item.getFrame(time);
 	*/
@@ -389,7 +378,6 @@ const frame = item.getFrame(time);
   }
   /**
 	* check if the item has a frame at that time
-	* @method Scene.SceneItem#hasFrame
 	* @param {Number} time - frame's time
 	* @return {Boolean} true: the item has a frame // false: not
 	* @example
@@ -404,9 +392,8 @@ if (item.hasFrame(10)) {
   }
   /**
 	* remove sceneItem's frame at that time
-	* @method Scene.SceneItem#removeFrame
 	* @param {Number} time - frame's time
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 item.removeFrame(time);
 	*/
@@ -420,10 +407,9 @@ item.removeFrame(time);
   }
   /**
 	* Copy frame of the previous time at the next time.
-	* @method Scene.SceneItem#copyFrame
 	* @param {number|string|object} fromTime - the previous time
 	* @param {number} toTime - the next time
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 // getFrame(0) equal getFrame(1)
 item.copyFrame(0, 1);
@@ -447,10 +433,9 @@ item.copyFrame(0, 1);
   }
   /**
 	* merge frame of the previous time at the next time.
-	* @method Scene.SceneItem#mergeFrame
 	* @param {number|string|object} fromTime - the previous time
 	* @param {number|string} toTime - the next time
-	* @return {Scene.SceneItem} An instance itself
+	* @return {SceneItem} An instance itself
 	* @example
 // getFrame(1) contains getFrame(0)
 item.merge(0, 1);
@@ -474,12 +459,11 @@ item.merge(0, 1);
   }
   /**
 	* Get frame of the current time
-	* @method Scene.SceneItem#getNowFrame
 	* @param {Number} time - the current time
 	* @param {function} easing - the speed curve of an animation
-	* @return {Scene.Frame} frame of the current time
+	* @return {Frame} frame of the current time
 	* @example
-let item = new Scene.SceneItem({
+let item = new SceneItem({
 	0: {
 		display: "none",
 	},
@@ -541,9 +525,8 @@ const frame = item.getNowFrame(1.7);
   }
   /**
 	 * clone SceneItem.
-	 * @method Scene.SceneItem#clone
-	 * @param {AnimatorOptions} [options] animator options
-	 * @return {Scene.SceneItem} An instance of clone
+	 * @param {StateInterface} [options] animator options
+	 * @return {SceneItem} An instance of clone
 	 * @example
 	 * item.clone();
 	 */
@@ -926,10 +909,10 @@ item.playCSS(false, {
 
     /**
 		 * This event is fired when timeupdate and animate.
-		 * @event Scene.SceneItem#animate
+		 * @event SceneItem#animate
 		 * @param {Number} param.currentTime The total time that the animator is running.
 		 * @param {Number} param.time The iteration time during duration that the animator is running.
-		 * @param {Scene.Frame} param.frame frame of that time.
+		 * @param {Frame} param.frame frame of that time.
 		 */
     this.trigger("animate", {
       frame,

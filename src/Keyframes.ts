@@ -1,8 +1,8 @@
-import { ObjectInterface, RoleInterface } from "./consts";
 import { isInProperties, toFixed } from "./utils";
 import PropertyObject from "./PropertyObject";
 import Frame from "./Frame";
-import { isObject, isArray } from "@daybrush/utils";
+import { isObject, isArray, ObjectInterface } from "@daybrush/utils";
+import { RoleInterface } from "./types";
 
 function getNames(names: ObjectInterface<any>, stack: string[]) {
   let arr: string[][] = [];
@@ -35,7 +35,6 @@ function updateFrame(names: ObjectInterface<any>, properties: ObjectInterface<an
 }
 /**
 * a list of objects in chronological order.
-* @memberof Scene
 */
 class Keyframes {
   public times: number[];
@@ -50,19 +49,19 @@ class Keyframes {
   }
   /**
 	* A list of names
-	* @return {string[][]} names
+	* @return {} names
 	* @example
 keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scale"]]
 	*/
-  public getNames() {
+  public getNames(): string[][] {
     const names = this.names;
 
     return getNames(names, []);
   }
   /**
 	* Check if keyframes has propery's name
-	* @param {...string[]} name - property's time
-	* @return {Boolean} true: if has property, false: not
+	* @param - property's time
+	* @return {boolean} true: if has property, false: not
 	* @example
 keyframes.hasName("transform", "translate"); // true or not
 	*/
@@ -71,7 +70,7 @@ keyframes.hasName("transform", "translate"); // true or not
   }
   /**
 	 * update property names used in frames.
-	 * @return {Scene.Keyframes} An instance itself
+	 * @return {Keyframes} An instance itself
 	 */
   public update() {
     const items = this.items;
@@ -83,11 +82,8 @@ keyframes.hasName("transform", "translate"); // true or not
   }
   /**
 	 * executes a provided function once for each scene item.
-	 * @param {Function} callback Function to execute for each element, taking three arguments
-	 * @param {Scene.Frame} [callback.item] The value of the item being processed in the keyframes.
-	 * @param {string} [callback.time] The time of the item being processed in the keyframes.
-	 * @param {object} [callback.items] The object that forEach() is being applied to.
-	 * @return {Scene.Keyframes} An instance itself
+	 * @param - Function to execute for each element, taking three arguments
+	 * @return {Keyframes} An instance itself
 	 */
   public forEach(callback: (item: any, time: number, items: ObjectInterface<any>) => void) {
     const times = this.times;
@@ -96,11 +92,12 @@ keyframes.hasName("transform", "translate"); // true or not
     times.forEach(time => {
       callback(items[time], time, items);
     });
+    return this;
   }
   /**
 	* update property names used in frame.
-	* @param {Scene.Frame} [frame] - frame of that time.
-	* @return {Scene.Keyframes} An instance itself
+	* @param {Frame} [frame] - frame of that time.
+	* @return {Keyframes} An instance itself
 	* @example
 keyframes.updateFrame(frame);
 	*/
@@ -126,7 +123,7 @@ keyframes.updateFrame(frame);
   /**
 	 * Set how long an animation should take to complete one cycle.
 	 * @param {number} duration - duration
-	 * @return {Scene.Keyframes} An instance itself.
+	 * @return {Keyframes} An instance itself.
 	 */
   public setDuration(duration: number, originalDuration: number = this.getDuration()) {
     const ratio = duration / originalDuration;
@@ -145,7 +142,7 @@ keyframes.updateFrame(frame);
   /**
 	 * Set how much time you want to push ahead.
 	 * @param {number} time - time
-	 * @return {Scene.Keyframes} An instance itself.
+	 * @return {Keyframes} An instance itself.
 	 */
   public unshift(time: number) {
     const { times, items } = this;
@@ -169,9 +166,9 @@ keyframes.updateFrame(frame);
   }
   /**
 	* add object in list
-	* @param {Number} time - frame's time
-	* @param {Object} object - target
-	* @return {Scene.Keyframes} An instance itself
+	* @param {number} time - frame's time
+	* @param {any} object - target
+	* @return {Keyframes} An instance itself
 	*/
   public add(time: number, object: any) {
     this.items[time] = object;
@@ -180,23 +177,23 @@ keyframes.updateFrame(frame);
   }
   /**
 	* Check if keyframes has object at that time.
-	* @param {Number} time - object's time
-	* @return {Boolean} true: if has time, false: not
+	* @param {number} time - object's time
+	* @return {boolean} true: if has time, false: not
 	*/
   public has(time: number) {
     return time in this.items;
   }
   /**
 	* get object at that time.
-	* @param {Number} time - object's time
-	* @return {Object} object at that time
+	* @param {number} time - object's time
+	* @return {object} object at that time
 	*/
   public get(time: number) {
     return this.items[time];
   }
   /**
 	* remove object at that time.
-	* @param {Number} time - object's time
+	* @param {number} time - object's time
 	* @return {Keyframes} An instance itself
 	*/
   public remove(time: number) {

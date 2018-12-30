@@ -1,11 +1,11 @@
 import {
-  ObjectInterface, NameType,
   ALIAS, TIMING_FUNCTION
 } from "./consts";
 import { isRole, getType, isPropertyObject } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
 import { isObject, isArray, isString,
-  ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT } from "@daybrush/utils";
+  ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, ObjectInterface } from "@daybrush/utils";
+import { NameType } from "./types";
 
 function toInnerProperties(obj: ObjectInterface<string>) {
   if (!obj) {
@@ -67,9 +67,12 @@ function getValue(names: NameType[], value: any): any {
 }
 /**
 * Animation's Frame
-* @class Scene.Frame
-* @param {Object} properties - properties
-* @example
+*/
+class Frame {
+  public properties: ObjectInterface<any>;
+  /**
+   * @param - properties
+   * @example
 const frame = new Scene.Frame({
 	display: "none"
 	transform: {
@@ -77,17 +80,14 @@ const frame = new Scene.Frame({
 		scale: "5, 5",
 	}
 });
- */
-class Frame {
-  public properties: ObjectInterface<any>;
+   */
   constructor(properties: ObjectInterface<any> = {}) {
     this.properties = {};
     this.set(properties);
   }
   /**
 	* get property value
-	* @method Scene.Frame#get
-	* @param {...Number|String|Scene.PropertyObject} args - property name or value
+	* @param {...Number|String|PropertyObject} args - property name or value
 	* @example
 	frame.get("display") // => "none", "block", ....
 	frame.get("transform", "translate") // => "10px,10px"
@@ -113,9 +113,8 @@ class Frame {
   }
   /**
 	* remove property value
-	* @method Scene.Frame#remove
 	* @param {...String} args - property name
-	* @return {Scene.Frame} An instance itself
+	* @return {Frame} An instance itself
 	* @example
 	frame.remove("display")
 	*/
@@ -138,9 +137,8 @@ class Frame {
   }
   /**
 	* set property
-	* @method Scene.Frame#set
-	* @param {...Number|String|Scene.PropertyObject} args - property names or values
-	* @return {Scene.Frame} An instance itself
+	* @param {...Number|String|PropertyObject} args - property names or values
+	* @return {Frame} An instance itself
 	* @example
 // one parameter
 frame.set({
@@ -163,7 +161,7 @@ frame.set("transform", {
 
 // three parameters
 frame.set("transform", "translate", "50px");
-	*/
+  */
   public set(...args: any[]) {
     const length = args.length;
     const params = args.slice(0, -1);
@@ -198,12 +196,12 @@ frame.set("transform", "translate", "50px");
         }
         return this;
       } else {
-        const styles = splitStyle(value);
+        const {styles, length: stylesLength} = splitStyle(value);
 
-        styles.forEach(style => {
-          this.set(...params, style);
-        });
-        if (styles.length) {
+        for (const name in styles) {
+          this.set(...params, styles[name]);
+        }
+        if (stylesLength) {
           return this;
         }
       }
@@ -215,7 +213,6 @@ frame.set("transform", "translate", "50px");
   }
   /**
 	* check that has property.
-	* @method Scene.Frame#has
 	* @param {...String} args - property name
 	* @example
 	frame.has("property", "display") // => true or false
@@ -238,8 +235,7 @@ frame.set("transform", "translate", "50px");
   }
   /**
 	* clone frame.
-	* @method Scene.Frame#clone
-	* @return {Scene.Frame} An instance of clone
+	* @return {Frame} An instance of clone
 	* @example
 	frame.clone();
 	*/
@@ -250,9 +246,8 @@ frame.set("transform", "translate", "50px");
   }
   /**
 	* merge one frame to other frame.
-	* @method Scene.Frame#merge
-	* @param {Scene.Frame} frame - target frame.
-	* @return {Scene.Frame} An instance itself
+	* @param - target frame.
+	* @return {Frame} An instance itself
 	* @example
 	frame.merge(frame2);
 	*/
@@ -272,7 +267,6 @@ frame.set("transform", "translate", "50px");
   }
   /**
 	* Specifies an css object that coverted the frame.
-	* @method Scene.Frame#toCSSObject
 	* @return {object} cssObject
 	*/
   public toCSSObject() {
@@ -301,7 +295,6 @@ frame.set("transform", "translate", "50px");
   }
   /**
 	* Specifies an css text that coverted the frame.
-	* @method Scene.Frame#toCSS
 	* @return {string} cssText
 	*/
   public toCSS() {

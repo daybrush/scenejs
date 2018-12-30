@@ -4,13 +4,16 @@
 */
 
 import PropertyObject from "../PropertyObject";
-import { COLOR_MODELS, isString, splitComma, splitSpace, stringToRGBA, RGBA, splitBracket } from "@daybrush/utils";
-import { ObjectInterface } from "../consts";
+import {
+  COLOR_MODELS, isString,
+  splitComma, splitSpace, stringToRGBA,
+  RGBA, splitBracket, ObjectInterface
+} from "@daybrush/utils";
 
 export function splitStyle(str: string) {
   const properties = str.split(";");
   const length = properties.length;
-  const obj = [];
+  const obj: ObjectInterface<string | PropertyObject> = {};
 
   for (let i = 0; i < length; ++i) {
     const matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
@@ -18,9 +21,9 @@ export function splitStyle(str: string) {
     if (!matches || matches.length < 3 || !matches[1]) {
       continue;
     }
-    obj.push({ [matches[1].trim()]: toPropertyObject(matches[2].trim()) });
+    obj[matches[1].trim()] = toPropertyObject(matches[2].trim());
   }
-  return obj;
+  return {styles: obj, length};
 }
 /**
 * convert array to PropertyObject[type=color].
@@ -124,7 +127,10 @@ export function stringToColorObject(value: string): string | PropertyObject {
 toPropertyObject("1px solid #000");
 // => PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)])
 */
-export function toPropertyObject(value: string | ObjectInterface<any> | any[]): any {
+export function toPropertyObject(value: any[]): PropertyObject;
+export function toPropertyObject(value: ObjectInterface<any>): ObjectInterface<any>;
+export function toPropertyObject(value: string): PropertyObject | string;
+export function toPropertyObject(value: string | ObjectInterface<any> | any[]) {
   if (!isString(value)) {
     if (Array.isArray(value)) {
       return arrayToPropertyObject(value, ",");

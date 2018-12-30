@@ -1,9 +1,12 @@
-import { ROLES, ObjectInterface, MAXIMUM, FIXED, ALIAS,
+import { ROLES, MAXIMUM, FIXED, ALIAS,
   PAUSED, RUNNING, PLAY, ENDED, PREFIX } from "./consts";
 import PropertyObject from "./PropertyObject";
 import Scene from "./Scene";
 import SceneItem from "./SceneItem";
-import { isArray, ANIMATION, ARRAY, OBJECT, PROPERTY, STRING, NUMBER, IS_WINDOW } from "@daybrush/utils";
+import {
+  isArray, ANIMATION, ARRAY, OBJECT,
+  PROPERTY, STRING, NUMBER, IS_WINDOW, ObjectInterface,
+} from "@daybrush/utils";
 
 export function isPropertyObject(value: any): value is PropertyObject {
   return value instanceof PropertyObject;

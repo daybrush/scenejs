@@ -1,3 +1,6 @@
+/**
+ * @typedef
+ */
 export interface EasingFunctionInterface extends Function {
   easingName?: string;
 }

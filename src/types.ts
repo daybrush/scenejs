@@ -11,7 +11,7 @@ export interface RoleInterface {
 /**
  * @typedef
  */
-export type NameType = string | string[];
+export type NameType = string | number;
 /**
  * @typedef
  */

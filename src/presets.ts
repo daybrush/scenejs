@@ -1,7 +1,7 @@
 
 import { StateInterface } from "./Animator";
 import SceneItem from "./SceneItem";
-import { ObjectInterface } from "./consts";
+import { ObjectInterface } from "@daybrush/utils";
 
 /**
  * @namespace presets
@@ -9,10 +9,8 @@ import { ObjectInterface } from "./consts";
 /**
  * Use the property to create an effect.
  * @memberof presets
- * @func set
- * @param {string | string[]} property - property to set effect
- * @param {any[]} values - values of 100%
- * @param {AnimatorOptions} [options]
+ * @param - property to set effect
+ * @param - values of 100%
  * @example
 // import {set, blink} from "scenejs";
 // set("opacity", [0, 1, 0], {duration: 2});
@@ -49,7 +47,6 @@ export function set(property: string | string[], values: any[], options: StateIn
 /**
  * Make a zoom in effect.
  * @memberof presets
- * @func zoomIn
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 0] start zoom
  * @param {number}[options.to = 1] end zoom
@@ -77,7 +74,6 @@ export function zoomIn({ from = 0, to = 1 }: StateInterface) {
 /**
  * Make a zoom out effect.
  * @memberof presets
- * @func zoomOut
  * @param {AnimatorOptions} options
  * @param {number} [options.from = 1] start zoom
  * @param {number}[options.to = 0] end zoom
@@ -105,7 +101,6 @@ export function zoomOut({ from = 1, to = 0 }: StateInterface) {
 /**
  * Make a wipe in effect.
  * @memberof presets
- * @func wipeIn
  * @param {AnimatorOptions} options
  * @param {string|string[]} [options.property = "left"] position property
  * @param {number|string} [options.from = "-100%"] start position
@@ -134,7 +129,6 @@ export function wipeIn({ from = "-100%", to = "0%", property = "left" }: StateIn
 /**
  * Make a wipe out effect.
  * @memberof presets
- * @func wipeOut
  * @param {AnimatorOptions} options
  * @param {string|string[]} [options.property = "left"] position property
  * @param {number|string} [options.from = "0%"] start position
@@ -163,7 +157,6 @@ export function wipeOut({ from = "0%", to = "100%", property = "left" }: StateIn
 /**
  * Use the property to create an effect.
  * @memberof presets
- * @func transition
  * @param {Scene.SceneItem} item1 - Item that end effect
  * @param {Scene.SceneItem} item2 - Item that start effect
  * @param {AnimatorOptions} options
@@ -220,8 +213,7 @@ export function transition(item1: SceneItem, item2: SceneItem, {
 /**
  * Make a fade in effect.
  * @memberof presets
- * @func fadeIn
- * @param {AnimatorOptions} options
+ * @param {StateInterface} options
  * @param {number} [options.from = 0] start opacity
  * @param {number}[options.to = 1] end opacity
  * @param {number} options.duration animation's duration
@@ -248,8 +240,7 @@ export function fadeIn({ from = 0, to = 1 }: StateInterface) {
 /**
  * Make a fade out effect.
  * @memberof presets
- * @func fadeOut
- * @param {AnimatorOptions} options
+ * @param {StateInterface} options
  * @param {number} [options.from = 1] start opacity
  * @param {number}[options.to = 0] end opacity
  * @param {number} options.duration animation's duration
@@ -275,8 +266,7 @@ export function fadeOut({ from = 1, to = 0 }: StateInterface) {
 /**
  * Make a blinking effect.
  * @memberof presets
- * @func blink
- * @param {AnimatorOptions} options
+ * @param {StateInterface} options
  * @param {number} [options.from = 0] start opacity
  * @param {number}[options.to = 1] end opacity
  * @param {number} options.duration animation's duration
