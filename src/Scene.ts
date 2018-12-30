@@ -110,12 +110,12 @@ class Scene extends Animator implements ForEachInterface<Scene | SceneItem> {
   /**
   * create item in scene
   * @param {String} name - name of item to create
-  * @param {StateOptions} options - The option object of SceneItem
+  * @param {StateInterface} options - The option object of SceneItem
   * @return {Sceme.SceneItem} Newly created item
   * @example
   const item = scene.newItem("item1")
   */
-  public newItem(name: number | string, options = {}) {
+  public newItem(name: number | string, options: StateInterface = {}) {
     if (name in this.items) {
       return;
     }
