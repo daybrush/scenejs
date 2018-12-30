@@ -128,7 +128,6 @@ tt, code, kbd, samp {
 
 #main {
   float: right;
-  min-width: 360px;
   width: calc(100% - 240px);
 }
 
@@ -624,9 +623,10 @@ span.param-type, .params td .param-type, .param-type dd {
   z-index: 1;
 }
 
-@media only screen and (min-width: 320px) and (max-width: 680px) {
+@media only screen and (max-width: 680px) {
   body {
     overflow-x: hidden;
+    padding: 0 10px;
   }
 
   nav {
@@ -653,7 +653,6 @@ span.param-type, .params td .param-type, .param-type dd {
 
   #main {
     width: 100%;
-    min-width: 360px;
   }
 
   #main h1.page-title {

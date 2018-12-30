@@ -1,5 +1,6 @@
 /*
 Copyright (c) 2018 Daybrush
+@name: scenejs
 license: MIT
 author: Daybrush
 repository: https://github.com/daybrush/scenejs.git
@@ -114,7 +115,7 @@ repository: https://github.com/daybrush/scenejs.git
     * @name Scene.OPTIONS
     * @memberof Scene
     * @static
-    * @type {string[]}
+    * @type {$ts:OptionType}
     * @example
     * Scene.OPTIONS // ["duration", "fillMode", "direction", "iterationCount", "delay", "easing", "playSpeed"]
     */
@@ -125,7 +126,7 @@ repository: https://github.com/daybrush/scenejs.git
     * @name Scene.EVENTS
     * @memberof Scene
     * @static
-    * @type {string[]}
+    * @type {$ts:EventType}
     * @example
     * Scene.EVENTS // ["paused", "ended", "timeupdate", "animate", "play", "iteration"];
     */
@@ -930,9 +931,905 @@ repository: https://github.com/daybrush/scenejs.git
       return cssObject;
     }
 
+    /*
+    Copyright (c) 2018 Daybrush
+    @name: fjx
+    license: MIT
+    author: Daybrush
+    repository: https://github.com/daybrush/fjx.git
+    @version 0.0.1-rc2
+    */
+    /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
+
+    function __awaiter$1(thisArg, _arguments, P, generator) {
+      return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) {
+          try {
+            step(generator.next(value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+
+        function rejected(value) {
+          try {
+            step(generator["throw"](value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+
+        function step(result) {
+          result.done ? resolve(result.value) : new P(function (resolve) {
+            resolve(result.value);
+          }).then(fulfilled, rejected);
+        }
+
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    }
+
+    function __generator$1(thisArg, body) {
+      var _ = {
+        label: 0,
+        sent: function () {
+          if (t[0] & 1) throw t[1];
+          return t[1];
+        },
+        trys: [],
+        ops: []
+      },
+          f,
+          y,
+          t,
+          g;
+      return g = {
+        next: verb(0),
+        "throw": verb(1),
+        "return": verb(2)
+      }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+        return this;
+      }), g;
+
+      function verb(n) {
+        return function (v) {
+          return step([n, v]);
+        };
+      }
+
+      function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+
+        while (_) try {
+          if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+          if (y = 0, t) op = [op[0] & 2, t.value];
+
+          switch (op[0]) {
+            case 0:
+            case 1:
+              t = op;
+              break;
+
+            case 4:
+              _.label++;
+              return {
+                value: op[1],
+                done: false
+              };
+
+            case 5:
+              _.label++;
+              y = op[1];
+              op = [0];
+              continue;
+
+            case 7:
+              op = _.ops.pop();
+
+              _.trys.pop();
+
+              continue;
+
+            default:
+              if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                _ = 0;
+                continue;
+              }
+
+              if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                _.label = op[1];
+                break;
+              }
+
+              if (op[0] === 6 && _.label < t[1]) {
+                _.label = t[1];
+                t = op;
+                break;
+              }
+
+              if (t && _.label < t[2]) {
+                _.label = t[2];
+
+                _.ops.push(op);
+
+                break;
+              }
+
+              if (t[2]) _.ops.pop();
+
+              _.trys.pop();
+
+              continue;
+          }
+
+          op = body.call(thisArg, _);
+        } catch (e) {
+          op = [6, e];
+          y = 0;
+        } finally {
+          f = t = 0;
+        }
+
+        if (op[0] & 5) throw op[1];
+        return {
+          value: op[0] ? op[1] : void 0,
+          done: true
+        };
+      }
+    }
+
+    function __values$1(o) {
+      var m = typeof Symbol === "function" && o[Symbol.iterator],
+          i = 0;
+      if (m) return m.call(o);
+      return {
+        next: function () {
+          if (o && i >= o.length) o = void 0;
+          return {
+            value: o && o[i++],
+            done: !o
+          };
+        }
+      };
+    }
+
+    function __read$1(o, n) {
+      var m = typeof Symbol === "function" && o[Symbol.iterator];
+      if (!m) return o;
+      var i = m.call(o),
+          r,
+          ar = [],
+          e;
+
+      try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+      } catch (error) {
+        e = {
+          error: error
+        };
+      } finally {
+        try {
+          if (r && !r.done && (m = i["return"])) m.call(i);
+        } finally {
+          if (e) throw e.error;
+        }
+      }
+
+      return ar;
+    }
+
+    function __spread$1() {
+      for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read$1(arguments[i]));
+
+      return ar;
+    }
+
+    function __await$1(v) {
+      return this instanceof __await$1 ? (this.v = v, this) : new __await$1(v);
+    }
+
+    function __asyncGenerator$1(thisArg, _arguments, generator) {
+      if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+      var g = generator.apply(thisArg, _arguments || []),
+          i,
+          q = [];
+      return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () {
+        return this;
+      }, i;
+
+      function verb(n) {
+        if (g[n]) i[n] = function (v) {
+          return new Promise(function (a, b) {
+            q.push([n, v, a, b]) > 1 || resume(n, v);
+          });
+        };
+      }
+
+      function resume(n, v) {
+        try {
+          step(g[n](v));
+        } catch (e) {
+          settle(q[0][3], e);
+        }
+      }
+
+      function step(r) {
+        r.value instanceof __await$1 ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);
+      }
+
+      function fulfill(value) {
+        resume("next", value);
+      }
+
+      function reject(value) {
+        resume("throw", value);
+      }
+
+      function settle(f, v) {
+        if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]);
+      }
+    }
+    /**
+     * @namespace Functions
+     */
+
+    /**
+     * @memberof Functions
+     */
+
+    function reduceArrayF(callbackFn, initial, iterator) {
+      return iterator.reduce(callbackFn, initial);
+    }
+    /**
+     * @memberof Functions
+     */
+
+
+    function reduceObjectF(callbackFn, initial, iterator) {
+      var cur = initial;
+
+      for (var key in iterator) {
+        cur = callbackFn(cur, iterator[key], key, iterator);
+      }
+
+      return cur;
+    }
+    /**
+     * @memberof Functions
+     */
+
+
+    function reduceIteratorF(callbackFn, initial, iterator) {
+      var e_1, _a;
+
+      var cur = initial;
+
+      try {
+        for (var iterator_1 = __values$1(iterator), iterator_1_1 = iterator_1.next(); !iterator_1_1.done; iterator_1_1 = iterator_1.next()) {
+          var value = iterator_1_1.value;
+          cur = callbackFn(cur, value, iterator);
+        }
+      } catch (e_1_1) {
+        e_1 = {
+          error: e_1_1
+        };
+      } finally {
+        try {
+          if (iterator_1_1 && !iterator_1_1.done && (_a = iterator_1.return)) _a.call(iterator_1);
+        } finally {
+          if (e_1) throw e_1.error;
+        }
+      }
+
+      return cur;
+    } // each
+
+    /**
+     * @memberof Functions
+     * @returns {} The calling array itself
+     */
+
+
+    function eachArrayF(f, iterator) {
+      iterator.forEach(f);
+      return iterator;
+    }
+    /**
+     * @memberof Functions
+     * @returns {} The calling object itself
+     */
+
+
+    function eachObjectF(f, iterator) {
+      for (var key in iterator) {
+        f(iterator[key], key, iterator);
+      }
+
+      return iterator;
+    }
+    /**
+     * @memberof Functions
+    * @returns {} The calling iterator itself
+     */
+
+
+    function eachIteratorF(f, iterator) {
+      var e_2, _a;
+
+      try {
+        for (var iterator_2 = __values$1(iterator), iterator_2_1 = iterator_2.next(); !iterator_2_1.done; iterator_2_1 = iterator_2.next()) {
+          var value = iterator_2_1.value;
+          f(value, iterator);
+        }
+      } catch (e_2_1) {
+        e_2 = {
+          error: e_2_1
+        };
+      } finally {
+        try {
+          if (iterator_2_1 && !iterator_2_1.done && (_a = iterator_2.return)) _a.call(iterator_2);
+        } finally {
+          if (e_2) throw e_2.error;
+        }
+      }
+
+      return iterator;
+    } // map
+
+    /**
+     * @memberof FunctionS
+     */
+
+
+    function mapArrayF(f, iterator) {
+      return iterator.map(f);
+    }
+    /**
+     * @memberof Functions
+     */
+
+
+    function mapObjectF(f, iterator) {
+      var obj = {};
+
+      for (var key in iterator) {
+        obj[key] = f(iterator[key], key, iterator);
+      }
+
+      return obj;
+    }
+    /**
+     * @memberof Functions
+     */
+
+
+    function mapIteratorF(f, iterator) {
+      var e_3, _a, iterator_3, iterator_3_1, value, e_3_1;
+
+      return __generator$1(this, function (_b) {
+        switch (_b.label) {
+          case 0:
+            _b.trys.push([0, 5, 6, 7]);
+
+            iterator_3 = __values$1(iterator), iterator_3_1 = iterator_3.next();
+            _b.label = 1;
+
+          case 1:
+            if (!!iterator_3_1.done) return [3
+            /*break*/
+            , 4];
+            value = iterator_3_1.value;
+            return [4
+            /*yield*/
+            , f(value, iterator)];
+
+          case 2:
+            _b.sent();
+
+            _b.label = 3;
+
+          case 3:
+            iterator_3_1 = iterator_3.next();
+            return [3
+            /*break*/
+            , 1];
+
+          case 4:
+            return [3
+            /*break*/
+            , 7];
+
+          case 5:
+            e_3_1 = _b.sent();
+            e_3 = {
+              error: e_3_1
+            };
+            return [3
+            /*break*/
+            , 7];
+
+          case 6:
+            try {
+              if (iterator_3_1 && !iterator_3_1.done && (_a = iterator_3.return)) _a.call(iterator_3);
+            } finally {
+              if (e_3) throw e_3.error;
+            }
+
+            return [7
+            /*endfinally*/
+            ];
+
+          case 7:
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    } // filter
+
+    /**
+     * @memberof Functions
+     */
+
+
+    function filterArrayF(f, iterator) {
+      return iterator.filter(f);
+    }
+    /**
+     * @memberof Functions
+     */
+
+
+    function filterObjectF(f, iterator) {
+      var obj = {};
+
+      for (var key in iterator) {
+        f(iterator[key], key, iterator) && (obj[key] = iterator[key]);
+      }
+
+      return obj;
+    }
+    /**
+     * @memberof Functions
+     */
+
+
+    function filterIteratorF(f, iterator) {
+      var e_4, _a, iterator_4, iterator_4_1, value, _b, e_4_1;
+
+      return __generator$1(this, function (_c) {
+        switch (_c.label) {
+          case 0:
+            _c.trys.push([0, 6, 7, 8]);
+
+            iterator_4 = __values$1(iterator), iterator_4_1 = iterator_4.next();
+            _c.label = 1;
+
+          case 1:
+            if (!!iterator_4_1.done) return [3
+            /*break*/
+            , 5];
+            value = iterator_4_1.value;
+            _b = f(value, iterator);
+            if (!_b) return [3
+            /*break*/
+            , 3];
+            return [4
+            /*yield*/
+            , value];
+
+          case 2:
+            _b = _c.sent();
+            _c.label = 3;
+
+          case 3:
+            _c.label = 4;
+
+          case 4:
+            iterator_4_1 = iterator_4.next();
+            return [3
+            /*break*/
+            , 1];
+
+          case 5:
+            return [3
+            /*break*/
+            , 8];
+
+          case 6:
+            e_4_1 = _c.sent();
+            e_4 = {
+              error: e_4_1
+            };
+            return [3
+            /*break*/
+            , 8];
+
+          case 7:
+            try {
+              if (iterator_4_1 && !iterator_4_1.done && (_a = iterator_4.return)) _a.call(iterator_4);
+            } finally {
+              if (e_4) throw e_4.error;
+            }
+
+            return [7
+            /*endfinally*/
+            ];
+
+          case 8:
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    }
+    /**
+     * @memberof utils
+     */
+
+
+    function curry(f) {
+      var length = f.length;
+
+      if (length === 0) {
+        return f;
+      }
+
+      function nest(i, args) {
+        return function () {
+          var args2 = [];
+
+          for (var _i = 0; _i < arguments.length; _i++) {
+            args2[_i] = arguments[_i];
+          }
+
+          var length2 = i - args2.length;
+          return length2 <= 0 ? f.apply(void 0, __spread$1(args, args2)) : nest(length2, args.concat(args2));
+        };
+      }
+
+      return nest(length, []);
+    }
+    /**
+     * @memberof AsyncFunctions
+     */
+
+
+    function asyncReduceIteratorF(callbackFn, initial, iterator) {
+      var _this = this;
+
+      return reduceIteratorF(function (prev, cur) {
+        return __awaiter$1(_this, void 0, void 0, function () {
+          var prev2, cur2;
+          return __generator$1(this, function (_a) {
+            switch (_a.label) {
+              case 0:
+                return [4
+                /*yield*/
+                , prev];
+
+              case 1:
+                prev2 = _a.sent();
+                return [4
+                /*yield*/
+                , cur];
+
+              case 2:
+                cur2 = _a.sent();
+                return [2
+                /*return*/
+                , callbackFn(prev2, cur2, iterator)];
+            }
+          });
+        });
+      }, initial, iterator);
+    } // async each
+    /**
+     * @memberof AsyncFunctions
+     */
+
+
+    function asyncEachIteratorF(f, iterator) {
+      return __awaiter$1(this, void 0, void 0, function () {
+        var e_1, _a, iterator_1, iterator_1_1, value, _b, e_1_1;
+
+        return __generator$1(this, function (_c) {
+          switch (_c.label) {
+            case 0:
+              _c.trys.push([0, 5, 6, 7]);
+
+              iterator_1 = __values$1(iterator), iterator_1_1 = iterator_1.next();
+              _c.label = 1;
+
+            case 1:
+              if (!!iterator_1_1.done) return [3
+              /*break*/
+              , 4];
+              value = iterator_1_1.value;
+              _b = f;
+              return [4
+              /*yield*/
+              , value];
+
+            case 2:
+              _b.apply(void 0, [_c.sent(), iterator]);
+
+              _c.label = 3;
+
+            case 3:
+              iterator_1_1 = iterator_1.next();
+              return [3
+              /*break*/
+              , 1];
+
+            case 4:
+              return [3
+              /*break*/
+              , 7];
+
+            case 5:
+              e_1_1 = _c.sent();
+              e_1 = {
+                error: e_1_1
+              };
+              return [3
+              /*break*/
+              , 7];
+
+            case 6:
+              try {
+                if (iterator_1_1 && !iterator_1_1.done && (_a = iterator_1.return)) _a.call(iterator_1);
+              } finally {
+                if (e_1) throw e_1.error;
+              }
+
+              return [7
+              /*endfinally*/
+              ];
+
+            case 7:
+              return [2
+              /*return*/
+              , iterator];
+          }
+        });
+      });
+    } // async map
+    /**
+     * @memberof AsyncFunctions
+     */
+
+
+    function asyncMapIteratorF(f, iterator) {
+      return __asyncGenerator$1(this, arguments, function asyncMapIteratorF_1() {
+        var e_2, _a, iterator_2, iterator_2_1, value, _b, e_2_1;
+
+        return __generator$1(this, function (_c) {
+          switch (_c.label) {
+            case 0:
+              _c.trys.push([0, 7, 8, 9]);
+
+              iterator_2 = __values$1(iterator), iterator_2_1 = iterator_2.next();
+              _c.label = 1;
+
+            case 1:
+              if (!!iterator_2_1.done) return [3
+              /*break*/
+              , 6];
+              value = iterator_2_1.value;
+              _b = f;
+              return [4
+              /*yield*/
+              , __await$1(value)];
+
+            case 2:
+              return [4
+              /*yield*/
+              , __await$1.apply(void 0, [_b.apply(void 0, [_c.sent(), iterator])])];
+
+            case 3:
+              return [4
+              /*yield*/
+              , _c.sent()];
+
+            case 4:
+              _c.sent();
+
+              _c.label = 5;
+
+            case 5:
+              iterator_2_1 = iterator_2.next();
+              return [3
+              /*break*/
+              , 1];
+
+            case 6:
+              return [3
+              /*break*/
+              , 9];
+
+            case 7:
+              e_2_1 = _c.sent();
+              e_2 = {
+                error: e_2_1
+              };
+              return [3
+              /*break*/
+              , 9];
+
+            case 8:
+              try {
+                if (iterator_2_1 && !iterator_2_1.done && (_a = iterator_2.return)) _a.call(iterator_2);
+              } finally {
+                if (e_2) throw e_2.error;
+              }
+
+              return [7
+              /*endfinally*/
+              ];
+
+            case 9:
+              return [2
+              /*return*/
+              ];
+          }
+        });
+      });
+    } // async filter
+    /**
+     * @namespace Currying
+     * @sort 1
+     */
+
+    /**
+     * @memberof Currying
+     * @function
+     */
+    // currying reduce
+
+
+    var reduceArray =
+    /*#__PURE__*/
+    curry(reduceArrayF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var reduceObject =
+    /*#__PURE__*/
+    curry(reduceObjectF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var reduceIterator =
+    /*#__PURE__*/
+    curry(reduceIteratorF); // currying each
+
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var eachArray =
+    /*#__PURE__*/
+    curry(eachArrayF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var eachObject =
+    /*#__PURE__*/
+    curry(eachObjectF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var eachIterator =
+    /*#__PURE__*/
+    curry(eachIteratorF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var mapArray =
+    /*#__PURE__*/
+    curry(mapArrayF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var mapObject =
+    /*#__PURE__*/
+    curry(mapObjectF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var mapIterator =
+    /*#__PURE__*/
+    curry(mapIteratorF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var filterArray =
+    /*#__PURE__*/
+    curry(filterArrayF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var filterObject =
+    /*#__PURE__*/
+    curry(filterObjectF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var filterIterator =
+    /*#__PURE__*/
+    curry(filterIteratorF); // currying async each
+
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var asyncEachIterator =
+    /*#__PURE__*/
+    curry(asyncEachIteratorF);
+    /**
+     * @memberof Currying
+     * @function
+     */
+
+    var asyncReduceIterator =
+    /*#__PURE__*/
+    curry(asyncReduceIteratorF);
+    /**
+     * @memberof Currying
+     * @function
+     * @param {} callbackFn - Function that produces an element of the new Iterator.
+     * @param {} [iterator] - The iterator to call this function.
+     * @example
+    asyncMapIterator(v => console.log(v), [fetch("https://daybrush.com").then(res => res.json()), 1, 2, 3]);
+
+    // curry
+    const func = asyncMapIterator(v => console.log(v));
+
+    func([fetch("https://daybrush.com").then(res => res.json()), 1, 2, 3])
+     */
+
+    var asyncMapIterator =
+    /*#__PURE__*/
+    curry(asyncMapIteratorF);
+
     /**
     * attach and trigger event handlers.
-    * @memberof Scene
     */
 
     var EventTrigger =
@@ -954,32 +1851,19 @@ repository: https://github.com/daybrush/scenejs.git
       function EventTrigger() {
         this.events = {};
       }
-      /**
-        * Attach an event handler function for one or more events to target
-        * @param {String} name - event's name
-        * @param {Function} callback -  function to execute when the event is triggered.
-        * @return {EventTrigger} An Instance itself.
-        * @example
-      target.on("animate", function() {
-        console.log("animate");
-      });
-       target.trigger("animate");
-           */
-
 
       var __proto = EventTrigger.prototype;
 
-      __proto.on = function (name, callback) {
+      __proto._on = function (name, callback, once) {
         var _this = this;
 
         var events = this.events;
 
         if (isObject(name)) {
-          for (var i in name) {
-            this.on(i, name[i]);
-          }
-
-          return this;
+          eachObjectF(function (f, i) {
+            _this._on(i, f, once);
+          }, name);
+          return;
         }
 
         if (!(name in events)) {
@@ -987,24 +1871,50 @@ repository: https://github.com/daybrush/scenejs.git
         }
 
         if (!callback) {
-          return this;
+          return;
         }
 
-        if (isObject(callback)) {
-          callback.forEach(function (func) {
-            return _this.on(name, func);
-          });
-          return this;
+        if (isArray(callback)) {
+          eachArrayF(function (func) {
+            return _this._on(name, func, once);
+          }, callback);
+          return;
         }
 
         var event = events[name];
-        event.push(callback);
+        event.push(once ? function callback2() {
+          var args = [];
+
+          for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+          }
+
+          callback.apply(void 0, args);
+          this.off(name, callback2);
+        } : callback);
+      };
+      /**
+        * Attach an event handler function for one or more events to target
+        * @param - event's name
+        * @param - function to execute when the event is triggered.
+        * @return {EventTrigger} An Instance itself.
+        * @example
+      target.on("animate", function() {
+        console.log("animate");
+      });
+       target.trigger("animate");
+         */
+
+
+      __proto.on = function (name, callback) {
+        this._on(name, callback);
+
         return this;
       };
       /**
         * Dettach an event handler function for one or more events to target
-        * @param {String} name - event's name
-        * @param {Function} callback -  function to execute when the event is triggered.
+        * @param - event's name
+        * @param -  function to execute when the event is triggered.
         * @return {EventTrigger} An Instance itself.
         * @example
       const callback = function() {
@@ -1039,8 +1949,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * execute event handler
-        * @param {String} name - event's name
-        * @param {Function} [...data] - event handler's additional parameter
+        * @param - event's name
+        * @param - event handler's additional parameter
         * @return {EventTrigger} An Instance itself.
         * @example
       target.on("animate", function(a1, a2) {
@@ -1074,9 +1984,15 @@ repository: https://github.com/daybrush/scenejs.git
           !target.target && (target.target = this);
         }
 
-        event.forEach(function (callback) {
+        eachArrayF(function (callback) {
           callback.apply(_this, data);
-        });
+        }, event);
+        return this;
+      };
+
+      __proto.once = function (name, callback) {
+        this._on(name, callback, true);
+
         return this;
       };
 
@@ -1273,21 +2189,16 @@ repository: https://github.com/daybrush/scenejs.git
 
     /**
     * Make string, array to PropertyObject for the dot product
-    * @memberof Scene
     */
 
     var PropertyObject =
     /*#__PURE__*/
     function () {
       /**
-        * @param {String|Array} value - This value is in the array format ..
-        * @param {String} separator - Array separator.
+        * @param - This value is in the array format.
+        * @param - options
         * @example
-      var obj1 = new PropertyObject("1,2,3", ",");
-      var obj2 = new PropertyObject([1,2,3], " ");
-      var obj3 = new PropertyObject("1$2$3", "$");
-       // rgba(100, 100, 100, 0.5)
-      var obj4 = new PropertyObject([100,100,100,0.5], {
+      var obj = new PropertyObject([100,100,100,0.5], {
         "separator" : ",",
         "prefix" : "rgba(",
         "suffix" : ")"
@@ -1652,7 +2563,7 @@ repository: https://github.com/daybrush/scenejs.git
       return direction === (currentIterationCount % 2 >= 1 ? ALTERNATE : ALTERNATE_REVERSE);
     }
     /**
-    * @typedef {Object} AnimatorOptions The Animator options. Properties used in css animation.
+    * @typedef {Object} StateInterface The Animator options. Properties used in css animation.
     * @property {number} [duration] The duration property defines how long an animation should take to complete one cycle.
     * @property {"none"|"forwards"|"backwards"|"both"} [fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
     * @property {"infinite"|number} [iterationCount] The iterationCount property specifies the number of times an animation should be played.
@@ -1661,31 +2572,31 @@ repository: https://github.com/daybrush/scenejs.git
     * @property {"normal"|"reverse"|"alternate"|"alternate-reverse"} [direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
     */
 
-    /**
-    * play video, animation, the others
-    * @memberof Scene
-    * @class Animator
-    * @extends Scene.EventTrigger
-    * @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
-    * @param {AnimatorOptions} [options] - animator's options
-    * @example
-    const animator = new Animator({
-        delay: 2,
-        diretion: "alternate",
-        duration: 2,
-        fillMode: "forwards",
-        iterationCount: 3,
-        easing: Scene.eaasing.EASE,
-    });
-    */
-
     var setters = [ITERATION_COUNT, DELAY, FILL_MODE, DIRECTION, PLAY_SPEED, DURATION, PLAY_SPEED, ITERATION_TIME, PLAY_STATE];
     var getters = setters.concat([EASING, EASING_NAME]);
+    /**
+    * play video, animation, the others
+    * @extends EventTrigger
+    * @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
+    */
 
     var Animator =
     /*#__PURE__*/
     function (_super) {
       __extends(Animator, _super);
+      /**
+       * @param - animator's options
+       * @example
+      const animator = new Animator({
+        delay: 2,
+        diretion: "alternate",
+        duration: 2,
+        fillMode: "forwards",
+        iterationCount: 3,
+        easing: Scene.easing.EASE,
+      });
+       */
+
 
       function Animator(options) {
         var _this = _super.call(this) || this;
@@ -1715,9 +2626,8 @@ repository: https://github.com/daybrush/scenejs.git
       }
       /**
         * set animator's easing.
-        * @method Scene.Animator#setEasing
-        * @param {array| function} curverArray - The speed curve of an animation.
-        * @return {Scene.Animator} An instance itself.
+        * @param curverArray - The speed curve of an animation.
+        * @return {Animator} An instance itself.
         * @example
       animator.({
         delay: 2,
@@ -1743,10 +2653,9 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * set animator's options.
-        * @method Scene.Animator#setOptions
         * @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
-        * @param {Object} [AnimatorOptions] - animator's options
-        * @return {Scene.Animator} An instance itself.
+        * @param - animator's options
+        * @return {Animator} An instance itself.
         * @example
       animator.({
         delay: 2,
@@ -1782,7 +2691,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Get the animator's total duration including delay
-        * @method Scene.Animator#getTotalDuration
         * @return {number} Total duration
         * @example
       animator.getTotalDuration();
@@ -1798,7 +2706,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Get the animator's total duration excluding delay
-        * @method Scene.Animator#getActiveDuration
         * @return {number} Total duration excluding delay
         * @example
       animator.getTotalDuration();
@@ -1814,7 +2721,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Check if the animator has reached the end.
-        * @method Scene.Animator#isEnded
         * @return {boolean} ended
         * @example
       animator.isEnded(); // true or false
@@ -1832,7 +2738,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         *Check if the animator is paused:
-        * @method Scene.Animator#isPaused
         * @return {boolean} paused
         * @example
       animator.isPaused(); // true or false
@@ -1851,8 +2756,7 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * play animator
-        * @method Scene.Animator#play
-        * @return {Scene.Animator} An instance itself.
+        * @return {Animator} An instance itself.
         */
 
 
@@ -1873,7 +2777,7 @@ repository: https://github.com/daybrush/scenejs.git
         });
         /**
              * This event is fired when play animator.
-             * @event Scene.Animator#play
+             * @event Animator#play
              */
 
         this.trigger(PLAY);
@@ -1881,8 +2785,7 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * pause animator
-        * @method Scene.Animator#pause
-        * @return {Scene.Animator} An instance itself.
+        * @return {Animator} An instance itself.
         */
 
 
@@ -1890,7 +2793,7 @@ repository: https://github.com/daybrush/scenejs.git
         this.state[PLAY_STATE] = PAUSED;
         /**
              * This event is fired when animator is paused.
-             * @event Scene.Animator#paused
+             * @event Animator#paused
              */
 
         this.trigger(PAUSED);
@@ -1898,8 +2801,7 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
          * end animator
-         * @method Scene.Animator#finish
-         * @return {Scene.Animator} An instance itself.
+         * @return {Animator} An instance itself.
         */
 
 
@@ -1911,8 +2813,7 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
          * end animator
-         * @method Scene.Animator#end
-         * @return {Scene.Animator} An instance itself.
+         * @return {Animator} An instance itself.
         */
 
 
@@ -1920,7 +2821,7 @@ repository: https://github.com/daybrush/scenejs.git
         this.pause();
         /**
              * This event is fired when animator is ended.
-             * @event Scene.Animator#ended
+             * @event Animator#ended
              */
 
         this.trigger(ENDED);
@@ -1928,9 +2829,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * set currentTime
-        * @method Scene.Animator#setTime
         * @param {Number|String} time - currentTime
-        * @return {Scene.Animator} An instance itself.
+        * @return {Animator} An instance itself.
         * @example
        animator.setTime("from"); // 0
       animator.setTime("to"); // 100%
@@ -1959,7 +2859,7 @@ repository: https://github.com/daybrush/scenejs.git
         }
         /**
              * This event is fired when the animator updates the time.
-             * @event Scene.Animator#timeupdate
+             * @event Animator#timeupdate
              * @param {Object} param The object of data to be sent to an event.
              * @param {Number} param.currentTime The total time that the animator is running.
              * @param {Number} param.time The iteration time during duration that the animator is running.
@@ -1988,7 +2888,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Get the animator's current time
-        * @method Scene.Animator#getTime
         * @return {number} current time
         * @example
       animator.getTime();
@@ -2027,7 +2926,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
          * Check if the current state of animator is delayed.
-         * @method Scene.Animator#isDelay
          * @return {boolean} check delay state
          */
 
@@ -2046,7 +2944,7 @@ repository: https://github.com/daybrush/scenejs.git
         if (state.currentIterationCount < passIterationCount) {
           /**
                 * The event is fired when an iteration of an animation ends.
-                * @event Scene.Animator#iteration
+                * @event Animator#iteration
                 * @param {Object} param The object of data to be sent to an event.
                 * @param {Number} param.currentTime The total time that the animator is running.
                 * @param {Number} param.iterationCount The iteration count that the animator is running.
@@ -2136,23 +3034,25 @@ repository: https://github.com/daybrush/scenejs.git
     * @name Property
     */
     function splitStyle(str) {
-      var _a;
-
       var properties = str.split(";");
+      var obj = {};
       var length = properties.length;
-      var obj = [];
 
       for (var i = 0; i < length; ++i) {
         var matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
 
         if (!matches || matches.length < 3 || !matches[1]) {
+          --length;
           continue;
         }
 
-        obj.push((_a = {}, _a[matches[1].trim()] = toPropertyObject(matches[2].trim()), _a));
+        obj[matches[1].trim()] = toPropertyObject(matches[2].trim());
       }
 
-      return obj;
+      return {
+        styles: obj,
+        length: length
+      };
     }
     /**
     * convert array to PropertyObject[type=color].
@@ -2250,19 +3150,6 @@ repository: https://github.com/daybrush/scenejs.git
       var result = stringToRGBA(value);
       return result ? arrayToColorObject(result) : value;
     }
-    /**
-    * convert CSS Value to PropertyObject
-    * @memberof Property
-    * @function toPropertyObject
-    * @param {String} value it's text contains the array.
-    * @return {String} Not Array, Not Separator, Only Number & Unit
-    * @return {PropertyObject} Array with Separator.
-    * @see referenced regular expression {@link http://stackoverflow.com/questions/20215440/parse-css-gradient-rule-with-javascript-regex}
-    * @example
-    toPropertyObject("1px solid #000");
-    // => PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)])
-    */
-
     function toPropertyObject(value) {
       if (!isString(value)) {
         if (Array.isArray(value)) {
@@ -2405,22 +3292,23 @@ repository: https://github.com/daybrush/scenejs.git
     }
     /**
     * Animation's Frame
-    * @class Scene.Frame
-    * @param {Object} properties - properties
-    * @example
-    const frame = new Scene.Frame({
-        display: "none"
-        transform: {
-            translate: "50px",
-            scale: "5, 5",
-        }
-    });
-     */
+    */
 
 
     var Frame =
     /*#__PURE__*/
     function () {
+      /**
+       * @param - properties
+       * @example
+      const frame = new Scene.Frame({
+        display: "none"
+        transform: {
+            translate: "50px",
+            scale: "5, 5",
+        }
+      });
+       */
       function Frame(properties) {
         if (properties === void 0) {
           properties = {};
@@ -2431,8 +3319,7 @@ repository: https://github.com/daybrush/scenejs.git
       }
       /**
         * get property value
-        * @method Scene.Frame#get
-        * @param {...Number|String|Scene.PropertyObject} args - property name or value
+        * @param {...Number|String|PropertyObject} args - property name or value
         * @example
         frame.get("display") // => "none", "block", ....
         frame.get("transform", "translate") // => "10px,10px"
@@ -2475,9 +3362,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * remove property value
-        * @method Scene.Frame#remove
         * @param {...String} args - property name
-        * @return {Scene.Frame} An instance itself
+        * @return {Frame} An instance itself
         * @example
         frame.remove("display")
         */
@@ -2511,9 +3397,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * set property
-        * @method Scene.Frame#set
-        * @param {...Number|String|Scene.PropertyObject} args - property names or values
-        * @return {Scene.Frame} An instance itself
+        * @param {...Number|String|PropertyObject} args - property names or values
+        * @return {Frame} An instance itself
         * @example
       // one parameter
       frame.set({
@@ -2534,12 +3419,10 @@ repository: https://github.com/daybrush/scenejs.git
       });
        // three parameters
       frame.set("transform", "translate", "50px");
-        */
+      */
 
 
       __proto.set = function () {
-        var _this = this;
-
         var args = [];
 
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -2580,12 +3463,15 @@ repository: https://github.com/daybrush/scenejs.git
 
             return this;
           } else {
-            var styles = splitStyle(value);
-            styles.forEach(function (style) {
-              _this.set.apply(_this, params.concat([style]));
-            });
+            var _a = splitStyle(value),
+                styles = _a.styles,
+                stylesLength = _a.length;
 
-            if (styles.length) {
+            for (var name in styles) {
+              this.set.apply(this, params.concat([name, styles[name]]));
+            }
+
+            if (stylesLength) {
               return this;
             }
           }
@@ -2599,7 +3485,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * check that has property.
-        * @method Scene.Frame#has
         * @param {...String} args - property name
         * @example
         frame.has("property", "display") // => true or false
@@ -2633,8 +3518,7 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * clone frame.
-        * @method Scene.Frame#clone
-        * @return {Scene.Frame} An instance of clone
+        * @return {Frame} An instance of clone
         * @example
         frame.clone();
         */
@@ -2646,9 +3530,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * merge one frame to other frame.
-        * @method Scene.Frame#merge
-        * @param {Scene.Frame} frame - target frame.
-        * @return {Scene.Frame} An instance itself
+        * @param - target frame.
+        * @return {Frame} An instance itself
         * @example
         frame.merge(frame2);
         */
@@ -2671,7 +3554,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Specifies an css object that coverted the frame.
-        * @method Scene.Frame#toCSSObject
         * @return {object} cssObject
         */
 
@@ -2703,7 +3585,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Specifies an css text that coverted the frame.
-        * @method Scene.Frame#toCSS
         * @return {string} cssText
         */
 
@@ -2775,7 +3656,6 @@ repository: https://github.com/daybrush/scenejs.git
     }
     /**
     * a list of objects in chronological order.
-    * @memberof Scene
     */
 
 
@@ -2791,7 +3671,7 @@ repository: https://github.com/daybrush/scenejs.git
       }
       /**
         * A list of names
-        * @return {string[][]} names
+        * @return {} names
         * @example
       keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scale"]]
         */
@@ -2805,8 +3685,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Check if keyframes has propery's name
-        * @param {...string[]} name - property's time
-        * @return {Boolean} true: if has property, false: not
+        * @param - property's time
+        * @return {boolean} true: if has property, false: not
         * @example
       keyframes.hasName("transform", "translate"); // true or not
         */
@@ -2823,7 +3703,7 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
          * update property names used in frames.
-         * @return {Scene.Keyframes} An instance itself
+         * @return {Keyframes} An instance itself
          */
 
 
@@ -2838,11 +3718,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
          * executes a provided function once for each scene item.
-         * @param {Function} callback Function to execute for each element, taking three arguments
-         * @param {Scene.Frame} [callback.item] The value of the item being processed in the keyframes.
-         * @param {string} [callback.time] The time of the item being processed in the keyframes.
-         * @param {object} [callback.items] The object that forEach() is being applied to.
-         * @return {Scene.Keyframes} An instance itself
+         * @param - Function to execute for each element, taking three arguments
+         * @return {Keyframes} An instance itself
          */
 
 
@@ -2852,11 +3729,12 @@ repository: https://github.com/daybrush/scenejs.git
         times.forEach(function (time) {
           callback(items[time], time, items);
         });
+        return this;
       };
       /**
         * update property names used in frame.
-        * @param {Scene.Frame} [frame] - frame of that time.
-        * @return {Scene.Keyframes} An instance itself
+        * @param {Frame} [frame] - frame of that time.
+        * @return {Keyframes} An instance itself
         * @example
       keyframes.updateFrame(frame);
         */
@@ -2885,7 +3763,7 @@ repository: https://github.com/daybrush/scenejs.git
       /**
          * Set how long an animation should take to complete one cycle.
          * @param {number} duration - duration
-         * @return {Scene.Keyframes} An instance itself.
+         * @return {Keyframes} An instance itself.
          */
 
 
@@ -2911,7 +3789,7 @@ repository: https://github.com/daybrush/scenejs.git
       /**
          * Set how much time you want to push ahead.
          * @param {number} time - time
-         * @return {Scene.Keyframes} An instance itself.
+         * @return {Keyframes} An instance itself.
          */
 
 
@@ -2940,9 +3818,9 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * add object in list
-        * @param {Number} time - frame's time
-        * @param {Object} object - target
-        * @return {Scene.Keyframes} An instance itself
+        * @param {number} time - frame's time
+        * @param {any} object - target
+        * @return {Keyframes} An instance itself
         */
 
 
@@ -2953,8 +3831,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Check if keyframes has object at that time.
-        * @param {Number} time - object's time
-        * @return {Boolean} true: if has time, false: not
+        * @param {number} time - object's time
+        * @return {boolean} true: if has time, false: not
         */
 
 
@@ -2963,8 +3841,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * get object at that time.
-        * @param {Number} time - object's time
-        * @return {Object} object at that time
+        * @param {number} time - object's time
+        * @return {object} object at that time
         */
 
 
@@ -2973,7 +3851,7 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * remove object at that time.
-        * @param {Number} time - object's time
+        * @param {number} time - object's time
         * @return {Keyframes} An instance itself
         */
 
@@ -3236,10 +4114,9 @@ repository: https://github.com/daybrush/scenejs.git
     }
     /**
     * manage Frame Keyframes and play keyframes.
-    * @memberof Scene
-    * @extends Scene.Animator
+    * @extends Animator
     * @example
-    const item = new Scene.SceneItem({
+    const item = new SceneItem({
         0: {
             display: "none",
         },
@@ -3259,10 +4136,10 @@ repository: https://github.com/daybrush/scenejs.git
     function (_super) {
       __extends(SceneItem, _super);
       /**
-        * @param {Object} [properties] - properties
-        * @param {AnimatorOptions} [options] - options
+        * @param - properties
+        * @param - options
         * @example
-        const item = new Scene.SceneItem({
+        const item = new SceneItem({
             0: {
                 display: "none",
             },
@@ -3311,9 +4188,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * set the unique indicator of the item.
-        * @method Scene.SceneItem#setId
         * @param {String} [id] - the indicator of the item.
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       const item = new SceneItem();
        item.setId("item");
@@ -3342,7 +4218,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Specifies the unique indicator of the item.
-        * @method Scene.SceneItem#getId
         * @return {String} the indicator of the item.
         * @example
       const item = scene.newItem("item");
@@ -3355,10 +4230,9 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Set properties to the sceneItem at that time
-        * @method Scene.SceneItem#set
         * @param {Number} time - time
         * @param {...String|Object} [properties] - property names or values
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       item.set(0, "a", "b") // item.getFrame(0).set("a", "b")
       console.log(item.get(0, "a")); // "b"
@@ -3416,7 +4290,7 @@ repository: https://github.com/daybrush/scenejs.git
         * Get properties of the sceneItem at that time
         * @param {Number} time - time
         * @param {...String|Object} args property's name or properties
-        * @return {Number|String|Scene.PropertyObejct} property value
+        * @return {Number|String|PropertyObejct} property value
         * @example
       item.get(0, "a"); // item.getFrame(0).get("a");
       item.get(0, "transform", "translate"); // item.getFrame(0).get("transform", "translate");
@@ -3437,7 +4311,7 @@ repository: https://github.com/daybrush/scenejs.git
         * remove properties to the sceneItem at that time
         * @param {Number} time - time
         * @param {...String|Object} [properties] - property names or values
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       item.remove(0, "a");
         */
@@ -3457,8 +4331,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Append the item or object at the last time.
-        * @param {SceneItem | object} item - the scene item or item object
-        * @return {Scene.SceneItem} An instance itself
+        * @param - the scene item or item object
+        * @return An instance itself
         * @example
       item.append(new SceneItem({
         0: {
@@ -3493,8 +4367,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Push the front frames for the time and prepend the scene item or item object.
-        * @param {SceneItem | object} item - the scene item or item object
-        * @return {Scene.SceneItem} An instance itself
+        * @param - the scene item or item object
+        * @return An instance itself
         */
 
 
@@ -3520,9 +4394,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Specifies an element to synchronize items' keyframes.
-        * @method Scene.SceneItem#setSelector
         * @param {string} selectors - Selectors to find elements in items.
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       item.setSelector("#id.class");
         */
@@ -3543,9 +4416,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Specifies an element to synchronize item's keyframes.
-        * @method Scene.SceneItem#setElement
         * @param {Element|Array|string} elements - elements to synchronize item's keyframes.
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       item.setElement(document.querySelector("#id.class"));
       item.setElement(document.querySelectorAll(".class"));
@@ -3563,9 +4435,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * add css styles of items's element to the frame at that time.
-        * @method Scene.SceneItem#setCSS
         * @param {Array} properties - elements to synchronize item's keyframes.
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       item.setElement(document.querySelector("#id.class"));
       item.setCSS(0, ["opacity"]);
@@ -3593,8 +4464,7 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * update property names used in frames.
-        * @method Scene.SceneItem#update
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       item.update();
         */
@@ -3606,9 +4476,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * update property names used in frame.
-        * @method Scene.SceneItem#updateFrame
-        * @param {Scene.Frame} [frame] - frame of that time.
-        * @return {Scene.SceneItem} An instance itself
+        * @param {Frame} [frame] - frame of that time.
+        * @return {SceneItem} An instance itself
         * @example
       item.updateFrame(time, this.get(time));
         */
@@ -3620,9 +4489,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Create and add a frame to the sceneItem at that time
-        * @method Scene.SceneItem#newFrame
         * @param {Number} time - frame's time
-        * @return {Scene.Frame} Created frame.
+        * @return {Frame} Created frame.
         * @example
       item.newFrame(time);
         */
@@ -3641,9 +4509,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Add a frame to the sceneItem at that time
-        * @method Scene.SceneItem#setFrame
         * @param {Number} time - frame's time
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       item.setFrame(time, frame);
         */
@@ -3656,9 +4523,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * get sceneItem's frame at that time
-        * @method Scene.SceneItem#getFrame
         * @param {Number} time - frame's time
-        * @return {Scene.Frame} sceneItem's frame at that time
+        * @return {Frame} sceneItem's frame at that time
         * @example
       const frame = item.getFrame(time);
         */
@@ -3669,7 +4535,6 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * check if the item has a frame at that time
-        * @method Scene.SceneItem#hasFrame
         * @param {Number} time - frame's time
         * @return {Boolean} true: the item has a frame // false: not
         * @example
@@ -3686,9 +4551,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * remove sceneItem's frame at that time
-        * @method Scene.SceneItem#removeFrame
         * @param {Number} time - frame's time
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       item.removeFrame(time);
         */
@@ -3702,10 +4566,9 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Copy frame of the previous time at the next time.
-        * @method Scene.SceneItem#copyFrame
         * @param {number|string|object} fromTime - the previous time
         * @param {number} toTime - the next time
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       // getFrame(0) equal getFrame(1)
       item.copyFrame(0, 1);
@@ -3733,10 +4596,9 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * merge frame of the previous time at the next time.
-        * @method Scene.SceneItem#mergeFrame
         * @param {number|string|object} fromTime - the previous time
         * @param {number|string} toTime - the next time
-        * @return {Scene.SceneItem} An instance itself
+        * @return {SceneItem} An instance itself
         * @example
       // getFrame(1) contains getFrame(0)
       item.merge(0, 1);
@@ -3764,12 +4626,11 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
         * Get frame of the current time
-        * @method Scene.SceneItem#getNowFrame
         * @param {Number} time - the current time
         * @param {function} easing - the speed curve of an animation
-        * @return {Scene.Frame} frame of the current time
+        * @return {Frame} frame of the current time
         * @example
-      let item = new Scene.SceneItem({
+      let item = new SceneItem({
         0: {
             display: "none",
         },
@@ -3851,9 +4712,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
          * clone SceneItem.
-         * @method Scene.SceneItem#clone
-         * @param {AnimatorOptions} [options] animator options
-         * @return {Scene.SceneItem} An instance of clone
+         * @param {StateInterface} [options] animator options
+         * @return {SceneItem} An instance of clone
          * @example
          * item.clone();
          */
@@ -4341,10 +5201,10 @@ repository: https://github.com/daybrush/scenejs.git
         var currentTime = this.getTime();
         /**
              * This event is fired when timeupdate and animate.
-             * @event Scene.SceneItem#animate
+             * @event SceneItem#animate
              * @param {Number} param.currentTime The total time that the animator is running.
              * @param {Number} param.time The iteration time during duration that the animator is running.
-             * @param {Scene.Frame} param.frame frame of that time.
+             * @param {Frame} param.frame frame of that time.
              */
 
         this.trigger("animate", {
@@ -4387,7 +5247,6 @@ repository: https://github.com/daybrush/scenejs.git
 
     /**
     * manage sceneItems and play Scene.
-    * @extends Scene.Animator
     */
 
     var Scene =
@@ -4395,8 +5254,9 @@ repository: https://github.com/daybrush/scenejs.git
     function (_super) {
       __extends(Scene, _super);
       /**
-      * @param {Object} [properties] - properties
-      * @param {AnimatorOptions} [options] - options
+      * @sort 1
+      * @param - properties
+      * @param - options
       * @example
       const scene = new Scene({
         item1: {
@@ -4484,21 +5344,23 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
       * get item in scene by name
-      * @method Scene#getItem
-      * @param {string} name - The item's name
-      * @param {number} [index] - If item is added as function, it can be imported via index.
-      * @return {Scene | Scene.SceneItem} item
+      * @param - The item's name
+      * @param - If item is added as function, it can be imported via index.
+      * @return {Scene | SceneItem} item
       * @example
       const item = scene.getItem("item1")
       */
 
 
-      __proto.getItem = function (name) {
+      __proto.getItem = function (name, index) {
+        if (index != null) {
+          return this.items[name].getItem(index);
+        }
+
         return this.items[name];
       };
       /**
       * create item in scene
-      * @method Scene#newItem
       * @param {String} name - name of item to create
       * @param {StateOptions} options - The option object of SceneItem
       * @return {Sceme.SceneItem} Newly created item
@@ -4523,8 +5385,8 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
       * add a sceneItem to the scene
-      * @param {String} name - name of item to create
-      * @param {Scene.SceneItem} item - sceneItem
+      * @param - name of item to create
+      * @param - sceneItem
       * @example
       const item = scene.newItem("item1")
       */
@@ -4551,21 +5413,14 @@ repository: https://github.com/daybrush/scenejs.git
       };
       /**
        * executes a provided function once for each scene item.
-       * @param {Function} func Function to execute for each element, taking three arguments
-       * @param {Scene | Scene.SceneItem} [func.item] The value of the item being processed in the scene.
-       * @param {string} [func.name] The name of the item being processed in the scene.
-       * @param {object} [func.items] The object that forEach() is being applied to.
+       * @param - Function to execute for each element, taking three arguments
        * @return {Scene} An instance itself
        */
 
 
       __proto.forEach = function (func) {
         var items = this.items;
-
-        for (var name in items) {
-          func(items[name], name, items);
-        }
-
+        eachObjectF(func, items);
         return this;
       };
 
@@ -4717,6 +5572,12 @@ repository: https://github.com/daybrush/scenejs.git
           properties = {};
         }
 
+        var args = [];
+
+        for (var _i = 1; _i < arguments.length; _i++) {
+          args[_i - 1] = arguments[_i];
+        }
+
         this.load(properties);
       };
 
@@ -4805,7 +5666,15 @@ repository: https://github.com/daybrush/scenejs.git
         });
         return frames;
       };
+      /**
+      * version info
+      * @type {string}
+      * @example
+      * Scene.VERSION // 1.0.0-beta13
+      */
 
+
+      Scene.VERSION = "1.0.0-beta13";
       return Scene;
     }(Animator);
 
@@ -4816,10 +5685,8 @@ repository: https://github.com/daybrush/scenejs.git
     /**
      * Use the property to create an effect.
      * @memberof presets
-     * @func set
-     * @param {string | string[]} property - property to set effect
-     * @param {any[]} values - values of 100%
-     * @param {AnimatorOptions} [options]
+     * @param - property to set effect
+     * @param - values of 100%
      * @example
     // import {set, blink} from "scenejs";
     // set("opacity", [0, 1, 0], {duration: 2});
@@ -4857,7 +5724,6 @@ repository: https://github.com/daybrush/scenejs.git
     /**
      * Make a zoom in effect.
      * @memberof presets
-     * @func zoomIn
      * @param {AnimatorOptions} options
      * @param {number} [options.from = 0] start zoom
      * @param {number}[options.to = 1] end zoom
@@ -4889,7 +5755,6 @@ repository: https://github.com/daybrush/scenejs.git
     /**
      * Make a zoom out effect.
      * @memberof presets
-     * @func zoomOut
      * @param {AnimatorOptions} options
      * @param {number} [options.from = 1] start zoom
      * @param {number}[options.to = 0] end zoom
@@ -4921,7 +5786,6 @@ repository: https://github.com/daybrush/scenejs.git
     /**
      * Make a wipe in effect.
      * @memberof presets
-     * @func wipeIn
      * @param {AnimatorOptions} options
      * @param {string|string[]} [options.property = "left"] position property
      * @param {number|string} [options.from = "-100%"] start position
@@ -4956,7 +5820,6 @@ repository: https://github.com/daybrush/scenejs.git
     /**
      * Make a wipe out effect.
      * @memberof presets
-     * @func wipeOut
      * @param {AnimatorOptions} options
      * @param {string|string[]} [options.property = "left"] position property
      * @param {number|string} [options.from = "0%"] start position
@@ -4991,7 +5854,6 @@ repository: https://github.com/daybrush/scenejs.git
     /**
      * Use the property to create an effect.
      * @memberof presets
-     * @func transition
      * @param {Scene.SceneItem} item1 - Item that end effect
      * @param {Scene.SceneItem} item2 - Item that start effect
      * @param {AnimatorOptions} options
@@ -5048,8 +5910,7 @@ repository: https://github.com/daybrush/scenejs.git
     /**
      * Make a fade in effect.
      * @memberof presets
-     * @func fadeIn
-     * @param {AnimatorOptions} options
+     * @param {StateInterface} options
      * @param {number} [options.from = 0] start opacity
      * @param {number}[options.to = 1] end opacity
      * @param {number} options.duration animation's duration
@@ -5080,8 +5941,7 @@ repository: https://github.com/daybrush/scenejs.git
     /**
      * Make a fade out effect.
      * @memberof presets
-     * @func fadeOut
-     * @param {AnimatorOptions} options
+     * @param {StateInterface} options
      * @param {number} [options.from = 1] start opacity
      * @param {number}[options.to = 0] end opacity
      * @param {number} options.duration animation's duration
@@ -5112,8 +5972,7 @@ repository: https://github.com/daybrush/scenejs.git
     /**
      * Make a blinking effect.
      * @memberof presets
-     * @func blink
-     * @param {AnimatorOptions} options
+     * @param {StateInterface} options
      * @param {number} [options.from = 0] start opacity
      * @param {number}[options.to = 1] end opacity
      * @param {number} options.duration animation's duration
@@ -5145,20 +6004,9 @@ repository: https://github.com/daybrush/scenejs.git
       return set("opacity", [from, to, from], arguments[0]);
     }
 
-    /**
-    * version info
-    * @name Scene.VERSION
-    * @memberof Scene
-    * @static
-    * @type {string}
-    * @example
-    * Scene.VERSION // 1.0.0-beta13
-    */
 
-    var VERSION = "1.0.0-beta13";
 
     var others = ({
-        VERSION: VERSION,
         SceneItem: SceneItem,
         Frame: Frame,
         Animator: Animator,
