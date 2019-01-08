@@ -1,8 +1,15 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
-		"noImplicitAny": false,
-		"types" : ["karma-chai", "mocha"]
-	},
-	"include": ["./src/**/*.ts", "./test/**/*.ts"]
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "types": [
+      "karma-chai",
+      "mocha"
+    ]
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./test/**/*.ts"
+  ]
 }
