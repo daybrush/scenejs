@@ -5,6 +5,16 @@ export type Role = true | RoleInterface;
 /**
  * @typedef
  */
+export type CallbackType<T = any> = (...args: any[]) => T;
+/**
+ * @typedef
+ */
+export interface EventParamterInterface {
+  [name: string]: CallbackType | CallbackType[];
+}
+/**
+ * @typedef
+ */
 export interface RoleInterface {
   [role: string]: Role;
 }

@@ -241,7 +241,7 @@ item.set(item.getDuration(), {
   public prepend(item: SceneItem | ObjectInterface<any>) {
     if (item instanceof SceneItem) {
       const delay = item.getDelay();
-      const duration = item.getIterationCount() === INFINITE ? item.getDuration() : item.getActiveDuration();
+      const duration = item.getDuration();
       const unshiftTime = duration + delay;
       const firstFrame = this.keyframes.get(0);
 
@@ -640,7 +640,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const peusdo = state.peusdo || "";
     const id = getRealId(this);
     // infinity or zero
-    const isInfinite = state[ITERATION_COUNT] === "infinite";
+    const isInfinite = state[ITERATION_COUNT] === INFINITE;
     const isParent = !isUndefined(options[ITERATION_COUNT]);
     const isZeroDuration = parentDuration === 0;
     const duration = isZeroDuration ? this.getDuration() : parentDuration;
@@ -648,7 +648,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const delay = ((options[DELAY] || 0) + (isZeroDuration ? state[DELAY] : 0)) / playSpeed;
     const easingName = (state[EASING] && state[EASING_NAME]) ||
       (isParent && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
-    const iterationCount = isInfinite ? "infinite" :
+    const iterationCount = isInfinite ? INFINITE :
       (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
     const fillMode = (options[FILL_MODE] !== "forwards" && options[FILL_MODE]) || state[FILL_MODE];
     const direction = isInfinite ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];

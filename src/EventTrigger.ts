@@ -1,10 +1,10 @@
 import { isObject, isArray } from "@daybrush/utils";
-import { EventInterface, CallbackType, EventParamterInterface, eachObjectF, eachArrayF } from "fjx";
+import { CallbackType, EventParamterInterface } from "./types";
 
 /**
 * attach and trigger event handlers.
 */
-class EventTrigger implements EventInterface {
+class EventTrigger {
   public events: { [name: string]: CallbackType[] };
   /**
 	* @example
@@ -27,9 +27,9 @@ et.trigger("call", {param: 1});
     const events = this.events;
 
     if (isObject(name)) {
-      eachObjectF((f, i) => {
-        this._on(i, f, once);
-      }, name);
+      for (const n in name) {
+        this._on(n, name[n], once);
+      }
       return;
     }
     if (!(name in events)) {
@@ -39,7 +39,7 @@ et.trigger("call", {param: 1});
       return;
     }
     if (isArray(callback)) {
-      eachArrayF(func => this._on(name, func, once), callback);
+      callback.forEach(func => this._on(name, func, once));
       return;
     }
     const event = events[name];
@@ -127,9 +127,9 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2
       target.currentTarget = this;
       !target.target && (target.target = this);
     }
-    eachArrayF(callback => {
+    event.forEach(callback => {
       callback.apply(this, data);
-    }, event);
+    });
 
     return this;
   }

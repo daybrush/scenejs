@@ -1,15 +1,15 @@
 import Animator, { StateInterface, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
-import { ANIMATE, ITERATION_COUNT, EASING, EASING_NAME } from "./consts";
+import { ANIMATE, ITERATION_COUNT, EASING, EASING_NAME, INFINITE } from "./consts";
 import Frame from "./Frame";
 import { playCSS, exportCSS, getRealId, makeId } from "./utils";
 import { isFunction, IS_WINDOW, ObjectInterface } from "@daybrush/utils";
-import { eachObjectF, ForEachInterface } from "fjx";
 
 /**
-* manage sceneItems and play Scene.
-*/
-class Scene extends Animator implements ForEachInterface<Scene | SceneItem> {
+ * manage sceneItems and play Scene.
+ * @sort 1
+ */
+class Scene extends Animator {
   /**
   * version info
   * @type {string}
@@ -19,7 +19,6 @@ class Scene extends Animator implements ForEachInterface<Scene | SceneItem> {
   public static VERSION: string = "#__VERSION__#";
   public items: ObjectInterface<Scene | SceneItem>;
   /**
-  * @sort 1
   * @param - properties
   * @param - options
   * @example
@@ -152,10 +151,12 @@ class Scene extends Animator implements ForEachInterface<Scene | SceneItem> {
    * @param - Function to execute for each element, taking three arguments
    * @return {Scene} An instance itself
    */
-  public forEach(func: (item?: Scene | SceneItem, name?: string, items?: ObjectInterface<Scene | SceneItem>) => void) {
+  public forEach(func: (item: Scene | SceneItem, name: string, items: ObjectInterface<Scene | SceneItem>) => void) {
     const items = this.items;
 
-    eachObjectF(func, items);
+    for (const name in items) {
+      func(items[name], name, items);
+    }
     return this;
   }
   public toCSS(duration: number = this.getDuration(), parentState?: StateInterface) {
@@ -174,9 +175,9 @@ class Scene extends Animator implements ForEachInterface<Scene | SceneItem> {
       const stateIterations = state[ITERATION_COUNT];
       const parentIterations = parentState[ITERATION_COUNT];
 
-      if (parentIterations === "infinite") {
-        state[ITERATION_COUNT] = "infinite";
-      } else if (stateIterations !== "infinite") {
+      if (parentIterations === INFINITE) {
+        state[ITERATION_COUNT] = INFINITE;
+      } else if (stateIterations !== INFINITE) {
         state[ITERATION_COUNT] = stateIterations * parentIterations;
       }
       if (!state[EASING]) {
