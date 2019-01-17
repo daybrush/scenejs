@@ -1,7 +1,12 @@
 /**
  * @typedef
  */
-export type Role = true | RoleInterface;
+export type Role = true | IRole;
+
+/**
+ * @typedef
+ */
+export type ElementsType = HTMLElement[] | NodeListOf<HTMLElement>;
 /**
  * @typedef
  */
@@ -9,13 +14,13 @@ export type CallbackType<T = any> = (...args: any[]) => T;
 /**
  * @typedef
  */
-export interface EventParamterInterface {
+export interface IEventParamter {
   [name: string]: CallbackType | CallbackType[];
 }
 /**
  * @typedef
  */
-export interface RoleInterface {
+export interface IRole {
   [role: string]: Role;
 }
 /**

@@ -1,10 +1,10 @@
 import { isInProperties, toFixed } from "./utils";
 import PropertyObject from "./PropertyObject";
 import Frame from "./Frame";
-import { isObject, isArray, ObjectInterface } from "@daybrush/utils";
-import { RoleInterface } from "./types";
+import { isObject, isArray, IObject } from "@daybrush/utils";
+import { IRole } from "./types";
 
-function getNames(names: ObjectInterface<any>, stack: string[]) {
+function getNames(names: IObject<any>, stack: string[]) {
   let arr: string[][] = [];
 
   for (const name in names) {
@@ -19,7 +19,7 @@ function getNames(names: ObjectInterface<any>, stack: string[]) {
   }
   return arr;
 }
-function updateFrame(names: ObjectInterface<any>, properties: ObjectInterface<any>) {
+function updateFrame(names: IObject<any>, properties: IObject<any>) {
   for (const name in properties) {
     const value = properties[name];
 
@@ -38,8 +38,8 @@ function updateFrame(names: ObjectInterface<any>, properties: ObjectInterface<an
 */
 class Keyframes {
   public times: number[];
-  public items: ObjectInterface<Frame>;
-  public names: RoleInterface;
+  public items: IObject<Frame>;
+  public names: IRole;
   /**
 	 */
   constructor() {
@@ -85,7 +85,7 @@ keyframes.hasName("transform", "translate"); // true or not
 	 * @param - Function to execute for each element, taking three arguments
 	 * @return {Keyframes} An instance itself
 	 */
-  public forEach(callback: (item: any, time: number, items: ObjectInterface<any>) => void) {
+  public forEach(callback: (item: any, time: number, items: IObject<any>) => void) {
     const times = this.times;
     const items = this.items;
 
@@ -128,7 +128,7 @@ keyframes.updateFrame(frame);
   public setDuration(duration: number, originalDuration: number = this.getDuration()) {
     const ratio = duration / originalDuration;
     const { times, items } = this;
-    const obj: ObjectInterface<any> = {};
+    const obj: IObject<any> = {};
 
     this.times = times.map(time => {
       const time2 = toFixed(time * ratio);
@@ -146,7 +146,7 @@ keyframes.updateFrame(frame);
 	 */
   public unshift(time: number) {
     const { times, items } = this;
-    const obj: ObjectInterface<any> = {};
+    const obj: IObject<any> = {};
 
     this.times = times.map(t => {
       const time2 = toFixed(time + t);

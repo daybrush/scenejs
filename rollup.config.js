@@ -3,6 +3,8 @@ import PrototypeMinify from "rollup-plugin-prototype-minify";
 import replace from "rollup-plugin-replace";
 import { uglify } from "rollup-plugin-uglify";
 import resolve from "rollup-plugin-node-resolve";
+import visualizer from 'rollup-plugin-visualizer';
+ 
 
 const pkg = require("./package.json");
 const banner = require("./config/banner");
@@ -73,7 +75,11 @@ export default [
     },
   }, {
     input: 'src/index.umd.ts',
-    plugins: [resolve(), uglifyCode],
+    plugins: [resolve(), uglifyCode, visualizer({
+      filename: './statistics/scene.min.html',
+      sourcemap: true,
+      title: 'scene.min.js'
+    })],
     output: {
       format: "umd",
       name: "Scene",

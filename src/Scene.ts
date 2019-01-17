@@ -1,9 +1,9 @@
-import Animator, { StateInterface, EasingType } from "./Animator";
+import Animator, { IState, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
 import { ANIMATE, ITERATION_COUNT, EASING, EASING_NAME, INFINITE } from "./consts";
 import Frame from "./Frame";
 import { playCSS, exportCSS, getRealId, makeId } from "./utils";
-import { isFunction, IS_WINDOW, ObjectInterface } from "@daybrush/utils";
+import { isFunction, IS_WINDOW, IObject } from "@daybrush/utils";
 
 /**
  * manage sceneItems and play Scene.
@@ -17,7 +17,7 @@ class Scene extends Animator {
   * Scene.VERSION // #__VERSION__#
   */
   public static VERSION: string = "#__VERSION__#";
-  public items: ObjectInterface<Scene | SceneItem>;
+  public items: IObject<Scene | SceneItem>;
   /**
   * @param - properties
   * @param - options
@@ -42,7 +42,7 @@ class Scene extends Animator {
     }
   });
     */
-  constructor(properties?: ObjectInterface<any>, options?: StateInterface) {
+  constructor(properties?: IObject<any>, options?: IState) {
     super();
     this.items = {};
     this.load(properties, options);
@@ -108,13 +108,13 @@ class Scene extends Animator {
   }
   /**
   * create item in scene
-  * @param {String} name - name of item to create
-  * @param {StateInterface} options - The option object of SceneItem
+  * @param {} name - name of item to create
+  * @param {} options - The option object of SceneItem
   * @return {Sceme.SceneItem} Newly created item
   * @example
   const item = scene.newItem("item1")
   */
-  public newItem(name: number | string, options: StateInterface = {}) {
+  public newItem(name: number | string, options: IState = {}) {
     if (name in this.items) {
       return;
     }
@@ -151,7 +151,7 @@ class Scene extends Animator {
    * @param - Function to execute for each element, taking three arguments
    * @return {Scene} An instance itself
    */
-  public forEach(func: (item: Scene | SceneItem, name: string, items: ObjectInterface<Scene | SceneItem>) => void) {
+  public forEach(func: (item: Scene | SceneItem, name: string, items: IObject<Scene | SceneItem>) => void) {
     const items = this.items;
 
     for (const name in items) {
@@ -159,7 +159,7 @@ class Scene extends Animator {
     }
     return this;
   }
-  public toCSS(duration: number = this.getDuration(), parentState?: StateInterface) {
+  public toCSS(duration: number = this.getDuration(), parentState?: IState) {
     const items = this.items;
     let totalDuration = parentState ? this.getDuration() : duration;
 
@@ -194,7 +194,7 @@ class Scene extends Animator {
    * Export the CSS of the items to the style.
    * @return {Scene} An instance itself
    */
-  public exportCSS(duration?: number, parentState?: StateInterface) {
+  public exportCSS(duration?: number, parentState?: IState) {
     const css = this.toCSS(duration, parentState);
 
     !parentState && exportCSS(getRealId(this), css);
@@ -320,7 +320,7 @@ class Scene extends Animator {
     const iterationTime = this.getIterationTime();
     const items = this.items;
     const easing = this.getEasing() || parentEasing;
-    const frames: ObjectInterface<ObjectInterface<any> | Frame> = {};
+    const frames: IObject<IObject<any> | Frame> = {};
 
     for (const id in items) {
       const item = items[id];

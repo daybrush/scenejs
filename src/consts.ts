@@ -1,10 +1,10 @@
-import { ObjectInterface } from "@daybrush/utils";
-import { RoleInterface, OptionType, EventType } from "./types";
+import { IObject } from "@daybrush/utils";
+import { IRole, OptionType, EventType } from "./types";
 
 export const PREFIX = "__SCENEJS_";
 export const TIMING_FUNCTION = "animation-timing-function";
-export const ROLES: RoleInterface = { transform: {}, filter: {}, attribute: {} };
-export const ALIAS: ObjectInterface<string[]> = { easing: [TIMING_FUNCTION] };
+export const ROLES: IRole = { transform: {}, filter: {}, attribute: {} };
+export const ALIAS: IObject<string[]> = { easing: [TIMING_FUNCTION] };
 export const FIXED = { "animation-timing-function": true, "contents": true };
 export const MAXIMUM = 1000000;
 export const THRESHOLD = 0.000001;

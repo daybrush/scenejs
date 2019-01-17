@@ -690,7 +690,7 @@ describe("SceneItem Test", () => {
                 }));
 
             // Then
-            expect(this.item.getDuration()).to.be.equals(4);
+            expect(this.item.getDuration()).to.be.equals(3);
             expect(this.item.get(1, "a")).to.be.equals(2);
             expect(this.item.get(1 + THRESHOLD, "a")).to.be.equals(3);
             expect(this.item.get("1>", "a")).to.be.equals(3);
@@ -699,15 +699,6 @@ describe("SceneItem Test", () => {
             expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(4);
             expect(this.item.get("2>", "a")).to.be.equals(4);
             expect(this.item.get(3, "a")).to.be.equals(6);
-            expect(this.item.get("3>", "a")).to.be.equals(4);
-            expect(this.item.get("3>", "a")).to.be.equals(4);
-            expect(this.item.get("3>", "a")).to.be.equals(4);
-            expect(this.item.get(4, "a")).to.be.equals(6);
-
-            expect(this.item.get(2, "easing")).to.be.not.ok;
-            expect(this.item.get("2>", "easing")).to.be.equals(EASE_IN_OUT);
-            expect(this.item.get("2>", "animation-timing-function")).to.be.equals(EASE_IN_OUT);
-            expect(this.item.get(4, "easing")).to.be.equals("initial");
         });
         it(`should check 'prepend' method`, () => {
             this.item.prepend(new SceneItem({
@@ -743,20 +734,15 @@ describe("SceneItem Test", () => {
 
             */
             // Then
-            expect(this.item.getDuration()).to.be.equals(4);
+            expect(this.item.getDuration()).to.be.equals(3);
 
             expect(this.item.get(0, "a")).to.be.equals(4);
             expect(this.item.get(1, "a")).to.be.equals(6);
-            expect(this.item.get("1>", "a")).to.be.equals(4);
-            expect(this.item.get(2, "a")).to.be.equals(6);
-            expect(this.item.get(0, "easing")).to.be.equals(EASE_IN_OUT);
-            expect(this.item.get(2, "easing")).to.be.equals("initial");
+            expect(this.item.get("1>", "a")).to.be.equals(3);
+            expect(this.item.get(2, "a")).to.be.equals(5);
 
-            expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(3);
-            expect(this.item.get(3, "a")).to.be.equals(5);
-
-            expect(this.item.get(3 + THRESHOLD, "a")).to.be.equals(1);
-            expect(this.item.get(4, "a")).to.be.equals(2);
+            expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(1);
+            expect(this.item.get(3, "a")).to.be.equals(2);
         });
         const expectations = {
             "normal": {
@@ -809,24 +795,17 @@ describe("SceneItem Test", () => {
                         });
 
                     const times1 = item.getAllTimes();
-                    const times2 = item.getAllTimes(false);
                     const values1 = expectations[direction][iterationCount];
                     const values2 = Object.assign({ [THRESHOLD]: values1[0] }, values1);
                     delete values2[0];
 
                     const keys1 = orderByASC(Object.keys(values1).map(key => parseFloat(key)));
-                    const keys2 = orderByASC(Object.keys(values2).map(key => parseFloat(key)));
                     const keytimes1 = group(orderByASC(Object.keys(values1).map(v => values1[v])));
-                    const keytimes2 = group(orderByASC(Object.keys(values2).map(v => values2[v])));
 
                     expect(orderByASC(Object.keys(times1.frames))).to.be.deep.equals(keytimes1);
                     expect(times1.keys).to.be.deep.equals(keys1);
                     expect(times1.values).to.be.deep.equals(values1);
 
-                    // {[THRESHOLD]: 0, ...}
-                    expect(orderByASC(Object.keys(times2.frames))).to.be.deep.equals(keytimes2);
-                    expect(times2.keys).to.be.deep.equals(keys2);
-                    expect(times2.values).to.be.deep.equals(values2);
                 });
             });
         });

@@ -4,9 +4,9 @@ import {
   ITERATION_COUNT, DELAY, FILL_MODE, DIRECTION, PLAY_SPEED,
   DURATION, EASING, ITERATION_TIME, EASING_NAME, PAUSED, RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE } from "./consts";
 import EventTrigger from "./EventTrigger";
-import { bezier, EasingFunctionInterface } from "./easing";
+import { bezier, IEasingFunction } from "./easing";
 import { toFixed } from "./utils";
-import { splitUnit, isString, camelize, requestAnimationFrame, ObjectInterface } from "@daybrush/utils";
+import { splitUnit, isString, camelize, requestAnimationFrame } from "@daybrush/utils";
 
 function GetterSetter<T extends { new(...args: any[]): {} }>(
   getter: string[], setter: string[], parent: string) {
@@ -38,7 +38,7 @@ export type IterationCountType = number | "infinite";
 /**
  * @typedef
  */
-export type EasingType = 0 | EasingFunctionInterface;
+export type EasingType = 0 | IEasingFunction;
 /**
  * @typedef
  */
@@ -48,7 +48,7 @@ export type DirectionType = "normal" | "reverse" | "alternate" | "alternate-reve
  */
 export type PlayStateType = "paused" | "running";
 
-export interface StateInterface {
+export interface IState {
   id?: number | string;
   easing?: EasingType;
   easingName?: string;
@@ -76,7 +76,7 @@ export function isDirectionReverse(currentIterationCount: number,
   return  direction === (currentIterationCount % 2 >= 1 ? ALTERNATE : ALTERNATE_REVERSE);
 }
 /**
-* @typedef {Object} StateInterface The Animator options. Properties used in css animation.
+* @typedef {Object} IState The Animator options. Properties used in css animation.
 * @property {number} [duration] The duration property defines how long an animation should take to complete one cycle.
 * @property {"none"|"forwards"|"backwards"|"both"} [fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
 * @property {"infinite"|number} [iterationCount] The iterationCount property specifies the number of times an animation should be played.
@@ -96,8 +96,8 @@ const getters = [...setters, EASING, EASING_NAME];
 */
 @GetterSetter(getters, setters, "state")
 class Animator extends EventTrigger {
-  public state: StateInterface;
-  public options: ObjectInterface<any>;
+  public state: IState;
+  public options: Partial<IState>;
 
   /**
    * @param - animator's options
@@ -111,7 +111,7 @@ const animator = new Animator({
 	easing: Scene.easing.EASE,
 });
    */
-  constructor(options?: StateInterface) {
+  constructor(options?: IState) {
     super();
     this.options = {};
     this.state = {
@@ -147,7 +147,7 @@ animator.({
 	easing: Scene.easing.EASE,
 });
 	*/
-  public setEasing(curveArray: [number, number, number, number] | EasingFunctionInterface): this {
+  public setEasing(curveArray: [number, number, number, number] | IEasingFunction): this {
     const easing = Array.isArray(curveArray) ?
       bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]) : curveArray;
     const easingName = easing[EASING_NAME] || "linear";
@@ -170,7 +170,7 @@ animator.({
 	easing: Scene.eaasing.EASE,
 });
 	*/
-  public setOptions(options: StateInterface = {}): this {
+  public setOptions(options: IState = {}): this {
     for (const name in options) {
       const value = options[name];
 
@@ -181,7 +181,7 @@ animator.({
         value && this.setDuration(value);
         continue;
       }
-      ((name in this.state ? this.state : this.options) as StateInterface)[name] = value;
+      ((name in this.state ? this.state : this.options) as IState)[name] = value;
     }
 
     return this;
@@ -345,7 +345,7 @@ animator.getTime() // 10
   public getState(name: string): any {
     return this.state[name];
   }
-  public setState(object: StateInterface) {
+  public setState(object: IState) {
     for (const name in object) {
       this.state[name] = object[name];
     }
@@ -564,6 +564,7 @@ animator.getTime();
 animator.getIterationTime();
 	*/
 
+// tslint:disable-next-line:interface-name
 interface Animator {
   getIterationTime(): number;
   setIterationTime(time: number): this;

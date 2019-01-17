@@ -1,4 +1,4 @@
-import Animator, { StateInterface, EasingType, isDirectionReverse } from "./Animator";
+import Animator, { IState, EasingType, isDirectionReverse } from "./Animator";
 import Frame from "./Frame";
 import {
   toFixed,
@@ -20,10 +20,10 @@ import {
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
-  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, ObjectInterface } from "@daybrush/utils";
-import { NameType } from "./types";
+  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, IObject } from "@daybrush/utils";
+import { NameType, ElementsType } from "./types";
 
-function makeAnimationProperties(properties: ObjectInterface<string | number>) {
+function makeAnimationProperties(properties: IObject<string | number>) {
   const cssArray = [];
 
   for (const name in properties) {
@@ -32,7 +32,6 @@ function makeAnimationProperties(properties: ObjectInterface<string | number>) {
   return cssArray.join("");
 }
 
-type ElementsType = HTMLElement[] | NodeListOf<HTMLElement>;
 /**
 * manage Frame Keyframes and play keyframes.
 * @extends Animator
@@ -70,7 +69,7 @@ class SceneItem extends Animator {
 		}
 	});
 	 */
-  constructor(properties?: ObjectInterface<any>, options?: StateInterface) {
+  constructor(properties?: IObject<any>, options?: Partial<IState>) {
     super();
     this.keyframes = new Keyframes();
     this.elements = [];
@@ -145,16 +144,11 @@ console.log(item.get(0, "a")); // "b"
       if (args[0] instanceof SceneItem) {
         const item: SceneItem = args[0];
         const delay = item.getDelay();
-        const realTime = this.getUnitTime(time) + delay;
-        const { keys, values, frames } = item.getAllTimes(!!delay || !this.hasFrame(time));
-        const easing = this.getEasingName() !== item.getEasingName() ? item.getEasing() : 0;
+        const realTime = this.getUnitTime(time);
+        const frames = item.toObject(!this.hasFrame(realTime + delay), realTime);
 
-        keys.forEach(t => {
-          this.set(realTime + t, frames[values[t]]);
-        });
-        if (easing) {
-          this.set(realTime + keys[0], EASING, easing);
-          this.set(realTime + keys[keys.length - 1], EASING, "initial");
+        for (const frameTime in frames) {
+          this.set(frameTime, frames[frameTime]);
         }
         return this;
       } else if (args.length === 1 && isArray(args[0])) {
@@ -229,7 +223,7 @@ item.set(item.getDuration(), {
 	}
 });
 	*/
-  public append(item: SceneItem | ObjectInterface<any>) {
+  public append(item: SceneItem | IObject<any>) {
     this.set(this.getDuration(), item);
     return this;
   }
@@ -238,7 +232,7 @@ item.set(item.getDuration(), {
 	* @param - the scene item or item object
 	* @return An instance itself
 	*/
-  public prepend(item: SceneItem | ObjectInterface<any>) {
+  public prepend(item: SceneItem | IObject<any>) {
     if (item instanceof SceneItem) {
       const delay = item.getDelay();
       const duration = item.getDuration();
@@ -255,6 +249,15 @@ item.set(item.getDuration(), {
       this.prepend(new SceneItem(item));
     }
     return this;
+  }
+  public toObject(isStartZero = true, startTime = 0) {
+    const obj: IObject<Frame> = {};
+    const keyframes = this.keyframes;
+    const delay = this.getDelay();
+    keyframes.forEach((frame: Frame, time: number) => {
+      obj[(time === 0 && !isStartZero ? THRESHOLD : 0) + delay + startTime + time] = frame.clone();
+    });
+    return obj;
   }
   /**
 	* Specifies an element to synchronize items' keyframes.
@@ -414,7 +417,7 @@ item.removeFrame(time);
 // getFrame(0) equal getFrame(1)
 item.copyFrame(0, 1);
 	*/
-  public copyFrame(fromTime: ObjectInterface<number> | number | string, toTime: number) {
+  public copyFrame(fromTime: IObject<number> | number | string, toTime: number) {
     if (isObject(fromTime)) {
       for (const time in fromTime) {
         this.copyFrame(time, fromTime[time]);
@@ -440,7 +443,7 @@ item.copyFrame(0, 1);
 // getFrame(1) contains getFrame(0)
 item.merge(0, 1);
 	*/
-  public mergeFrame(fromTime: ObjectInterface<number> | number | string, toTime: number | string) {
+  public mergeFrame(fromTime: IObject<number> | number | string, toTime: number | string) {
     if (isObject(fromTime)) {
       for (const time in fromTime) {
         this.mergeFrame(time, fromTime[time]);
@@ -525,7 +528,7 @@ const frame = item.getNowFrame(1.7);
   }
   /**
 	 * clone SceneItem.
-	 * @param {StateInterface} [options] animator options
+	 * @param {IState} [options] animator options
 	 * @return {SceneItem} An instance of clone
 	 * @example
 	 * item.clone();
@@ -538,7 +541,7 @@ const frame = item.getNowFrame(1.7);
     this.keyframes.forEach((frame: Frame, time: number) => item.setFrame(time, frame.clone()));
     return item;
   }
-  public setOptions(options: StateInterface = {}) {
+  public setOptions(options: IState = {}) {
     super.setOptions(options);
     const { id, selector, duration, elements } = options;
 
@@ -551,16 +554,16 @@ const frame = item.getNowFrame(1.7);
     }
     return this;
   }
-  public getAllTimes(isStartZero = true, options: StateInterface = {}) {
+  public getAllTimes(options: IState = {}) {
     const times = this.keyframes.times.slice();
     let length = times.length;
     const keys: number[] = [];
-    const values: ObjectInterface<number> = {};
+    const values: IObject<number> = {};
 
     if (!length) {
       return { keys: [], values: {}, frames: {} };
     }
-    const frames: ObjectInterface<Frame> = {};
+    const frames: IObject<Frame> = {};
     const duration = this.getDuration();
     const direction = options[DIRECTION] || this.state[DIRECTION];
     const isShuffle = direction === ALTERNATE || direction === ALTERNATE_REVERSE;
@@ -582,7 +585,7 @@ const frame = item.getNowFrame(1.7);
           continue;
         }
         // isStartZero is keytimes[0] is 0 (i === 0 & j === 0)
-        const threshold = j === 0 && (i === 0 ? !isStartZero : !isShuffle) ? THRESHOLD : 0;
+        const threshold = j === 0 && (i > 0 && !isShuffle) ? THRESHOLD : 0;
         const keyvalue = toFixed(isReverse ? times[length - 1 - j] : times[j]);
         const time = toFixed(isReverse ? duration - keyvalue : keyvalue);
         const keytime = toFixed(start + time + threshold);
@@ -631,7 +634,7 @@ const frame = item.getNowFrame(1.7);
 item.setCSS(0, ["opacity"]);
 item.setCSS(0, ["opacity", "width", "height"]);
 	*/
-  public toCSS(parentDuration = this.getDuration(), options: StateInterface = {}) {
+  public toCSS(parentDuration = this.getDuration(), options: IState = {}) {
     const state = this.state;
     const selector = state.selector || this.options.selector;
     if (!selector) {
@@ -671,7 +674,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 
     return css;
   }
-  public exportCSS(duration?: number, options?: StateInterface) {
+  public exportCSS(duration?: number, options?: IState) {
     if (!this.elements.length) {
       return "";
     }
@@ -792,7 +795,7 @@ item.playCSS(false, {
     const delay = isParent ? state[DELAY] : 0;
     const direction = isParent ? state[DIRECTION] : NORMAL;
     const isReverse = direction === REVERSE || direction === ALTERNATE_REVERSE;
-    const { keys, values, frames } = this.getAllTimes(true, {
+    const { keys, values, frames } = this.getAllTimes({
       duration,
       delay,
       direction,
@@ -800,7 +803,7 @@ item.playCSS(false, {
       isCSS: true,
     });
     const length = keys.length;
-    const css: ObjectInterface<string> = {};
+    const css: IObject<string> = {};
     const keyframes: string[] = [];
 
     if (!keys.length) {
