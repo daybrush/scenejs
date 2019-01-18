@@ -36,9 +36,9 @@ function updateFrame(names: IObject<any>, properties: IObject<any>) {
 /**
 * a list of objects in chronological order.
 */
-class Keyframes {
+class Keyframes<T> {
   public times: number[];
-  public items: IObject<Frame>;
+  public items: IObject<T>;
   public names: IRole;
   /**
 	 */
@@ -76,7 +76,7 @@ keyframes.hasName("transform", "translate"); // true or not
     const items = this.items;
 
     for (const time in items) {
-      this.updateFrame(items[time]);
+      this.updateFrame(items[time] as any);
     }
     return this;
   }
@@ -85,7 +85,7 @@ keyframes.hasName("transform", "translate"); // true or not
 	 * @param - Function to execute for each element, taking three arguments
 	 * @return {Keyframes} An instance itself
 	 */
-  public forEach(callback: (item: any, time: number, items: IObject<any>) => void) {
+  public forEach(callback: (item: T, time: number, items: IObject<T>) => void) {
     const times = this.times;
     const items = this.items;
 
@@ -146,7 +146,7 @@ keyframes.updateFrame(frame);
 	 */
   public unshift(time: number) {
     const { times, items } = this;
-    const obj: IObject<any> = {};
+    const obj: IObject<T> = {};
 
     this.times = times.map(t => {
       const time2 = toFixed(time + t);
@@ -170,7 +170,7 @@ keyframes.updateFrame(frame);
 	* @param {any} object - target
 	* @return {Keyframes} An instance itself
 	*/
-  public add(time: number, object: any) {
+  public add(time: number, object: T) {
     this.items[time] = object;
     this.addTime(time);
     return this;
