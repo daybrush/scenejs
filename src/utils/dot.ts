@@ -6,9 +6,6 @@ import { toPropertyObject } from "./property";
 import { isArray, splitUnit, PROPERTY, FUNCTION } from "@daybrush/utils";
 
 function dotArray(a1: any[], a2: any, b1: number, b2: number): any {
-  if (!isArray(a2)) {
-    return a1;
-  }
   const length = a2.length;
 
   return a1.map((v1, i) => {

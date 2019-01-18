@@ -711,17 +711,14 @@ describe("SceneItem Test", () => {
             }, {
                     iterationCount: 1,
                 }));
-            this.item.prepend(new SceneItem({
+            this.item.prepend({
                 0: {
                     a: 4,
                 },
                 1: {
                     a: 6,
                 },
-            }, {
-                    iterationCount: 2,
-                    easing: EASE_IN_OUT,
-                }));
+            });
             /*
             0: {
                 a: 1,

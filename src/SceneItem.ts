@@ -50,7 +50,7 @@ const item = new SceneItem({
 });
 */
 class SceneItem extends Animator {
-  public keyframes: Keyframes;
+  public keyframes: Keyframes<Frame>;
   public elements: ElementsType;
   /**
 	* @param - properties
@@ -139,29 +139,30 @@ console.log(item.get(0, "a")); // "b"
   public set(time: any, ...args: any[]) {
     if (isObject(time)) {
       this.load(time);
-      return this;
-    } else if (args[0]) {
-      if (args[0] instanceof SceneItem) {
-        const item: SceneItem = args[0];
-        const delay = item.getDelay();
+    } else {
+      const value = args[0];
+
+      if (value instanceof Frame) {
+        this.setFrame(time, value);
+      } else if (value instanceof SceneItem) {
+        const delay = value.getDelay();
         const realTime = this.getUnitTime(time);
-        const frames = item.toObject(!this.hasFrame(realTime + delay), realTime);
+        const frames = value.toObject(!this.hasFrame(realTime + delay), realTime);
 
         for (const frameTime in frames) {
           this.set(frameTime, frames[frameTime]);
         }
-        return this;
-      } else if (args.length === 1 && isArray(args[0])) {
-        args[0].forEach((item: any) => {
+      } else if (args.length === 1 && isArray(value)) {
+        value.forEach((item: any) => {
           this.set(time, item);
         });
-        return this;
+      } else {
+        const frame = this.newFrame(time);
+
+        frame.set(...args);
+        this.updateFrame(frame);
       }
     }
-    const frame = this.newFrame(time);
-
-    frame.set(...args);
-    this.updateFrame(frame);
     return this;
   }
   /**
@@ -696,20 +697,15 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const elements = this.elements;
     const length = elements.length;
 
-    if (!length) {
-      return this;
-    }
     for (let i = 0; i < length; ++i) {
       addClass(elements[i], PAUSE_ANIMATION);
     }
+    return this;
   }
   public endCSS() {
     const elements = this.elements;
     const length = elements.length;
 
-    if (!length) {
-      return this;
-    }
     for (let i = 0; i < length; ++i) {
       const element = elements[i];
 
@@ -717,6 +713,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
       removeClass(element, START_ANIMATION);
     }
     this.setState({ playCSS: false });
+    return this;
   }
   public end() {
     !this.isEnded() && this.state.playCSS && this.endCSS();
