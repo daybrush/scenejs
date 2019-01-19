@@ -1,9 +1,9 @@
 import Animator, { IState, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
-import { ANIMATE, ITERATION_COUNT, EASING, EASING_NAME, INFINITE } from "./consts";
+import { ANIMATE, ITERATION_COUNT, EASING, EASING_NAME, INFINITE, DATA_SCENE_ID, PLAY_CSS, SELECTOR } from "./consts";
 import Frame from "./Frame";
-import { playCSS, exportCSS, getRealId, makeId } from "./utils";
-import { isFunction, IS_WINDOW, IObject } from "@daybrush/utils";
+import { playCSS, exportCSS, getRealId, makeId, isPausedCSS } from "./utils";
+import { isFunction, IS_WINDOW, IObject, $ } from "@daybrush/utils";
 
 /**
  * manage sceneItems and play Scene.
@@ -46,13 +46,6 @@ class Scene extends Animator {
     super();
     this.items = {};
     this.load(properties, options);
-  }
-  public setId(id: number | string = `scene${Math.floor(Math.random() * 100000)}`) {
-    this.state.id = id;
-    return this;
-  }
-  public getId() {
-    return this.state.id;
   }
   public getDuration() {
     const items = this.items;
@@ -110,11 +103,11 @@ class Scene extends Animator {
   * create item in scene
   * @param {} name - name of item to create
   * @param {} options - The option object of SceneItem
-  * @return {Sceme.SceneItem} Newly created item
+  * @return {} Newly created item
   * @example
   const item = scene.newItem("item1")
   */
-  public newItem(name: number | string, options: IState = {}) {
+  public newItem(name: number | string, options: IState = {}): SceneItem {
     if (name in this.items) {
       return;
     }
@@ -137,13 +130,8 @@ class Scene extends Animator {
     this.items[name] = item;
     return this;
   }
-  public animate(time: number, parentEasing?: EasingType) {
-    super.setTime(time, true);
-    return this._animate(parentEasing);
-  }
   public setTime(time: number | string, isNumber?: boolean, parentEasing?: EasingType) {
-    super.setTime(time, isNumber);
-    this._animate(parentEasing);
+    this.animate(time, isNumber, parentEasing);
     return this;
   }
   /**
@@ -160,7 +148,6 @@ class Scene extends Animator {
     return this;
   }
   public toCSS(duration: number = this.getDuration(), parentState?: IState) {
-    const items = this.items;
     let totalDuration = parentState ? this.getDuration() : duration;
 
     if (!totalDuration || !isFinite(totalDuration)) {
@@ -185,9 +172,9 @@ class Scene extends Animator {
         state[EASING_NAME] = parentState[EASING_NAME];
       }
     }
-    for (const id in items) {
-      styles.push(items[id].toCSS(totalDuration, state));
-    }
+    this.forEach(item => {
+      styles.push(item.toCSS(totalDuration, state));
+    });
     return styles.join("");
   }
   /**
@@ -204,19 +191,14 @@ class Scene extends Animator {
     item.setDelay(item.getDelay() + this.getDuration());
     this.setItem(getRealId(item), item);
   }
-  public isPausedCSS() {
-    return this.state.playCSS && this.isPaused();
-  }
   public pauseCSS() {
-    const items = this.items;
-
-    for (const id in items) {
-      items[id].pauseCSS();
-    }
+    return this.forEach(item => {
+      item.pauseCSS();
+    });
   }
   public pause() {
     super.pause();
-    this.isPausedCSS() && this.pauseCSS();
+    isPausedCSS(this) && this.pauseCSS();
     return this;
   }
   public endCSS() {
@@ -228,7 +210,7 @@ class Scene extends Animator {
     this.setState({ playCSS: false });
   }
   public end() {
-    !this.isEnded() && this.state.playCSS && this.endCSS();
+    !this.isEnded() && this.state[PLAY_CSS] && this.endCSS();
     super.end();
     return this;
   }
@@ -266,14 +248,15 @@ class Scene extends Animator {
     playCSS(this, isExportCSS, properties);
     return this;
   }
-  public set(properties: any = {}, ...args: any[]) {
+  public set(properties: any) {
     this.load(properties);
+    return this;
   }
   public load(properties: any = {}, options = properties.options) {
     if (!properties) {
       return this;
     }
-    const isSelector = options && options.selector || this.options.selector;
+    const isSelector = options && options[SELECTOR] || this.options[SELECTOR];
 
     for (const name in properties) {
       if (name === "options") {
@@ -286,7 +269,7 @@ class Scene extends Animator {
         this.setItem(name, object);
         item = object;
       } else if (isFunction(object) && isSelector) {
-        const elements = IS_WINDOW ? document.querySelectorAll(name) : ([] as Element[]);
+        const elements = IS_WINDOW ? $(name, true) : ([] as Element[]);
         const length = elements.length;
         const scene = new Scene();
 
@@ -295,7 +278,7 @@ class Scene extends Animator {
 
           scene.newItem(`${i}`, {
             id,
-            selector: `[data-scene-id="${id}"]`,
+            selector: `[${DATA_SCENE_ID}="${id}"]`,
             elements: elements[i],
           }).load(object(i));
         }
@@ -310,13 +293,15 @@ class Scene extends Animator {
     this.setOptions(options);
   }
   public setSelector(_: string | boolean) {
-    const isSelector = this.options.selector;
+    const isSelector = this.options[SELECTOR];
 
     this.forEach((item, name) => {
       item.setSelector(isSelector ? name : false);
     });
   }
-  private _animate(parentEasing?: EasingType) {
+  public animate(time: number | string, isNumber: boolean, parentEasing?: EasingType) {
+    super.setTime(time, isNumber);
+
     const iterationTime = this.getIterationTime();
     const items = this.items;
     const easing = this.getEasing() || parentEasing;
@@ -325,7 +310,7 @@ class Scene extends Animator {
     for (const id in items) {
       const item = items[id];
 
-      frames[id] = item.animate(Math.max(iterationTime * item.getPlaySpeed() - item.getDelay(), 0), easing);
+      frames[id] = item.animate(Math.max(iterationTime * item.getPlaySpeed() - item.getDelay(), 0), true, easing);
     }
     /**
      * This event is fired when timeupdate and animate.

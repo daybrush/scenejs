@@ -24,7 +24,7 @@ const uglifyCode = uglify({
       var type = comment.type;
       if (type === "comment2") {
         // multiline comment
-        return /@name:\Sscenejs/.test(text);
+        return /name:\sscenejs/.test(text);
       }
     },
   },

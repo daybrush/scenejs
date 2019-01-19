@@ -1,11 +1,11 @@
 import { ROLES, MAXIMUM, FIXED, ALIAS,
-  PAUSED, RUNNING, PLAY, ENDED, PREFIX } from "./consts";
+  PAUSED, RUNNING, PLAY, ENDED, PREFIX, PLAY_CSS, CURRENT_TIME } from "./consts";
 import PropertyObject from "./PropertyObject";
 import Scene from "./Scene";
 import SceneItem from "./SceneItem";
 import {
   isArray, ANIMATION, ARRAY, OBJECT,
-  PROPERTY, STRING, NUMBER, IS_WINDOW, IObject,
+  PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document,
 } from "@daybrush/utils";
 
 export function isPropertyObject(value: any): value is PropertyObject {
@@ -47,7 +47,7 @@ export function getType(value: any) {
 export function toFixed(num: number) {
   return Math.round(num * MAXIMUM) / MAXIMUM;
 }
-export function isInProperties(roles: IObject<any>, args: any[], isCheckTrue?: boolean) {
+export function isInProperties(roles: IObject<any>, args: string[], isCheckTrue?: boolean) {
   const length = args.length;
   let role: any = roles;
 
@@ -65,10 +65,10 @@ export function isInProperties(roles: IObject<any>, args: any[], isCheckTrue?: b
   }
   return true;
 }
-export function isRole(args: any[], isCheckTrue?: boolean) {
+export function isRole(args: string[], isCheckTrue?: boolean) {
   return isInProperties(ROLES, args, isCheckTrue);
 }
-export function isFixed(args: any[]) {
+export function isFixed(args: string[]) {
   return isInProperties(FIXED, args, true);
 }
 
@@ -78,11 +78,11 @@ export interface IterationInterface {
   elapsedTime: number;
 }
 export function isPausedCSS(item: Scene | SceneItem) {
-  return item.state.playCSS && item.getPlayState() === PAUSED;
+  return item.state[PLAY_CSS] && item.isPaused();
 }
 export function exportCSS(id: number | string, css: string) {
   const styleId = `${PREFIX}STYLE_${toId(id)}`;
-  const styleElement: HTMLElement = document.querySelector(`#${styleId}`);
+  const styleElement: HTMLElement = $(`#${styleId}`);
 
   if (styleElement) {
     styleElement.innerText = css;
@@ -98,7 +98,7 @@ export function makeId(selector?: boolean) {
     if (!IS_WINDOW || !selector) {
       return id;
     }
-    const checkElement = document.querySelector(`[data-scene-id="${id}"]`);
+    const checkElement = $(`[data-scene-id="${id}"]`);
 
     if (!checkElement) {
       return id;
@@ -106,7 +106,7 @@ export function makeId(selector?: boolean) {
   }
 }
 export function getRealId(item: Scene | SceneItem) {
-  return item.state.id || item.setId().getId();
+  return item.getId() || item.setId().getId();
 }
 export function toId(text: number | string) {
   return `${text}`.match(/[0-9a-zA-Z]+/g).join("");
@@ -152,8 +152,8 @@ export function addAnimationEvent(item: Scene | SceneItem, el: HTMLElement) {
     const currentTime = elapsedTime;
     const iterationCount = isZeroDuration ? 0 : (currentTime / duration);
 
-    item.state.currentTime = currentTime;
-    item.setCurrentIterationCount(iterationCount);
+    item.state[CURRENT_TIME] = currentTime;
+    item.setIteration(iterationCount);
   };
   el.addEventListener("animationend", animationend);
   el.addEventListener("animationiteration", animationiteration);

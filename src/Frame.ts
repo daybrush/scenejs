@@ -1,5 +1,5 @@
 import {
-  ALIAS, TIMING_FUNCTION
+  ALIAS, TIMING_FUNCTION, TRANSFORM_NAME
 } from "./consts";
 import { isRole, getType, isPropertyObject } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
@@ -262,15 +262,12 @@ frame.set("transform", "translate", "50px");
 
     return this;
   }
-  public toObject() {
-    return clone(this.properties, true);
-  }
   /**
 	* Specifies an css object that coverted the frame.
 	* @return {object} cssObject
 	*/
   public toCSSObject() {
-    const properties = this.toObject();
+    const properties = this.get();
     const cssObject: IObject<string> = {};
 
     for (const name in properties) {
@@ -286,7 +283,7 @@ frame.set("transform", "translate", "50px");
       }
       cssObject[name] = value;
     }
-    const transform = toInnerProperties(properties.transform);
+    const transform = toInnerProperties(properties[TRANSFORM_NAME]);
     const filter = toInnerProperties(properties.filter);
 
     TRANSFORM && transform && (cssObject[TRANSFORM] = transform);

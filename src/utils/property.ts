@@ -175,7 +175,9 @@ export function toObject(object: PropertyObject, result: IObject<any> = {}) {
 
     result[model] = value;
   } else {
-    object.forEach(obj => toObject(obj, result));
+    object.forEach(obj => {
+      toObject(obj, result);
+    });
   }
   return result;
 }

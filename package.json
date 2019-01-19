@@ -17,7 +17,7 @@
     "test:chrome": "karma start --chrome",
     "build": "npm run build:rollup && npm run declaration && npm run release:latest",
     "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
-    "tsc": "tsc -p tsconfig.test.json",
+    "tsc": "tsc -p tsconfig.json",
     "build:rollup": "rollup -c && print-sizes ./dist",
     "deploy": "gh-pages -d ./demo --dest=./ --add",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
@@ -48,7 +48,7 @@
   },
   "homepage": "https://daybrush.com",
   "devDependencies": {
-    "@daybrush/jsdoc": "^0.3.0",
+    "@daybrush/jsdoc": "^0.3.1",
     "@types/karma-chai": "^0.1.1",
     "@types/mocha": "^5.2.5",
     "@types/sinon": "^7.0.2",
@@ -85,6 +85,6 @@
     "typescript-compiler": "^1.4.1-2"
   },
   "dependencies": {
-    "@daybrush/utils": "^0.4.1"
+    "@daybrush/utils": "^0.5.1"
   }
 }

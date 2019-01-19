@@ -2,6 +2,7 @@
 import { IState } from "./Animator";
 import SceneItem from "./SceneItem";
 import { IObject } from "@daybrush/utils";
+import { TRANSFORM_NAME } from "./consts";
 
 /**
  * @namespace presets
@@ -68,7 +69,7 @@ new SceneItem({
 });
  */
 export function zoomIn({ from = 0, to = 1 }: IState) {
-  return set(["transform", "scale"], [from, to], arguments[0]);
+  return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
 /**
@@ -95,7 +96,7 @@ new SceneItem({
 });
  */
 export function zoomOut({ from = 1, to = 0 }: IState) {
-  return set(["transform", "scale"], [from, to], arguments[0]);
+  return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
 /**

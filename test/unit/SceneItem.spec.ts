@@ -83,8 +83,10 @@ describe("SceneItem Test", () => {
         });
     });
     describe("test item method", () => {
+        let item: SceneItem;
+
         beforeEach(() => {
-            this.item = new SceneItem({
+            item = new SceneItem({
                 0: {
                     a: 1,
                     display: "block",
@@ -99,25 +101,23 @@ describe("SceneItem Test", () => {
             });
         });
         afterEach(() => {
-            this.item = null;
+            item = null;
         });
         it("should check 'setId' method", () => {
             // When
-            this.item.setId(".a .b");
+            item.setId(".a .b");
 
             // Then
-            expect(this.item.getState("id")).to.be.equals(".a .b");
+            expect(item.getId()).to.be.equals(".a .b");
         });
         it("should check 'getNowFrame' method", () => {
-            const item = this.item;
-
             expect(item.getNowFrame(0).get("display")).to.be.equals("block");
             expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
             expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
             expect(item.getNowFrame(1).get("display")).to.be.equals("none");
         });
         it("should check 'getNowFrame' method (no 0%)", () => {
-            const item = new SceneItem({
+            item = new SceneItem({
                 0.5: {
                     display: "none",
                     a: 1.5,
@@ -144,29 +144,21 @@ describe("SceneItem Test", () => {
             expect(item.getNowFrame(1).get("a")).to.be.equals(2);
         });
         it("should check 'getNowFrame' method(getDuration < time <= duration)", () => {
-            const item = this.item;
-
             item.state.duration = 2;
             expect(item.getDuration()).to.be.equals(2);
         });
         it("should check 'getFrame' method", () => {
-            const item = this.item;
-
             expect(item.getFrame(0).get("display")).to.be.equals("block");
             expect(item.getFrame(0.7)).to.be.not.ok;
             expect(item.getFrame(1).get("display")).to.be.equals("none");
         });
         it("should check 'hasFrame' method", () => {
-            const item = this.item;
-
             expect(item.hasFrame("0")).to.be.true;
             expect(item.hasFrame("0.5")).to.be.true;
             expect(item.hasFrame("1")).to.be.true;
             expect(item.hasFrame("1.2")).to.be.false;
         });
         it("should check 'removeFrame' method", () => {
-            const item = this.item;
-
             expect(item.hasFrame("0")).to.be.true;
             expect(item.hasFrame("1")).to.be.true;
             item.removeFrame(0);
@@ -179,7 +171,7 @@ describe("SceneItem Test", () => {
         it("should check dot function", () => {
             let vari = 0;
 
-            const item = new SceneItem({
+            item = new SceneItem({
                 0: {
                     a: "rgb(0, 0, 0)",
                     b: 0,
@@ -213,8 +205,6 @@ describe("SceneItem Test", () => {
             });
         });
         it("should check 'set' method", () => {
-            const item = this.item;
-
             item.set(0.5, "a", 1);
             item.set(0.6, "transform", "a", 1);
             item.set(0.7, "b", "b");
@@ -250,9 +240,6 @@ describe("SceneItem Test", () => {
             });
         });
         it("should check 'remove' method", () => {
-            // Given
-            const item = this.item;
-
             // When
             item.remove(0, "a");
 
@@ -263,28 +250,28 @@ describe("SceneItem Test", () => {
         it("should check 'getDuration' method", () => {
             // Given
             // When
-            this.item.setDuration(10);
+            item.setDuration(10);
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.getActiveDuration()).to.be.equals(10);
-            expect(this.item.getTotalDuration()).to.be.equals(10);
+            expect(item.getDuration()).to.be.equals(10);
+            expect(item.getActiveDuration()).to.be.equals(10);
+            expect(item.getTotalDuration()).to.be.equals(10);
 
             // When
-            this.item.setDelay(5);
+            item.setDelay(5);
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.getActiveDuration()).to.be.equals(10);
-            expect(this.item.getTotalDuration()).to.be.equals(15);
+            expect(item.getDuration()).to.be.equals(10);
+            expect(item.getActiveDuration()).to.be.equals(10);
+            expect(item.getTotalDuration()).to.be.equals(15);
         });
         it("should check 'setDuration' with no frame", () => {
-            const item = new SceneItem({});
+            item = new SceneItem({});
 
             item.setDuration(0);
 
             expect(item.getDuration()).to.be.equals(0);
         });
         it("should check 'setDuration' option", () => {
-            const item = new SceneItem({
+            item = new SceneItem({
                 "0%": {
                     transform: "translate(0px, 0px) rotate(0deg)",
                 },
@@ -328,32 +315,32 @@ describe("SceneItem Test", () => {
         it("should check 'getDuration' method with iterationCount", () => {
             // Given
             // When
-            this.item.setDuration(10);
-            this.item.setIterationCount(2);
+            item.setDuration(10);
+            item.setIterationCount(2);
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.getActiveDuration()).to.be.equals(20);
-            expect(this.item.getTotalDuration()).to.be.equals(20);
+            expect(item.getDuration()).to.be.equals(10);
+            expect(item.getActiveDuration()).to.be.equals(20);
+            expect(item.getTotalDuration()).to.be.equals(20);
 
             // When
-            this.item.setDelay(5);
+            item.setDelay(5);
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.getActiveDuration()).to.be.equals(20);
-            expect(this.item.getTotalDuration()).to.be.equals(25);
+            expect(item.getDuration()).to.be.equals(10);
+            expect(item.getActiveDuration()).to.be.equals(20);
+            expect(item.getTotalDuration()).to.be.equals(25);
 
             // When
-            this.item.setIterationCount("infinite");
+            item.setIterationCount("infinite");
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.getActiveDuration()).to.be.equals(Infinity);
-            expect(this.item.getTotalDuration()).to.be.equals(Infinity);
+            expect(item.getDuration()).to.be.equals(10);
+            expect(item.getActiveDuration()).to.be.equals(Infinity);
+            expect(item.getTotalDuration()).to.be.equals(Infinity);
         });
         it("should check 'from, to' method", () => {
             // Given
             // When
-            this.item.setDuration(10);
-            this.item.load({
+            item.setDuration(10);
+            item.load({
                 from: {
                     a: 1,
                 },
@@ -362,49 +349,35 @@ describe("SceneItem Test", () => {
                 },
             });
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.get("from", "a")).to.be.equal(1);
-            expect(this.item.get("to", "a")).to.be.equal(2);
-            expect(this.item.get("50%", "a")).to.be.equal(1.5);
-        });
-        it("should check 'clone' method", () => {
-            // Given
-            const item = this.item.clone();
-            const item2 = this.item.clone({ delay: 1 });
-            // When
-
-            // Then
-            expect(this.item.getDuration()).to.be.equals(1);
-            expect(item.getDuration()).to.be.equals(1);
-            expect(this.item.get("from", "a")).to.be.equal(1);
-            expect(this.item.get("to", "a")).to.be.equal(2);
-            expect(this.item.get("50%", "a")).to.be.equal(1.5);
+            expect(item.getDuration()).to.be.equals(10);
             expect(item.get("from", "a")).to.be.equal(1);
             expect(item.get("to", "a")).to.be.equal(2);
             expect(item.get("50%", "a")).to.be.equal(1.5);
-            expect(item.getNowFrame(0).get("a")).to.be.equal(1);
-            expect(item.getNowFrame(1).get("a")).to.be.equal(2);
-            expect(item.getNowFrame(0.5).get("a")).to.be.equal(1.5);
+        });
+        it("should check 'clone' method", () => {
+            // Given
+            const item1 = item.clone();
+            const item2 = item.clone({ delay: 1 });
+            // When
+
+            // Then
+            expect(item.getDuration()).to.be.equals(1);
+            expect(item1.getDuration()).to.be.equals(1);
+            expect(item.get("from", "a")).to.be.equal(1);
+            expect(item.get("to", "a")).to.be.equal(2);
+            expect(item.get("50%", "a")).to.be.equal(1.5);
+            expect(item1.get("from", "a")).to.be.equal(1);
+            expect(item1.get("to", "a")).to.be.equal(2);
+            expect(item1.get("50%", "a")).to.be.equal(1.5);
+            expect(item1.getNowFrame(0).get("a")).to.be.equal(1);
+            expect(item1.getNowFrame(1).get("a")).to.be.equal(2);
+            expect(item1.getNowFrame(0.5).get("a")).to.be.equal(1.5);
             expect(item2.get(0, "a")).to.be.equal(1);
             expect(item2.get(1, "a")).to.be.equal(2);
             expect(item2.get("50%", "a")).to.be.equal(1.5);
-            expect(item.getDelay()).to.be.equal(0);
+            expect(item1.getDelay()).to.be.equal(0);
             expect(item2.getDelay()).to.be.equal(1);
-            expect(this.item.constructor).to.be.equals(item.constructor);
-        });
-        it(`should check 'copyFrame' method`, () => {
-            // Given
-            // When
-            this.item.copyFrame(0.5, 1.5);
-            this.item.copyFrame(0.7, 1.5);
-            this.item.copyFrame({
-                0.7: 1,
-                2: 4,
-                1.5: 1.8,
-            });
-
-            expect(this.item.getFrame(1.5).properties).to.be.deep.equals(this.item.getFrame(0.5).properties);
-            expect(this.item.getFrame(1.5).properties).to.be.deep.equals(this.item.getFrame(1.8).properties);
+            expect(item.constructor).to.be.equals(item1.constructor);
         });
         it(`should check 'mergeFrame' method`, () => {
             /*
@@ -421,21 +394,21 @@ describe("SceneItem Test", () => {
                 },
             */
             // Given
-            this.item.set(0.5, "b", 2);
-            this.item.set(0.7, "c", 3);
+            item.set(0.5, "b", 2);
+            item.set(0.7, "c", 3);
             // When
-            this.item.mergeFrame(0.5, 1.5);
-            this.item.mergeFrame(1, 1.5);
-            this.item.mergeFrame({ 0.7: 1.5 });
-            this.item.mergeFrame(0.8, 1.5);
+            item.mergeFrame(1.5, this.getFrame(0.5));
+            item.mergeFrame(1.5, this.getFrame(1));
+            item.mergeFrame(1.5, this.getFrame(0.7));
+            item.mergeFrame(1.5, this.getFrame(0.8));
 
-            expect(this.item.getFrame(1.5).get("a")).to.be.deep.equals(2);
-            expect(this.item.getFrame(1.5).get("b")).to.be.deep.equals(2);
-            expect(this.item.getFrame(1.5).get("c")).to.be.deep.equals(3);
-            expect(this.item.getFrame(1.5).get("display")).to.be.deep.equals("none");
+            expect(item.getFrame(1.5).get("a")).to.be.deep.equals(2);
+            expect(item.getFrame(1.5).get("b")).to.be.deep.equals(2);
+            expect(item.getFrame(1.5).get("c")).to.be.deep.equals(3);
+            expect(item.getFrame(1.5).get("display")).to.be.deep.equals("none");
         });
         it("should check no frame", () => {
-            const item = new SceneItem({});
+            item = new SceneItem({});
 
             item.setTime(0);
             expect(item.getDuration()).to.be.equals(0);
@@ -791,7 +764,7 @@ describe("SceneItem Test", () => {
                             direction,
                         });
 
-                    const times1 = item.getAllTimes();
+                    const times1 = item.getAllTimes(item.state);
                     const values1 = expectations[direction][iterationCount];
                     const values2 = Object.assign({ [THRESHOLD]: values1[0] }, values1);
                     delete values2[0];
@@ -809,11 +782,14 @@ describe("SceneItem Test", () => {
     });
     [true, false].forEach(hasClassList => {
         describe(`test SceneItem events(hasClassList = ${hasClassList})`, () => {
+            let item: SceneItem;
+
             beforeEach(() => {
                 this.element = document.createElement("div");
                 !hasClassList && removeProperty(this.element, "classList");
                 document.body.appendChild(this.element);
-                this.item = new SceneItem({
+
+                item = new SceneItem({
                     0: {
                         a: 1,
                     },
@@ -829,28 +805,28 @@ describe("SceneItem Test", () => {
             afterEach(() => {
                 document.body.innerHTML = "";
                 this.element = null;
-                this.item.off();
-                this.item = null;
+                item.off();
+                item = null;
             });
             it(`should check "playCSS" and event order `, done => {
                 // Given
-                this.item.setElement(this.element);
+                item.setElement(this.element);
                 const play = sinon.spy();
                 const ended = sinon.spy();
                 const iteration = sinon.spy();
                 const paused = sinon.spy();
-                this.item.on("play", play);
-                this.item.on("ended", ended);
-                this.item.on("iteration", iteration);
-                this.item.on("paused", paused);
+                item.on("play", play);
+                item.on("ended", ended);
+                item.on("iteration", iteration);
+                item.on("paused", paused);
 
                 // When
-                this.item.playCSS();
-                this.item.playCSS();
+                item.playCSS();
+                item.playCSS();
 
-                expect(this.item.getPlayState()).to.be.equals("running");
-                expect(this.item.getState("playCSS")).to.be.true;
-                this.item.on("ended", e => {
+                expect(item.getPlayState()).to.be.equals("running");
+                expect(item.state.playCSS).to.be.true;
+                item.on("ended", e => {
                     // Then
                     expect(play.calledOnce).to.be.true;
                     expect(iteration.calledOnce).to.be.false;
@@ -861,19 +837,19 @@ describe("SceneItem Test", () => {
             });
             it(`should check "playCSS" and replay`, done => {
                 // Given
-                this.item.setElement(this.element);
+                item.setElement(this.element);
                 const play = sinon.spy();
                 const ended = sinon.spy();
-                this.item.on("play", play);
-                this.item.on("ended", ended);
+                item.on("play", play);
+                item.on("ended", ended);
 
                 // When
-                this.item.playCSS();
+                item.playCSS();
 
-                this.item.on("ended", e => {
+                item.on("ended", e => {
                     // Then
                     if (play.callCount === 1) {
-                        this.item.playCSS();
+                        item.playCSS();
                     } else {
                         expect(play.callCount).to.be.equals(2);
                         expect(ended.callCount).to.be.equals(2);
@@ -883,21 +859,21 @@ describe("SceneItem Test", () => {
             });
             it(`should check "iteration" event `, done => {
                 // Given
-                this.item.setElement(this.element);
+                item.setElement(this.element);
                 const play = sinon.spy();
                 const ended = sinon.spy();
                 const iteration = sinon.spy();
                 const paused = sinon.spy();
-                this.item.on("play", play);
-                this.item.on("ended", ended);
-                this.item.on("iteration", iteration);
-                this.item.on("paused", paused);
+                item.on("play", play);
+                item.on("ended", ended);
+                item.on("iteration", iteration);
+                item.on("paused", paused);
 
                 // When
-                this.item.setIterationCount(2);
-                this.item.playCSS();
+                item.setIterationCount(2);
+                item.playCSS();
 
-                this.item.on("ended", e => {
+                item.on("ended", e => {
                     // Then
                     expect(play.calledOnce).to.be.true;
                     expect(iteration.calledOnce).to.be.true;
@@ -909,10 +885,10 @@ describe("SceneItem Test", () => {
             it(`should check "playCSS" and no elements `, () => {
                 // Given
                 // When
-                this.item.playCSS();
+                item.playCSS();
 
                 // Then
-                expect(this.item.getPlayState()).to.be.equals("paused");
+                expect(item.getPlayState()).to.be.equals("paused");
             });
         });
     });

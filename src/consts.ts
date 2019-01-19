@@ -2,10 +2,11 @@ import { IObject } from "@daybrush/utils";
 import { IRole, OptionType, EventType } from "./types";
 
 export const PREFIX = "__SCENEJS_";
+export const DATA_SCENE_ID = "data-scene-id";
 export const TIMING_FUNCTION = "animation-timing-function";
 export const ROLES: IRole = { transform: {}, filter: {}, attribute: {} };
 export const ALIAS: IObject<string[]> = { easing: [TIMING_FUNCTION] };
-export const FIXED = { "animation-timing-function": true, "contents": true };
+export const FIXED = { [TIMING_FUNCTION]: true, contents: true };
 export const MAXIMUM = 1000000;
 export const THRESHOLD = 0.000001;
 
@@ -33,6 +34,12 @@ export const ALTERNATE_REVERSE = "alternate-reverse";
 export const NORMAL = "normal";
 export const INFINITE = "infinite";
 export const PLAY_STATE = "playState";
+export const PLAY_CSS = "playCSS";
+export const PREV_TIME = "prevTime";
+export const TICK_TIME = "tickTime";
+export const CURRENT_TIME = "currentTime";
+export const SELECTOR = "selector";
+export const TRANSFORM_NAME = "transform";
 
 /**
 * option name list

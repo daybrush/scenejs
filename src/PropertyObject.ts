@@ -33,7 +33,16 @@ var obj = new PropertyObject([100,100,100,0.5], {
 	 */
   constructor(value: string | any[], options?: Partial<IPropertyObject>) {
     options && this.setOptions(options);
-    this.init(value);
+
+    const type = typeof value;
+
+    if (type === STRING) {
+      this.value = (value as string).split(this.separator);
+    } else if (type === OBJECT) {
+      this.value = (value as any[]);
+    } else {
+      this.value = [value];
+    }
   }
   public setOptions(newOptions: Partial<IPropertyObject>) {
     for (const name in newOptions) {
@@ -157,18 +166,6 @@ obj4.forEach(t => {
 	*/
   public forEach(func: (value?: any, index?: number, array?: any[]) => void) {
     this.value.forEach(func);
-    return this;
-  }
-  private init(value: string | any[]) {
-    const type = typeof value;
-
-    if (type === STRING) {
-      this.value = (value as string).split(this.separator);
-    } else if (type === OBJECT) {
-      this.value = (value as any[]);
-    } else {
-      this.value = [value];
-    }
     return this;
   }
 }
