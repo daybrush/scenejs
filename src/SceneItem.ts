@@ -891,14 +891,16 @@ item[PLAY_CSS](false, {
     const keyframes = [];
     let lastTime = entries[entries.length - 1][0];
 
-    for (const time in frames) {
-      css[time] = frames[time].toCSS();
-    }
     if (delay) {
       const isReverse = direction === REVERSE || direction === ALTERNATE_REVERSE;
       const delayTime = isReverse && (fillMode === "both" || fillMode === "backwards") ? originalDuration : 0;
 
-      entries.unshift([-THRESHOLD, delayTime], [-delay, 0]);
+      !frames[delayTime] && (frames[delayTime] = this.getNowFrame(delayTime));
+      (entries[0][1] !== delayTime) && entries.unshift([-THRESHOLD, delayTime]);
+      entries.unshift([-delay, 0]);
+    }
+    for (const time in frames) {
+      css[time] = frames[time].toCSS();
     }
     if ((delay + lastTime) / playSpeed < duration) {
       entries.push([duration * playSpeed - delay, entries[entries.length - 1][1]]);

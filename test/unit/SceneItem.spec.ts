@@ -25,6 +25,7 @@ describe("SceneItem Test", () => {
             expect(item.get(1, "display")).to.be.equals("block");
             expect(item.get(1, "a")).to.be.equals(2);
             expect(item.get(2, "a")).to.be.equals(1);
+            expect(item.size()).to.be.equals(3);
         });
         it("should check array item", () => {
             const item = new SceneItem([{
@@ -223,6 +224,16 @@ describe("SceneItem Test", () => {
                     b: 5,
                 },
             });
+            item.set(12, [
+                {
+                    a: 1,
+                    b: 2,
+                },
+                {
+                    c: 1,
+                    d: 2,
+                },
+            ]);
             expect(item.getFrame(0.5).get("a")).to.be.equals(1);
             expect(item.getFrame(0.6).get("transform", "a")).to.be.equals(1);
             expect(item.getFrame(0.7).get("b")).to.be.equals("b");
@@ -238,6 +249,10 @@ describe("SceneItem Test", () => {
                 expect(item.getFrame(time).get("g")).to.be.equals("1");
                 expect(item.getFrame(time).get("h")).to.be.equals("5");
             });
+            expect(item.getFrame(12).get("a")).to.be.equals(1);
+            expect(item.getFrame(12).get("b")).to.be.equals(2);
+            expect(item.getFrame(12).get("c")).to.be.equals(1);
+            expect(item.getFrame(12).get("d")).to.be.equals(2);
         });
         it("should check 'remove' method", () => {
             // When
@@ -748,6 +763,7 @@ describe("SceneItem Test", () => {
             [0.3, 1, 1.3, 2, 2.3].forEach(iterationCount => {
                 it(`should check 'getAllTimes()' with direction="${direction}",
                     iterationCount=${iterationCount}`, () => {
+                    // Given
                     const item = new SceneItem({
                         0: {
                             a: 1,
@@ -760,21 +776,46 @@ describe("SceneItem Test", () => {
                             a: 2,
                         },
                     }, {
-                            iterationCount,
-                            direction,
-                        });
-
+                        iterationCount,
+                        direction,
+                    });
+                    const item2 = new SceneItem({
+                        0: {
+                            a: 1,
+                        },
+                        0.5: {
+                            a: 3,
+                        },
+                        1: {
+                            display: "block",
+                            a: 2,
+                        },
+                    }, {
+                        delay: 1,
+                        iterationCount,
+                        direction,
+                    });
                     // When
                     const values = expectations[direction][iterationCount];
                     const times = orderByASC(Object.keys(values).map(t => parseFloat(t)));
                     const lastTime = times[times.length - 1];
                     const keyframes = (item as any)._toKeyframes(lastTime, true) as string[];
-
+                    const keyframes2 = (item2 as any)._toKeyframes(lastTime + 1, true) as string[];
+                    const isReverse = direction === "reverse" || direction === "alternate-reverse";
                     // Then
                     expect(keyframes.length).to.be.equal(times.length);
+                    expect(keyframes2.length).to.be.equal(times.length + (isReverse ? 2 : 1));
                     keyframes.forEach((frame, i) => {
                         const time = parseFloat(frame.substring(0, frame.indexOf("%") + 1));
                         expect(toFixed(time / 100 * lastTime)).to.be.equal(times[i]);
+                    });
+                    keyframes2.forEach((frame, i) => {
+                        const time = parseFloat(frame.substring(0, frame.indexOf("%") + 1));
+
+                        if (i >= (isReverse ? 2 : 1)) {
+                            expect(toFixed(time / 100 * (1 + lastTime))).to.be
+                                .equal(1 + times[i - (isReverse ? 2 : 1)]);
+                        }
                     });
                 });
             });
