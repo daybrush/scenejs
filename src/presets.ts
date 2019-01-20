@@ -200,14 +200,14 @@ export function transition(item1: SceneItem, item2: SceneItem, {
   to,
   duration = item1.getDuration(),
   time = Math.max(item1.getDuration() - duration, 0),
-}: { from: IObject<any>, to: IObject<any>, duration?: number, time: number }) {
+}: { from: IObject<any>, to: IObject<any>, duration?: number, time?: number }) {
   item1.set({
-    [time]: from,
-    [time + duration]: to,
+    [time]: to,
+    [time + duration]: from,
   });
   item2.set({
-    0: to,
-    [duration]: from,
+    0: from,
+    [duration]: to,
   });
 }
 
