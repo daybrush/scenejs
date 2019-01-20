@@ -3,7 +3,7 @@ import { THRESHOLD } from "../../src/consts";
 import { EASE_IN_OUT } from "../../src/easing";
 import removeProperty from "./injections/ClassListInjection";
 import { orderByASC, group } from "./TestHelper";
-import { setRole } from "../../src/utils";
+import { setRole, toFixed } from "../../src/utils";
 import { DirectionType } from "../../src/Animator";
 import * as sinon from "sinon";
 
@@ -397,10 +397,10 @@ describe("SceneItem Test", () => {
             item.set(0.5, "b", 2);
             item.set(0.7, "c", 3);
             // When
-            item.mergeFrame(1.5, this.getFrame(0.5));
-            item.mergeFrame(1.5, this.getFrame(1));
-            item.mergeFrame(1.5, this.getFrame(0.7));
-            item.mergeFrame(1.5, this.getFrame(0.8));
+            item.mergeFrame(1.5, item.getFrame(0.5));
+            item.mergeFrame(1.5, item.getFrame(1));
+            item.mergeFrame(1.5, item.getFrame(0.7));
+            item.mergeFrame(1.5, item.getFrame(0.8));
 
             expect(item.getFrame(1.5).get("a")).to.be.deep.equals(2);
             expect(item.getFrame(1.5).get("b")).to.be.deep.equals(2);
@@ -764,18 +764,18 @@ describe("SceneItem Test", () => {
                             direction,
                         });
 
-                    const times1 = item.getAllTimes(item.state);
-                    const values1 = expectations[direction][iterationCount];
-                    const values2 = Object.assign({ [THRESHOLD]: values1[0] }, values1);
-                    delete values2[0];
+                    // When
+                    const values = expectations[direction][iterationCount];
+                    const times = orderByASC(Object.keys(values).map(t => parseFloat(t)));
+                    const lastTime = times[times.length - 1];
+                    const keyframes = (item as any)._toKeyframes(lastTime, true) as string[];
 
-                    const keys1 = orderByASC(Object.keys(values1).map(key => parseFloat(key)));
-                    const keytimes1 = group(orderByASC(Object.keys(values1).map(v => values1[v])));
-
-                    expect(orderByASC(Object.keys(times1.frames))).to.be.deep.equals(keytimes1);
-                    expect(times1.keys).to.be.deep.equals(keys1);
-                    expect(times1.values).to.be.deep.equals(values1);
-
+                    // Then
+                    expect(keyframes.length).to.be.equal(times.length);
+                    keyframes.forEach((frame, i) => {
+                        const time = parseFloat(frame.substring(0, frame.indexOf("%") + 1));
+                        expect(toFixed(time / 100 * lastTime)).to.be.equal(times[i]);
+                    });
                 });
             });
         });

@@ -6,7 +6,7 @@ export type Role = true | IRole;
 /**
  * @typedef
  */
-export type ElementsType = HTMLElement[] | NodeListOf<HTMLElement>;
+export type ElementsType = HTMLElement | HTMLElement[] | NodeListOf<HTMLElement>;
 /**
  * @typedef
  */

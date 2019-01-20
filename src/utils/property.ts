@@ -7,7 +7,7 @@ import PropertyObject from "../PropertyObject";
 import {
   COLOR_MODELS, isString,
   splitComma, splitSpace, stringToRGBA,
-  RGBA, splitBracket, IObject
+  RGBA, splitBracket, IObject, isArray
 } from "@daybrush/utils";
 
 export function splitStyle(str: string) {
@@ -133,7 +133,7 @@ export function toPropertyObject(value: IObject<any>): IObject<any>;
 export function toPropertyObject(value: string): PropertyObject | string;
 export function toPropertyObject(value: string | IObject<any> | any[]) {
   if (!isString(value)) {
-    if (Array.isArray(value)) {
+    if (isArray(value)) {
       return arrayToPropertyObject(value, ",");
     }
     return value;

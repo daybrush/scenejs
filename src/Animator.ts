@@ -8,7 +8,7 @@ import {
 import EventTrigger from "./EventTrigger";
 import { bezier, IEasingFunction } from "./easing";
 import { toFixed, makeId } from "./utils";
-import { splitUnit, isString, camelize, requestAnimationFrame } from "@daybrush/utils";
+import { splitUnit, isString, camelize, requestAnimationFrame, isArray } from "@daybrush/utils";
 
 function GetterSetter<T extends { new(...args: any[]): {} }>(
   getter: string[], setter: string[], parent: string) {
@@ -27,6 +27,28 @@ function GetterSetter<T extends { new(...args: any[]): {} }>(
       };
     });
   };
+}
+function tick(animator: Animator, now: number) {
+  const state = animator.state;
+  const playSpeed = state[PLAY_SPEED];
+  const prevTime = state[PREV_TIME];
+  const delay = state[DELAY];
+  const tickTime = state[TICK_TIME];
+  const currentTime = tickTime + Math.min(1000, now - prevTime) / 1000 * playSpeed;
+
+  state[PREV_TIME] = now;
+  animator.setTime(currentTime - delay, true);
+  if (animator.isEnded()) {
+    animator.end();
+    return;
+  }
+  if (state[PLAY_STATE] === PAUSED) {
+    return;
+  }
+
+  requestAnimationFrame((time: number) => {
+    tick(animator, time);
+  });
 }
 
 /**
@@ -150,7 +172,7 @@ animator.({
 });
 	*/
   public setEasing(curveArray: [number, number, number, number] | IEasingFunction): this {
-    const easing = Array.isArray(curveArray) ?
+    const easing = isArray(curveArray) ?
       bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]) : curveArray;
     const easingName = easing[EASING_NAME] || "linear";
 
@@ -265,7 +287,7 @@ animator.isPaused(); // true or false
 
     requestAnimationFrame((time: number) => {
       state[PREV_TIME] = time;
-      this.tick(time);
+      tick(this, time);
     });
     /**
 		 * This event is fired when play animator.
@@ -335,7 +357,7 @@ animator.getTime() // 10
       currentTime = activeDuration;
     }
     state[CURRENT_TIME] = currentTime;
-    this.calculateIterationTime();
+    this.calculate();
 
     if (this.isDelay()) {
       return this;
@@ -425,7 +447,7 @@ animator.getTime();
     state.iteration = iterationCount;
     return this;
   }
-  protected calculateIterationTime() {
+  protected calculate() {
     const state = this.state;
     const iterationCount = state[ITERATION_COUNT];
     const fillMode = state[FILL_MODE];
@@ -460,28 +482,6 @@ animator.getTime();
     }
     this.setIterationTime(currentIterationTime);
     return this;
-  }
-  protected tick(now: number) {
-    const state = this.state;
-    const playSpeed = state[PLAY_SPEED];
-    const prevTime = state[PREV_TIME];
-    const delay = state[DELAY];
-    const tickTime = state[TICK_TIME];
-    const currentTime = tickTime + Math.min(1000, now - prevTime) / 1000 * playSpeed;
-
-    state[PREV_TIME] = now;
-    this.setTime(currentTime - delay, true);
-    if (this.isEnded()) {
-      this.end();
-      return;
-    }
-    if (state[PLAY_STATE] === PAUSED) {
-      return;
-    }
-
-    requestAnimationFrame((time: number) => {
-      this.tick(time);
-    });
   }
 }
 

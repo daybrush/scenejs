@@ -248,6 +248,7 @@ class Scene extends Animator {
     playCSS(this, isExportCSS, properties);
     return this;
   }
+  public set(properties: any, ...args: any[]): this;
   public set(properties: any) {
     this.load(properties);
     return this;
