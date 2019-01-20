@@ -6,6 +6,7 @@ import { orderByASC, group } from "./TestHelper";
 import { setRole, toFixed } from "../../src/utils";
 import { DirectionType } from "../../src/Animator";
 import * as sinon from "sinon";
+import { isTemplateSpan } from "typescript";
 
 describe("SceneItem Test", () => {
     describe("test item initialize", () => {
@@ -116,6 +117,27 @@ describe("SceneItem Test", () => {
             expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
             expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
             expect(item.getNowFrame(1).get("display")).to.be.equals("none");
+        });
+        it("should check 'getNowFrame(true)' method", () => {
+            // When
+            item.set(0, "transform", "translate(20px)");
+            item.set(1, "transform", "scale(0)");
+            item.set(2, "transform", "translate(40px)");
+
+            // Then
+            expect(item.getNowFrame(0, 0, true).get("display")).to.be.equals("block");
+            expect(item.getNowFrame(0.5, 0, true).get("display")).to.be.not.ok;
+            expect(item.getNowFrame(1, 0, true).get("display")).to.be.equals("none");
+
+            expect(item.getNowFrame(0, 0, true).get("transform", "translate")).to.be.equals("20px");
+            expect(item.getNowFrame(0.5, 0, true).get("transform", "translate")).to.be.not.ok;
+            expect(item.getNowFrame(1, 0, true).get("transform", "translate")).to.be.equals("30px");
+            expect(item.getNowFrame(2, 0, true).get("transform", "translate")).to.be.equals("40px");
+
+            expect(item.getNowFrame(0, 0, true).get("transform", "scale")).to.be.equals("0");
+            expect(item.getNowFrame(0.5, 0, true).get("transform", "scale")).to.be.not.ok;
+            expect(item.getNowFrame(1, 0, true).get("transform", "scale")).to.be.equal("0");
+            expect(item.getNowFrame(2, 0, true).get("transform", "scale")).to.be.equal("0");
         });
         it("should check 'getNowFrame' method (no 0%)", () => {
             item = new SceneItem({

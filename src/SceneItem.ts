@@ -18,7 +18,7 @@ import {
   PREFIX, THRESHOLD,
   TIMING_FUNCTION, ALTERNATE, ALTERNATE_REVERSE, NORMAL, INFINITE,
   REVERSE, EASING, FILL_MODE, DIRECTION, ITERATION_COUNT,
-  EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION, DATA_SCENE_ID, PLAY_CSS, SELECTOR
+  EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION, DATA_SCENE_ID, PLAY_CSS, SELECTOR, ROLES
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
@@ -63,6 +63,7 @@ function updateFrame(names: IObject<any>, properties: IObject<any>) {
     }
     updateFrame(names[name], properties[name]);
   }
+  return names;
 }
 function addTime(times: number[], time: number) {
   const length = times.length;
@@ -558,16 +559,6 @@ item.merge(0, 1);
     }
     return this;
   }
-
-  /**
-	* A list of names
-	* @return {} names
-	* @example
-keyframes.getNames(); // [["a"], ["transform", "translate"], ["transform", "scale"]]
-	*/
-  public getNames(): string[][] {
-    return getNames(this.names, []);
-  }
   /**
 	* Get frame of the current time
 	* @param {Number} time - the current time
@@ -591,12 +582,25 @@ const frame = item.getNowFrame(1.7);
 	*/
   public getNowFrame(time: number, easing?: EasingType, isAccurate?: boolean) {
     const frame = new Frame();
-    const names = this.getNames();
     const { left, right } = getNearTimeIndex(this.times, time);
     const realEasing = this._getEasing(time, left, right, this.getEasing() || easing);
+    let nameObject = this.names;
+
+    if (isAccurate) {
+      const prevFrame = this.getFrame(time);
+      const prevNames = updateFrame({}, prevFrame.properties);
+
+      for (const name in ROLES) {
+        if (name in prevNames) {
+          prevNames[name] = nameObject[name];
+        }
+      }
+      nameObject = prevNames;
+    }
+    const names = getNames(nameObject, []);
 
     names.forEach(properties => {
-      const value = this._getNowValue(time, properties, left, right, realEasing, isAccurate);
+      const value = this._getNowValue(time, properties, left, right, isAccurate, realEasing);
 
       if (isUndefined(value)) {
         return;
@@ -818,7 +822,7 @@ item[PLAY_CSS](false, {
   }
   private _getEasing(time: number, left: number, right: number, easing: EasingType) {
     if (this.hasName([TIMING_FUNCTION])) {
-      const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
+      const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, false, 0, true);
 
       return isFunction(nowEasing) ? nowEasing : easing;
     }
@@ -919,9 +923,9 @@ item[PLAY_CSS](false, {
     properties: string[],
     left: number,
     right: number,
-    easing: EasingType = this.getEasing(),
-    usePrevValue: boolean = isFixed(properties),
     isAccurate?: boolean,
+    easing?: EasingType,
+    usePrevValue: boolean = isFixed(properties),
   ) {
     const times = this.times;
     const length = times.length;
