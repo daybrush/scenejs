@@ -38,9 +38,9 @@ $ npm install scenejs
 ```
 
 ## Components
-* [**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs): A React Component that can easily use scenejs
-* [**ng-scene**](https://github.com/daybrush/scenejs/tree/master/packages/ng-scene): A Angular Component that can easily use scenejs
-* [**vue-scene**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scene): A Vue Component that can easily use scenejs
+* [**react-scenejs**](https://www.npmjs.com/package/react-scenejs): A React Component that can easily use scenejs
+* [**ng-scene**](https://www.npmjs.com/package/ng-scene): A Angular Component that can easily use scenejs
+* [**vue-scene**](https://www.npmjs.com/package/vue-scene): A Vue Component that can easily use scenejs
 
 ## Documents
 * [API documentation](https://daybrush.github.io/scenejs/release/latest/doc/)
