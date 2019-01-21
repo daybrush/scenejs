@@ -305,6 +305,15 @@ item.set(item.getDuration(), {
     }
     return this;
   }
+   /**
+  * Push out the amount of time.
+  * @param - time to push
+	* @return {}
+	* @example
+  item.get(0); // frame 0
+  item.unshift(3);
+  item.get(3) // frame 0
+	*/
   public unshift(time: number) {
     const { times, items } = this;
     const obj: IObject<Frame> = {};
@@ -317,7 +326,14 @@ item.set(item.getDuration(), {
     });
     this.items = obj;
   }
-  public toObject(isStartZero = true, startTime = 0) {
+   /**
+	* Get the frames in the item in object form.
+	* @return {}
+	* @example
+item.toObject();
+// {0: {display: "none"}, 1: {display: "block"}}
+	*/
+  public toObject(isStartZero = true, startTime = 0): IObject<Frame> {
     const obj: IObject<Frame> = {};
     const delay = this.getDelay();
 
