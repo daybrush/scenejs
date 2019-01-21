@@ -354,7 +354,7 @@ describe("Scene Test", () => {
             expect(scene.getPlayState()).to.be.equals("running");
             scene.on("ended", e => {
                 expect(scene.getPlayState()).to.be.equals("paused");
-                expect(scene.getState("playCSS")).to.be.false;
+                expect(scene.state.playCSS).to.be.false;
                 done();
             });
         });
@@ -428,7 +428,7 @@ describe("Scene Test", () => {
             expect(hasClass(document.querySelector(".test2"), START_ANIMATION)).to.be.true;
             expect(hasClass(document.querySelector(".test2"), PAUSE_ANIMATION)).to.be.true;
             expect(scene.getPlayState()).to.be.equals("paused");
-            expect(scene.getState("playCSS")).to.be.true;
+            expect(scene.state.playCSS).to.be.true;
 
             scene.finish();
         });
@@ -483,7 +483,7 @@ describe("Scene Test", () => {
             expect(hasClass(document.querySelector(".test2"), START_ANIMATION)).to.be.false;
             expect(hasClass(document.querySelector(".test2"), PAUSE_ANIMATION)).to.be.false;
             expect(scene.getPlayState()).to.be.equals("paused");
-            expect(scene.getState("playCSS")).to.be.false;
+            expect(scene.state.playCSS).to.be.false;
         });
         it(`should check playCSS method with iteration count = 2`, done => {
             const scene = new Scene({
@@ -507,7 +507,7 @@ describe("Scene Test", () => {
             expect(hasClass(document.querySelector(".test1"), START_ANIMATION)).to.be.true;
             expect(hasClass(document.querySelector(".test2"), START_ANIMATION)).to.be.true;
             expect(scene.getPlayState()).to.be.equals("running");
-            expect(scene.getState("playCSS")).to.be.true;
+            expect(scene.state.playCSS).to.be.true;
 
             const spy = sinon.spy();
 
@@ -515,7 +515,7 @@ describe("Scene Test", () => {
             scene.on("ended", e => {
                 expect(spy.calledOnce).to.be.true;
                 expect(scene.getPlayState()).to.be.equals("paused");
-                expect(scene.getState("playCSS")).to.be.false;
+                expect(scene.state.playCSS).to.be.false;
                 done();
             });
         });

@@ -1,7 +1,8 @@
 
-import { StateInterface } from "./Animator";
+import { IState } from "./Animator";
 import SceneItem from "./SceneItem";
-import { ObjectInterface } from "@daybrush/utils";
+import { IObject } from "@daybrush/utils";
+import { TRANSFORM_NAME } from "./consts";
 
 /**
  * @namespace presets
@@ -34,7 +35,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function set(property: string | string[], values: any[], options: StateInterface) {
+export function set(property: string | string[], values: any[], options: IState) {
   const item = new SceneItem({}, options);
   const length = values.length;
 
@@ -67,8 +68,8 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function zoomIn({ from = 0, to = 1 }: StateInterface) {
-  return set(["transform", "scale"], [from, to], arguments[0]);
+export function zoomIn({ from = 0, to = 1 }: IState) {
+  return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
 /**
@@ -94,8 +95,8 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function zoomOut({ from = 1, to = 0 }: StateInterface) {
-  return set(["transform", "scale"], [from, to], arguments[0]);
+export function zoomOut({ from = 1, to = 0 }: IState) {
+  return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
 /**
@@ -122,7 +123,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function wipeIn({ from = "-100%", to = "0%", property = "left" }: StateInterface) {
+export function wipeIn({ from = "-100%", to = "0%", property = "left" }: IState) {
   return set(property, [from, to], arguments[0]);
 }
 
@@ -150,7 +151,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function wipeOut({ from = "0%", to = "100%", property = "left" }: StateInterface) {
+export function wipeOut({ from = "0%", to = "100%", property = "left" }: IState) {
   return set(property, [from, to], arguments[0]);
 }
 
@@ -199,21 +200,21 @@ export function transition(item1: SceneItem, item2: SceneItem, {
   to,
   duration = item1.getDuration(),
   time = Math.max(item1.getDuration() - duration, 0),
-}: { from: ObjectInterface<any>, to: ObjectInterface<any>, duration?: number, time: number }) {
+}: { from: IObject<any>, to: IObject<any>, duration?: number, time?: number }) {
   item1.set({
-    [time]: from,
-    [time + duration]: to,
+    [time]: to,
+    [time + duration]: from,
   });
   item2.set({
-    0: to,
-    [duration]: from,
+    0: from,
+    [duration]: to,
   });
 }
 
 /**
  * Make a fade in effect.
  * @memberof presets
- * @param {StateInterface} options
+ * @param {IState} options
  * @param {number} [options.from = 0] start opacity
  * @param {number}[options.to = 1] end opacity
  * @param {number} options.duration animation's duration
@@ -233,14 +234,14 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function fadeIn({ from = 0, to = 1 }: StateInterface) {
+export function fadeIn({ from = 0, to = 1 }: IState) {
   return set("opacity", [from, to], arguments[0]);
 }
 
 /**
  * Make a fade out effect.
  * @memberof presets
- * @param {StateInterface} options
+ * @param {IState} options
  * @param {number} [options.from = 1] start opacity
  * @param {number}[options.to = 0] end opacity
  * @param {number} options.duration animation's duration
@@ -260,13 +261,13 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function fadeOut({ from = 1, to = 0 }: StateInterface) {
+export function fadeOut({ from = 1, to = 0 }: IState) {
   return set("opacity", [from, to], arguments[0]);
 }
 /**
  * Make a blinking effect.
  * @memberof presets
- * @param {StateInterface} options
+ * @param {IState} options
  * @param {number} [options.from = 0] start opacity
  * @param {number}[options.to = 1] end opacity
  * @param {number} options.duration animation's duration
@@ -289,6 +290,6 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function blink({ from = 0, to = 1 }: StateInterface) {
+export function blink({ from = 0, to = 1 }: IState) {
   return set("opacity", [from, to, from], arguments[0]);
 }

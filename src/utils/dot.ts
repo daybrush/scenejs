@@ -1,7 +1,3 @@
-/**
-* @namespace
-* @name Dot
-*/
 
 import PropertyObject from "../PropertyObject";
 import { EasingType } from "../Animator";
@@ -9,26 +5,7 @@ import { getType } from "../utils";
 import { toPropertyObject } from "./property";
 import { isArray, splitUnit, PROPERTY, FUNCTION } from "@daybrush/utils";
 
-/**
-* The dot product of Arrays
-* @memberof Dot
-* @function dotArray
-* @param {Array} a1 value1
-* @param {Array} a2 value2
-* @param {Number} b1 b1 ratio
-* @param {Number} b2 b2 ratio
-* @return {Array|Object} Array.
-* @example
-dotArray([0, 0, 0, 1],[50, 50, 50, 1],0.5, 0.5);
-// => [25, 25, 25, 1]
-*/
-export function dotArray(a1: any[], a2: any, b1: number, b2: number): any {
-  if (b2 === 0) {
-    return a2;
-  }
-  if (!isArray(a2)) {
-    return a1;
-  }
+function dotArray(a1: any[], a2: any, b1: number, b2: number): any {
   const length = a2.length;
 
   return a1.map((v1, i) => {
@@ -40,32 +17,13 @@ export function dotArray(a1: any[], a2: any, b1: number, b2: number): any {
   });
 }
 
-/**
-* The dot product of PropertyObject(type=color)
-* If the values are not RGBA model, change them RGBA mdoel.
-* @memberof Dot
-* @function dotColor
-* @param {PropertyObject} a1 value1
-* @param {PropertyObject} a2 value2
-* @param {Number} b1 b1 ratio
-* @param {Number} b2 b2 ratio
-* @return {PropertyObject} PropertyObject(type=color).
-* @example
-var colorObject = ......; //PropertyObject(type=color, model="rgba", value=[254, 254, 254, 1]);
-dotColor("#000",  colorObject, 0.5, 0.5);
-// "#000" => PropertyObject(type=color, model="rgba", value=[0, 0, 0, 1]);
-// return => PropertyObject(type=color, model="rgba", value=[127, 127, 127, 1]);
-*/
-export function dotColor(color1: PropertyObject, color2: PropertyObject, b1: number, b2: number) {
-  if (b2 === 0) {
-    return color2;
-  }
+function dotColor(color1: PropertyObject, color2: PropertyObject, b1: number, b2: number) {
   // convert array to PropertyObject(type=color)
   const value1 = color1.value;
   const value2 = color2.value;
   // If the model name is not same, the inner product is impossible.
-  const model1 = color1.getOption("model");
-  const model2 = color2.getOption("model");
+  const model1 = color1.model;
+  const model2 = color2.model;
 
   if (model1 !== model2) {
     // It is recognized as a string.
@@ -92,23 +50,9 @@ export function dotColor(color1: PropertyObject, color2: PropertyObject, b1: num
 
   return object;
 }
-/**
-* The dot product of Objects
-* @memberof Dot
-* @function dotObject
-* @param {PropertyObject} a1 value1
-* @param {PropertyObject} a2 value2
-* @param {Number} b1 b1 ratio
-* @param {Number} b2 b2 ratio
-* @return {PropertyObject} Array with Separator.
-* @example
-dotObject(PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)]),
-PropertyObject(["9px", "solid", rgba(50, 50, 50, 1)]),
-0.5, 0.5);
-// => PropertyObject(["5px", "solid", rgba(25, 25, 25, 1)])
-*/
-export function dotObject(a1: PropertyObject, a2: PropertyObject, b1: number, b2: number) {
-  const a1Type = a1.getOption("type");
+
+function dotObject(a1: PropertyObject, a2: PropertyObject, b1: number, b2: number) {
+  const a1Type = a1.type;
 
   if (a1Type === "color") {
     return dotColor(a1, a2, b1, b2);
@@ -119,10 +63,10 @@ export function dotObject(a1: PropertyObject, a2: PropertyObject, b1: number, b2
 
   return new PropertyObject(arr, {
     type: a1Type,
-    separator: a1.getOption("separator") || a2.getOption("separator"),
-    prefix: a1.getOption("prefix") || a2.getOption("prefix"),
-    suffix: a1.getOption("suffix") || a2.getOption("suffix"),
-    model: a1.getOption("model") || a2.getOption("model"),
+    separator: a1.separator || a2.separator,
+    prefix: a1.prefix || a2.prefix,
+    suffix: a1.suffix || a2.suffix,
+    model: a1.model || a2.model,
   });
 }
 /**

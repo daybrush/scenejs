@@ -20,10 +20,16 @@
         "monospaceLinks": false
     },
     "linkMap": {
-        "ObjectInterface": "http://daybrush.com/utils/release/latest/doc/global.html#ObjectInterface",
-        "EventInterface": "http://daybrush.com/fjx/release/latest/doc/global.html#EventInterface",
-        "CallbackType": "http://daybrush.com/fjx/release/latest/doc/global.html#CallbackType",
-        "EventParamterType": "http://daybrush.com/fjx/release/latest/doc/global.html#EventParamterType",
-        "ForEachInterface": "http://daybrush.com/fjx/release/latest/doc/global.html#ForEachInterface"
+        "IObject": "http://daybrush.com/utils/release/latest/doc/global.html#ObjectInterface"
+    },
+    "docdash": {
+        "menu": {
+            "Github repo": {
+                "href": "https://github.com/daybrush/fjx",
+                "target": "_blank",
+                "class": "menu-item",
+                "id": "repository"
+            }
+        }
     }
 }

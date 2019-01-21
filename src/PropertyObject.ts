@@ -3,19 +3,23 @@ import { OBJECT, STRING } from "@daybrush/utils";
 /**
  * @typedef
  */
-interface PropertyObjectInterface {
-  prefix?: string;
-  suffix?: string;
-  model?: string;
-  type?: string;
-  separator?: string;
+export interface IPropertyObject {
+  prefix: string;
+  suffix: string;
+  model: string;
+  type: string;
+  separator: string;
 }
 /**
 * Make string, array to PropertyObject for the dot product
 */
-class PropertyObject {
+class PropertyObject implements IPropertyObject {
   public value: any[];
-  public options: PropertyObjectInterface;
+  public prefix: string  = "";
+  public suffix: string = "";
+  public model: string = "";
+  public type: string = "";
+  public separator: string = ",";
 
   /**
 	* @param - This value is in the array format.
@@ -27,28 +31,24 @@ var obj = new PropertyObject([100,100,100,0.5], {
 	"suffix" : ")"
 });
 	 */
-  constructor(value: string | any[], options?: PropertyObjectInterface) {
-    this.options = {
-      prefix: "",
-      suffix: "",
-      model: "",
-      type: "",
-      separator: ",",
-    };
+  constructor(value: string | any[], options?: Partial<IPropertyObject>) {
     options && this.setOptions(options);
-    this.init(value);
-  }
-  public setOptions(newOptions: PropertyObjectInterface) {
-    const options = this.options;
 
-    for (const name in newOptions) {
-      options[name as keyof PropertyObjectInterface] = newOptions[name as keyof PropertyObjectInterface];
+    const type = typeof value;
+
+    if (type === STRING) {
+      this.value = (value as string).split(this.separator);
+    } else if (type === OBJECT) {
+      this.value = (value as any[]);
+    } else {
+      this.value = [value];
     }
-    options && (this.options = {...this.options, ...options});
-    return this;
   }
-  public getOption(name: keyof PropertyObjectInterface) {
-    return this.options[name];
+  public setOptions(newOptions: Partial<IPropertyObject>) {
+    for (const name in newOptions) {
+      this[name as keyof IPropertyObject] = newOptions[name as keyof IPropertyObject];
+    }
+    return this;
   }
   /**
 	* the number of values.
@@ -97,8 +97,21 @@ const obj1 = new PropertyObject("1,2,3", ",");
 const obj2 = obj1.clone();
 	 */
   public clone(): PropertyObject {
+    const {
+      separator,
+      prefix,
+      suffix,
+      model,
+      type,
+    } = this;
     const arr = this.value.map(v => ((v instanceof PropertyObject) ? v.clone() : v));
-    return new PropertyObject(arr, this.options);
+    return new PropertyObject(arr, {
+      separator,
+      prefix,
+      suffix,
+      model,
+      type,
+    });
   }
   /**
 	* Make Property Object to String
@@ -114,7 +127,7 @@ console.log(obj4.toValue());
 // "rgba(100,100,100,0.5)"
 	*/
   public toValue(): string {
-    return this.options.prefix + this.join() + this.options.suffix;
+    return this.prefix + this.join() + this.suffix;
   }
   /**
 	* Make Property Object's array to String
@@ -129,7 +142,7 @@ console.log(obj4.toValue());
 	obj4.join();  // =>   "100,100,100,0.5"
 	 */
   public join() {
-    return this.value.map(v => ((v instanceof PropertyObject) ? v.toValue() : v)).join(this.options.separator);
+    return this.value.map(v => ((v instanceof PropertyObject) ? v.toValue() : v)).join(this.separator);
   }
   /**
 	* executes a provided function once per array element.
@@ -153,18 +166,6 @@ obj4.forEach(t => {
 	*/
   public forEach(func: (value?: any, index?: number, array?: any[]) => void) {
     this.value.forEach(func);
-    return this;
-  }
-  private init(value: string | any[]) {
-    const type = typeof value;
-
-    if (type === STRING) {
-      this.value = (value as string).split(this.options.separator);
-    } else if (type === OBJECT) {
-      this.value = (value as any[]);
-    } else {
-      this.value = [value];
-    }
     return this;
   }
 }

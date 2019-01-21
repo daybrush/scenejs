@@ -127,7 +127,7 @@ describe("Frame Test", () => {
             expect(frame.get("transform", "scale")).to.be.not.ok;
             expect(frame.get("transform")).to.be.not.ok;
         });
-        it("sholud check 'toObject' method", () => {
+        it("sholud check 'get(toObject)' method", () => {
             /*
                this.frame = new Frame({
                 a: 1,
@@ -140,7 +140,7 @@ describe("Frame Test", () => {
             */
             // Given
             frame.set("border-color", "1px solid rgb( 100 , 200 , 300)");
-            const properties = frame.toObject();
+            const properties = frame.get();
 
             expect(properties).to.be.deep.equal({
                 "a": 1,

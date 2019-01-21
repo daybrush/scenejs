@@ -13,3 +13,4 @@ declaration/
 build/
 .vscode/
 rollup-plugin-visualizer/
+statistics/

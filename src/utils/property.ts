@@ -7,12 +7,12 @@ import PropertyObject from "../PropertyObject";
 import {
   COLOR_MODELS, isString,
   splitComma, splitSpace, stringToRGBA,
-  RGBA, splitBracket, ObjectInterface
+  RGBA, splitBracket, IObject, isArray
 } from "@daybrush/utils";
 
 export function splitStyle(str: string) {
   const properties = str.split(";");
-  const obj: ObjectInterface<string | PropertyObject> = {};
+  const obj: IObject<string | PropertyObject> = {};
   let length = properties.length;
 
   for (let i = 0; i < length; ++i) {
@@ -80,10 +80,10 @@ export function stringToBracketObject(text: string) {
   let suffix = `)${afterModel}`;
 
   if (obj instanceof PropertyObject) {
-    separator = obj.getOption("separator");
+    separator = obj.separator;
     arr = obj.value;
-    prefix += obj.getOption("prefix");
-    suffix = obj.getOption("suffix") + suffix;
+    prefix += obj.prefix;
+    suffix = obj.suffix + suffix;
   }
   return new PropertyObject(arr, {
     separator,
@@ -129,11 +129,11 @@ toPropertyObject("1px solid #000");
 // => PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)])
 */
 export function toPropertyObject(value: any[]): PropertyObject;
-export function toPropertyObject(value: ObjectInterface<any>): ObjectInterface<any>;
+export function toPropertyObject(value: IObject<any>): IObject<any>;
 export function toPropertyObject(value: string): PropertyObject | string;
-export function toPropertyObject(value: string | ObjectInterface<any> | any[]) {
+export function toPropertyObject(value: string | IObject<any> | any[]) {
   if (!isString(value)) {
-    if (Array.isArray(value)) {
+    if (isArray(value)) {
       return arrayToPropertyObject(value, ",");
     }
     return value;
@@ -162,8 +162,8 @@ export function toPropertyObject(value: string | ObjectInterface<any> | any[]) {
   }
   return value;
 }
-export function toObject(object: PropertyObject, result: ObjectInterface<any> = {}) {
-  const model = object.getOption("model");
+export function toObject(object: PropertyObject, result: IObject<any> = {}) {
+  const model = object.model;
 
   if (model) {
     object.setOptions({
@@ -175,7 +175,9 @@ export function toObject(object: PropertyObject, result: ObjectInterface<any> = 
 
     result[model] = value;
   } else {
-    object.forEach(obj => toObject(obj, result));
+    object.forEach(obj => {
+      toObject(obj, result);
+    });
   }
   return result;
 }

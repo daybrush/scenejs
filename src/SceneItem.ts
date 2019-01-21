@@ -1,4 +1,4 @@
-import Animator, { StateInterface, EasingType, isDirectionReverse } from "./Animator";
+import Animator, { IState, EasingType, isDirectionReverse } from "./Animator";
 import Frame from "./Frame";
 import {
   toFixed,
@@ -8,22 +8,25 @@ import {
   exportCSS,
   getRealId,
   makeId,
+  isPausedCSS,
+  isRole,
+  isInProperties,
 } from "./utils";
-import Keyframes from "./Keyframes";
 import { dotValue } from "./utils/dot";
 import {
   START_ANIMATION,
   PREFIX, THRESHOLD,
   TIMING_FUNCTION, ALTERNATE, ALTERNATE_REVERSE, NORMAL, INFINITE,
   REVERSE, EASING, FILL_MODE, DIRECTION, ITERATION_COUNT,
-  EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION
+  EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION, DATA_SCENE_ID, PLAY_CSS, SELECTOR, ROLES
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
-  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, ObjectInterface } from "@daybrush/utils";
-import { NameType } from "./types";
+  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, IObject, $ } from "@daybrush/utils";
+import { NameType, ElementsType, IRole } from "./types";
+import PropertyObject from "./PropertyObject";
 
-function makeAnimationProperties(properties: ObjectInterface<string | number>) {
+function makeAnimationProperties(properties: IObject<string | number>) {
   const cssArray = [];
 
   for (const name in properties) {
@@ -32,7 +35,58 @@ function makeAnimationProperties(properties: ObjectInterface<string | number>) {
   return cssArray.join("");
 }
 
-type ElementsType = HTMLElement[] | NodeListOf<HTMLElement>;
+function getNames(names: IObject<any>, stack: string[]) {
+  let arr: string[][] = [];
+
+  for (const name in names) {
+    stack.push(name);
+
+    if (isObject(names[name])) {
+      arr = arr.concat(getNames(names[name], stack));
+    } else {
+      arr.push(stack.slice());
+    }
+    stack.pop();
+  }
+  return arr;
+}
+function updateFrame(names: IObject<any>, properties: IObject<any>) {
+  for (const name in properties) {
+    const value = properties[name];
+
+    if (!isObject(value) || isArray(value) || value instanceof PropertyObject) {
+      names[name] = true;
+      continue;
+    }
+    if (!isObject(names[name])) {
+      names[name] = {};
+    }
+    updateFrame(names[name], properties[name]);
+  }
+  return names;
+}
+function addTime(times: number[], time: number) {
+  const length = times.length;
+  for (let i = 0; i < length; ++i) {
+    if (time < times[i]) {
+      times.splice(i, 0, time);
+      return;
+    }
+  }
+  times[length] = time;
+}
+function getNearTimeIndex(times: number[], time: number) {
+  const length = times.length;
+
+  for (let i = 0; i < length; ++i) {
+    if (times[i] === time) {
+      return { left: i, right: i };
+    } else if (times[i] > time) {
+      return { left: i === 0 ? 0 : i - 1, right: i };
+    }
+  }
+  return { left: length - 1, right: length - 1 };
+}
 /**
 * manage Frame Keyframes and play keyframes.
 * @extends Animator
@@ -51,8 +105,10 @@ const item = new SceneItem({
 });
 */
 class SceneItem extends Animator {
-  public keyframes: Keyframes;
-  public elements: ElementsType;
+  public times: number[] = [];
+  public items: IObject<Frame> = {};
+  public names: IRole = {};
+  public elements: HTMLElement[] = [];
   /**
 	* @param - properties
 	* @param - options
@@ -70,14 +126,22 @@ class SceneItem extends Animator {
 		}
 	});
 	 */
-  constructor(properties?: ObjectInterface<any>, options?: StateInterface) {
+  constructor(properties?: IObject<any>, options?: Partial<IState>) {
     super();
-    this.keyframes = new Keyframes();
-    this.elements = [];
     this.load(properties, options);
   }
   public getDuration() {
-    return Math.max(this.state[DURATION], this.keyframes.getDuration());
+    const times = this.times;
+    const length = times.length;
+
+    return Math.max(this.state[DURATION], length === 0 ? 0 : times[length - 1]);
+  }
+  /**
+	* get size of list
+	* @return {Number} length of list
+	*/
+  public size() {
+    return this.times.length;
   }
   public setDuration(duration: number) {
     if (duration === 0) {
@@ -86,48 +150,41 @@ class SceneItem extends Animator {
     const originalDuration = this.getDuration();
 
     if (originalDuration > 0) {
-      this.keyframes.setDuration(duration, originalDuration);
+      const ratio = duration / originalDuration;
+      const { times, items } = this;
+      const obj: IObject<any> = {};
+
+      this.times = times.map(time => {
+        const time2 = toFixed(time * ratio);
+
+        obj[time2] = items[time];
+
+        return time2;
+      });
+      this.items = obj;
     }
     super.setDuration(toFixed(duration));
     return this;
   }
-  /**
-	* set the unique indicator of the item.
-	* @param {String} [id] - the indicator of the item.
-	* @return {SceneItem} An instance itself
-	* @example
-const item = new SceneItem();
-
-item.setId("item");
-console.log(item.getId()); // item
-	*/
   public setId(id?: number | string) {
     const elements = this.elements;
     const length = elements.length;
+    const state = this.state;
 
-    this.setState({ id: id || makeId(!!length) });
+    state.id = id || makeId(!!length);
     const sceneId = toId(this.getId());
 
-    this.state.selector || (this.state.selector = `[data-scene-id="${sceneId}"]`);
+    state[SELECTOR] || (state[SELECTOR] = `[${DATA_SCENE_ID}="${sceneId}"]`);
 
     if (!length) {
       return this;
     }
-    for (let i = 0; i < length; ++i) {
-      elements[i].setAttribute("data-scene-id", sceneId);
-    }
+    elements.forEach(element => {
+      element.setAttribute(DATA_SCENE_ID, sceneId);
+    });
     return this;
   }
-  /**
-	* Specifies the unique indicator of the item.
-	* @return {String} the indicator of the item.
-	* @example
-const item = scene.newItem("item");
-console.log(item.getId()); // item
-	*/
-  public getId() {
-    return this.state.id;
-  }
+
   /**
 	* Set properties to the sceneItem at that time
 	* @param {Number} time - time
@@ -140,34 +197,30 @@ console.log(item.get(0, "a")); // "b"
   public set(time: any, ...args: any[]) {
     if (isObject(time)) {
       this.load(time);
-      return this;
-    } else if (args[0]) {
-      if (args[0] instanceof SceneItem) {
-        const item: SceneItem = args[0];
-        const delay = item.getDelay();
-        const realTime = this.getUnitTime(time) + delay;
-        const { keys, values, frames } = item.getAllTimes(!!delay || !this.hasFrame(time));
-        const easing = this.getEasingName() !== item.getEasingName() ? item.getEasing() : 0;
+    } else {
+      const value = args[0];
 
-        keys.forEach(t => {
-          this.set(realTime + t, frames[values[t]]);
-        });
-        if (easing) {
-          this.set(realTime + keys[0], EASING, easing);
-          this.set(realTime + keys[keys.length - 1], EASING, "initial");
+      if (value instanceof Frame) {
+        this.setFrame(time, value);
+      } else if (value instanceof SceneItem) {
+        const delay = value.getDelay();
+        const realTime = this.getUnitTime(time);
+        const frames = value.toObject(!this.hasFrame(realTime + delay), realTime);
+
+        for (const frameTime in frames) {
+          this.set(frameTime, frames[frameTime]);
         }
-        return this;
-      } else if (args.length === 1 && isArray(args[0])) {
-        args[0].forEach((item: any) => {
+      } else if (args.length === 1 && isArray(value)) {
+        value.forEach((item: any) => {
           this.set(time, item);
         });
-        return this;
+      } else {
+        const frame = this.newFrame(time);
+
+        frame.set(...args);
+        this.updateFrame(frame);
       }
     }
-    const frame = this.newFrame(time);
-
-    frame.set(...args);
-    this.updateFrame(frame);
     return this;
   }
   /**
@@ -229,7 +282,7 @@ item.set(item.getDuration(), {
 	}
 });
 	*/
-  public append(item: SceneItem | ObjectInterface<any>) {
+  public append(item: SceneItem | IObject<any>) {
     this.set(this.getDuration(), item);
     return this;
   }
@@ -238,23 +291,56 @@ item.set(item.getDuration(), {
 	* @param - the scene item or item object
 	* @return An instance itself
 	*/
-  public prepend(item: SceneItem | ObjectInterface<any>) {
+  public prepend(item: SceneItem | IObject<any>) {
     if (item instanceof SceneItem) {
-      const delay = item.getDelay();
-      const duration = item.getIterationCount() === INFINITE ? item.getDuration() : item.getActiveDuration();
-      const unshiftTime = duration + delay;
-      const firstFrame = this.keyframes.get(0);
-
-      if (firstFrame) {
-        this.keyframes.remove(0);
-      }
-      this.keyframes.unshift(unshiftTime);
+      const unshiftTime = item.getDuration() + item.getDelay();
+      const firstFrame = this.getFrame(0);
+      // remove first frame
+      this.removeFrame(0);
+      this.unshift(unshiftTime);
       this.set(0, item);
       this.set(unshiftTime + THRESHOLD, firstFrame);
     } else {
       this.prepend(new SceneItem(item));
     }
     return this;
+  }
+   /**
+  * Push out the amount of time.
+  * @param - time to push
+	* @return {}
+	* @example
+  item.get(0); // frame 0
+  item.unshift(3);
+  item.get(3) // frame 0
+	*/
+  public unshift(time: number) {
+    const { times, items } = this;
+    const obj: IObject<Frame> = {};
+
+    this.times = times.map(t => {
+      const time2 = toFixed(time + t);
+
+      obj[time2] = items[t];
+      return time2;
+    });
+    this.items = obj;
+  }
+   /**
+	* Get the frames in the item in object form.
+	* @return {}
+	* @example
+item.toObject();
+// {0: {display: "none"}, 1: {display: "block"}}
+	*/
+  public toObject(isStartZero = true, startTime = 0): IObject<Frame> {
+    const obj: IObject<Frame> = {};
+    const delay = this.getDelay();
+
+    this.forEach((frame: Frame, time: number) => {
+      obj[(time === 0 && !isStartZero ? THRESHOLD : 0) + delay + startTime + time] = frame.clone();
+    });
+    return obj;
   }
   /**
 	* Specifies an element to synchronize items' keyframes.
@@ -266,16 +352,16 @@ item.setSelector("#id.class");
   public setSelector(selector: boolean | string) {
     const state = this.state;
 
-    state.selector = selector === true ? state.id :
-      (selector || `[data-scene-id="${state.id}"]`);
+    state[SELECTOR] = selector === true ? state.id :
+      (selector || `[${DATA_SCENE_ID}="${state.id}"]`);
 
-    const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(state.selector);
+    const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(state[SELECTOR]);
 
     if (matches) {
-      state.selector = matches[1];
+      state[SELECTOR] = matches[1];
       state.peusdo = matches[2];
     }
-    IS_WINDOW && this.setElement(document.querySelectorAll(state.selector));
+    IS_WINDOW && this.setElement($(state[SELECTOR], true));
     return this;
   }
   /**
@@ -287,11 +373,10 @@ item.setElement(document.querySelector("#id.class"));
 item.setElement(document.querySelectorAll(".class"));
 	*/
   public setElement(elements: HTMLElement | ElementsType) {
-    if (!elements) {
-      return this;
+    if (elements) {
+      this.elements = (elements instanceof Element) ? [elements] : Array.prototype.slice.call(elements);
+      this.setId(this.getId());
     }
-    this.elements = (elements instanceof Element) ? [elements] : elements;
-    this.setId(this.getId());
     return this;
   }
   /**
@@ -307,14 +392,56 @@ item.setCSS(0, ["opacity", "width", "height"]);
     this.set(time, fromCSS(this.elements, properties));
     return this;
   }
-  public animate(time: number, parentEasing?: EasingType) {
-    super.setTime(time, true);
-    return this._animate(parentEasing);
-  }
   public setTime(time: number | string, isNumber?: boolean, parentEasing?: EasingType) {
-    super.setTime(time, isNumber);
-    this._animate(parentEasing);
+    this.animate(time, isNumber, parentEasing);
     return this;
+  }
+  public animate(time: number | string, isNumber?: boolean, parentEasing?: EasingType) {
+    super.setTime(time, isNumber);
+
+    const iterationTime = this.getIterationTime();
+    const easing = this.getEasing() || parentEasing;
+    const frame = this.getNowFrame(iterationTime, easing);
+    const currentTime = this.getTime();
+    const state = this.state;
+
+    /**
+		 * This event is fired when timeupdate and animate.
+		 * @event SceneItem#animate
+		 * @param {Number} param.currentTime The total time that the animator is running.
+		 * @param {Number} param.time The iteration time during duration that the animator is running.
+		 * @param {Frame} param.frame frame of that time.
+		 */
+    this.trigger("animate", {
+      frame,
+      currentTime,
+      time: iterationTime,
+    });
+    const elements = this.elements;
+    const length = elements.length;
+
+    if (!length || state.peusdo) {
+      return frame;
+    }
+    const attributes = frame.get("attribute");
+
+    if (attributes) {
+      for (const name in attributes) {
+        for (let i = 0; i < length; ++i) {
+          elements[i].setAttribute(name, attributes[name]);
+        }
+      }
+    }
+    const cssText = frame.toCSS();
+
+    if (state.cssText !== cssText) {
+      state.cssText = cssText;
+
+      for (let i = 0; i < length; ++i) {
+        elements[i].style.cssText += cssText;
+      }
+      return frame;
+    }
   }
   /**
 	* update property names used in frames.
@@ -323,7 +450,9 @@ item.setCSS(0, ["opacity", "width", "height"]);
 item.update();
 	*/
   public update() {
-    this.keyframes.update();
+    this.forEach(frame => {
+      this.updateFrame(frame);
+    });
     return this;
   }
   /**
@@ -334,7 +463,13 @@ item.update();
 item.updateFrame(time, this.get(time));
 	*/
   public updateFrame(frame: Frame) {
-    this.keyframes.updateFrame(frame);
+    if (!frame) {
+      return this;
+    }
+    const properties = frame.properties;
+    const names = this.names;
+
+    updateFrame(names, properties);
     return this;
   }
   /**
@@ -362,8 +497,11 @@ item.newFrame(time);
 item.setFrame(time, frame);
 	*/
   public setFrame(time: string | number, frame: Frame) {
-    this.keyframes.add(this.getUnitTime(time), frame);
-    this.keyframes.update();
+    const realTime = this.getUnitTime(time);
+
+    this.items[realTime] = frame;
+    addTime(this.times, realTime);
+    this.update();
     return this;
   }
   /**
@@ -374,7 +512,7 @@ item.setFrame(time, frame);
 const frame = item.getFrame(time);
 	*/
   public getFrame(time: number | string) {
-    return this.keyframes.get(this.getUnitTime(time));
+    return this.items[this.getUnitTime(time)];
   }
   /**
 	* check if the item has a frame at that time
@@ -388,7 +526,17 @@ if (item.hasFrame(10)) {
 }
 	*/
   public hasFrame(time: number | string) {
-    return this.keyframes.has(this.getUnitTime(time));
+    return this.getUnitTime(time) in this.items;
+  }
+  /**
+	* Check if keyframes has propery's name
+	* @param - property's time
+	* @return {boolean} true: if has property, false: not
+	* @example
+  item.hasName(["transform", "translate"]); // true or not
+	*/
+  public hasName(args: string[]) {
+    return isInProperties(this.names, args, true);
   }
   /**
 	* remove sceneItem's frame at that time
@@ -398,63 +546,33 @@ if (item.hasFrame(10)) {
 item.removeFrame(time);
 	*/
   public removeFrame(time: number) {
-    const keyframes = this.keyframes;
+    const items = this.items;
+    const index = this.times.indexOf(time);
 
-    keyframes.remove(time);
-    keyframes.update();
+    delete items[time];
 
-    return this;
-  }
-  /**
-	* Copy frame of the previous time at the next time.
-	* @param {number|string|object} fromTime - the previous time
-	* @param {number} toTime - the next time
-	* @return {SceneItem} An instance itself
-	* @example
-// getFrame(0) equal getFrame(1)
-item.copyFrame(0, 1);
-	*/
-  public copyFrame(fromTime: ObjectInterface<number> | number | string, toTime: number) {
-    if (isObject(fromTime)) {
-      for (const time in fromTime) {
-        this.copyFrame(time, fromTime[time]);
-      }
-      return this;
+    // remove time
+    if (index > -1) {
+      this.times.splice(index, 1);
     }
-    const frame = this.getFrame(fromTime);
-
-    if (!frame) {
-      return this;
-    }
-    const copyFrame = frame.clone();
-
-    this.setFrame(toTime, copyFrame);
+    this.update();
     return this;
   }
   /**
 	* merge frame of the previous time at the next time.
-	* @param {number|string|object} fromTime - the previous time
-	* @param {number|string} toTime - the next time
+  * @param - The time of the frame to merge
+  * @param - The target frame
 	* @return {SceneItem} An instance itself
 	* @example
 // getFrame(1) contains getFrame(0)
 item.merge(0, 1);
 	*/
-  public mergeFrame(fromTime: ObjectInterface<number> | number | string, toTime: number | string) {
-    if (isObject(fromTime)) {
-      for (const time in fromTime) {
-        this.mergeFrame(time, fromTime[time]);
-      }
-      return this;
-    }
-    const frame = this.getFrame(fromTime);
+  public mergeFrame(time: number | string, frame: Frame) {
+    if (frame) {
+      const toFrame = this.newFrame(time);
 
-    if (!frame) {
-      return this;
+      toFrame.merge(frame);
     }
-    const toFrame = this.newFrame(toTime);
-
-    toFrame.merge(frame);
     return this;
   }
   /**
@@ -478,14 +596,27 @@ let item = new SceneItem({
 // opacity: 0.7; display:"block";
 const frame = item.getNowFrame(1.7);
 	*/
-  public getNowFrame(time: number, easing?: EasingType) {
+  public getNowFrame(time: number, easing?: EasingType, isAccurate?: boolean) {
     const frame = new Frame();
-    const names = this.keyframes.getNames();
-    const { left, right } = this._getNearTimeIndex(time);
+    const { left, right } = getNearTimeIndex(this.times, time);
     const realEasing = this._getEasing(time, left, right, this.getEasing() || easing);
+    let nameObject = this.names;
+
+    if (isAccurate) {
+      const prevFrame = this.getFrame(time);
+      const prevNames = updateFrame({}, prevFrame.properties);
+
+      for (const name in ROLES) {
+        if (name in prevNames) {
+          prevNames[name] = nameObject[name];
+        }
+      }
+      nameObject = prevNames;
+    }
+    const names = getNames(nameObject, []);
 
     names.forEach(properties => {
-      const value = this._getNowValue(time, properties, left, right, realEasing);
+      const value = this._getNowValue(time, properties, left, right, isAccurate, realEasing);
 
       if (isUndefined(value)) {
         return;
@@ -514,7 +645,7 @@ const frame = item.getNowFrame(1.7);
         const realTime = this.getUnitTime(time);
 
         if (typeof value === "number") {
-          this.mergeFrame(value, realTime);
+          this.mergeFrame(realTime, this.getFrame(value));
           continue;
         }
         this.set(realTime, value);
@@ -525,7 +656,7 @@ const frame = item.getNowFrame(1.7);
   }
   /**
 	 * clone SceneItem.
-	 * @param {StateInterface} [options] animator options
+	 * @param {IState} [options] animator options
 	 * @return {SceneItem} An instance of clone
 	 * @example
 	 * item.clone();
@@ -535,10 +666,26 @@ const frame = item.getNowFrame(1.7);
 
     item.setOptions(this.state);
     item.setOptions(options);
-    this.keyframes.forEach((frame: Frame, time: number) => item.setFrame(time, frame.clone()));
+    this.forEach((frame: Frame, time: number) => {
+      item.setFrame(time, frame.clone());
+    });
     return item;
   }
-  public setOptions(options: StateInterface = {}) {
+/**
+	 * executes a provided function once for each scene item.
+	 * @param - Function to execute for each element, taking three arguments
+	 * @return {Keyframes} An instance itself
+	 */
+  public forEach(callback: (item: Frame, time: number, items: IObject<Frame>) => void) {
+    const times = this.times;
+    const items = this.items;
+
+    times.forEach(time => {
+      callback(items[time], time, items);
+    });
+    return this;
+  }
+  public setOptions(options: IState = {}) {
     super.setOptions(options);
     const { id, selector, duration, elements } = options;
 
@@ -551,78 +698,6 @@ const frame = item.getNowFrame(1.7);
     }
     return this;
   }
-  public getAllTimes(isStartZero = true, options: StateInterface = {}) {
-    const times = this.keyframes.times.slice();
-    let length = times.length;
-    const keys: number[] = [];
-    const values: ObjectInterface<number> = {};
-
-    if (!length) {
-      return { keys: [], values: {}, frames: {} };
-    }
-    const frames: ObjectInterface<Frame> = {};
-    const duration = this.getDuration();
-    const direction = options[DIRECTION] || this.state[DIRECTION];
-    const isShuffle = direction === ALTERNATE || direction === ALTERNATE_REVERSE;
-    (!this.getFrame(0)) && times.unshift(0);
-    (!this.getFrame(duration)) && times.push(duration);
-    length = times.length;
-    let iterationCount = options[ITERATION_COUNT] || this.state[ITERATION_COUNT];
-
-    iterationCount = iterationCount !== INFINITE ? iterationCount : 1;
-    const totalDuration = iterationCount * duration;
-
-    for (let i = 0; i < iterationCount; ++i) {
-      const isReverse = isDirectionReverse(i, iterationCount, direction);
-      const start = i * duration;
-
-      for (let j = 0; j < length; ++j) {
-        if (isShuffle && i !== 0 && j === 0) {
-          // pass duplicate
-          continue;
-        }
-        // isStartZero is keytimes[0] is 0 (i === 0 & j === 0)
-        const threshold = j === 0 && (i === 0 ? !isStartZero : !isShuffle) ? THRESHOLD : 0;
-        const keyvalue = toFixed(isReverse ? times[length - 1 - j] : times[j]);
-        const time = toFixed(isReverse ? duration - keyvalue : keyvalue);
-        const keytime = toFixed(start + time + threshold);
-
-        if (totalDuration < keytime) {
-          break;
-        }
-        keys.push(keytime);
-        values[keytime] = keyvalue;
-
-        if (!frames[keyvalue]) {
-          const frame = this.getFrame(keyvalue);
-
-          if (!frame || j === 0 || j === length - 1) {
-            frames[keyvalue] = this.getNowFrame(keyvalue);
-          } else {
-            frames[keyvalue] = frame.clone();
-            const isTransform = frame.has("transform");
-            const isFilter = frame.has("filter");
-            if (isTransform || isFilter) {
-              const nowFrame = this.getNowFrame(keyvalue);
-
-              isTransform && frames[keyvalue].remove("transform").set("transform", nowFrame.raw("transform"));
-              isFilter && frames[keyvalue].remove("filter").set("filter", nowFrame.raw("filter"));
-            }
-          }
-        }
-      }
-    }
-    if (keys[keys.length - 1] < totalDuration) {
-      // last time === totalDuration
-      const isReverse = isDirectionReverse(iterationCount, iterationCount, direction);
-      const keyvalue = toFixed(duration * (isReverse ? 1 - iterationCount % 1 : iterationCount % 1));
-
-      keys.push(totalDuration);
-      values[totalDuration] = keyvalue;
-      !frames[keyvalue] && (frames[keyvalue] = this.getNowFrame(keyvalue));
-    }
-    return { keys, values, frames };
-  }
   /**
 	* Specifies an css text that coverted the keyframes of the item.
 	* @param {Array} [duration=this.getDuration()] - elements to synchronize item's keyframes.
@@ -631,16 +706,17 @@ const frame = item.getNowFrame(1.7);
 item.setCSS(0, ["opacity"]);
 item.setCSS(0, ["opacity", "width", "height"]);
 	*/
-  public toCSS(parentDuration = this.getDuration(), options: StateInterface = {}) {
+  public toCSS(parentDuration = this.getDuration(), options: IState = {}) {
     const state = this.state;
-    const selector = state.selector || this.options.selector;
+    const selector = state[SELECTOR];
+
     if (!selector) {
       return "";
     }
     const peusdo = state.peusdo || "";
-    const id = getRealId(this);
+    const id = toId(getRealId(this));
     // infinity or zero
-    const isInfinite = state[ITERATION_COUNT] === "infinite";
+    const isInfinite = state[ITERATION_COUNT] === INFINITE;
     const isParent = !isUndefined(options[ITERATION_COUNT]);
     const isZeroDuration = parentDuration === 0;
     const duration = isZeroDuration ? this.getDuration() : parentDuration;
@@ -648,7 +724,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const delay = ((options[DELAY] || 0) + (isZeroDuration ? state[DELAY] : 0)) / playSpeed;
     const easingName = (state[EASING] && state[EASING_NAME]) ||
       (isParent && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
-    const iterationCount = isInfinite ? "infinite" :
+    const iterationCount = isInfinite ? INFINITE :
       (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
     const fillMode = (options[FILL_MODE] !== "forwards" && options[FILL_MODE]) || state[FILL_MODE];
     const direction = isInfinite ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
@@ -657,21 +733,21 @@ item.setCSS(0, ["opacity", "width", "height"]);
       direction,
       iterationCount,
       delay: `${delay}s`,
-      name: `${PREFIX}KEYFRAMES_${toId(id)}`,
+      name: `${PREFIX}KEYFRAMES_${id}`,
       duration: `${duration / playSpeed}s`,
       timingFunction: easingName,
     });
 
-    const css = `${selector}.${START_ANIMATION}${peusdo} {
+    return `${selector}.${START_ANIMATION}${peusdo} {
 			${cssText}
 		}${selector}.${PAUSE_ANIMATION}${peusdo} {
       ${ANIMATION}-play-state: paused;
     }
-		${this._toKeyframes(duration, !isZeroDuration && isParent)}`;
-
-    return css;
+    @${KEYFRAMES} ${PREFIX}KEYFRAMES_${id}{
+			${this._toKeyframes(duration, !isZeroDuration && isParent).join("\n")}
+		}`;
   }
-  public exportCSS(duration?: number, options?: StateInterface) {
+  public exportCSS(duration?: number, options?: IState) {
     if (!this.elements.length) {
       return "";
     }
@@ -683,40 +759,25 @@ item.setCSS(0, ["opacity", "width", "height"]);
   }
   public pause() {
     super.pause();
-    this.isPausedCSS() && this.pauseCSS();
+    isPausedCSS(this) && this.pauseCSS();
     return this;
   }
-  public isPausedCSS() {
-    return this.state.playCSS && this.isPaused();
-  }
   public pauseCSS() {
-    const elements = this.elements;
-    const length = elements.length;
-
-    if (!length) {
-      return this;
-    }
-    for (let i = 0; i < length; ++i) {
-      addClass(elements[i], PAUSE_ANIMATION);
-    }
+    this.elements.forEach(element => {
+      addClass(element, PAUSE_ANIMATION);
+    });
+    return this;
   }
   public endCSS() {
-    const elements = this.elements;
-    const length = elements.length;
-
-    if (!length) {
-      return this;
-    }
-    for (let i = 0; i < length; ++i) {
-      const element = elements[i];
-
+    this.elements.forEach(element => {
       removeClass(element, PAUSE_ANIMATION);
       removeClass(element, START_ANIMATION);
-    }
+    });
     this.setState({ playCSS: false });
+    return this;
   }
   public end() {
-    !this.isEnded() && this.state.playCSS && this.endCSS();
+    !this.isEnded() && this.state[PLAY_CSS] && this.endCSS();
     super.end();
     return this;
   }
@@ -732,8 +793,8 @@ item.setCSS(0, ["opacity", "width", "height"]);
 	* @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
 	* @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
 	* @example
-item.playCSS();
-item.playCSS(false, {
+item[PLAY_CSS]();
+item[PLAY_CSS](false, {
 	direction: "reverse",
 	fillMode: "forwards",
 });
@@ -776,74 +837,113 @@ item.playCSS(false, {
     return elements[0];
   }
   private _getEasing(time: number, left: number, right: number, easing: EasingType) {
-    if (this.keyframes.hasName(TIMING_FUNCTION)) {
-      const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, 0, true);
+    if (this.hasName([TIMING_FUNCTION])) {
+      const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, false, 0, true);
 
       return isFunction(nowEasing) ? nowEasing : easing;
     }
     return easing;
   }
   private _toKeyframes(duration = this.getDuration(), isParent: boolean) {
-    const id = getRealId(this);
     const state = this.state;
     const playSpeed = state[PLAY_SPEED];
-    const iterationCount = state[ITERATION_COUNT];
     const fillMode = state[FILL_MODE];
     const delay = isParent ? state[DELAY] : 0;
     const direction = isParent ? state[DIRECTION] : NORMAL;
-    const isReverse = direction === REVERSE || direction === ALTERNATE_REVERSE;
-    const { keys, values, frames } = this.getAllTimes(true, {
-      duration,
-      delay,
-      direction,
-      iterationCount: isParent && iterationCount !== INFINITE ? iterationCount : 1,
-      isCSS: true,
-    });
-    const length = keys.length;
-    const css: ObjectInterface<string> = {};
-    const keyframes: string[] = [];
+    const stateIterationCount = state[ITERATION_COUNT];
+    const iterationCount = isParent && stateIterationCount !== INFINITE ? stateIterationCount : 1;
+    const times = this.times.slice();
+    const entries: number[][] = [];
 
-    if (!keys.length) {
-      return "";
+    if (!times.length) {
+      return [];
+    }
+    const frames: IObject<Frame> = {};
+    const originalDuration = this.getDuration();
+    const isShuffle = direction === ALTERNATE || direction === ALTERNATE_REVERSE;
+    const totalDuration = iterationCount * originalDuration;
+
+    (!this.getFrame(0)) && times.unshift(0);
+    (!this.getFrame(originalDuration)) && times.push(originalDuration);
+
+    const length = times.length;
+
+    for (let i = 0; i < iterationCount; ++i) {
+      const isReverse = isDirectionReverse(i, iterationCount, direction);
+      const start = i * originalDuration;
+
+      for (let j = 0; j < length; ++j) {
+        if (isShuffle && i !== 0 && j === 0) {
+          // pass duplicate
+          continue;
+        }
+        // shuffle 0 1 0 1
+        // not suffle 0 1 0.001 1 0.001 1
+        // i> 0 || j > 0 || !suffle
+        const threshold = j === 0 && (i > 0 && !isShuffle) ? THRESHOLD : 0;
+        const keyvalue = toFixed(isReverse ? times[length - 1 - j] : times[j]);
+        const keytime = toFixed(start + (isReverse ? originalDuration - keyvalue : keyvalue) + threshold);
+
+        if (totalDuration < keytime) {
+          break;
+        }
+        entries.push([keytime, keyvalue]);
+
+        if (!frames[keyvalue]) {
+          if (!this.hasFrame(keyvalue) || j === 0 || j === length - 1) {
+            frames[keyvalue] = this.getNowFrame(keyvalue);
+          } else {
+            frames[keyvalue] = this.getNowFrame(keyvalue, 0, true);
+          }
+        }
+      }
+    }
+    if (!entries.length || entries[entries.length - 1][0] < totalDuration) {
+      // last time === totalDuration
+      const isReverse = isDirectionReverse(iterationCount, iterationCount, direction);
+      const keyvalue = toFixed(originalDuration * (isReverse ? 1 - iterationCount % 1 : iterationCount % 1));
+
+      entries.push([totalDuration, keyvalue]);
+      !frames[keyvalue] && (frames[keyvalue] = this.getNowFrame(keyvalue));
+    }
+
+    const css: IObject<string> = {};
+    const keyframes = [];
+    let lastTime = entries[entries.length - 1][0];
+
+    if (delay) {
+      const isReverse = direction === REVERSE || direction === ALTERNATE_REVERSE;
+      const delayTime = isReverse && (fillMode === "both" || fillMode === "backwards") ? originalDuration : 0;
+
+      !frames[delayTime] && (frames[delayTime] = this.getNowFrame(delayTime));
+      (entries[0][1] !== delayTime) && entries.unshift([-THRESHOLD, delayTime]);
+      entries.unshift([-delay, 0]);
     }
     for (const time in frames) {
       css[time] = frames[time].toCSS();
     }
-    const lastTime = keys[length - 1];
-    const lastCSS = css[values[lastTime]];
-
-    if (delay) {
-      const delayCSS = isReverse && (fillMode === "both" || fillMode === "backwards") ? lastCSS : css[0];
-      keyframes.push(`0%{}`);
-      isReverse && keyframes.push(`${delay / playSpeed / duration * 100 - THRESHOLD}%{${delayCSS}}`);
-    }
-    keys.forEach(time => {
-      const keyTime = (delay + time) / playSpeed / duration * 100;
-      keyframes.push(`${keyTime}%{${keyTime === 0 ? "" : css[values[time]]}}`);
-    });
-    // if (afterDelay) {
-    //   keyframes.push(`${lastTime / playSpeed / duration * 100 + THRESHOLD}%{${lastCSS}}`);
-    //   keyframes.push(`100%{${lastCSS}`);
-    // } else {
     if ((delay + lastTime) / playSpeed < duration) {
-      // not 100%
-      keyframes.push(`100%{${lastCSS}}`);
+      entries.push([duration * playSpeed - delay, entries[entries.length - 1][1]]);
+
+      lastTime = entries[entries.length - 1][0];
     }
-    // }
-    return `@${KEYFRAMES} ${PREFIX}KEYFRAMES_${toId(id)}{
-			${keyframes.join("\n")}
-		}`;
+    entries.forEach(([time, keyvalue]) => {
+      const keyTime = (delay + time) / playSpeed / (delay + lastTime) * 100;
+      keyframes.push(`${keyTime}%{${keyTime === 0 ? "" : css[keyvalue]}}`);
+    });
+
+    return keyframes;
   }
   private _getNowValue(
     time: number,
     properties: string[],
     left: number,
     right: number,
-    easing: EasingType = this.getEasing(),
+    isAccurate?: boolean,
+    easing?: EasingType,
     usePrevValue: boolean = isFixed(properties),
   ) {
-    const keyframes = this.keyframes;
-    const times = keyframes.times;
+    const times = this.times;
     const length = times.length;
 
     let prevTime: number;
@@ -852,7 +952,7 @@ item.playCSS(false, {
     let nextFrame: Frame;
 
     for (let i = left; i >= 0; --i) {
-      const frame = keyframes.get(times[i]);
+      const frame = this.getFrame(times[i]);
 
       if (frame.has(...properties)) {
         prevTime = times[i];
@@ -862,11 +962,14 @@ item.playCSS(false, {
     }
     const prevValue = prevFrame && prevFrame.raw(...properties);
 
+    if (isAccurate && !isRole([properties[0]])) {
+      return prevTime === time ? prevValue : undefined;
+    }
     if (usePrevValue) {
       return prevValue;
     }
     for (let i = right; i < length; ++i) {
-      const frame = keyframes.get(times[i]);
+      const frame = this.getFrame(times[i]);
 
       if (frame.has(...properties)) {
         nextTime = times[i];
@@ -886,64 +989,6 @@ item.playCSS(false, {
       prevTime = 0;
     }
     return dotValue(time, prevTime, nextTime, prevValue, nextValue, easing);
-  }
-  private _getNearTimeIndex(time: number) {
-    const keyframes = this.keyframes;
-    const times = keyframes.times;
-    const length = times.length;
-
-    for (let i = 0; i < length; ++i) {
-      if (times[i] === time) {
-        return { left: i, right: i };
-      } else if (times[i] > time) {
-        return { left: i === 0 ? 0 : i - 1, right: i };
-      }
-    }
-    return { left: length - 1, right: length - 1 };
-  }
-  private _animate(parentEasing?: EasingType) {
-    const iterationTime = this.getIterationTime();
-    const easing = this.getEasing() || parentEasing;
-    const frame = this.getNowFrame(iterationTime, easing);
-    const currentTime = this.getTime();
-
-    /**
-		 * This event is fired when timeupdate and animate.
-		 * @event SceneItem#animate
-		 * @param {Number} param.currentTime The total time that the animator is running.
-		 * @param {Number} param.time The iteration time during duration that the animator is running.
-		 * @param {Frame} param.frame frame of that time.
-		 */
-    this.trigger("animate", {
-      frame,
-      currentTime,
-      time: iterationTime,
-    });
-    const elements = this.elements;
-    const length = elements.length;
-
-    if (!length || this.state.peusdo) {
-      return frame;
-    }
-    const attributes = frame.get("attribute");
-
-    if (attributes) {
-      for (const name in (attributes as any)) {
-        for (let i = 0; i < length; ++i) {
-          elements[i].setAttribute(name, attributes[name]);
-        }
-      }
-    }
-    const cssText = frame.toCSS();
-
-    if (this.state.cssText !== cssText) {
-      this.state.cssText = cssText;
-
-      for (let i = 0; i < length; ++i) {
-        elements[i].style.cssText += cssText;
-      }
-      return frame;
-    }
   }
 }
 

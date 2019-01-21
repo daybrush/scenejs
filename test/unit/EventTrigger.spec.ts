@@ -132,6 +132,18 @@ describe("EventTrigger Test", () => {
       // Then
       expect(event.events).to.be.deep.equals({});
     });
+    it("should check 'once' method", () => {
+      // Given
+      const event = new EventTrigger();
+      const a = sinon.spy();
+
+      event.once("a", a);
+
+      event.trigger("a");
+      event.trigger("a");
+
+      expect(a.callCount).to.be.equal(1);
+    });
     it("should check 'off' method multiple", () => {
       // Given
       const event = new EventTrigger();

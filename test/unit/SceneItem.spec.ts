@@ -3,9 +3,10 @@ import { THRESHOLD } from "../../src/consts";
 import { EASE_IN_OUT } from "../../src/easing";
 import removeProperty from "./injections/ClassListInjection";
 import { orderByASC, group } from "./TestHelper";
-import { setRole } from "../../src/utils";
+import { setRole, toFixed } from "../../src/utils";
 import { DirectionType } from "../../src/Animator";
 import * as sinon from "sinon";
+import { isTemplateSpan } from "typescript";
 
 describe("SceneItem Test", () => {
     describe("test item initialize", () => {
@@ -25,6 +26,7 @@ describe("SceneItem Test", () => {
             expect(item.get(1, "display")).to.be.equals("block");
             expect(item.get(1, "a")).to.be.equals(2);
             expect(item.get(2, "a")).to.be.equals(1);
+            expect(item.size()).to.be.equals(3);
         });
         it("should check array item", () => {
             const item = new SceneItem([{
@@ -83,8 +85,10 @@ describe("SceneItem Test", () => {
         });
     });
     describe("test item method", () => {
+        let item: SceneItem;
+
         beforeEach(() => {
-            this.item = new SceneItem({
+            item = new SceneItem({
                 0: {
                     a: 1,
                     display: "block",
@@ -99,25 +103,44 @@ describe("SceneItem Test", () => {
             });
         });
         afterEach(() => {
-            this.item = null;
+            item = null;
         });
         it("should check 'setId' method", () => {
             // When
-            this.item.setId(".a .b");
+            item.setId(".a .b");
 
             // Then
-            expect(this.item.getState("id")).to.be.equals(".a .b");
+            expect(item.getId()).to.be.equals(".a .b");
         });
         it("should check 'getNowFrame' method", () => {
-            const item = this.item;
-
             expect(item.getNowFrame(0).get("display")).to.be.equals("block");
             expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
             expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
             expect(item.getNowFrame(1).get("display")).to.be.equals("none");
         });
+        it("should check 'getNowFrame(true)' method", () => {
+            // When
+            item.set(0, "transform", "translate(20px)");
+            item.set(1, "transform", "scale(0)");
+            item.set(2, "transform", "translate(40px)");
+
+            // Then
+            expect(item.getNowFrame(0, 0, true).get("display")).to.be.equals("block");
+            expect(item.getNowFrame(0.5, 0, true).get("display")).to.be.not.ok;
+            expect(item.getNowFrame(1, 0, true).get("display")).to.be.equals("none");
+
+            expect(item.getNowFrame(0, 0, true).get("transform", "translate")).to.be.equals("20px");
+            expect(item.getNowFrame(0.5, 0, true).get("transform", "translate")).to.be.not.ok;
+            expect(item.getNowFrame(1, 0, true).get("transform", "translate")).to.be.equals("30px");
+            expect(item.getNowFrame(2, 0, true).get("transform", "translate")).to.be.equals("40px");
+
+            expect(item.getNowFrame(0, 0, true).get("transform", "scale")).to.be.equals("0");
+            expect(item.getNowFrame(0.5, 0, true).get("transform", "scale")).to.be.not.ok;
+            expect(item.getNowFrame(1, 0, true).get("transform", "scale")).to.be.equal("0");
+            expect(item.getNowFrame(2, 0, true).get("transform", "scale")).to.be.equal("0");
+        });
         it("should check 'getNowFrame' method (no 0%)", () => {
-            const item = new SceneItem({
+            item = new SceneItem({
                 0.5: {
                     display: "none",
                     a: 1.5,
@@ -144,29 +167,21 @@ describe("SceneItem Test", () => {
             expect(item.getNowFrame(1).get("a")).to.be.equals(2);
         });
         it("should check 'getNowFrame' method(getDuration < time <= duration)", () => {
-            const item = this.item;
-
             item.state.duration = 2;
             expect(item.getDuration()).to.be.equals(2);
         });
         it("should check 'getFrame' method", () => {
-            const item = this.item;
-
             expect(item.getFrame(0).get("display")).to.be.equals("block");
             expect(item.getFrame(0.7)).to.be.not.ok;
             expect(item.getFrame(1).get("display")).to.be.equals("none");
         });
         it("should check 'hasFrame' method", () => {
-            const item = this.item;
-
             expect(item.hasFrame("0")).to.be.true;
             expect(item.hasFrame("0.5")).to.be.true;
             expect(item.hasFrame("1")).to.be.true;
             expect(item.hasFrame("1.2")).to.be.false;
         });
         it("should check 'removeFrame' method", () => {
-            const item = this.item;
-
             expect(item.hasFrame("0")).to.be.true;
             expect(item.hasFrame("1")).to.be.true;
             item.removeFrame(0);
@@ -179,7 +194,7 @@ describe("SceneItem Test", () => {
         it("should check dot function", () => {
             let vari = 0;
 
-            const item = new SceneItem({
+            item = new SceneItem({
                 0: {
                     a: "rgb(0, 0, 0)",
                     b: 0,
@@ -213,8 +228,6 @@ describe("SceneItem Test", () => {
             });
         });
         it("should check 'set' method", () => {
-            const item = this.item;
-
             item.set(0.5, "a", 1);
             item.set(0.6, "transform", "a", 1);
             item.set(0.7, "b", "b");
@@ -233,6 +246,16 @@ describe("SceneItem Test", () => {
                     b: 5,
                 },
             });
+            item.set(12, [
+                {
+                    a: 1,
+                    b: 2,
+                },
+                {
+                    c: 1,
+                    d: 2,
+                },
+            ]);
             expect(item.getFrame(0.5).get("a")).to.be.equals(1);
             expect(item.getFrame(0.6).get("transform", "a")).to.be.equals(1);
             expect(item.getFrame(0.7).get("b")).to.be.equals("b");
@@ -248,11 +271,12 @@ describe("SceneItem Test", () => {
                 expect(item.getFrame(time).get("g")).to.be.equals("1");
                 expect(item.getFrame(time).get("h")).to.be.equals("5");
             });
+            expect(item.getFrame(12).get("a")).to.be.equals(1);
+            expect(item.getFrame(12).get("b")).to.be.equals(2);
+            expect(item.getFrame(12).get("c")).to.be.equals(1);
+            expect(item.getFrame(12).get("d")).to.be.equals(2);
         });
         it("should check 'remove' method", () => {
-            // Given
-            const item = this.item;
-
             // When
             item.remove(0, "a");
 
@@ -263,28 +287,28 @@ describe("SceneItem Test", () => {
         it("should check 'getDuration' method", () => {
             // Given
             // When
-            this.item.setDuration(10);
+            item.setDuration(10);
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.getActiveDuration()).to.be.equals(10);
-            expect(this.item.getTotalDuration()).to.be.equals(10);
+            expect(item.getDuration()).to.be.equals(10);
+            expect(item.getActiveDuration()).to.be.equals(10);
+            expect(item.getTotalDuration()).to.be.equals(10);
 
             // When
-            this.item.setDelay(5);
+            item.setDelay(5);
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.getActiveDuration()).to.be.equals(10);
-            expect(this.item.getTotalDuration()).to.be.equals(15);
+            expect(item.getDuration()).to.be.equals(10);
+            expect(item.getActiveDuration()).to.be.equals(10);
+            expect(item.getTotalDuration()).to.be.equals(15);
         });
         it("should check 'setDuration' with no frame", () => {
-            const item = new SceneItem({});
+            item = new SceneItem({});
 
             item.setDuration(0);
 
             expect(item.getDuration()).to.be.equals(0);
         });
         it("should check 'setDuration' option", () => {
-            const item = new SceneItem({
+            item = new SceneItem({
                 "0%": {
                     transform: "translate(0px, 0px) rotate(0deg)",
                 },
@@ -328,32 +352,32 @@ describe("SceneItem Test", () => {
         it("should check 'getDuration' method with iterationCount", () => {
             // Given
             // When
-            this.item.setDuration(10);
-            this.item.setIterationCount(2);
+            item.setDuration(10);
+            item.setIterationCount(2);
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.getActiveDuration()).to.be.equals(20);
-            expect(this.item.getTotalDuration()).to.be.equals(20);
+            expect(item.getDuration()).to.be.equals(10);
+            expect(item.getActiveDuration()).to.be.equals(20);
+            expect(item.getTotalDuration()).to.be.equals(20);
 
             // When
-            this.item.setDelay(5);
+            item.setDelay(5);
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.getActiveDuration()).to.be.equals(20);
-            expect(this.item.getTotalDuration()).to.be.equals(25);
+            expect(item.getDuration()).to.be.equals(10);
+            expect(item.getActiveDuration()).to.be.equals(20);
+            expect(item.getTotalDuration()).to.be.equals(25);
 
             // When
-            this.item.setIterationCount("infinite");
+            item.setIterationCount("infinite");
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.getActiveDuration()).to.be.equals(Infinity);
-            expect(this.item.getTotalDuration()).to.be.equals(Infinity);
+            expect(item.getDuration()).to.be.equals(10);
+            expect(item.getActiveDuration()).to.be.equals(Infinity);
+            expect(item.getTotalDuration()).to.be.equals(Infinity);
         });
         it("should check 'from, to' method", () => {
             // Given
             // When
-            this.item.setDuration(10);
-            this.item.load({
+            item.setDuration(10);
+            item.load({
                 from: {
                     a: 1,
                 },
@@ -362,49 +386,35 @@ describe("SceneItem Test", () => {
                 },
             });
             // Then
-            expect(this.item.getDuration()).to.be.equals(10);
-            expect(this.item.get("from", "a")).to.be.equal(1);
-            expect(this.item.get("to", "a")).to.be.equal(2);
-            expect(this.item.get("50%", "a")).to.be.equal(1.5);
-        });
-        it("should check 'clone' method", () => {
-            // Given
-            const item = this.item.clone();
-            const item2 = this.item.clone({ delay: 1 });
-            // When
-
-            // Then
-            expect(this.item.getDuration()).to.be.equals(1);
-            expect(item.getDuration()).to.be.equals(1);
-            expect(this.item.get("from", "a")).to.be.equal(1);
-            expect(this.item.get("to", "a")).to.be.equal(2);
-            expect(this.item.get("50%", "a")).to.be.equal(1.5);
+            expect(item.getDuration()).to.be.equals(10);
             expect(item.get("from", "a")).to.be.equal(1);
             expect(item.get("to", "a")).to.be.equal(2);
             expect(item.get("50%", "a")).to.be.equal(1.5);
-            expect(item.getNowFrame(0).get("a")).to.be.equal(1);
-            expect(item.getNowFrame(1).get("a")).to.be.equal(2);
-            expect(item.getNowFrame(0.5).get("a")).to.be.equal(1.5);
+        });
+        it("should check 'clone' method", () => {
+            // Given
+            const item1 = item.clone();
+            const item2 = item.clone({ delay: 1 });
+            // When
+
+            // Then
+            expect(item.getDuration()).to.be.equals(1);
+            expect(item1.getDuration()).to.be.equals(1);
+            expect(item.get("from", "a")).to.be.equal(1);
+            expect(item.get("to", "a")).to.be.equal(2);
+            expect(item.get("50%", "a")).to.be.equal(1.5);
+            expect(item1.get("from", "a")).to.be.equal(1);
+            expect(item1.get("to", "a")).to.be.equal(2);
+            expect(item1.get("50%", "a")).to.be.equal(1.5);
+            expect(item1.getNowFrame(0).get("a")).to.be.equal(1);
+            expect(item1.getNowFrame(1).get("a")).to.be.equal(2);
+            expect(item1.getNowFrame(0.5).get("a")).to.be.equal(1.5);
             expect(item2.get(0, "a")).to.be.equal(1);
             expect(item2.get(1, "a")).to.be.equal(2);
             expect(item2.get("50%", "a")).to.be.equal(1.5);
-            expect(item.getDelay()).to.be.equal(0);
+            expect(item1.getDelay()).to.be.equal(0);
             expect(item2.getDelay()).to.be.equal(1);
-            expect(this.item.constructor).to.be.equals(item.constructor);
-        });
-        it(`should check 'copyFrame' method`, () => {
-            // Given
-            // When
-            this.item.copyFrame(0.5, 1.5);
-            this.item.copyFrame(0.7, 1.5);
-            this.item.copyFrame({
-                0.7: 1,
-                2: 4,
-                1.5: 1.8,
-            });
-
-            expect(this.item.getFrame(1.5).properties).to.be.deep.equals(this.item.getFrame(0.5).properties);
-            expect(this.item.getFrame(1.5).properties).to.be.deep.equals(this.item.getFrame(1.8).properties);
+            expect(item.constructor).to.be.equals(item1.constructor);
         });
         it(`should check 'mergeFrame' method`, () => {
             /*
@@ -421,21 +431,21 @@ describe("SceneItem Test", () => {
                 },
             */
             // Given
-            this.item.set(0.5, "b", 2);
-            this.item.set(0.7, "c", 3);
+            item.set(0.5, "b", 2);
+            item.set(0.7, "c", 3);
             // When
-            this.item.mergeFrame(0.5, 1.5);
-            this.item.mergeFrame(1, 1.5);
-            this.item.mergeFrame({ 0.7: 1.5 });
-            this.item.mergeFrame(0.8, 1.5);
+            item.mergeFrame(1.5, item.getFrame(0.5));
+            item.mergeFrame(1.5, item.getFrame(1));
+            item.mergeFrame(1.5, item.getFrame(0.7));
+            item.mergeFrame(1.5, item.getFrame(0.8));
 
-            expect(this.item.getFrame(1.5).get("a")).to.be.deep.equals(2);
-            expect(this.item.getFrame(1.5).get("b")).to.be.deep.equals(2);
-            expect(this.item.getFrame(1.5).get("c")).to.be.deep.equals(3);
-            expect(this.item.getFrame(1.5).get("display")).to.be.deep.equals("none");
+            expect(item.getFrame(1.5).get("a")).to.be.deep.equals(2);
+            expect(item.getFrame(1.5).get("b")).to.be.deep.equals(2);
+            expect(item.getFrame(1.5).get("c")).to.be.deep.equals(3);
+            expect(item.getFrame(1.5).get("display")).to.be.deep.equals("none");
         });
         it("should check no frame", () => {
-            const item = new SceneItem({});
+            item = new SceneItem({});
 
             item.setTime(0);
             expect(item.getDuration()).to.be.equals(0);
@@ -690,7 +700,7 @@ describe("SceneItem Test", () => {
                 }));
 
             // Then
-            expect(this.item.getDuration()).to.be.equals(4);
+            expect(this.item.getDuration()).to.be.equals(3);
             expect(this.item.get(1, "a")).to.be.equals(2);
             expect(this.item.get(1 + THRESHOLD, "a")).to.be.equals(3);
             expect(this.item.get("1>", "a")).to.be.equals(3);
@@ -699,15 +709,6 @@ describe("SceneItem Test", () => {
             expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(4);
             expect(this.item.get("2>", "a")).to.be.equals(4);
             expect(this.item.get(3, "a")).to.be.equals(6);
-            expect(this.item.get("3>", "a")).to.be.equals(4);
-            expect(this.item.get("3>", "a")).to.be.equals(4);
-            expect(this.item.get("3>", "a")).to.be.equals(4);
-            expect(this.item.get(4, "a")).to.be.equals(6);
-
-            expect(this.item.get(2, "easing")).to.be.not.ok;
-            expect(this.item.get("2>", "easing")).to.be.equals(EASE_IN_OUT);
-            expect(this.item.get("2>", "animation-timing-function")).to.be.equals(EASE_IN_OUT);
-            expect(this.item.get(4, "easing")).to.be.equals("initial");
         });
         it(`should check 'prepend' method`, () => {
             this.item.prepend(new SceneItem({
@@ -720,17 +721,14 @@ describe("SceneItem Test", () => {
             }, {
                     iterationCount: 1,
                 }));
-            this.item.prepend(new SceneItem({
+            this.item.prepend({
                 0: {
                     a: 4,
                 },
                 1: {
                     a: 6,
                 },
-            }, {
-                    iterationCount: 2,
-                    easing: EASE_IN_OUT,
-                }));
+            });
             /*
             0: {
                 a: 1,
@@ -743,20 +741,15 @@ describe("SceneItem Test", () => {
 
             */
             // Then
-            expect(this.item.getDuration()).to.be.equals(4);
+            expect(this.item.getDuration()).to.be.equals(3);
 
             expect(this.item.get(0, "a")).to.be.equals(4);
             expect(this.item.get(1, "a")).to.be.equals(6);
-            expect(this.item.get("1>", "a")).to.be.equals(4);
-            expect(this.item.get(2, "a")).to.be.equals(6);
-            expect(this.item.get(0, "easing")).to.be.equals(EASE_IN_OUT);
-            expect(this.item.get(2, "easing")).to.be.equals("initial");
+            expect(this.item.get("1>", "a")).to.be.equals(3);
+            expect(this.item.get(2, "a")).to.be.equals(5);
 
-            expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(3);
-            expect(this.item.get(3, "a")).to.be.equals(5);
-
-            expect(this.item.get(3 + THRESHOLD, "a")).to.be.equals(1);
-            expect(this.item.get(4, "a")).to.be.equals(2);
+            expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(1);
+            expect(this.item.get(3, "a")).to.be.equals(2);
         });
         const expectations = {
             "normal": {
@@ -792,6 +785,7 @@ describe("SceneItem Test", () => {
             [0.3, 1, 1.3, 2, 2.3].forEach(iterationCount => {
                 it(`should check 'getAllTimes()' with direction="${direction}",
                     iterationCount=${iterationCount}`, () => {
+                    // Given
                     const item = new SceneItem({
                         0: {
                             a: 1,
@@ -804,40 +798,61 @@ describe("SceneItem Test", () => {
                             a: 2,
                         },
                     }, {
-                            iterationCount,
-                            direction,
-                        });
+                        iterationCount,
+                        direction,
+                    });
+                    const item2 = new SceneItem({
+                        0: {
+                            a: 1,
+                        },
+                        0.5: {
+                            a: 3,
+                        },
+                        1: {
+                            display: "block",
+                            a: 2,
+                        },
+                    }, {
+                        delay: 1,
+                        iterationCount,
+                        direction,
+                    });
+                    // When
+                    const values = expectations[direction][iterationCount];
+                    const times = orderByASC(Object.keys(values).map(t => parseFloat(t)));
+                    const lastTime = times[times.length - 1];
+                    const keyframes = (item as any)._toKeyframes(lastTime, true) as string[];
+                    const keyframes2 = (item2 as any)._toKeyframes(lastTime + 1, true) as string[];
+                    const isReverse = direction === "reverse" || direction === "alternate-reverse";
+                    // Then
+                    expect(keyframes.length).to.be.equal(times.length);
+                    expect(keyframes2.length).to.be.equal(times.length + (isReverse ? 2 : 1));
+                    keyframes.forEach((frame, i) => {
+                        const time = parseFloat(frame.substring(0, frame.indexOf("%") + 1));
+                        expect(toFixed(time / 100 * lastTime)).to.be.equal(times[i]);
+                    });
+                    keyframes2.forEach((frame, i) => {
+                        const time = parseFloat(frame.substring(0, frame.indexOf("%") + 1));
 
-                    const times1 = item.getAllTimes();
-                    const times2 = item.getAllTimes(false);
-                    const values1 = expectations[direction][iterationCount];
-                    const values2 = Object.assign({ [THRESHOLD]: values1[0] }, values1);
-                    delete values2[0];
-
-                    const keys1 = orderByASC(Object.keys(values1).map(key => parseFloat(key)));
-                    const keys2 = orderByASC(Object.keys(values2).map(key => parseFloat(key)));
-                    const keytimes1 = group(orderByASC(Object.keys(values1).map(v => values1[v])));
-                    const keytimes2 = group(orderByASC(Object.keys(values2).map(v => values2[v])));
-
-                    expect(orderByASC(Object.keys(times1.frames))).to.be.deep.equals(keytimes1);
-                    expect(times1.keys).to.be.deep.equals(keys1);
-                    expect(times1.values).to.be.deep.equals(values1);
-
-                    // {[THRESHOLD]: 0, ...}
-                    expect(orderByASC(Object.keys(times2.frames))).to.be.deep.equals(keytimes2);
-                    expect(times2.keys).to.be.deep.equals(keys2);
-                    expect(times2.values).to.be.deep.equals(values2);
+                        if (i >= (isReverse ? 2 : 1)) {
+                            expect(toFixed(time / 100 * (1 + lastTime))).to.be
+                                .equal(1 + times[i - (isReverse ? 2 : 1)]);
+                        }
+                    });
                 });
             });
         });
     });
     [true, false].forEach(hasClassList => {
         describe(`test SceneItem events(hasClassList = ${hasClassList})`, () => {
+            let item: SceneItem;
+
             beforeEach(() => {
                 this.element = document.createElement("div");
                 !hasClassList && removeProperty(this.element, "classList");
                 document.body.appendChild(this.element);
-                this.item = new SceneItem({
+
+                item = new SceneItem({
                     0: {
                         a: 1,
                     },
@@ -853,28 +868,28 @@ describe("SceneItem Test", () => {
             afterEach(() => {
                 document.body.innerHTML = "";
                 this.element = null;
-                this.item.off();
-                this.item = null;
+                item.off();
+                item = null;
             });
             it(`should check "playCSS" and event order `, done => {
                 // Given
-                this.item.setElement(this.element);
+                item.setElement(this.element);
                 const play = sinon.spy();
                 const ended = sinon.spy();
                 const iteration = sinon.spy();
                 const paused = sinon.spy();
-                this.item.on("play", play);
-                this.item.on("ended", ended);
-                this.item.on("iteration", iteration);
-                this.item.on("paused", paused);
+                item.on("play", play);
+                item.on("ended", ended);
+                item.on("iteration", iteration);
+                item.on("paused", paused);
 
                 // When
-                this.item.playCSS();
-                this.item.playCSS();
+                item.playCSS();
+                item.playCSS();
 
-                expect(this.item.getPlayState()).to.be.equals("running");
-                expect(this.item.getState("playCSS")).to.be.true;
-                this.item.on("ended", e => {
+                expect(item.getPlayState()).to.be.equals("running");
+                expect(item.state.playCSS).to.be.true;
+                item.on("ended", e => {
                     // Then
                     expect(play.calledOnce).to.be.true;
                     expect(iteration.calledOnce).to.be.false;
@@ -885,19 +900,19 @@ describe("SceneItem Test", () => {
             });
             it(`should check "playCSS" and replay`, done => {
                 // Given
-                this.item.setElement(this.element);
+                item.setElement(this.element);
                 const play = sinon.spy();
                 const ended = sinon.spy();
-                this.item.on("play", play);
-                this.item.on("ended", ended);
+                item.on("play", play);
+                item.on("ended", ended);
 
                 // When
-                this.item.playCSS();
+                item.playCSS();
 
-                this.item.on("ended", e => {
+                item.on("ended", e => {
                     // Then
                     if (play.callCount === 1) {
-                        this.item.playCSS();
+                        item.playCSS();
                     } else {
                         expect(play.callCount).to.be.equals(2);
                         expect(ended.callCount).to.be.equals(2);
@@ -907,21 +922,21 @@ describe("SceneItem Test", () => {
             });
             it(`should check "iteration" event `, done => {
                 // Given
-                this.item.setElement(this.element);
+                item.setElement(this.element);
                 const play = sinon.spy();
                 const ended = sinon.spy();
                 const iteration = sinon.spy();
                 const paused = sinon.spy();
-                this.item.on("play", play);
-                this.item.on("ended", ended);
-                this.item.on("iteration", iteration);
-                this.item.on("paused", paused);
+                item.on("play", play);
+                item.on("ended", ended);
+                item.on("iteration", iteration);
+                item.on("paused", paused);
 
                 // When
-                this.item.setIterationCount(2);
-                this.item.playCSS();
+                item.setIterationCount(2);
+                item.playCSS();
 
-                this.item.on("ended", e => {
+                item.on("ended", e => {
                     // Then
                     expect(play.calledOnce).to.be.true;
                     expect(iteration.calledOnce).to.be.true;
@@ -933,10 +948,10 @@ describe("SceneItem Test", () => {
             it(`should check "playCSS" and no elements `, () => {
                 // Given
                 // When
-                this.item.playCSS();
+                item.playCSS();
 
                 // Then
-                expect(this.item.getPlayState()).to.be.equals("paused");
+                expect(item.getPlayState()).to.be.equals("paused");
             });
         });
     });

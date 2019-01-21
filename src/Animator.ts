@@ -2,11 +2,13 @@ import {
   THRESHOLD,
   ALTERNATE, ALTERNATE_REVERSE, REVERSE, INFINITE, NORMAL,
   ITERATION_COUNT, DELAY, FILL_MODE, DIRECTION, PLAY_SPEED,
-  DURATION, EASING, ITERATION_TIME, EASING_NAME, PAUSED, RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE } from "./consts";
+  DURATION, EASING, ITERATION_TIME, EASING_NAME, PAUSED,
+  RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE, PREV_TIME, TICK_TIME, CURRENT_TIME
+} from "./consts";
 import EventTrigger from "./EventTrigger";
-import { bezier, EasingFunctionInterface } from "./easing";
-import { toFixed } from "./utils";
-import { splitUnit, isString, camelize, requestAnimationFrame, ObjectInterface } from "@daybrush/utils";
+import { bezier, IEasingFunction } from "./easing";
+import { toFixed, makeId } from "./utils";
+import { splitUnit, isString, camelize, requestAnimationFrame, isArray } from "@daybrush/utils";
 
 function GetterSetter<T extends { new(...args: any[]): {} }>(
   getter: string[], setter: string[], parent: string) {
@@ -26,6 +28,28 @@ function GetterSetter<T extends { new(...args: any[]): {} }>(
     });
   };
 }
+function tick(animator: Animator, now: number) {
+  const state = animator.state;
+  const playSpeed = state[PLAY_SPEED];
+  const prevTime = state[PREV_TIME];
+  const delay = state[DELAY];
+  const tickTime = state[TICK_TIME];
+  const currentTime = tickTime + Math.min(1000, now - prevTime) / 1000 * playSpeed;
+
+  state[PREV_TIME] = now;
+  animator.setTime(currentTime - delay, true);
+  if (animator.isEnded()) {
+    animator.end();
+    return;
+  }
+  if (state[PLAY_STATE] === PAUSED) {
+    return;
+  }
+
+  requestAnimationFrame((time: number) => {
+    tick(animator, time);
+  });
+}
 
 /**
  * @typedef
@@ -38,7 +62,7 @@ export type IterationCountType = number | "infinite";
 /**
  * @typedef
  */
-export type EasingType = 0 | EasingFunctionInterface;
+export type EasingType = 0 | IEasingFunction;
 /**
  * @typedef
  */
@@ -48,7 +72,7 @@ export type DirectionType = "normal" | "reverse" | "alternate" | "alternate-reve
  */
 export type PlayStateType = "paused" | "running";
 
-export interface StateInterface {
+export interface IState {
   id?: number | string;
   easing?: EasingType;
   easingName?: string;
@@ -60,23 +84,23 @@ export interface StateInterface {
   iterationTime?: number;
   currentTime?: number;
   tickTime?: number;
-  currentIterationCount?: number;
+  iteration?: number;
   prevTime?: number;
   playState?: PlayStateType;
   duration?: number;
   [key: string]: any;
 }
-export function isDirectionReverse(currentIterationCount: number,
+export function isDirectionReverse(iteration: number,
                                    iteraiontCount: IterationCountType, direction: DirectionType) {
   if (direction === REVERSE) {
     return true;
-  } else if (iteraiontCount !== "infinite" && currentIterationCount === iteraiontCount && iteraiontCount % 1 === 0) {
-    return  direction === (currentIterationCount % 2 >= 1 ? ALTERNATE_REVERSE : ALTERNATE);
+  } else if (iteraiontCount !== INFINITE && iteration === iteraiontCount && iteraiontCount % 1 === 0) {
+    return  direction === (iteration % 2 >= 1 ? ALTERNATE_REVERSE : ALTERNATE);
   }
-  return  direction === (currentIterationCount % 2 >= 1 ? ALTERNATE : ALTERNATE_REVERSE);
+  return  direction === (iteration % 2 >= 1 ? ALTERNATE : ALTERNATE_REVERSE);
 }
 /**
-* @typedef {Object} StateInterface The Animator options. Properties used in css animation.
+* @typedef {Object} IState The Animator options. Properties used in css animation.
 * @property {number} [duration] The duration property defines how long an animation should take to complete one cycle.
 * @property {"none"|"forwards"|"backwards"|"both"} [fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
 * @property {"infinite"|number} [iterationCount] The iterationCount property specifies the number of times an animation should be played.
@@ -96,8 +120,8 @@ const getters = [...setters, EASING, EASING_NAME];
 */
 @GetterSetter(getters, setters, "state")
 class Animator extends EventTrigger {
-  public state: StateInterface;
-  public options: ObjectInterface<any>;
+  public state: IState;
+  public options: Partial<IState>;
 
   /**
    * @param - animator's options
@@ -111,7 +135,7 @@ const animator = new Animator({
 	easing: Scene.easing.EASE,
 });
    */
-  constructor(options?: StateInterface) {
+  constructor(options?: IState) {
     super();
     this.options = {};
     this.state = {
@@ -125,7 +149,7 @@ const animator = new Animator({
       playSpeed: 1,
       currentTime: 0,
       iterationTime: -1,
-      currentIterationCount: 0,
+      iteration: 0,
       tickTime: 0,
       prevTime: 0,
       playState: PAUSED,
@@ -147,13 +171,29 @@ animator.({
 	easing: Scene.easing.EASE,
 });
 	*/
-  public setEasing(curveArray: [number, number, number, number] | EasingFunctionInterface): this {
-    const easing = Array.isArray(curveArray) ?
+  public setEasing(curveArray: [number, number, number, number] | IEasingFunction): this {
+    const easing = isArray(curveArray) ?
       bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]) : curveArray;
     const easingName = easing[EASING_NAME] || "linear";
 
     this.setState({ easing, easingName });
     return this;
+  }
+  /**
+  * Specifies the unique indicator of the animator
+  * @param - String or number of id to be set in the animator
+	* @return {Animator} An instance itself.
+	*/
+  public setId(id: number | string = makeId(false)) {
+    this.state.id = id;
+    return this;
+  }
+  /**
+	* Specifies the unique indicator of the animator
+	* @return {String} the indicator of the item.
+	*/
+  public getId() {
+    return this.state.id;
   }
   /**
 	* set animator's options.
@@ -170,7 +210,7 @@ animator.({
 	easing: Scene.eaasing.EASE,
 });
 	*/
-  public setOptions(options: StateInterface = {}): this {
+  public setOptions(options: IState = {}): this {
     for (const name in options) {
       const value = options[name];
 
@@ -181,7 +221,7 @@ animator.({
         value && this.setDuration(value);
         continue;
       }
-      ((name in this.state ? this.state : this.options) as StateInterface)[name] = value;
+      ((name in this.state ? this.state : this.options) as IState)[name] = value;
     }
 
     return this;
@@ -193,22 +233,21 @@ animator.({
 animator.getTotalDuration();
 	*/
   public getTotalDuration(): number {
-    if (this.state[ITERATION_COUNT] === INFINITE) {
-      return Infinity;
-    }
-    return this.state[DELAY] + this.getActiveDuration();
+    return this.getActiveDuration(true);
   }
   /**
 	* Get the animator's total duration excluding delay
 	* @return {number} Total duration excluding delay
 	* @example
-animator.getTotalDuration();
+animator.getActiveDuration();
 	*/
-  public getActiveDuration(): number {
-    if (this.state[ITERATION_COUNT] === INFINITE) {
+  public getActiveDuration(delay?: boolean): number {
+    const state = this.state;
+    const count = state[ITERATION_COUNT];
+    if (count === INFINITE) {
       return Infinity;
     }
-    return this.getDuration() * (this.state[ITERATION_COUNT] as number);
+    return (delay ? state[DELAY] : 0) + this.getDuration() * count;
   }
   /**
 	* Check if the animator has reached the end.
@@ -217,7 +256,7 @@ animator.getTotalDuration();
 animator.isEnded(); // true or false
 	*/
   public isEnded(): boolean {
-    if (this.state.tickTime === 0 && this.state[PLAY_STATE] === PAUSED) {
+    if (this.state[TICK_TIME] === 0 && this.state[PLAY_STATE] === PAUSED) {
       return true;
     } else if (this.getTime() < this.getActiveDuration()) {
       return false;
@@ -233,26 +272,22 @@ animator.isPaused(); // true or false
   public isPaused(): boolean {
     return this.state[PLAY_STATE] === PAUSED;
   }
-  public setNext(animator: Animator): this {
-    this.on(ENDED, () => {
-      animator.play();
-    });
-    return this;
-  }
   /**
 	* play animator
 	* @return {Animator} An instance itself.
 	*/
   public play() {
-    this.state[PLAY_STATE] = RUNNING;
+    const state = this.state;
+
+    state[PLAY_STATE] = RUNNING;
     if (this.isEnded()) {
-      this.setTickTime(0);
+      this.setTime(-state[DELAY], true);
     }
-    this.state.tickTime = this.getTime();
+    state[TICK_TIME] = this.getTime();
 
     requestAnimationFrame((time: number) => {
-      this.state.prevTime = time;
-      this.tick(time);
+      state[PREV_TIME] = time;
+      tick(this, time);
     });
     /**
 		 * This event is fired when play animator.
@@ -280,8 +315,8 @@ animator.isPaused(); // true or false
 	 * @return {Animator} An instance itself.
 	*/
   public finish() {
-    this.state.tickTime = 0;
     this.setTime(0);
+    this.state[TICK_TIME] = 0;
     this.end();
     return this;
   }
@@ -312,16 +347,17 @@ animator.getTime() // 10
 	*/
   public setTime(time: number | string, isTick?: boolean) {
     const activeDuration = this.getActiveDuration();
+    const state = this.state;
     let currentTime = isTick ? (time as number) : this.getUnitTime(time);
 
-    this.state.tickTime = this.state.delay + currentTime;
+    state[TICK_TIME] = state[DELAY] + currentTime;
     if (currentTime < 0) {
       currentTime = 0;
     } else if (currentTime > activeDuration) {
       currentTime = activeDuration;
     }
-    this.state.currentTime = currentTime;
-    this.calculateIterationTime();
+    state[CURRENT_TIME] = currentTime;
+    this.calculate();
 
     if (this.isDelay()) {
       return this;
@@ -337,15 +373,12 @@ animator.getTime() // 10
     this.trigger(TIMEUPDATE, {
       currentTime,
       time: this.getIterationTime(),
-      iterationCount: this.getIterationCount(),
+      iterationCount: state.iteration,
     });
 
     return this;
   }
-  public getState(name: string): any {
-    return this.state[name];
-  }
-  public setState(object: StateInterface) {
+  public setState(object: IState) {
     for (const name in object) {
       this.state[name] = object[name];
     }
@@ -358,7 +391,7 @@ animator.getTime() // 10
 animator.getTime();
 	*/
   public getTime(): number {
-    return this.state.currentTime;
+    return this.state[CURRENT_TIME];
   }
   public getUnitTime(time: string | number) {
     if (isString(time)) {
@@ -388,15 +421,17 @@ animator.getTime();
 	 * @return {boolean} check delay state
 	 */
   public isDelay() {
-    const { delay, tickTime } = this.state;
+    const state = this.state;
+    const delay = state[DELAY];
+    const tickTime = state[TICK_TIME];
 
     return delay > 0 && (tickTime < delay);
   }
-  public setCurrentIterationCount(iterationCount: number): this {
+  public setIteration(iterationCount: number): this {
     const state = this.state;
     const passIterationCount = Math.floor(iterationCount);
 
-    if (state.currentIterationCount < passIterationCount) {
+    if (state.iteration < passIterationCount) {
       /**
 			* The event is fired when an iteration of an animation ends.
 			* @event Animator#iteration
@@ -405,29 +440,32 @@ animator.getTime();
 			* @param {Number} param.iterationCount The iteration count that the animator is running.
 			*/
       this.trigger("iteration", {
-        currentTime: state.currentTime,
+        currentTime: state[CURRENT_TIME],
         iterationCount: passIterationCount,
       });
     }
-    state.currentIterationCount = iterationCount;
+    state.iteration = iterationCount;
     return this;
   }
-  protected calculateIterationTime() {
-    const { iterationCount, fillMode, direction } = this.state;
+  protected calculate() {
+    const state = this.state;
+    const iterationCount = state[ITERATION_COUNT];
+    const fillMode = state[FILL_MODE];
+    const direction = state[DIRECTION];
     const duration = this.getDuration();
     const time = this.getTime();
-    const currentIterationCount = duration === 0 ? 0 : time / duration;
+    const iteration = duration === 0 ? 0 : time / duration;
     let currentIterationTime = duration ? time % duration : 0;
 
     if (!duration) {
       this.setIterationTime(0);
       return this;
     }
-    this.setCurrentIterationCount(currentIterationCount);
+    this.setIteration(iteration);
 
     // direction : normal, reverse, alternate, alternate-reverse
     // fillMode : forwards, backwards, both, none
-    const isReverse = isDirectionReverse(currentIterationCount, iterationCount, direction);
+    const isReverse = isDirectionReverse(iteration, iterationCount, direction);
 
     const isFiniteDuration = isFinite(duration);
     if (isFiniteDuration && isReverse) {
@@ -437,35 +475,13 @@ animator.getTime();
       const isForwards = fillMode === "both" || fillMode === "forwards";
 
       // fill forwards
-      if (currentIterationCount >= iterationCount) {
+      if (iteration >= iterationCount) {
         currentIterationTime = duration * (isForwards ? (iterationCount % 1) || 1 : 0);
         isReverse && (currentIterationTime = duration - currentIterationTime);
       }
     }
     this.setIterationTime(currentIterationTime);
     return this;
-  }
-  protected tick(now: number) {
-    const state = this.state;
-    const { playSpeed, prevTime } = state;
-    const currentTime = this.state.tickTime + Math.min(1000, now - prevTime) / 1000 * playSpeed;
-
-    state.prevTime = now;
-    this.setTickTime(currentTime);
-    if (this.isEnded()) {
-      this.end();
-      return;
-    }
-    if (state[PLAY_STATE] === PAUSED) {
-      return;
-    }
-
-    requestAnimationFrame((time: number) => {
-      this.tick(time);
-    });
-  }
-  private setTickTime(time: number) {
-    this.setTime(time - this.state.delay, true);
   }
 }
 
@@ -564,6 +580,7 @@ animator.getTime();
 animator.getIterationTime();
 	*/
 
+// tslint:disable-next-line:interface-name
 interface Animator {
   getIterationTime(): number;
   setIterationTime(time: number): this;

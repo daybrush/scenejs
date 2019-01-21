@@ -1,10 +1,10 @@
 import { isObject, isArray } from "@daybrush/utils";
-import { EventInterface, CallbackType, EventParamterInterface, eachObjectF, eachArrayF } from "fjx";
+import { CallbackType, IEventParamter } from "./types";
 
 /**
 * attach and trigger event handlers.
 */
-class EventTrigger implements EventInterface {
+class EventTrigger {
   public events: { [name: string]: CallbackType[] };
   /**
 	* @example
@@ -23,13 +23,13 @@ et.trigger("call", {param: 1});
   constructor() {
     this.events = {};
   }
-  public _on(name: string | EventParamterInterface, callback?: CallbackType | CallbackType[], once?: boolean) {
+  public _on(name: string | IEventParamter, callback?: CallbackType | CallbackType[], once?: boolean) {
     const events = this.events;
 
     if (isObject(name)) {
-      eachObjectF((f, i) => {
-        this._on(i, f, once);
-      }, name);
+      for (const n in name) {
+        this._on(n, name[n], once);
+      }
       return;
     }
     if (!(name in events)) {
@@ -39,7 +39,7 @@ et.trigger("call", {param: 1});
       return;
     }
     if (isArray(callback)) {
-      eachArrayF(func => this._on(name, func, once), callback);
+      callback.forEach(func => this._on(name, func, once));
       return;
     }
     const event = events[name];
@@ -61,7 +61,7 @@ target.on("animate", function() {
 target.trigger("animate");
 
   */
-  public on(name: string | EventParamterInterface, callback?: CallbackType | CallbackType[]) {
+  public on(name: string | IEventParamter, callback?: CallbackType | CallbackType[]) {
     this._on(name, callback);
     return this;
   }
@@ -127,13 +127,13 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2
       target.currentTarget = this;
       !target.target && (target.target = this);
     }
-    eachArrayF(callback => {
+    event.forEach(callback => {
       callback.apply(this, data);
-    }, event);
+    });
 
     return this;
   }
-  public once(name: string | EventParamterInterface, callback?: CallbackType | CallbackType[]) {
+  public once(name: string | IEventParamter, callback?: CallbackType | CallbackType[]) {
     this._on(name, callback, true);
     return this;
   }

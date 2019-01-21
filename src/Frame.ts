@@ -1,13 +1,13 @@
 import {
-  ALIAS, TIMING_FUNCTION
+  ALIAS, TIMING_FUNCTION, TRANSFORM_NAME
 } from "./consts";
 import { isRole, getType, isPropertyObject } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
 import { isObject, isArray, isString,
-  ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, ObjectInterface } from "@daybrush/utils";
+  ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, IObject } from "@daybrush/utils";
 import { NameType } from "./types";
 
-function toInnerProperties(obj: ObjectInterface<string>) {
+function toInnerProperties(obj: IObject<string>) {
   if (!obj) {
     return "";
   }
@@ -20,10 +20,10 @@ function toInnerProperties(obj: ObjectInterface<string>) {
 }
 
 /* eslint-disable */
-function clone(target: ObjectInterface<any>, toValue = false) {
+function clone(target: IObject<any>, toValue = false) {
   return merge({}, target, toValue);
 }
-function merge(to: ObjectInterface<any>, from: ObjectInterface<any>, toValue = false) {
+function merge(to: IObject<any>, from: IObject<any>, toValue = false) {
   for (const name in from) {
     const value = from[name];
     const type = getType(value);
@@ -69,7 +69,7 @@ function getValue(names: NameType[], value: any): any {
 * Animation's Frame
 */
 class Frame {
-  public properties: ObjectInterface<any>;
+  public properties: IObject<any>;
   /**
    * @param - properties
    * @example
@@ -81,7 +81,7 @@ const frame = new Scene.Frame({
 	}
 });
    */
-  constructor(properties: ObjectInterface<any> = {}) {
+  constructor(properties: IObject<any> = {}) {
     this.properties = {};
     this.set(properties);
   }
@@ -262,16 +262,13 @@ frame.set("transform", "translate", "50px");
 
     return this;
   }
-  public toObject() {
-    return clone(this.properties, true);
-  }
   /**
 	* Specifies an css object that coverted the frame.
 	* @return {object} cssObject
 	*/
   public toCSSObject() {
-    const properties = this.toObject();
-    const cssObject: ObjectInterface<string> = {};
+    const properties = this.get();
+    const cssObject: IObject<string> = {};
 
     for (const name in properties) {
       if (isRole([name], true)) {
@@ -286,7 +283,7 @@ frame.set("transform", "translate", "50px");
       }
       cssObject[name] = value;
     }
-    const transform = toInnerProperties(properties.transform);
+    const transform = toInnerProperties(properties[TRANSFORM_NAME]);
     const filter = toInnerProperties(properties.filter);
 
     TRANSFORM && transform && (cssObject[TRANSFORM] = transform);
