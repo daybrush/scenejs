@@ -148,11 +148,7 @@ class Scene extends Animator {
     return this;
   }
   public toCSS(duration: number = this.getDuration(), parentState?: IState) {
-    let totalDuration = parentState ? this.getDuration() : duration;
-
-    if (!totalDuration || !isFinite(totalDuration)) {
-      totalDuration = 0;
-    }
+    const totalDuration = !duration || !isFinite(duration) ? 0 : duration;
     const styles: string[] = [];
     const state = {
       ...this.state,
