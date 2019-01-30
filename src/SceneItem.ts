@@ -656,12 +656,12 @@ const frame = item.getNowFrame(1.7);
   }
   /**
 	 * clone SceneItem.
-	 * @param {IState} [options] animator options
+	 * @param - animator options
 	 * @return {SceneItem} An instance of clone
 	 * @example
 	 * item.clone();
 	 */
-  public clone(options = {}) {
+  public clone(options: Partial<IState> = {}) {
     const item = new SceneItem();
 
     item.setOptions(this.state);
@@ -685,7 +685,7 @@ const frame = item.getNowFrame(1.7);
     });
     return this;
   }
-  public setOptions(options: IState = {}) {
+  public setOptions(options: Partial<IState> = {}) {
     super.setOptions(options);
     const { id, selector, duration, elements } = options;
 
@@ -706,7 +706,7 @@ const frame = item.getNowFrame(1.7);
 item.setCSS(0, ["opacity"]);
 item.setCSS(0, ["opacity", "width", "height"]);
 	*/
-  public toCSS(parentDuration = this.getDuration(), options: IState = {}) {
+  public toCSS(parentDuration = this.getDuration(), options: Partial<IState> = {}) {
     const state = this.state;
     const selector = state[SELECTOR];
 
@@ -747,7 +747,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 			${this._toKeyframes(duration, !isZeroDuration && isParent).join("\n")}
 		}`;
   }
-  public exportCSS(duration?: number, options?: IState) {
+  public exportCSS(duration?: number, options?: Partial<IState>) {
     if (!this.elements.length) {
       return "";
     }

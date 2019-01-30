@@ -73,21 +73,21 @@ export type DirectionType = "normal" | "reverse" | "alternate" | "alternate-reve
 export type PlayStateType = "paused" | "running";
 
 export interface IState {
-  id?: number | string;
-  easing?: EasingType;
-  easingName?: string;
-  iterationCount?: IterationCountType;
-  delay?: number;
-  fillMode?: FillModeType;
-  direction?: DirectionType;
-  playSpeed?: number;
-  iterationTime?: number;
-  currentTime?: number;
-  tickTime?: number;
-  iteration?: number;
-  prevTime?: number;
-  playState?: PlayStateType;
-  duration?: number;
+  id: number | string;
+  easing: EasingType;
+  easingName: string;
+  iterationCount: IterationCountType;
+  delay: number;
+  fillMode: FillModeType;
+  direction: DirectionType;
+  playSpeed: number;
+  iterationTime: number;
+  currentTime: number;
+  tickTime: number;
+  iteration: number;
+  prevTime: number;
+  playState: PlayStateType;
+  duration: number;
   [key: string]: any;
 }
 export function isDirectionReverse(iteration: number,
@@ -135,7 +135,7 @@ const animator = new Animator({
 	easing: Scene.easing.EASE,
 });
    */
-  constructor(options?: IState) {
+  constructor(options?: Partial<IState>) {
     super();
     this.options = {};
     this.state = {
@@ -210,7 +210,7 @@ animator.({
 	easing: Scene.eaasing.EASE,
 });
 	*/
-  public setOptions(options: IState = {}): this {
+  public setOptions(options: Partial<IState> = {}): this {
     for (const name in options) {
       const value = options[name];
 
@@ -378,7 +378,7 @@ animator.getTime() // 10
 
     return this;
   }
-  public setState(object: IState) {
+  public setState(object: Partial<IState>) {
     for (const name in object) {
       this.state[name] = object[name];
     }

@@ -35,7 +35,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function set(property: string | string[], values: any[], options: IState) {
+export function set(property: string | string[], values: any[], options: Partial<IState>) {
   const item = new SceneItem({}, options);
   const length = values.length;
 
@@ -68,7 +68,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function zoomIn({ from = 0, to = 1 }: IState) {
+export function zoomIn({ from = 0, to = 1 }: Partial<IState>) {
   return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
@@ -95,7 +95,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function zoomOut({ from = 1, to = 0 }: IState) {
+export function zoomOut({ from = 1, to = 0 }: Partial<IState>) {
   return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
@@ -123,7 +123,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function wipeIn({ from = "-100%", to = "0%", property = "left" }: IState) {
+export function wipeIn({ from = "-100%", to = "0%", property = "left" }: Partial<IState>) {
   return set(property, [from, to], arguments[0]);
 }
 
@@ -151,7 +151,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function wipeOut({ from = "0%", to = "100%", property = "left" }: IState) {
+export function wipeOut({ from = "0%", to = "100%", property = "left" }: Partial<IState>) {
   return set(property, [from, to], arguments[0]);
 }
 
@@ -234,7 +234,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function fadeIn({ from = 0, to = 1 }: IState) {
+export function fadeIn({ from = 0, to = 1 }: Partial<IState>) {
   return set("opacity", [from, to], arguments[0]);
 }
 
@@ -261,7 +261,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function fadeOut({ from = 1, to = 0 }: IState) {
+export function fadeOut({ from = 1, to = 0 }: Partial<IState>) {
   return set("opacity", [from, to], arguments[0]);
 }
 /**
@@ -290,6 +290,6 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function blink({ from = 0, to = 1 }: IState) {
+export function blink({ from = 0, to = 1 }: Partial<IState>) {
   return set("opacity", [from, to, from], arguments[0]);
 }

@@ -42,7 +42,7 @@ class Scene extends Animator {
     }
   });
     */
-  constructor(properties?: IObject<any>, options?: IState) {
+  constructor(properties?: IObject<any>, options?: Partial<IState>) {
     super();
     this.items = {};
     this.load(properties, options);
@@ -107,7 +107,7 @@ class Scene extends Animator {
   * @example
   const item = scene.newItem("item1")
   */
-  public newItem(name: number | string, options: IState = {}): SceneItem {
+  public newItem(name: number | string, options: Partial<IState> = {}): SceneItem {
     if (name in this.items) {
       return;
     }
@@ -147,7 +147,7 @@ class Scene extends Animator {
     }
     return this;
   }
-  public toCSS(duration: number = this.getDuration(), parentState?: IState) {
+  public toCSS(duration: number = this.getDuration(), parentState?: Partial<IState>) {
     const totalDuration = !duration || !isFinite(duration) ? 0 : duration;
     const styles: string[] = [];
     const state = {
@@ -177,7 +177,7 @@ class Scene extends Animator {
    * Export the CSS of the items to the style.
    * @return {Scene} An instance itself
    */
-  public exportCSS(duration?: number, parentState?: IState) {
+  public exportCSS(duration?: number, parentState?: Partial<IState>) {
     const css = this.toCSS(duration, parentState);
 
     !parentState && exportCSS(getRealId(this), css);
