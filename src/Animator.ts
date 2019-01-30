@@ -72,7 +72,7 @@ export type DirectionType = "normal" | "reverse" | "alternate" | "alternate-reve
  */
 export type PlayStateType = "paused" | "running";
 
-export interface IState {
+export interface AnimatorState {
   id: number | string;
   easing: EasingType;
   easingName: string;
@@ -100,7 +100,7 @@ export function isDirectionReverse(iteration: number,
   return  direction === (iteration % 2 >= 1 ? ALTERNATE : ALTERNATE_REVERSE);
 }
 /**
-* @typedef {Object} IState The Animator options. Properties used in css animation.
+* @typedef {Object} AnimatorState The Animator options. Properties used in css animation.
 * @property {number} [duration] The duration property defines how long an animation should take to complete one cycle.
 * @property {"none"|"forwards"|"backwards"|"both"} [fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
 * @property {"infinite"|number} [iterationCount] The iterationCount property specifies the number of times an animation should be played.
@@ -120,8 +120,8 @@ const getters = [...setters, EASING, EASING_NAME];
 */
 @GetterSetter(getters, setters, "state")
 class Animator extends EventTrigger {
-  public state: IState;
-  public options: Partial<IState>;
+  public state: AnimatorState;
+  public options: Partial<AnimatorState>;
 
   /**
    * @param - animator's options
@@ -135,7 +135,7 @@ const animator = new Animator({
 	easing: Scene.easing.EASE,
 });
    */
-  constructor(options?: Partial<IState>) {
+  constructor(options?: Partial<AnimatorState>) {
     super();
     this.options = {};
     this.state = {
@@ -210,7 +210,7 @@ animator.({
 	easing: Scene.eaasing.EASE,
 });
 	*/
-  public setOptions(options: Partial<IState> = {}): this {
+  public setOptions(options: Partial<AnimatorState> = {}): this {
     for (const name in options) {
       const value = options[name];
 
@@ -221,7 +221,7 @@ animator.({
         value && this.setDuration(value);
         continue;
       }
-      ((name in this.state ? this.state : this.options) as IState)[name] = value;
+      ((name in this.state ? this.state : this.options) as AnimatorState)[name] = value;
     }
 
     return this;
@@ -378,7 +378,7 @@ animator.getTime() // 10
 
     return this;
   }
-  public setState(object: Partial<IState>) {
+  public setState(object: Partial<AnimatorState>) {
     for (const name in object) {
       this.state[name] = object[name];
     }

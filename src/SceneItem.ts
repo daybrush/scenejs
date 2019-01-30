@@ -1,4 +1,4 @@
-import Animator, { IState, EasingType, isDirectionReverse } from "./Animator";
+import Animator, { AnimatorState, EasingType, isDirectionReverse } from "./Animator";
 import Frame from "./Frame";
 import {
   toFixed,
@@ -23,7 +23,7 @@ import {
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
   KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, IObject, $ } from "@daybrush/utils";
-import { NameType, ElementsType, IRole } from "./types";
+import { NameType, ElementsType, RoleObject } from "./types";
 import PropertyObject from "./PropertyObject";
 
 function makeAnimationProperties(properties: IObject<string | number>) {
@@ -107,7 +107,7 @@ const item = new SceneItem({
 class SceneItem extends Animator {
   public times: number[] = [];
   public items: IObject<Frame> = {};
-  public names: IRole = {};
+  public names: RoleObject = {};
   public elements: HTMLElement[] = [];
   /**
 	* @param - properties
@@ -126,7 +126,7 @@ class SceneItem extends Animator {
 		}
 	});
 	 */
-  constructor(properties?: IObject<any>, options?: Partial<IState>) {
+  constructor(properties?: IObject<any>, options?: Partial<AnimatorState>) {
     super();
     this.load(properties, options);
   }
@@ -661,7 +661,7 @@ const frame = item.getNowFrame(1.7);
 	 * @example
 	 * item.clone();
 	 */
-  public clone(options: Partial<IState> = {}) {
+  public clone(options: Partial<AnimatorState> = {}) {
     const item = new SceneItem();
 
     item.setOptions(this.state);
@@ -685,7 +685,7 @@ const frame = item.getNowFrame(1.7);
     });
     return this;
   }
-  public setOptions(options: Partial<IState> = {}) {
+  public setOptions(options: Partial<AnimatorState> = {}) {
     super.setOptions(options);
     const { id, selector, duration, elements } = options;
 
@@ -706,7 +706,7 @@ const frame = item.getNowFrame(1.7);
 item.setCSS(0, ["opacity"]);
 item.setCSS(0, ["opacity", "width", "height"]);
 	*/
-  public toCSS(parentDuration = this.getDuration(), options: Partial<IState> = {}) {
+  public toCSS(parentDuration = this.getDuration(), options: Partial<AnimatorState> = {}) {
     const state = this.state;
     const selector = state[SELECTOR];
 
@@ -747,7 +747,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
 			${this._toKeyframes(duration, !isZeroDuration && isParent).join("\n")}
 		}`;
   }
-  public exportCSS(duration?: number, options?: Partial<IState>) {
+  public exportCSS(duration?: number, options?: Partial<AnimatorState>) {
     if (!this.elements.length) {
       return "";
     }

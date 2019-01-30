@@ -1,7 +1,7 @@
 /**
  * @typedef
  */
-export type Role = true | IRole;
+export type Role = true | RoleObject;
 
 /**
  * @typedef
@@ -14,13 +14,13 @@ export type CallbackType<T = any> = (...args: any[]) => T;
 /**
  * @typedef
  */
-export interface IEventParamter {
+export interface EventParameter {
   [name: string]: CallbackType | CallbackType[];
 }
 /**
  * @typedef
  */
-export interface IRole {
+export interface RoleObject {
   [role: string]: Role;
 }
 /**

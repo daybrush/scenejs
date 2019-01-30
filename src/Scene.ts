@@ -1,4 +1,4 @@
-import Animator, { IState, EasingType } from "./Animator";
+import Animator, { AnimatorState, EasingType } from "./Animator";
 import SceneItem from "./SceneItem";
 import { ANIMATE, ITERATION_COUNT, EASING, EASING_NAME, INFINITE, DATA_SCENE_ID, PLAY_CSS, SELECTOR } from "./consts";
 import Frame from "./Frame";
@@ -42,7 +42,7 @@ class Scene extends Animator {
     }
   });
     */
-  constructor(properties?: IObject<any>, options?: Partial<IState>) {
+  constructor(properties?: IObject<any>, options?: Partial<AnimatorState>) {
     super();
     this.items = {};
     this.load(properties, options);
@@ -107,7 +107,7 @@ class Scene extends Animator {
   * @example
   const item = scene.newItem("item1")
   */
-  public newItem(name: number | string, options: Partial<IState> = {}): SceneItem {
+  public newItem(name: number | string, options: Partial<AnimatorState> = {}): SceneItem {
     if (name in this.items) {
       return;
     }
@@ -147,7 +147,7 @@ class Scene extends Animator {
     }
     return this;
   }
-  public toCSS(duration: number = this.getDuration(), parentState?: Partial<IState>) {
+  public toCSS(duration: number = this.getDuration(), parentState?: Partial<AnimatorState>) {
     const totalDuration = !duration || !isFinite(duration) ? 0 : duration;
     const styles: string[] = [];
     const state = {
@@ -177,7 +177,7 @@ class Scene extends Animator {
    * Export the CSS of the items to the style.
    * @return {Scene} An instance itself
    */
-  public exportCSS(duration?: number, parentState?: Partial<IState>) {
+  public exportCSS(duration?: number, parentState?: Partial<AnimatorState>) {
     const css = this.toCSS(duration, parentState);
 
     !parentState && exportCSS(getRealId(this), css);

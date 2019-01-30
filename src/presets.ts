@@ -1,5 +1,5 @@
 
-import { IState } from "./Animator";
+import { AnimatorState } from "./Animator";
 import SceneItem from "./SceneItem";
 import { IObject } from "@daybrush/utils";
 import { TRANSFORM_NAME } from "./consts";
@@ -35,7 +35,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function set(property: string | string[], values: any[], options: Partial<IState>) {
+export function set(property: string | string[], values: any[], options: Partial<AnimatorState>) {
   const item = new SceneItem({}, options);
   const length = values.length;
 
@@ -68,7 +68,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function zoomIn({ from = 0, to = 1 }: Partial<IState>) {
+export function zoomIn({ from = 0, to = 1 }: Partial<AnimatorState>) {
   return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
@@ -95,7 +95,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function zoomOut({ from = 1, to = 0 }: Partial<IState>) {
+export function zoomOut({ from = 1, to = 0 }: Partial<AnimatorState>) {
   return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
@@ -123,7 +123,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function wipeIn({ from = "-100%", to = "0%", property = "left" }: Partial<IState>) {
+export function wipeIn({ from = "-100%", to = "0%", property = "left" }: Partial<AnimatorState>) {
   return set(property, [from, to], arguments[0]);
 }
 
@@ -151,7 +151,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function wipeOut({ from = "0%", to = "100%", property = "left" }: Partial<IState>) {
+export function wipeOut({ from = "0%", to = "100%", property = "left" }: Partial<AnimatorState>) {
   return set(property, [from, to], arguments[0]);
 }
 
@@ -214,7 +214,7 @@ export function transition(item1: SceneItem, item2: SceneItem, {
 /**
  * Make a fade in effect.
  * @memberof presets
- * @param {IState} options
+ * @param {AnimatorState} options
  * @param {number} [options.from = 0] start opacity
  * @param {number}[options.to = 1] end opacity
  * @param {number} options.duration animation's duration
@@ -234,14 +234,14 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function fadeIn({ from = 0, to = 1 }: Partial<IState>) {
+export function fadeIn({ from = 0, to = 1 }: Partial<AnimatorState>) {
   return set("opacity", [from, to], arguments[0]);
 }
 
 /**
  * Make a fade out effect.
  * @memberof presets
- * @param {IState} options
+ * @param {AnimatorState} options
  * @param {number} [options.from = 1] start opacity
  * @param {number}[options.to = 0] end opacity
  * @param {number} options.duration animation's duration
@@ -261,13 +261,13 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function fadeOut({ from = 1, to = 0 }: Partial<IState>) {
+export function fadeOut({ from = 1, to = 0 }: Partial<AnimatorState>) {
   return set("opacity", [from, to], arguments[0]);
 }
 /**
  * Make a blinking effect.
  * @memberof presets
- * @param {IState} options
+ * @param {AnimatorState} options
  * @param {number} [options.from = 0] start opacity
  * @param {number}[options.to = 1] end opacity
  * @param {number} options.duration animation's duration
@@ -290,6 +290,6 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function blink({ from = 0, to = 1 }: Partial<IState>) {
+export function blink({ from = 0, to = 1 }: Partial<AnimatorState>) {
   return set("opacity", [from, to, from], arguments[0]);
 }
