@@ -48,7 +48,7 @@
   },
   "homepage": "https://daybrush.com",
   "devDependencies": {
-    "@daybrush/jsdoc": "^0.3.1",
+    "@daybrush/jsdoc": "^0.3.2",
     "@types/karma-chai": "^0.1.1",
     "@types/mocha": "^5.2.5",
     "@types/sinon": "^7.0.2",
