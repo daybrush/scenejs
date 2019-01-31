@@ -535,8 +535,8 @@ describe("SceneItem Test", () => {
             this.item.setSelector("div:before");
 
             // Then
-            expect(this.item.state.selector).to.be.equals("div");
-            expect(this.item.state.peusdo).to.be.equals(":before");
+            expect(this.item.state.selector).to.be.equals("div:before");
+            expect(this.item.state.peusdo).to.be.true;
             expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.state.id);
         });
         it("should check 'setElement' method", () => {

@@ -22,7 +22,7 @@ import {
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
-  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, IObject, $ } from "@daybrush/utils";
+  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, IObject, $, splitComma } from "@daybrush/utils";
 import { NameType, ElementsType, RoleObject } from "./types";
 import PropertyObject from "./PropertyObject";
 
@@ -357,11 +357,8 @@ item.setSelector("#id.class");
 
     const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(state[SELECTOR]);
 
-    if (matches) {
-      state[SELECTOR] = matches[1];
-      state.peusdo = matches[2];
-    }
-    IS_WINDOW && this.setElement($(state[SELECTOR], true));
+    state.peusdo = !!matches;
+    IS_WINDOW && this.setElement($(matches ? matches[1] : state[SELECTOR], true));
     return this;
   }
   /**
@@ -713,7 +710,6 @@ item.setCSS(0, ["opacity", "width", "height"]);
     if (!selector) {
       return "";
     }
-    const peusdo = state.peusdo || "";
     const id = toId(getRealId(this));
     // infinity or zero
     const isInfinite = state[ITERATION_COUNT] === INFINITE;
@@ -737,10 +733,19 @@ item.setCSS(0, ["opacity", "width", "height"]);
       duration: `${duration / playSpeed}s`,
       timingFunction: easingName,
     });
+    const selectors = splitComma(selector).map(sel => {
+      const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(sel);
 
-    return `${selector}.${START_ANIMATION}${peusdo} {
+      if (matches) {
+        return [matches[0], matches[1]];
+      } else {
+        return [sel, ""];
+      }
+    });
+
+    return `${selectors.map(([sel, peusdo]) => `${sel}.${START_ANIMATION}${peusdo}`)} {
 			${cssText}
-		}${selector}.${PAUSE_ANIMATION}${peusdo} {
+		}${selectors.map(([sel, peusdo]) => `${sel}.${PAUSE_ANIMATION}${peusdo}`)} {
       ${ANIMATION}-play-state: paused;
     }
     @${KEYFRAMES} ${PREFIX}KEYFRAMES_${id}{
