@@ -11,6 +11,7 @@ import {
   isPausedCSS,
   isRole,
   isInProperties,
+  getValueByNames,
 } from "./utils";
 import { dotValue } from "./utils/dot";
 import {
@@ -22,7 +23,7 @@ import {
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
-  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, IObject, $, splitComma } from "@daybrush/utils";
+  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, IObject, $, splitComma, toArray } from "@daybrush/utils";
 import { NameType, ElementsType, RoleObject } from "./types";
 import PropertyObject from "./PropertyObject";
 
@@ -30,23 +31,24 @@ function makeAnimationProperties(properties: IObject<string | number>) {
   const cssArray = [];
 
   for (const name in properties) {
-    cssArray.push(`${ANIMATION}-${decamelize(name)} : ${properties[name]};`);
+    cssArray.push(`${ANIMATION}-${decamelize(name)}:${properties[name]};`);
   }
   return cssArray.join("");
 }
-
+function isPureObject(obj: any): obj is object  {
+  return isObject(obj) && obj.constructor === Object;
+}
 function getNames(names: IObject<any>, stack: string[]) {
   let arr: string[][] = [];
 
-  for (const name in names) {
-    stack.push(name);
-
-    if (isObject(names[name])) {
+  if (isPureObject(names)) {
+    for (const name in names) {
+      stack.push(name);
       arr = arr.concat(getNames(names[name], stack));
-    } else {
-      arr.push(stack.slice());
+      stack.pop();
     }
-    stack.pop();
+  } else {
+    arr.push(stack.slice());
   }
   return arr;
 }
@@ -54,7 +56,7 @@ function updateFrame(names: IObject<any>, properties: IObject<any>) {
   for (const name in properties) {
     const value = properties[name];
 
-    if (!isObject(value) || isArray(value) || value instanceof PropertyObject) {
+    if (!isPureObject(value)) {
       names[name] = true;
       continue;
     }
@@ -109,6 +111,7 @@ class SceneItem extends Animator {
   public items: IObject<Frame> = {};
   public names: RoleObject = {};
   public elements: HTMLElement[] = [];
+  public target: any;
   /**
 	* @param - properties
 	* @param - options
@@ -195,8 +198,33 @@ item.set(0, "a", "b") // item.getFrame(0).set("a", "b")
 console.log(item.get(0, "a")); // "b"
 	*/
   public set(time: any, ...args: any[]) {
-    if (isObject(time)) {
-      this.load(time);
+    if (isArray(time)) {
+      const length = time.length;
+
+      for (let i = 0; i < length; ++i) {
+        const t = length === 1 ? 0 : this.getUnitTime(`${i / (length - 1) * 100}%`);
+
+        this.set(t, time[i]);
+      }
+    } else if (isObject(time)) {
+      for (const t in time) {
+        const value = time[t];
+        const realTime = this.getUnitTime(t);
+
+        if (isNaN(realTime)) {
+          getNames(value, [t]).forEach(names => {
+            const innerValue = getValueByNames(names.slice(1), value);
+            const arr = isArray(innerValue) ? innerValue : [getValueByNames(names, this.target), innerValue];
+            const length = arr.length;
+
+            for (let i = 0; i < length; ++i) {
+              this.newFrame(`${i / (length - 1) * 100}%`).set(names, arr[i]);
+            }
+          });
+        } else {
+          this.set(realTime, value);
+        }
+      }
     } else {
       const value = args[0];
 
@@ -371,7 +399,7 @@ item.setElement(document.querySelectorAll(".class"));
 	*/
   public setElement(elements: HTMLElement | ElementsType) {
     if (elements) {
-      this.elements = (elements instanceof Element) ? [elements] : Array.prototype.slice.call(elements);
+      this.elements = (elements instanceof Element) ? [elements] : toArray(elements);
       this.setId(this.getId());
     }
     return this;
@@ -417,6 +445,13 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const elements = this.elements;
     const length = elements.length;
 
+    if (this.target) {
+      const obj = frame.get();
+
+      for (const name in obj) {
+        this.target[name] = obj[name];
+      }
+    }
     if (!length || state.peusdo) {
       return frame;
     }
@@ -623,32 +658,19 @@ const frame = item.getNowFrame(1.7);
     return frame;
   }
   public load(properties: any = {}, options = properties.options) {
-    if (isArray(properties)) {
-      const length = properties.length;
-
-      for (let i = 0; i < length; ++i) {
-        const time = length === 1 ? 0 : this.getUnitTime(`${i / (length - 1) * 100}%`);
-
-        this.set(time, properties[i]);
-      }
-    } else if (properties.keyframes) {
+    options && this.setOptions(options);
+    if (properties.keyframes) {
       this.set(properties.keyframes);
     } else {
       for (const time in properties) {
-        if (time === "options" || time === "keyframes") {
+        if (time === "options") {
           continue;
         }
-        const value = properties[time];
-        const realTime = this.getUnitTime(time);
-
-        if (typeof value === "number") {
-          this.mergeFrame(realTime, this.getFrame(value));
-          continue;
-        }
-        this.set(realTime, value);
+        this.set({
+          [time]: properties[time],
+        });
       }
     }
-    options && this.setOptions(options);
     return this;
   }
   /**
@@ -684,12 +706,15 @@ const frame = item.getNowFrame(1.7);
   }
   public setOptions(options: Partial<AnimatorState> = {}) {
     super.setOptions(options);
-    const { id, selector, duration, elements } = options;
+    const { id, selector, duration, elements, element, target } = options;
 
     duration && this.setDuration(duration);
     id && this.setId(id);
-    if (elements) {
-      this.setElement(elements);
+    if (target) {
+      this.target = target;
+    }
+    if (elements || element) {
+      this.setElement(elements || element);
     } else if (selector) {
       this.setSelector(selector === true ? this.state.id : selector);
     }
@@ -817,13 +842,11 @@ item[PLAY_CSS](false, {
       return;
     }
     if (isPaused) {
-      for (let i = 0; i < length; ++i) {
-        removeClass(elements[i], PAUSE_ANIMATION);
-      }
+      elements.forEach(element => {
+        removeClass(element, PAUSE_ANIMATION);
+      });
     } else {
-      for (let i = 0; i < length; ++i) {
-        const element = elements[i];
-
+      elements.forEach(element => {
         element.style.cssText += cssText;
         if (hasClass(element, START_ANIMATION)) {
           removeClass(element, START_ANIMATION);
@@ -837,7 +860,7 @@ item[PLAY_CSS](false, {
         } else {
           addClass(element, START_ANIMATION);
         }
-      }
+      });
     }
     return elements[0];
   }

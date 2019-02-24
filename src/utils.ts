@@ -5,7 +5,7 @@ import Scene from "./Scene";
 import SceneItem from "./SceneItem";
 import {
   isArray, ANIMATION, ARRAY, OBJECT,
-  PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document,
+  PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document, isObject,
 } from "@daybrush/utils";
 
 export function isPropertyObject(value: any): value is PropertyObject {
@@ -46,6 +46,18 @@ export function getType(value: any) {
 }
 export function toFixed(num: number) {
   return Math.round(num * MAXIMUM) / MAXIMUM;
+}
+export function getValueByNames(names: Array<string | number>,
+                                properties: IObject<any>, length: number = names.length) {
+  let value = properties;
+
+  for (let i = 0; i < length; ++i) {
+    if (!isObject(value)) {
+      return undefined;
+    }
+    value = value[names[i]];
+  }
+  return value;
 }
 export function isInProperties(roles: IObject<any>, args: string[], isCheckTrue?: boolean) {
   const length = args.length;
