@@ -28,7 +28,10 @@ function GetterSetter<T extends { new(...args: any[]): {} }>(
     });
   };
 }
-function tick(animator: Animator, now: number) {
+function tick(animator: Animator, now: number, to?: number) {
+  if (animator.isPaused()) {
+    return;
+  }
   const state = animator.state;
   const playSpeed = state[PLAY_SPEED];
   const prevTime = state[PREV_TIME];
@@ -42,12 +45,15 @@ function tick(animator: Animator, now: number) {
     animator.end();
     return;
   }
+  if (to && to * 1000 < now) {
+    animator.pause();
+  }
   if (state[PLAY_STATE] === PAUSED) {
     return;
   }
 
   requestAnimationFrame((time: number) => {
-    tick(animator, time);
+    tick(animator, time, to);
   });
 }
 
@@ -276,18 +282,20 @@ animator.isPaused(); // true or false
 	* play animator
 	* @return {Animator} An instance itself.
 	*/
-  public play() {
+  public play(toTime?: number) {
     const state = this.state;
 
     state[PLAY_STATE] = RUNNING;
-    if (this.isEnded()) {
+    const currentTime = this.getTime();
+
+    if (this.isEnded() && (currentTime === 0 || currentTime >= this.getActiveDuration())) {
       this.setTime(-state[DELAY], true);
     }
     state[TICK_TIME] = this.getTime();
 
     requestAnimationFrame((time: number) => {
       state[PREV_TIME] = time;
-      tick(this, time);
+      tick(this, time, toTime);
     });
     /**
 		 * This event is fired when play animator.
@@ -406,7 +414,7 @@ animator.getTime();
 
       if (unit === "%") {
         !this.getDuration() && (this.state.duration = duration);
-        return parseFloat(time) / 100 * duration;
+        return toFixed(parseFloat(time) / 100 * duration);
       } else if (unit === ">") {
         return value + THRESHOLD;
       } else {
