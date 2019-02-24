@@ -19,8 +19,8 @@ describe("SceneItem Test", () => {
                     display: "block",
                     a: 2,
                 },
-                2: 0,
             });
+            item.mergeFrame(2, item.getFrame(0));
 
             expect(item.get(0, "a")).to.be.equals(1);
             expect(item.get(1, "display")).to.be.equals("block");
@@ -56,6 +56,7 @@ describe("SceneItem Test", () => {
             ], {
                     duration: 2,
                 });
+
 
             expect(item.get(0, "a")).to.be.equals(1);
             expect(item.getDuration()).to.be.equals(0);

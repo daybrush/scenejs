@@ -658,8 +658,9 @@ const frame = item.getNowFrame(1.7);
     return frame;
   }
   public load(properties: any = {}, options = properties.options) {
-    options && this.setOptions(options);
-    if (properties.keyframes) {
+    if (isArray(properties)) {
+      this.set(properties);
+    } else if (properties.keyframes) {
       this.set(properties.keyframes);
     } else {
       for (const time in properties) {
@@ -671,6 +672,7 @@ const frame = item.getNowFrame(1.7);
         });
       }
     }
+    options && this.setOptions(options);
     return this;
   }
   /**
