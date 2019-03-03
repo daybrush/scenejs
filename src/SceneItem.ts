@@ -12,6 +12,8 @@ import {
   isRole,
   isInProperties,
   getValueByNames,
+  isEndedCSS,
+  setPlayCSS,
 } from "./utils";
 import { dotValue } from "./utils/dot";
 import {
@@ -23,9 +25,21 @@ import {
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
-  KEYFRAMES, requestAnimationFrame, isFunction, IS_WINDOW, IObject, $, splitComma, toArray } from "@daybrush/utils";
-import { NameType, ElementsType, RoleObject } from "./types";
-import PropertyObject from "./PropertyObject";
+  KEYFRAMES, requestAnimationFrame, isFunction,
+  IObject, $, splitComma, toArray, isString, IArrayFormat } from "@daybrush/utils";
+import { NameType, RoleObject, AnimateElement } from "./types";
+
+export interface SceneItemState extends AnimatorState {
+  playCSS: boolean;
+  cssText: string;
+  selector: string;
+}
+export interface SceneItemOptions extends AnimatorState {
+  selector: boolean | string;
+  elements: IArrayFormat<AnimateElement> | AnimateElement;
+  element: IArrayFormat<AnimateElement> | AnimateElement;
+  target: any;
+}
 
 function makeAnimationProperties(properties: IObject<string | number>) {
   const cssArray = [];
@@ -106,12 +120,14 @@ const item = new SceneItem({
 	}
 });
 */
-class SceneItem extends Animator {
+class SceneItem extends Animator<SceneItemState> {
   public times: number[] = [];
   public items: IObject<Frame> = {};
   public names: RoleObject = {};
-  public elements: HTMLElement[] = [];
-  public target: any;
+  public elements: AnimateElement[] = [];
+  private target: any;
+  private targetFunc: (frame: Frame) => void;
+
   /**
 	* @param - properties
 	* @param - options
@@ -129,7 +145,7 @@ class SceneItem extends Animator {
 		}
 	});
 	 */
-  constructor(properties?: IObject<any>, options?: Partial<AnimatorState>) {
+  constructor(properties?: IObject<any>, options?: Partial<SceneItemOptions>) {
     super();
     this.load(properties, options);
   }
@@ -147,7 +163,7 @@ class SceneItem extends Animator {
     return this.times.length;
   }
   public setDuration(duration: number) {
-    if (duration === 0) {
+    if (!duration) {
       return this;
     }
     const originalDuration = this.getDuration();
@@ -170,21 +186,19 @@ class SceneItem extends Animator {
     return this;
   }
   public setId(id?: number | string) {
-    const elements = this.elements;
-    const length = elements.length;
     const state = this.state;
 
     state.id = id || makeId(!!length);
     const sceneId = toId(this.getId());
 
-    state[SELECTOR] || (state[SELECTOR] = `[${DATA_SCENE_ID}="${sceneId}"]`);
+    const elements = this.elements;
 
-    if (!length) {
-      return this;
+    if (elements.length && !state[SELECTOR]) {
+      state[SELECTOR] = `[${DATA_SCENE_ID}="${sceneId}"]`;
+      elements.forEach(element => {
+        element.setAttribute(DATA_SCENE_ID, sceneId);
+      });
     }
-    elements.forEach(element => {
-      element.setAttribute(DATA_SCENE_ID, sceneId);
-    });
     return this;
   }
 
@@ -366,42 +380,82 @@ item.toObject();
     const delay = this.getDelay();
 
     this.forEach((frame: Frame, time: number) => {
-      obj[(time === 0 && !isStartZero ? THRESHOLD : 0) + delay + startTime + time] = frame.clone();
+      obj[(!time && !isStartZero ? THRESHOLD : 0) + delay + startTime + time] = frame.clone();
     });
     return obj;
   }
-  /**
+   /**
 	* Specifies an element to synchronize items' keyframes.
 	* @param {string} selectors - Selectors to find elements in items.
 	* @return {SceneItem} An instance itself
 	* @example
 item.setSelector("#id.class");
 	*/
-  public setSelector(selector: boolean | string) {
-    const state = this.state;
-
-    state[SELECTOR] = selector === true ? state.id :
-      (selector || `[${DATA_SCENE_ID}="${state.id}"]`);
-
-    const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(state[SELECTOR]);
-
-    state.peusdo = !!matches;
-    IS_WINDOW && this.setElement($(matches ? matches[1] : state[SELECTOR], true));
-    return this;
+  public setSelector(target: string | boolean) {
+    this.setElement(target);
   }
   /**
 	* Specifies an element to synchronize item's keyframes.
-	* @param {Element|Array|string} elements - elements to synchronize item's keyframes.
+  * @param - elements to synchronize item's keyframes.
+  * @param - Make sure that you have peusdo.
 	* @return {SceneItem} An instance itself
 	* @example
 item.setElement(document.querySelector("#id.class"));
 item.setElement(document.querySelectorAll(".class"));
 	*/
-  public setElement(elements: HTMLElement | ElementsType) {
-    if (elements) {
-      this.elements = (elements instanceof Element) ? [elements] : toArray(elements);
-      this.setId(this.getId());
+  public setElement(target: boolean | string | AnimateElement | IArrayFormat<AnimateElement>) {
+    const state = this.state;
+    let elements: AnimateElement[] = [];
+
+    if (!target) {
+      return this;
+    } else if (target === true || isString(target)) {
+      const selector = target === true ? `${state.id}` : target;
+      const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(selector);
+
+      elements = toArray($(matches ? matches[1] : selector, true));
+      state[SELECTOR] = selector;
+    } else {
+      elements = (target instanceof Element) ? [target] : toArray(target);
     }
+    if (!elements.length) {
+      return this;
+    }
+    this.elements = elements;
+    this.setId(this.getId());
+    this.target = elements[0].style;
+    this.targetFunc = (frame: Frame) => {
+      const attributes = frame.get("attribute");
+
+      if (attributes) {
+        for (const name in attributes) {
+          elements.forEach(el => {
+            el.setAttribute(name, attributes[name]);
+          });
+        }
+      }
+      const cssText = frame.toCSS();
+
+      if (state.cssText !== cssText) {
+        state.cssText = cssText;
+
+        elements.forEach(el => {
+          el.style.cssText += cssText;
+        });
+        return frame;
+      }
+    };
+    return this;
+  }
+  public setTarget(target: any): this {
+    this.target = target;
+    this.targetFunc = (frame: Frame) => {
+      const obj = frame.get();
+
+      for (const name in obj) {
+        target[name] = obj[name];
+      }
+    };
     return this;
   }
   /**
@@ -442,38 +496,8 @@ item.setCSS(0, ["opacity", "width", "height"]);
       currentTime,
       time: iterationTime,
     });
-    const elements = this.elements;
-    const length = elements.length;
-
-    if (this.target) {
-      const obj = frame.get();
-
-      for (const name in obj) {
-        this.target[name] = obj[name];
-      }
-    }
-    if (!length || state.peusdo) {
-      return frame;
-    }
-    const attributes = frame.get("attribute");
-
-    if (attributes) {
-      for (const name in attributes) {
-        for (let i = 0; i < length; ++i) {
-          elements[i].setAttribute(name, attributes[name]);
-        }
-      }
-    }
-    const cssText = frame.toCSS();
-
-    if (state.cssText !== cssText) {
-      state.cssText = cssText;
-
-      for (let i = 0; i < length; ++i) {
-        elements[i].style.cssText += cssText;
-      }
-      return frame;
-    }
+    this.targetFunc && this.targetFunc(frame);
+    return frame;
   }
   /**
 	* update property names used in frames.
@@ -631,9 +655,14 @@ const frame = item.getNowFrame(1.7);
   public getNowFrame(time: number, easing?: EasingType, isAccurate?: boolean) {
     const frame = new Frame();
     const { left, right } = getNearTimeIndex(this.times, time);
-    const realEasing = this._getEasing(time, left, right, this.getEasing() || easing);
+    let realEasing = this.getEasing() || easing;
     let nameObject = this.names;
 
+    if (this.hasName([TIMING_FUNCTION])) {
+      const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, false, 0, true);
+
+      isFunction(nowEasing) && (realEasing = nowEasing);
+    }
     if (isAccurate) {
       const prevFrame = this.getFrame(time);
       const prevNames = updateFrame({}, prevFrame.properties);
@@ -658,6 +687,7 @@ const frame = item.getNowFrame(1.7);
     return frame;
   }
   public load(properties: any = {}, options = properties.options) {
+    options && this.setOptions(options);
     if (isArray(properties)) {
       this.set(properties);
     } else if (properties.keyframes) {
@@ -672,7 +702,9 @@ const frame = item.getNowFrame(1.7);
         });
       }
     }
-    options && this.setOptions(options);
+    if (options && options[DURATION]) {
+      this.setDuration(options[DURATION]);
+    }
     return this;
   }
   /**
@@ -682,7 +714,7 @@ const frame = item.getNowFrame(1.7);
 	 * @example
 	 * item.clone();
 	 */
-  public clone(options: Partial<AnimatorState> = {}) {
+  public clone(options: Partial<SceneItemState> = {}) {
     const item = new SceneItem();
 
     item.setOptions(this.state);
@@ -692,7 +724,7 @@ const frame = item.getNowFrame(1.7);
     });
     return item;
   }
-/**
+  /**
 	 * executes a provided function once for each scene item.
 	 * @param - Function to execute for each element, taking three arguments
 	 * @return {Keyframes} An instance itself
@@ -706,19 +738,15 @@ const frame = item.getNowFrame(1.7);
     });
     return this;
   }
-  public setOptions(options: Partial<AnimatorState> = {}) {
+  public setOptions(options: Partial<SceneItemOptions> = {}) {
     super.setOptions(options);
-    const { id, selector, duration, elements, element, target } = options;
+    const { id, selector, elements, element, target } = options;
 
-    duration && this.setDuration(duration);
     id && this.setId(id);
     if (target) {
-      this.target = target;
-    }
-    if (elements || element) {
-      this.setElement(elements || element);
-    } else if (selector) {
-      this.setSelector(selector === true ? this.state.id : selector);
+      this.setTarget(target);
+    } else if (elements || element || selector) {
+      this.setElement(elements || element || selector);
     }
     return this;
   }
@@ -805,11 +833,11 @@ item.setCSS(0, ["opacity", "width", "height"]);
       removeClass(element, PAUSE_ANIMATION);
       removeClass(element, START_ANIMATION);
     });
-    this.setState({ playCSS: false });
+    setPlayCSS(this, false);
     return this;
   }
   public end() {
-    !this.isEnded() && this.state[PLAY_CSS] && this.endCSS();
+    isEndedCSS(this) && this.endCSS();
     super.end();
     return this;
   }
@@ -852,27 +880,17 @@ item[PLAY_CSS](false, {
         element.style.cssText += cssText;
         if (hasClass(element, START_ANIMATION)) {
           removeClass(element, START_ANIMATION);
-          (el => {
+          requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                addClass(el, START_ANIMATION);
-              });
+              addClass(element, START_ANIMATION);
             });
-          })(element);
+          });
         } else {
           addClass(element, START_ANIMATION);
         }
       });
     }
     return elements[0];
-  }
-  private _getEasing(time: number, left: number, right: number, easing: EasingType) {
-    if (this.hasName([TIMING_FUNCTION])) {
-      const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, false, 0, true);
-
-      return isFunction(nowEasing) ? nowEasing : easing;
-    }
-    return easing;
   }
   private _toKeyframes(duration = this.getDuration(), isParent: boolean) {
     const state = this.state;

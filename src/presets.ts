@@ -1,12 +1,24 @@
 
 import { AnimatorState } from "./Animator";
-import SceneItem from "./SceneItem";
+import SceneItem, { SceneItemOptions } from "./SceneItem";
 import { IObject } from "@daybrush/utils";
 import { TRANSFORM_NAME } from "./consts";
 
 /**
  * @namespace presets
  */
+
+/**
+ * @memberof presets
+ * @typedef
+ */
+export interface PresetState extends AnimatorState {
+  [key: string]: any;
+}
+
+export function animate(properties?: IObject<any>, options?: Partial<SceneItemOptions>) {
+  return new SceneItem(properties, options).play();
+}
 /**
  * Use the property to create an effect.
  * @memberof presets
@@ -68,7 +80,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function zoomIn({ from = 0, to = 1 }: Partial<AnimatorState>) {
+export function zoomIn({ from = 0, to = 1 }: Partial<PresetState>) {
   return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
@@ -95,7 +107,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function zoomOut({ from = 1, to = 0 }: Partial<AnimatorState>) {
+export function zoomOut({ from = 1, to = 0 }: Partial<PresetState>) {
   return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
@@ -123,7 +135,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function wipeIn({ from = "-100%", to = "0%", property = "left" }: Partial<AnimatorState>) {
+export function wipeIn({ from = "-100%", to = "0%", property = "left" }: Partial<PresetState>) {
   return set(property, [from, to], arguments[0]);
 }
 
@@ -151,7 +163,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function wipeOut({ from = "0%", to = "100%", property = "left" }: Partial<AnimatorState>) {
+export function wipeOut({ from = "0%", to = "100%", property = "left" }: Partial<PresetState>) {
   return set(property, [from, to], arguments[0]);
 }
 
@@ -234,7 +246,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function fadeIn({ from = 0, to = 1 }: Partial<AnimatorState>) {
+export function fadeIn({ from = 0, to = 1 }: Partial<PresetState>) {
   return set("opacity", [from, to], arguments[0]);
 }
 
@@ -261,7 +273,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function fadeOut({ from = 1, to = 0 }: Partial<AnimatorState>) {
+export function fadeOut({ from = 1, to = 0 }: Partial<PresetState>) {
   return set("opacity", [from, to], arguments[0]);
 }
 /**
@@ -290,6 +302,6 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function blink({ from = 0, to = 1 }: Partial<AnimatorState>) {
+export function blink({ from = 0, to = 1 }: Partial<PresetState>) {
   return set("opacity", [from, to, from], arguments[0]);
 }

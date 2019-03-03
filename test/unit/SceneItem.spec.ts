@@ -57,7 +57,6 @@ describe("SceneItem Test", () => {
                     duration: 2,
                 });
 
-
             expect(item.get(0, "a")).to.be.equals(1);
             expect(item.getDuration()).to.be.equals(0);
 
@@ -527,7 +526,7 @@ describe("SceneItem Test", () => {
 
             // Then
             expect(this.item.state.selector).to.be.equals("div");
-            expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.state.id);
+            expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.not.ok;
         });
         it("should check 'setSelector' method(peusdo)", () => {
             // Given
@@ -537,8 +536,7 @@ describe("SceneItem Test", () => {
 
             // Then
             expect(this.item.state.selector).to.be.equals("div:before");
-            expect(this.item.state.peusdo).to.be.true;
-            expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equals(this.item.state.id);
+            expect(this.item.elements[0].tagName).to.be.equals("DIV");
         });
         it("should check 'setElement' method", () => {
             // Given
@@ -574,13 +572,13 @@ describe("SceneItem Test", () => {
         });
         it("should check 'setElement' method (already has selector)", () => {
             // Given
-            this.item.options.selector = "div";
+            this.item.state.selector = "div";
             // When
             this.item.setElement(this.element);
             const id = this.item.elements[0].getAttribute("data-scene-id");
             // Then
-            expect(this.item.state.id).to.be.equals(id);
-            expect(this.item.options.selector).to.be.equals(`div`);
+            expect(id).to.be.not.ok;
+            expect(this.item.state.selector).to.be.equals(`div`);
             expect(this.item.elements[0]).to.be.equals(this.element);
         });
         it("should check 'toKeyframes' method", () => {

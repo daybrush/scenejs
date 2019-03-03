@@ -89,9 +89,16 @@ export interface IterationInterface {
   iterationCount: number;
   elapsedTime: number;
 }
+export function setPlayCSS(item: Scene | SceneItem, isActivate: boolean) {
+  item.state[PLAY_CSS] = isActivate;
+}
 export function isPausedCSS(item: Scene | SceneItem) {
   return item.state[PLAY_CSS] && item.isPaused();
 }
+export function isEndedCSS(item: Scene | SceneItem) {
+  return !item.isEnded() && item.state[PLAY_CSS];
+}
+
 export function exportCSS(id: number | string, css: string) {
   const styleId = `${PREFIX}STYLE_${toId(id)}`;
   const styleElement: HTMLElement = $(`#${styleId}`);
@@ -139,20 +146,20 @@ export function playCSS(item: Scene | SceneItem, isExportCSS: boolean, propertie
     if (!el) {
       return;
     }
-    !item.state.peusdo && addAnimationEvent(item, el);
-    item.setState({ playCSS: true });
+    addAnimationEvent(item, el);
+    setPlayCSS(item, true);
   }
   item.setPlayState(RUNNING);
   item.trigger(PLAY);
 }
 
-export function addAnimationEvent(item: Scene | SceneItem, el: HTMLElement) {
+export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
   const duration = item.getDuration();
   const isZeroDuration = !duration || !isFinite(duration);
-
+  const state = item.state;
   const animationend = () => {
     if (!isZeroDuration) {
-      item.setState({ playCSS: false });
+      setPlayCSS(item, false);
       item.finish();
     }
   };
@@ -164,7 +171,7 @@ export function addAnimationEvent(item: Scene | SceneItem, el: HTMLElement) {
     const currentTime = elapsedTime;
     const iterationCount = isZeroDuration ? 0 : (currentTime / duration);
 
-    item.state[CURRENT_TIME] = currentTime;
+    state[CURRENT_TIME] = currentTime;
     item.setIteration(iterationCount);
   };
   el.addEventListener("animationend", animationend);

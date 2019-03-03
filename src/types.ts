@@ -11,6 +11,7 @@ export type ElementsType = HTMLElement | HTMLElement[] | NodeListOf<HTMLElement>
  * @typedef
  */
 export type CallbackType<T = any> = (...args: any[]) => T;
+
 /**
  * @typedef
  */
@@ -35,3 +36,9 @@ export type OptionType = ["duration", "fillMode", "direction", "iterationCount",
  * @typedef
  */
 export type EventType = ["paused", "ended", "timeupdate", "animate", "play", "iteration"];
+
+/**
+ * @typedef
+ */
+export interface AnimateElement extends Element, ElementCSSInlineStyle {
+}

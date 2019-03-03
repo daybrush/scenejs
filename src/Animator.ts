@@ -3,7 +3,7 @@ import {
   ALTERNATE, ALTERNATE_REVERSE, REVERSE, INFINITE, NORMAL,
   ITERATION_COUNT, DELAY, FILL_MODE, DIRECTION, PLAY_SPEED,
   DURATION, EASING, ITERATION_TIME, EASING_NAME, PAUSED,
-  RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE, PREV_TIME, TICK_TIME, CURRENT_TIME
+  RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE, PREV_TIME, TICK_TIME, CURRENT_TIME, ITERATION, OPTIONS
 } from "./consts";
 import EventTrigger from "./EventTrigger";
 import { bezier, IEasingFunction } from "./easing";
@@ -94,7 +94,6 @@ export interface AnimatorState {
   prevTime: number;
   playState: PlayStateType;
   duration: number;
-  [key: string]: any;
 }
 export function isDirectionReverse(iteration: number,
                                    iteraiontCount: IterationCountType, direction: DirectionType) {
@@ -125,9 +124,8 @@ const getters = [...setters, EASING, EASING_NAME];
 * @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
 */
 @GetterSetter(getters, setters, "state")
-class Animator extends EventTrigger {
-  public state: AnimatorState;
-  public options: Partial<AnimatorState>;
+class Animator<T extends AnimatorState = AnimatorState> extends EventTrigger {
+  public state: T;
 
   /**
    * @param - animator's options
@@ -141,9 +139,8 @@ const animator = new Animator({
 	easing: Scene.easing.EASE,
 });
    */
-  constructor(options?: Partial<AnimatorState>) {
+  constructor(options?: Partial<T>) {
     super();
-    this.options = {};
     this.state = {
       id: "",
       easing: 0,
@@ -160,7 +157,7 @@ const animator = new Animator({
       prevTime: 0,
       playState: PAUSED,
       duration: 0,
-    };
+    } as T;
     this.setOptions(options);
   }
   /**
@@ -182,7 +179,10 @@ animator.({
       bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]) : curveArray;
     const easingName = easing[EASING_NAME] || "linear";
 
-    this.setState({ easing, easingName });
+    const state = this.state;
+
+    state[EASING] = easing;
+    state[EASING_NAME] = easingName;
     return this;
   }
   /**
@@ -227,7 +227,9 @@ animator.({
         value && this.setDuration(value);
         continue;
       }
-      ((name in this.state ? this.state : this.options) as AnimatorState)[name] = value;
+      if (OPTIONS.indexOf(name as any) > -1) {
+        this.state[name] = value;
+      }
     }
 
     return this;
@@ -381,15 +383,9 @@ animator.getTime() // 10
     this.trigger(TIMEUPDATE, {
       currentTime,
       time: this.getIterationTime(),
-      iterationCount: state.iteration,
+      iterationCount: state[ITERATION],
     });
 
-    return this;
-  }
-  public setState(object: Partial<AnimatorState>) {
-    for (const name in object) {
-      this.state[name] = object[name];
-    }
     return this;
   }
   /**
@@ -413,7 +409,7 @@ animator.getTime();
       const { unit, value } = splitUnit(time);
 
       if (unit === "%") {
-        !this.getDuration() && (this.state.duration = duration);
+        !this.getDuration() && (this.state[DURATION] = duration);
         return toFixed(parseFloat(time) / 100 * duration);
       } else if (unit === ">") {
         return value + THRESHOLD;
@@ -439,7 +435,7 @@ animator.getTime();
     const state = this.state;
     const passIterationCount = Math.floor(iterationCount);
 
-    if (state.iteration < passIterationCount) {
+    if (state[ITERATION] < passIterationCount) {
       /**
 			* The event is fired when an iteration of an animation ends.
 			* @event Animator#iteration
@@ -452,7 +448,7 @@ animator.getTime();
         iterationCount: passIterationCount,
       });
     }
-    state.iteration = iterationCount;
+    state[ITERATION] = iterationCount;
     return this;
   }
   protected calculate() {
@@ -589,7 +585,7 @@ animator.getIterationTime();
 	*/
 
 // tslint:disable-next-line:interface-name
-interface Animator {
+interface Animator<T extends AnimatorState> {
   getIterationTime(): number;
   setIterationTime(time: number): this;
   setDelay(delay: number): this;
