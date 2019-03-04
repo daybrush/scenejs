@@ -182,40 +182,6 @@ describe("Scene Test", () => {
         afterEach(() => {
             this.scene = null;
         });
-        it("should check 'animate' event", done => {
-            const scene = this.scene;
-
-            scene.setItem("scene1", new Scene({
-                item3: {
-                    0: {
-                        a: 3,
-                    },
-                    1: {
-                        a: 5,
-                    },
-                },
-                item4: {
-                    0: {
-                        a: 5,
-                    },
-                    1: {
-                        a: 7,
-                    },
-                },
-            }));
-
-            scene.on("animate", ({ target, time, frames, currentTime }) => {
-                // Then
-                expect(frames.item.get("a")).to.be.equals(1.5);
-                expect(frames.item2.get("a")).to.be.equals(1.5);
-                expect(frames.scene1.item3.get("a")).to.be.equals(4);
-                expect(frames.scene1.item4.get("a")).to.be.equals(6);
-                done();
-            });
-
-            // When
-            scene.setTime(0.5);
-        });
         it(`should check forEach method`, () => {
             const scene = new Scene({
                 ".test": {

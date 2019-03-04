@@ -150,49 +150,50 @@ frame.set("transform", {
 frame.set("transform", "translate", "50px");
   */
   public set(...args: any[]) {
+    const self = this;
     const length = args.length;
     const params = args.slice(0, -1);
     const value = args[length - 1];
 
     if (params[0] in ALIAS) {
-      this._set(ALIAS[params[0]], value);
+      self._set(ALIAS[params[0]], value);
     } else if (length === 2 && isArray(params[0])) {
-      this._set(params[0], value);
+      self._set(params[0], value);
     } else if (isArray(value)) {
-      this._set(params, value);
+      self._set(params, value);
     } else if (isPropertyObject(value)) {
       if (isRole(params)) {
-        this.set(...params, toObject(value));
+        self.set(...params, toObject(value));
       } else {
-        this._set(params, value);
+        self._set(params, value);
       }
     } else if (isObject(value)) {
       for (const name in value) {
-        this.set(...params, name, value[name]);
+        self.set(...params, name, value[name]);
       }
     } else if (isString(value)) {
       if (isRole(params)) {
         const obj = toPropertyObject(value);
 
         if (isObject(obj)) {
-          this.set(...params, obj);
+          self.set(...params, obj);
         }
         return this;
       } else {
         const {styles, length: stylesLength} = splitStyle(value);
 
         for (const name in styles) {
-          this.set(...params, name, styles[name]);
+          self.set(...params, name, styles[name]);
         }
         if (stylesLength) {
           return this;
         }
       }
-      this._set(params, value);
+      self._set(params, value);
     } else {
-      this._set(params, value);
+      self._set(params, value);
     }
-    return this;
+    return self;
   }
   /**
 	* check that has property.

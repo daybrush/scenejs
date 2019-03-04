@@ -19,9 +19,11 @@
     "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
     "tsc": "tsc -p tsconfig.json",
     "build:rollup": "rollup -c && print-sizes ./dist",
-    "deploy": "gh-pages -d ./demo --dest=./ --add",
+    "deploy": "gh-pages -d ./demo --dest=./ --add --remote local",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
+    "demo:start": "demo demo.js -w",
+    "demo:build": "rm -rf ./demo/dist && demo demo.js",
     "release": "npm run build && npm run release:current && npm run release:doc && npm run deploy",
     "release:mkdir": "mkdir -p ./demo/release",
     "release:current": "npm run release:mkdir && rm -rf ./demo/release/$npm_package_version && cp -a ./dist/. ./demo/release/$npm_package_version",
@@ -48,7 +50,10 @@
   },
   "homepage": "https://daybrush.com",
   "devDependencies": {
-    "@daybrush/jsdoc": "^0.3.2",
+    "@daybrush/demo": "0.0.2",
+    "@daybrush/jsdoc": "^0.3.5",
+    "@daybrush/page": "^0.2.0",
+    "@egjs/flicking": "^2.4.3",
     "@types/karma-chai": "^0.1.1",
     "@types/mocha": "^5.2.5",
     "@types/sinon": "^7.0.2",
@@ -79,12 +84,13 @@
     "rollup-plugin-typescript": "^1.0.0",
     "rollup-plugin-uglify": "^6.0.0",
     "rollup-plugin-visualizer": "^0.9.2",
+    "shape-svg": "^0.3.1",
     "sinon": "^4.1.2",
     "tslint": "^5.11.0",
     "typescript": "^2.8.4",
     "typescript-compiler": "^1.4.1-2"
   },
   "dependencies": {
-    "@daybrush/utils": "^0.5.1"
+    "@daybrush/utils": "^0.6.0"
   }
 }

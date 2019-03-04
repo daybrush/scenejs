@@ -118,15 +118,16 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2
     if (!(name in events)) {
       return this;
     }
+
+    const args = data || [];
+
+    !args[0] && (args[0] = {});
     const event = events[name];
+    const target = args[0];
 
-    if (data.length) {
-      const target = data[0];
-
-      target.type = name;
-      target.currentTarget = this;
-      !target.target && (target.target = this);
-    }
+    target.type = name;
+    target.currentTarget = this;
+    !target.target && (target.target = this);
     event.forEach(callback => {
       callback.apply(this, data);
     });

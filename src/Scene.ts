@@ -138,8 +138,18 @@ class Scene extends Animator<SceneState> {
     this.items[name] = item;
     return this;
   }
-  public setTime(time: number | string, isNumber?: boolean, parentEasing?: EasingType) {
-    this.animate(time, isNumber, parentEasing);
+  public setTime(time: number | string, isTick?: boolean, parentEasing?: EasingType) {
+    super.setTime(time, isTick);
+
+    const iterationTime = this.getIterationTime();
+    const items = this.items;
+    const easing = this.getEasing() || parentEasing;
+
+    for (const id in items) {
+      const item = items[id];
+
+      item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, easing);
+    }
     return this;
   }
   /**
@@ -202,7 +212,11 @@ class Scene extends Animator<SceneState> {
   }
   public pause() {
     super.pause();
+
     isPausedCSS(this) && this.pauseCSS();
+    this.forEach(item => {
+      item.pause();
+    });
     return this;
   }
   public endCSS() {
@@ -306,31 +320,11 @@ class Scene extends Animator<SceneState> {
       item.setSelector(isSelector ? name : false);
     });
   }
-  public animate(time: number | string, isNumber: boolean, parentEasing?: EasingType) {
-    super.setTime(time, isNumber);
-
-    const iterationTime = this.getIterationTime();
-    const items = this.items;
-    const easing = this.getEasing() || parentEasing;
-    const frames: IObject<IObject<any> | Frame> = {};
-
-    for (const id in items) {
-      const item = items[id];
-
-      frames[id] = item.animate(Math.max(iterationTime * item.getPlaySpeed() - item.getDelay(), 0), true, easing);
-    }
-    /**
-     * This event is fired when timeupdate and animate.
-     * @param {Number} param.currentTime The total time that the animator is running.
-     * @param {Number} param.time The iteration time during duration that the animator is running.
-     * @param {Frame} param.frames frame of that time.
-     */
-    this.trigger(ANIMATE, {
-      currentTime: this.getTime(),
-      time: iterationTime,
-      frames,
+  public start(delay: number) {
+    super.start(delay);
+    this.forEach(item => {
+      item.start(delay);
     });
-    return frames;
   }
 }
 

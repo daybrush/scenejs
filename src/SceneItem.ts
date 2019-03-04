@@ -21,7 +21,7 @@ import {
   PREFIX, THRESHOLD,
   TIMING_FUNCTION, ALTERNATE, ALTERNATE_REVERSE, NORMAL, INFINITE,
   REVERSE, EASING, FILL_MODE, DIRECTION, ITERATION_COUNT,
-  EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION, DATA_SCENE_ID, PLAY_CSS, SELECTOR, ROLES
+  EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION, DATA_SCENE_ID, PLAY_CSS, SELECTOR, ROLES, CURRENT_TIME
 } from "./consts";
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
@@ -40,7 +40,18 @@ export interface SceneItemOptions extends AnimatorState {
   element: IArrayFormat<AnimateElement> | AnimateElement;
   target: any;
 }
+function getNearTimeIndex(times: number[], time: number) {
+  const length = times.length;
 
+  for (let i = 0; i < length; ++i) {
+    if (times[i] === time) {
+      return [i, i];
+    } else if (times[i] > time) {
+      return [i > 0 ? i - 1 : 0, i];
+    }
+  }
+  return [length - 1, length - 1];
+}
 function makeAnimationProperties(properties: IObject<string | number>) {
   const cssArray = [];
 
@@ -90,18 +101,6 @@ function addTime(times: number[], time: number) {
     }
   }
   times[length] = time;
-}
-function getNearTimeIndex(times: number[], time: number) {
-  const length = times.length;
-
-  for (let i = 0; i < length; ++i) {
-    if (times[i] === time) {
-      return { left: i, right: i };
-    } else if (times[i] > time) {
-      return { left: i === 0 ? 0 : i - 1, right: i };
-    }
-  }
-  return { left: length - 1, right: length - 1 };
 }
 /**
 * manage Frame Keyframes and play keyframes.
@@ -171,7 +170,7 @@ class SceneItem extends Animator<SceneItemState> {
     if (originalDuration > 0) {
       const ratio = duration / originalDuration;
       const { times, items } = this;
-      const obj: IObject<any> = {};
+      const obj: IObject<Frame> = {};
 
       this.times = times.map(time => {
         const time2 = toFixed(time * ratio);
@@ -189,11 +188,11 @@ class SceneItem extends Animator<SceneItemState> {
     const state = this.state;
 
     state.id = id || makeId(!!length);
-    const sceneId = toId(this.getId());
-
     const elements = this.elements;
 
     if (elements.length && !state[SELECTOR]) {
+      const sceneId = toId(this.getId());
+
       state[SELECTOR] = `[${DATA_SCENE_ID}="${sceneId}"]`;
       elements.forEach(element => {
         element.setAttribute(DATA_SCENE_ID, sceneId);
@@ -471,18 +470,13 @@ item.setCSS(0, ["opacity", "width", "height"]);
     this.set(time, fromCSS(this.elements, properties));
     return this;
   }
-  public setTime(time: number | string, isNumber?: boolean, parentEasing?: EasingType) {
-    this.animate(time, isNumber, parentEasing);
-    return this;
-  }
-  public animate(time: number | string, isNumber?: boolean, parentEasing?: EasingType) {
-    super.setTime(time, isNumber);
+  public setTime(time: number | string, isTick?: boolean, parentEasing?: EasingType) {
+    super.setTime(time, isTick);
 
     const iterationTime = this.getIterationTime();
     const easing = this.getEasing() || parentEasing;
     const frame = this.getNowFrame(iterationTime, easing);
     const currentTime = this.getTime();
-    const state = this.state;
 
     /**
 		 * This event is fired when timeupdate and animate.
@@ -497,7 +491,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
       time: iterationTime,
     });
     this.targetFunc && this.targetFunc(frame);
-    return frame;
+    return this;
   }
   /**
 	* update property names used in frames.
@@ -654,7 +648,7 @@ const frame = item.getNowFrame(1.7);
 	*/
   public getNowFrame(time: number, easing?: EasingType, isAccurate?: boolean) {
     const frame = new Frame();
-    const { left, right } = getNearTimeIndex(this.times, time);
+    const [left, right] = getNearTimeIndex(this.times, time);
     let realEasing = this.getEasing() || easing;
     let nameObject = this.names;
 
@@ -677,7 +671,7 @@ const frame = item.getNowFrame(1.7);
     const names = getNames(nameObject, []);
 
     names.forEach(properties => {
-      const value = this._getNowValue(time, properties, left, right, isAccurate, realEasing);
+      const value = this._getNowValue(time, properties, left, right, isAccurate, realEasing, isFixed(properties));
 
       if (isUndefined(value)) {
         return;
@@ -989,7 +983,7 @@ item[PLAY_CSS](false, {
     right: number,
     isAccurate?: boolean,
     easing?: EasingType,
-    usePrevValue: boolean = isFixed(properties),
+    usePrevValue?: boolean,
   ) {
     const times = this.times;
     const length = times.length;

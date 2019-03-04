@@ -125,7 +125,7 @@ export function makeId(selector?: boolean) {
   }
 }
 export function getRealId(item: Scene | SceneItem) {
-  return item.getId() || item.setId().getId();
+  return item.getId() || item.setId(makeId(false)).getId();
 }
 export function toId(text: number | string) {
   return `${text}`.match(/[0-9a-zA-Z]+/g).join("");
