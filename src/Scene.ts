@@ -1,10 +1,11 @@
 import Animator, { AnimatorState, EasingType } from "./Animator";
 import SceneItem, { SceneItemOptions } from "./SceneItem";
-import { ANIMATE, ITERATION_COUNT, EASING, EASING_NAME, INFINITE, DATA_SCENE_ID, PLAY_CSS, SELECTOR } from "./consts";
+import { DATA_SCENE_ID, SELECTOR, DURATION } from "./consts";
 import Frame from "./Frame";
 import { playCSS, exportCSS, getRealId, makeId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import { AnimateElement } from "./types";
+import { timingSafeEqual } from "crypto";
 
 export interface SceneState extends AnimatorState {
   selector: string | boolean;
@@ -165,29 +166,15 @@ class Scene extends Animator<SceneState> {
     }
     return this;
   }
-  public toCSS(duration: number = this.getDuration(), parentState?: Partial<AnimatorState>) {
+  public toCSS(duration: number = this.getDuration(), parentStates: AnimatorState[] = []) {
     const totalDuration = !duration || !isFinite(duration) ? 0 : duration;
     const styles: string[] = [];
-    const state: SceneState = {
-      ...this.state,
-    };
+    const state = this.state;
 
-    if (parentState) {
-      const stateIterations = state[ITERATION_COUNT];
-      const parentIterations = parentState[ITERATION_COUNT];
+    state[DURATION] = this.getDuration();
 
-      if (parentIterations === INFINITE) {
-        state[ITERATION_COUNT] = INFINITE;
-      } else if (stateIterations !== INFINITE) {
-        state[ITERATION_COUNT] = stateIterations * parentIterations;
-      }
-      if (!state[EASING]) {
-        state[EASING] = parentState[EASING];
-        state[EASING_NAME] = parentState[EASING_NAME];
-      }
-    }
     this.forEach(item => {
-      styles.push(item.toCSS(totalDuration, state));
+      styles.push(item.toCSS(totalDuration, parentStates.concat(state)));
     });
     return styles.join("");
   }
@@ -195,10 +182,10 @@ class Scene extends Animator<SceneState> {
    * Export the CSS of the items to the style.
    * @return {Scene} An instance itself
    */
-  public exportCSS(duration?: number, parentState?: Partial<AnimatorState>) {
-    const css = this.toCSS(duration, parentState);
+  public exportCSS(duration?: number, parentStates?: AnimatorState[]) {
+    const css = this.toCSS(duration, parentStates);
 
-    !parentState && exportCSS(getRealId(this), css);
+    (!parentStates || !parentStates.length) && exportCSS(getRealId(this), css);
     return css;
   }
   public append(item: SceneItem | Scene) {
@@ -310,6 +297,14 @@ class Scene extends Animator<SceneState> {
       isSelector && item.setSelector(name);
     }
     this.setOptions(options);
+  }
+  public setOptions(options: Partial<SceneState> = {}): this {
+    super.setOptions(options);
+
+    if (options.selector) {
+      this.state[SELECTOR] = true;
+    }
+    return this;
   }
   public setSelector(target: string | boolean) {
     const state = this.state;

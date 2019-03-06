@@ -5,7 +5,7 @@ import Scene from "./Scene";
 import SceneItem from "./SceneItem";
 import {
   isArray, ANIMATION, ARRAY, OBJECT,
-  PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document, isObject,
+  PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document, isObject, addEvent, removeEvent,
 } from "@daybrush/utils";
 
 export function isPropertyObject(value: any): value is PropertyObject {
@@ -150,9 +150,22 @@ export function playCSS(item: Scene | SceneItem, isExportCSS: boolean, propertie
     setPlayCSS(item, true);
   }
   item.setPlayState(RUNNING);
-  item.trigger(PLAY);
 }
+export function findIndex<T>(arr: T[], callback: (element: T) => any, defaultIndex: number = -1): number {
+  const length = arr.length;
 
+  for (let i = 0; i < length; ++i) {
+    if (callback(arr[i])) {
+      return i;
+    }
+  }
+  return defaultIndex;
+}
+export function find<T>(arr: T[], callback: (element: T) => any, defalutValue?: T): T | undefined {
+  const index = findIndex(arr, callback);
+
+  return index > - 1 ? arr[index] : defalutValue;
+}
 export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
   const duration = item.getDuration();
   const isZeroDuration = !duration || !isFinite(duration);
@@ -163,9 +176,13 @@ export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
       item.finish();
     }
   };
+  const animationstart = () => {
+    item.trigger(PLAY);
+  };
   item.on(ENDED, () => {
-    el.removeEventListener("animationend", animationend);
-    el.removeEventListener("animationiteration", animationiteration);
+    removeEvent(el, "animationend", animationend);
+    removeEvent(el, "animationiteration", animationiteration);
+    removeEvent(el, "animationstart", animationstart);
   });
   const animationiteration = ({elapsedTime}: any) => {
     const currentTime = elapsedTime;
@@ -174,6 +191,7 @@ export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
     state[CURRENT_TIME] = currentTime;
     item.setIteration(iterationCount);
   };
-  el.addEventListener("animationend", animationend);
-  el.addEventListener("animationiteration", animationiteration);
+  addEvent(el, "animationend", animationend);
+  addEvent(el, "animationiteration", animationiteration);
+  addEvent(el, "animationstart", animationstart);
 }

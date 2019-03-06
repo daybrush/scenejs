@@ -14,8 +14,10 @@ import {
   getValueByNames,
   isEndedCSS,
   setPlayCSS,
+  find,
+  findIndex,
 } from "./utils";
-import { dotValue } from "./utils/dot";
+import { dotValue, dotNumber } from "./utils/dot";
 import {
   START_ANIMATION,
   PREFIX, THRESHOLD,
@@ -101,6 +103,51 @@ function addTime(times: number[], time: number) {
     }
   }
   times[length] = time;
+}
+function getEntries(duration, times: number[], states: AnimatorState[]) {
+  let entries = times.map(time => ([time, time]));
+  let nextEntries = [];
+
+  states.forEach(state => {
+    const iterationCount = state[ITERATION_COUNT] as number;
+    const delay = state[DELAY];
+    const playSpeed = state[PLAY_SPEED];
+    const direction = state[DIRECTION];
+    const intCount = Math.ceil(iterationCount);
+    const currentDuration = entries[entries.length - 1][0];
+    const length = entries.length;
+    const lastTime = currentDuration * iterationCount;
+
+    // delay time
+    delay && nextEntries.push([0, entries[0][1]]);
+    for (let i = 0; i < intCount; ++i) {
+      const isReverse =
+        direction === REVERSE || direction === ALTERNATE && i % 2 || direction === ALTERNATE_REVERSE && !(i % 2);
+
+      for (let j = 0; j < length; ++j) {
+        const entry = entries[isReverse ? length - j - 1 : j];
+        const time = entry[1];
+        const currentTime = currentDuration * i + (isReverse ? currentDuration - entry[0] : entry[0]);
+
+        if (currentTime > lastTime) {
+          const prevEntry = entries[isReverse ? length - j + 1 : j - 1];
+          const prevTime = currentDuration * i + (isReverse ? currentDuration - prevEntry[0] : prevEntry[0]);
+          const divideTime = dotNumber(prevEntry[1], time, currentTime - lastTime,  lastTime - prevTime);
+          nextEntries.push([(delay + currentDuration * iterationCount) / playSpeed, divideTime]);
+          break;
+        }
+        nextEntries.push([(delay + currentTime) / playSpeed, time]);
+      }
+    }
+    entries = nextEntries;
+    nextEntries = [];
+  });
+  const lastEntry = entries[entries.length - 1];
+
+  // end delay time
+  lastEntry[0] < duration && entries.push([duration, lastEntry[1]]);
+
+  return entries;
 }
 /**
 * manage Frame Keyframes and play keyframes.
@@ -752,34 +799,41 @@ const frame = item.getNowFrame(1.7);
 item.setCSS(0, ["opacity"]);
 item.setCSS(0, ["opacity", "width", "height"]);
 	*/
-  public toCSS(parentDuration = this.getDuration(), options: Partial<AnimatorState> = {}) {
-    const state = this.state;
-    const selector = state[SELECTOR];
+  public toCSS(parentDuration = this.getDuration(), states: AnimatorState[] = []) {
+    const itemState = this.state;
+    const selector = itemState[SELECTOR];
 
     if (!selector) {
       return "";
     }
+    const originalDuration = this.getDuration();
+    itemState[DURATION] = originalDuration;
+    states.push(itemState);
+
+    const reversedStates = toArray(states).reverse();
     const id = toId(getRealId(this));
-    // infinity or zero
-    const isInfinite = state[ITERATION_COUNT] === INFINITE;
-    const isParent = !isUndefined(options[ITERATION_COUNT]);
-    const isZeroDuration = parentDuration === 0;
-    const duration = isZeroDuration ? this.getDuration() : parentDuration;
-    const playSpeed = (options[PLAY_SPEED] || 1);
-    const delay = ((options[DELAY] || 0) + (isZeroDuration ? state[DELAY] : 0)) / playSpeed;
-    const easingName = (state[EASING] && state[EASING_NAME]) ||
-      (isParent && options[EASING] && options[EASING_NAME]) || state[EASING_NAME];
-    const iterationCount = isInfinite ? INFINITE :
-      (!isZeroDuration && options[ITERATION_COUNT]) || state[ITERATION_COUNT];
-    const fillMode = (options[FILL_MODE] !== "forwards" && options[FILL_MODE]) || state[FILL_MODE];
-    const direction = isInfinite ? state[DIRECTION] : options[DIRECTION] || state[DIRECTION];
+    const superParent = states[0];
+    const infiniteIndex = findIndex(reversedStates, state => {
+      return state[ITERATION_COUNT] === INFINITE || !isFinite(state[DURATION]);
+    }, states.length - 1);
+    const finiteStates = reversedStates.slice(0, infiniteIndex);
+    const duration = parentDuration || finiteStates.reduce((prev, cur) => {
+      return (cur[DELAY] + prev * (cur[ITERATION_COUNT] as number)) / cur[PLAY_SPEED];
+    }, originalDuration);
+    const delay = reversedStates.slice(infiniteIndex).reduce((prev, cur) => {
+      return (prev + cur[DELAY]) / cur[PLAY_SPEED];
+    }, 0);
+    const easingName = find(reversedStates, state => (state[EASING] && state[EASING_NAME]), itemState)[EASING_NAME];
+    const iterationCount = reversedStates[infiniteIndex][ITERATION_COUNT];
+    const fillMode = superParent[FILL_MODE];
+    const direction = reversedStates[infiniteIndex][DIRECTION];
     const cssText = makeAnimationProperties({
       fillMode,
       direction,
       iterationCount,
       delay: `${delay}s`,
       name: `${PREFIX}KEYFRAMES_${id}`,
-      duration: `${duration / playSpeed}s`,
+      duration: `${duration / superParent[PLAY_SPEED]}s`,
       timingFunction: easingName,
     });
     const selectors = splitComma(selector).map(sel => {
@@ -798,10 +852,10 @@ item.setCSS(0, ["opacity", "width", "height"]);
       ${ANIMATION}-play-state: paused;
     }
     @${KEYFRAMES} ${PREFIX}KEYFRAMES_${id}{
-			${this._toKeyframes(duration, !isZeroDuration && isParent).join("\n")}
+			${this._toKeyframes(duration, finiteStates)}
 		}`;
   }
-  public exportCSS(duration?: number, options?: Partial<AnimatorState>) {
+  public exportCSS(duration?: number, options?: AnimatorState[]) {
     if (!this.elements.length) {
       return "";
     }
@@ -886,95 +940,26 @@ item[PLAY_CSS](false, {
     }
     return elements[0];
   }
-  private _toKeyframes(duration = this.getDuration(), isParent: boolean) {
-    const state = this.state;
-    const playSpeed = state[PLAY_SPEED];
-    const fillMode = state[FILL_MODE];
-    const delay = isParent ? state[DELAY] : 0;
-    const direction = isParent ? state[DIRECTION] : NORMAL;
-    const stateIterationCount = state[ITERATION_COUNT];
-    const iterationCount = isParent && stateIterationCount !== INFINITE ? stateIterationCount : 1;
+  private _toKeyframes(duration, states: AnimatorState[]) {
+    const frames: IObject<string> = {};
     const times = this.times.slice();
-    const entries: number[][] = [];
 
     if (!times.length) {
-      return [];
+      return "";
     }
-    const frames: IObject<Frame> = {};
     const originalDuration = this.getDuration();
-    const isShuffle = direction === ALTERNATE || direction === ALTERNATE_REVERSE;
-    const totalDuration = iterationCount * originalDuration;
-
     (!this.getFrame(0)) && times.unshift(0);
     (!this.getFrame(originalDuration)) && times.push(originalDuration);
+    const entries = getEntries(duration, times, states);
 
-    const length = times.length;
-
-    for (let i = 0; i < iterationCount; ++i) {
-      const isReverse = isDirectionReverse(i, iterationCount, direction);
-      const start = i * originalDuration;
-
-      for (let j = 0; j < length; ++j) {
-        if (isShuffle && i !== 0 && j === 0) {
-          // pass duplicate
-          continue;
-        }
-        // shuffle 0 1 0 1
-        // not suffle 0 1 0.001 1 0.001 1
-        // i> 0 || j > 0 || !suffle
-        const threshold = j === 0 && (i > 0 && !isShuffle) ? THRESHOLD : 0;
-        const keyvalue = toFixed(isReverse ? times[length - 1 - j] : times[j]);
-        const keytime = toFixed(start + (isReverse ? originalDuration - keyvalue : keyvalue) + threshold);
-
-        if (totalDuration < keytime) {
-          break;
-        }
-        entries.push([keytime, keyvalue]);
-
-        if (!frames[keyvalue]) {
-          if (!this.hasFrame(keyvalue) || j === 0 || j === length - 1) {
-            frames[keyvalue] = this.getNowFrame(keyvalue);
-          } else {
-            frames[keyvalue] = this.getNowFrame(keyvalue, 0, true);
-          }
-        }
+    return entries.map(([time, keytime]) => {
+      if (!frames[keytime]) {
+        frames[keytime] =
+          (!this.hasFrame(keytime) || keytime === 0 || keytime === originalDuration ?
+          this.getNowFrame(keytime) : this.getNowFrame(keytime, 0, true)).toCSS();
       }
-    }
-    if (!entries.length || entries[entries.length - 1][0] < totalDuration) {
-      // last time === totalDuration
-      const isReverse = isDirectionReverse(iterationCount, iterationCount, direction);
-      const keyvalue = toFixed(originalDuration * (isReverse ? 1 - iterationCount % 1 : iterationCount % 1));
-
-      entries.push([totalDuration, keyvalue]);
-      !frames[keyvalue] && (frames[keyvalue] = this.getNowFrame(keyvalue));
-    }
-
-    const css: IObject<string> = {};
-    const keyframes = [];
-    let lastTime = entries[entries.length - 1][0];
-
-    if (delay) {
-      const isReverse = direction === REVERSE || direction === ALTERNATE_REVERSE;
-      const delayTime = isReverse && (fillMode === "both" || fillMode === "backwards") ? originalDuration : 0;
-
-      !frames[delayTime] && (frames[delayTime] = this.getNowFrame(delayTime));
-      (entries[0][1] !== delayTime) && entries.unshift([-THRESHOLD, delayTime]);
-      entries.unshift([-delay, 0]);
-    }
-    for (const time in frames) {
-      css[time] = frames[time].toCSS();
-    }
-    if ((delay + lastTime) / playSpeed < duration) {
-      entries.push([duration * playSpeed - delay, entries[entries.length - 1][1]]);
-
-      lastTime = entries[entries.length - 1][0];
-    }
-    entries.forEach(([time, keyvalue]) => {
-      const keyTime = (delay + time) / playSpeed / (delay + lastTime) * 100;
-      keyframes.push(`${keyTime}%{${keyTime === 0 ? "" : css[keyvalue]}}`);
-    });
-
-    return keyframes;
+      return `${time / duration * 100}%{${time === 0 ? "" : frames[keytime]}}`;
+    }).join("");
   }
   private _getNowValue(
     time: number,

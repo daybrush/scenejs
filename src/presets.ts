@@ -3,6 +3,7 @@ import { AnimatorState } from "./Animator";
 import SceneItem, { SceneItemOptions } from "./SceneItem";
 import { IObject } from "@daybrush/utils";
 import { TRANSFORM_NAME } from "./consts";
+import Scene, { SceneOptions } from "./Scene";
 
 /**
  * @namespace presets
@@ -16,12 +17,16 @@ export interface PresetState extends AnimatorState {
   [key: string]: any;
 }
 
-export function animate(properties?: IObject<any>, options?: Partial<SceneItemOptions>) {
+export function animate(properties?: IObject<any>, options?: Partial<SceneOptions>) {
+  return new Scene(properties, options).play();
+}
+export function animateItem(properties?: IObject<any>, options?: Partial<SceneItemOptions>) {
   return new SceneItem(properties, options).play();
 }
 /**
  * Use the property to create an effect.
  * @memberof presets
+ * @private
  * @param - property to set effect
  * @param - values of 100%
  * @example
@@ -47,7 +52,7 @@ new SceneItem({
 	duration: 2,
 });
  */
-export function set(property: string | string[], values: any[], options: Partial<AnimatorState>) {
+function set(property: string | string[], values: any[], options: Partial<AnimatorState>) {
   const item = new SceneItem({}, options);
   const length = values.length;
 
