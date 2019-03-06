@@ -11,7 +11,7 @@
   background: #f55;
 }
 </style>
-<script src="../release/latest/scene.js"></script>
+<script src="../dist/scene.js"></script>
 <script>
 var scene = new Scene({
 	".rectangle": {
@@ -37,12 +37,30 @@ var scene = new Scene({
 });
 var item = scene.getItem(".rectangle");
 
-
+scene.on("play", e => {
+	console.log("play");
+});
+scene.on("paused", e => {
+	console.log("paused");
+});
 scene.on("ended", e => {
 	console.log("ended");
 });
 scene.on("iteration", e => {
 	console.log("iteration", e);
 });
-scene.playCSS();
+
+item.on("play", e => {
+	console.log("play.i");
+});
+item.on("ended", e => {
+	console.log("ended.i");
+});
+item.on("paused", e => {
+	console.log("paused.i");
+});
+item.on("iteration", e => {
+	console.log("iteration.i", e);
+});
+scene.play();
 </script>

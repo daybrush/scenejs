@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "1.0.0-beta13",
+  "version": "1.0.0-rc",
   "description": "Javascript Animation Library",
   "main": "dist/scene.common.js",
   "module": "dist/scene.esm.js",
@@ -14,8 +14,9 @@
     "coverage": "karma start --coverage && print-coveralls --sort=desc",
     "test": "karma start",
     "webpack": "webpack",
+    "start": "rollup -c -w",
     "test:chrome": "karma start --chrome",
-    "build": "npm run build:rollup && npm run declaration && npm run release:latest",
+    "build": "npm run build:rollup && npm run declaration",
     "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
     "tsc": "tsc -p tsconfig.json",
     "build:rollup": "rollup -c && print-sizes ./dist",
@@ -24,11 +25,11 @@
     "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
     "demo:start": "demo demo.js -w",
     "demo:build": "rm -rf ./demo/dist && demo demo.js",
-    "release": "npm run build && npm run release:current && npm run release:doc && npm run deploy",
-    "release:mkdir": "mkdir -p ./demo/release",
-    "release:current": "npm run release:mkdir && rm -rf ./demo/release/$npm_package_version && cp -a ./dist/. ./demo/release/$npm_package_version",
-    "release:doc": "npm run doc && cp -a ./doc/. ./demo/release/$npm_package_version/doc &&  cp -a ./doc/. ./demo/release/latest/doc",
-    "release:latest": "npm run release:mkdir && rm -rf ./demo/release/latest && cp -a ./dist/. ./demo/release/latest"
+    "release": "npm run build && npm run release:build && npm run deploy",
+    "release:build": "npm run release:mkdir && npm run doc && npm run release:version && npm run release:latest",
+    "release:mkdir": "mkdir -p ./demo/release && rm -rf ./demo/release/$npm_package_version && rm -rf ./demo/release/latest && mkdir -p ./demo/release/$npm_package_version && mkdir -p ./demo/release/latest",
+    "release:version": "cp -a ./dist/. ./demo/release/$npm_package_version/dist && cp -a ./doc/. ./demo/release/$npm_package_version/doc && cp -a ./example/. ./demo/release/$npm_package_version/example",
+    "release:latest": "cp -a ./dist/. ./demo/release/latest/dist && cp -a ./doc/. ./demo/release/latest/doc && cp -a ./example/. ./demo/release/latest/example"
   },
   "repository": {
     "type": "git",
@@ -77,8 +78,8 @@
     "mocha": "^4.0.1",
     "print-coveralls": "^1.2.2",
     "print-sizes": "0.0.3",
-    "rollup": "^0.66.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup": "^1.4.1",
+    "rollup-plugin-node-resolve": "^4.0.1",
     "rollup-plugin-prototype-minify": "^1.0.4",
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-typescript": "^1.0.0",
@@ -91,6 +92,6 @@
     "typescript-compiler": "^1.4.1-2"
   },
   "dependencies": {
-    "@daybrush/utils": "^0.6.0"
+    "@daybrush/utils": "^0.7.0-rc"
   }
 }
