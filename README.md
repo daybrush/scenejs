@@ -34,7 +34,7 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 $ npm install scenejs
 ```
 ```js
-<script src="//daybrush.github.io/scenejs/release/latest/scene.min.js"></script>
+<script src="//daybrush.github.io/scenejs/release/latest/dist/scene.min.js"></script>
 ```
 
 ## Components

@@ -28,7 +28,7 @@ import {
 import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
   KEYFRAMES, requestAnimationFrame, isFunction,
-  IObject, $, splitComma, toArray, isString, IArrayFormat } from "@daybrush/utils";
+  IObject, $, splitComma, toArray, isString, IArrayFormat, TRANSFORM } from "@daybrush/utils";
 import { NameType, RoleObject, AnimateElement } from "./types";
 
 export interface SceneItemState extends AnimatorState {
@@ -104,7 +104,12 @@ function addTime(times: number[], time: number) {
   }
   times[length] = time;
 }
-function getEntries(duration, times: number[], states: AnimatorState[]) {
+function addEntry(entries: number[][], time: number, keytime: number) {
+  const prevEntry = entries[entries.length - 1];
+
+  (!prevEntry || prevEntry[0] !== time || prevEntry[1] !== keytime) && entries.push([toFixed(time), toFixed(keytime)]);
+}
+export function getEntries(times: number[], states: AnimatorState[]) {
   let entries = times.map(time => ([time, time]));
   let nextEntries = [];
 
@@ -118,8 +123,6 @@ function getEntries(duration, times: number[], states: AnimatorState[]) {
     const length = entries.length;
     const lastTime = currentDuration * iterationCount;
 
-    // delay time
-    delay && nextEntries.push([0, entries[0][1]]);
     for (let i = 0; i < intCount; ++i) {
       const isReverse =
         direction === REVERSE || direction === ALTERNATE && i % 2 || direction === ALTERNATE_REVERSE && !(i % 2);
@@ -128,24 +131,28 @@ function getEntries(duration, times: number[], states: AnimatorState[]) {
         const entry = entries[isReverse ? length - j - 1 : j];
         const time = entry[1];
         const currentTime = currentDuration * i + (isReverse ? currentDuration - entry[0] : entry[0]);
+        const prevEntry = entries[isReverse ? length - j : j - 1];
 
         if (currentTime > lastTime) {
-          const prevEntry = entries[isReverse ? length - j + 1 : j - 1];
-          const prevTime = currentDuration * i + (isReverse ? currentDuration - prevEntry[0] : prevEntry[0]);
-          const divideTime = dotNumber(prevEntry[1], time, currentTime - lastTime,  lastTime - prevTime);
-          nextEntries.push([(delay + currentDuration * iterationCount) / playSpeed, divideTime]);
+          if (j !== 0) {
+            const prevTime = currentDuration * i + (isReverse ? currentDuration - prevEntry[0] : prevEntry[0]);
+            const divideTime = dotNumber(prevEntry[1], time, lastTime - prevTime, currentTime - lastTime);
+
+            addEntry(nextEntries, (delay + currentDuration * iterationCount) / playSpeed, divideTime);
+          }
+          break;
+        } else if (currentTime === lastTime && nextEntries[nextEntries.length - 1][0] === lastTime + delay) {
           break;
         }
-        nextEntries.push([(delay + currentTime) / playSpeed, time]);
+        addEntry(nextEntries, (delay + currentTime) / playSpeed, time);
       }
     }
+    // delay time
+    delay && nextEntries.unshift([0, nextEntries[0][1]]);
+
     entries = nextEntries;
     nextEntries = [];
   });
-  const lastEntry = entries[entries.length - 1];
-
-  // end delay time
-  lastEntry[0] < duration && entries.push([duration, lastEntry[1]]);
 
   return entries;
 }
@@ -940,7 +947,7 @@ item[PLAY_CSS](false, {
     }
     return elements[0];
   }
-  private _toKeyframes(duration, states: AnimatorState[]) {
+  private _toKeyframes(duration: number, states: AnimatorState[]) {
     const frames: IObject<string> = {};
     const times = this.times.slice();
 
@@ -950,7 +957,12 @@ item[PLAY_CSS](false, {
     const originalDuration = this.getDuration();
     (!this.getFrame(0)) && times.unshift(0);
     (!this.getFrame(originalDuration)) && times.push(originalDuration);
-    const entries = getEntries(duration, times, states);
+    const entries = getEntries(times, states);
+    const lastEntry = entries[entries.length - 1];
+
+    // end delay time
+    lastEntry[0] < duration && addEntry(entries, duration, lastEntry[1]);
+    let prevTime = -1;
 
     return entries.map(([time, keytime]) => {
       if (!frames[keytime]) {
@@ -958,7 +970,14 @@ item[PLAY_CSS](false, {
           (!this.hasFrame(keytime) || keytime === 0 || keytime === originalDuration ?
           this.getNowFrame(keytime) : this.getNowFrame(keytime, 0, true)).toCSS();
       }
-      return `${time / duration * 100}%{${time === 0 ? "" : frames[keytime]}}`;
+
+      let frameTime = time / duration * 100;
+
+      if (frameTime - prevTime < THRESHOLD) {
+        frameTime += THRESHOLD;
+      }
+      prevTime = frameTime;
+      return `${frameTime}%{${time === 0 ? "" : frames[keytime]}}`;
     }).join("");
   }
   private _getNowValue(

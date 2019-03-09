@@ -1,11 +1,9 @@
 import Animator, { AnimatorState, EasingType } from "./Animator";
 import SceneItem, { SceneItemOptions } from "./SceneItem";
 import { DATA_SCENE_ID, SELECTOR, DURATION } from "./consts";
-import Frame from "./Frame";
 import { playCSS, exportCSS, getRealId, makeId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import { AnimateElement } from "./types";
-import { timingSafeEqual } from "crypto";
 
 export interface SceneState extends AnimatorState {
   selector: string | boolean;
