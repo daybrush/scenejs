@@ -1,4 +1,4 @@
-<script src="../release/latest/scene.js"></script>
+<script src="../dist/scene.js"></script>
 
 <style>
 body {
@@ -262,16 +262,16 @@ const customTimingFunction = [0.48, 0.01, 0.25, 1];
 const scene1 = new Scene({
 	"#sun" : {
 		0 : {"border-width" : "100px", "transform" : "scale(0, 0)"},
-		0.5 : {"border-width" : "0px", "transform" : "scale(1, 1)"}
+		1 : {"border-width" : "0px", "transform" : "scale(1, 1)"}
 	},
 	"#sun2" : {
 		0 : {"transform" : "scale(0, 0)", "border-width" : "100px"},
-		0.45 : {"transform": "scale(0.9, 0.9)", "border-width": "0px"}
+		0.9 : {"transform": "scale(0.9, 0.9)", "border-width": "0px"}
 	}
 }, {
 	easing : customTimingFunction,
 	selector: true,
-	playSpeed: 0.5
+	playSpeed: 1,
 });
 
 
@@ -281,7 +281,7 @@ for (let i = 1; i <= 8; ++i) {
 		selector: true
 	}).set({
 		0 : {transform : {rotate: i * 45 + "deg", translate : "40px, 0px", scale : "0,1"}, width: "120px"},
-		0.9 : {transform : {translate : "140px, 0px", scale : "1,1"}, width: "0px"},
+		1.8 : {transform : {translate : "140px, 0px", scale : "1,1"}, width: "0px"},
 	});
 }
 
@@ -310,7 +310,7 @@ scene2.newItem("#stick", {easing: ease, selector: true}).set({
 	[2 + scene2_delay] : "transform: rotate(630deg), scale(1,1)", // t = 2 + delay
 	[2 + scene2_delay + scene2_delay / 2] : "transform: scale(1,0)", // t = 2 + delay + delay / 2
 });
-scene2.on("play", function() {
+scene2.on("play", function(e) {
 	text.innerHTML = "2";
 });
 
@@ -425,17 +425,13 @@ scene6.on("play", function() {
 	text.innerHTML = "6";
 });
 
-scene1.setTime(0);
-scene2.setTime(0);
-scene3.setTime(0);
-scene4.setTime(0);
-scene5.setTime(0);
-scene6.setTime(0);
+// scene1.setIterationCount("infinite");
 
+scene1.append(scene2);
+scene1.append(scene3);
+scene1.append(scene4);
+scene1.append(scene5);
+scene1.append(scene6);
 scene1.play();
-scene1.setNext(scene2);
-scene2.setNext(scene3);
-scene3.setNext(scene4);
-scene4.setNext(scene5);
-scene5.setNext(scene6);
+
 </script>

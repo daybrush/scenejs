@@ -8,6 +8,7 @@
 		"forin": false,
 		"no-console": false,
 		"no-any": false,
+		"interface-name": false,
 		"indent": [
 			true,
 			"spaces",

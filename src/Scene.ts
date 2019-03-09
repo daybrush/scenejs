@@ -1,15 +1,22 @@
-import Animator, { IState, EasingType } from "./Animator";
-import SceneItem from "./SceneItem";
-import { ANIMATE, ITERATION_COUNT, EASING, EASING_NAME, INFINITE, DATA_SCENE_ID, PLAY_CSS, SELECTOR } from "./consts";
-import Frame from "./Frame";
-import { playCSS, exportCSS, getRealId, makeId, isPausedCSS } from "./utils";
-import { isFunction, IS_WINDOW, IObject, $ } from "@daybrush/utils";
+import Animator, { AnimatorState, EasingType } from "./Animator";
+import SceneItem, { SceneItemOptions } from "./SceneItem";
+import { DATA_SCENE_ID, SELECTOR, DURATION } from "./consts";
+import { playCSS, exportCSS, getRealId, makeId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
+import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
+import { AnimateElement } from "./types";
 
+export interface SceneState extends AnimatorState {
+  selector: string | boolean;
+  playCSS: boolean;
+}
+export interface SceneOptions extends AnimatorState {
+  selector: string | boolean;
+}
 /**
  * manage sceneItems and play Scene.
  * @sort 1
  */
-class Scene extends Animator {
+class Scene extends Animator<SceneState> {
   /**
   * version info
   * @type {string}
@@ -42,7 +49,7 @@ class Scene extends Animator {
     }
   });
     */
-  constructor(properties?: IObject<any>, options?: IState) {
+  constructor(properties?: IObject<any>, options?: Partial<SceneOptions>) {
     super();
     this.items = {};
     this.load(properties, options);
@@ -107,7 +114,7 @@ class Scene extends Animator {
   * @example
   const item = scene.newItem("item1")
   */
-  public newItem(name: number | string, options: IState = {}): SceneItem {
+  public newItem(name: number | string, options: Partial<SceneItemOptions> = {}): SceneItem {
     if (name in this.items) {
       return;
     }
@@ -130,8 +137,18 @@ class Scene extends Animator {
     this.items[name] = item;
     return this;
   }
-  public setTime(time: number | string, isNumber?: boolean, parentEasing?: EasingType) {
-    this.animate(time, isNumber, parentEasing);
+  public setTime(time: number | string, isTick?: boolean, parentEasing?: EasingType) {
+    super.setTime(time, isTick);
+
+    const iterationTime = this.getIterationTime();
+    const items = this.items;
+    const easing = this.getEasing() || parentEasing;
+
+    for (const id in items) {
+      const item = items[id];
+
+      item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, easing);
+    }
     return this;
   }
   /**
@@ -147,33 +164,15 @@ class Scene extends Animator {
     }
     return this;
   }
-  public toCSS(duration: number = this.getDuration(), parentState?: IState) {
-    let totalDuration = parentState ? this.getDuration() : duration;
-
-    if (!totalDuration || !isFinite(totalDuration)) {
-      totalDuration = 0;
-    }
+  public toCSS(duration: number = this.getDuration(), parentStates: AnimatorState[] = []) {
+    const totalDuration = !duration || !isFinite(duration) ? 0 : duration;
     const styles: string[] = [];
-    const state = {
-      ...this.state,
-    };
+    const state = this.state;
 
-    if (parentState) {
-      const stateIterations = state[ITERATION_COUNT];
-      const parentIterations = parentState[ITERATION_COUNT];
+    state[DURATION] = this.getDuration();
 
-      if (parentIterations === INFINITE) {
-        state[ITERATION_COUNT] = INFINITE;
-      } else if (stateIterations !== INFINITE) {
-        state[ITERATION_COUNT] = stateIterations * parentIterations;
-      }
-      if (!state[EASING]) {
-        state[EASING] = parentState[EASING];
-        state[EASING_NAME] = parentState[EASING_NAME];
-      }
-    }
     this.forEach(item => {
-      styles.push(item.toCSS(totalDuration, state));
+      styles.push(item.toCSS(totalDuration, parentStates.concat(state)));
     });
     return styles.join("");
   }
@@ -181,10 +180,10 @@ class Scene extends Animator {
    * Export the CSS of the items to the style.
    * @return {Scene} An instance itself
    */
-  public exportCSS(duration?: number, parentState?: IState) {
-    const css = this.toCSS(duration, parentState);
+  public exportCSS(duration?: number, parentStates?: AnimatorState[]) {
+    const css = this.toCSS(duration, parentStates);
 
-    !parentState && exportCSS(getRealId(this), css);
+    (!parentStates || !parentStates.length) && exportCSS(getRealId(this), css);
     return css;
   }
   public append(item: SceneItem | Scene) {
@@ -198,7 +197,11 @@ class Scene extends Animator {
   }
   public pause() {
     super.pause();
+
     isPausedCSS(this) && this.pauseCSS();
+    this.forEach(item => {
+      item.pause();
+    });
     return this;
   }
   public endCSS() {
@@ -207,16 +210,16 @@ class Scene extends Animator {
     for (const id in items) {
       items[id].endCSS();
     }
-    this.setState({ playCSS: false });
+    setPlayCSS(this, false);
   }
   public end() {
-    !this.isEnded() && this.state[PLAY_CSS] && this.endCSS();
+    isEndedCSS(this) && this.endCSS();
     super.end();
     return this;
   }
   public addPlayClass(isPaused: boolean, properties = {}) {
     const items = this.items;
-    let animtionElement: HTMLElement;
+    let animtionElement: AnimateElement;
 
     for (const id in items) {
       const el = items[id].addPlayClass(isPaused, properties);
@@ -257,7 +260,7 @@ class Scene extends Animator {
     if (!properties) {
       return this;
     }
-    const isSelector = options && options[SELECTOR] || this.options[SELECTOR];
+    const isSelector = options && options[SELECTOR] || this.state[SELECTOR];
 
     for (const name in properties) {
       if (name === "options") {
@@ -270,7 +273,7 @@ class Scene extends Animator {
         this.setItem(name, object);
         item = object;
       } else if (isFunction(object) && isSelector) {
-        const elements = IS_WINDOW ? $(name, true) : ([] as Element[]);
+        const elements = IS_WINDOW ? $(name, true) as IArrayFormat<AnimateElement> : ([] as AnimateElement[]);
         const length = elements.length;
         const scene = new Scene();
 
@@ -293,38 +296,28 @@ class Scene extends Animator {
     }
     this.setOptions(options);
   }
-  public setSelector(_: string | boolean) {
-    const isSelector = this.options[SELECTOR];
+  public setOptions(options: Partial<SceneState> = {}): this {
+    super.setOptions(options);
 
+    if (options.selector) {
+      this.state[SELECTOR] = true;
+    }
+    return this;
+  }
+  public setSelector(target: string | boolean) {
+    const state = this.state;
+    const isSelector = target || state[SELECTOR];
+
+    state[SELECTOR] = target;
     this.forEach((item, name) => {
       item.setSelector(isSelector ? name : false);
     });
   }
-  public animate(time: number | string, isNumber: boolean, parentEasing?: EasingType) {
-    super.setTime(time, isNumber);
-
-    const iterationTime = this.getIterationTime();
-    const items = this.items;
-    const easing = this.getEasing() || parentEasing;
-    const frames: IObject<IObject<any> | Frame> = {};
-
-    for (const id in items) {
-      const item = items[id];
-
-      frames[id] = item.animate(Math.max(iterationTime * item.getPlaySpeed() - item.getDelay(), 0), true, easing);
-    }
-    /**
-     * This event is fired when timeupdate and animate.
-     * @param {Number} param.currentTime The total time that the animator is running.
-     * @param {Number} param.time The iteration time during duration that the animator is running.
-     * @param {Frame} param.frames frame of that time.
-     */
-    this.trigger(ANIMATE, {
-      currentTime: this.getTime(),
-      time: iterationTime,
-      frames,
+  public start(delay: number) {
+    super.start(delay);
+    this.forEach(item => {
+      item.start(delay);
     });
-    return frames;
   }
 }
 

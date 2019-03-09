@@ -3,7 +3,7 @@ import PropertyObject from "../PropertyObject";
 import { EasingType } from "../Animator";
 import { getType } from "../utils";
 import { toPropertyObject } from "./property";
-import { isArray, splitUnit, PROPERTY, FUNCTION } from "@daybrush/utils";
+import { splitUnit, PROPERTY, FUNCTION, ARRAY } from "@daybrush/utils";
 
 function dotArray(a1: any[], a2: any, b1: number, b2: number): any {
   const length = a2.length;
@@ -104,7 +104,7 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
   } else if (type1 === type2) {
     if (type1 === PROPERTY) {
       return dotObject(a1, a2, b1, b2);
-    } else if (type1 === "array") {
+    } else if (type1 === ARRAY) {
       return dotArray(a1, a2, b1, b2);
     } else if (type1 !== "value") {
       return a1;
@@ -112,10 +112,6 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
   } else {
     return a1;
   }
-  // split number and unit of the value.
-  const r1 = b1 / (b1 + b2);
-  const r2 = 1 - r1;
-
   const v1 = splitUnit(`${a1}`);
   const v2 = splitUnit(`${a2}`);
   let v;
@@ -124,7 +120,7 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
   if (isNaN(v1.value) || isNaN(v2.value)) {
     return a1;
   } else {
-    v = v1.value * r2 + v2.value * r1;
+    v = dotNumber(v1.value, v2.value, b1, b2);
   }
   const prefix = v1.prefix || v2.prefix;
   const unit = v1.unit || v2.unit;
@@ -134,7 +130,9 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
   }
   return prefix + v + unit;
 }
-
+export function dotNumber(a1: number, a2: number, b1: number, b2: number) {
+  return (a1 * b2 + a2 * b1) / (b1 + b2);
+}
 export function dotValue(
   time: number,
   prevTime: number,

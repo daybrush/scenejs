@@ -5,7 +5,7 @@ import Scene from "./Scene";
 import SceneItem from "./SceneItem";
 import {
   isArray, ANIMATION, ARRAY, OBJECT,
-  PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document,
+  PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document, isObject, addEvent, removeEvent,
 } from "@daybrush/utils";
 
 export function isPropertyObject(value: any): value is PropertyObject {
@@ -47,6 +47,18 @@ export function getType(value: any) {
 export function toFixed(num: number) {
   return Math.round(num * MAXIMUM) / MAXIMUM;
 }
+export function getValueByNames(names: Array<string | number>,
+                                properties: IObject<any>, length: number = names.length) {
+  let value = properties;
+
+  for (let i = 0; i < length; ++i) {
+    if (!isObject(value)) {
+      return undefined;
+    }
+    value = value[names[i]];
+  }
+  return value;
+}
 export function isInProperties(roles: IObject<any>, args: string[], isCheckTrue?: boolean) {
   const length = args.length;
   let role: any = roles;
@@ -77,9 +89,16 @@ export interface IterationInterface {
   iterationCount: number;
   elapsedTime: number;
 }
+export function setPlayCSS(item: Scene | SceneItem, isActivate: boolean) {
+  item.state[PLAY_CSS] = isActivate;
+}
 export function isPausedCSS(item: Scene | SceneItem) {
   return item.state[PLAY_CSS] && item.isPaused();
 }
+export function isEndedCSS(item: Scene | SceneItem) {
+  return !item.isEnded() && item.state[PLAY_CSS];
+}
+
 export function exportCSS(id: number | string, css: string) {
   const styleId = `${PREFIX}STYLE_${toId(id)}`;
   const styleElement: HTMLElement = $(`#${styleId}`);
@@ -106,7 +125,7 @@ export function makeId(selector?: boolean) {
   }
 }
 export function getRealId(item: Scene | SceneItem) {
-  return item.getId() || item.setId().getId();
+  return item.getId() || item.setId(makeId(false)).getId();
 }
 export function toId(text: number | string) {
   return `${text}`.match(/[0-9a-zA-Z]+/g).join("");
@@ -127,34 +146,52 @@ export function playCSS(item: Scene | SceneItem, isExportCSS: boolean, propertie
     if (!el) {
       return;
     }
-    !item.state.peusdo && addAnimationEvent(item, el);
-    item.setState({ playCSS: true });
+    addAnimationEvent(item, el);
+    setPlayCSS(item, true);
   }
   item.setPlayState(RUNNING);
-  item.trigger(PLAY);
 }
+export function findIndex<T>(arr: T[], callback: (element: T) => any, defaultIndex: number = -1): number {
+  const length = arr.length;
 
-export function addAnimationEvent(item: Scene | SceneItem, el: HTMLElement) {
+  for (let i = 0; i < length; ++i) {
+    if (callback(arr[i])) {
+      return i;
+    }
+  }
+  return defaultIndex;
+}
+export function find<T>(arr: T[], callback: (element: T) => any, defalutValue?: T): T | undefined {
+  const index = findIndex(arr, callback);
+
+  return index > - 1 ? arr[index] : defalutValue;
+}
+export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
   const duration = item.getDuration();
   const isZeroDuration = !duration || !isFinite(duration);
-
+  const state = item.state;
   const animationend = () => {
     if (!isZeroDuration) {
-      item.setState({ playCSS: false });
+      setPlayCSS(item, false);
       item.finish();
     }
   };
+  const animationstart = () => {
+    item.trigger(PLAY);
+  };
   item.on(ENDED, () => {
-    el.removeEventListener("animationend", animationend);
-    el.removeEventListener("animationiteration", animationiteration);
+    removeEvent(el, "animationend", animationend);
+    removeEvent(el, "animationiteration", animationiteration);
+    removeEvent(el, "animationstart", animationstart);
   });
   const animationiteration = ({elapsedTime}: any) => {
     const currentTime = elapsedTime;
     const iterationCount = isZeroDuration ? 0 : (currentTime / duration);
 
-    item.state[CURRENT_TIME] = currentTime;
+    state[CURRENT_TIME] = currentTime;
     item.setIteration(iterationCount);
   };
-  el.addEventListener("animationend", animationend);
-  el.addEventListener("animationiteration", animationiteration);
+  addEvent(el, "animationend", animationend);
+  addEvent(el, "animationiteration", animationiteration);
+  addEvent(el, "animationstart", animationstart);
 }

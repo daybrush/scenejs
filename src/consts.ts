@@ -1,10 +1,10 @@
 import { IObject } from "@daybrush/utils";
-import { IRole, OptionType, EventType } from "./types";
+import { RoleObject, OptionType, EventType } from "./types";
 
 export const PREFIX = "__SCENEJS_";
 export const DATA_SCENE_ID = "data-scene-id";
 export const TIMING_FUNCTION = "animation-timing-function";
-export const ROLES: IRole = { transform: {}, filter: {}, attribute: {} };
+export const ROLES: RoleObject = { transform: {}, filter: {}, attribute: {} };
 export const ALIAS: IObject<string[]> = { easing: [TIMING_FUNCTION] };
 export const FIXED = { [TIMING_FUNCTION]: true, contents: true };
 export const MAXIMUM = 1000000;

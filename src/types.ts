@@ -1,7 +1,7 @@
 /**
  * @typedef
  */
-export type Role = true | IRole;
+export type Role = true | RoleObject;
 
 /**
  * @typedef
@@ -11,16 +11,17 @@ export type ElementsType = HTMLElement | HTMLElement[] | NodeListOf<HTMLElement>
  * @typedef
  */
 export type CallbackType<T = any> = (...args: any[]) => T;
+
 /**
  * @typedef
  */
-export interface IEventParamter {
+export interface EventParameter {
   [name: string]: CallbackType | CallbackType[];
 }
 /**
  * @typedef
  */
-export interface IRole {
+export interface RoleObject {
   [role: string]: Role;
 }
 /**
@@ -35,3 +36,9 @@ export type OptionType = ["duration", "fillMode", "direction", "iterationCount",
  * @typedef
  */
 export type EventType = ["paused", "ended", "timeupdate", "animate", "play", "iteration"];
+
+/**
+ * @typedef
+ */
+export interface AnimateElement extends Element, ElementCSSInlineStyle {
+}

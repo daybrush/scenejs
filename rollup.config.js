@@ -42,7 +42,11 @@ const defaultConfig = {
     }),
     PrototypeMinify({ sourcemap: true })
   ],
+  external: ["@daybrush/utils"],
   output: {
+    globals: {
+      "@daybrush/utils" : "utils",
+    },
     banner,
     format: "es",
     freeze: false,
@@ -67,7 +71,9 @@ export default [
   }, {
     input: 'src/index.umd.ts',
     plugins: [resolve()],
+    external: undefined,
     output: {
+      globals: undefined,
       format: "umd",
       name: "Scene",
       exports: "default",
@@ -80,7 +86,9 @@ export default [
       sourcemap: true,
       title: 'scene.min.js'
     })],
+    external: undefined,
     output: {
+      globals: undefined,
       format: "umd",
       name: "Scene",
       exports: "default",

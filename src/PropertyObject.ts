@@ -1,4 +1,4 @@
-import { OBJECT, STRING } from "@daybrush/utils";
+import { isString } from "@daybrush/utils";
 
 /**
  * @typedef
@@ -33,16 +33,7 @@ var obj = new PropertyObject([100,100,100,0.5], {
 	 */
   constructor(value: string | any[], options?: Partial<IPropertyObject>) {
     options && this.setOptions(options);
-
-    const type = typeof value;
-
-    if (type === STRING) {
-      this.value = (value as string).split(this.separator);
-    } else if (type === OBJECT) {
-      this.value = (value as any[]);
-    } else {
-      this.value = [value];
-    }
+    this.value = isString(value) ? value.split(this.separator) : value;
   }
   public setOptions(newOptions: Partial<IPropertyObject>) {
     for (const name in newOptions) {

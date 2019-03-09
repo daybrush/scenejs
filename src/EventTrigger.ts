@@ -1,5 +1,5 @@
 import { isObject, isArray } from "@daybrush/utils";
-import { CallbackType, IEventParamter } from "./types";
+import { CallbackType, EventParameter } from "./types";
 
 /**
 * attach and trigger event handlers.
@@ -23,7 +23,7 @@ et.trigger("call", {param: 1});
   constructor() {
     this.events = {};
   }
-  public _on(name: string | IEventParamter, callback?: CallbackType | CallbackType[], once?: boolean) {
+  public _on(name: string | EventParameter, callback?: CallbackType | CallbackType[], once?: boolean) {
     const events = this.events;
 
     if (isObject(name)) {
@@ -61,7 +61,7 @@ target.on("animate", function() {
 target.trigger("animate");
 
   */
-  public on(name: string | IEventParamter, callback?: CallbackType | CallbackType[]) {
+  public on(name: string | EventParameter, callback?: CallbackType | CallbackType[]) {
     this._on(name, callback);
     return this;
   }
@@ -118,22 +118,23 @@ target.trigger("animate", [1, 2]); // log => "animate", 1, 2
     if (!(name in events)) {
       return this;
     }
+
+    const args = data || [];
+
+    !args[0] && (args[0] = {});
     const event = events[name];
+    const target = args[0];
 
-    if (data.length) {
-      const target = data[0];
-
-      target.type = name;
-      target.currentTarget = this;
-      !target.target && (target.target = this);
-    }
+    target.type = name;
+    target.currentTarget = this;
+    !target.target && (target.target = this);
     event.forEach(callback => {
       callback.apply(this, data);
     });
 
     return this;
   }
-  public once(name: string | IEventParamter, callback?: CallbackType | CallbackType[]) {
+  public once(name: string | EventParameter, callback?: CallbackType | CallbackType[]) {
     this._on(name, callback, true);
     return this;
   }
