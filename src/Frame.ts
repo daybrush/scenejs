@@ -31,7 +31,7 @@ function merge(to: IObject<any>, from: IObject<any>, toValue = false) {
     if (type === PROPERTY) {
       to[name] = toValue ? value.toValue() : value.clone();
     } else if (type === FUNCTION) {
-      to[name] = toValue ? getValue([name], value()) : value;
+      to[name] = toValue ? getValue([name], value) : value;
     } else if (type === ARRAY) {
       to[name] = value.slice();
     } else if (type === OBJECT) {
