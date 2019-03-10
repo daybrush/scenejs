@@ -4,8 +4,8 @@ import Frame from "./Frame";
 import Animator from "./Animator";
 
 export { SceneItem, Frame, Animator };
-export { bezier, EASE_IN_OUT, EASE_IN, EASE_OUT, EASE, LINEAR, steps, STEP_START, STEP_END } from "./easing";
-export { transition, wipeIn, wipeOut, fadeIn, fadeOut, blink, zoomIn, zoomOut, animate} from "./presets";
+export * from "./easing";
+export * from "./presets";
 export { OPTIONS, EVENTS } from "./consts";
 export { setRole, setAlias } from "./utils";
 export { Scene as default };
