@@ -394,9 +394,22 @@ describe("SceneItem Test", () => {
         });
         it("should check 'clone' method", () => {
             // Given
+            /*
+            item = new SceneItem({
+                0: {
+                    a: 1,
+                    display: "block",
+                },
+                0.5: {
+                    a: 1.5,
+                },
+                1: {
+                    display: "none",
+                    a: 2,
+                },
+            });
+            */
             const item1 = item.clone();
-            const item2 = item.clone({ delay: 1 });
-            // When
 
             // Then
             expect(item.getDuration()).to.be.equals(1);
@@ -410,11 +423,7 @@ describe("SceneItem Test", () => {
             expect(item1.getNowFrame(0).get("a")).to.be.equal(1);
             expect(item1.getNowFrame(1).get("a")).to.be.equal(2);
             expect(item1.getNowFrame(0.5).get("a")).to.be.equal(1.5);
-            expect(item2.get(0, "a")).to.be.equal(1);
-            expect(item2.get(1, "a")).to.be.equal(2);
-            expect(item2.get("50%", "a")).to.be.equal(1.5);
             expect(item1.getDelay()).to.be.equal(0);
-            expect(item2.getDelay()).to.be.equal(1);
             expect(item.constructor).to.be.equals(item1.constructor);
         });
         it(`should check 'mergeFrame' method`, () => {

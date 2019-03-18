@@ -178,6 +178,7 @@ class SceneItem extends Animator<SceneItemState> {
   public items: IObject<Frame> = {};
   public names: RoleObject = {};
   public elements: AnimateElement[] = [];
+  private needUpdate: boolean = false;
   private target: any;
   private targetFunc: (frame: Frame) => void;
 
@@ -313,9 +314,9 @@ console.log(item.get(0, "a")); // "b"
         const frame = this.newFrame(time);
 
         frame.set(...args);
-        this.updateFrame(frame);
       }
     }
+    this.needUpdate = true;
     return this;
   }
   /**
@@ -344,7 +345,7 @@ item.remove(0, "a");
     const frame = this.getFrame(time);
 
     frame && frame.remove(...args);
-    this.update();
+    this.needUpdate = true;
     return this;
   }
   /**
@@ -554,26 +555,11 @@ item.setCSS(0, ["opacity", "width", "height"]);
 item.update();
 	*/
   public update() {
-    this.forEach(frame => {
-      this.updateFrame(frame);
-    });
-    return this;
-  }
-  /**
-	* update property names used in frame.
-	* @param {Frame} [frame] - frame of that time.
-	* @return {SceneItem} An instance itself
-	* @example
-item.updateFrame(time, this.get(time));
-	*/
-  public updateFrame(frame: Frame) {
-    if (!frame) {
-      return this;
-    }
-    const properties = frame.properties;
     const names = this.names;
-
-    updateFrame(names, properties);
+    this.forEach(frame => {
+      updateFrame(names, frame.properties);
+    });
+    this.needUpdate = false;
     return this;
   }
   /**
@@ -605,7 +591,7 @@ item.setFrame(time, frame);
 
     this.items[realTime] = frame;
     addTime(this.times, realTime);
-    this.update();
+    this.needUpdate = true;
     return this;
   }
   /**
@@ -640,6 +626,7 @@ if (item.hasFrame(10)) {
   item.hasName(["transform", "translate"]); // true or not
 	*/
   public hasName(args: string[]) {
+    this.needUpdate && this.update();
     return isInProperties(this.names, args, true);
   }
   /**
@@ -659,7 +646,6 @@ item.removeFrame(time);
     if (index > -1) {
       this.times.splice(index, 1);
     }
-    this.update();
     return this;
   }
   /**
@@ -701,6 +687,7 @@ let item = new SceneItem({
 const frame = item.getNowFrame(1.7);
 	*/
   public getNowFrame(time: number, easing?: EasingType, isAccurate?: boolean) {
+    this.needUpdate && this.update();
     const frame = new Frame();
     const [left, right] = getNearTimeIndex(this.times, time);
     let realEasing = this.getEasing() || easing;
@@ -757,16 +744,14 @@ const frame = item.getNowFrame(1.7);
   }
   /**
 	 * clone SceneItem.
-	 * @param - animator options
 	 * @return {SceneItem} An instance of clone
 	 * @example
 	 * item.clone();
 	 */
-  public clone(options: Partial<SceneItemState> = {}) {
+  public clone() {
     const item = new SceneItem();
 
     item.setOptions(this.state);
-    item.setOptions(options);
     this.forEach((frame: Frame, time: number) => {
       item.setFrame(time, frame.clone());
     });
