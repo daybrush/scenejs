@@ -1,7 +1,7 @@
 /// <reference types="react" />
 import { SceneItem as NativeSceneItem } from 'scenejs';
 import { SceneInterface } from './SceneInterface';
-export declare class SceneItem extends SceneInterface {
+export declare class SceneItem extends SceneInterface<NativeSceneItem> {
     protected item: NativeSceneItem;
     constructor(props: any);
     render(): import("react").ReactNode;

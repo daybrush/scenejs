@@ -1,5 +1,7 @@
 import Frame from "../../src/Frame";
 import {setAlias} from "../../src/utils";
+import { EASE_IN_OUT } from "../../src/easing";
+import { TIMING_FUNCTION, EASING_NAME } from "../../src/consts";
 
 describe("Frame Test", () => {
     describe("test frame initialize", () => {
@@ -189,6 +191,25 @@ describe("Frame Test", () => {
                     grayscale: "40%",
                 },
             });
+        });
+        it("should check 'toCSSObject' method", () => {
+            frame = new Frame({
+                a: 1,
+                b: 2,
+                transform: "scale(1, 2) translateX(100px) translateY(200px)",
+                filter: {
+                    brightness: "90%",
+                    grayscale: "40%",
+                },
+                easing: EASE_IN_OUT,
+            });
+            const obj = frame.toCSSObject();
+
+            expect(obj.a).to.be.equals(1);
+            expect(obj.b).to.be.equals(2);
+            expect(obj.transform).to.be.equals("scale(1,2) translateX(100px) translateY(200px)");
+            expect(obj.filter).to.be.equals("brightness(90%) grayscale(40%)");
+            expect(obj[TIMING_FUNCTION]).to.be.equals(EASE_IN_OUT[EASING_NAME]);
         });
         it("should check 'toCSS' method", () => {
             const css = frame.toCSS().replace(/;(\S)/g, ";\n$1").split("\n");

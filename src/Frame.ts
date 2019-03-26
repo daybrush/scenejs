@@ -1,10 +1,10 @@
 import {
-  ALIAS, TIMING_FUNCTION, TRANSFORM_NAME
+  ALIAS, TIMING_FUNCTION, TRANSFORM_NAME, EASING_NAME
 } from "./consts";
-import { isRole, getType, isPropertyObject } from "./utils";
+import { isRole, getType, isPropertyObject, getValueByNames } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
 import { isObject, isArray, isString,
-  ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, IObject } from "@daybrush/utils";
+  ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, IObject, isUndefined } from "@daybrush/utils";
 import { NameType } from "./types";
 
 function toInnerProperties(obj: IObject<string>) {
@@ -31,7 +31,7 @@ function merge(to: IObject<any>, from: IObject<any>, toValue = false) {
     if (type === PROPERTY) {
       to[name] = toValue ? value.toValue() : value.clone();
     } else if (type === FUNCTION) {
-      to[name] = toValue ? getValue([name], value()) : value;
+      to[name] = toValue ? getValue([name], value) : value;
     } else if (type === ARRAY) {
       to[name] = value.slice();
     } else if (type === OBJECT) {
@@ -99,17 +99,7 @@ const frame = new Scene.Frame({
   }
 
   public raw(...args: NameType[]) {
-    let properties = this.properties;
-    const params = getPropertyName(args);
-    const length = params.length;
-
-    for (let i = 0; i < length; ++i) {
-      if (!isObject(properties)) {
-        return undefined;
-      }
-      properties = properties[params[i]];
-    }
-    return properties;
+    return getValueByNames(getPropertyName(args), this.properties);
   }
   /**
 	* remove property value
@@ -119,20 +109,17 @@ const frame = new Scene.Frame({
 	frame.remove("display")
 	*/
   public remove(...args: NameType[]) {
-    let properties = this.properties;
     const params = getPropertyName(args);
     const length = params.length;
 
     if (!length) {
       return this;
     }
-    for (let i = 0; i < length - 1; ++i) {
-      if (!isObject(properties)) {
-        return this;
-      }
-      properties = properties[params[i]];
+    const value = getValueByNames(params, this.properties, length - 1);
+
+    if (isObject(value)) {
+      delete value[params[length - 1]];
     }
-    delete properties[params[length - 1]];
     return this;
   }
   /**
@@ -163,53 +150,50 @@ frame.set("transform", {
 frame.set("transform", "translate", "50px");
   */
   public set(...args: any[]) {
+    const self = this;
     const length = args.length;
     const params = args.slice(0, -1);
     const value = args[length - 1];
 
     if (params[0] in ALIAS) {
-      this._set(ALIAS[params[0]], value);
+      self._set(ALIAS[params[0]], value);
     } else if (length === 2 && isArray(params[0])) {
-      this._set(params[0], value);
-    } else if (isObject(value)) {
-      if (isArray(value)) {
-        this._set(params, value);
-      } else if (isPropertyObject(value)) {
-        if (isRole(params)) {
-          this.set(...params, toObject(value));
-        } else {
-          this._set(params, value);
-        }
-      } else if (value instanceof Frame) {
-        this.merge(value);
+      self._set(params[0], value);
+    } else if (isArray(value)) {
+      self._set(params, value);
+    } else if (isPropertyObject(value)) {
+      if (isRole(params)) {
+        self.set(...params, toObject(value));
       } else {
-        for (const name in value) {
-          this.set(...params, name, value[name]);
-        }
+        self._set(params, value);
+      }
+    } else if (isObject(value)) {
+      for (const name in value) {
+        self.set(...params, name, value[name]);
       }
     } else if (isString(value)) {
       if (isRole(params)) {
         const obj = toPropertyObject(value);
 
         if (isObject(obj)) {
-          this.set(...params, obj);
+          self.set(...params, obj);
         }
         return this;
       } else {
         const {styles, length: stylesLength} = splitStyle(value);
 
         for (const name in styles) {
-          this.set(...params, name, styles[name]);
+          self.set(...params, name, styles[name]);
         }
         if (stylesLength) {
           return this;
         }
       }
-      this._set(params, value);
+      self._set(params, value);
     } else {
-      this._set(params, value);
+      self._set(params, value);
     }
-    return this;
+    return self;
   }
   /**
 	* check that has property.
@@ -218,20 +202,13 @@ frame.set("transform", "translate", "50px");
 	frame.has("property", "display") // => true or false
 	*/
   public has(...args: NameType[]) {
-    let properties = this.properties;
     const params = getPropertyName(args);
     const length = params.length;
 
     if (!length) {
       return false;
     }
-    for (let i = 0; i < length; ++i) {
-      if (!isObject(properties) || !(params[i] in properties)) {
-        return false;
-      }
-      properties = properties[params[i]];
-    }
-    return true;
+    return !isUndefined(getValueByNames(params, this.properties, length));
   }
   /**
 	* clone frame.
@@ -278,7 +255,7 @@ frame.set("transform", "translate", "50px");
 
       if (name === TIMING_FUNCTION) {
         cssObject[TIMING_FUNCTION.replace("animation", ANIMATION)] =
-          (isString(value) ? value : value.easingName) || "initial";
+          (isString(value) ? value : value[EASING_NAME]) || "initial";
         continue;
       }
       cssObject[name] = value;

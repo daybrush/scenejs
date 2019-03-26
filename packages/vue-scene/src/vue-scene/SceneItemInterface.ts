@@ -1,8 +1,8 @@
 import { Prop, Vue, Component } from 'vue-property-decorator';
-import {
-  EasingType, FillModeType, DirectionType, IterationCountType, StateInterface,
-} from 'scenejs/declaration/Animator';
-import Scene, { SceneItem, OPTIONS, EVENTS } from 'scenejs';
+import Scene, {
+  SceneItem, OPTIONS, EVENTS, EasingType, FillModeType,
+  DirectionType, IterationCountType, AnimatorState,
+} from 'scenejs';
 
 @Component
 export class SceneItemInterface extends Vue {
@@ -41,14 +41,14 @@ export class SceneItemInterface extends Vue {
   }
   protected init() {
     const item = this.item;
-    const sceneOptions: StateInterface = {};
+    const sceneOptions: Partial<AnimatorState> = {};
 
     OPTIONS.forEach((name) => {
       sceneOptions[name] = this.$props[name];
     });
 
     // console.log(this.item, this.$props, sceneOptions);
-    item.setOptions(sceneOptions);
+    (item as any).setOptions(sceneOptions);
     EVENTS.forEach((name) => {
       item.on(name, (e) => {
         this.$emit(name, e);
