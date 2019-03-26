@@ -1,13 +1,13 @@
 {
   "name": "react-scenejs",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A react component that can easily use scenejs",
   "main": "dist/common/index.js",
   "module": "dist/esm/index.js",
   "sideEffects": false,
   "types": "declaration/index.d.ts",
   "dependencies": {
-    "scenejs": "^1.0.0-beta8",
+    "scenejs": "^1.0.0-rc3",
     "typescript": "^3.0.3"
   },
   "peerDependencies": {

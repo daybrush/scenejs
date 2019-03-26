@@ -1,7 +1,6 @@
-import { StateInterface } from 'scenejs/declaration/Animator';
-import { ObjectInterface } from 'scenejs/declaration/consts';
 import { Component } from 'react';
-import Scene, {OPTIONS, EVENTS, SceneItem} from 'scenejs';
+import Scene, {OPTIONS, EVENTS, SceneItem, AnimatorState} from 'scenejs';
+import { IObject } from '@daybrush/utils';
 
 type Callback = (...args: any[]) => any;
 
@@ -11,19 +10,18 @@ export interface EventTypes {
   onEnded?: Callback;
   onTimeUpdate?: Callback;
   onIteration?: Callback;
-  onAnimate?: Callback;
 }
-export interface PropTypes extends StateInterface, EventTypes {
-  keyframes?: ObjectInterface<any>;
-  from?: ObjectInterface<any>;
-  to?: ObjectInterface<any>;
+export interface PropTypes extends Partial<AnimatorState>, EventTypes {
+  keyframes?: IObject<any>;
+  from?: IObject<any>;
+  to?: IObject<any>;
   css?: boolean;
   time?: string | number;
   autoplay?: boolean;
 }
 
 
-export class SceneInterface extends Component<PropTypes, {}> {
+export class SceneInterface<T extends Scene | SceneItem> extends Component<PropTypes, {}> {
   public static defaultProps: PropTypes = {
     duration: 0,
     fillMode: 'forwards',
@@ -40,16 +38,14 @@ export class SceneInterface extends Component<PropTypes, {}> {
     onEnded: () => undefined,
     onTimeUpdate: () => undefined,
     onIteration: () => undefined,
-    onAnimate: () => undefined,
   };
-  protected item: Scene | SceneItem;
-  protected events: ObjectInterface<any> = {
+  protected item: T;
+  protected events: IObject<any> = {
     play: (e: any) => this.props.onPlay(e),
     paused: (e: any) => this.props.onPaused(e),
     ended: (e: any) => this.props.onEnded(e),
     timeupdate: (e: any) => this.props.onTimeUpdate(e),
     iteration: (e: any) => this.props.onIteration(e),
-    animate: (e: any) => this.props.onAnimate(e),
   };
   public render() {
     return this.props.children;
@@ -83,12 +79,12 @@ export class SceneInterface extends Component<PropTypes, {}> {
   protected init() {
     const item = this.item;
     const events = this.events;
-    const sceneOptions: StateInterface = {};
+    const sceneOptions: Partial<AnimatorState> = {};
 
     OPTIONS.forEach((name) => {
       sceneOptions[name] = this.props[name];
     });
-    item.setOptions(sceneOptions);
+    (item as any).setOptions(sceneOptions);
     EVENTS.forEach((name) => {
       this.item.on(name, events[name]);
     });

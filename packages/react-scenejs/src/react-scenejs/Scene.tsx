@@ -3,7 +3,7 @@ import { findDOMNode } from 'react-dom';
 import { SceneInterface } from './SceneInterface';
 
 
-export class Scene extends SceneInterface {
+export class Scene extends SceneInterface<NativeScene> {
   protected item: NativeScene = new NativeScene({}, {});
   constructor(props: any) {
     super(props);
