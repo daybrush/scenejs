@@ -16,7 +16,7 @@ export class NgSceneComponent extends NgSceneInterface implements AfterViewInit 
 
      this._items.forEach(ngItem => {
       const item = ngItem.getItem();
-      const id = item.getId() || item.setId().getId();
+      const id = item.getId();
 
       scene.setItem(id, item);
     });

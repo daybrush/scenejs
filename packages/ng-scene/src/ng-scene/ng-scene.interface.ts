@@ -1,6 +1,5 @@
 import { Input, Output, EventEmitter, OnDestroy, AfterContentChecked, Component, AfterViewChecked } from '@angular/core';
-import { FillModeType, DirectionType, IterationCountType, EasingType, StateInterface } from 'scenejs/declaration/Animator';
-import Scene, { SceneItem, OPTIONS } from 'scenejs';
+import Scene, { SceneItem, OPTIONS, DirectionType, FillModeType, IterationCountType, EasingType, AnimatorState } from 'scenejs';
 
 export class NgSceneInterface implements OnDestroy, AfterViewChecked {
   @Input() public from: { [key: string]: any } = {};
@@ -26,12 +25,12 @@ export class NgSceneInterface implements OnDestroy, AfterViewChecked {
   protected item: Scene | SceneItem;
 
   public init() {
-    const itemOptions: StateInterface = {};
+    const itemOptions: Partial<AnimatorState> = {};
 
     OPTIONS.forEach(name => {
       itemOptions[name] = this[name];
     });
-    this.item.setOptions(itemOptions);
+    (this.item as any).setOptions(itemOptions);
 
 
     if (this.autoplay !== false) {
