@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<style>
+    html,
+    body {
+        position: relative;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .background {
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: linear-gradient(#0B0D26, #4E335C);
+    }
+
+    .cloud {
+        position: absolute;
+        opacity: 0.2;
+    }
+
+    .cloud-type1 {
+        width: 150px;
+        height: 80px;
+    }
+
+    .cloud div {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .cloud-type1 div:nth-child(1) {
+        width: 65%;
+        height: 50%;
+        left: 25%;
+    }
+
+    .cloud-type1 div:nth-child(2) {
+        width: 80%;
+        height: 50%;
+        top: 20%;
+        left: 10%;
+    }
+
+    .cloud-type1 div:nth-child(3) {
+        top: 40%;
+        width: 100%;
+        height: 50%;
+    }
+
+    .cloud-type2 {
+        width: 150px;
+        height: 80px;
+    }
+
+    .cloud-type2 div:nth-child(1) {
+        width: 60%;
+        height: 60%;
+        left: 30%;
+    }
+
+    .cloud-type2 div:nth-child(2) {
+        width: 60%;
+        height: 60%;
+        left: 0%;
+        top: 20%;
+    }
+
+    .cloud-type2 div:nth-child(3) {
+        width: 60%;
+        height: 60%;
+        left: 40%;
+        top: 20%;
+    }
+
+    .cloud-type2 div:nth-child(4) {
+        width: 60%;
+        height: 60%;
+        left: 15%;
+        top: 40%;
+    }
+
+    .cloud-type3 {
+        width: 150px;
+        height: 60px;
+    }
+
+    .cloud-type3 div:nth-child(1) {
+        width: 80%;
+        height: 60%;
+        top: 40%;
+    }
+
+    .cloud-type3 div:nth-child(2) {
+        width: 80%;
+        height: 60%;
+        left: 20%;
+    }
+
+    .cloud {
+        top: 65%;
+        left: 50%;
+    }
+
+    .cloud1 {
+        transform: translate(100px, -170px);
+    }
+
+    .cloud2 {
+        transform: translate(10px, 80px);
+    }
+
+    .cloud3 {
+        transform: translate(-230px, -10px);
+    }
+
+    .particle {
+        position: absolute;
+        background: white;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        box-shadow: 0px 0px 2px 2px white;
+        transform-origin: 50% 30px;
+    }
+
+    .moon {
+        position: absolute;
+        bottom: 0;
+        width: 200px;
+        height: 200px;
+        background: #E0E9F6;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0px 0px 10px 5px #E0E9F6;
+    }
+</style>
+<div class="background"></div>
+<div class="moon"></div>
+<div id="snows" class="snows"></div>
+<script src="../dist/scene.js"></script>
+<script>
+    Scene.setAlias("ty", ["transform", "translateY"]);
+    Scene.setAlias("rotate", ["transform", "rotate"]);
+    Scene.setAlias("scale", ["transform", "scale"]);
+    function createSnows(num) {
+        var snows = [];
+
+        for (var i = 0; i < num; ++i) {
+            snows.push(`<div class="snow particle particle${i}" style="left: ${10 + (i % 8) * 11}%"></div>`);
+        }
+        return snows.join("");
+    }
+
+    snows.innerHTML = createSnows(40);
+
+    var scene = new Scene({
+        ".snow.particle": function () {
+            return {
+                0: {
+                    ty: "-4vh",
+                    rotate: "0deg",
+                },
+                10: {
+                    ty: "104vh",
+                    rotate: "1080deg",
+                },
+                options: {
+                    delay: Math.random() * 10,
+                    iterationCount: "infinite",
+                }
+            };
+        },
+        ".moon": {
+            0: {
+                transform: {
+                    translate: "-50%, -50%",
+                    translateX: "-40px",
+                }
+            },
+            1: {
+                transform: {
+                    translate: "-50%, -50%",
+                    translateX: "40px",
+                }
+            },
+            options: {
+                direction: "alternate",
+                iterationCount: "infinite",
+            }
+        },
+    }, {
+            iterationCount: "infinite",
+            selector: true,
+        }).playCSS();
+</script>
+
+</html>
