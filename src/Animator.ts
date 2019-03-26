@@ -6,9 +6,10 @@ import {
   RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE, PREV_TIME, TICK_TIME, CURRENT_TIME, ITERATION, OPTIONS
 } from "./consts";
 import EventTrigger from "./EventTrigger";
-import { bezier, IEasingFunction } from "./easing";
+import { bezier } from "./easing";
 import { toFixed, makeId } from "./utils";
 import { splitUnit, isString, camelize, requestAnimationFrame, isArray } from "@daybrush/utils";
+import { IterationCountType, DirectionType, AnimatorState, IEasingFunction, FillModeType, PlayStateType, EasingType } from "./types";
 
 function GetterSetter<T extends { new(...args: any[]): {} }>(
   getter: string[], setter: string[], parent: string) {
@@ -53,44 +54,7 @@ function tick(animator: Animator, now: number, to?: number) {
   });
 }
 
-/**
- * @typedef
- */
-export type FillModeType = "forwards" | "backwards" | "both";
-/**
- * @typedef
- */
-export type IterationCountType = number | "infinite";
-/**
- * @typedef
- */
-export type EasingType = 0 | IEasingFunction;
-/**
- * @typedef
- */
-export type DirectionType = "normal" | "reverse" | "alternate" | "alternate-reverse";
-/**
- * @typedef
- */
-export type PlayStateType = "paused" | "running";
 
-export interface AnimatorState {
-  id: number | string;
-  easing: EasingType;
-  easingName: string;
-  iterationCount: IterationCountType;
-  delay: number;
-  fillMode: FillModeType;
-  direction: DirectionType;
-  playSpeed: number;
-  iterationTime: number;
-  currentTime: number;
-  tickTime: number;
-  iteration: number;
-  prevTime: number;
-  playState: PlayStateType;
-  duration: number;
-}
 export function isDirectionReverse(iteration: number,
                                    iteraiontCount: IterationCountType, direction: DirectionType) {
   if (direction === REVERSE) {

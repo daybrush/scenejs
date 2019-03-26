@@ -1,19 +1,11 @@
 import { isString } from "@daybrush/utils";
+import { PropertyObjectState } from "./types";
 
-/**
- * @typedef
- */
-export interface IPropertyObject {
-  prefix: string;
-  suffix: string;
-  model: string;
-  type: string;
-  separator: string;
-}
+
 /**
 * Make string, array to PropertyObject for the dot product
 */
-class PropertyObject implements IPropertyObject {
+class PropertyObject implements PropertyObjectState {
   public value: any[];
   public prefix: string  = "";
   public suffix: string = "";
@@ -31,13 +23,13 @@ var obj = new PropertyObject([100,100,100,0.5], {
 	"suffix" : ")"
 });
 	 */
-  constructor(value: string | any[], options?: Partial<IPropertyObject>) {
+  constructor(value: string | any[], options?: Partial<PropertyObjectState>) {
     options && this.setOptions(options);
     this.value = isString(value) ? value.split(this.separator) : value;
   }
-  public setOptions(newOptions: Partial<IPropertyObject>) {
+  public setOptions(newOptions: Partial<PropertyObjectState>) {
     for (const name in newOptions) {
-      this[name as keyof IPropertyObject] = newOptions[name as keyof IPropertyObject];
+      this[name as keyof PropertyObjectState] = newOptions[name as keyof PropertyObjectState];
     }
     return this;
   }

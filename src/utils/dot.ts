@@ -1,9 +1,9 @@
 
 import PropertyObject from "../PropertyObject";
-import { EasingType } from "../Animator";
 import { getType } from "../utils";
 import { toPropertyObject } from "./property";
 import { splitUnit, PROPERTY, FUNCTION, ARRAY } from "@daybrush/utils";
+import { EasingType } from "../types";
 
 function dotArray(a1: any[], a2: any, b1: number, b2: number): any {
   const length = a2.length;

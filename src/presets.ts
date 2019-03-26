@@ -1,21 +1,12 @@
-
-import { AnimatorState } from "./Animator";
-import SceneItem, { SceneItemOptions } from "./SceneItem";
+import SceneItem from "./SceneItem";
 import { IObject } from "@daybrush/utils";
 import { TRANSFORM_NAME } from "./consts";
-import Scene, { SceneOptions } from "./Scene";
+import Scene from "./Scene";
+import { SceneOptions, SceneItemOptions, AnimatorState, PresetState } from "./types";
 
 /**
  * @namespace presets
  */
-
-/**
- * @memberof presets
- * @typedef
- */
-export interface PresetState extends AnimatorState {
-  [key: string]: any;
-}
 
 export function animate(properties?: IObject<any>, options?: Partial<SceneOptions>) {
   return new Scene(properties, options).play();

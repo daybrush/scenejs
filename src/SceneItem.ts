@@ -1,4 +1,4 @@
-import Animator, { AnimatorState, EasingType, isDirectionReverse } from "./Animator";
+import Animator from "./Animator";
 import Frame from "./Frame";
 import {
   toFixed,
@@ -29,19 +29,9 @@ import { isObject, isArray, isUndefined, decamelize,
   ANIMATION, fromCSS, addClass, removeClass, hasClass,
   KEYFRAMES, requestAnimationFrame, isFunction,
   IObject, $, splitComma, toArray, isString, IArrayFormat, TRANSFORM } from "@daybrush/utils";
-import { NameType, RoleObject, AnimateElement } from "./types";
+import { NameType, RoleObject, AnimateElement, AnimatorState, SceneItemState, SceneItemOptions, EasingType } from "./types";
 
-export interface SceneItemState extends AnimatorState {
-  playCSS: boolean;
-  cssText: string;
-  selector: string;
-}
-export interface SceneItemOptions extends AnimatorState {
-  selector: boolean | string;
-  elements: IArrayFormat<AnimateElement> | AnimateElement;
-  element: IArrayFormat<AnimateElement> | AnimateElement;
-  target: any;
-}
+
 function getNearTimeIndex(times: number[], time: number) {
   const length = times.length;
 

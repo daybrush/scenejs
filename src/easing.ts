@@ -1,9 +1,4 @@
-/**
- * @typedef
- */
-export interface IEasingFunction extends Function {
-  easingName?: string;
-}
+import { IEasingFunction } from "./types";
 
 function cubic(y1: number, y2: number, t: number) {
   const t2 = 1 - t;

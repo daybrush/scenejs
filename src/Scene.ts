@@ -1,17 +1,11 @@
-import Animator, { AnimatorState, EasingType } from "./Animator";
-import SceneItem, { SceneItemOptions } from "./SceneItem";
+import Animator from "./Animator";
+import SceneItem from "./SceneItem";
 import { DATA_SCENE_ID, SELECTOR, DURATION } from "./consts";
 import { playCSS, exportCSS, getRealId, makeId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
-import { AnimateElement } from "./types";
+import { AnimateElement, SceneState, SceneOptions, EasingType, AnimatorState, SceneItemOptions } from "./types";
 
-export interface SceneState extends AnimatorState {
-  selector: string | boolean;
-  playCSS: boolean;
-}
-export interface SceneOptions extends AnimatorState {
-  selector: string | boolean;
-}
+
 /**
  * manage sceneItems and play Scene.
  * @sort 1

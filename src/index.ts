@@ -6,6 +6,7 @@ import Animator from "./Animator";
 export { SceneItem, Frame, Animator };
 export * from "./easing";
 export * from "./presets";
+export * from "./types";
 export { OPTIONS, EVENTS } from "./consts";
 export { setRole, setAlias } from "./utils";
 export { Scene as default };

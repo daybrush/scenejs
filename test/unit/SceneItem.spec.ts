@@ -4,10 +4,11 @@ import { EASE_IN_OUT } from "../../src/easing";
 import removeProperty from "./injections/ClassListInjection";
 import { orderByASC, group } from "./TestHelper";
 import { setRole, toFixed } from "../../src/utils";
-import Animator, { DirectionType, AnimatorState } from "../../src/Animator";
+import Animator from "../../src/Animator";
 import * as sinon from "sinon";
 import { isTemplateSpan } from "typescript";
 import Scene from "../../src/Scene";
+import { DirectionType } from "../../src/types";
 
 describe("SceneItem Test", () => {
     describe("test item initialize", () => {
