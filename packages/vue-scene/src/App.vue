@@ -42,7 +42,7 @@
 <script lang='ts'>
 import { Component, Vue } from "vue-property-decorator";
 import { VueScene, VueSceneItem, EASE_IN_OUT } from "./vue-scene";
-import { EasingFunctionInterface } from "scenejs/declaration/easing";
+import { EasingType } from "scenejs";
 
 @Component({
   components: {
@@ -51,7 +51,7 @@ import { EasingFunctionInterface } from "scenejs/declaration/easing";
   }
 })
 export default class App extends Vue {
-  public easing: EasingFunctionInterface = EASE_IN_OUT;
+  public easing: EasingType = EASE_IN_OUT;
   public time: string | number = 0;
   public keyframes = {
     0: { "border-width": "150px", opacity: 1, transform: "scale(0)" },

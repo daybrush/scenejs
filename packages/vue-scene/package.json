@@ -1,6 +1,6 @@
 {
   "name": "vue-scene",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "dist/common/index.js",
   "module": "dist/esm/index.js",
   "sideEffects": false,
@@ -33,7 +33,7 @@
   "author": "Daybrush",
   "license": "MIT",
   "dependencies": {
-    "scenejs": "^1.0.0-beta8",
+    "scenejs": "^1.0.0-rc3",
     "vue": "^2.5.0",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0"
