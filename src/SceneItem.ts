@@ -168,6 +168,7 @@ class SceneItem extends Animator<SceneItemState> {
   public items: IObject<Frame> = {};
   public names: RoleObject = {};
   public elements: AnimateElement[] = [];
+  public temp: Frame;
   private needUpdate: boolean = false;
   private target: any;
   private targetFunc: (frame: Frame) => void;
@@ -523,6 +524,7 @@ item.setCSS(0, ["opacity", "width", "height"]);
     const frame = this.getNowFrame(iterationTime, easing);
     const currentTime = this.getTime();
 
+    this.temp = frame;
     /**
 		 * This event is fired when timeupdate and animate.
 		 * @event SceneItem#animate
@@ -719,12 +721,11 @@ const frame = item.getNowFrame(1.7);
       this.set(properties.keyframes);
     } else {
       for (const time in properties) {
-        if (time === "options") {
-          continue;
+        if (time !== "options") {
+          this.set({
+            [time]: properties[time],
+          });
         }
-        this.set({
-          [time]: properties[time],
-        });
       }
     }
     if (options && options[DURATION]) {

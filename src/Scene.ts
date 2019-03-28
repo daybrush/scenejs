@@ -4,6 +4,7 @@ import { DATA_SCENE_ID, SELECTOR, DURATION } from "./consts";
 import { playCSS, exportCSS, getRealId, makeId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import { AnimateElement, SceneState, SceneOptions, EasingType, AnimatorState, SceneItemOptions } from "./types";
+import Frame from "./Frame";
 
 
 /**
@@ -19,6 +20,7 @@ class Scene extends Animator<SceneState> {
   */
   public static VERSION: string = "#__VERSION__#";
   public items: IObject<Scene | SceneItem>;
+  public temp: IObject<Frame>;
   /**
   * @param - properties
   * @param - options
@@ -137,12 +139,54 @@ class Scene extends Animator<SceneState> {
     const iterationTime = this.getIterationTime();
     const items = this.items;
     const easing = this.getEasing() || parentEasing;
+    const frames: IObject<any> = {};
 
     for (const id in items) {
       const item = items[id];
 
       item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, easing);
+
+      frames[item.getId()] = item.temp;
     }
+    this.temp = frames;
+
+    /**
+		 * This event is fired when timeupdate and animate.
+		 * @event Scene#animate
+     * @param {object} param The object of data to be sent to an event.
+		 * @param {number} param.currentTime The total time that the animator is running.
+		 * @param {number} param.time The iteration time during duration that the animator is running.
+		 * @param {object} param.frames frames of that time.
+     * @example
+const scene = new Scene({
+  a: {
+    0: {
+      opacity: 0,
+    },
+    1: {
+      opacity: 1,
+    }
+  },
+  b: {
+    0: {
+      opacity: 0,
+    },
+    1: {
+      opacity: 1,
+    }
+  }
+}).on("animate", e => {
+  console.log(e);
+  // {a: Frame, b: Frame}
+  console.log(e.a.get("opacity"));
+});
+		 */
+    this.trigger("animate", {
+      frames,
+      currentTime: this.getTime(),
+      time: iterationTime,
+    });
+
     return this;
   }
   /**
@@ -278,7 +322,7 @@ class Scene extends Animator<SceneState> {
             id,
             selector: `[${DATA_SCENE_ID}="${id}"]`,
             elements: elements[i],
-          }).load(object(i));
+          }).load(object(i, elements[i]));
         }
         this.setItem(name, scene);
         continue;
