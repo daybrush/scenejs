@@ -10,6 +10,7 @@ export interface EventTypes {
   onEnded?: Callback;
   onTimeUpdate?: Callback;
   onIteration?: Callback;
+  onAnimate?: Callback;
 }
 export interface PropTypes extends Partial<AnimatorState>, EventTypes {
   keyframes?: IObject<any>;
@@ -38,6 +39,7 @@ export class SceneInterface<T extends Scene | SceneItem> extends Component<PropT
     onEnded: () => undefined,
     onTimeUpdate: () => undefined,
     onIteration: () => undefined,
+    onAnimate: () => undefined,
   };
   protected item: T;
   protected events: IObject<any> = {
@@ -46,6 +48,7 @@ export class SceneInterface<T extends Scene | SceneItem> extends Component<PropT
     ended: (e: any) => this.props.onEnded(e),
     timeupdate: (e: any) => this.props.onTimeUpdate(e),
     iteration: (e: any) => this.props.onIteration(e),
+    animate: (e: any) => this.props.onAnimate(e),
   };
   public render() {
     return this.props.children;
