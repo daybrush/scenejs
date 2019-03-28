@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "1.0.0-rc3",
+  "version": "1.0.0-rc4",
   "description": "Javascript Animation Library",
   "main": "dist/scene.common.js",
   "module": "dist/scene.esm.js",
@@ -25,7 +25,7 @@
     "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
     "demo:start": "demo demo.js -w",
     "demo:build": "rm -rf ./demo/dist && demo demo.js",
-    "release": "npm run build && npm run demo:build && npm run release:build && npm run deploy",
+    "release": "npm run build  && npm run release:build && npm run deploy",
     "release:build": "npm run release:mkdir && npm run doc && npm run release:version && npm run release:latest",
     "release:mkdir": "mkdir -p ./demo/release && rm -rf ./demo/release/$npm_package_version && rm -rf ./demo/release/latest && mkdir -p ./demo/release/$npm_package_version && mkdir -p ./demo/release/latest",
     "release:version": "cp -a ./dist/. ./demo/release/$npm_package_version/dist && cp -a ./doc/. ./demo/release/$npm_package_version/doc && cp -a ./examples/. ./demo/release/$npm_package_version/examples",

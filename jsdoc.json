@@ -25,7 +25,7 @@
     "docdash": {
         "menu": {
             "Github repo": {
-                "href": "https://github.com/daybrush/fjx",
+                "href": "https://github.com/daybrush/scenejs",
                 "target": "_blank",
                 "class": "menu-item",
                 "id": "repository"

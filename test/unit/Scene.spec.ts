@@ -218,6 +218,41 @@ describe("Scene Test", () => {
             expect(test[".test2"].get(0, "width")).to.be.equals("200px");
             expect(test).to.be.deep.equals(test2);
         });
+        it(`should check 'animate' event`, done => {
+            // Given
+            const scene = new Scene({
+                ".test": {
+                    0: {
+                        width: "100px",
+                        height: "100px",
+                    },
+                    1: {
+                        width: "200px",
+                        height: "200px",
+                    },
+                },
+                ".test2": {
+                    0: {
+                        width: "200px",
+                        height: "200px",
+                    },
+                    1: {
+                        width: "100px",
+                        height: "100px",
+                    },
+                },
+            });
+            scene.on("animate", e => {
+                // Then
+                expect(e.time).to.be.equals(0.25);
+                expect(e.currentTime).to.be.equals(0.25);
+                expect(e.frames[".test"].get("width")).to.be.equals("125px");
+                expect(e.frames[".test2"].get("width")).to.be.equals("175px");
+                done();
+            });
+            // When
+            scene.setTime(0.25);
+        });
     });
     describe(`test body's element`, () => {
         beforeEach(() => {
