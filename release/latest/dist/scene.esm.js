@@ -2894,11 +2894,9 @@ function (_super) {
       this.set(properties.keyframes);
     } else {
       for (var time in properties) {
-        if (time === "options") {
-          continue;
+        if (time !== "options") {
+          this.set((_a = {}, _a[time] = properties[time], _a));
         }
-
-        this.set((_a = {}, _a[time] = properties[time], _a));
       }
     }
 

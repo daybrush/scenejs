@@ -3780,11 +3780,9 @@ version: 1.0.0-rc4
           this.set(properties.keyframes);
         } else {
           for (var time in properties) {
-            if (time === "options") {
-              continue;
+            if (time !== "options") {
+              this.set((_a = {}, _a[time] = properties[time], _a));
             }
-
-            this.set((_a = {}, _a[time] = properties[time], _a));
           }
         }
 
