@@ -59,7 +59,7 @@ class Scene extends Animator<SceneState> {
 
       time = Math.max(time, item.getTotalDuration() / item.getPlaySpeed());
     }
-    return time;
+    return Math.max(time, this.state[DURATION]);
   }
   public setDuration(duration: number) {
     const items = this.items;
@@ -84,6 +84,7 @@ class Scene extends Animator<SceneState> {
         item.setDuration(item.getDuration() * ratio);
       }
     }
+    super.setDuration(duration);
     return this;
   }
   public getItem<T extends (Scene | SceneItem) = Scene | SceneItem>(name: number | string): T;

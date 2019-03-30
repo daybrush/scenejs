@@ -953,7 +953,7 @@ item[PLAY_CSS](false, {
         frameTime += THRESHOLD;
       }
       prevTime = frameTime;
-      return `${frameTime}%{${time === 0 ? "" : frames[keytime]}}`;
+      return `${Math.min(frameTime, 100)}%{${time === 0 ? "" : frames[keytime]}}`;
     }).join("");
   }
   private _getNowValue(
