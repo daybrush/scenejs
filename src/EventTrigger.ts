@@ -1,4 +1,4 @@
-import { isObject, isArray } from "@daybrush/utils";
+import { isObject, isArray, toArray } from "@daybrush/utils";
 import { CallbackType, EventParameter } from "./types";
 
 /**
@@ -42,8 +42,7 @@ class EventTrigger {
             callback.forEach(func => this._on(name, func, once));
             return;
         }
-        const event = events[name];
-        event.push(once ? function callback2(...args) {
+        events[name].push(once ? function callback2(...args) {
             callback(...args);
             this.off(name, callback2);
         } : callback);
@@ -128,7 +127,7 @@ class EventTrigger {
         target.type = name;
         target.currentTarget = this;
         !target.target && (target.target = this);
-        event.forEach(callback => {
+        toArray(events[name]).forEach(callback => {
             callback.apply(this, data);
         });
 

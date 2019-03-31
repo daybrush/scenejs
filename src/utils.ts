@@ -178,15 +178,14 @@ export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
     const duration = item.getDuration();
     const isZeroDuration = !duration || !isFinite(duration);
     const animationend = () => {
-        if (!isZeroDuration) {
-            setPlayCSS(item, false);
-            item.finish();
-        }
+        setPlayCSS(item, false);
+        item.finish();
     };
     const animationstart = () => {
         item.trigger(PLAY);
     };
     item.once(ENDED, () => {
+        removeEvent(el, "animationcancel", animationend);
         removeEvent(el, "animationend", animationend);
         removeEvent(el, "animationiteration", animationiteration);
         removeEvent(el, "animationstart", animationstart);
