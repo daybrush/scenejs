@@ -49,7 +49,8 @@ export function getType(value: any) {
 export function toFixed(num: number) {
     return Math.round(num * MAXIMUM) / MAXIMUM;
 }
-export function getValueByNames(names: Array<string | number>,
+export function getValueByNames(
+    names: Array<string | number>,
     properties: IObject<any>, length: number = names.length) {
     let value = properties;
 
@@ -132,7 +133,9 @@ export function getRealId(item: Scene | SceneItem) {
 export function toId(text: number | string) {
     return `${text}`.match(/[0-9a-zA-Z]+/g).join("");
 }
-export function playCSS(item: Scene | SceneItem, isExportCSS?: boolean, playClassName?: string, properties: object = {}) {
+export function playCSS(
+    item: Scene | SceneItem, isExportCSS?: boolean,
+    playClassName?: string, properties: object = {}) {
     if (!ANIMATION || item.getPlayState() === RUNNING) {
         return;
     }
@@ -144,7 +147,7 @@ export function playCSS(item: Scene | SceneItem, isExportCSS?: boolean, playClas
         if (item.isEnded()) {
             item.setTime(0);
         }
-        isExportCSS && item.exportCSS({className: `.${className}`});
+        isExportCSS && item.exportCSS({ className: `.${className}` });
         const el = item.addPlayClass(false, className, properties);
 
         if (!el) {
@@ -187,7 +190,7 @@ export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
         removeEvent(el, "animationend", animationend);
         removeEvent(el, "animationiteration", animationiteration);
         removeEvent(el, "animationstart", animationstart);
-      });
+    });
     const animationiteration = ({ elapsedTime }: any) => {
         const currentTime = elapsedTime;
         const iterationCount = isZeroDuration ? 0 : (currentTime / duration);
