@@ -1,7 +1,7 @@
 import {
     ALIAS, TIMING_FUNCTION, TRANSFORM_NAME, EASING_NAME
 } from "./consts";
-import { isRole, getType, isPropertyObject, getValueByNames } from "./utils";
+import { isRole, getType, isPropertyObject, getValueByNames, isFixed } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
 import {
     isObject, isArray, isString,
@@ -174,11 +174,15 @@ class Frame {
                 self.set(...params, name, value[name]);
             }
         } else if (isString(value)) {
-            if (isRole(params)) {
-                const obj = toPropertyObject(value);
+            if (isRole(params, true)) {
+                if (isFixed(params) || !isRole(params)) {
+                    this._set(params, value);
+                } else  {
+                    const obj = toPropertyObject(value);
 
-                if (isObject(obj)) {
-                    self.set(...params, obj);
+                    if (isObject(obj)) {
+                        self.set(...params, obj);
+                    }
                 }
                 return this;
             } else {
