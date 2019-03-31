@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "1.0.0-rc4",
+  "version": "1.0.0-rc5",
   "description": "Javascript Animation Library",
   "main": "dist/scene.common.js",
   "module": "dist/scene.esm.js",
@@ -25,11 +25,8 @@
     "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
     "demo:start": "demo demo.js -w",
     "demo:build": "rm -rf ./demo/dist && demo demo.js",
-    "release": "npm run build  && npm run release:build && npm run deploy",
-    "release:build": "npm run release:mkdir && npm run doc && npm run release:version && npm run release:latest",
-    "release:mkdir": "mkdir -p ./demo/release && rm -rf ./demo/release/$npm_package_version && rm -rf ./demo/release/latest && mkdir -p ./demo/release/$npm_package_version && mkdir -p ./demo/release/latest",
-    "release:version": "cp -a ./dist/. ./demo/release/$npm_package_version/dist && cp -a ./doc/. ./demo/release/$npm_package_version/doc && cp -a ./examples/. ./demo/release/$npm_package_version/examples",
-    "release:latest": "cp -a ./dist/. ./demo/release/latest/dist && cp -a ./doc/. ./demo/release/latest/doc && cp -a ./examples/. ./demo/release/latest/examples"
+    "release": "npm run build && npm run demo:build && release",
+    "release:build": "npm run build && prerelease"
   },
   "repository": {
     "type": "git",
@@ -54,6 +51,7 @@
     "@daybrush/demo": "0.0.2",
     "@daybrush/jsdoc": "^0.3.5",
     "@daybrush/page": "^0.2.0",
+    "@daybrush/release": "0.0.6",
     "@egjs/flicking": "^2.4.3",
     "@types/karma-chai": "^0.1.1",
     "@types/mocha": "^5.2.5",
@@ -87,7 +85,7 @@
     "rollup-plugin-visualizer": "^0.9.2",
     "shape-svg": "^0.3.1",
     "sinon": "^4.1.2",
-    "tslint": "^5.11.0",
+    "tslint": "^5.14.0",
     "typescript": "^2.8.4",
     "typescript-compiler": "^1.4.1-2"
   },

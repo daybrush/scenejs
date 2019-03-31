@@ -5,7 +5,7 @@
 <style>
 	.cubes {
 		position: absolute;
-		left: 300px;
+		left: 50%;
 		top: 300px;
 		width: 100px;
 		height: 100px;
@@ -88,9 +88,9 @@
 <script>	
 	var scene = new Scene({
 		".cubes" : {
-			0.5: "width: 100px; height: 100px; top: 300px; transform: translateX(0px);",
-			1.5: {width: "140px", "height": "140px",  top: "350px"},
-			4: {transform: "translateX(0px)"},
+			0.5: "width: 100px; height: 100px; top: 300px; transform: translate(-50%) translateX(0px);",
+			1.5: {width: "140px", "height": "140px",  top: "350px", transform: "translateX(20px)"},
+			4: {transform: "translateX(20px)"},
 			5: {transform: "translateX(200px)"}
 		},
 		".cube22" : {
@@ -108,7 +108,7 @@
 			7 : {transform: "translate(-100px,0px)"}
 		}
 	}, {
-		easing: Scene.steps(4, "start"),
+		easing: Scene.EASE_IN_OUT,
 		selector: true,
 	});
 	scene.play();

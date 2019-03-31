@@ -2,7 +2,7 @@ import SceneItem, { getEntries } from "../../src/SceneItem";
 import { THRESHOLD } from "../../src/consts";
 import { EASE_IN_OUT } from "../../src/easing";
 import removeProperty from "./injections/ClassListInjection";
-import { orderByASC, group } from "./TestHelper";
+import { orderByASC, group, waitEvent } from "./TestHelper";
 import { setRole, toFixed } from "../../src/utils";
 import Animator from "../../src/Animator";
 import * as sinon from "sinon";
@@ -875,7 +875,7 @@ describe("SceneItem Test", () => {
                 item.off();
                 item = null;
             });
-            it(`should check "playCSS" and event order `, done => {
+            it(`should check "playCSS" and event order `, async () => {
                 // Given
                 item.setElement(this.element);
                 const play = sinon.spy();
@@ -891,18 +891,17 @@ describe("SceneItem Test", () => {
                 item.playCSS();
                 item.playCSS();
 
+                // Then
                 expect(item.getPlayState()).to.be.equals("running");
                 expect(item.state.playCSS).to.be.true;
-                item.on("ended", e => {
-                    // Then
-                    expect(play.calledOnce).to.be.true;
-                    expect(iteration.calledOnce).to.be.false;
-                    expect(ended.calledOnce).to.be.true;
-                    expect(paused.calledOnce).to.be.true;
-                    done();
-                });
+
+                await waitEvent(item, "ended");
+                expect(play.calledOnce).to.be.true;
+                expect(iteration.calledOnce).to.be.false;
+                expect(ended.calledOnce).to.be.true;
+                expect(paused.calledOnce).to.be.true;
             });
-            it(`should check "playCSS" and replay`, done => {
+            it(`should check "playCSS" and replay`, async () => {
                 // Given
                 item.setElement(this.element);
                 const play = sinon.spy();
@@ -912,17 +911,15 @@ describe("SceneItem Test", () => {
 
                 // When
                 item.playCSS();
+                await waitEvent(item, "ended");
 
-                item.on("ended", e => {
-                    // Then
-                    if (play.callCount === 1) {
-                        item.playCSS();
-                    } else {
-                        expect(play.callCount).to.be.equals(2);
-                        expect(ended.callCount).to.be.equals(2);
-                        done();
-                    }
-                });
+                // replay
+                item.playCSS();
+                await waitEvent(item, "ended");
+
+                // Then
+                expect(play.callCount).to.be.equals(2);
+                expect(ended.callCount).to.be.equals(2);
             });
             it(`should check "iteration" event `, done => {
                 // Given

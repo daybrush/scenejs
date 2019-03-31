@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Scene.js is a JavaScript Animation Library</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width"/>
+  <link rel="stylesheet" href="./dist/index.css" />
+</head>
+
+<body>
+  <header>
+    <div class="logo" data-item="main"><a href="#main">Scene.js</a></div>
+    <nav>
+      <ul>
+        <li data-item="features"><a href="#features">FEATURES</a></li>
+        <li data-item="examples"><a href="#examples">EXAMPLES</a></li>
+        <li data-item="started"><a href="#started">GETTING STARTED</a></li>
+        <li data-link="api"><a href="https://daybrush.com/scenejs/release/latest/doc/"
+            target="_blank">
+            API
+            </a></li>
+        <li data-link="download"><a href="https://github.com/daybrush/scenejs" target="_blank">DOWNLOAD</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div id="main" class="page page1">
+    <div class="container">
+      <div class="logo logo1">
+        <div class="cut_effects">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+        <div class="clapper">
+          <div class="background">
+            <div class="stick stick1 shadow"></div>
+            <div class="stick stick2 shadow"></div>
+            <div class="stick stick1">
+              <div class="rect rect1"></div>
+              <div class="rect rect2"></div>
+              <div class="rect rect3"></div>
+              <div class="rect rect4"></div>
+              <div class="rect rect5"></div>
+              <div class="rect rect6"></div>
+            </div>
+            <div class="stick stick2">
+              <div class="rect rect1"></div>
+              <div class="rect rect2"></div>
+              <div class="rect rect3"></div>
+              <div class="rect rect4"></div>
+              <div class="rect rect5"></div>
+              <div class="rect rect6"></div>
+            </div>
+
+            <div class="bottom"></div>
+            <div class="bottom shadow"></div>
+          </div>
+          <div class="play_circle"></div>
+          <div class="circle circle1 scene1"></div>
+          <div class="circle circle2 scene1"></div>
+          <div class="circle circle3 scene1"></div>
+          <div class="circle circle4 scene1"></div>
+          <div class="circle circle5 scene1"></div>
+          <div class="circle scene2"></div>
+        </div>
+        <h1 class="title">
+          <span class="character" data-character="S">S<span class="left"></span><span class="right"></span></span>
+          <span class="character" data-character="c">c<span class="left"></span><span class="right"></span></span>
+          <span class="character" data-character="e">e<span class="left"></span><span class="right"></span></span>
+          <span class="character" data-character="n">n<span class="left"></span><span class="right"></span></span>
+          <span class="character" data-character="e">e<span class="left"></span><span class="right"></span></span>
+          <span class="character" data-character=".">.<span class="left"></span><span class="right"></span></span>
+          <span class="character" data-character="j">j<span class="left"></span><span class="right"></span></span>
+          <span class="character" data-character="s">s<span class="left"></span><span class="right"></span></span>
+        </h1>
+        <div class="description">
+          <p><span>Scene.js is a JavaScript Animation Library</span></p>
+          <p><span>For creating animated websites</span></p>
+        </div>
+      </div>
+      <audio controls>
+        <source src="clapper.mp3" type="audio/mp3" />
+      </audio>
+    </div>
+  </div>
+  <div id="features" class="page page2 black">
+    <div class="container">
+      <h2>Features</h2>
+      <ul class="features">
+        <li>
+          <div class="feature" data-feature="play">
+            <div class="icon icon1">
+              <span class="js lang">JS</span> &nbsp;<span>+</span>&nbsp; <span class="css lang">CSS</span>
+            </div>
+            <p class="title">Powerful CSS Animation</p>
+            <p class="description">Scene.js supports two plays: javascript and css animation. It's perfect to use it in
+              context and not feel the difference.</p>
+          </div>
+        </li>
+        <li>
+          <div class="feature" data-feature="progress">
+            <div class="icon icon2">
+              <div class="progress">
+                <div class="thumb"></div>
+              </div>
+            </div>
+            <p class="title">Control Progress</p>
+            <p class="description">Scene.js have complete control over time. No matter what time you choose, this can
+              show you the right movement for that time.</p>
+          </div>
+        </li>
+        <li>
+          <div class="feature" data-feature="svg">
+            <div class="icon icon3">
+              <svg width="100%" viewBox="0 0 500 200" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/"
+                style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+                <g transform="matrix(0.5,0,0,0.5,0,0)">
+                  <g id="Artboard1" transform="matrix(0.966957,0,0,0.675155,-748.037,-365.425)">
+                    <rect x="773.599" y="541.246" width="1034.17" height="592.456" style="fill:none;" />
+                    <g transform="matrix(1.03417,0,0,1.2726,27.2532,-187.379)">
+                      <path stroke="#fff" stroke-width="20" stroke-linecap="round" fill="transparent"
+                        d="M996.666,679.872C1016.68,655.274 1009.67,616.655 985.445,597.875C929.217,554.281 849.568,590.954 855,674C858.594,728.954 906.299,755.034 943.827,790.796C1012.29,856.035 1022.56,916.434 998.214,960.514C990.689,974.138 979.57,987.254 965.375,1000.17C902.726,1057.19 800.881,1008.44 848.62,961.74C922.753,889.223 1057.88,928.034 1159.9,739.94C1246.37,580.503 1161.53,509.841 1145,669C1130.13,812.248 1215.47,889.427 1151.92,999.619C1123.03,1049.71 1109.19,1023.67 1140.8,971.27C1221.91,836.848 1336.07,790.934 1436,691C1453.9,673.095 1515.82,620.051 1520.21,595.06C1525.96,562.341 1464.68,579.599 1410.32,645.994C1360.37,706.991 1319.8,805.055 1363.57,835.284C1396.76,858.201 1500.26,816.383 1530.15,730.371C1577.48,594.192 1521.97,567.018 1533,671C1540.44,741.131 1523.55,836.38 1499.15,891.878C1458.48,984.405 1339.14,1066.05 1294.19,1014.08C1261.3,976.049 1335.33,916.554 1361.54,896.459C1478.06,807.134 1611.35,827.518 1682.83,840.829"
+                        style="fill:none;" />
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <p class="title">Support SVG Animation</p>
+            <p class="description">With Scene.js, SVG can be used by CSS animation in Chrome and can also be controlled
+              by point through 'attribute'.</p>
+          </div>
+        </li>
+        <li>
+          <div class="feature" data-feature="timeline">
+            <div class="icon icon4">
+              <div class="timelines">
+                <div class="timeline"></div>
+                <div class="timeline"></div>
+                <div class="timeline"></div>
+                <div class="timeline"></div>
+                <div class="timeline"></div>
+                <div class="play_bar"></div>
+              </div>
+            </div>
+            <p class="title">Multiple Timeline</p>
+            <p class="description">Scene.js can control multiple elements at the same time. Even though the time between
+              the start and end of each element is different, it can be repeated.</p>
+          </div>
+        </li>
+        <li>
+          <div class="feature" data-feature="value">
+            <div class="icon icon5">
+              <div class="slide">
+                <div class="target"></div>
+                <p class="sub_description">opacity: 1</p>
+                <p class="sub_title">Number</p>
+              </div>
+              <div class="slide">
+                <div class="target"></div>
+                <p class="sub_description">opacity: 1</p>
+                <p class="sub_title">Color</p>
+              </div>
+              <div class="slide">
+                <div class="target"></div>
+                <p class="sub_description"></p>
+                <p class="sub_title">Text</p>
+              </div>
+            </div>
+            <p class="title">Varius Value types</p>
+            <p class="description">Scene.js supports a variety of value types, such as CSS, and can be handled in
+              JavaScript.</p>
+          </div>
+        </li>
+        <li>
+          <div class="feature" data-feature="color">
+            <div class="icon icon6">
+              <div class="text">
+                <p>
+                  <span class="before">#ff5555</span>
+                  <span class="after">rgba(255, 85, 85, 1)</span>
+                </p>
+                <p>
+                  <span class="before">rgb(255, 85, 85)</span>
+                  <span class="after">rgba(255, 85, 85, 1)</span>
+                </p>
+                <p>
+                  <span class="before">hsl(0, 100%, 67%)</span>
+                  <span class="after">rgba(255, 85, 85, 1)</span>
+                </p>
+              </div>
+            </div>
+            <p class="title">Support RGB, HSL, HEX<br />Color Models</p>
+            <p class="description">Scene.js supports RGB, HSL, and HEX types, so you can use the color format used by
+              CSS.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div id="examples" class="page page3">
+    <div class="container">
+      <h2>Examples</h2>
+      <ul class="examples">
+        <li>
+          <a href="https://codepen.io/daybrush/pen/ybxwpV" target="_blank">
+            <img alt="cube" src="./images/cube.png">
+          </a>
+        </li>
+        <li>
+          <a href="https://codepen.io/daybrush/pen/VRomqr" target="_blank">
+            <img alt="clapperboard" src="./images/clapperboard.png">
+          </a>
+        </li>
+        <li>
+          <a href="https://codepen.io/daybrush/pen/pLxQGY" target="_blank">
+            <img alt="motiongraphic" src="./images/motiongraphic.png">
+          </a>
+        </li>
+        <li>
+          <a href="https://codepen.io/daybrush/pen/EQPPBg" target="_blank">
+            <img alt="tree" src="./images/tree.png">
+          </a>
+        </li>
+        <li>
+          <a href="https://codepen.io/daybrush/pen/zWMeJW" target="_blank">
+            <img alt="circleburst" src="./images/circleburst.png">
+          </a>
+        </li>
+        <li>
+          <a href="https://codepen.io/daybrush/pen/eoYGrx" target="_blank">
+            <img alt="snow" src="./images/snow.png">
+          </a>
+        </li>
+        <li>
+          <a href="https://codepen.io/daybrush/pen/QYRyMd" target="_blank">
+            <img alt="card" src="./images/card.png">
+          </a>
+        </li>
+        <li>
+          <a href="https://codepen.io/daybrush/pen/RMBXBm" target="_blank">
+            <img alt="search" src="./images/search.png">
+          </a>
+        </li>
+        <li>
+            <a href="https://codepen.io/daybrush/pen/RMBXBm" target="_blank">
+              <img alt="raindrop" src="./images/raindrop.png">
+            </a>
+          </li>
+      </ul>
+      <p class="more_area">
+        <a href="https://codepen.io/collection/DLWxrd/" target="_blank"><button class="more">More Examples</button></a>
+      </p>
+    </div>
+  </div>
+  <div id="started" class="page page4 black">
+    <div class="container">
+      <h2>Getting Started</h2>
+      <p>You can view the code and animation of clapperboard, the main logo of scene.js</p>
+      <p class="codepen" data-height="493" data-theme-id="dark" data-default-tab="css,result" data-user="daybrush" data-slug-hash="aYPjjM" style="height: 493px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="scenejs examples clapperboard animation">
+        <span>See the Pen <a href="https://codepen.io/daybrush/pen/aYPjjM/">
+        scenejs examples clapperboard animation</a> by daybrush (<a href="https://codepen.io/daybrush">@daybrush</a>)
+        on <a href="https://codepen.io">CodePen</a>.</span>
+      </p>
+      <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+    </div>
+  </div>
+  <footer>
+    <div class="container">
+      <p>Copyright &copy; <a href="https://daybrush.com" target="_blank">Daybrush</a></p>
+
+      <p>daybrush@gmail.com</p>
+    </div>
+  </footer>
+</body>
+<script src="./release/latest/dist/scene.js"></script>
+<script src="https://daybrush.com/media-scene/release/latest/dist/mediascene.js"></script>
+<script src="./dist/index.js"></script>
+
+</html>

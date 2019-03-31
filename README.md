@@ -37,13 +37,17 @@ $ npm install scenejs
 <script src="//daybrush.github.io/scenejs/release/latest/dist/scene.min.js"></script>
 ```
 
-## Components
+## Documents
+* [API documentation](https://daybrush.github.io/scenejs/release/latest/doc/)
+
+## 1st party libraries
+* [**media-scene**](https://www.npmjs.com/package/media-scene): A library for playing or controlling media
+* [**scenejs-render**](https://www.npmjs.com/package/scenejs-render): Make a movie of CSS animation through scenejs.
+
+## Framework Components
 * [**react-scenejs**](https://www.npmjs.com/package/react-scenejs): A React Component that can easily use scenejs
 * [**ng-scene**](https://www.npmjs.com/package/ng-scene): A Angular Component that can easily use scenejs
 * [**vue-scene**](https://www.npmjs.com/package/vue-scene): A Vue Component that can easily use scenejs
-
-## Documents
-* [API documentation](https://daybrush.github.io/scenejs/release/latest/doc/)
 
 ## Make scene
 ```javascript
