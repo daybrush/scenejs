@@ -3301,7 +3301,7 @@ function (_super) {
       time = Math.max(time, item.getTotalDuration() / item.getPlaySpeed());
     }
 
-    return time;
+    return Math.max(time, this.state[DURATION]);
   };
 
   __proto.setDuration = function (duration) {
@@ -3326,6 +3326,8 @@ function (_super) {
         item.setDuration(item.getDuration() * ratio);
       }
     }
+
+    _super.prototype.setDuration.call(this, duration);
 
     return this;
   };

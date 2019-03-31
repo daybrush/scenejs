@@ -4187,7 +4187,7 @@ version: 1.0.0-rc4
           time = Math.max(time, item.getTotalDuration() / item.getPlaySpeed());
         }
 
-        return time;
+        return Math.max(time, this.state[DURATION]);
       };
 
       __proto.setDuration = function (duration) {
@@ -4212,6 +4212,8 @@ version: 1.0.0-rc4
             item.setDuration(item.getDuration() * ratio);
           }
         }
+
+        _super.prototype.setDuration.call(this, duration);
 
         return this;
       };
