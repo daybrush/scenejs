@@ -1,0 +1,209 @@
+.page.page2 {
+  min-height: 900px;
+}
+.page2 .container {
+  top: 50%;
+  transform: translateY(-50%);
+}
+.page2 .features {
+  font-size: 0;
+}
+.page2 ul {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+.page2 .features li {
+  display: inline-block;
+  width: 30%;
+  min-width: 220px;
+  font-size: 15px;
+  transition: transform ease 0.2s;
+  text-align: center;
+  vertical-align: top;
+}
+.page2 .features li:hover {
+  transform: scale(1.05);
+}
+.page2 .features li .feature {
+  margin: 0px 20px;
+}
+.page2 .features li .icon {
+  position: relative;
+  width: 200px;
+  height: 150px;
+  line-height: 150px;
+  margin: 0px auto;
+}
+
+.page2 .icon1 span {
+  font-size: 20px;
+}
+.page2 .icon1 span.lang {
+  border: 2px solid #fff;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+.page2 .icon1 span.js {
+  border-color: #f55;
+  color: #f55;
+}
+.page2 li p.title {
+  position: relative;
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+.page2 li p.title:after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  width: 40px;
+  height: 2px;
+  background: #ccc;
+  transform: translate(-50%);
+}
+.page2 li p.description {
+}
+
+.page2 .icon2 .progress {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 6px;
+  background: #fff;
+  border-radius: 3px;
+}
+.page2 .icon2 .thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #f55;
+}
+
+.page2 .icon3 svg {
+  position: absolute;
+  width: 150px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.page2 .icon4 .timelines {
+  position: relative;
+  margin: 0px auto;
+  width: 170px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 0px;
+}
+.page2 .icon4 .timeline {
+  position: relative;
+  width: 100px;
+  height: 8px;
+  border-radius: 4px;
+  background: #eee;
+  margin: 6px 0px;
+}
+.page2 .icon4 .timeline:nth-child(1) {
+  left: 40px;
+  width: 80px;
+}
+.page2 .icon4 .timeline:nth-child(2) {
+  left: 80px;
+  width: 80px;
+}
+.page2 .icon4 .timeline:nth-child(3) {
+  left: 40px;
+  width: 90px;
+}
+.page2 .icon4 .timeline:nth-child(4) {
+  left: 10px;
+}
+.page2 .icon4 .timeline:nth-child(5) {
+  left: 50px;
+}
+.page2 .icon4 .timelines .play_bar {
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background: #f55;
+  top: 0;
+  left: 0;
+}
+.page2 .features li .icon.icon5 {
+  line-height: 1;
+  overflow: hidden;
+}
+.page2 .icon5 .slide {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.page2 .icon5 .sub_title {
+  font-weight: bold;
+}
+.page2 .icon5 .sub_title, .page2 .icon5 .sub_description {
+  margin: 5px;
+}
+.page2 .icon5 .target {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 5px;
+  background: #fff;
+  margin: 10px auto;
+}
+.page2 .features li .icon.icon6 {
+  line-height: 1;
+}
+.page2 .features li .icon.icon6 {
+  text-align: center;
+}
+.page .icon6 .text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.page2 .icon6 p {
+  margin: 8px;
+}
+.page2 .icon6 .before {
+  display: block;
+}
+.page2 .icon6 .after {
+  color: #f55;
+  display: none;
+}
+.page2 .features li [data-feature="color"]:hover .icon6 .after {
+  display: block;
+}
+
+@media screen and (max-width: 800px) {
+  .page.page2 {
+    min-height: 1200px;
+  }
+  .page2 .features li {
+    width: 49%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .page2 .features li {
+    width: 99%;
+  }
+  .page.page2 {
+    height: auto;
+  }
+  .page2 .container {
+    top: 0;
+    transform: none;
+  }
+}
