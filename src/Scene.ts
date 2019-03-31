@@ -3,7 +3,10 @@ import SceneItem from "./SceneItem";
 import { DATA_SCENE_ID, SELECTOR, DURATION, START_ANIMATION } from "./consts";
 import { playCSS, exportCSS, getRealId, makeId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
-import { AnimateElement, SceneState, SceneOptions, EasingType, AnimatorState, SceneItemOptions } from "./types";
+import {
+    AnimateElement, SceneState, SceneOptions, EasingType,
+    AnimatorState, SceneItemOptions, PlayCondition
+} from "./types";
 import Frame from "./Frame";
 
 /**
@@ -203,7 +206,7 @@ class Scene extends Animator<SceneState> {
         return this;
     }
     public toCSS(
-        playCondition?: { className?: string, selector?: string },
+        playCondition?: PlayCondition,
         duration: number = this.getDuration(), parentStates: AnimatorState[] = []) {
         const totalDuration = !duration || !isFinite(duration) ? 0 : duration;
         const styles: string[] = [];
@@ -222,7 +225,7 @@ class Scene extends Animator<SceneState> {
      * @return {Scene} An instance itself
      */
     public exportCSS(
-        playCondition?: { className?: string, selector?: string }, duration?: number, parentStates?: AnimatorState[]) {
+        playCondition?: PlayCondition, duration?: number, parentStates?: AnimatorState[]) {
         const css = this.toCSS(playCondition, duration, parentStates);
 
         (!parentStates || !parentStates.length) && exportCSS(getRealId(this), css);

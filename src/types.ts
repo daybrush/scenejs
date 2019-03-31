@@ -1,4 +1,5 @@
 import { IArrayFormat } from "@daybrush/utils";
+import { SceneItem } from ".";
 
 /**
  * @typedef
@@ -145,4 +146,11 @@ export type EventType = ["paused", "ended", "timeupdate", "animate", "play", "it
  * @typedef
  */
 export interface AnimateElement extends Element, ElementCSSInlineStyle {
+}
+/**
+ * @typedef
+ */
+export interface PlayCondition {
+    className?: string;
+    selector?: string | ((item: SceneItem, selector: string) => string);
 }

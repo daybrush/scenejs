@@ -1,4 +1,4 @@
-import Animator from "./Animator";
+import Animator, { isDirectionReverse } from "./Animator";
 import Frame from "./Frame";
 import {
     toFixed,
@@ -33,7 +33,7 @@ import {
 } from "@daybrush/utils";
 import {
     NameType, RoleObject, AnimateElement, AnimatorState,
-    SceneItemState, SceneItemOptions, EasingType
+    SceneItemState, SceneItemOptions, EasingType, PlayCondition, DirectionType
 } from "./types";
 
 function getNearTimeIndex(times: number[], time: number) {
@@ -784,7 +784,7 @@ class SceneItem extends Animator<SceneItemState> {
         return this;
     }
     public toCSS(
-        playCondition: { className?: string, selector?: string } = { className: START_ANIMATION },
+        playCondition: PlayCondition = { className: START_ANIMATION },
         parentDuration = this.getDuration(), states: AnimatorState[] = []) {
         const itemState = this.state;
         const selector = itemState[SELECTOR];
@@ -832,11 +832,13 @@ class SceneItem extends Animator<SceneItemState> {
             }
         });
         const className = playCondition.className;
+        const selectorCallback = playCondition.selector;
+        const preselector = isFunction(selectorCallback) ? selectorCallback(this, selector) : selectorCallback;
 
         return `
-    ${playCondition.selector || selectors.map(([sel, peusdo]) => `${sel}.${className}${peusdo}`)} {${cssText}}
+    ${preselector || selectors.map(([sel, peusdo]) => `${sel}.${className}${peusdo}`)} {${cssText}}
     ${selectors.map(([sel, peusdo]) => `${sel}.${PAUSE_ANIMATION}${peusdo}`)} {${ANIMATION}-play-state: paused;}
-    @${KEYFRAMES} ${PREFIX}KEYFRAMES_${id}{${this._toKeyframes(duration, finiteStates)}}`;
+    @${KEYFRAMES} ${PREFIX}KEYFRAMES_${id}{${this._toKeyframes(duration, finiteStates, direction)}}`;
     }
     /**
      * Export the CSS of the items to the style.
@@ -844,7 +846,7 @@ class SceneItem extends Animator<SceneItemState> {
      * @return {SceneItem} An instance itself
      */
     public exportCSS(
-        playCondition?: { className?: string, selector?: string },
+        playCondition?: PlayCondition,
         duration?: number, options?: AnimatorState[]) {
         if (!this.elements.length) {
             return "";
@@ -925,7 +927,7 @@ class SceneItem extends Animator<SceneItemState> {
         }
         return elements[0];
     }
-    private _toKeyframes(duration: number, states: AnimatorState[]) {
+    private _toKeyframes(duration: number, states: AnimatorState[], direction: DirectionType) {
         const frames: IObject<string> = {};
         const times = this.times.slice();
 
@@ -955,7 +957,9 @@ class SceneItem extends Animator<SceneItemState> {
                 frameTime += THRESHOLD;
             }
             prevTime = frameTime;
-            return `${Math.min(frameTime, 100)}%{${time === 0 ? "" : frames[keytime]}}`;
+            return `${Math.min(frameTime, 100)}%{
+                ${time === 0 && !isDirectionReverse(0, 1, direction) ? "" : frames[keytime]}
+            }`;
         }).join("");
     }
     private _getNowValue(

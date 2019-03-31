@@ -147,7 +147,7 @@ export function playCSS(
         if (item.isEnded()) {
             item.setTime(0);
         }
-        isExportCSS && item.exportCSS({ className: `.${className}` });
+        isExportCSS && item.exportCSS({ className });
         const el = item.addPlayClass(false, className, properties);
 
         if (!el) {
