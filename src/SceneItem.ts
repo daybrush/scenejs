@@ -44,7 +44,7 @@ function getNearTimeIndex(times: number[], time: number) {
   }
   return [length - 1, length - 1];
 }
-function makeAnimationProperties(properties: IObject<string | number>) {
+function makeAnimationProperties(properties: object) {
   const cssArray = [];
 
   for (const name in properties) {
@@ -774,15 +774,7 @@ const frame = item.getNowFrame(1.7);
     }
     return this;
   }
-  /**
-	* Specifies an css text that coverted the keyframes of the item.
-	* @param {Array} [duration=this.getDuration()] - elements to synchronize item's keyframes.
-	* @param {Array} [options={}] - parent options to unify options of items.
-	* @example
-item.setCSS(0, ["opacity"]);
-item.setCSS(0, ["opacity", "width", "height"]);
-	*/
-  public toCSS(parentDuration = this.getDuration(), states: AnimatorState[] = []) {
+  public toCSS(playCondition: {className?: string, selector?: string} = {className: START_ANIMATION}, parentDuration = this.getDuration(), states: AnimatorState[] = []) {
     const itemState = this.state;
     const selector = itemState[SELECTOR];
 
@@ -828,25 +820,27 @@ item.setCSS(0, ["opacity", "width", "height"]);
         return [sel, ""];
       }
     });
+    const className = playCondition.className;
 
-    return `${selectors.map(([sel, peusdo]) => `${sel}.${START_ANIMATION}${peusdo}`)} {
-			${cssText}
-		}${selectors.map(([sel, peusdo]) => `${sel}.${PAUSE_ANIMATION}${peusdo}`)} {
-      ${ANIMATION}-play-state: paused;
-    }
-    @${KEYFRAMES} ${PREFIX}KEYFRAMES_${id}{
-			${this._toKeyframes(duration, finiteStates)}
-		}`;
+    return `
+    ${playCondition.selector || selectors.map(([sel, peusdo]) => `${sel}.${className}${peusdo}`)} {${cssText}}
+    ${selectors.map(([sel, peusdo]) => `${sel}.${PAUSE_ANIMATION}${peusdo}`)} {${ANIMATION}-play-state: paused;}
+    @${KEYFRAMES} ${PREFIX}KEYFRAMES_${id}{${this._toKeyframes(duration, finiteStates)}}`;
   }
-  public exportCSS(duration?: number, options?: AnimatorState[]) {
+  /**
+   * Export the CSS of the items to the style.
+   * @param - Add a selector or className to play.
+   * @return {SceneItem} An instance itself
+   */
+  public exportCSS(playCondition?: {className?: string, selector?: string}, duration?: number, options?: AnimatorState[]) {
     if (!this.elements.length) {
       return "";
     }
-    const css = this.toCSS(duration, options);
+    const css = this.toCSS(playCondition, duration, options);
     const isParent = options && !isUndefined(options[ITERATION_COUNT]);
 
     !isParent && exportCSS(getRealId(this), css);
-    return css;
+    return this;
   }
   public pause() {
     super.pause();
@@ -874,27 +868,22 @@ item.setCSS(0, ["opacity", "width", "height"]);
   }
   /**
 	* Play using the css animation and keyframes.
-	* @param {boolean} [exportCSS=true] Check if you want to export css.
-	* @param {Object} [properties={}] The shorthand properties for six of the animation properties.
-	* @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
-	* @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
-	* @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
-	* @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
-	* @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
-	* @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+    * @param - Check if you want to export css.
+    * @param [playClassName="startAnimation"] - Add a class name to play.
+	* @param - The shorthand properties for six of the animation properties.
 	* @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
 	* @example
-item[PLAY_CSS]();
-item[PLAY_CSS](false, {
+item.playCSS();
+item.playCSS(false, "startAnimation", {
 	direction: "reverse",
 	fillMode: "forwards",
 });
 	*/
-  public playCSS(isExportCSS = true, properties = {}) {
-    playCSS(this, isExportCSS, properties);
+  public playCSS(isExportCSS = true, playClassName?: string, properties: object = {}) {
+    playCSS(this, isExportCSS, playClassName, properties);
     return this;
   }
-  public addPlayClass(isPaused: boolean, properties = {}) {
+  public addPlayClass(isPaused: boolean, playClassName?: string, properties: object = {}) {
     const elements = this.elements;
     const length = elements.length;
     const cssText = makeAnimationProperties(properties);

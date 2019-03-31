@@ -1,6 +1,6 @@
 import Animator from "./Animator";
 import SceneItem from "./SceneItem";
-import { DATA_SCENE_ID, SELECTOR, DURATION } from "./consts";
+import { DATA_SCENE_ID, SELECTOR, DURATION, START_ANIMATION } from "./consts";
 import { playCSS, exportCSS, getRealId, makeId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import { AnimateElement, SceneState, SceneOptions, EasingType, AnimatorState, SceneItemOptions } from "./types";
@@ -203,7 +203,7 @@ const scene = new Scene({
     }
     return this;
   }
-  public toCSS(duration: number = this.getDuration(), parentStates: AnimatorState[] = []) {
+  public toCSS(playCondition?: {className?: string, selector?: string}, duration: number = this.getDuration(), parentStates: AnimatorState[] = []) {
     const totalDuration = !duration || !isFinite(duration) ? 0 : duration;
     const styles: string[] = [];
     const state = this.state;
@@ -211,19 +211,20 @@ const scene = new Scene({
     state[DURATION] = this.getDuration();
 
     this.forEach(item => {
-      styles.push(item.toCSS(totalDuration, parentStates.concat(state)));
+      styles.push(item.toCSS(playCondition, totalDuration, parentStates.concat(state)));
     });
     return styles.join("");
   }
   /**
    * Export the CSS of the items to the style.
+   * @param - Add a selector or className to play.
    * @return {Scene} An instance itself
    */
-  public exportCSS(duration?: number, parentStates?: AnimatorState[]) {
-    const css = this.toCSS(duration, parentStates);
+  public exportCSS(playCondition?: {className?: string, selector?: string}, duration?: number, parentStates?: AnimatorState[]) {
+    const css = this.toCSS(playCondition, duration, parentStates);
 
     (!parentStates || !parentStates.length) && exportCSS(getRealId(this), css);
-    return css;
+    return this;
   }
   public append(item: SceneItem | Scene) {
     item.setDelay(item.getDelay() + this.getDuration());
@@ -256,12 +257,12 @@ const scene = new Scene({
     super.end();
     return this;
   }
-  public addPlayClass(isPaused: boolean, properties = {}) {
+  public addPlayClass(isPaused: boolean, playClassName?: string, properties: object = {}) {
     const items = this.items;
     let animtionElement: AnimateElement;
 
     for (const id in items) {
-      const el = items[id].addPlayClass(isPaused, properties);
+      const el = items[id].addPlayClass(isPaused, playClassName, properties);
 
       !animtionElement && (animtionElement = el);
     }
@@ -269,14 +270,9 @@ const scene = new Scene({
   }
   /**
   * Play using the css animation and keyframes.
-  * @param {boolean} [exportCSS=true] Check if you want to export css.
-  * @param {Object} [properties={}] The shorthand properties for six of the animation properties.
-  * @param {Object} [properties.duration] The duration property defines how long an animation should take to complete one cycle.
-  * @param {Object} [properties.fillMode] The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
-  * @param {Object} [properties.iterationCount] The iterationCount property specifies the number of times an animation should be played.
-  * @param {String} [properties.easing] The easing(timing-function) specifies the speed curve of an animation.
-  * @param {Object} [properties.delay] The delay property specifies a delay for the start of an animation.
-  * @param {Object} [properties.direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+  * @param - Check if you want to export css.
+  * @param [playClassName="startAnimation"] - Add a class name to play.
+  * @param - The shorthand properties for six of the animation properties.
   * @return {Scene} An instance itself
   * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
   * @example
@@ -286,8 +282,8 @@ const scene = new Scene({
   fillMode: "forwards",
   });
   */
-  public playCSS(isExportCSS = true, properties = {}) {
-    playCSS(this, isExportCSS, properties);
+  public playCSS(isExportCSS = true, playClassName?: string, properties: Partial<AnimatorState> = {}) {
+    playCSS(this, isExportCSS, playClassName, properties);
     return this;
   }
   public set(properties: any, ...args: any[]): this;

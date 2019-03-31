@@ -9,10 +9,10 @@ import { SceneOptions, SceneItemOptions, AnimatorState, PresetState } from "./ty
  */
 
 export function animate(properties?: IObject<any>, options?: Partial<SceneOptions>) {
-  return new Scene(properties, options).play();
+    return new Scene(properties, options).play();
 }
 export function animateItem(properties?: IObject<any>, options?: Partial<SceneItemOptions>) {
-  return new SceneItem(properties, options).play();
+    return new SceneItem(properties, options).play();
 }
 /**
  * Use the property to create an effect.
@@ -44,13 +44,13 @@ new SceneItem({
 });
  */
 function set(property: string | string[], values: any[], options: Partial<AnimatorState>) {
-  const item = new SceneItem({}, options);
-  const length = values.length;
+    const item = new SceneItem({}, options);
+    const length = values.length;
 
-  for (let i = 0; i < length; ++i) {
-    item.set(`${i / (length - 1) * 100}%`, property, values[i]);
-  }
-  return item;
+    for (let i = 0; i < length; ++i) {
+        item.set(`${i / (length - 1) * 100}%`, property, values[i]);
+    }
+    return item;
 }
 
 /**
@@ -77,7 +77,7 @@ new SceneItem({
 });
  */
 export function zoomIn({ from = 0, to = 1 }: Partial<PresetState>) {
-  return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
+    return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
 /**
@@ -104,7 +104,7 @@ new SceneItem({
 });
  */
 export function zoomOut({ from = 1, to = 0 }: Partial<PresetState>) {
-  return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
+    return set([TRANSFORM_NAME, "scale"], [from, to], arguments[0]);
 }
 
 /**
@@ -132,7 +132,7 @@ new SceneItem({
 });
  */
 export function wipeIn({ from = "-100%", to = "0%", property = "left" }: Partial<PresetState>) {
-  return set(property, [from, to], arguments[0]);
+    return set(property, [from, to], arguments[0]);
 }
 
 /**
@@ -160,7 +160,7 @@ new SceneItem({
 });
  */
 export function wipeOut({ from = "0%", to = "100%", property = "left" }: Partial<PresetState>) {
-  return set(property, [from, to], arguments[0]);
+    return set(property, [from, to], arguments[0]);
 }
 
 /**
@@ -204,19 +204,19 @@ item2.set({
 });
  */
 export function transition(item1: SceneItem, item2: SceneItem, {
-  from,
-  to,
-  duration = item1.getDuration(),
-  time = Math.max(item1.getDuration() - duration, 0),
+    from,
+    to,
+    duration = item1.getDuration(),
+    time = Math.max(item1.getDuration() - duration, 0),
 }: { from: IObject<any>, to: IObject<any>, duration?: number, time?: number }) {
-  item1.set({
-    [time]: to,
-    [time + duration]: from,
-  });
-  item2.set({
-    0: from,
-    [duration]: to,
-  });
+    item1.set({
+        [time]: to,
+        [time + duration]: from,
+    });
+    item2.set({
+        0: from,
+        [duration]: to,
+    });
 }
 
 /**
@@ -243,7 +243,7 @@ new SceneItem({
 });
  */
 export function fadeIn({ from = 0, to = 1 }: Partial<PresetState>) {
-  return set("opacity", [from, to], arguments[0]);
+    return set("opacity", [from, to], arguments[0]);
 }
 
 /**
@@ -270,7 +270,7 @@ new SceneItem({
 });
  */
 export function fadeOut({ from = 1, to = 0 }: Partial<PresetState>) {
-  return set("opacity", [from, to], arguments[0]);
+    return set("opacity", [from, to], arguments[0]);
 }
 /**
  * Make a blinking effect.
@@ -299,5 +299,5 @@ new SceneItem({
 });
  */
 export function blink({ from = 0, to = 1 }: Partial<PresetState>) {
-  return set("opacity", [from, to, from], arguments[0]);
+    return set("opacity", [from, to, from], arguments[0]);
 }

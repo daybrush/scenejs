@@ -55,6 +55,7 @@ export interface AnimatorState {
 export interface SceneState extends AnimatorState {
   selector: string | boolean;
   playCSS: boolean;
+  exportEvent?: boolean;
 }
 
 /**
@@ -70,6 +71,7 @@ export interface SceneItemState extends AnimatorState {
   playCSS: boolean;
   cssText: string;
   selector: string;
+  exportEvent?: boolean;
 }
 /**
  * @typedef
