@@ -5,7 +5,7 @@ module.exports = {
   input: "demo/src/index.ts",
   output: {
     sourcemap: true,
-    uglify: false,
+    uglify: true,
     banner: banner,
     file: "./demo/dist/index.js",
     css: "./demo/dist/index.css",

@@ -25,7 +25,7 @@
     "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
     "demo:start": "demo demo.js -w",
     "demo:build": "rm -rf ./demo/dist && demo demo.js",
-    "release": "npm run build && npm run demo:build && release",
+    "release": "npm run build && npm run doc && npm run demo:build && release --dirs dist,doc,examples",
     "release:build": "npm run build && prerelease"
   },
   "repository": {
