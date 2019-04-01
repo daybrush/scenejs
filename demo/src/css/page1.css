@@ -219,6 +219,7 @@
   position: relative;
   font-size: 0;
   text-align: center;
+  -webkit-perspective: 1000;
 }
 
 .page1 .character {
