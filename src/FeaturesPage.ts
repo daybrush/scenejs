@@ -62,7 +62,8 @@ new Scene({
     easing: Scene.EASE_IN_OUT,
     selector: true,
 }).exportCSS({
-    selector: `.page2 [data-feature="progress"]:hover .icon2 .thumb`,
+    selector:
+        `.page2 [data-feature="progress"]:hover .icon2 .thumb, .page2 [data-feature="progress"]:focus .icon2 .thumb`,
 });
 
 new Scene({
@@ -71,18 +72,24 @@ new Scene({
             "stroke-dasharray": "4450 4450",
         },
         "0>": {
-            "stroke-dasharray": "0 5000",
+            "stroke-dasharray": "0 4450",
         },
-        "0.8": {
-            "stroke-dasharray": "1400 5000",
+        "0.3": {
+            "stroke-dasharray": "360 4450",
         },
-        "1.6": {
-            "stroke-dasharray": "2500 4450",
+        "1.2": {
+            "stroke-dasharray": "1400 4450",
         },
-        "2.7": {
+        "2": {
+            "stroke-dasharray": "2400 4450",
+        },
+        "2.6": {
+            "stroke-dasharray": "3000 4450",
+        },
+        "3.1": {
             "stroke-dasharray": "4450 4450",
         },
-        "3": {
+        "3.5": {
 
         },
     },
@@ -91,7 +98,7 @@ new Scene({
     easing: Scene.EASE_IN,
     selector: true,
 }).exportCSS({
-    selector: `.page2 [data-feature="svg"]:hover .icon3 path`,
+    selector: `.page2 [data-feature="svg"]:hover .icon3 path, .page2 [data-feature="svg"]:focus .icon3 path`,
 }).setTime(0);
 
 new Scene({
@@ -210,6 +217,13 @@ icon5Scene.getItem(".slide:nth-child(3) .target").on("animate", e => {
 
     el.innerHTML = `${e.frame.get("text")}`;
 });
+
+toArray($(".page2 li .feature", true)).forEach(el => {
+    addEvent(el, "click", e => {
+        e.preventDefault();
+    });
+});
+
 addEvent(valueFeatureElement, "mouseenter", () => {
     icon5Scene.getPlayState() !== "running" && icon5Scene.play();
 });

@@ -1,11 +1,17 @@
-import {SceneItem, EASE} from "../../src";
+import NativeScene, {animateItem, IEasingFunction} from "../../src";
+
+declare var Scene: typeof NativeScene & {
+    animateItem: typeof animateItem,
+    EASE: IEasingFunction,
+};
 
 export function scroll(to: number) {
-  return new SceneItem({
-    scrollTop: to,
+  return Scene.animateItem({
+    scrollTop: [document.documentElement.scrollTop || document.body.scrollTop, to],
   }, {
-    target: document.documentElement,
     duration: 1,
-    easing: EASE,
-  }).play();
+    easing: Scene.EASE,
+  }).on("animate", ({frame}) => {
+    window.scrollTo(0, frame.get("scrollTop"));
+  });
 }
