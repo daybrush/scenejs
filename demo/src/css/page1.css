@@ -8,14 +8,14 @@
   top: 0px;
   left: 0px;
   right: 0px;
-  bottom: 0px;
+  bottom: 100px;
   height: 200px;
   margin: auto;
 }
 
 .page1 .clapper {
   position: relative;
-  width: 350px;
+  width: 270px;
   height: 200px;
   margin: 0px auto;
 }
@@ -317,8 +317,13 @@
 }
 
 .page1 .description p span {
-  display: block;
+  display: inline-block;
   padding: 5px;
+}
+.page1 .description p a {
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
 }
 .page1 .startAnimation {
   will-change: transform;

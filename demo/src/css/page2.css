@@ -21,8 +21,13 @@
   transition: transform ease 0.2s;
   text-align: center;
   vertical-align: top;
+  touch-action: manipulation;
 }
-.page2 .features li:hover {
+.page2 .features li a {
+  color: #fff;
+  text-decoration: none;
+}
+.page2 .features li:hover,.page2 .features li:focus, .info-slide:active {
   transform: scale(1.05);
 }
 .page2 .features li .feature {

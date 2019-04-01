@@ -10,20 +10,28 @@
 
 <body>
   <header>
+    <button class="nav_button">
+      <div></div>
+      <div></div>
+      <div></div>
+    </button>
     <div class="logo" data-item="main"><a href="#main">Scene.js</a></div>
-    <nav>
-      <ul>
-        <li data-item="features"><a href="#features">FEATURES</a></li>
-        <li data-item="examples"><a href="#examples">EXAMPLES</a></li>
-        <li data-item="started"><a href="#started">GETTING STARTED</a></li>
-        <li data-link="api"><a href="https://daybrush.com/scenejs/release/latest/doc/"
-            target="_blank">
-            API
-            </a></li>
-        <li data-link="download"><a href="https://github.com/daybrush/scenejs" target="_blank">DOWNLOAD</a></li>
-      </ul>
-    </nav>
   </header>
+  <nav>
+      <div class="half">
+        <ul>
+          <li data-item="home"><a href="#home">Home</a></li>
+          <li data-item="features"><a href="#features">FEATURES</a></li>
+          <li data-item="examples"><a href="#examples">EXAMPLES</a></li>
+          <li data-item="started"><a href="#started">GETTING STARTED</a></li>
+          <li data-link="api"><a href="https://daybrush.com/scenejs/release/latest/doc/"
+              target="_blank">
+              API
+              </a></li>
+          <li data-link="download"><a href="https://github.com/daybrush/scenejs" target="_blank">DOWNLOAD</a></li>
+        </ul>
+      </div>
+  </nav>
   <div id="main" class="page page1">
     <div class="container">
       <div class="logo logo1">
@@ -77,6 +85,14 @@
         <div class="description">
           <p><span>Scene.js is a JavaScript Animation Library</span></p>
           <p><span>For creating animated websites</span></p>
+          <p>
+            <a href="https://github.com/daybrush/scenejs" target="_blank"><span>Github</span></a>
+            <span>/</span>
+            <a href="https://daybrush.com/scenejs/release/latest/doc/" target="_blank"><span>API</span></a>
+          </p>
+        </div>
+        <div class="description">
+          
         </div>
       </div>
       <audio controls>
@@ -113,19 +129,15 @@
         <li>
           <div class="feature" data-feature="svg">
             <div class="icon icon3">
-              <svg width="100%" viewBox="0 0 500 200" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/"
-                style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
-                <g transform="matrix(0.5,0,0,0.5,0,0)">
-                  <g id="Artboard1" transform="matrix(0.966957,0,0,0.675155,-748.037,-365.425)">
-                    <rect x="773.599" y="541.246" width="1034.17" height="592.456" style="fill:none;" />
-                    <g transform="matrix(1.03417,0,0,1.2726,27.2532,-187.379)">
-                      <path stroke="#fff" stroke-width="20" stroke-linecap="round" fill="transparent"
-                        d="M996.666,679.872C1016.68,655.274 1009.67,616.655 985.445,597.875C929.217,554.281 849.568,590.954 855,674C858.594,728.954 906.299,755.034 943.827,790.796C1012.29,856.035 1022.56,916.434 998.214,960.514C990.689,974.138 979.57,987.254 965.375,1000.17C902.726,1057.19 800.881,1008.44 848.62,961.74C922.753,889.223 1057.88,928.034 1159.9,739.94C1246.37,580.503 1161.53,509.841 1145,669C1130.13,812.248 1215.47,889.427 1151.92,999.619C1123.03,1049.71 1109.19,1023.67 1140.8,971.27C1221.91,836.848 1336.07,790.934 1436,691C1453.9,673.095 1515.82,620.051 1520.21,595.06C1525.96,562.341 1464.68,579.599 1410.32,645.994C1360.37,706.991 1319.8,805.055 1363.57,835.284C1396.76,858.201 1500.26,816.383 1530.15,730.371C1577.48,594.192 1521.97,567.018 1533,671C1540.44,741.131 1523.55,836.38 1499.15,891.878C1458.48,984.405 1339.14,1066.05 1294.19,1014.08C1261.3,976.049 1335.33,916.554 1361.54,896.459C1478.06,807.134 1611.35,827.518 1682.83,840.829"
-                        style="fill:none;" />
-                    </g>
+                <svg width="100%" height="100%" viewBox="0 0 500 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+                  <g transform="matrix(0.5,0,0,0.5,0,0)">
+                      <g id="Artboard1" transform="matrix(0.966957,0,0,0.675155,-748.037,-365.425)">
+                          <rect x="773.599" y="541.246" width="1034.17" height="592.456" style="fill:none;"/>
+                          <g id="Layer1" transform="matrix(1.03417,0,0,1.48114,773.599,520.51)">
+                              <path stroke="#fff" stroke-width="20" stroke-linecap="round" fill="transparent" d="M14.072,282.172C62.055,287.178 211.405,258.288 232.093,106.803C245.183,10.95 175.634,38.769 175.274,121.466C174.696,254.303 345.708,276.667 261.505,364.848C223.868,404.264 162.843,365.295 135.844,332.678C44.912,222.821 174.741,290.734 226.944,314.06C305.751,349.274 394.038,317.424 421.116,157.12C440.884,40.084 426.007,37.332 405.238,178.8C374.39,388.93 525.241,428.727 604.056,135.659C631.833,32.372 590.153,120.492 700.477,128.771C765.675,133.664 906.434,99.5 899.092,83.529C888.047,59.504 651.522,134.399 689.798,210.4C715.743,261.917 824.613,253.598 880.128,185.618C925.485,130.077 888.739,57.951 897.887,113.597C922.461,263.076 786.919,398.343 713.414,373.936C695.57,368.011 688.743,349.213 700.318,334.202C754.291,264.208 948.931,261.515 988.492,282.759" style="fill:none;"/>
+                          </g>
+                      </g>
                   </g>
-                </g>
               </svg>
             </div>
             <p class="title">Support SVG Animation</p>
