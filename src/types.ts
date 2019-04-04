@@ -24,30 +24,43 @@ export type EasingType = 0 | IEasingFunction;
  * @typedef
  */
 export type DirectionType = "normal" | "reverse" | "alternate" | "alternate-reverse";
+
 /**
  * @typedef
  */
 export type PlayStateType = "paused" | "running";
 
 /**
- * @typedef
- */
-export interface AnimatorState {
+* @typedef - The Animator options. Properties used in css animation.
+* @property - The id represents the unique key of the animator.
+* @property - The easing(timing-function) specifies the speed curve of an animation.
+* @property - The iterationCount property specifies the number of times an animation should be played.
+* @property - The delay property specifies a delay for the start of an animation.
+* @property - The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
+* @property - The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+* @property - The playspeed define the speed at which the play is performed.
+* @property - The duration property defines how long an animation should take to complete one cycle.
+
+*/
+export interface AnimatorOptions {
     id: number | string;
     easing: EasingType;
-    easingName: string;
     iterationCount: IterationCountType;
     delay: number;
     fillMode: FillModeType;
     direction: DirectionType;
     playSpeed: number;
+    duration: number;
+}
+
+export interface AnimatorState extends AnimatorOptions {
+    easingName: string;
     iterationTime: number;
     currentTime: number;
     tickTime: number;
     iteration: number;
     prevTime: number;
     playState: PlayStateType;
-    duration: number;
 }
 
 /**
@@ -62,7 +75,7 @@ export interface SceneState extends AnimatorState {
 /**
  * @typedef
  */
-export interface SceneOptions extends AnimatorState {
+export interface SceneOptions extends AnimatorOptions {
     selector: string | boolean;
 }
 /**
@@ -77,7 +90,7 @@ export interface SceneItemState extends AnimatorState {
 /**
  * @typedef
  */
-export interface SceneItemOptions extends AnimatorState {
+export interface SceneItemOptions extends AnimatorOptions {
     selector: boolean | string;
     elements: IArrayFormat<AnimateElement> | AnimateElement;
     element: IArrayFormat<AnimateElement> | AnimateElement;

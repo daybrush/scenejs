@@ -11,7 +11,7 @@ import { toFixed, makeId } from "./utils";
 import { splitUnit, isString, camelize, requestAnimationFrame, isArray } from "@daybrush/utils";
 import {
     IterationCountType, DirectionType, AnimatorState,
-    IEasingFunction, FillModeType, PlayStateType, EasingType,
+    IEasingFunction, FillModeType, PlayStateType, EasingType, AnimatorOptions,
 } from "./types";
 
 function GetterSetter<T extends new (...args: any[]) => {}>(
@@ -85,8 +85,9 @@ const getters = [...setters, EASING, EASING_NAME];
 * @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
 */
 @GetterSetter(getters, setters, "state")
-class Animator<T extends AnimatorState = AnimatorState> extends EventTrigger {
-    public state: T;
+class Animator
+    <T extends AnimatorOptions = AnimatorOptions, U extends AnimatorState = AnimatorState> extends EventTrigger {
+    public state: U;
 
     /**
      * @param - animator's options
@@ -100,7 +101,7 @@ class Animator<T extends AnimatorState = AnimatorState> extends EventTrigger {
       easing: Scene.easing.EASE,
   });
      */
-    constructor(options?: Partial<T>) {
+    constructor(options?: Partial<T & AnimatorOptions>) {
         super();
         this.state = {
             id: "",
@@ -118,7 +119,7 @@ class Animator<T extends AnimatorState = AnimatorState> extends EventTrigger {
             prevTime: 0,
             playState: PAUSED,
             duration: 0,
-        } as T;
+        } as U;
         this.setOptions(options);
     }
     /**
@@ -161,7 +162,7 @@ class Animator<T extends AnimatorState = AnimatorState> extends EventTrigger {
       easing: Scene.eaasing.EASE,
   });
       */
-    public setOptions(options: Partial<AnimatorState> = {}): this {
+    public setOptions(options: Partial<AnimatorOptions> = {}): this {
         for (const name in options) {
             const value = options[name];
 
@@ -567,7 +568,7 @@ animator.getIterationTime();
 	*/
 
 // tslint:disable-next-line:interface-name
-interface Animator<T extends AnimatorState> {
+interface Animator<T extends AnimatorOptions = AnimatorOptions, U extends AnimatorState = AnimatorState> {
     setId(id: number | string): this;
     getId(): number | string;
     getIterationTime(): number;

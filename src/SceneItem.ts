@@ -171,7 +171,7 @@ const item = new SceneItem({
 	}
 });
 */
-class SceneItem extends Animator<SceneItemState> {
+class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
     public times: number[] = [];
     public items: IObject<Frame> = {};
     public names: RoleObject = {};

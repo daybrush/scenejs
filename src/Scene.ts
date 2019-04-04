@@ -13,7 +13,7 @@ import Frame from "./Frame";
  * manage sceneItems and play Scene.
  * @sort 1
  */
-class Scene extends Animator<SceneState> {
+class Scene extends Animator<SceneOptions, SceneState> {
     /**
     * version info
     * @type {string}

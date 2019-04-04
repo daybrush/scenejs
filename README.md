@@ -91,13 +91,15 @@ const scene = new Scene({
 * [blink](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.blink)
 * [fadeIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.fadeIn)
 * [fadeOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.fadeOut)
-* [set](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.set)
 * [transition](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.transition)
+* [animate](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.animate)
+* [animateItem](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.animateItem)
+
 
 ## Support Browser
 
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
-|9+(polyfill 8+)|latest|latest|latest|latest|
+|9+(10+ playCSS)|latest|latest|latest|latest|
 
 
