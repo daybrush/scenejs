@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="description" content="Scene.js is a JavaScript Animation Library for creating animated websites" />
+    <meta property="og:title" content="Scene.js is a JavaScript Animation Library">
+    <meta property="og:url" content="http://daybrush.com/scenejs">
+    <meta property="og:image" content="http://daybrush.com/scenejs/clapperboard.png">
+    <meta property="og:description" content="Scene.js is a JavaScript Animation Library for creating animated websites">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Scene.js is a JavaScript Animation Library ">
+    <meta name="twitter:url" content="http://daybrush.com/scenejs">
+    <meta name="twitter:image" content="http://daybrush.com/scenejs/clapperboard.png">
+    <meta name="twitter:description"
+        content="Scene.js is a JavaScript Animation Library for creating animated websites">
+    <link rel="stylesheet" href="https://daybrush.com/daybrush-jsdoc-template/static/styles/jsdoc.css">
+    <link rel="stylesheet" href="https://daybrush.com/daybrush-jsdoc-template/static/styles/daybrush.css">
+    <style>
+        nav > ul > li {
+            padding: 8px 10px;
+        }
+        nav > ul > li > a {
+            margin: 0px 0px 5px;
+        }
+        nav li:after {
+            display: none;
+        }
+
+        nav li h4,
+        nav li ul {
+            display: block;
+        }
+
+        nav {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        nav {
+            position: relative !important;
+            display: block !important;
+            left: 0 !important;
+        }
+
+        #main {
+            float: left;
+            width: calc(100% - 250px);
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h2><a href="index.html">Home</a></h2>
+        <h2 class="custom"><a href="https://github.com/daybrush/scenejs" target="_blank" class="menu-item"
+                id="repository">Github repo</a></h2>
+        <div class="search">
+            <div class="input-area"><input type="text"></div><button></button>
+        </div>
+        <ul class="classes">
+            <li class="parent">
+                <a href="Scene.html">Options</a>
+                <ul class="methods">
+                    <li><a href="Scene.html#end">direction</a></li>
+                    <li><a href="Scene.html#finish">delay</a></li>
+                    <li><a href="Scene.html#exportCSS">iterationCount</a></li>
+                    <li><a href="Scene.html#forEach">fillMode</a></li>
+                    <li><a href="Scene.html#getActiveDuration">easing</a></li>
+                    <li><a href="Scene.html#getDelay">playSpeed</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">Values</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">Number</a></li>
+                    <li><a href="presets.html#.fadeIn">Unit (Number + String)</a></li>
+                    <li><a href="presets.html#.fadeOut">String</a></li>
+                    <li><a href="presets.html#.transition">function</a></li>
+                    <li><a href="presets.html#.wipeIn">color</a></li>
+                    <li><a href="presets.html#.wipeOut">array</a></li>
+                    <li><a href="presets.html#.zoomIn">object</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">Timeline</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">Keyframes</a></li>
+                    <li><a href="presets.html#.fadeIn">Progress</a></li>
+                    <li><a href="presets.html#.fadeOut">Player</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">SVG Animation</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">Hand Writting</a></li>
+                    <li><a href="presets.html#.fadeIn">Transform Shape</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">Plays</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">Javascript Animation</a></li>
+                    <li><a href="presets.html#.fadeIn">CSS Animation</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">Presets</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">blink</a></li>
+                    <li><a href="presets.html#.fadeIn">fadeIn</a></li>
+                    <li><a href="presets.html#.fadeOut">fadeOut</a></li>
+                    <li><a href="presets.html#.transition">transition</a></li>
+                    <li><a href="presets.html#.wipeIn">wipeIn</a></li>
+                    <li><a href="presets.html#.wipeOut">wipeOut</a></li>
+                    <li><a href="presets.html#.zoomIn">zoomIn</a></li>
+                    <li><a href="presets.html#.zoomOut">zoomOut</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">Rendering</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">Export MP4</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="main">
+        <div class="container-overview">
+            <h2>Options</h2>
+
+
+            <h4 class="name" id="Scene">direction</h4>
+            <table class="params">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th class="last">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="name"><code>directiobn</code></td>
+                        <td class="type">
+                            <span class="param-type"><a
+                                    href="http://daybrush.com/utils/release/latest/doc/global.html#ObjectInterface"
+                                    target="_blank">IObject</a>&lt;any&gt;</span>
+                        </td>
+                        <td class="description last">properties</td>
+                    </tr>
+                    <tr>
+                        <td class="name"><code>options</code>?</td>
+                        <td class="type">
+                            <span class="param-type">Partial&lt;<a
+                                    href="global.html#SceneOptions">SceneOptions</a>&gt;</span>
+                        </td>
+                        <td class="description last">options</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h5>Example</h5>
+        </div>
+        Options
+        direction
+        iterationCount
+        delay
+        fillMode
+        easing
+        playSpeed
+        Values
+        string
+        number
+        array
+        object
+        function
+        color
+        Timeline
+        Keyframes
+        Progress
+        Player
+        SVG Animation
+        HandWritting
+        Points
+        Presets
+        animate
+        animateItem
+        wipeIn
+        wipeOut
+        fadeIn
+        fadeOut
+        zoomIn
+        zoomOut
+        blink
+        transition
+        Plays
+        Javascript Animation
+        CSS Animation
+        Export MP4
+        Rendering
+    </div>
+</body>
+
+</html>
