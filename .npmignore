@@ -17,6 +17,7 @@ coverage/
 dist/report.html
 rollup-plugin-visualizer/
 outjs/
+statistics/
 .scene_cache
 *.mp3
 *.mp4
