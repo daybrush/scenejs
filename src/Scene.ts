@@ -61,7 +61,7 @@ class Scene extends Animator<SceneOptions, SceneState> {
 
             time = Math.max(time, item.getTotalDuration() / item.getPlaySpeed());
         }
-        return Math.max(time, this.state[DURATION]);
+        return time || this.state[DURATION];
     }
     public setDuration(duration: number) {
         const items = this.items;
@@ -123,6 +123,22 @@ class Scene extends Animator<SceneOptions, SceneState> {
         item.setOptions(options);
 
         return item;
+    }
+    /**
+    * remove item in scene
+    * @param - name of item to remove
+    * @return  An instance itself
+    * @example
+    const item = scene.newItem("item1")
+
+    scene.removeItem("item1");
+    */
+   public removeItem(name: number | string): this {
+        const items = this.items;
+        if (name in items) {
+            delete items[name];
+        }
+        return this;
     }
     /**
     * add a sceneItem to the scene
