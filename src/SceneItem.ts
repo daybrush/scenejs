@@ -177,7 +177,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
     public names: RoleObject = {};
     public elements: AnimateElement[] = [];
     public temp: Frame;
-    private needUpdate: boolean = false;
+    private needUpdate: boolean = true;
     private target: any;
     private targetFunc: (frame: Frame) => void;
 
@@ -206,7 +206,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         const times = this.times;
         const length = times.length;
 
-        return Math.max(this.state[DURATION], length === 0 ? 0 : times[length - 1]);
+        return (length === 0 ? 0 : times[length - 1]) || this.state[DURATION];
     }
     /**
       * get size of list
@@ -234,8 +234,9 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
                 return time2;
             });
             this.items = obj;
+        } else {
+            this.newFrame(this.getDuration());
         }
-        super.setDuration(toFixed(duration));
         return this;
     }
     public setId(id?: number | string) {
@@ -556,11 +557,13 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
   item.update();
       */
     public update() {
-        const names = this.names;
-        this.forEach(frame => {
-            updateFrame(names, frame.properties);
-        });
-        this.needUpdate = false;
+        if (this.needUpdate) {
+            const names = this.names;
+            this.forEach(frame => {
+                updateFrame(names, frame.properties);
+            });
+            this.needUpdate = false;
+        }
         return this;
     }
     /**
@@ -695,7 +698,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         let nameObject = this.names;
 
         if (this.hasName([TIMING_FUNCTION])) {
-            const nowEasing = this._getNowValue(time, [TIMING_FUNCTION], left, right, false, 0, true);
+            const nowEasing = this.getNowValue(time, [TIMING_FUNCTION], left, right, false, 0, true);
 
             isFunction(nowEasing) && (realEasing = nowEasing);
         }
@@ -713,7 +716,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         const names = getNames(nameObject, []);
 
         names.forEach(properties => {
-            const value = this._getNowValue(time, properties, left, right, isAccurate, realEasing, isFixed(properties));
+            const value = this.getNowValue(time, properties, left, right, isAccurate, realEasing, isFixed(properties));
 
             if (isUndefined(value)) {
                 return;
@@ -927,46 +930,11 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         }
         return elements[0];
     }
-    private _toKeyframes(duration: number, states: AnimatorState[], direction: DirectionType) {
-        const frames: IObject<string> = {};
-        const times = this.times.slice();
-
-        if (!times.length) {
-            return "";
-        }
-        const originalDuration = this.getDuration();
-        (!this.getFrame(0)) && times.unshift(0);
-        (!this.getFrame(originalDuration)) && times.push(originalDuration);
-        const entries = getEntries(times, states);
-        const lastEntry = entries[entries.length - 1];
-
-        // end delay time
-        lastEntry[0] < duration && addEntry(entries, duration, lastEntry[1]);
-        let prevTime = -1;
-
-        return entries.map(([time, keytime]) => {
-            if (!frames[keytime]) {
-                frames[keytime] =
-                    (!this.hasFrame(keytime) || keytime === 0 || keytime === originalDuration ?
-                        this.getNowFrame(keytime) : this.getNowFrame(keytime, 0, true)).toCSS();
-            }
-
-            let frameTime = time / duration * 100;
-
-            if (frameTime - prevTime < THRESHOLD) {
-                frameTime += THRESHOLD;
-            }
-            prevTime = frameTime;
-            return `${Math.min(frameTime, 100)}%{
-                ${time === 0 && !isDirectionReverse(0, 1, direction) ? "" : frames[keytime]}
-            }`;
-        }).join("");
-    }
-    private _getNowValue(
+    public getNowValue(
         time: number,
         properties: string[],
-        left: number,
-        right: number,
+        left?: number,
+        right?: number,
         isAccurate?: boolean,
         easing?: EasingType,
         usePrevValue?: boolean,
@@ -978,6 +946,13 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         let nextTime: number;
         let prevFrame: Frame;
         let nextFrame: Frame;
+        const isUndefinedLeft = isUndefined(left);
+        const isUndefinedRight = isUndefined(right);
+        if (isUndefinedLeft || isUndefinedRight) {
+            const indicies = getNearTimeIndex(times, time);
+            isUndefinedLeft && (left = indicies[0]);
+            isUndefinedRight && (right = indicies[1]);
+        }
 
         for (let i = left; i >= 0; --i) {
             const frame = this.getFrame(times[i]);
@@ -1013,10 +988,42 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         if (!nextFrame || isUndefined(nextValue) || prevValue === nextValue) {
             return prevValue;
         }
-        if (prevTime < 0) {
-            prevTime = 0;
+        return dotValue(time, Math.max(prevTime, 0), nextTime, prevValue, nextValue, easing);
+    }
+    private _toKeyframes(duration: number, states: AnimatorState[], direction: DirectionType) {
+        const frames: IObject<string> = {};
+        const times = this.times.slice();
+
+        if (!times.length) {
+            return "";
         }
-        return dotValue(time, prevTime, nextTime, prevValue, nextValue, easing);
+        const originalDuration = this.getDuration();
+        (!this.getFrame(0)) && times.unshift(0);
+        (!this.getFrame(originalDuration)) && times.push(originalDuration);
+        const entries = getEntries(times, states);
+        const lastEntry = entries[entries.length - 1];
+
+        // end delay time
+        lastEntry[0] < duration && addEntry(entries, duration, lastEntry[1]);
+        let prevTime = -1;
+
+        return entries.map(([time, keytime]) => {
+            if (!frames[keytime]) {
+                frames[keytime] =
+                    (!this.hasFrame(keytime) || keytime === 0 || keytime === originalDuration ?
+                        this.getNowFrame(keytime) : this.getNowFrame(keytime, 0, true)).toCSS();
+            }
+
+            let frameTime = time / duration * 100;
+
+            if (frameTime - prevTime < THRESHOLD) {
+                frameTime += THRESHOLD;
+            }
+            prevTime = frameTime;
+            return `${Math.min(frameTime, 100)}%{
+                ${time === 0 && !isDirectionReverse(0, 1, direction) ? "" : frames[keytime]}
+            }`;
+        }).join("");
     }
 }
 
