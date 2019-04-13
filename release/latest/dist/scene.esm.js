@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2017 Daybrush
+Copyright (c) 2019 Daybrush
 name: scenejs
 license: MIT
 author: Daybrush
@@ -1285,7 +1285,7 @@ function (_super) {
           value = _a.value;
 
       if (unit === "%") {
-        !this.getDuration() && (this.state[DURATION] = duration);
+        !this.getDuration() && this.setDuration(duration);
         return toFixed(parseFloat(time) / 100 * duration);
       } else if (unit === ">") {
         return value + THRESHOLD;
@@ -2261,7 +2261,7 @@ function (_super) {
     _this.items = {};
     _this.names = {};
     _this.elements = [];
-    _this.needUpdate = false;
+    _this.needUpdate = true;
 
     _this.load(properties, options);
 
@@ -2273,7 +2273,7 @@ function (_super) {
   __proto.getDuration = function () {
     var times = this.times;
     var length = times.length;
-    return Math.max(this.state[DURATION], length === 0 ? 0 : times[length - 1]);
+    return (length === 0 ? 0 : times[length - 1]) || this.state[DURATION];
   };
   /**
     * get size of list
@@ -2306,9 +2306,9 @@ function (_super) {
         return time2;
       });
       this.items = obj_1;
+    } else {
+      this.newFrame(duration);
     }
-
-    _super.prototype.setDuration.call(this, toFixed(duration));
 
     return this;
   };
@@ -2693,11 +2693,14 @@ function (_super) {
 
 
   __proto.update = function () {
-    var names = this.names;
-    this.forEach(function (frame) {
-      updateFrame(names, frame.properties);
-    });
-    this.needUpdate = false;
+    if (this.needUpdate) {
+      var names_1 = this.names;
+      this.forEach(function (frame) {
+        updateFrame(names_1, frame.properties);
+      });
+      this.needUpdate = false;
+    }
+
     return this;
   };
   /**
@@ -2907,7 +2910,9 @@ function (_super) {
     }
 
     if (options && options[DURATION]) {
+      console.log(this.getDuration());
       this.setDuration(options[DURATION]);
+      console.log(this.getDuration());
     }
 
     return this;
@@ -3312,7 +3317,7 @@ function (_super) {
       time = Math.max(time, item.getTotalDuration() / item.getPlaySpeed());
     }
 
-    return Math.max(time, this.state[DURATION]);
+    return time || this.state[DURATION];
   };
 
   __proto.setDuration = function (duration) {
@@ -3382,6 +3387,25 @@ function (_super) {
     this.setItem(name, item);
     item.setOptions(options);
     return item;
+  };
+  /**
+  * remove item in scene
+  * @param - name of item to remove
+  * @return  An instance itself
+  * @example
+  const item = scene.newItem("item1")
+   scene.removeItem("item1");
+  */
+
+
+  __proto.removeItem = function (name) {
+    var items = this.items;
+
+    if (name in items) {
+      delete items[name];
+    }
+
+    return this;
   };
   /**
   * add a sceneItem to the scene

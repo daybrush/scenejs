@@ -6,7 +6,9 @@ author: Daybrush
 repository: https://github.com/daybrush/scenejs.git
 version: 1.0.0-rc7
 */
-import { isObject, isArray, toArray, isString, $, document, IS_WINDOW, ANIMATION, removeEvent, addEvent, OBJECT, ARRAY, PROPERTY, STRING, NUMBER, requestAnimationFrame, splitUnit, camelize, splitComma, splitSpace, splitBracket, COLOR_MODELS, stringToRGBA, RGBA, isUndefined, TRANSFORM, FILTER, FUNCTION, fromCSS, isFunction, KEYFRAMES, addClass, removeClass, hasClass, decamelize } from '@daybrush/utils';
+'use strict';
+
+var utils = require('@daybrush/utils');
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -153,7 +155,7 @@ function () {
 
     var events = this.events;
 
-    if (isObject(name)) {
+    if (utils.isObject(name)) {
       for (var n in name) {
         this._on(n, name[n], once);
       }
@@ -169,7 +171,7 @@ function () {
       return;
     }
 
-    if (isArray(callback)) {
+    if (utils.isArray(callback)) {
       callback.forEach(function (func) {
         return _this._on(name, func, once);
       });
@@ -276,7 +278,7 @@ function () {
     target.type = name;
     target.currentTarget = this;
     !target.target && (target.target = this);
-    toArray(events[name]).forEach(function (callback) {
+    utils.toArray(events[name]).forEach(function (callback) {
       callback.apply(_this, data);
     });
     return this;
@@ -503,7 +505,7 @@ function () {
     this.type = "";
     this.separator = ",";
     options && this.setOptions(options);
-    this.value = isString(value) ? value.split(this.separator) : value;
+    this.value = utils.isString(value) ? value.split(this.separator) : value;
   }
 
   var __proto = PropertyObject.prototype;
@@ -679,13 +681,13 @@ function setRole(names, isProperty, isFixedProperty) {
 function getType(value) {
   var type = typeof value;
 
-  if (type === OBJECT) {
-    if (isArray(value)) {
-      return ARRAY;
+  if (type === utils.OBJECT) {
+    if (utils.isArray(value)) {
+      return utils.ARRAY;
     } else if (isPropertyObject(value)) {
-      return PROPERTY;
+      return utils.PROPERTY;
     }
-  } else if (type === STRING || type === NUMBER) {
+  } else if (type === utils.STRING || type === utils.NUMBER) {
     return "value";
   }
 
@@ -702,7 +704,7 @@ function getValueByNames(names, properties, length) {
   var value = properties;
 
   for (var i = 0; i < length; ++i) {
-    if (!isObject(value)) {
+    if (!utils.isObject(value)) {
       return undefined;
     }
 
@@ -750,23 +752,23 @@ function isEndedCSS(item) {
 }
 function exportCSS(id, css) {
   var styleId = PREFIX + "STYLE_" + toId(id);
-  var styleElement = $("#" + styleId);
+  var styleElement = utils.$("#" + styleId);
 
   if (styleElement) {
     styleElement.innerText = css;
   } else {
-    document.body.insertAdjacentHTML("beforeend", "<style id=\"" + styleId + "\">" + css + "</style>");
+    utils.document.body.insertAdjacentHTML("beforeend", "<style id=\"" + styleId + "\">" + css + "</style>");
   }
 }
 function makeId(selector) {
   for (;;) {
     var id = "" + Math.floor(Math.random() * 10000000);
 
-    if (!IS_WINDOW || !selector) {
+    if (!utils.IS_WINDOW || !selector) {
       return id;
     }
 
-    var checkElement = $("[data-scene-id=\"" + id + "\"]");
+    var checkElement = utils.$("[data-scene-id=\"" + id + "\"]");
 
     if (!checkElement) {
       return id;
@@ -784,7 +786,7 @@ function playCSS(item, isExportCSS, playClassName, properties) {
     properties = {};
   }
 
-  if (!ANIMATION || item.getPlayState() === RUNNING) {
+  if (!utils.ANIMATION || item.getPlayState() === RUNNING) {
     return;
   }
 
@@ -846,10 +848,10 @@ function addAnimationEvent(item, el) {
   };
 
   item.once(ENDED, function () {
-    removeEvent(el, "animationcancel", animationend);
-    removeEvent(el, "animationend", animationend);
-    removeEvent(el, "animationiteration", animationiteration);
-    removeEvent(el, "animationstart", animationstart);
+    utils.removeEvent(el, "animationcancel", animationend);
+    utils.removeEvent(el, "animationend", animationend);
+    utils.removeEvent(el, "animationiteration", animationiteration);
+    utils.removeEvent(el, "animationstart", animationstart);
   });
 
   var animationiteration = function (_a) {
@@ -860,22 +862,22 @@ function addAnimationEvent(item, el) {
     item.setIteration(iterationCount);
   };
 
-  addEvent(el, "animationcancel", animationend);
-  addEvent(el, "animationend", animationend);
-  addEvent(el, "animationiteration", animationiteration);
-  addEvent(el, "animationstart", animationstart);
+  utils.addEvent(el, "animationcancel", animationend);
+  utils.addEvent(el, "animationend", animationend);
+  utils.addEvent(el, "animationiteration", animationiteration);
+  utils.addEvent(el, "animationstart", animationstart);
 }
 
 function GetterSetter(getter, setter, parent) {
   return function (constructor) {
     var prototype = constructor.prototype;
     getter.forEach(function (name) {
-      prototype[camelize("get " + name)] = function () {
+      prototype[utils.camelize("get " + name)] = function () {
         return this[parent][name];
       };
     });
     setter.forEach(function (name) {
-      prototype[camelize("set " + name)] = function (value) {
+      prototype[utils.camelize("set " + name)] = function (value) {
         this[parent][name] = value;
         return this;
       };
@@ -905,7 +907,7 @@ function tick(animator, now, to) {
     return;
   }
 
-  requestAnimationFrame(function (time) {
+  utils.requestAnimationFrame(function (time) {
     tick(animator, time, to);
   });
 }
@@ -999,7 +1001,7 @@ function (_super) {
   var __proto = Animator.prototype;
 
   __proto.setEasing = function (curveArray) {
-    var easing = isArray(curveArray) ? bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]) : curveArray;
+    var easing = utils.isArray(curveArray) ? bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]) : curveArray;
     var easingName = easing[EASING_NAME] || "linear";
     var state = this.state;
     state[EASING] = easing;
@@ -1139,7 +1141,7 @@ function (_super) {
     }
 
     state[TICK_TIME] = this.getTime();
-    requestAnimationFrame(function (time) {
+    utils.requestAnimationFrame(function (time) {
       state[PREV_TIME] = time;
       tick(_this, time, toTime);
     });
@@ -1271,7 +1273,7 @@ function (_super) {
   };
 
   __proto.getUnitTime = function (time) {
-    if (isString(time)) {
+    if (utils.isString(time)) {
       var duration = this.getDuration() || 100;
 
       if (time === "from") {
@@ -1280,7 +1282,7 @@ function (_super) {
         return duration;
       }
 
-      var _a = splitUnit(time),
+      var _a = utils.splitUnit(time),
           unit = _a.unit,
           value = _a.value;
 
@@ -1412,7 +1414,7 @@ arrayToColorObject([0, 0, 0])
 */
 
 function arrayToColorObject(arr) {
-  var model = RGBA;
+  var model = utils.RGBA;
 
   if (arr.length === 3) {
     arr[3] = 1;
@@ -1439,7 +1441,7 @@ stringToBracketObject("abcde(0, 0, 0,1)")
 
 function stringToBracketObject(text) {
   // [prefix, value, other]
-  var _a = splitBracket(text),
+  var _a = utils.splitBracket(text),
       model = _a.prefix,
       value = _a.value,
       afterModel = _a.suffix;
@@ -1448,8 +1450,8 @@ function stringToBracketObject(text) {
     return text;
   }
 
-  if (COLOR_MODELS.indexOf(model) !== -1) {
-    return arrayToColorObject(stringToRGBA(text));
+  if (utils.COLOR_MODELS.indexOf(model) !== -1) {
+    return arrayToColorObject(utils.stringToRGBA(text));
   } // divide comma(,)
 
 
@@ -1492,19 +1494,19 @@ stringToColorObject("rgba(0, 0, 0,1)")
 */
 
 function stringToColorObject(value) {
-  var result = stringToRGBA(value);
+  var result = utils.stringToRGBA(value);
   return result ? arrayToColorObject(result) : value;
 }
 function toPropertyObject(value) {
-  if (!isString(value)) {
-    if (isArray(value)) {
+  if (!utils.isString(value)) {
+    if (utils.isArray(value)) {
       return arrayToPropertyObject(value, ",");
     }
 
     return value;
   }
 
-  var values = splitComma(value);
+  var values = utils.splitComma(value);
 
   if (values.length > 1) {
     return arrayToPropertyObject(values.map(function (v) {
@@ -1512,7 +1514,7 @@ function toPropertyObject(value) {
     }), ",");
   }
 
-  values = splitSpace(value);
+  values = utils.splitSpace(value);
 
   if (values.length > 1) {
     return arrayToPropertyObject(values.map(function (v) {
@@ -1594,14 +1596,14 @@ function merge(to, from, toValue) {
     var value = from[name];
     var type = getType(value);
 
-    if (type === PROPERTY) {
+    if (type === utils.PROPERTY) {
       to[name] = toValue ? value.toValue() : value.clone();
-    } else if (type === FUNCTION) {
+    } else if (type === utils.FUNCTION) {
       to[name] = toValue ? getValue([name], value) : value;
-    } else if (type === ARRAY) {
+    } else if (type === utils.ARRAY) {
       to[name] = value.slice();
-    } else if (type === OBJECT) {
-      if (isObject(to[name]) && !isPropertyObject(to[name])) {
+    } else if (type === utils.OBJECT) {
+      if (utils.isObject(to[name]) && !isPropertyObject(to[name])) {
         merge(to[name], value, toValue);
       } else {
         to[name] = clone(value, toValue);
@@ -1623,13 +1625,13 @@ function getPropertyName(args) {
 function getValue(names, value) {
   var type = getType(value);
 
-  if (type === PROPERTY) {
+  if (type === utils.PROPERTY) {
     return value.toValue();
-  } else if (type === FUNCTION) {
+  } else if (type === utils.FUNCTION) {
     if (names[0] !== TIMING_FUNCTION) {
       return getValue(names, value());
     }
-  } else if (type === OBJECT) {
+  } else if (type === utils.OBJECT) {
     return clone(value, true);
   }
 
@@ -1718,7 +1720,7 @@ function () {
 
     var value = getValueByNames(params, this.properties, length - 1);
 
-    if (isObject(value)) {
+    if (utils.isObject(value)) {
       delete value[params[length - 1]];
     }
 
@@ -1765,9 +1767,9 @@ function () {
 
     if (params[0] in ALIAS) {
       self._set(ALIAS[params[0]], value);
-    } else if (length === 2 && isArray(params[0])) {
+    } else if (length === 2 && utils.isArray(params[0])) {
       self._set(params[0], value);
-    } else if (isArray(value)) {
+    } else if (utils.isArray(value)) {
       self._set(params, value);
     } else if (isPropertyObject(value)) {
       if (isRole(params)) {
@@ -1775,18 +1777,18 @@ function () {
       } else {
         self._set(params, value);
       }
-    } else if (isObject(value)) {
+    } else if (utils.isObject(value)) {
       for (var name in value) {
         self.set.apply(self, params.concat([name, value[name]]));
       }
-    } else if (isString(value)) {
+    } else if (utils.isString(value)) {
       if (isRole(params, true)) {
         if (isFixed(params) || !isRole(params)) {
           this._set(params, value);
         } else {
           var obj = toPropertyObject(value);
 
-          if (isObject(obj)) {
+          if (utils.isObject(obj)) {
             self.set.apply(self, params.concat([obj]));
           }
         }
@@ -1835,7 +1837,7 @@ function () {
       return false;
     }
 
-    return !isUndefined(getValueByNames(params, this.properties, length));
+    return !utils.isUndefined(getValueByNames(params, this.properties, length));
   };
   /**
     * clone frame.
@@ -1887,7 +1889,7 @@ function () {
       var value = properties[name];
 
       if (name === TIMING_FUNCTION) {
-        cssObject[TIMING_FUNCTION.replace("animation", ANIMATION)] = (isString(value) ? value : value[EASING_NAME]) || "initial";
+        cssObject[TIMING_FUNCTION.replace("animation", utils.ANIMATION)] = (utils.isString(value) ? value : value[EASING_NAME]) || "initial";
         continue;
       }
 
@@ -1896,8 +1898,8 @@ function () {
 
     var transform = toInnerProperties(properties[TRANSFORM_NAME]);
     var filter = toInnerProperties(properties.filter);
-    TRANSFORM && transform && (cssObject[TRANSFORM] = transform);
-    FILTER && filter && (cssObject[FILTER] = filter);
+    utils.TRANSFORM && transform && (cssObject[utils.TRANSFORM] = transform);
+    utils.FILTER && filter && (cssObject[utils.FILTER] = filter);
     return cssObject;
   };
   /**
@@ -1931,7 +1933,7 @@ function () {
       return;
     }
 
-    properties[args[length - 1]] = isString(value) ? toPropertyObject(value) : value;
+    properties[args[length - 1]] = utils.isString(value) ? toPropertyObject(value) : value;
   };
 
   return Frame;
@@ -2030,17 +2032,17 @@ function dot(a1, a2, b1, b2) {
 
   var type1 = getType(a1);
   var type2 = getType(a2);
-  var isFunction1 = type1 === FUNCTION;
-  var isFunction2 = type2 === FUNCTION;
+  var isFunction1 = type1 === utils.FUNCTION;
+  var isFunction2 = type2 === utils.FUNCTION;
 
   if (isFunction1 || isFunction2) {
     return function () {
       return dot(isFunction1 ? toPropertyObject(a1()) : a1, isFunction2 ? toPropertyObject(a2()) : a2, b1, b2);
     };
   } else if (type1 === type2) {
-    if (type1 === PROPERTY) {
+    if (type1 === utils.PROPERTY) {
       return dotObject(a1, a2, b1, b2);
-    } else if (type1 === ARRAY) {
+    } else if (type1 === utils.ARRAY) {
       return dotArray(a1, a2, b1, b2);
     } else if (type1 !== "value") {
       return a1;
@@ -2049,8 +2051,8 @@ function dot(a1, a2, b1, b2) {
     return a1;
   }
 
-  var v1 = splitUnit("" + a1);
-  var v2 = splitUnit("" + a2);
+  var v1 = utils.splitUnit("" + a1);
+  var v2 = utils.splitUnit("" + a2);
   var v; // 숫자가 아닐경우 첫번째 값을 반환 b2가 0일경우 두번째 값을 반환
 
   if (isNaN(v1.value) || isNaN(v2.value)) {
@@ -2103,14 +2105,14 @@ function makeAnimationProperties(properties) {
   var cssArray = [];
 
   for (var name in properties) {
-    cssArray.push(ANIMATION + "-" + decamelize(name) + ":" + properties[name] + ";");
+    cssArray.push(utils.ANIMATION + "-" + utils.decamelize(name) + ":" + properties[name] + ";");
   }
 
   return cssArray.join("");
 }
 
 function isPureObject(obj) {
-  return isObject(obj) && obj.constructor === Object;
+  return utils.isObject(obj) && obj.constructor === Object;
 }
 
 function getNames(names, stack) {
@@ -2138,7 +2140,7 @@ function updateFrame(names, properties) {
       continue;
     }
 
-    if (!isObject(names[name])) {
+    if (!utils.isObject(names[name])) {
       names[name] = {};
     }
 
@@ -2348,14 +2350,14 @@ function (_super) {
       args[_i - 1] = arguments[_i];
     }
 
-    if (isArray(time)) {
+    if (utils.isArray(time)) {
       var length = time.length;
 
       for (var i = 0; i < length; ++i) {
         var t = length === 1 ? 0 : this.getUnitTime(i / (length - 1) * 100 + "%");
         this.set(t, time[i]);
       }
-    } else if (isObject(time)) {
+    } else if (utils.isObject(time)) {
       var _loop_1 = function (t) {
         var value = time[t];
         var realTime = this_1.getUnitTime(t);
@@ -2363,7 +2365,7 @@ function (_super) {
         if (isNaN(realTime)) {
           getNames(value, [t]).forEach(function (names) {
             var innerValue = getValueByNames(names.slice(1), value);
-            var arr = isArray(innerValue) ? innerValue : [getValueByNames(names, _this.target), innerValue];
+            var arr = utils.isArray(innerValue) ? innerValue : [getValueByNames(names, _this.target), innerValue];
             var length = arr.length;
 
             for (var i = 0; i < length; ++i) {
@@ -2393,7 +2395,7 @@ function (_super) {
         for (var frameTime in frames) {
           this.set(frameTime, frames[frameTime]);
         }
-      } else if (args.length === 1 && isArray(value)) {
+      } else if (args.length === 1 && utils.isArray(value)) {
         value.forEach(function (item) {
           _this.set(time, item);
         });
@@ -2585,13 +2587,13 @@ function (_super) {
 
     if (!target) {
       return this;
-    } else if (target === true || isString(target)) {
+    } else if (target === true || utils.isString(target)) {
       var selector = target === true ? "" + state.id : target;
       var matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(selector);
-      elements = toArray($(matches ? matches[1] : selector, true));
+      elements = utils.toArray(utils.$(matches ? matches[1] : selector, true));
       state[SELECTOR] = selector;
     } else {
-      elements = target instanceof Element ? [target] : toArray(target);
+      elements = target instanceof Element ? [target] : utils.toArray(target);
     }
 
     if (!elements.length) {
@@ -2656,7 +2658,7 @@ function (_super) {
 
 
   __proto.setCSS = function (time, properties) {
-    this.set(time, fromCSS(this.elements, properties));
+    this.set(time, utils.fromCSS(this.elements, properties));
     return this;
   };
 
@@ -2857,7 +2859,7 @@ function (_super) {
 
     if (this.hasName([TIMING_FUNCTION])) {
       var nowEasing = this.getNowValue(time, [TIMING_FUNCTION], left, right, false, 0, true);
-      isFunction(nowEasing) && (realEasing = nowEasing);
+      utils.isFunction(nowEasing) && (realEasing = nowEasing);
     }
 
     if (isAccurate) {
@@ -2877,7 +2879,7 @@ function (_super) {
     names.forEach(function (properties) {
       var value = _this.getNowValue(time, properties, left, right, isAccurate, realEasing, isFixed(properties));
 
-      if (isUndefined(value)) {
+      if (utils.isUndefined(value)) {
         return;
       }
 
@@ -2897,7 +2899,7 @@ function (_super) {
 
     options && this.setOptions(options);
 
-    if (isArray(properties)) {
+    if (utils.isArray(properties)) {
       this.set(properties);
     } else if (properties.keyframes) {
       this.set(properties.keyframes);
@@ -2999,7 +3001,7 @@ function (_super) {
     var originalDuration = this.getDuration();
     itemState[DURATION] = originalDuration;
     states.push(itemState);
-    var reversedStates = toArray(states).reverse();
+    var reversedStates = utils.toArray(states).reverse();
     var id = toId(getRealId(this));
     var superParent = states[0];
     var infiniteIndex = findIndex(reversedStates, function (state) {
@@ -3027,7 +3029,7 @@ function (_super) {
       duration: duration / superParent[PLAY_SPEED] + "s",
       timingFunction: easingName
     });
-    var selectors = splitComma(selector).map(function (sel) {
+    var selectors = utils.splitComma(selector).map(function (sel) {
       var matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(sel);
 
       if (matches) {
@@ -3038,7 +3040,7 @@ function (_super) {
     });
     var className = playCondition.className;
     var selectorCallback = playCondition.selector;
-    var preselector = isFunction(selectorCallback) ? selectorCallback(this, selector) : selectorCallback;
+    var preselector = utils.isFunction(selectorCallback) ? selectorCallback(this, selector) : selectorCallback;
     return "\n    " + (preselector || selectors.map(function (_a) {
       var sel = _a[0],
           peusdo = _a[1];
@@ -3047,7 +3049,7 @@ function (_super) {
       var sel = _a[0],
           peusdo = _a[1];
       return sel + "." + PAUSE_ANIMATION + peusdo;
-    }) + " {" + ANIMATION + "-play-state: paused;}\n    @" + KEYFRAMES + " " + PREFIX + "KEYFRAMES_" + id + "{" + this._toKeyframes(duration, finiteStates, direction) + "}";
+    }) + " {" + utils.ANIMATION + "-play-state: paused;}\n    @" + utils.KEYFRAMES + " " + PREFIX + "KEYFRAMES_" + id + "{" + this._toKeyframes(duration, finiteStates, direction) + "}";
   };
   /**
    * Export the CSS of the items to the style.
@@ -3062,7 +3064,7 @@ function (_super) {
     }
 
     var css = this.toCSS(playCondition, duration, options);
-    var isParent = options && !isUndefined(options[ITERATION_COUNT]);
+    var isParent = options && !utils.isUndefined(options[ITERATION_COUNT]);
     !isParent && exportCSS(getRealId(this), css);
     return this;
   };
@@ -3076,15 +3078,15 @@ function (_super) {
 
   __proto.pauseCSS = function () {
     this.elements.forEach(function (element) {
-      addClass(element, PAUSE_ANIMATION);
+      utils.addClass(element, PAUSE_ANIMATION);
     });
     return this;
   };
 
   __proto.endCSS = function () {
     this.elements.forEach(function (element) {
-      removeClass(element, PAUSE_ANIMATION);
-      removeClass(element, START_ANIMATION);
+      utils.removeClass(element, PAUSE_ANIMATION);
+      utils.removeClass(element, START_ANIMATION);
     });
     setPlayCSS(this, false);
     return this;
@@ -3140,21 +3142,21 @@ function (_super) {
 
     if (isPaused) {
       elements.forEach(function (element) {
-        removeClass(element, PAUSE_ANIMATION);
+        utils.removeClass(element, PAUSE_ANIMATION);
       });
     } else {
       elements.forEach(function (element) {
         element.style.cssText += cssText;
 
-        if (hasClass(element, START_ANIMATION)) {
-          removeClass(element, START_ANIMATION);
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              addClass(element, START_ANIMATION);
+        if (utils.hasClass(element, START_ANIMATION)) {
+          utils.removeClass(element, START_ANIMATION);
+          utils.requestAnimationFrame(function () {
+            utils.requestAnimationFrame(function () {
+              utils.addClass(element, START_ANIMATION);
             });
           });
         } else {
-          addClass(element, START_ANIMATION);
+          utils.addClass(element, START_ANIMATION);
         }
       });
     }
@@ -3169,8 +3171,8 @@ function (_super) {
     var nextTime;
     var prevFrame;
     var nextFrame;
-    var isUndefinedLeft = isUndefined(left);
-    var isUndefinedRight = isUndefined(right);
+    var isUndefinedLeft = utils.isUndefined(left);
+    var isUndefinedRight = utils.isUndefined(right);
 
     if (isUndefinedLeft || isUndefinedRight) {
       var indicies = getNearTimeIndex(times, time);
@@ -3210,11 +3212,11 @@ function (_super) {
 
     var nextValue = nextFrame && nextFrame.raw.apply(nextFrame, properties);
 
-    if (!prevFrame || isUndefined(prevValue)) {
+    if (!prevFrame || utils.isUndefined(prevValue)) {
       return nextValue;
     }
 
-    if (!nextFrame || isUndefined(nextValue) || prevValue === nextValue) {
+    if (!nextFrame || utils.isUndefined(nextValue) || prevValue === nextValue) {
       return prevValue;
     }
 
@@ -3638,8 +3640,8 @@ function (_super) {
       if (object instanceof Scene || object instanceof SceneItem) {
         this.setItem(name, object);
         item = object;
-      } else if (isFunction(object) && isSelector) {
-        var elements = IS_WINDOW ? $(name, true) : [];
+      } else if (utils.isFunction(object) && isSelector) {
+        var elements = utils.IS_WINDOW ? utils.$(name, true) : [];
         var length = elements.length;
         var scene = new Scene();
 
@@ -4040,6 +4042,31 @@ function blink(_a) {
   return set("opacity", [from, to, from], arguments[0]);
 }
 
-export default Scene;
-export { SceneItem, Frame, Animator, OPTIONS, EVENTS, setRole, setAlias, bezier, steps, STEP_START, STEP_END, LINEAR, EASE, EASE_IN, EASE_OUT, EASE_IN_OUT, animate, animateItem, zoomIn, zoomOut, wipeIn, wipeOut, transition, fadeIn, fadeOut, blink };
-//# sourceMappingURL=scene.esm.js.map
+exports.SceneItem = SceneItem;
+exports.Frame = Frame;
+exports.Animator = Animator;
+exports.default = Scene;
+exports.OPTIONS = OPTIONS;
+exports.EVENTS = EVENTS;
+exports.setRole = setRole;
+exports.setAlias = setAlias;
+exports.bezier = bezier;
+exports.steps = steps;
+exports.STEP_START = STEP_START;
+exports.STEP_END = STEP_END;
+exports.LINEAR = LINEAR;
+exports.EASE = EASE;
+exports.EASE_IN = EASE_IN;
+exports.EASE_OUT = EASE_OUT;
+exports.EASE_IN_OUT = EASE_IN_OUT;
+exports.animate = animate;
+exports.animateItem = animateItem;
+exports.zoomIn = zoomIn;
+exports.zoomOut = zoomOut;
+exports.wipeIn = wipeIn;
+exports.wipeOut = wipeOut;
+exports.transition = transition;
+exports.fadeIn = fadeIn;
+exports.fadeOut = fadeOut;
+exports.blink = blink;
+//# sourceMappingURL=scene.cjs.js.map
