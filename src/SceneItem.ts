@@ -235,7 +235,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
             });
             this.items = obj;
         } else {
-            this.newFrame(this.getDuration());
+            this.newFrame(duration);
         }
         return this;
     }
@@ -727,6 +727,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
     }
     public load(properties: any = {}, options = properties.options) {
         options && this.setOptions(options);
+
         if (isArray(properties)) {
             this.set(properties);
         } else if (properties.keyframes) {
@@ -741,7 +742,9 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
             }
         }
         if (options && options[DURATION]) {
+            console.log(this.getDuration());
             this.setDuration(options[DURATION]);
+            console.log(this.getDuration());
         }
         return this;
     }

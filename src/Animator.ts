@@ -381,7 +381,7 @@ class Animator
             const { unit, value } = splitUnit(time);
 
             if (unit === "%") {
-                !this.getDuration() && (this.state[DURATION] = duration);
+                !this.getDuration() && (this.setDuration(duration));
                 return toFixed(parseFloat(time) / 100 * duration);
             } else if (unit === ">") {
                 return value + THRESHOLD;

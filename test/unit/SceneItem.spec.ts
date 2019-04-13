@@ -63,6 +63,7 @@ describe("SceneItem Test", () => {
             expect(item.getDuration()).to.be.equals(0);
 
             expect(item2.get(0, "a")).to.be.equals(1);
+
             expect(item2.get(100, "a")).to.be.equals(3);
             expect(item2.get("0%", "a")).to.be.equals(1);
             expect(item2.get("50%", "a")).to.be.equals(2);
@@ -167,10 +168,6 @@ describe("SceneItem Test", () => {
             expect(item.getNowFrame(0.6).get("a")).to.be.equals(1.6);
             expect(item.getNowFrame(1).get("display")).to.be.equals("block");
             expect(item.getNowFrame(1).get("a")).to.be.equals(2);
-        });
-        it("should check 'getNowFrame' method(getDuration < time <= duration)", () => {
-            item.state.duration = 2;
-            expect(item.getDuration()).to.be.equals(2);
         });
         it("should check 'getFrame' method", () => {
             expect(item.getFrame(0).get("display")).to.be.equals("block");
