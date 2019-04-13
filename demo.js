@@ -1,5 +1,13 @@
 // https://github.com/daybrush/demo
-const banner = require("./config/banner");
+const pkg = require("./package.json");
+const banner = `/*
+Copyright (c) 2017 ${pkg.author}
+name: ${pkg.name}
+license: ${pkg.license}
+author: ${pkg.author}
+repository: ${pkg.repository.url}
+version: ${pkg.version}
+*/`;
 
 module.exports = {
   input: "demo/src/index.ts",

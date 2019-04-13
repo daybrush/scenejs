@@ -2,7 +2,7 @@
   "name": "scenejs",
   "version": "1.0.0-rc7",
   "description": "Javascript Animation Library",
-  "main": "dist/scene.common.js",
+  "main": "dist/scene.cjs.js",
   "module": "dist/scene.esm.js",
   "sideEffects": false,
   "types": "declaration/index.d.ts",
@@ -48,6 +48,7 @@
   },
   "homepage": "https://daybrush.com",
   "devDependencies": {
+    "@daybrush/builder": "0.0.5",
     "@daybrush/demo": "0.0.2",
     "@daybrush/jsdoc": "^0.3.5",
     "@daybrush/page": "^0.2.0",
