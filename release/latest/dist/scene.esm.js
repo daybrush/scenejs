@@ -3608,6 +3608,7 @@ function (_super) {
   };
   /**
    * set item or properties in scene
+   * @param {Number} time - time
    * @param - The item's name
    * @param {...String|Object} args property's name or properties
    * @return {Scene} An instance itself
@@ -3618,24 +3619,30 @@ function (_super) {
    */
 
 
-  __proto.set = function (name) {
+  __proto.set = function (time, name) {
     var properties = [];
 
-    for (var _i = 1; _i < arguments.length; _i++) {
-      properties[_i - 1] = arguments[_i];
+    for (var _i = 2; _i < arguments.length; _i++) {
+      properties[_i - 2] = arguments[_i];
     }
 
-    if (isObject(name)) {
-      this.load(name);
+    if (isObject(time)) {
+      this.load(time);
+    } else if (isUndefined(name)) {
+      this.newItem(time);
     } else {
       this.newItem(name);
-      this.getItem(name).set(properties);
+
+      (_a = this.getItem(name)).set.apply(_a, [time].concat(properties));
     }
 
     return this;
+
+    var _a;
   };
   /**
   * get item or properties in scene by name
+  * @param {Number} time - time
   * @param - The item's name
   * @param {...String|Object} args property's name or properties
   * @return {Scene | SceneItem | Number|String|PropertyObejct} - item or property value
@@ -3646,19 +3653,18 @@ function (_super) {
   */
 
 
-  __proto.get = function (name) {
+  __proto.get = function (time, name) {
     var properties = [];
 
-    for (var _i = 1; _i < arguments.length; _i++) {
-      properties[_i - 1] = arguments[_i];
+    for (var _i = 2; _i < arguments.length; _i++) {
+      properties[_i - 2] = arguments[_i];
     }
 
-    var item = this.getItem(name);
-
-    if (properties.length > 0) {
-      return (_a = item).get.apply(_a, properties);
+    if (isUndefined(name)) {
+      return this.getItem(time);
     } else {
-      return item;
+      var item = this.getItem(name);
+      return (_a = item).get.apply(_a, [time].concat(properties));
     }
 
     var _a;
