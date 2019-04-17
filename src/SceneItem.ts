@@ -742,9 +742,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
             }
         }
         if (options && options[DURATION]) {
-            console.log(this.getDuration());
             this.setDuration(options[DURATION]);
-            console.log(this.getDuration());
         }
         return this;
     }
