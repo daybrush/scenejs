@@ -3796,9 +3796,7 @@ version: 1.0.0-rc8
         }
 
         if (options && options[DURATION]) {
-          console.log(this.getDuration());
           this.setDuration(options[DURATION]);
-          console.log(this.getDuration());
         }
 
         return this;
@@ -4518,13 +4516,13 @@ version: 1.0.0-rc8
           this.newItem(time);
         } else {
           this.newItem(name);
-
-          (_a = this.getItem(name)).set.apply(_a, [time].concat(properties));
+          var item = this.getItem(name);
+          var unitTime = this.getUnitTime(time);
+          var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
+          item.set.apply(item, [realTime].concat(properties));
         }
 
         return this;
-
-        var _a;
       };
       /**
       * get item or properties in scene by name
@@ -4550,7 +4548,9 @@ version: 1.0.0-rc8
           return this.getItem(time);
         } else {
           var item = this.getItem(name);
-          return (_a = item).get.apply(_a, [time].concat(properties));
+          var unitTime = this.getUnitTime(time);
+          var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
+          return (_a = item).get.apply(_a, [realTime].concat(properties));
         }
 
         var _a;
