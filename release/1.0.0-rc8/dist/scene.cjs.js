@@ -2754,6 +2754,27 @@ function (_super) {
     return this.items[this.getUnitTime(time)];
   };
   /**
+    * remove sceneItem's frame at that time
+    * @param - frame's time
+    * @return {SceneItem} An instance itself
+    * @example
+  item.removeFrame(time);
+    */
+
+
+  __proto.removeFrame = function (time) {
+    var realTime = this.getUnitTime(time);
+    var items = this.items;
+    var index = this.times.indexOf(realTime);
+    delete items[realTime]; // remove time
+
+    if (index > -1) {
+      this.times.splice(index, 1);
+    }
+
+    return this;
+  };
+  /**
     * check if the item has a frame at that time
     * @param {Number} time - frame's time
     * @return {Boolean} true: the item has a frame // false: not
@@ -2781,26 +2802,6 @@ function (_super) {
   __proto.hasName = function (args) {
     this.needUpdate && this.update();
     return isInProperties(this.names, args, true);
-  };
-  /**
-    * remove sceneItem's frame at that time
-    * @param {Number} time - frame's time
-    * @return {SceneItem} An instance itself
-    * @example
-  item.removeFrame(time);
-    */
-
-
-  __proto.removeFrame = function (time) {
-    var items = this.items;
-    var index = this.times.indexOf(time);
-    delete items[time]; // remove time
-
-    if (index > -1) {
-      this.times.splice(index, 1);
-    }
-
-    return this;
   };
   /**
     * merge frame of the previous time at the next time.
@@ -3670,6 +3671,33 @@ function (_super) {
     }
 
     var _a;
+  };
+
+  __proto.getFrame = function (time) {
+    var names = [];
+
+    for (var _i = 1; _i < arguments.length; _i++) {
+      names[_i - 1] = arguments[_i];
+    }
+
+    var item = this.getItem(names[0]);
+    var unitTime = this.getUnitTime(time);
+    var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
+    return item.getFrame.apply(item, [realTime].concat(names.slice(1)));
+  };
+
+  __proto.removeFrame = function (time) {
+    var names = [];
+
+    for (var _i = 1; _i < arguments.length; _i++) {
+      names[_i - 1] = arguments[_i];
+    }
+
+    var item = this.getItem(names[0]);
+    var unitTime = this.getUnitTime(time);
+    var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
+    item.removeFrame.apply(item, [realTime].concat(names.slice(1)));
+    return this;
   };
 
   __proto.load = function (properties, options) {
