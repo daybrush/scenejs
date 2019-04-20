@@ -3330,8 +3330,13 @@ version: 1.0.0-rc8
           args[_i - 1] = arguments[_i];
         }
 
-        var frame = this.getFrame(time);
-        frame && frame.remove.apply(frame, args);
+        if (args.length) {
+          var frame = this.getFrame(time);
+          frame && frame.remove.apply(frame, args);
+        } else {
+          this.removeFrame(time);
+        }
+
         this.needUpdate = true;
         return this;
       };
@@ -4539,10 +4544,10 @@ version: 1.0.0-rc8
 
 
       __proto.get = function (time, name) {
-        var properties = [];
+        var names = [];
 
         for (var _i = 2; _i < arguments.length; _i++) {
-          properties[_i - 2] = arguments[_i];
+          names[_i - 2] = arguments[_i];
         }
 
         if (isUndefined(name)) {
@@ -4551,7 +4556,7 @@ version: 1.0.0-rc8
           var item = this.getItem(name);
           var unitTime = this.getUnitTime(time);
           var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
-          return (_a = item).get.apply(_a, [realTime].concat(properties));
+          return (_a = item).get.apply(_a, [realTime].concat(names));
         }
 
         var _a;
@@ -4568,6 +4573,20 @@ version: 1.0.0-rc8
         var unitTime = this.getUnitTime(time);
         var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
         return item.getFrame.apply(item, [realTime].concat(names.slice(1)));
+      };
+
+      __proto.remove = function (time) {
+        var names = [];
+
+        for (var _i = 1; _i < arguments.length; _i++) {
+          names[_i - 1] = arguments[_i];
+        }
+
+        var item = this.getItem(names[0]);
+        var unitTime = this.getUnitTime(time);
+        var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
+        item.remove.apply(item, [realTime].concat(names.slice(1)));
+        return this;
       };
 
       __proto.removeFrame = function (time) {
