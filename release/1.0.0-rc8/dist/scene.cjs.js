@@ -3640,7 +3640,7 @@ function (_super) {
       this.newItem(name);
       var item = this.getItem(name);
       var unitTime = this.getUnitTime(time);
-      var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
+      var realTime = isNaN(unitTime) ? time : unitTime * item.getPlaySpeed() - item.getDelay();
       item.set.apply(item, [realTime].concat(properties));
     }
 
@@ -3671,7 +3671,7 @@ function (_super) {
     } else {
       var item = this.getItem(name);
       var unitTime = this.getUnitTime(time);
-      var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
+      var realTime = isNaN(unitTime) ? time : unitTime * item.getPlaySpeed() - item.getDelay();
       return (_a = item).get.apply(_a, [realTime].concat(names));
     }
 
@@ -3687,7 +3687,7 @@ function (_super) {
 
     var item = this.getItem(names[0]);
     var unitTime = this.getUnitTime(time);
-    var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
+    var realTime = isNaN(unitTime) ? time : unitTime * item.getPlaySpeed() - item.getDelay();
     return item.getFrame.apply(item, [realTime].concat(names.slice(1)));
   };
 
@@ -3700,7 +3700,7 @@ function (_super) {
 
     var item = this.getItem(names[0]);
     var unitTime = this.getUnitTime(time);
-    var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
+    var realTime = isNaN(unitTime) ? time : unitTime * item.getPlaySpeed() - item.getDelay();
     item.remove.apply(item, [realTime].concat(names.slice(1)));
     return this;
   };
@@ -3714,7 +3714,7 @@ function (_super) {
 
     var item = this.getItem(names[0]);
     var unitTime = this.getUnitTime(time);
-    var realTime = isNaN(unitTime) ? time : item.getDelay() + unitTime * item.getPlaySpeed();
+    var realTime = isNaN(unitTime) ? time : unitTime * item.getPlaySpeed() - item.getDelay();
     item.removeFrame.apply(item, [realTime].concat(names.slice(1)));
     return this;
   };
