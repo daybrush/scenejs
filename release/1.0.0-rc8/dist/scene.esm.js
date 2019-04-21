@@ -6,7 +6,7 @@ author: Daybrush
 repository: https://github.com/daybrush/scenejs.git
 version: 1.0.0-rc8
 */
-import { isObject, isArray, toArray, isString, $, document, IS_WINDOW, ANIMATION, removeEvent, addEvent, OBJECT, ARRAY, PROPERTY, STRING, NUMBER, requestAnimationFrame, splitUnit, camelize, splitComma, splitSpace, splitBracket, COLOR_MODELS, stringToRGBA, RGBA, isUndefined, TRANSFORM, FILTER, FUNCTION, fromCSS, isFunction, KEYFRAMES, addClass, removeClass, hasClass, decamelize } from '@daybrush/utils';
+import { isObject, isArray, toArray, isString, $, document, IS_WINDOW, ANIMATION, removeEvent, addEvent, OBJECT, ARRAY, PROPERTY, STRING, NUMBER, splitComma, splitSpace, splitBracket, COLOR_MODELS, stringToRGBA, RGBA, requestAnimationFrame, splitUnit, camelize, isUndefined, TRANSFORM, FILTER, FUNCTION, fromCSS, isFunction, KEYFRAMES, addClass, removeClass, hasClass, decamelize } from '@daybrush/utils';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -53,6 +53,194 @@ function __decorate(decorators, target, key, desc) {
   return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
 
+function cubic(y1, y2, t) {
+  var t2 = 1 - t; // Bezier Curve Formula
+
+  return t * t * t + 3 * t * t * t2 * y2 + 3 * t * t2 * t2 * y1;
+}
+
+function solveFromX(x1, x2, x) {
+  // x  0 ~ 1
+  // t 0 ~ 1
+  var t = x;
+  var solveX = x;
+  var dx = 1;
+
+  while (Math.abs(dx) > 1 / 1000) {
+    // 예상 t초에 의한 _x값
+    solveX = cubic(x1, x2, t);
+    dx = solveX - x; // 차이가 미세하면 그 값을 t로 지정
+
+    if (Math.abs(dx) < 1 / 1000) {
+      return t;
+    }
+
+    t -= dx / 2;
+  }
+
+  return t;
+}
+/**
+ * @namespace easing
+ */
+
+/**
+* Cubic Bezier curve.
+* @memberof easing
+* @func bezier
+* @param {number} [x1] - point1's x
+* @param {number} [y1] - point1's y
+* @param {number} [x2] - point2's x
+* @param {number} [y2] - point2's y
+* @return {function} the curve function
+* @example
+import {bezier} from "scenejs";
+Scene.bezier(0, 0, 1, 1) // LINEAR
+Scene.bezier(0.25, 0.1, 0.25, 1) // EASE
+*/
+
+
+function bezier(x1, y1, x2, y2) {
+  /*
+        x = f(t)
+        calculate inverse function by x
+        t = f-1(x)
+    */
+  var func = function (x) {
+    var t = solveFromX(x1, x2, Math.max(Math.min(1, x), 0));
+    return cubic(y1, y2, t);
+  };
+
+  func.easingName = "cubic-bezier(" + x1 + "," + y1 + "," + x2 + "," + y2 + ")";
+  return func;
+}
+/**
+* Specifies a stepping function
+* @see {@link https://www.w3schools.com/cssref/css3_pr_animation-timing-function.asp|CSS3 Timing Function}
+* @memberof easing
+* @func steps
+* @param {number} count - point1's x
+* @param {"start" | "end"} postion - point1's y
+* @return {function} the curve function
+* @example
+import {steps} from "scenejs";
+Scene.steps(1, "start") // Scene.STEP_START
+Scene.steps(1, "end") // Scene.STEP_END
+*/
+
+function steps(count, position) {
+  var func = function (time) {
+    var level = 1 / count;
+
+    if (time >= 1) {
+      return 1;
+    }
+
+    return (position === "start" ? level : 0) + Math.floor(time / level) * level;
+  };
+
+  func.easingName = "steps(" + count + ", " + position + ")";
+  return func;
+}
+/**
+* Equivalent to steps(1, start)
+* @memberof easing
+* @name STEP_START
+* @static
+* @type {function}
+* @example
+import {STEP_START} from "scenejs";
+Scene.STEP_START // steps(1, start)
+*/
+
+var STEP_START =
+/*#__PURE__#*/
+steps(1, "start");
+/**
+* Equivalent to steps(1, end)
+* @memberof easing
+* @name STEP_END
+* @static
+* @type {function}
+* @example
+import {STEP_END} from "scenejs";
+Scene.STEP_END // steps(1, end)
+*/
+
+var STEP_END =
+/*#__PURE__#*/
+steps(1, "end");
+/**
+* Linear Speed (0, 0, 1, 1)
+* @memberof easing
+* @name LINEAR
+* @static
+* @type {function}
+* @example
+import {LINEAR} from "scenejs";
+Scene.LINEAR
+*/
+
+var LINEAR =
+/*#__PURE__#*/
+bezier(0, 0, 1, 1);
+/**
+* Ease Speed (0.25, 0.1, 0.25, 1)
+* @memberof easing
+* @name EASE
+* @static
+* @type {function}
+* @example
+import {EASE} from "scenejs";
+Scene.EASE
+*/
+
+var EASE =
+/*#__PURE__#*/
+bezier(0.25, 0.1, 0.25, 1);
+/**
+* Ease In Speed (0.42, 0, 1, 1)
+* @memberof easing
+* @name EASE_IN
+* @static
+* @type {function}
+* @example
+import {EASE_IN} from "scenejs";
+Scene.EASE_IN
+*/
+
+var EASE_IN =
+/*#__PURE__#*/
+bezier(0.42, 0, 1, 1);
+/**
+* Ease Out Speed (0, 0, 0.58, 1)
+* @memberof easing
+* @name EASE_OUT
+* @static
+* @type {function}
+* @example
+import {EASE_OUT} from "scenejs";
+Scene.EASE_OUT
+*/
+
+var EASE_OUT =
+/*#__PURE__#*/
+bezier(0, 0, 0.58, 1);
+/**
+* Ease In Out Speed (0.42, 0, 0.58, 1)
+* @memberof easing
+* @name EASE_IN_OUT
+* @static
+* @type {function}
+* @example
+import {EASE_IN_OUT} from "scenejs";
+Scene.EASE_IN_OUT
+*/
+
+var EASE_IN_OUT =
+/*#__PURE__#*/
+bezier(0.42, 0, 0.58, 1);
+
 var PREFIX = "__SCENEJS_";
 var DATA_SCENE_ID = "data-scene-id";
 var TIMING_FUNCTION = "animation-timing-function";
@@ -97,6 +285,15 @@ var TICK_TIME = "tickTime";
 var CURRENT_TIME = "currentTime";
 var SELECTOR = "selector";
 var TRANSFORM_NAME = "transform";
+var EASINGS = {
+  "linear": LINEAR,
+  "ease": EASE,
+  "ease-in": EASE_IN,
+  "ease-out": EASE_OUT,
+  "ease-in-out": EASE_IN_OUT,
+  "step-start": STEP_START,
+  "step-end": STEP_END
+};
 /**
 * option name list
 * @name Scene.OPTIONS
@@ -290,194 +487,6 @@ function () {
 
   return EventTrigger;
 }();
-
-function cubic(y1, y2, t) {
-  var t2 = 1 - t; // Bezier Curve Formula
-
-  return t * t * t + 3 * t * t * t2 * y2 + 3 * t * t2 * t2 * y1;
-}
-
-function solveFromX(x1, x2, x) {
-  // x  0 ~ 1
-  // t 0 ~ 1
-  var t = x;
-  var solveX = x;
-  var dx = 1;
-
-  while (Math.abs(dx) > 1 / 1000) {
-    // 예상 t초에 의한 _x값
-    solveX = cubic(x1, x2, t);
-    dx = solveX - x; // 차이가 미세하면 그 값을 t로 지정
-
-    if (Math.abs(dx) < 1 / 1000) {
-      return t;
-    }
-
-    t -= dx / 2;
-  }
-
-  return t;
-}
-/**
- * @namespace easing
- */
-
-/**
-* Cubic Bezier curve.
-* @memberof easing
-* @func bezier
-* @param {number} [x1] - point1's x
-* @param {number} [y1] - point1's y
-* @param {number} [x2] - point2's x
-* @param {number} [y2] - point2's y
-* @return {function} the curve function
-* @example
-import {bezier} from "scenejs";
-Scene.bezier(0, 0, 1, 1) // LINEAR
-Scene.bezier(0.25, 0.1, 0.25, 1) // EASE
-*/
-
-
-function bezier(x1, y1, x2, y2) {
-  /*
-        x = f(t)
-        calculate inverse function by x
-        t = f-1(x)
-    */
-  var func = function (x) {
-    var t = solveFromX(x1, x2, Math.max(Math.min(1, x), 0));
-    return cubic(y1, y2, t);
-  };
-
-  func.easingName = "cubic-bezier(" + x1 + "," + y1 + "," + x2 + "," + y2 + ")";
-  return func;
-}
-/**
-* Specifies a stepping function
-* @see {@link https://www.w3schools.com/cssref/css3_pr_animation-timing-function.asp|CSS3 Timing Function}
-* @memberof easing
-* @func steps
-* @param {number} count - point1's x
-* @param {"start" | "end"} postion - point1's y
-* @return {function} the curve function
-* @example
-import {steps} from "scenejs";
-Scene.steps(1, "start") // Scene.STEP_START
-Scene.steps(1, "end") // Scene.STEP_END
-*/
-
-function steps(count, position) {
-  var func = function (time) {
-    var level = 1 / count;
-
-    if (time >= 1) {
-      return 1;
-    }
-
-    return (position === "start" ? level : 0) + Math.floor(time / level) * level;
-  };
-
-  func.easingName = "steps(" + count + ", " + position + ")";
-  return func;
-}
-/**
-* Equivalent to steps(1, start)
-* @memberof easing
-* @name STEP_START
-* @static
-* @type {function}
-* @example
-import {STEP_START} from "scenejs";
-Scene.STEP_START // steps(1, start)
-*/
-
-var STEP_START =
-/*#__PURE__#*/
-steps(1, "start");
-/**
-* Equivalent to steps(1, end)
-* @memberof easing
-* @name STEP_END
-* @static
-* @type {function}
-* @example
-import {STEP_END} from "scenejs";
-Scene.STEP_END // steps(1, end)
-*/
-
-var STEP_END =
-/*#__PURE__#*/
-steps(1, "end");
-/**
-* Linear Speed (0, 0, 1, 1)
-* @memberof easing
-* @name LINEAR
-* @static
-* @type {function}
-* @example
-import {LINEAR} from "scenejs";
-Scene.LINEAR
-*/
-
-var LINEAR =
-/*#__PURE__#*/
-bezier(0, 0, 1, 1);
-/**
-* Ease Speed (0.25, 0.1, 0.25, 1)
-* @memberof easing
-* @name EASE
-* @static
-* @type {function}
-* @example
-import {EASE} from "scenejs";
-Scene.EASE
-*/
-
-var EASE =
-/*#__PURE__#*/
-bezier(0.25, 0.1, 0.25, 1);
-/**
-* Ease In Speed (0.42, 0, 1, 1)
-* @memberof easing
-* @name EASE_IN
-* @static
-* @type {function}
-* @example
-import {EASE_IN} from "scenejs";
-Scene.EASE_IN
-*/
-
-var EASE_IN =
-/*#__PURE__#*/
-bezier(0.42, 0, 1, 1);
-/**
-* Ease Out Speed (0, 0, 0.58, 1)
-* @memberof easing
-* @name EASE_OUT
-* @static
-* @type {function}
-* @example
-import {EASE_OUT} from "scenejs";
-Scene.EASE_OUT
-*/
-
-var EASE_OUT =
-/*#__PURE__#*/
-bezier(0, 0, 0.58, 1);
-/**
-* Ease In Out Speed (0.42, 0, 0.58, 1)
-* @memberof easing
-* @name EASE_IN_OUT
-* @static
-* @type {function}
-* @example
-import {EASE_IN_OUT} from "scenejs";
-Scene.EASE_IN_OUT
-*/
-
-var EASE_IN_OUT =
-/*#__PURE__#*/
-bezier(0.42, 0, 0.58, 1);
 
 /**
 * Make string, array to PropertyObject for the dot product
@@ -866,6 +875,193 @@ function addAnimationEvent(item, el) {
   addEvent(el, "animationstart", animationstart);
 }
 
+/**
+* @namespace
+* @name Property
+*/
+function splitStyle(str) {
+  var properties = str.split(";");
+  var obj = {};
+  var length = properties.length;
+
+  for (var i = 0; i < length; ++i) {
+    var matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
+
+    if (!matches || matches.length < 3 || !matches[1]) {
+      --length;
+      continue;
+    }
+
+    obj[matches[1].trim()] = toPropertyObject(matches[2].trim());
+  }
+
+  return {
+    styles: obj,
+    length: length
+  };
+}
+/**
+* convert array to PropertyObject[type=color].
+* default model "rgba"
+* @memberof Property
+* @function arrayToColorObject
+* @param {Array|PropertyObject} value ex) [0, 0, 0, 1]
+* @return {PropertyObject} PropertyObject[type=color]
+* @example
+arrayToColorObject([0, 0, 0])
+// => PropertyObject(type="color", model="rgba", value=[0, 0, 0, 1], separator=",")
+*/
+
+function arrayToColorObject(arr) {
+  var model = RGBA;
+
+  if (arr.length === 3) {
+    arr[3] = 1;
+  }
+
+  return new PropertyObject(arr, {
+    model: model,
+    separator: ",",
+    type: "color",
+    prefix: model + "(",
+    suffix: ")"
+  });
+}
+/**
+* convert text with parentheses to object.
+* @memberof Property
+* @function stringToBracketObject
+* @param {String} value ex) "rgba(0,0,0,1)"
+* @return {PropertyObject} PropertyObject
+* @example
+stringToBracketObject("abcde(0, 0, 0,1)")
+// => PropertyObject(model="abcde", value=[0, 0, 0,1], separator=",")
+*/
+
+function stringToBracketObject(text) {
+  // [prefix, value, other]
+  var _a = splitBracket(text),
+      model = _a.prefix,
+      value = _a.value,
+      afterModel = _a.suffix;
+
+  if (typeof value === "undefined") {
+    return text;
+  }
+
+  if (COLOR_MODELS.indexOf(model) !== -1) {
+    return arrayToColorObject(stringToRGBA(text));
+  } // divide comma(,)
+
+
+  var obj = toPropertyObject(value);
+  var arr = [value];
+  var separator = ",";
+  var prefix = model + "(";
+  var suffix = ")" + afterModel;
+
+  if (obj instanceof PropertyObject) {
+    separator = obj.separator;
+    arr = obj.value;
+    prefix += obj.prefix;
+    suffix = obj.suffix + suffix;
+  }
+
+  return new PropertyObject(arr, {
+    separator: separator,
+    model: model,
+    prefix: prefix,
+    suffix: suffix
+  });
+}
+function arrayToPropertyObject(arr, separator) {
+  return new PropertyObject(arr, {
+    type: "array",
+    separator: separator
+  });
+}
+/**
+* convert text with parentheses to PropertyObject[type=color].
+* If the values are not RGBA model, change them RGBA mdoel.
+* @memberof Property
+* @function stringToColorObject
+* @param {String|PropertyObject} value ex) "rgba(0,0,0,1)"
+* @return {PropertyObject} PropertyObject[type=color]
+* @example
+stringToColorObject("rgba(0, 0, 0,1)")
+// => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")
+*/
+
+function stringToColorObject(value) {
+  var result = stringToRGBA(value);
+  return result ? arrayToColorObject(result) : value;
+}
+function toPropertyObject(value) {
+  if (!isString(value)) {
+    if (isArray(value)) {
+      return arrayToPropertyObject(value, ",");
+    }
+
+    return value;
+  }
+
+  var values = splitComma(value);
+
+  if (values.length > 1) {
+    return arrayToPropertyObject(values.map(function (v) {
+      return toPropertyObject(v);
+    }), ",");
+  }
+
+  values = splitSpace(value);
+
+  if (values.length > 1) {
+    return arrayToPropertyObject(values.map(function (v) {
+      return toPropertyObject(v);
+    }), " ");
+  }
+
+  values = /^(['"])([^'"]*)(['"])$/g.exec(value);
+
+  if (values && values[1] === values[3]) {
+    // Quotes
+    return new PropertyObject([toPropertyObject(values[2])], {
+      prefix: values[1],
+      suffix: values[1]
+    });
+  } else if (value.indexOf("(") !== -1) {
+    // color
+    return stringToBracketObject(value);
+  } else if (value.charAt(0) === "#") {
+    return stringToColorObject(value);
+  }
+
+  return value;
+}
+function toObject(object, result) {
+  if (result === void 0) {
+    result = {};
+  }
+
+  var model = object.model;
+
+  if (model) {
+    object.setOptions({
+      model: "",
+      suffix: "",
+      prefix: ""
+    });
+    var value = object.size() > 1 ? object : object.get(0);
+    result[model] = value;
+  } else {
+    object.forEach(function (obj) {
+      toObject(obj, result);
+    });
+  }
+
+  return result;
+}
+
 function GetterSetter(getter, setter, parent) {
   return function (constructor) {
     var prototype = constructor.prototype;
@@ -999,7 +1195,35 @@ function (_super) {
   var __proto = Animator.prototype;
 
   __proto.setEasing = function (curveArray) {
-    var easing = isArray(curveArray) ? bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]) : curveArray;
+    var easing;
+
+    if (isString(curveArray)) {
+      if (curveArray in EASINGS) {
+        easing = EASINGS[curveArray];
+      } else {
+        var obj = toPropertyObject(curveArray);
+
+        if (isString(obj)) {
+          return this;
+        } else {
+          if (obj.model === "cubic-bezier") {
+            curveArray = obj.value.map(function (v) {
+              return parseFloat(v);
+            });
+            easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
+          } else if (obj.model === "steps") {
+            easing = steps(parseFloat(obj.value[0]), obj.value[1]);
+          } else {
+            return this;
+          }
+        }
+      }
+    } else if (isArray(curveArray)) {
+      easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
+    } else {
+      easing = curveArray;
+    }
+
     var easingName = easing[EASING_NAME] || "linear";
     var state = this.state;
     state[EASING] = easing;
@@ -1373,193 +1597,6 @@ function (_super) {
   Animator = __decorate([GetterSetter(getters, setters, "state")], Animator);
   return Animator;
 }(EventTrigger);
-
-/**
-* @namespace
-* @name Property
-*/
-function splitStyle(str) {
-  var properties = str.split(";");
-  var obj = {};
-  var length = properties.length;
-
-  for (var i = 0; i < length; ++i) {
-    var matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
-
-    if (!matches || matches.length < 3 || !matches[1]) {
-      --length;
-      continue;
-    }
-
-    obj[matches[1].trim()] = toPropertyObject(matches[2].trim());
-  }
-
-  return {
-    styles: obj,
-    length: length
-  };
-}
-/**
-* convert array to PropertyObject[type=color].
-* default model "rgba"
-* @memberof Property
-* @function arrayToColorObject
-* @param {Array|PropertyObject} value ex) [0, 0, 0, 1]
-* @return {PropertyObject} PropertyObject[type=color]
-* @example
-arrayToColorObject([0, 0, 0])
-// => PropertyObject(type="color", model="rgba", value=[0, 0, 0, 1], separator=",")
-*/
-
-function arrayToColorObject(arr) {
-  var model = RGBA;
-
-  if (arr.length === 3) {
-    arr[3] = 1;
-  }
-
-  return new PropertyObject(arr, {
-    model: model,
-    separator: ",",
-    type: "color",
-    prefix: model + "(",
-    suffix: ")"
-  });
-}
-/**
-* convert text with parentheses to object.
-* @memberof Property
-* @function stringToBracketObject
-* @param {String} value ex) "rgba(0,0,0,1)"
-* @return {PropertyObject} PropertyObject
-* @example
-stringToBracketObject("abcde(0, 0, 0,1)")
-// => PropertyObject(model="abcde", value=[0, 0, 0,1], separator=",")
-*/
-
-function stringToBracketObject(text) {
-  // [prefix, value, other]
-  var _a = splitBracket(text),
-      model = _a.prefix,
-      value = _a.value,
-      afterModel = _a.suffix;
-
-  if (typeof value === "undefined") {
-    return text;
-  }
-
-  if (COLOR_MODELS.indexOf(model) !== -1) {
-    return arrayToColorObject(stringToRGBA(text));
-  } // divide comma(,)
-
-
-  var obj = toPropertyObject(value);
-  var arr = [value];
-  var separator = ",";
-  var prefix = model + "(";
-  var suffix = ")" + afterModel;
-
-  if (obj instanceof PropertyObject) {
-    separator = obj.separator;
-    arr = obj.value;
-    prefix += obj.prefix;
-    suffix = obj.suffix + suffix;
-  }
-
-  return new PropertyObject(arr, {
-    separator: separator,
-    model: model,
-    prefix: prefix,
-    suffix: suffix
-  });
-}
-function arrayToPropertyObject(arr, separator) {
-  return new PropertyObject(arr, {
-    type: "array",
-    separator: separator
-  });
-}
-/**
-* convert text with parentheses to PropertyObject[type=color].
-* If the values are not RGBA model, change them RGBA mdoel.
-* @memberof Property
-* @function stringToColorObject
-* @param {String|PropertyObject} value ex) "rgba(0,0,0,1)"
-* @return {PropertyObject} PropertyObject[type=color]
-* @example
-stringToColorObject("rgba(0, 0, 0,1)")
-// => PropertyObject(type="color", model="rgba", value=[0, 0, 0,1], separator=",")
-*/
-
-function stringToColorObject(value) {
-  var result = stringToRGBA(value);
-  return result ? arrayToColorObject(result) : value;
-}
-function toPropertyObject(value) {
-  if (!isString(value)) {
-    if (isArray(value)) {
-      return arrayToPropertyObject(value, ",");
-    }
-
-    return value;
-  }
-
-  var values = splitComma(value);
-
-  if (values.length > 1) {
-    return arrayToPropertyObject(values.map(function (v) {
-      return toPropertyObject(v);
-    }), ",");
-  }
-
-  values = splitSpace(value);
-
-  if (values.length > 1) {
-    return arrayToPropertyObject(values.map(function (v) {
-      return toPropertyObject(v);
-    }), " ");
-  }
-
-  values = /^(['"])([^'"]*)(['"])$/g.exec(value);
-
-  if (values && values[1] === values[3]) {
-    // Quotes
-    return new PropertyObject([toPropertyObject(values[2])], {
-      prefix: values[1],
-      suffix: values[1]
-    });
-  } else if (value.indexOf("(") !== -1) {
-    // color
-    return stringToBracketObject(value);
-  } else if (value.charAt(0) === "#") {
-    return stringToColorObject(value);
-  }
-
-  return value;
-}
-function toObject(object, result) {
-  if (result === void 0) {
-    result = {};
-  }
-
-  var model = object.model;
-
-  if (model) {
-    object.setOptions({
-      model: "",
-      suffix: "",
-      prefix: ""
-    });
-    var value = object.size() > 1 ? object : object.get(0);
-    result[model] = value;
-  } else {
-    object.forEach(function (obj) {
-      toObject(obj, result);
-    });
-  }
-
-  return result;
-}
 
 function toInnerProperties(obj) {
   if (!obj) {
@@ -3610,110 +3647,9 @@ function (_super) {
     playCSS(this, isExportCSS, playClassName, properties);
     return this;
   };
-  /**
-   * set item or properties in scene
-   * @param {Number} time - time
-   * @param - The item's name
-   * @param {...String|Object} args property's name or properties
-   * @return {Scene} An instance itself
-   * @example
-   scene.set("item1")
-   scene.set("item1", "opacity", 0);
-   scene.set("item1", "transform", "translate", "0px, 0px");
-   */
 
-
-  __proto.set = function (time, name) {
-    var properties = [];
-
-    for (var _i = 2; _i < arguments.length; _i++) {
-      properties[_i - 2] = arguments[_i];
-    }
-
-    if (isObject(time)) {
-      this.load(time);
-    } else if (isUndefined(name)) {
-      this.newItem(time);
-    } else {
-      this.newItem(name);
-      var item = this.getItem(name);
-      var unitTime = this.getUnitTime(time);
-      var realTime = isNaN(unitTime) ? time : unitTime * item.getPlaySpeed() - item.getDelay();
-      item.set.apply(item, [realTime].concat(properties));
-    }
-
-    return this;
-  };
-  /**
-  * get item or properties in scene by name
-  * @param {Number} time - time
-  * @param - The item's name
-  * @param {...String|Object} args property's name or properties
-  * @return {Scene | SceneItem | Number|String|PropertyObejct} - item or property value
-  * @example
-  const item = scene.get("item1")
-  const transform = scene.get("item1", "transform");
-  const translate = scene.get("item1", "transform", "translate");
-  */
-
-
-  __proto.get = function (time, name) {
-    var names = [];
-
-    for (var _i = 2; _i < arguments.length; _i++) {
-      names[_i - 2] = arguments[_i];
-    }
-
-    if (isUndefined(name)) {
-      return this.getItem(time);
-    } else {
-      var item = this.getItem(name);
-      var unitTime = this.getUnitTime(time);
-      var realTime = isNaN(unitTime) ? time : unitTime * item.getPlaySpeed() - item.getDelay();
-      return (_a = item).get.apply(_a, [realTime].concat(names));
-    }
-
-    var _a;
-  };
-
-  __proto.getFrame = function (time) {
-    var names = [];
-
-    for (var _i = 1; _i < arguments.length; _i++) {
-      names[_i - 1] = arguments[_i];
-    }
-
-    var item = this.getItem(names[0]);
-    var unitTime = this.getUnitTime(time);
-    var realTime = isNaN(unitTime) ? time : unitTime * item.getPlaySpeed() - item.getDelay();
-    return item.getFrame.apply(item, [realTime].concat(names.slice(1)));
-  };
-
-  __proto.remove = function (time) {
-    var names = [];
-
-    for (var _i = 1; _i < arguments.length; _i++) {
-      names[_i - 1] = arguments[_i];
-    }
-
-    var item = this.getItem(names[0]);
-    var unitTime = this.getUnitTime(time);
-    var realTime = isNaN(unitTime) ? time : unitTime * item.getPlaySpeed() - item.getDelay();
-    item.remove.apply(item, [realTime].concat(names.slice(1)));
-    return this;
-  };
-
-  __proto.removeFrame = function (time) {
-    var names = [];
-
-    for (var _i = 1; _i < arguments.length; _i++) {
-      names[_i - 1] = arguments[_i];
-    }
-
-    var item = this.getItem(names[0]);
-    var unitTime = this.getUnitTime(time);
-    var realTime = isNaN(unitTime) ? time : unitTime * item.getPlaySpeed() - item.getDelay();
-    item.removeFrame.apply(item, [realTime].concat(names.slice(1)));
+  __proto.set = function (properties) {
+    this.load(properties);
     return this;
   };
 

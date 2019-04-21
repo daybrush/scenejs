@@ -1,11 +1,11 @@
 import { oval, poly } from "shape-svg";
-import NativeScene, { IEasingFunction } from "../../src";
+import NativeScene, { EasingFunction } from "../../src";
 import Page from "@daybrush/page";
 import { add } from "./Store";
 import { $, addEvent } from "@daybrush/utils";
 
 declare var Scene: typeof NativeScene & {
-    EASE_IN_OUT: IEasingFunction,
+    EASE_IN_OUT: EasingFunction,
 };
 declare var MediaScene: new (duration: number, properties?: any, options?: any) => NativeScene;
 

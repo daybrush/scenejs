@@ -1,12 +1,12 @@
 import Page from "@daybrush/page";
 import { add } from "./Store";
 import { $, addEvent, toArray } from "@daybrush/utils";
-import NativeScene, { IEasingFunction, SceneItem, setRole } from "../../src";
+import NativeScene, { EasingFunction, SceneItem, setRole } from "../../src";
 
 declare var Scene: typeof NativeScene & {
-    EASE_IN: IEasingFunction;
-    EASE_IN_OUT: IEasingFunction;
-    LINEAR: IEasingFunction;
+    EASE_IN: EasingFunction;
+    EASE_IN_OUT: EasingFunction;
+    LINEAR: EasingFunction;
     SceneItem: typeof SceneItem;
     setRole: typeof setRole;
 };
