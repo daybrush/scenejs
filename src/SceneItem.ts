@@ -334,6 +334,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
 
         return frame && frame.get(...args);
     }
+    public remove(time: string | number, ...args: any[]): this;
     /**
       * remove properties to the sceneItem at that time
       * @param {Number} time - time
@@ -342,10 +343,14 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
       * @example
   item.remove(0, "a");
       */
-    public remove(time: number, ...args: NameType[]) {
-        const frame = this.getFrame(time);
+    public remove(time: string | number, ...args: NameType[]) {
+        if (args.length) {
+            const frame = this.getFrame(time);
 
-        frame && frame.remove(...args);
+            frame && frame.remove(...args);
+        } else {
+            this.removeFrame(time);
+        }
         this.needUpdate = true;
         return this;
     }
@@ -598,6 +603,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         this.needUpdate = true;
         return this;
     }
+    public getFrame(time: number | string, ...names: any[]): Frame;
     /**
       * get sceneItem's frame at that time
       * @param {Number} time - frame's time
@@ -607,6 +613,27 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
       */
     public getFrame(time: number | string) {
         return this.items[this.getUnitTime(time)];
+    }
+    public removeFrame(time: number | string, ...names: any[]): this;
+    /**
+      * remove sceneItem's frame at that time
+      * @param - frame's time
+      * @return {SceneItem} An instance itself
+      * @example
+  item.removeFrame(time);
+      */
+    public removeFrame(time: number | string) {
+        const realTime = this.getUnitTime(time);
+        const items = this.items;
+        const index = this.times.indexOf(realTime);
+
+        delete items[realTime];
+
+        // remove time
+        if (index > -1) {
+            this.times.splice(index, 1);
+        }
+        return this;
     }
     /**
       * check if the item has a frame at that time
@@ -632,25 +659,6 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
     public hasName(args: string[]) {
         this.needUpdate && this.update();
         return isInProperties(this.names, args, true);
-    }
-    /**
-      * remove sceneItem's frame at that time
-      * @param {Number} time - frame's time
-      * @return {SceneItem} An instance itself
-      * @example
-  item.removeFrame(time);
-      */
-    public removeFrame(time: number) {
-        const items = this.items;
-        const index = this.times.indexOf(time);
-
-        delete items[time];
-
-        // remove time
-        if (index > -1) {
-            this.times.splice(index, 1);
-        }
-        return this;
     }
     /**
       * merge frame of the previous time at the next time.
