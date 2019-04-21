@@ -1,5 +1,6 @@
 import { IObject } from "@daybrush/utils";
-import { RoleObject, OptionType, EventType } from "./types";
+import { RoleObject, OptionType, EventType, EasingFunction } from "./types";
+import { EASE, EASE_IN, EASE_IN_OUT, LINEAR, EASE_OUT, STEP_START, STEP_END } from "./easing";
 
 export const PREFIX = "__SCENEJS_";
 export const DATA_SCENE_ID = "data-scene-id";
@@ -40,6 +41,15 @@ export const TICK_TIME = "tickTime";
 export const CURRENT_TIME = "currentTime";
 export const SELECTOR = "selector";
 export const TRANSFORM_NAME = "transform";
+export const EASINGS = {
+    "linear": LINEAR,
+    "ease": EASE,
+    "ease-in": EASE_IN,
+    "ease-out": EASE_OUT,
+    "ease-in-out": EASE_IN_OUT,
+    "step-start": STEP_START,
+    "step-end": STEP_END,
+};
 
 /**
 * option name list

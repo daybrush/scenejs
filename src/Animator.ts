@@ -3,16 +3,17 @@ import {
     ALTERNATE, ALTERNATE_REVERSE, REVERSE, INFINITE, NORMAL,
     ITERATION_COUNT, DELAY, FILL_MODE, DIRECTION, PLAY_SPEED,
     DURATION, EASING, ITERATION_TIME, EASING_NAME, PAUSED,
-    RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE, PREV_TIME, TICK_TIME, CURRENT_TIME, ITERATION, OPTIONS
+    RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE, PREV_TIME, TICK_TIME, CURRENT_TIME, ITERATION, OPTIONS, EASINGS
 } from "./consts";
 import EventTrigger from "./EventTrigger";
-import { bezier } from "./easing";
+import { bezier, steps } from "./easing";
 import { toFixed, makeId } from "./utils";
 import { splitUnit, isString, camelize, requestAnimationFrame, isArray } from "@daybrush/utils";
 import {
     IterationCountType, DirectionType, AnimatorState,
-    IEasingFunction, FillModeType, PlayStateType, EasingType, AnimatorOptions,
+    EasingFunction, FillModeType, PlayStateType, EasingType, AnimatorOptions,
 } from "./types";
+import { toPropertyObject } from "./utils/property";
 
 function GetterSetter<T extends new (...args: any[]) => {}>(
     getter: string[], setter: string[], parent: string) {
@@ -136,9 +137,33 @@ class Animator
       easing: Scene.easing.EASE,
   });
       */
-    public setEasing(curveArray: [number, number, number, number] | IEasingFunction): this {
-        const easing = isArray(curveArray) ?
-            bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]) : curveArray;
+    public setEasing(curveArray: string | number[] | EasingFunction): this {
+        let easing: EasingFunction;
+
+        if (isString(curveArray)) {
+            if (curveArray in EASINGS) {
+                easing = EASINGS[curveArray];
+            } else {
+                const obj = toPropertyObject(curveArray);
+
+                if (isString(obj)) {
+                    return this;
+                } else {
+                    if (obj.model === "cubic-bezier") {
+                        curveArray = obj.value.map(v => parseFloat(v));
+                        easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
+                    } else if (obj.model === "steps") {
+                        easing = steps(parseFloat(obj.value[0]), obj.value[1]);
+                    } else {
+                        return this;
+                    }
+                }
+            }
+        } else if (isArray(curveArray)) {
+            easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
+        } else {
+            easing = curveArray;
+        }
         const easingName = easing[EASING_NAME] || "linear";
 
         const state = this.state;

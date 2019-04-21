@@ -4,7 +4,7 @@ import { SceneItem } from ".";
 /**
  * @typedef
  */
-export interface IEasingFunction extends Function {
+export interface EasingFunction extends Function {
     easingName?: string;
 }
 
@@ -19,7 +19,7 @@ export type IterationCountType = number | "infinite";
 /**
  * @typedef
  */
-export type EasingType = 0 | IEasingFunction;
+export type EasingType = 0 | EasingFunction;
 /**
  * @typedef
  */

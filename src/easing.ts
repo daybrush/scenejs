@@ -1,4 +1,4 @@
-import { IEasingFunction } from "./types";
+import { EasingFunction } from "./types";
 
 function cubic(y1: number, y2: number, t: number) {
   const t2 = 1 - t;
@@ -48,7 +48,7 @@ export function bezier(x1: number, y1: number, x2: number, y2: number) {
 		calculate inverse function by x
 		t = f-1(x)
 	*/
-  const func: IEasingFunction = (x: number) => {
+  const func: EasingFunction = (x: number) => {
     const t = solveFromX(x1, x2, Math.max(Math.min(1, x), 0));
 
     return cubic(y1, y2, t);
@@ -71,7 +71,7 @@ Scene.steps(1, "start") // Scene.STEP_START
 Scene.steps(1, "end") // Scene.STEP_END
 */
 export function steps(count: number, position: "start" | "end") {
-  const func: IEasingFunction = (time: number) => {
+  const func: EasingFunction = (time: number) => {
     const level = 1 / count;
 
     if (time >= 1) {
