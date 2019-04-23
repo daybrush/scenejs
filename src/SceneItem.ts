@@ -562,13 +562,12 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
   item.update();
       */
     public update() {
-        if (this.needUpdate) {
-            const names = this.names;
-            this.forEach(frame => {
-                updateFrame(names, frame.properties);
-            });
-            this.needUpdate = false;
-        }
+        const names = {};
+        this.forEach(frame => {
+            updateFrame(names, frame.properties);
+        });
+        this.names = names;
+        this.needUpdate = false;
         return this;
     }
     /**
@@ -633,6 +632,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         if (index > -1) {
             this.times.splice(index, 1);
         }
+        this.needUpdate = true;
         return this;
     }
     /**
