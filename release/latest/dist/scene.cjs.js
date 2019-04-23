@@ -2737,14 +2737,12 @@ function (_super) {
 
 
   __proto.update = function () {
-    if (this.needUpdate) {
-      var names_1 = this.names;
-      this.forEach(function (frame) {
-        updateFrame(names_1, frame.properties);
-      });
-      this.needUpdate = false;
-    }
-
+    var names = {};
+    this.forEach(function (frame) {
+      updateFrame(names, frame.properties);
+    });
+    this.names = names;
+    this.needUpdate = false;
     return this;
   };
   /**
@@ -2814,6 +2812,7 @@ function (_super) {
       this.times.splice(index, 1);
     }
 
+    this.needUpdate = true;
     return this;
   };
   /**
