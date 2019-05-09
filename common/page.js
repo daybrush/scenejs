@@ -1,25 +1,46 @@
 const DirectionCode = (direction) => `
-new Scene.SceneItem({
-    0: { left: "0%" },
-    1: { left: "100%" },
+new Scene({
+  "[data-direction='${direction}'] .rect": i => ({
+    "transform": {
+      scale: [0, 1],
+    },
+    "border-width": [${"`${"}30 + i * 5}px${"`"}, "0px"],
+    options: {
+      duration: 1,
+      delay: i * 0.1,
+    }
+  }),
 }, {
-    selector: ${"`"}[data-direction="${direction}"] .target${"`"},
-    direction: "${direction}",
-    iterationCount: 2,
+  easing: "ease-in-out",
+  selector: true,
+  direction: "${direction}",
+  iterationCount: 2,
 }).play();
 `;
 
 const DelayCode = (delay) => `
 new Scene({
-  "#delay .target.delay0": {
-    0: { left: "0%" },
-    1: { left: "100%" },
+  "#delay .circle1": {
+    0: {
+      transform: "translate(-50%, -50%) scale(0)",
+      "border-width": "100px",
+    },
+    1: {
+      transform: "scale(1)",
+      "border-width": "0px",
+    },
   },
-  "#delay .target.delay1": {
-    0: { left: "0%" },
-    1: { left: "100%" },
+  "#delay .circle2": {
+    0: {
+      transform: "translate(-50%, -50%) scale(0)",
+      "border-width": "100px",
+    },
+    1: {
+      transform: "scale(1)",
+      "border-width": "0px",
+    },
     options: {
-      delay: ${delay},
+      delay: 0.5,
     }
   },
 }, {
@@ -27,89 +48,121 @@ new Scene({
 }).play();
 `;
 const IterationCountCode = (iterationCount, i) => `
-new Scene.SceneItem({
-    0: { left: "0%" },
-    1: { left: "100%" },
+new Scene({
+  "[data-iterationcount='${iterationCount}'] .circle": i => ({
+    0: {
+      transform: "translate(-50%, -50%) scale(0)",
+      "border-width": "100px",
+      opacity: 1,
+    },
+    1: {
+      transform: "scale(1)",
+      "border-width": "0px",
+      opacity: 0.3,
+    },
+    options: {
+      delay: i * 0.3,
+    }
+  }),
 }, {
-    selector: ${"`"}[data-iterationcount="${iterationCount}"] .target${"`"},
-    iterationCount: ${iterationCount === "infinite" ? '"infinite"' : iterationCount},
+  selector: true,
+  iterationCount: ${iterationCount === "infinite" ? '"infinite"' : iterationCount},
 }).play();
 `;
 const FillModeCode = (fillMode) => `
 new Scene({
-  "#fillmode .target.backwards": {
-    0: { left: "0%" },
-    1: { left: "100%" },
-    options: {
-      fillMode: "backwards",
-    },
+  "[data-fillmode='${fillMode}'] .pie, [data-fillmode='${fillMode}'] .half.left .semicircle": {
+    transform: {
+      rotate: ["0deg", "180deg"],
+    }
   },
-  "#fillmode .target.both": {
-    0: { left: "0%" },
-    1: { left: "100%" },
-    options: {
-      fillMode: "both",
-    },
-  },
+  "[data-fillmode='${fillMode}'] .half.right .semicircle": {
+    transform: {
+      rotate: ["0deg", "-180deg"],
+    }
+  }
 }, {
+  duration: 1,
+  easing: "ease-in-out",
   selector: true,
+  fillMode: "${fillMode}",
 }).play();
 `;
 const EasingCode = (easing, i) => `
 new Scene({
-  "#easing .example:nth-child(${i + 1}) .target.default": {
-    0: { left: "0%" },
-    1: { left: "100%" },
+  "#easing .example:nth-child(${i + 1}) .rect": i => ({
+    "transform": {
+      scale: [0, 1],
+    },
+    "border-width": [${"`${"}30 + i * 5}px${"`"}, "0px"],
     options: {
-      easing: Scene.LINEAR,
+      duration: 1,
+      delay: i * 0.1,
+    }
+  }),
+}, {
+  easing: "${easing}",
+  selector: true,
+}).play();
+`;
+const PlaySpeedCode = (playSpeed) => `
+new Scene({
+  "[data-playspeed='${playSpeed}'] .chase .dot": {
+    0: {
+      transform: "rotate(0deg) translate(0px, -99px) scale(1)",
+    },
+    2: {
+      transform: "rotate(360deg) scale(0.1)",
     },
   },
-  "#easing .example:nth-child(${i + 1}) .target.easing": {
-    0: { left: "0%" },
-    1: { left: "100%" },
-    options: {
-      easing: Scene.${easing},
+  "[data-playspeed='${playSpeed}'] .chase ellipse": {
+    0: {
+     "stroke-dasharray": "0 1000",
+    },
+    2: {
+      "stroke-dasharray": "311 1000",
     },
   },
 }, {
   selector: true,
+  playSpeed: ${playSpeed},
+  easing: "ease",
 }).play();
-`;
-const PlaySpeedCode = () => `
-new Scene({
-    "#playspeed .target.speed1": {
-      0: { left: "0%" },
-      1: { left: "100%" },
-      options: {
-        playSpeed: 1,
-      },
-    },
-    "#playspeed .target.speed2": {
-      0: { left: "0%" },
-      1: { left: "100%" },
-      options: {
-        playSpeed: 2,
-      },
-    },
-  }, {
-    selector: true,
-  }).play();
 `;
 
 const NumberCode = number => `
-new Scene.SceneItem({
-    0: { opacity: 0 },
-    1: { opacity: 1 },
+new Scene({
+  "[data-number='0,1'] .square": i => ({
+    opacity: [0, 1],
+    options: {
+      duration: 1,
+      delay: (i % 7) * 0.1 + Math.floor(i / 7) * 0.2,
+    }
+  }),
 }, {
-    selector: "#number .target"
+  selector: true,
 }).play();
 `;
 const UnitCode = () => `
-new Scene.SceneItem({
-    0: { left: "0%" },
-    1: { left: "100%" },
+new Scene({
+  ".overflow .text span": i => ({
+    0: {
+      transform: {
+        translateY: "100%",
+      }
+    },
+    1: {
+      transform: {
+        translateY: "0%",
+      }
+    },
+    options: {
+      delay: i * 0.2,
+    }
+  }),
 }, {
-    selector: "#unit .target"
+  easing: "ease-in-out",
+  selector: true,
 }).play();
 `;
 const StringCode = (_, i) => `
@@ -160,61 +213,90 @@ new Scene.SceneItem({
 }).play();
 `;
 const ObjectCode = () => `
-new Scene.SceneItem({
-  0: {
-    transform: {
-      translate: "-50px",
-      rotate: "0deg",
-    },
-  },
-  1: {
-    transform: {
-      translate: "50px",
-      rotate: "360deg",
-    }
-  }
-}, {
-  selector: "#object .target",
-  direction: "alternate",
-  iterationCount: "infinite",
-}).play();
-`
-
-const TimelineCode = () => `
-const scene = new Scene({
-  "#keyframes .target:nth-child(1)": {
+new Scene({
+  "[data-object] .circle": i => ({
     0: {
       transform: {
-          translate: "0px",
+        rotate: ${"`${"}-90 * i}deg${"`"}, 
+        translate: "0%, 0%",
       },
     },
     1: {
       transform: {
-        translate: "100px",
+        translate: "180%, 0%",
+      },
     },
-    }
-  },
+  }),
 }, {
+  selector: true,
+  iterationCount: "infinite",
+  easing: "ease-in-out",
+}).play();
+`
+
+const TimelineCode = () => `
+const clapperScene = new Scene({
+  ".clapper": {
+    2: "transform: translate(-50%, -50%) rotate(0deg)",
+    2.5: "transform: rotate(-15deg)",
+    3: "transform: rotate(0deg)",
+    3.5: "transform: rotate(-10deg)",
+  },
+  ".clapper-container" : {
+    0: Scene.zoomIn({ duration: 1 }),
+  },
+  ".circle": {
+    0.3: Scene.zoomIn({ duration: 1 }),
+  },
+  ".play": {
+    0: "transform: translate(-50%, -50%)",
+    0.6: Scene.zoomIn({ duration: 1 }),
+  },
+  ".top .stick1": {
+    2: "transform: rotate(0deg)",
+    2.5: "transform: rotate(-20deg)",
+    3: "transform: rotate(0deg)",
+    3.5: "transform: rotate(-10deg)",
+  },
+  ".stick1 .rect": i => ({
+    0: "transform: scale(0) skew(15deg)",
+    0.7: "transform: scale(1)",
+    options: { delay: 0.6 + i * 0.1 },
+  }),
+  ".stick2 .rect": i => ({
+    0: "transform: scale(0) skew(-15deg)",
+    0.7: "transform: scale(1)",
+    options: { delay: 0.8 + i * 0.1 },
+  }),
+}, {
+  easing: "ease-in-out",
+  iterationCount: "infinite",
   selector: true,
 });
 
+
 new Timeline(
-  scene,
+  clapperScene,
   document.querySelector("#keyframes .example_result"),
+  { keyboard: false },
 );
 `;
 
 
 const Example = (example, i, id, html, code) => `
 <div class="example" data-${id}="${example.value}">
-    <div class="example_result">
-        <h5>${example.title}</h5>
-        <div class="container">
-            ${example.html || (typeof html === "function" ? html(example.title) : html)}
-        </div>
+  <div class="example_wrapper left">
+      <h5>${example.title}</h5>
+      <div class="example_result">
+          <div class="container">
+              ${example.html || (typeof html === "function" ? html(example.title) : html)}
+          </div>
+      </div>
     </div>
-    <pre><code class="code javascript"></code></pre>
-    <script type="text/example">${(example.code || code || (() => {}))(example.value, i)}</script>
+    <div class="example_wrapper right">
+      <pre><code class="code javascript"></code></pre>
+      <script type="text/example">${(example.code || code || (() => {}))(example.value, i)}</script>
+    </div>
 </div>`;
 const Feature = (feature) => `
 <div class="feature" id="${feature.id}">
