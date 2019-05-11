@@ -21,9 +21,13 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 ## Examples
 * [Circle Burst](https://codepen.io/daybrush/pen/zWMeJW)
 * [Motion Effect](https://codepen.io/daybrush/pen/pLxQGY)
+* [Tree Animation](https://codepen.io/daybrush/pen/EQPPBg)
+* [Snow Animation](https://codepen.io/daybrush/pen/eoYGrx)
+* [Card Rotation](https://codepen.io/daybrush/pen/QYRyMd)
 * [Raindrop Effect](https://codepen.io/daybrush/pen/vRrbXG)
 * [Cube](https://codepen.io/daybrush/pen/ybxwpV)
 * [Shape](https://codepen.io/daybrush/pen/VXVgpE) 
+* [Timer](https://codepen.io/daybrush/pen/OdMMXd)
 
 [**More Examples**](https://codepen.io/collection/DLWxrd/)
 
@@ -33,25 +37,27 @@ Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
 ```bash
 $ npm install scenejs
 ```
-```js
-<script src="//daybrush.github.io/scenejs/release/latest/dist/scene.min.js"></script>
+```html
+<script src="//daybrush.com/scenejs/release/latest/dist/scene.min.js"></script>
 ```
 
 ## Documents
-* [API documentation](https://daybrush.github.io/scenejs/release/latest/doc/)
+* [API documentation](https://daybrush.com/scenejs/release/latest/doc/)
+* [Features Documentation](https://daybrush.com/scenejs/features.html)
 
-## 1st party libraries
-* [**media-scene**](https://www.npmjs.com/package/media-scene): A library for playing or controlling media
-* [**scenejs-render**](https://www.npmjs.com/package/scenejs-render): Make a movie of CSS animation through scenejs.
-
-## Framework Components
+## Related Projects
 * [**react-scenejs**](https://www.npmjs.com/package/react-scenejs): A React Component that can easily use scenejs
 * [**ng-scene**](https://www.npmjs.com/package/ng-scene): A Angular Component that can easily use scenejs
 * [**vue-scene**](https://www.npmjs.com/package/vue-scene): A Vue Component that can easily use scenejs
+* [**@scenejs/effects**](https://www.npmjs.com/package/@scenejs/effects): Effect collection library where you can add scene effects to Scenejs.
+* [**@scenejs/timeline**](https://www.npmjs.com/package/@scenejs/timeline): A library that represents the timeline of Scene.js. You can control time, properties, and items.
+* [**@scenejs/media**](https://www.npmjs.com/package/@scenejs/media): A library for playing or controlling media
+* [**@scenejs/render**](https://www.npmjs.com/package/@scenejs/render): Make a movie of CSS animation through scenejs.
+
 
 ## Make scene
 ```javascript
-import Scene, {EASE_IN_OUT} from "scenejs";
+import Scene from "scenejs";
 
 const scene = new Scene({
   ".class": {
@@ -67,7 +73,7 @@ const scene = new Scene({
   }
 }, {
   selector: true,
-  easing: EASE_IN_OUT,
+  easing: "ease-in-out",
 }).play();
 
 ```
@@ -103,3 +109,27 @@ const scene = new Scene({
 |9+(10+ playCSS)|latest|latest|latest|latest|
 
 
+
+```
+MIT License
+
+Copyright (c) 2016 Daybrush
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```

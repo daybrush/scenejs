@@ -67,7 +67,7 @@ export interface AnimatorState extends AnimatorOptions {
  * @typedef
  */
 export interface SceneState extends AnimatorState {
-    selector: string | boolean;
+    selector: string | boolean | ((id: number | string) => string);
     playCSS: boolean;
     exportEvent?: boolean;
 }
@@ -76,7 +76,7 @@ export interface SceneState extends AnimatorState {
  * @typedef
  */
 export interface SceneOptions extends AnimatorOptions {
-    selector: string | boolean;
+    selector: string | boolean | ((id: number | string) => string);
 }
 /**
  * @typedef
@@ -91,18 +91,10 @@ export interface SceneItemState extends AnimatorState {
  * @typedef
  */
 export interface SceneItemOptions extends AnimatorOptions {
-    selector: boolean | string;
+    selector: string | boolean | ((id: number | string) => string);
     elements: IArrayFormat<AnimateElement> | AnimateElement;
     element: IArrayFormat<AnimateElement> | AnimateElement;
     target: any;
-}
-
-/**
- * @memberof presets
- * @typedef
- */
-export interface PresetState extends AnimatorState {
-    [key: string]: any;
 }
 
 /**

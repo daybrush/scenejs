@@ -316,8 +316,7 @@ class Scene extends Animator<SceneOptions, SceneState> {
         if (!properties) {
             return this;
         }
-        const isSelector = options && options[SELECTOR] || this.state[SELECTOR];
-
+        const selector = options && options[SELECTOR] || this.state[SELECTOR];
         for (const name in properties) {
             if (name === "options") {
                 continue;
@@ -328,19 +327,16 @@ class Scene extends Animator<SceneOptions, SceneState> {
             if (object instanceof Scene || object instanceof SceneItem) {
                 this.setItem(name, object);
                 item = object;
-            } else if (isFunction(object) && isSelector) {
-                const elements = IS_WINDOW ? $(name, true) as IArrayFormat<AnimateElement> : ([] as AnimateElement[]);
+            } else if (isFunction(object) && selector) {
+                const elements =
+                    IS_WINDOW
+                    ? $(`${isFunction(selector) ? selector(name) : name}`, true) as IArrayFormat<AnimateElement>
+                    : ([] as AnimateElement[]);
                 const length = elements.length;
                 const scene = new Scene();
 
                 for (let i = 0; i < length; ++i) {
-                    const id = makeId();
-
-                    scene.newItem(`${i}`, {
-                        id,
-                        selector: `[${DATA_SCENE_ID}="${id}"]`,
-                        elements: elements[i],
-                    }).load(object(i, elements[i]));
+                    scene.newItem(i).setId().setElement(elements[i]).load(object(i, elements[i]));
                 }
                 this.setItem(name, scene);
                 continue;
@@ -348,26 +344,31 @@ class Scene extends Animator<SceneOptions, SceneState> {
                 item = this.newItem(name);
                 item.load(object);
             }
-            isSelector && item.setSelector(name);
+            selector && item.setSelector(selector);
         }
         this.setOptions(options);
     }
     public setOptions(options: Partial<SceneState> = {}): this {
         super.setOptions(options);
 
-        if (options.selector) {
-            this.state[SELECTOR] = true;
+        const selector = options.selector;
+
+        if (selector) {
+            this.state[SELECTOR] = selector;
         }
         return this;
     }
-    public setSelector(target: string | boolean) {
+    public setSelector(target?: string | boolean | ((id: number | string) => string)) {
         const state = this.state;
-        const isSelector = target || state[SELECTOR];
+        const selector = target || state[SELECTOR];
 
-        state[SELECTOR] = target;
-        this.forEach((item, name) => {
-            item.setSelector(isSelector ? name : false);
-        });
+        state[SELECTOR] = selector;
+        const isItFunction = isFunction(target);
+        if (selector) {
+            this.forEach((item, name) => {
+                item.setSelector(isItFunction ? (target as (id: number | string) => string)(name) : false);
+            });
+        }
     }
     public start(delay: number) {
         super.start(delay);

@@ -309,6 +309,8 @@ describe("Scene Test", () => {
             expect(item1.state.selector).to.be.equals(`[data-scene-id="${item1.state.id}"]`);
             expect(item0.elements.length).to.be.equals(1);
             expect(item1.elements.length).to.be.equals(1);
+            expect(item0.elements[0].getAttribute("data-scene-id")).to.be.equals(item0.state.id);
+            expect(item1.elements[0].getAttribute("data-scene-id")).to.be.equals(item1.state.id);
             expect(item0.get(0, "width")).to.be.equals("0px");
             expect(item1.get(0, "width")).to.be.equals("100px");
         });

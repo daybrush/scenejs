@@ -451,8 +451,12 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
      * @example
  item.setSelector("#id.class");
      */
-    public setSelector(target: string | boolean) {
-        this.setElement(target);
+    public setSelector(target: string | boolean | ((id: number | string) => string)) {
+        if (isFunction(target)) {
+            this.setElement(target(this.getId()));
+        } else {
+            this.setElement(target);
+        }
     }
     /**
       * Specifies an element to synchronize item's keyframes.
@@ -790,8 +794,10 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         id && this.setId(id);
         if (target) {
             this.setTarget(target);
-        } else if (elements || element || selector) {
-            this.setElement(elements || element || selector);
+        } else if (selector) {
+            this.setSelector(selector);
+        } else if (elements || element) {
+            this.setElement(elements || element);
         }
         return this;
     }
