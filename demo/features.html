@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="description" content="Scene.js is a JavaScript Animation Library for creating animated websites" />
+    <meta property="og:title" content="Scene.js is a JavaScript Animation Library">
+    <meta property="og:url" content="http://daybrush.com/scenejs">
+    <meta property="og:image" content="http://daybrush.com/scenejs/clapperboard.png">
+    <meta property="og:description" content="Scene.js is a JavaScript Animation Library for creating animated websites">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Scene.js is a JavaScript Animation Library ">
+    <meta name="twitter:url" content="http://daybrush.com/scenejs">
+    <meta name="twitter:image" content="http://daybrush.com/scenejs/clapperboard.png">
+    <meta name="twitter:description"
+        content="Scene.js is a JavaScript Animation Library for creating animated websites">
+    <link rel="stylesheet" href="https://daybrush.com/daybrush-jsdoc-template/static/styles/jsdoc.css">
+    <link rel="stylesheet" href="https://daybrush.com/daybrush-jsdoc-template/static/styles/daybrush.css">
+    <script src="https://daybrush.com/scenejs/release/latest/dist/scene.js"></script>
+    <script src="https://daybrush.com/utils/release/latest/dist/utils.js"></script>
+    <script src="https://daybrush.com/scenejs-timeline/release/latest/dist/timeline.pkgd.min.js"></script>
+    <style>
+        nav>ul>li {
+            padding: 8px 10px;
+        }
+
+        nav>ul>li>a {
+            margin: 0px 0px 5px;
+        }
+
+        nav li:after {
+            display: none;
+        }
+
+        nav li h4,
+        nav li ul {
+            display: block;
+        }
+
+        nav {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        nav {
+            display: block !important;
+            left: 0 !important;
+        }
+
+        #main h4 {
+            margin-bottom: 0;
+            border-top: 0;
+            border-bottom: 0;
+            background: none;
+            color: #333;
+            box-shadow: none;
+        }
+
+        #main {
+            float: right;
+            width: calc(100% - 250px);
+        }
+
+        .feature .description,
+        .feature pre code {
+            padding-left: 10px;
+        }
+        .feature pre .hljs {
+            background: #333;
+        }
+
+        .feature pre {
+            margin: 0;
+        }
+
+        .feature table.params {
+            width: auto;
+        }
+
+        .feature table th,
+        .feature table td {
+            padding: 10px 20px;
+            border-right: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .feature .example {
+            position: relative;
+            width: 100%;
+            min-height: 150px;
+            font-size: 0;
+            padding: 10px 0px;
+        }
+
+        .feature .example {
+            border-bottom: 1px solid #ccc;
+        }
+
+        .feature .example:nth-child(1) {
+            border-top: 1px solid #ccc;
+        }
+
+        .feature .example_result {
+            position: absolute;
+            display: inline-block;
+            width: 50%;
+            height: 100%;
+            font-size: 16px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .example_result h5 {
+            padding: 10px 20px;
+            font-size: 100%;
+        }
+
+        .example_result .container {
+            position: absolute;
+            left: 20px;
+            right: 50px;
+            max-width: 500px;
+            margin: auto;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .example .content {
+            position: relative;
+            padding: 0px;
+        }
+        .example .content h5 {
+            position: absolute;
+            height: 30px;
+            line-height: 30px;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            left: 40px;
+            top: 0;
+            color: #777;
+            font-size: 15px;
+        }
+        .example .target {
+            position: relative;
+            width: 30px;
+            height: 30px;
+            margin: 5px 0px;
+            background: #333;
+        }
+        .example .text {
+            position: relative;
+            height: 30px;
+            margin: 5px 0px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .example .text:before {
+            content: attr(data-text);
+        }
+        .example .center {
+            margin: auto;
+        }
+
+        .feature pre {
+            position: relative;
+            font-size: 14px;
+            display: inline-block;
+            width: 50%;
+            left: 50%;
+        }
+
+        .feature pre code {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h2><a href="index.html">Home</a></h2>
+        <h2 class="custom"><a href="https://github.com/daybrush/scenejs" target="_blank" class="menu-item"
+                id="repository">Github repo</a></h2>
+        <div class="search">
+            <div class="input-area"><input type="text"></div><button></button>
+        </div>
+        <ul class="classes">
+            <li class="parent">
+                <a href="Scene.html">Options</a>
+                <ul class="methods">
+                    <li><a href="Scene.html#end">direction</a></li>
+                    <li><a href="Scene.html#finish">delay</a></li>
+                    <li><a href="Scene.html#exportCSS">iterationCount</a></li>
+                    <li><a href="Scene.html#forEach">fillMode</a></li>
+                    <li><a href="Scene.html#getActiveDuration">easing</a></li>
+                    <li><a href="Scene.html#getDelay">playSpeed</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">Values</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">Number</a></li>
+                    <li><a href="presets.html#.fadeIn">Unit (Number + String)</a></li>
+                    <li><a href="presets.html#.fadeOut">String</a></li>
+                    <li><a href="presets.html#.transition">function</a></li>
+                    <li><a href="presets.html#.wipeIn">color</a></li>
+                    <li><a href="presets.html#.wipeOut">array</a></li>
+                    <li><a href="presets.html#.zoomIn">object</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">Timeline</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">Keyframes</a></li>
+                    <li><a href="presets.html#.fadeIn">Progress</a></li>
+                    <li><a href="presets.html#.fadeOut">Player</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">SVG Animation</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">Hand Writting</a></li>
+                    <li><a href="presets.html#.fadeIn">Transform Shape</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">Plays</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">Javascript Animation</a></li>
+                    <li><a href="presets.html#.fadeIn">CSS Animation</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">Presets</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">blink</a></li>
+                    <li><a href="presets.html#.fadeIn">fadeIn</a></li>
+                    <li><a href="presets.html#.fadeOut">fadeOut</a></li>
+                    <li><a href="presets.html#.transition">transition</a></li>
+                    <li><a href="presets.html#.wipeIn">wipeIn</a></li>
+                    <li><a href="presets.html#.wipeOut">wipeOut</a></li>
+                    <li><a href="presets.html#.zoomIn">zoomIn</a></li>
+                    <li><a href="presets.html#.zoomOut">zoomOut</a></li>
+                </ul>
+            </li>
+            <li class="parent"><a href="presets.html">Rendering</a>
+                <ul class="methods">
+                    <li><a href="presets.html#.blink">Export MP4</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="main">
+        <div class="container-overview"></div>
+    </div>
+</body>
+<script charset="UTF-8" src="./common/page.js"></script>
+<script charset="UTF-8" src="./common/data.js"></script>
+<script charset="UTF-8" src="./common/highlight.pack.js"></script>
+<link rel="stylesheet" href="./common/styles/monokai-sublime.css" />
+<script>
+    document.querySelector(".container-overview").innerHTML = Pages(datas);
+    document.querySelector(".classes").innerHTML = Navigations(datas);
+
+    
+    utils.toArray(document.querySelectorAll(".feature")).forEach(feature => {
+        utils.toArray(feature.querySelectorAll(".example")).forEach(example => {
+            const code = example.querySelector("script").innerText;
+
+
+            example.querySelector(".code").innerText = code.trim();
+
+            const script = document.createElement("script");
+
+            script.innerHTML = code;
+            example.appendChild(script)
+        });
+    });
+    hljs.initHighlightingOnLoad();
+</script>
+
+</html>
