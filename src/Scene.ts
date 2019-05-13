@@ -369,6 +369,7 @@ class Scene extends Animator<SceneOptions, SceneState> {
                 item.setSelector(isItFunction ? (target as (id: number | string) => string)(name) : false);
             });
         }
+        return this;
     }
     public start(delay: number) {
         super.start(delay);
