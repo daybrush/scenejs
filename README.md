@@ -46,6 +46,7 @@ $ npm install scenejs
 * [Features Documentation](https://daybrush.com/scenejs/features.html)
 
 ## Related Projects
+* [**keyframer**](https://www.npmjs.com/package/keyframer): Make the CSS Keyframes the keyframes object.
 * [**react-scenejs**](https://www.npmjs.com/package/react-scenejs): A React Component that can easily use scenejs
 * [**ng-scene**](https://www.npmjs.com/package/ng-scene): A Angular Component that can easily use scenejs
 * [**vue-scene**](https://www.npmjs.com/package/vue-scene): A Vue Component that can easily use scenejs
@@ -89,17 +90,15 @@ const scene = new Scene({
 * [steps(count, "start" | "end")](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.steps)
 
 
-## presets
+## Effects
+* [fadeIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.fadeIn)
+* [fadeOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.fadeOut)
+* [blink](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.blink)
 * [wipeIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.wipeIn)
 * [wipeOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.wipeOut)
 * [zoomIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.zoomIn)
 * [zoomOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.zoomOut)
-* [blink](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.blink)
-* [fadeIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.fadeIn)
-* [fadeOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.fadeOut)
 * [transition](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.transition)
-* [animate](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.animate)
-* [animateItem](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.animateItem)
 
 
 ## Support Browser
