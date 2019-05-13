@@ -1,6 +1,7 @@
 import { IObject } from "@daybrush/utils";
-
-import Scene, { SceneOptions, SceneItemOptions, SceneItem } from ".";
+import Scene from "./Scene";
+import SceneItem from "./SceneItem";
+import { SceneOptions, SceneItemOptions } from "./types";
 
 export function animate(properties?: IObject<any>, options?: Partial<SceneOptions>) {
     return new Scene(properties, options).play();

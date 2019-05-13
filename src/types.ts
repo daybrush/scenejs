@@ -52,7 +52,11 @@ export interface AnimatorOptions {
     playSpeed: number;
     duration: number;
 }
-
+/**
+ * @typedef
+ * @extends AnimatorOptions
+ * @see AnimatorOptions
+ */
 export interface AnimatorState extends AnimatorOptions {
     easingName: string;
     iterationTime: number;
@@ -65,6 +69,8 @@ export interface AnimatorState extends AnimatorOptions {
 
 /**
  * @typedef
+ * @extends AnimatorState
+ * @see AnimatorState
  */
 export interface SceneState extends AnimatorState {
     selector: string | boolean | ((id: number | string) => string);
@@ -74,12 +80,16 @@ export interface SceneState extends AnimatorState {
 
 /**
  * @typedef
+ * @extends AnimatorOptions
+ * @see AnimatorOptions
  */
 export interface SceneOptions extends AnimatorOptions {
     selector: string | boolean | ((id: number | string) => string);
 }
 /**
  * @typedef
+ * @extends AnimatorState
+ * @see AnimatorState
  */
 export interface SceneItemState extends AnimatorState {
     playCSS: boolean;
@@ -89,6 +99,8 @@ export interface SceneItemState extends AnimatorState {
 }
 /**
  * @typedef
+ * @extends AnimatorOptions
+ * @see AnimatorOptions
  */
 export interface SceneItemOptions extends AnimatorOptions {
     selector: string | boolean | ((id: number | string) => string);
