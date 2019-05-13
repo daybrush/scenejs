@@ -1,7 +1,7 @@
 import {
     ALIAS, TIMING_FUNCTION, TRANSFORM_NAME, EASING_NAME
 } from "./consts";
-import { isRole, getType, isPropertyObject, getValueByNames, isFixed } from "./utils";
+import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, updateFrame } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
 import {
     isObject, isArray, isString,
@@ -83,7 +83,7 @@ class Frame {
       }
   });
      */
-    constructor(properties: IObject<any> = {}) {
+    constructor(properties: any = {}) {
         this.properties = {};
         this.set(properties);
     }
@@ -200,6 +200,25 @@ class Frame {
             self._set(params, value);
         }
         return self;
+    }
+    /**
+      * Gets the names of properties.
+      * @return the names of properties.
+      * @example
+  // one parameter
+  frame.set({
+      display: "none",
+      transform: {
+          translate: "10px, 10px",
+          scale: "1",
+      },
+  });
+
+  // [["display"], ["transform", "translate"], ["transform", "scale"]]
+  console.log(frame.getNames());
+    */
+    public getNames(): string[][] {
+        return getNames(this.properties, []);
     }
     /**
       * check that has property.
