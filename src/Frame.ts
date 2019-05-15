@@ -16,7 +16,7 @@ function toInnerProperties(obj: IObject<string>) {
     const arrObj = [];
 
     for (const name in obj) {
-        arrObj.push(`${name.replace(/\d/g, "")}(${obj[name]})`);
+        arrObj.push(`${name.replace(/\d$/g, "")}(${obj[name]})`);
     }
     return arrObj.join(" ");
 }
