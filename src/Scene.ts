@@ -366,7 +366,7 @@ class Scene extends Animator<SceneOptions, SceneState> {
         const isItFunction = isFunction(target);
         if (selector) {
             this.forEach((item, name) => {
-                item.setSelector(isItFunction ? (target as (id: number | string) => string)(name) : false);
+                item.setSelector(isItFunction ? (target as (id: number | string) => string)(name) : selector);
             });
         }
         return this;
