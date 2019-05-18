@@ -21,12 +21,12 @@ function GetterSetter<T extends new (...args: any[]) => {}>(
         const prototype = constructor.prototype;
 
         getter.forEach(name => {
-            prototype[camelize(`get ${name}`)] = function() {
+            prototype[camelize(`get ${name}`)] = function () {
                 return this[parent][name];
             };
         });
         setter.forEach(name => {
-            prototype[camelize(`set ${name}`)] = function(value: any) {
+            prototype[camelize(`set ${name}`)] = function (value: any) {
                 this[parent][name] = value;
                 return this;
             };
@@ -334,8 +334,10 @@ class Animator
         if (isTick) {
             const tickTime = state[TICK_TIME];
 
-            if (prevTime < delay && time >= 0 ||
-                state[PLAY_STATE] !== RUNNING && tickTime >= delay && (tickTime === 0 || !this.isEnded())) {
+            if (
+                (prevTime < delay && time >= 0 || state[PLAY_STATE] !== RUNNING && tickTime >= delay)
+                && (tickTime === delay || !this.isEnded())
+            ) {
                 this.start(0);
             }
             if (tickTime < prevTime || this.isEnded()) {
