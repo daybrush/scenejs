@@ -1,7 +1,7 @@
 import Animator from "./Animator";
 import SceneItem from "./SceneItem";
-import { DATA_SCENE_ID, SELECTOR, DURATION, START_ANIMATION } from "./consts";
-import { playCSS, exportCSS, getRealId, makeId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
+import { SELECTOR, DURATION, DELAY } from "./consts";
+import { playCSS, exportCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import {
     AnimateElement, SceneState, SceneOptions, EasingType,
@@ -371,10 +371,10 @@ class Scene extends Animator<SceneOptions, SceneState> {
         }
         return this;
     }
-    public start(delay: number) {
+    public start(delay: number = this.state[DELAY]) {
         super.start(delay);
         this.forEach(item => {
-            item.start(delay);
+            item.start();
         });
     }
 }
