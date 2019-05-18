@@ -7,8 +7,8 @@ import {
 } from "./consts";
 import EventTrigger from "./EventTrigger";
 import { bezier, steps } from "./easing";
-import { toFixed, makeId } from "./utils";
-import { splitUnit, isString, camelize, requestAnimationFrame, isArray } from "@daybrush/utils";
+import { toFixed } from "./utils";
+import { splitUnit, isString, camelize, requestAnimationFrame, isArray, cancelAnimationFrame } from "@daybrush/utils";
 import {
     IterationCountType, DirectionType, AnimatorState,
     EasingFunction, FillModeType, PlayStateType, EasingType, AnimatorOptions,
@@ -33,31 +33,6 @@ function GetterSetter<T extends new (...args: any[]) => {}>(
         });
     };
 }
-function tick(animator: Animator, now: number, to?: number) {
-    if (animator.isPaused()) {
-        return;
-    }
-    const state = animator.state;
-    const playSpeed = state[PLAY_SPEED];
-    const prevTime = state[PREV_TIME];
-    const delay = state[DELAY];
-    const tickTime = state[TICK_TIME];
-    const currentTime = tickTime + Math.min(1000, now - prevTime) / 1000 * playSpeed;
-
-    state[PREV_TIME] = now;
-    animator.setTime(currentTime - delay, true);
-    if (to && to * 1000 < now) {
-        animator.pause();
-    }
-    if (state[PLAY_STATE] === PAUSED) {
-        return;
-    }
-
-    requestAnimationFrame((time: number) => {
-        tick(animator, time, to);
-    });
-}
-
 export function isDirectionReverse(iteration: number, iteraiontCount: IterationCountType, direction: DirectionType) {
     if (direction === REVERSE) {
         return true;
@@ -89,6 +64,7 @@ const getters = [...setters, EASING, EASING_NAME];
 class Animator
     <T extends AnimatorOptions = AnimatorOptions, U extends AnimatorState = AnimatorState> extends EventTrigger {
     public state: U;
+    private timerId: number = 0;
 
     /**
      * @param - animator's options
@@ -279,9 +255,9 @@ class Animator
         }
         state[TICK_TIME] = this.getTime();
 
-        requestAnimationFrame((time: number) => {
+        this.timerId = requestAnimationFrame((time: number) => {
             state[PREV_TIME] = time;
-            tick(this, time, toTime);
+            this.tick(time, toTime);
         });
         this.start();
         return this;
@@ -301,6 +277,7 @@ class Animator
              */
             this.trigger(PAUSED);
         }
+        cancelAnimationFrame(this.timerId);
         return this;
     }
     /**
@@ -358,7 +335,7 @@ class Animator
             const tickTime = state[TICK_TIME];
 
             if (prevTime < delay && time >= 0 ||
-                state[PLAY_STATE] !== RUNNING && tickTime >= delay && !this.isEnded()) {
+                state[PLAY_STATE] !== RUNNING && tickTime >= delay && (tickTime === 0 || !this.isEnded())) {
                 this.start(0);
             }
             if (tickTime < prevTime || this.isEnded()) {
@@ -484,6 +461,30 @@ class Animator
         }
         this.setIterationTime(currentIterationTime);
         return this;
+    }
+    private tick(now: number, to?: number) {
+        if (this.isPaused()) {
+            return;
+        }
+        const state = this.state;
+        const playSpeed = state[PLAY_SPEED];
+        const prevTime = state[PREV_TIME];
+        const delay = state[DELAY];
+        const tickTime = state[TICK_TIME];
+        const currentTime = tickTime + Math.min(1000, now - prevTime) / 1000 * playSpeed;
+
+        state[PREV_TIME] = now;
+        this.setTime(currentTime - delay, true);
+        if (to && to * 1000 < now) {
+            this.pause();
+        }
+        if (state[PLAY_STATE] === PAUSED) {
+            return;
+        }
+
+        this.timerId = requestAnimationFrame((time: number) => {
+            this.tick(time, to);
+        });
     }
 }
 /**

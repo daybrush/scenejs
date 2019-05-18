@@ -254,7 +254,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
                     getNames(value, [t]).forEach(names => {
                         const innerValue = getValueByNames(names.slice(1), value);
                         const arr = isArray(innerValue) ?
-                        innerValue : [getValueByNames(names, this.target), innerValue];
+                            innerValue : [getValueByNames(names, this.target), innerValue];
                         const length = arr.length;
 
                         for (let i = 0; i < length; ++i) {
@@ -387,9 +387,8 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         return this;
     }
     /**
-   * Push out the amount of time.
-   * @param - time to push
-     * @return {}
+     * Push out the amount of time.
+     * @param - time to push
      * @example
    item.get(0); // frame 0
    item.unshift(3);
@@ -406,6 +405,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
             return time2;
         });
         this.items = obj;
+        return this;
     }
     /**
      * Get the frames in the item in object form.
@@ -428,7 +428,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
      * @param {string} selectors - Selectors to find elements in items.
      * @return {SceneItem} An instance itself
      * @example
- item.setSelector("#id.class");
+item.setSelector("#id.class");
      */
     public setSelector(target: string | boolean | ((id: number | string) => string)) {
         if (isFunction(target)) {
@@ -439,14 +439,32 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         return this;
     }
     /**
-      * Specifies an element to synchronize item's keyframes.
-    * @param - elements to synchronize item's keyframes.
-    * @param - Make sure that you have peusdo.
-      * @return {SceneItem} An instance itself
-      * @example
-  item.setElement(document.querySelector("#id.class"));
-  item.setElement(document.querySelectorAll(".class"));
-      */
+     * Get the elements connected to SceneItem.
+     */
+    public getElements(): AnimateElement[] {
+        return this.elements;
+    }
+    /**
+     * Specifies an element to synchronize item's keyframes.
+     * @param - elements to synchronize item's keyframes.
+     * @param - Make sure that you have peusdo.
+     * @return {SceneItem} An instance itself
+     * @example
+item.setElement(document.querySelector("#id.class"));
+item.setElement(document.querySelectorAll(".class"));
+     */
+    public setElements(target: boolean | string | AnimateElement | IArrayFormat<AnimateElement>): this {
+        return this.setElement(target);
+    }
+    /**
+     * Specifies an element to synchronize item's keyframes.
+     * @param - elements to synchronize item's keyframes.
+     * @param - Make sure that you have peusdo.
+     * @return {SceneItem} An instance itself
+     * @example
+item.setElement(document.querySelector("#id.class"));
+item.setElement(document.querySelectorAll(".class"));
+     */
     public setElement(target: boolean | string | AnimateElement | IArrayFormat<AnimateElement>) {
         const state = this.state;
         let elements: AnimateElement[] = [];
