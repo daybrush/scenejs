@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "1.0.0-rc8",
+  "version": "1.0.0-rc9",
   "description": "Javascript Animation Library",
   "main": "dist/scene.cjs.js",
   "module": "dist/scene.esm.js",
@@ -91,6 +91,6 @@
     "typescript-compiler": "^1.4.1-2"
   },
   "dependencies": {
-    "@daybrush/utils": "^0.8.0"
+    "@daybrush/utils": "^0.9.0"
   }
 }

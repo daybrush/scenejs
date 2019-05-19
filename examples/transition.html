@@ -28,6 +28,7 @@
 
 </style>
 <script src="../dist/scene.js"></script>
+<script src="https://daybrush.com/scenejs-effects/release/latest/dist/effects.js"></script>
 <script>
 var scene = new Scene({
 	".rectangle1": {options: {easing: Scene.bezier(1, 0, 1, 1)}},
@@ -41,28 +42,23 @@ var item1 = scene.getItem(".rectangle1");
 var item2 = scene.getItem(".rectangle2");
 
 Scene.transition(item1, item2, {
-	from: {
+	0: {
 		transform: {
 			scale: 1.2,
 			rotate: "0deg",
 		},
 	},
-	to: {
+	0.9: {
+		opacity: 1,
+	},
+	1: {
 		transform: {
 			scale: 2,
 			rotate: "40deg",
 		},
-	},
-	duration: 1,
-});
-Scene.transition(item1, item2, {
-	from: {
-		opacity: 1,
-	},
-	to: {
 		opacity: 0,
 	},
-	duration: 0.1,
 });
+
 scene.playCSS();
 </script>

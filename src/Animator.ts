@@ -227,7 +227,7 @@ class Animator
     public isPaused(): boolean {
         return this.state[PLAY_STATE] === PAUSED;
     }
-    public start(delay: number = this.state[DELAY]): void {
+    public start(delay: number = this.state[DELAY]): boolean {
         const state = this.state;
 
         state[PLAY_STATE] = RUNNING;
@@ -237,7 +237,9 @@ class Animator
              * @event Animator#play
              */
             this.trigger(PLAY);
+            return true;
         }
+        return false;
     }
     /**
       * play animator
@@ -315,7 +317,7 @@ class Animator
   animator.setTime(10);
   animator.getTime() // 10
       */
-    public setTime(time: number | string, isTick?: boolean) {
+    public setTime(time: number | string, isTick?: boolean, isParent?: boolean) {
         const activeDuration = this.getActiveDuration();
         const state = this.state;
         const prevTime = state[TICK_TIME];
@@ -331,13 +333,10 @@ class Animator
         state[CURRENT_TIME] = currentTime;
         this.calculate();
 
-        if (isTick) {
+        if (isTick && !isParent) {
             const tickTime = state[TICK_TIME];
 
-            if (
-                (prevTime < delay && time >= 0 || state[PLAY_STATE] !== RUNNING && tickTime >= delay)
-                && (tickTime === delay || !this.isEnded())
-            ) {
+            if (prevTime < delay && time >= 0) {
                 this.start(0);
             }
             if (tickTime < prevTime || this.isEnded()) {

@@ -1,6 +1,6 @@
 import Animator from "./Animator";
 import SceneItem from "./SceneItem";
-import { SELECTOR, DURATION, DELAY } from "./consts";
+import { SELECTOR, DURATION, DELAY, RUNNING } from "./consts";
 import { playCSS, exportCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import {
@@ -152,8 +152,8 @@ class Scene extends Animator<SceneOptions, SceneState> {
         this.items[name] = item;
         return this;
     }
-    public setTime(time: number | string, isTick?: boolean, parentEasing?: EasingType) {
-        super.setTime(time, isTick);
+    public setTime(time: number | string, isTick?: boolean, isParent?: boolean, parentEasing?: EasingType) {
+        super.setTime(time, isTick, isParent);
 
         const iterationTime = this.getIterationTime();
         const items = this.items;
@@ -163,42 +163,42 @@ class Scene extends Animator<SceneOptions, SceneState> {
         for (const id in items) {
             const item = items[id];
 
-            item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, easing);
+            item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, true, easing);
 
             frames[item.getId()] = item.temp;
         }
         this.temp = frames;
 
         /**
-             * This event is fired when timeupdate and animate.
-             * @event Scene#animate
+         * This event is fired when timeupdate and animate.
+         * @event Scene#animate
          * @param {object} param The object of data to be sent to an event.
-             * @param {number} param.currentTime The total time that the animator is running.
-             * @param {number} param.time The iteration time during duration that the animator is running.
-             * @param {object} param.frames frames of that time.
+         * @param {number} param.currentTime The total time that the animator is running.
+         * @param {number} param.time The iteration time during duration that the animator is running.
+         * @param {object} param.frames frames of that time.
          * @example
-    const scene = new Scene({
-      a: {
+const scene = new Scene({
+    a: {
         0: {
-          opacity: 0,
+            opacity: 0,
         },
         1: {
-          opacity: 1,
+            opacity: 1,
         }
-      },
-      b: {
+    },
+    b: {
         0: {
-          opacity: 0,
+            opacity: 0,
         },
         1: {
-          opacity: 1,
+            opacity: 1,
         }
-      }
-    }).on("animate", e => {
-      console.log(e);
-      // {a: Frame, b: Frame}
-      console.log(e.a.get("opacity"));
-    });
+    }
+}).on("animate", e => {
+    console.log(e);
+    // {a: Frame, b: Frame}
+    console.log(e.a.get("opacity"));
+});
              */
         this.trigger("animate", {
             frames,
@@ -371,11 +371,19 @@ class Scene extends Animator<SceneOptions, SceneState> {
         }
         return this;
     }
-    public start(delay: number = this.state[DELAY]) {
-        super.start(delay);
-        this.forEach(item => {
-            item.start();
-        });
+    public start(delay: number = this.state[DELAY]): boolean {
+        const result = super.start(delay);
+
+        if (result) {
+            this.forEach(item => {
+                item.start(0);
+            });
+        } else {
+            this.forEach(item => {
+                item.setPlayState(RUNNING);
+            });
+        }
+        return result;
     }
 }
 

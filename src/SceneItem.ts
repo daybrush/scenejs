@@ -533,8 +533,8 @@ item.setElement(document.querySelectorAll(".class"));
         this.set(time, fromCSS(this.elements, properties));
         return this;
     }
-    public setTime(time: number | string, isTick?: boolean, parentEasing?: EasingType) {
-        super.setTime(time, isTick);
+    public setTime(time: number | string, isTick?: boolean, isParent?: boolean, parentEasing?: EasingType) {
+        super.setTime(time, isTick, isParent);
 
         const iterationTime = this.getIterationTime();
         const easing = this.getEasing() || parentEasing;
