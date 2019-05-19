@@ -110,7 +110,11 @@ export function getEntries(times: number[], states: AnimatorState[]) {
                         addEntry(nextEntries, (delay + currentDuration * iterationCount) / playSpeed, divideTime);
                     }
                     break;
-                } else if (currentTime === lastTime && nextEntries[nextEntries.length - 1][0] === lastTime + delay) {
+                } else if (
+                    currentTime === lastTime
+                    && nextEntries.length
+                    && nextEntries[nextEntries.length - 1][0] === lastTime + delay
+                ) {
                     break;
                 }
                 addEntry(nextEntries, (delay + currentTime) / playSpeed, time);

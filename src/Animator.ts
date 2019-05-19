@@ -21,12 +21,12 @@ function GetterSetter<T extends new (...args: any[]) => {}>(
         const prototype = constructor.prototype;
 
         getter.forEach(name => {
-            prototype[camelize(`get ${name}`)] = function () {
+            prototype[camelize(`get ${name}`)] = function() {
                 return this[parent][name];
             };
         });
         setter.forEach(name => {
-            prototype[camelize(`set ${name}`)] = function (value: any) {
+            prototype[camelize(`set ${name}`)] = function(value: any) {
                 this[parent][name] = value;
                 return this;
             };
