@@ -78,27 +78,21 @@ const scene = new Scene({
 }).play();
 
 ```
-
-## easing
-* [EASE](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.EASE)
-* [EASE_IN](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.EASE_IN)
-* [EASE_OUT](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.EASE_OUT)
-* [EASE_IN_OUT](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.EASE_IN_OUT)
-* [STEP_START](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.STEP_START)
-* [STEP_END](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.STEP_END)
-* [bezier(x1, y1, x2, y2)](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.bezier)
-* [steps(count, "start" | "end")](https://daybrush.github.io/scenejs/release/latest/doc/easing.html#.steps)
-
-
 ## Effects
-* [fadeIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.fadeIn)
-* [fadeOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.fadeOut)
-* [blink](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.blink)
-* [wipeIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.wipeIn)
-* [wipeOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.wipeOut)
-* [zoomIn](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.zoomIn)
-* [zoomOut](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.zoomOut)
-* [transition](https://daybrush.github.io/scenejs/release/latest/doc/presets.html#.transition)
+* [wipeIn](https://daybrush.com/scenejs/features.html#wipein)
+* [wipeOut](https://daybrush.com/scenejs/features.html#wipeout)
+* [zoomIn](https://daybrush.com/scenejs/features.html#zoomin)
+* [zoomOut](https://daybrush.com/scenejs/features.html#zoomout)
+* [blink](https://daybrush.com/scenejs/features.html#bllink)
+* [fadeIn](https://daybrush.com/scenejs/features.html#fadein)
+* [fadeOut](https://daybrush.com/scenejs/features.html#fadeout)
+* [flip](https://daybrush.com/scenejs/features.html#flip)
+* [flipX](https://daybrush.com/scenejs/features.html#flipx)
+* [flipY](https://daybrush.com/scenejs/features.html#flipy)
+* [shake](https://daybrush.com/scenejs/features.html#shake)
+* [shakeX](https://daybrush.com/scenejs/features.html#shakex)
+* [shakeY](https://daybrush.com/scenejs/features.html#shakey)
+* [transition](https://daybrush.com/scenejs/features.html#transition)
 
 
 ## Support Browser
