@@ -7,7 +7,13 @@ import { $, addEvent } from "@daybrush/utils";
 declare var Scene: typeof NativeScene & {
     EASE_IN_OUT: EasingFunction,
 };
-declare var MediaScene: new (duration: number, properties?: any, options?: any) => NativeScene;
+interface Media extends NativeScene {
+    getVolume(): number;
+    setVolume(volume: number): this;
+    setPlaySpeed(playSpeed: number): this;
+    seek(fromTime: number, toTime: number): this;
+}
+declare var MediaScene: new () => NativeScene & {addMedia: (filename) => Media };
 
 const clapper = document.querySelector(".clapper");
 
@@ -305,23 +311,15 @@ const scene = new Scene({
         selector: true,
     });
 
-const clapperSound = document.querySelector("audio");
-const mediaScene = new MediaScene(
-    scene.getDuration(),
-    {
-        "./clapper.mp3": {
-            [nextStep3 + 0.9]: {
-                seek: [0, 1],
-                playSpeed: 2,
-                volume: 0.7,
-            },
-            options: {
-                element: clapperSound,
-            },
-        },
-    },
-);
+const mediaScene = new MediaScene();
 
+mediaScene
+    .addMedia("./clapper.mp3")
+    .seek(0, 0.452)
+    .setPlaySpeed(2)
+    .setVolume(0.7)
+    .setDelay(nextStep3 + 0.9);
+(window as any).mediaScene = mediaScene;
 addEvent($<HTMLElement>(".play_btn.front"), "click", () => {
     scene.playCSS(false);
     mediaScene.play();

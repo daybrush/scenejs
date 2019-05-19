@@ -219,9 +219,7 @@ icon5Scene.getItem(".slide:nth-child(3) .target").on("animate", e => {
 });
 
 toArray($(".page2 li .feature", true)).forEach(el => {
-    addEvent(el, "click", e => {
-        e.preventDefault();
-    });
+    addEvent(el, "click", e => {});
 });
 
 addEvent(valueFeatureElement, "mouseenter", () => {
