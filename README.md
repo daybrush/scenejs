@@ -1,7 +1,7 @@
 Scene.js  [![npm version](https://badge.fury.io/js/scenejs.svg)](https://badge.fury.io/js/scenejs) [![Build Status](https://travis-ci.org/daybrush/scenejs.svg?branch=master)](https://travis-ci.org/daybrush/scenejs) [![Coverage Status](https://coveralls.io/repos/github/daybrush/scenejs/badge.svg?branch=master)](https://coveralls.io/github/daybrush/scenejs?branch=master)
 ============ 
 
-Scene.js is an Javascript Aniamtion Library. Make Your Homepage Dynamic.
+Scene.js is an JavaScript & CSS timeline-based animation library.
 <br>
 
 
@@ -46,14 +46,14 @@ $ npm install scenejs
 * [Features Documentation](https://daybrush.com/scenejs/features.html)
 
 ## Related Projects
-* [**keyframer**](https://www.npmjs.com/package/keyframer): Make the CSS Keyframes the keyframes object.
-* [**react-scenejs**](https://www.npmjs.com/package/react-scenejs): A React Component that can easily use scenejs
-* [**ng-scene**](https://www.npmjs.com/package/ng-scene): A Angular Component that can easily use scenejs
-* [**vue-scene**](https://www.npmjs.com/package/vue-scene): A Vue Component that can easily use scenejs
-* [**@scenejs/effects**](https://www.npmjs.com/package/@scenejs/effects): Effect collection library where you can add scene effects to Scenejs.
-* [**@scenejs/timeline**](https://www.npmjs.com/package/@scenejs/timeline): A library that represents the timeline of Scene.js. You can control time, properties, and items.
-* [**@scenejs/media**](https://www.npmjs.com/package/@scenejs/media): A library for playing or controlling media
-* [**@scenejs/render**](https://www.npmjs.com/package/@scenejs/render): Make a movie of CSS animation through scenejs.
+* [**keyframer**](https://github.com/daybrush/keyframer): Make the CSS Keyframes the keyframes object.
+* [**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs): A React Component that can easily use scenejs
+* [**ng-scene**](https://github.com/daybrush/scenejs/tree/master/packages/ng-scene): A Angular Component that can easily use scenejs
+* [**vue-scene**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scene): A Vue Component that can easily use scenejs
+* [**@scenejs/effects**](https://github.com/daybrush/scenejs-effects): Effect collection library where you can add scene effects to Scenejs.
+* [**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline): A library that represents the timeline of Scene.js. You can control time, properties, and items.
+* [**@scenejs/media**](https://github.com/daybrush/scenejs-media): A library for playing or controlling media
+* [**@scenejs/render**](https://github.com/daybrush/scenejs-render): Make a movie of CSS animation through scenejs.
 
 
 ## Make scene

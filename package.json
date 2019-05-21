@@ -1,7 +1,7 @@
 {
   "name": "scenejs",
   "version": "1.0.0-rc10",
-  "description": "Javascript Animation Library",
+  "description": "JavaScript & CSS timeline-based animation library",
   "main": "dist/scene.cjs.js",
   "module": "dist/scene.esm.js",
   "sideEffects": false,
@@ -35,6 +35,8 @@
   "keywords": [
     "scene",
     "scenejs",
+    "keyframes",
+    "timeline",
     "animate",
     "animation",
     "css",
