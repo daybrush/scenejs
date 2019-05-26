@@ -32,10 +32,22 @@ describe("Scene Test", () => {
             });
 
             // When
-            scene.newItem("item2");
+            const item = scene.newItem("item2");
             const duplicateItem2 = scene.newItem("item2");
 
-            expect(duplicateItem2).to.be.not.ok;
+            expect(duplicateItem2).to.be.equals(item);
+        });
+        it("should check 'removeItem' method", () => {
+            const scene = new Scene({
+                item: {},
+            });
+
+            // When
+            const item = scene.newItem("item2");
+
+            scene.removeItem("item2");
+            expect(item).to.be.ok;
+            expect(scene.getItem("item2")).to.be.undefined;
         });
         it("should check 'getDuration' method", () => {
             const scene = new Scene({
@@ -208,7 +220,7 @@ describe("Scene Test", () => {
             const test = {};
             let test2 = {};
 
-            scene.forEach((item, name, items) => {
+            scene.forEach((item, name, index, items) => {
                 test[name] = item;
                 test2 = items;
             });
@@ -262,8 +274,18 @@ describe("Scene Test", () => {
         afterEach(() => {
             document.body.innerHTML = "";
         });
+        it(`should check setSelector method`, () => {
+            const scene = new Scene();
+
+            scene.newItem(".test");
+            scene.setSelector(true);
+
+            expect(scene.getItem<SceneItem>(".test").elements.length).to.be.equals(2);
+        });
         it(`should check Scene load`, () => {
-            const scene = new Scene({
+            const scene = new Scene();
+
+            scene.set({
                 ".test": {
                     0: {
                         width: "100px",
@@ -274,9 +296,10 @@ describe("Scene Test", () => {
                         height: "200px",
                     },
                 },
-            }, {
+                "options": {
                     selector: true,
-                });
+                },
+            });
 
             expect(scene.getItem<SceneItem>(".test").elements.length).to.be.equals(2);
         });
@@ -298,12 +321,8 @@ describe("Scene Test", () => {
                 }).playCSS();
             const item0 = scene.getItem<Scene>(".test").getItem<SceneItem>(0);
             const item1 = scene.getItem<Scene>(".test").getItem<SceneItem>(1);
-            const item2 = scene.getItem(".test", 0);
-            const item3 = scene.getItem(".test", 1);
 
             // Then
-            expect(item0).to.be.equals(item2);
-            expect(item1).to.be.equals(item3);
             expect(scene.getItem(".test") instanceof Scene).to.be.true;
             expect(item0.state.selector).to.be.equals(`[data-scene-id="${item0.state.id}"]`);
             expect(item1.state.selector).to.be.equals(`[data-scene-id="${item1.state.id}"]`);

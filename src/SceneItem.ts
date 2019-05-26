@@ -14,8 +14,6 @@ import {
     getValueByNames,
     isEndedCSS,
     setPlayCSS,
-    find,
-    findIndex,
     getNames,
     updateFrame,
 } from "./utils";
@@ -33,6 +31,8 @@ import {
     KEYFRAMES, requestAnimationFrame, isFunction,
     IObject, $, splitComma, toArray, isString, IArrayFormat,
     dot as dotNumber,
+    find,
+    findIndex,
 } from "@daybrush/utils";
 import {
     NameType, RoleObject, AnimateElement, AnimatorState,

@@ -8,6 +8,7 @@ import {
     AnimatorState, SceneItemOptions, PlayCondition
 } from "./types";
 import Frame from "./Frame";
+import ListMap from "list-map";
 
 /**
  * manage sceneItems and play Scene.
@@ -21,7 +22,7 @@ class Scene extends Animator<SceneOptions, SceneState> {
     * Scene.VERSION // #__VERSION__#
     */
     public static VERSION: string = "#__VERSION__#";
-    public items: IObject<Scene | SceneItem>;
+    public items: ListMap<Scene | SceneItem> = new ListMap();
     public temp: IObject<Frame>;
     /**
     * @param - properties
@@ -49,18 +50,14 @@ class Scene extends Animator<SceneOptions, SceneState> {
       */
     constructor(properties?: IObject<any>, options?: Partial<SceneOptions>) {
         super();
-        this.items = {};
         this.load(properties, options);
     }
     public getDuration() {
-        const items = this.items;
         let time = 0;
 
-        for (const id in items) {
-            const item = items[id];
-
+        this.forEach(item => {
             time = Math.max(time, item.getTotalDuration() / item.getPlaySpeed());
-        }
+        });
         return time || this.state[DURATION];
     }
     public setDuration(duration: number) {
@@ -71,39 +68,30 @@ class Scene extends Animator<SceneOptions, SceneState> {
             return this;
         }
         if (sceneDuration === 0) {
-            for (const id in items) {
-                const item = items[id];
-
+            this.forEach(item => {
                 item.setDuration(duration);
-            }
+            });
         } else {
             const ratio = duration / sceneDuration;
 
-            for (const id in items) {
-                const item = items[id];
-
+            this.forEach(item => {
                 item.setDelay(item.getDelay() * ratio);
                 item.setDuration(item.getDuration() * ratio);
-            }
+            });
         }
         super.setDuration(duration);
         return this;
     }
     public getItem<T extends (Scene | SceneItem) = Scene | SceneItem>(name: number | string): T;
-    public getItem(name: number | string, index: number): SceneItem;
     /**
     * get item in scene by name
     * @param - The item's name
-    * @param - If item is added as function, it can be imported via index.
     * @return {Scene | SceneItem} item
     * @example
     const item = scene.getItem("item1")
     */
-    public getItem(name: number | string, index?: number) {
-        if (index != null) {
-            return (this.items[name] as Scene).getItem(index) as SceneItem;
-        }
-        return this.items[name];
+    public getItem(name: number | string) {
+        return this.items.get(name);
     }
     /**
     * create item in scene
@@ -113,9 +101,9 @@ class Scene extends Animator<SceneOptions, SceneState> {
     * @example
     const item = scene.newItem("item1")
     */
-    public newItem(name: number | string, options: Partial<SceneItemOptions> = {}): SceneItem {
-        if (name in this.items) {
-            return;
+    public newItem(name: number | string, options: Partial<SceneItemOptions> = {}): Scene | SceneItem {
+        if (this.items.has(name)) {
+            return this.items.get(name);
         }
         const item = new SceneItem();
 
@@ -133,11 +121,8 @@ class Scene extends Animator<SceneOptions, SceneState> {
 
     scene.removeItem("item1");
     */
-   public removeItem(name: number | string): this {
-        const items = this.items;
-        if (name in items) {
-            delete items[name];
-        }
+    public removeItem(name: number | string): this {
+        this.items.remove(name);
         return this;
     }
     /**
@@ -149,24 +134,21 @@ class Scene extends Animator<SceneOptions, SceneState> {
     */
     public setItem(name: number | string, item: Scene | SceneItem) {
         item.setId(name);
-        this.items[name] = item;
+        this.items.set(name, item);
         return this;
     }
     public setTime(time: number | string, isTick?: boolean, isParent?: boolean, parentEasing?: EasingType) {
         super.setTime(time, isTick, isParent);
 
         const iterationTime = this.getIterationTime();
-        const items = this.items;
         const easing = this.getEasing() || parentEasing;
         const frames: IObject<any> = {};
 
-        for (const id in items) {
-            const item = items[id];
-
+        this.forEach(item => {
             item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, true, easing);
 
             frames[item.getId()] = item.temp;
-        }
+        });
         this.temp = frames;
 
         /**
@@ -213,12 +195,19 @@ const scene = new Scene({
      * @param - Function to execute for each element, taking three arguments
      * @return {Scene} An instance itself
      */
-    public forEach(func: (item: Scene | SceneItem, name: string, items: IObject<Scene | SceneItem>) => void) {
+    public forEach(
+        func: (
+            item: Scene | SceneItem,
+            id: string | number,
+            index: number,
+            items: IObject<Scene | SceneItem>,
+        ) => void,
+    ) {
         const items = this.items;
 
-        for (const name in items) {
-            func(items[name], name, items);
-        }
+        items.forEach((item, id, index, obj) => {
+            func(item, id, index, obj);
+        });
         return this;
     }
     public toCSS(
@@ -266,11 +255,9 @@ const scene = new Scene({
         return this;
     }
     public endCSS() {
-        const items = this.items;
-
-        for (const id in items) {
-            items[id].endCSS();
-        }
+        this.forEach(item => {
+            item.endCSS();
+        });
         setPlayCSS(this, false);
     }
     public end() {
@@ -279,14 +266,13 @@ const scene = new Scene({
         return this;
     }
     public addPlayClass(isPaused: boolean, playClassName?: string, properties: object = {}) {
-        const items = this.items;
         let animtionElement: AnimateElement;
 
-        for (const id in items) {
-            const el = items[id].addPlayClass(isPaused, playClassName, properties);
+        this.forEach(item => {
+            const el = item.addPlayClass(isPaused, playClassName, properties);
 
             !animtionElement && (animtionElement = el);
-        }
+        });
         return animtionElement;
     }
     /**
@@ -330,13 +316,13 @@ const scene = new Scene({
             } else if (isFunction(object) && selector) {
                 const elements =
                     IS_WINDOW
-                    ? $(`${isFunction(selector) ? selector(name) : name}`, true) as IArrayFormat<AnimateElement>
-                    : ([] as AnimateElement[]);
+                        ? $(`${isFunction(selector) ? selector(name) : name}`, true) as IArrayFormat<AnimateElement>
+                        : ([] as AnimateElement[]);
                 const length = elements.length;
                 const scene = new Scene();
 
                 for (let i = 0; i < length; ++i) {
-                    scene.newItem(i).setId().setElement(elements[i]).load(object(i, elements[i]));
+                    (scene.newItem(i) as SceneItem).setId().setElement(elements[i]).load(object(i, elements[i]));
                 }
                 this.setItem(name, scene);
                 continue;

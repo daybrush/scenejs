@@ -190,21 +190,7 @@ export function playCSS(
     }
     item.setPlayState(RUNNING);
 }
-export function findIndex<T>(arr: T[], callback: (element: T) => any, defaultIndex: number = -1): number {
-    const length = arr.length;
 
-    for (let i = 0; i < length; ++i) {
-        if (callback(arr[i])) {
-            return i;
-        }
-    }
-    return defaultIndex;
-}
-export function find<T>(arr: T[], callback: (element: T) => any, defalutValue?: T): T | undefined {
-    const index = findIndex(arr, callback);
-
-    return index > - 1 ? arr[index] : defalutValue;
-}
 export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
     const state = item.state;
     const duration = item.getDuration();
