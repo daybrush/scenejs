@@ -51,7 +51,7 @@ $ npm install scenejs
 ```
 
 ## Documents
-* [API documentation](https://daybrush.com/scenejs/release/latest/doc/)
+* [API Documentation](https://daybrush.com/scenejs/release/latest/doc/)
 * [Features Documentation](https://daybrush.com/scenejs/features.html)
 
 ## Related Projects
