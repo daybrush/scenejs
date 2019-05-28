@@ -9,7 +9,7 @@
 🎬 Scene.js is an JavaScript & CSS timeline-based animation library.
 
 
-[**Main Page**](https://daybrush.com/scenejs) &nbsp;/&nbsp; [**API**](https://daybrush.com/scenejs/release/latest/doc) &nbsp;/&nbsp; [**Features**](http://daybrush.com/scenejs/features.html) &nbsp;/&nbsp; [**Examples**](https://codepen.io/collection/DLWxrd/)
+[**Home**](https://daybrush.com/scenejs) &nbsp;/&nbsp; [**API**](https://daybrush.com/scenejs/release/latest/doc) &nbsp;/&nbsp; [**Features**](http://daybrush.com/scenejs/features.html) &nbsp;/&nbsp; [**Examples**](https://codepen.io/collection/DLWxrd/)
 
 </div>
 
@@ -58,10 +58,10 @@ $ npm install scenejs
 * [Features Documentation](https://daybrush.com/scenejs/features.html)
 
 ## Related Projects
+* [**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs): A React Component that can easily use scenejs.
+* [**ng-scene**](https://github.com/daybrush/scenejs/tree/master/packages/ng-scene): A Angular Component that can easily use scenejs.
+* [**vue-scene**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scene): A Vue Component that can easily use scenejs.
 * [**keyframer**](https://github.com/daybrush/keyframer): Make the CSS Keyframes the keyframes object.
-* [**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs): A React Component that can easily use scenejs
-* [**ng-scene**](https://github.com/daybrush/scenejs/tree/master/packages/ng-scene): A Angular Component that can easily use scenejs
-* [**vue-scene**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scene): A Vue Component that can easily use scenejs
 * [**@scenejs/effects**](https://github.com/daybrush/scenejs-effects): Effect collection library where you can add scene effects to Scenejs.
 * [**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline): A library that represents the timeline of Scene.js. You can control time, properties, and items.
 * [**@scenejs/media**](https://github.com/daybrush/scenejs-media): A library for playing or controlling media
