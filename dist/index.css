@@ -588,7 +588,7 @@ footer a {
   -webkit-perspective: 1000;
 }
 .page.page2 {
-  min-height: 900px;
+  min-height: 1000px;
 }
 .page2 .container {
   top: 50%;
@@ -625,8 +625,8 @@ footer a {
 .page2 .features li .icon {
   position: relative;
   width: 200px;
-  height: 150px;
-  line-height: 150px;
+  height: 140px;
+  line-height: 140px;
   margin: 0px auto;
 }
 
@@ -770,16 +770,53 @@ footer a {
 .page2 .icon6 p {
   margin: 8px;
 }
-.page2 .icon6 .before {
-  display: block;
+.page2 .icon6 .card-rotor {
+  position: absolute;
+  width: 10px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 35px;
+  height: 80px;
 }
-.page2 .icon6 .after {
-  color: #f55;
-  display: none;
+.page2 .icon6 .card {
+  position: absolute;
+  width: 50px;
+  height: 69px;
+  bottom: 0px;
+  left: 50%;
+  background: #f5f5f5;
+  border-radius: 5px;
+  transform: rotate(-35deg);
+  transform-origin: 0% 100%;
 }
-.page2 .features li [data-feature="color"]:hover .icon6 .after {
-  display: block;
+.page2 .icon6 .bottom {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  opacity: 0.5;
+  bottom: 25px;
+  left: 50%;
+  transform: translate(-50%);
 }
+
+.page2 .more_area {
+  text-align: center;
+  padding-top: 30px;
+}
+.page2 .more_area .more {
+  padding: 15px;
+  border: 2px solid #f5f5f5;
+  background: transparent;
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+}
+
+
 
 @media screen and (max-width: 800px) {
   .page.page2 {
@@ -858,6 +895,7 @@ footer a {
   background: transparent;
   font-weight: bold;
   font-size: 16px;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 800px) {

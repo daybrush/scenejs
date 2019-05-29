@@ -1,0 +1,80 @@
+.page3 {
+  min-height: 1200px;
+}
+.page3 .examples {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-top: 30px;
+  text-align: center;
+}
+.page3 .examples li {
+  display: inline-block;
+  width: 30%;
+  margin: 0;
+  font-size: 15px;
+  transition: transform ease 0.2s;
+  text-align: center;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+.page3 .examples li a {
+  position: relative;
+  margin: 10px;
+  display: block;
+  text-align: center;
+  overflow: hidden;
+  max-height: 260px;
+}
+.page3 .examples li a:after {
+  content: "";
+  position: relative;
+  display: block;
+  width: 100%;
+  padding-top: 75%;
+}
+.page3 .examples li a img {
+  position: absolute;
+  display: inline-block;
+  width: 100%;
+  max-width: 300px;
+  top: -100px;
+  left: 0;
+  right: 0;
+  bottom: -100px;
+  margin: auto;
+
+}
+.page3 .more_area {
+  text-align: center;
+  padding-top: 30px;
+}
+.page3 .more_area .more {
+  padding: 15px;
+  border: 2px solid #333;
+  background: transparent;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+  .page.page3 {
+    min-height: 1650px;
+  }
+  .page3 .examples li {
+    width: 49%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .page3 .examples li {
+    width: 99%;
+  }
+  .page.page3 {
+    height: auto;
+  }
+  .page3 .container {
+    top: 0;
+    transform: none;
+  }
+}

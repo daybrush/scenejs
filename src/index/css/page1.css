@@ -1,0 +1,332 @@
+.page1 {
+
+  min-height: 600px;
+}
+
+.page1 .logo {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 100px;
+  height: 200px;
+  margin: auto;
+}
+
+.page1 .clapper {
+  position: relative;
+  width: 270px;
+  height: 200px;
+  margin: 0px auto;
+}
+
+.page1 .svg_circle {
+  position: absolute;
+}
+
+.page1 svg circle {
+  stroke-dasharray: 0 1000;
+  stroke-dashoffset: 0;
+}
+
+.page1 .play_btn {
+  width: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translate(3px);
+  transition: width ease 0.2s;
+}
+
+.page1 .play_btn:hover {
+  width: 45px;
+}
+
+.page1 .circle,
+.page1 .center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: -1;
+}
+
+.page1 .circle {
+  transform: scale(0);
+}
+
+.page1 .circle2 {
+  bottom: 100px;
+  left: 50px;
+}
+
+.page1 .circle3 {
+  top: 50px;
+  right: 100px;
+}
+
+.page1 .circle4 {
+  left: 100px;
+  top: 50px;
+}
+
+.page1 .circle5 {
+  right: 100px;
+  bottom: 50px;
+}
+
+.page1 .circle {
+  position: absolute;
+  box-sizing: border-box;
+  border-style: solid;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  border-width: 50px;
+  border-color: transparent;
+}
+
+.page1 .circle:before,
+.page1 .circle:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-style: solid;
+  width: inherit;
+  height: inherit;
+  border-width: inherit;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+
+.page1 .circle:before {
+  transform: translate(-50%, -50%);
+  margin-top: 15%;
+  margin-left: 15%;
+  border-color: #D6D6D6;
+}
+
+.page1 .circle:after {
+  transform: translate(-50%, -50%);
+  border-color: #333;
+}
+
+.page1 .scene2.circle {
+  width: 90px;
+  height: 90px;
+}
+
+.page1 ellipse {
+  opacity: 0;
+}
+
+.page1 .background {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 110px;
+  border-radius: 5px;
+  transform: translate(-50%, -50%);
+}
+
+.play_circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.page1 .play_btn.front {
+  z-index: 2;
+}
+
+.page1 .clapper .stick {
+  position: absolute;
+  box-sizing: border-box;
+  width: 200px;
+  height: 32px;
+  font-size: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 5px 8px;
+  text-align: center;
+  background: #333;
+}
+
+.page1 .clapper .stick1 {
+  transform-origin: 0% 100%;
+  border-radius: 5px 5px 0px 0px;
+  top: -60px;
+}
+
+.page1 .clapper .stick2 {
+  top: -30px;
+}
+
+.page1 .clapper .rect {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+  width: 20px;
+  background: white;
+  vertical-align: top;
+  margin: 0px 5px 0px;
+  border-radius: 5px;
+}
+
+.page1 .clapper .stick1 .rect {
+  transform: skew(15deg);
+}
+
+.page1 .clapper .stick2 .rect {
+  transform: skew(-15deg);
+}
+
+.page1 .bottom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #333;
+  box-sizing: border-box;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.page1 .clapper .shadow {
+  position: absolute;
+  box-sizing: border-box;
+  background: #D6D6D6;
+  margin-top: 10px;
+  margin-left: 10px;
+  z-index: -1;
+}
+
+.page1 audio {
+  display: none;
+}
+
+.page1 .title {
+  position: relative;
+  font-size: 0;
+  text-align: center;
+  -webkit-perspective: 1000;
+}
+
+.page1 .character {
+  position: relative;
+  overflow: hidden;
+  margin: 0px 1px;
+  height: 60px;
+  line-height: 60px;
+  color: rgba(0, 0, 0, 0);
+  display: inline-block;
+  font-size: 50px;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+.page1 .character span {
+  display: inline-block;
+  color: #333;
+}
+
+.page1 .character span {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  left: 0;
+  overflow: hidden;
+}
+
+.page1 .character span.left {
+  top: 0;
+}
+
+.page1 .character span.right {
+  bottom: 0;
+}
+
+.page1 .character[data-character="S"] span:before {
+  content: "S";
+}
+
+.page1 .character[data-character="c"] span:before {
+  content: "c";
+}
+
+.page1 .character[data-character="e"] span:before {
+  content: "e";
+}
+
+.page1 .character[data-character="n"] span:before {
+  content: "n";
+}
+
+.page1 .character[data-character="n"] span:before {
+  content: "n";
+}
+
+.page1 .character[data-character="."] span:before {
+  content: ".";
+}
+
+.page1 .character[data-character="j"] span:before {
+  content: "j";
+}
+
+.page1 .character[data-character="s"] span:before {
+  content: "s";
+}
+
+.page1 .character span:before {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  display: block;
+}
+
+.page1 .character span.right:before {
+  bottom: 0;
+}
+
+.page1 .description {
+  position: relative;
+  margin-top: 20px;
+  font-size: 16px;
+  text-align: center;
+  overflow: hidden;
+  font-weight: 400;
+  color: #555;
+}
+
+.page1 .description p {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+}
+
+.page1 .description p span {
+  display: inline-block;
+  padding: 5px;
+}
+.page1 .description p a {
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+}
+.page1 .startAnimation {
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+}
