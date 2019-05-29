@@ -44,7 +44,7 @@ export type PlayStateType = "paused" | "running";
 */
 export interface AnimatorOptions {
     id: number | string;
-    easing: EasingType;
+    easing: string | EasingType;
     iterationCount: IterationCountType;
     delay: number;
     fillMode: FillModeType;
@@ -52,7 +52,11 @@ export interface AnimatorOptions {
     playSpeed: number;
     duration: number;
 }
-
+/**
+ * @typedef
+ * @extends AnimatorOptions
+ * @see AnimatorOptions
+ */
 export interface AnimatorState extends AnimatorOptions {
     easingName: string;
     iterationTime: number;
@@ -65,21 +69,27 @@ export interface AnimatorState extends AnimatorOptions {
 
 /**
  * @typedef
+ * @extends AnimatorState
+ * @see AnimatorState
  */
 export interface SceneState extends AnimatorState {
-    selector: string | boolean;
+    selector: string | boolean | ((id: number | string) => string);
     playCSS: boolean;
     exportEvent?: boolean;
 }
 
 /**
  * @typedef
+ * @extends AnimatorOptions
+ * @see AnimatorOptions
  */
 export interface SceneOptions extends AnimatorOptions {
-    selector: string | boolean;
+    selector: string | boolean | ((id: number | string) => string);
 }
 /**
  * @typedef
+ * @extends AnimatorState
+ * @see AnimatorState
  */
 export interface SceneItemState extends AnimatorState {
     playCSS: boolean;
@@ -89,20 +99,14 @@ export interface SceneItemState extends AnimatorState {
 }
 /**
  * @typedef
+ * @extends AnimatorOptions
+ * @see AnimatorOptions
  */
 export interface SceneItemOptions extends AnimatorOptions {
-    selector: boolean | string;
+    selector: string | boolean | ((id: number | string) => string);
     elements: IArrayFormat<AnimateElement> | AnimateElement;
     element: IArrayFormat<AnimateElement> | AnimateElement;
     target: any;
-}
-
-/**
- * @memberof presets
- * @typedef
- */
-export interface PresetState extends AnimatorState {
-    [key: string]: any;
 }
 
 /**

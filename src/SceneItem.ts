@@ -14,22 +14,25 @@ import {
     getValueByNames,
     isEndedCSS,
     setPlayCSS,
-    find,
-    findIndex,
+    getNames,
+    updateFrame,
 } from "./utils";
-import { dotValue, dotNumber } from "./utils/dot";
+import { dotValue } from "./utils/dot";
 import {
     START_ANIMATION,
     PREFIX, THRESHOLD,
-    TIMING_FUNCTION, ALTERNATE, ALTERNATE_REVERSE, NORMAL, INFINITE,
+    TIMING_FUNCTION, ALTERNATE, ALTERNATE_REVERSE, INFINITE,
     REVERSE, EASING, FILL_MODE, DIRECTION, ITERATION_COUNT,
-    EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION, DATA_SCENE_ID, PLAY_CSS, SELECTOR, ROLES, CURRENT_TIME
+    EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION, DATA_SCENE_ID, SELECTOR, ROLES, CURRENT_TIME
 } from "./consts";
 import {
     isObject, isArray, isUndefined, decamelize,
     ANIMATION, fromCSS, addClass, removeClass, hasClass,
     KEYFRAMES, requestAnimationFrame, isFunction,
-    IObject, $, splitComma, toArray, isString, IArrayFormat, TRANSFORM
+    IObject, $, splitComma, toArray, isString, IArrayFormat,
+    dot as dotNumber,
+    find,
+    findIndex,
 } from "@daybrush/utils";
 import {
     NameType, RoleObject, AnimateElement, AnimatorState,
@@ -55,38 +58,6 @@ function makeAnimationProperties(properties: object) {
         cssArray.push(`${ANIMATION}-${decamelize(name)}:${properties[name]};`);
     }
     return cssArray.join("");
-}
-function isPureObject(obj: any): obj is object {
-    return isObject(obj) && obj.constructor === Object;
-}
-function getNames(names: IObject<any>, stack: string[]) {
-    let arr: string[][] = [];
-
-    if (isPureObject(names)) {
-        for (const name in names) {
-            stack.push(name);
-            arr = arr.concat(getNames(names[name], stack));
-            stack.pop();
-        }
-    } else {
-        arr.push(stack.slice());
-    }
-    return arr;
-}
-function updateFrame(names: IObject<any>, properties: IObject<any>) {
-    for (const name in properties) {
-        const value = properties[name];
-
-        if (!isPureObject(value)) {
-            names[name] = true;
-            continue;
-        }
-        if (!isObject(names[name])) {
-            names[name] = {};
-        }
-        updateFrame(names[name], properties[name]);
-    }
-    return names;
 }
 function addTime(times: number[], time: number) {
     const length = times.length;
@@ -139,7 +110,11 @@ export function getEntries(times: number[], states: AnimatorState[]) {
                         addEntry(nextEntries, (delay + currentDuration * iterationCount) / playSpeed, divideTime);
                     }
                     break;
-                } else if (currentTime === lastTime && nextEntries[nextEntries.length - 1][0] === lastTime + delay) {
+                } else if (
+                    currentTime === lastTime
+                    && nextEntries.length
+                    && nextEntries[nextEntries.length - 1][0] === lastTime + delay
+                ) {
                     break;
                 }
                 addEntry(nextEntries, (delay + currentTime) / playSpeed, time);
@@ -198,7 +173,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
           }
       });
        */
-    constructor(properties?: IObject<any>, options?: Partial<SceneItemOptions>) {
+    constructor(properties?: any, options?: Partial<SceneItemOptions>) {
         super();
         this.load(properties, options);
     }
@@ -283,7 +258,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
                     getNames(value, [t]).forEach(names => {
                         const innerValue = getValueByNames(names.slice(1), value);
                         const arr = isArray(innerValue) ?
-                        innerValue : [getValueByNames(names, this.target), innerValue];
+                            innerValue : [getValueByNames(names, this.target), innerValue];
                         const length = arr.length;
 
                         for (let i = 0; i < length; ++i) {
@@ -302,10 +277,14 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
             } else if (value instanceof SceneItem) {
                 const delay = value.getDelay();
                 const realTime = this.getUnitTime(time);
-                const frames = value.toObject(!this.hasFrame(realTime + delay), realTime);
+                const frames = value.toObject(!this.hasFrame(realTime + delay));
+                const duration = value.getDuration();
+                const direction = value.getDirection();
+                const isReverse = direction.indexOf("reverse") > -1;
 
                 for (const frameTime in frames) {
-                    this.set(frameTime, frames[frameTime]);
+                    const nextTime = isReverse ? duration - parseFloat(frameTime) : parseFloat(frameTime);
+                    this.set(realTime + nextTime, frames[frameTime]);
                 }
             } else if (args.length === 1 && isArray(value)) {
                 value.forEach((item: any) => {
@@ -385,7 +364,11 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
   });
       */
     public append(item: SceneItem | IObject<any>) {
-        this.set(this.getDuration(), item);
+        if (item instanceof SceneItem) {
+            this.set(this.getDuration(), item);
+        } else {
+            this.append(new SceneItem(item));
+        }
         return this;
     }
     /**
@@ -408,9 +391,8 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         return this;
     }
     /**
-   * Push out the amount of time.
-   * @param - time to push
-     * @return {}
+     * Push out the amount of time.
+     * @param - time to push
      * @example
    item.get(0); // frame 0
    item.unshift(3);
@@ -427,6 +409,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
             return time2;
         });
         this.items = obj;
+        return this;
     }
     /**
      * Get the frames in the item in object form.
@@ -435,12 +418,12 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
  item.toObject();
  // {0: {display: "none"}, 1: {display: "block"}}
      */
-    public toObject(isStartZero = true, startTime = 0): IObject<Frame> {
+    public toObject(isStartZero = true): IObject<Frame> {
         const obj: IObject<Frame> = {};
         const delay = this.getDelay();
 
         this.forEach((frame: Frame, time: number) => {
-            obj[(!time && !isStartZero ? THRESHOLD : 0) + delay + startTime + time] = frame.clone();
+            obj[(!time && !isStartZero ? THRESHOLD : 0) + delay + time] = frame.clone();
         });
         return obj;
     }
@@ -449,20 +432,43 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
      * @param {string} selectors - Selectors to find elements in items.
      * @return {SceneItem} An instance itself
      * @example
- item.setSelector("#id.class");
+item.setSelector("#id.class");
      */
-    public setSelector(target: string | boolean) {
-        this.setElement(target);
+    public setSelector(target: string | boolean | ((id: number | string) => string)) {
+        if (isFunction(target)) {
+            this.setElement(target(this.getId()));
+        } else {
+            this.setElement(target);
+        }
+        return this;
     }
     /**
-      * Specifies an element to synchronize item's keyframes.
-    * @param - elements to synchronize item's keyframes.
-    * @param - Make sure that you have peusdo.
-      * @return {SceneItem} An instance itself
-      * @example
-  item.setElement(document.querySelector("#id.class"));
-  item.setElement(document.querySelectorAll(".class"));
-      */
+     * Get the elements connected to SceneItem.
+     */
+    public getElements(): AnimateElement[] {
+        return this.elements;
+    }
+    /**
+     * Specifies an element to synchronize item's keyframes.
+     * @param - elements to synchronize item's keyframes.
+     * @param - Make sure that you have peusdo.
+     * @return {SceneItem} An instance itself
+     * @example
+item.setElement(document.querySelector("#id.class"));
+item.setElement(document.querySelectorAll(".class"));
+     */
+    public setElements(target: boolean | string | AnimateElement | IArrayFormat<AnimateElement>): this {
+        return this.setElement(target);
+    }
+    /**
+     * Specifies an element to synchronize item's keyframes.
+     * @param - elements to synchronize item's keyframes.
+     * @param - Make sure that you have peusdo.
+     * @return {SceneItem} An instance itself
+     * @example
+item.setElement(document.querySelector("#id.class"));
+item.setElement(document.querySelectorAll(".class"));
+     */
     public setElement(target: boolean | string | AnimateElement | IArrayFormat<AnimateElement>) {
         const state = this.state;
         let elements: AnimateElement[] = [];
@@ -531,8 +537,8 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         this.set(time, fromCSS(this.elements, properties));
         return this;
     }
-    public setTime(time: number | string, isTick?: boolean, parentEasing?: EasingType) {
-        super.setTime(time, isTick);
+    public setTime(time: number | string, isTick?: boolean, isParent?: boolean, parentEasing?: EasingType) {
+        super.setTime(time, isTick, isParent);
 
         const iterationTime = this.getIterationTime();
         const easing = this.getEasing() || parentEasing;
@@ -790,8 +796,10 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         id && this.setId(id);
         if (target) {
             this.setTarget(target);
-        } else if (elements || element || selector) {
-            this.setElement(elements || element || selector);
+        } else if (selector) {
+            this.setSelector(selector);
+        } else if (elements || element) {
+            this.setElement(elements || element);
         }
         return this;
     }

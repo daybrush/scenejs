@@ -2,7 +2,7 @@
 import PropertyObject from "../PropertyObject";
 import { getType } from "../utils";
 import { toPropertyObject } from "./property";
-import { splitUnit, PROPERTY, FUNCTION, ARRAY } from "@daybrush/utils";
+import { splitUnit, PROPERTY, FUNCTION, ARRAY, dot as dotNumber } from "@daybrush/utils";
 import { EasingType } from "../types";
 
 function dotArray(a1: any[], a2: any, b1: number, b2: number): any {
@@ -130,9 +130,7 @@ export function dot(a1: any, a2: any, b1: number, b2: number): any {
   }
   return prefix + v + unit;
 }
-export function dotNumber(a1: number, a2: number, b1: number, b2: number) {
-  return (a1 * b2 + a2 * b1) / (b1 + b2);
-}
+
 export function dotValue(
   time: number,
   prevTime: number,

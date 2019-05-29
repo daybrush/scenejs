@@ -9,6 +9,7 @@ declare var Scene: typeof NativeScene & {
     LINEAR: EasingFunction;
     SceneItem: typeof SceneItem;
     setRole: typeof setRole;
+    flipY: any,
 };
 new Scene({
     ".page2 .icon1 .lang": i => ({
@@ -218,10 +219,33 @@ icon5Scene.getItem(".slide:nth-child(3) .target").on("animate", e => {
     el.innerHTML = `${e.frame.get("text")}`;
 });
 
+const icon6Scene = new Scene({
+    ".icon6 .card-rotor": {
+        0: Scene.flipY({ y: 2, duration: 2 }),
+    },
+    ".icon6 .bottom": {
+        0: {
+            transform: "translateX(-50%) scaleX(4)",
+        },
+        0.5: {
+            transform: "scaleX(1)",
+        },
+        options: {
+            iterationCount: 4,
+            direction: "alternate",
+        },
+    }
+}, {
+    easing: "linear",
+    direction: "alternate",
+    iterationCount: "infinite",
+    selector: true,
+}).exportCSS({
+    selector: (item, selector) => `.page2 [data-feature="effect"]:hover ${selector}`,
+}).setTime(0);
+
 toArray($(".page2 li .feature", true)).forEach(el => {
-    addEvent(el, "click", e => {
-        e.preventDefault();
-    });
+    addEvent(el, "click", () => {});
 });
 
 addEvent(valueFeatureElement, "mouseenter", () => {

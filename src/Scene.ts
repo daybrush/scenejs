@@ -1,13 +1,14 @@
 import Animator from "./Animator";
 import SceneItem from "./SceneItem";
-import { DATA_SCENE_ID, SELECTOR, DURATION, START_ANIMATION } from "./consts";
-import { playCSS, exportCSS, getRealId, makeId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
+import { SELECTOR, DURATION, DELAY, RUNNING } from "./consts";
+import { playCSS, exportCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import {
     AnimateElement, SceneState, SceneOptions, EasingType,
     AnimatorState, SceneItemOptions, PlayCondition
 } from "./types";
 import Frame from "./Frame";
+import ListMap from "list-map";
 
 /**
  * manage sceneItems and play Scene.
@@ -21,7 +22,7 @@ class Scene extends Animator<SceneOptions, SceneState> {
     * Scene.VERSION // #__VERSION__#
     */
     public static VERSION: string = "#__VERSION__#";
-    public items: IObject<Scene | SceneItem>;
+    public items: ListMap<Scene | SceneItem> = new ListMap();
     public temp: IObject<Frame>;
     /**
     * @param - properties
@@ -49,18 +50,14 @@ class Scene extends Animator<SceneOptions, SceneState> {
       */
     constructor(properties?: IObject<any>, options?: Partial<SceneOptions>) {
         super();
-        this.items = {};
         this.load(properties, options);
     }
     public getDuration() {
-        const items = this.items;
         let time = 0;
 
-        for (const id in items) {
-            const item = items[id];
-
+        this.forEach(item => {
             time = Math.max(time, item.getTotalDuration() / item.getPlaySpeed());
-        }
+        });
         return time || this.state[DURATION];
     }
     public setDuration(duration: number) {
@@ -71,39 +68,30 @@ class Scene extends Animator<SceneOptions, SceneState> {
             return this;
         }
         if (sceneDuration === 0) {
-            for (const id in items) {
-                const item = items[id];
-
+            this.forEach(item => {
                 item.setDuration(duration);
-            }
+            });
         } else {
             const ratio = duration / sceneDuration;
 
-            for (const id in items) {
-                const item = items[id];
-
+            this.forEach(item => {
                 item.setDelay(item.getDelay() * ratio);
                 item.setDuration(item.getDuration() * ratio);
-            }
+            });
         }
         super.setDuration(duration);
         return this;
     }
     public getItem<T extends (Scene | SceneItem) = Scene | SceneItem>(name: number | string): T;
-    public getItem(name: number | string, index: number): SceneItem;
     /**
     * get item in scene by name
     * @param - The item's name
-    * @param - If item is added as function, it can be imported via index.
     * @return {Scene | SceneItem} item
     * @example
     const item = scene.getItem("item1")
     */
-    public getItem(name: number | string, index?: number) {
-        if (index != null) {
-            return (this.items[name] as Scene).getItem(index) as SceneItem;
-        }
-        return this.items[name];
+    public getItem(name: number | string) {
+        return this.items.get(name);
     }
     /**
     * create item in scene
@@ -113,9 +101,9 @@ class Scene extends Animator<SceneOptions, SceneState> {
     * @example
     const item = scene.newItem("item1")
     */
-    public newItem(name: number | string, options: Partial<SceneItemOptions> = {}): SceneItem {
-        if (name in this.items) {
-            return;
+    public newItem(name: number | string, options: Partial<SceneItemOptions> = {}): Scene | SceneItem {
+        if (this.items.has(name)) {
+            return this.items.get(name);
         }
         const item = new SceneItem();
 
@@ -133,11 +121,8 @@ class Scene extends Animator<SceneOptions, SceneState> {
 
     scene.removeItem("item1");
     */
-   public removeItem(name: number | string): this {
-        const items = this.items;
-        if (name in items) {
-            delete items[name];
-        }
+    public removeItem(name: number | string): this {
+        this.items.remove(name);
         return this;
     }
     /**
@@ -149,56 +134,53 @@ class Scene extends Animator<SceneOptions, SceneState> {
     */
     public setItem(name: number | string, item: Scene | SceneItem) {
         item.setId(name);
-        this.items[name] = item;
+        this.items.set(name, item);
         return this;
     }
-    public setTime(time: number | string, isTick?: boolean, parentEasing?: EasingType) {
-        super.setTime(time, isTick);
+    public setTime(time: number | string, isTick?: boolean, isParent?: boolean, parentEasing?: EasingType) {
+        super.setTime(time, isTick, isParent);
 
         const iterationTime = this.getIterationTime();
-        const items = this.items;
         const easing = this.getEasing() || parentEasing;
         const frames: IObject<any> = {};
 
-        for (const id in items) {
-            const item = items[id];
-
-            item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, easing);
+        this.forEach(item => {
+            item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, true, easing);
 
             frames[item.getId()] = item.temp;
-        }
+        });
         this.temp = frames;
 
         /**
-             * This event is fired when timeupdate and animate.
-             * @event Scene#animate
+         * This event is fired when timeupdate and animate.
+         * @event Scene#animate
          * @param {object} param The object of data to be sent to an event.
-             * @param {number} param.currentTime The total time that the animator is running.
-             * @param {number} param.time The iteration time during duration that the animator is running.
-             * @param {object} param.frames frames of that time.
+         * @param {number} param.currentTime The total time that the animator is running.
+         * @param {number} param.time The iteration time during duration that the animator is running.
+         * @param {object} param.frames frames of that time.
          * @example
-    const scene = new Scene({
-      a: {
+const scene = new Scene({
+    a: {
         0: {
-          opacity: 0,
+            opacity: 0,
         },
         1: {
-          opacity: 1,
+            opacity: 1,
         }
-      },
-      b: {
+    },
+    b: {
         0: {
-          opacity: 0,
+            opacity: 0,
         },
         1: {
-          opacity: 1,
+            opacity: 1,
         }
-      }
-    }).on("animate", e => {
-      console.log(e);
-      // {a: Frame, b: Frame}
-      console.log(e.a.get("opacity"));
-    });
+    }
+}).on("animate", e => {
+    console.log(e);
+    // {a: Frame, b: Frame}
+    console.log(e.a.get("opacity"));
+});
              */
         this.trigger("animate", {
             frames,
@@ -213,12 +195,19 @@ class Scene extends Animator<SceneOptions, SceneState> {
      * @param - Function to execute for each element, taking three arguments
      * @return {Scene} An instance itself
      */
-    public forEach(func: (item: Scene | SceneItem, name: string, items: IObject<Scene | SceneItem>) => void) {
+    public forEach(
+        func: (
+            item: Scene | SceneItem,
+            id: string | number,
+            index: number,
+            items: IObject<Scene | SceneItem>,
+        ) => void,
+    ) {
         const items = this.items;
 
-        for (const name in items) {
-            func(items[name], name, items);
-        }
+        items.forEach((item, id, index, obj) => {
+            func(item, id, index, obj);
+        });
         return this;
     }
     public toCSS(
@@ -266,11 +255,9 @@ class Scene extends Animator<SceneOptions, SceneState> {
         return this;
     }
     public endCSS() {
-        const items = this.items;
-
-        for (const id in items) {
-            items[id].endCSS();
-        }
+        this.forEach(item => {
+            item.endCSS();
+        });
         setPlayCSS(this, false);
     }
     public end() {
@@ -279,14 +266,13 @@ class Scene extends Animator<SceneOptions, SceneState> {
         return this;
     }
     public addPlayClass(isPaused: boolean, playClassName?: string, properties: object = {}) {
-        const items = this.items;
         let animtionElement: AnimateElement;
 
-        for (const id in items) {
-            const el = items[id].addPlayClass(isPaused, playClassName, properties);
+        this.forEach(item => {
+            const el = item.addPlayClass(isPaused, playClassName, properties);
 
             !animtionElement && (animtionElement = el);
-        }
+        });
         return animtionElement;
     }
     /**
@@ -316,8 +302,7 @@ class Scene extends Animator<SceneOptions, SceneState> {
         if (!properties) {
             return this;
         }
-        const isSelector = options && options[SELECTOR] || this.state[SELECTOR];
-
+        const selector = options && options[SELECTOR] || this.state[SELECTOR];
         for (const name in properties) {
             if (name === "options") {
                 continue;
@@ -328,19 +313,16 @@ class Scene extends Animator<SceneOptions, SceneState> {
             if (object instanceof Scene || object instanceof SceneItem) {
                 this.setItem(name, object);
                 item = object;
-            } else if (isFunction(object) && isSelector) {
-                const elements = IS_WINDOW ? $(name, true) as IArrayFormat<AnimateElement> : ([] as AnimateElement[]);
+            } else if (isFunction(object) && selector) {
+                const elements =
+                    IS_WINDOW
+                        ? $(`${isFunction(selector) ? selector(name) : name}`, true) as IArrayFormat<AnimateElement>
+                        : ([] as AnimateElement[]);
                 const length = elements.length;
                 const scene = new Scene();
 
                 for (let i = 0; i < length; ++i) {
-                    const id = makeId();
-
-                    scene.newItem(`${i}`, {
-                        id,
-                        selector: `[${DATA_SCENE_ID}="${id}"]`,
-                        elements: elements[i],
-                    }).load(object(i, elements[i]));
+                    (scene.newItem(i) as SceneItem).setId().setElement(elements[i]).load(object(i, elements[i]));
                 }
                 this.setItem(name, scene);
                 continue;
@@ -348,32 +330,46 @@ class Scene extends Animator<SceneOptions, SceneState> {
                 item = this.newItem(name);
                 item.load(object);
             }
-            isSelector && item.setSelector(name);
+            selector && item.setSelector(selector);
         }
         this.setOptions(options);
     }
     public setOptions(options: Partial<SceneState> = {}): this {
         super.setOptions(options);
 
-        if (options.selector) {
-            this.state[SELECTOR] = true;
+        const selector = options.selector;
+
+        if (selector) {
+            this.state[SELECTOR] = selector;
         }
         return this;
     }
-    public setSelector(target: string | boolean) {
+    public setSelector(target?: string | boolean | ((id: number | string) => string)) {
         const state = this.state;
-        const isSelector = target || state[SELECTOR];
+        const selector = target || state[SELECTOR];
 
-        state[SELECTOR] = target;
-        this.forEach((item, name) => {
-            item.setSelector(isSelector ? name : false);
-        });
+        state[SELECTOR] = selector;
+        const isItFunction = isFunction(target);
+        if (selector) {
+            this.forEach((item, name) => {
+                item.setSelector(isItFunction ? (target as (id: number | string) => string)(name) : selector);
+            });
+        }
+        return this;
     }
-    public start(delay: number) {
-        super.start(delay);
-        this.forEach(item => {
-            item.start(delay);
-        });
+    public start(delay: number = this.state[DELAY]): boolean {
+        const result = super.start(delay);
+
+        if (result) {
+            this.forEach(item => {
+                item.start(0);
+            });
+        } else {
+            this.forEach(item => {
+                item.setPlayState(RUNNING);
+            });
+        }
+        return result;
     }
 }
 

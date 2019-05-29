@@ -46,6 +46,38 @@ export function getType(value: any) {
     }
     return type;
 }
+export function isPureObject(obj: any): obj is object {
+    return isObject(obj) && obj.constructor === Object;
+}
+export function getNames(names: IObject<any>, stack: string[]) {
+    let arr: string[][] = [];
+
+    if (isPureObject(names)) {
+        for (const name in names) {
+            stack.push(name);
+            arr = arr.concat(getNames(names[name], stack));
+            stack.pop();
+        }
+    } else {
+        arr.push(stack.slice());
+    }
+    return arr;
+}
+export function updateFrame(names: IObject<any>, properties: IObject<any>) {
+    for (const name in properties) {
+        const value = properties[name];
+
+        if (!isPureObject(value)) {
+            names[name] = true;
+            continue;
+        }
+        if (!isObject(names[name])) {
+            names[name] = {};
+        }
+        updateFrame(names[name], properties[name]);
+    }
+    return names;
+}
 export function toFixed(num: number) {
     return Math.round(num * MAXIMUM) / MAXIMUM;
 }
@@ -158,21 +190,7 @@ export function playCSS(
     }
     item.setPlayState(RUNNING);
 }
-export function findIndex<T>(arr: T[], callback: (element: T) => any, defaultIndex: number = -1): number {
-    const length = arr.length;
 
-    for (let i = 0; i < length; ++i) {
-        if (callback(arr[i])) {
-            return i;
-        }
-    }
-    return defaultIndex;
-}
-export function find<T>(arr: T[], callback: (element: T) => any, defalutValue?: T): T | undefined {
-    const index = findIndex(arr, callback);
-
-    return index > - 1 ? arr[index] : defalutValue;
-}
 export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
     const state = item.state;
     const duration = item.getDuration();

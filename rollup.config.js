@@ -1,6 +1,7 @@
 import builder from "@daybrush/builder";
 const external = {
     "@daybrush/utils": "utils",
+    "list-map": "ListMap",
 }
 export default builder([
     {

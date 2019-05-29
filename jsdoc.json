@@ -29,6 +29,12 @@
                 "target": "_blank",
                 "class": "menu-item",
                 "id": "repository"
+            },
+            "Features": {
+                "href": "https://daybrush.com/scenejs/features.html",
+                "target": "_blank",
+                "class": "menu-item",
+                "id": "features"
             }
         }
     }

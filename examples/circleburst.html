@@ -285,7 +285,6 @@ for (let i = 1; i <= 8; ++i) {
 }
 
 
-
 //	stroke-dasharray: 283 1000;
 //	stroke-dashoffset: -283;
 const scene2 = new Scene();
@@ -309,9 +308,7 @@ scene2.newItem("#stick", {easing: ease, selector: true}).set({
 	[2 + scene2_delay] : "transform: rotate(630deg), scale(1,1)", // t = 2 + delay
 	[2 + scene2_delay + scene2_delay / 2] : "transform: scale(1,0)", // t = 2 + delay + delay / 2
 });
-scene2.on("play", function(e) {
-	text.innerHTML = "2";
-});
+
 
 
 
@@ -345,9 +342,6 @@ for (let i = 0; i < circles.length; ++i) {
 	}).setCSS(0, ["border-color"]);
 }
 
-scene3.on("play", function() {
-	text.innerHTML = "3";	
-});
 
 
 
@@ -372,9 +366,7 @@ for(let i = 0; i <= 5; ++i) {
 	});
 }
 
-scene4.on("play", function() {
-	text.innerHTML = "4";	
-});
+
 
 
 
@@ -394,9 +386,6 @@ for (let i = 0; i < css.length; ++i) {
 
 
 
-scene5.on("play", function() {
-	text.innerHTML = "5";	
-});
 
 
 const scene6 = new Scene({
@@ -420,8 +409,21 @@ const scene6 = new Scene({
 });
 
 
-scene6.on("play", function() {
-	text.innerHTML = "6";
+scene1.on("animate", function (e) {
+	var time = e.time;
+	if (scene6.getDelay() < time) {
+		text.innerHTML = "6";
+	} else if (scene5.getDelay() < time) {
+		text.innerHTML = "5";
+	} else if (scene4.getDelay() < time) {
+		text.innerHTML = "4";
+	} else if (scene3.getDelay() < time) {
+		text.innerHTML = "3";
+	} else if (scene2.getDelay() < time) {
+		text.innerHTML = "2";
+	} else {
+		text.innerHTML = "1";
+	}
 });
 
 // scene1.setIterationCount("infinite");
