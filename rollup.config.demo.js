@@ -9,6 +9,7 @@ export default builder([
         exports: "named",
         plugins: [cssbundle({output: "./demo/dist/index.css"})],
         resolve: true,
+        uglify: true,
     },
     {
         input: 'demo/src/features/index.ts',
@@ -17,5 +18,6 @@ export default builder([
         exports: "named",
         plugins: [cssbundle({output: "./demo/dist/features.css"})],
         resolve: true,
+        uglify: true,
     },
 ]);
