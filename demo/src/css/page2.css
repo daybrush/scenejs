@@ -213,6 +213,22 @@
   transform: translate(-50%);
 }
 
+.page2 .more_area {
+  text-align: center;
+  padding-top: 30px;
+}
+.page2 .more_area .more {
+  padding: 15px;
+  border: 2px solid #f5f5f5;
+  background: transparent;
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+}
+
+
+
 @media screen and (max-width: 800px) {
   .page.page2 {
     min-height: 1200px;
