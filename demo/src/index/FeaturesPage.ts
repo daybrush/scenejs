@@ -1,7 +1,7 @@
 import Page from "@daybrush/page";
 import { add } from "./Store";
 import { $, addEvent, toArray } from "@daybrush/utils";
-import NativeScene, { EasingFunction, SceneItem, setRole } from "../../src";
+import NativeScene, { EasingFunction, SceneItem, setRole } from "../../../src";
 
 declare var Scene: typeof NativeScene & {
     EASE_IN: EasingFunction;

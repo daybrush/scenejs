@@ -1,4 +1,4 @@
-import NativeScene, {animateItem, EasingFunction} from "../../src";
+import NativeScene, {animateItem, EasingFunction} from "../../../src";
 
 declare var Scene: typeof NativeScene & {
     animateItem: typeof animateItem,

@@ -23,7 +23,7 @@
     "deploy": "gh-pages -d ./demo --dest=./ --add --remote origin",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
-    "demo:start": "demo demo.js -w",
+    "demo:start": "rollup -c rollup.config.demo.js -w",
     "demo:build": "rm -rf ./demo/dist && demo demo.js",
     "release": "npm run build && npm run doc && npm run demo:build && release --dirs dist,doc,examples",
     "release:build": "npm run build && prerelease"
@@ -78,6 +78,7 @@
     "mocha": "^4.0.1",
     "print-coveralls": "^1.2.2",
     "print-sizes": "^0.0.3",
+    "rollup-plugin-css-bundle": "^1.0.4",
     "shape-svg": "^0.3.1",
     "sinon": "^4.1.2",
     "tslint": "^5.14.0",
