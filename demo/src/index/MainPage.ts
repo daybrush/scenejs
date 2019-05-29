@@ -1,5 +1,5 @@
 import { oval, poly } from "shape-svg";
-import NativeScene, { EasingFunction } from "../../src";
+import NativeScene, { EasingFunction } from "../../../src";
 import Page from "@daybrush/page";
 import { add } from "./Store";
 import { $, addEvent } from "@daybrush/utils";
