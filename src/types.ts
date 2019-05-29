@@ -44,7 +44,7 @@ export type PlayStateType = "paused" | "running";
 */
 export interface AnimatorOptions {
     id: number | string;
-    easing: EasingType;
+    easing: string | EasingType;
     iterationCount: IterationCountType;
     delay: number;
     fillMode: FillModeType;

@@ -540,7 +540,7 @@ var datas = [
         description: "Make a blinking effect.",
         html: `<div class="target center">1</div>`,
         code: BlinkCode,
-        examples: [{value: "Make a blinking effect."}],
+        examples: [{value: ""}],
       },
       {
         id: "wipein",
