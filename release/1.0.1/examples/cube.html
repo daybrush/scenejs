@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../dist/scene.js"></script>
+<style>
+	.cubes {
+		position: absolute;
+		left: 50%;
+		top: 300px;
+		width: 100px;
+		height: 100px;
+	}
+	.cube {
+		position: absolute;
+		width:100px;
+		height: 100px;
+	}
+	.cube .left, .cube .right,  .cube .top {
+		position: absolute;
+	}
+	.cube .top {
+		height:50%;
+		width: 100%;
+		transform-origin: 0px center;
+	}
+	.cube .top::before, .cube .top::after {
+		content: "";
+		position: absolute;
+		border-top: 25px solid transparent;
+		border-bottom: 25px solid transparent;		
+	}
+	.cube .top::before {
+		border-right: 50px solid #00D775;
+	}
+	.cube .top::after {
+		right: 0;
+		border-left: 50px solid #00D775;
+	}
+	.cube .left, .cube .right {
+		top: 37%;
+		width: 50%;
+		height: 50%;
+	}
+	.cube .left {
+		background: #00A65B;
+		transform:skewY(0.4636rad);
+	}
+	.cube .right {
+		right: 0;
+		background: #00BF69;
+		transform:skewY(-0.4636rad);
+	}
+</style>
+<style>.cube1{top:0%;left:0%;}
+.cube2{top:-25%;left:-50%;}
+.cube3{top:-25%;left:50%;}
+.cube4{top:-50%;left:-100%;}
+.cube5{top:-50%;left:0%;}
+.cube6{top:-50%;left:100%;}
+.cube7{top:-75%;left:-50%;}
+.cube8{top:-75%;left:50%;}
+.cube9{top:-100%;left:0%;}
+.cube10{top:-45%;left:0%;}
+.cube11{top:-70%;left:-50%;}
+.cube12{top:-70%;left:50%;}
+.cube13{top:-95%;left:-100%;}
+.cube14{top:-95%;left:0%;}
+.cube15{top:-95%;left:100%;}
+.cube16{top:-120%;left:-50%;}
+.cube17{top:-120%;left:50%;}
+.cube18{top:-145%;left:0%;}
+.cube19{top:-90%;left:0%;}
+.cube20{top:-115%;left:-50%;}
+.cube21{top:-115%;left:50%;}
+.cube22{top:-140%;left:-100%;}
+.cube23{top:-140%;left:0%;}
+.cube24{top:-140%;left:100%;}
+.cube25{top:-165%;left:-50%;}
+.cube26{top:-165%;left:50%;}
+.cube27{top:-190%;left:0%;}
+</style>
+</head>
+<body>
+	<div class="cubes">
+
+	<div class="cube cube9"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube8"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube7"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube6"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube5"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube4"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube3"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube2"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube1"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube18"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube17"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube16"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube15"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube14"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube13"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube12"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube11"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube10"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube27"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube26"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube25"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube24"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube23"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube22"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube21"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube20"><div class="left"></div><div class="right"></div><div class="top"></div></div><div class="cube cube19"><div class="left"></div><div class="right"></div><div class="top"></div></div></div>
+
+<script>	
+	var scene = new Scene({
+		".cubes" : {
+			0.5: "width: 100px; height: 100px; top: 300px; transform: translate(-50%) translateX(0px);",
+			1.5: {width: "140px", "height": "140px",  top: "350px", transform: "translateX(20px)"},
+			4: {transform: "translateX(20px)"},
+			5: {transform: "translateX(200px)"}
+		},
+		".cube22" : {
+			1.7 : {filter:"hue-rotate(0deg)", transform: "translate(0px, 0px)"},
+			2.4 : {filter:"hue-rotate(50deg)"},
+			5 : {transform: "translate(0px, 0px)"},
+			5.5 : {transform: "translate(-50px, -30px)"},
+			6 : {transform: "translate(-100px, 0px)"}
+		},
+		".cube20" : {
+			2.7: {filter:"hue-rotate(0deg)", transform: "translate(0px, 0px)"},
+			3.4 : {filter:"hue-rotate(50deg)"},
+			6 : {transform: "translate(0px, 0px)"},
+			6.5 : {transform: "translate(-50px, -30px)"},
+			7 : {transform: "translate(-100px,0px)"}
+		}
+	}, {
+		easing: Scene.EASE_IN_OUT,
+		selector: true,
+	});
+	scene.play();
+
+</script>
+</body></html>
