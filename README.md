@@ -7,7 +7,7 @@
 <p align="middle">🎬 Scene.js is an JavaScript & CSS timeline-based animation library.</p>
 
 <p align="middle"><a href="https://daybrush.com/scenejs"><strong>About Scene.js</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>Features</strong></a> &nbsp;/&nbsp; <a href="https://codepen.io/collection/DLWxrd/"><strong>Examples</strong></a></p>
-
+<br/>
 
 <p align="middle" style="max-width: 1000px; margin: 0px auto;" >
   <img src="https://daybrush.github.io/scenejs/example/logo.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>&nbsp;
