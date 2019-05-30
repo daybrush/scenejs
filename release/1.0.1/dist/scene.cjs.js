@@ -3780,25 +3780,35 @@ function animateItem(properties, options) {
   return new SceneItem(properties, options).play();
 }
 
-exports.Animator = Animator;
-exports.EASE = EASE;
-exports.EASE_IN = EASE_IN;
-exports.EASE_IN_OUT = EASE_IN_OUT;
-exports.EASE_OUT = EASE_OUT;
-exports.EVENTS = EVENTS;
-exports.FIXED = FIXED;
-exports.Frame = Frame;
-exports.LINEAR = LINEAR;
-exports.OPTIONS = OPTIONS;
-exports.ROLES = ROLES;
-exports.STEP_END = STEP_END;
-exports.STEP_START = STEP_START;
-exports.SceneItem = SceneItem;
-exports.animate = animate;
-exports.animateItem = animateItem;
-exports.bezier = bezier;
-exports.default = Scene;
-exports.setAlias = setAlias;
-exports.setRole = setRole;
-exports.steps = steps;
+
+
+var others = ({
+    SceneItem: SceneItem,
+    Frame: Frame,
+    Animator: Animator,
+    'default': Scene,
+    OPTIONS: OPTIONS,
+    EVENTS: EVENTS,
+    FIXED: FIXED,
+    ROLES: ROLES,
+    setRole: setRole,
+    setAlias: setAlias,
+    bezier: bezier,
+    steps: steps,
+    STEP_START: STEP_START,
+    STEP_END: STEP_END,
+    LINEAR: LINEAR,
+    EASE: EASE,
+    EASE_IN: EASE_IN,
+    EASE_OUT: EASE_OUT,
+    EASE_IN_OUT: EASE_IN_OUT,
+    animate: animate,
+    animateItem: animateItem
+});
+
+for (var name in others) {
+  Scene[name] = others[name];
+}
+
+module.exports = Scene;
 //# sourceMappingURL=scene.cjs.js.map

@@ -4293,7 +4293,7 @@ version: 1.0.1
     license: MIT
     author: Daybrush
     repository: git+https://github.com/daybrush/list-map.git
-    version: 0.1.0
+    version: 0.1.1
     */
 
     /**
