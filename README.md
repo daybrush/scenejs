@@ -1,17 +1,13 @@
 
-<div align="center">
-<img src="https://daybrush.com/scenejs/images/clapperboard.png" width="250"/></p>
-
-# Scene.js
-[![npm version](https://badge.fury.io/js/scenejs.svg)](https://badge.fury.io/js/scenejs) [![Build Status](https://travis-ci.org/daybrush/scenejs.svg?branch=master)](https://travis-ci.org/daybrush/scenejs) [![Coverage Status](https://coveralls.io/repos/github/daybrush/scenejs/badge.svg?branch=master)](https://coveralls.io/github/daybrush/scenejs?branch=master) [![TypeScript](https://badges.frapsoft.com/typescript/version/typescript-next.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
-
-🎬 Scene.js is an JavaScript & CSS timeline-based animation library.
+<p align="middle"><img src="https://daybrush.com/scenejs/images/clapperboard.png" width="250"/></p>
+<h2 align="middle">Scene.js</h2>
+<p align="middle"><a href="https://badge.fury.io/js/scenejs" target="_blank"><img src="https://badge.fury.io/js/scenejs.svg" alt="npm version" height="18"/></a> <a href="https://travis-ci.org/daybrush/scenejs"><img src="https://travis-ci.org/daybrush/scenejs.svg?branch=master"/></a> <a href="https://coveralls.io/github/daybrush/scenejs?branch=master"><img src="https://coveralls.io/repos/github/daybrush/scenejs/badge.svg?branch=master"/></a> <img src="https://img.shields.io/badge/language-typescript-blue.svg"/> <a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/daybrush/scenejs.svg"/></a></p>
 
 
-[**Home**](https://daybrush.com/scenejs) &nbsp;/&nbsp; [**API**](https://daybrush.com/scenejs/release/latest/doc) &nbsp;/&nbsp; [**Features**](https://daybrush.com/scenejs/features.html) &nbsp;/&nbsp; [**Examples**](https://codepen.io/collection/DLWxrd/)
+<p align="middle">🎬 Scene.js is an JavaScript & CSS timeline-based animation library.</p>
 
-</div>
+<p align="middle"><a href="https://daybrush.com/scenejs"><strong>About Scene.js</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>Features</strong></a> &nbsp;/&nbsp; <a href="https://codepen.io/collection/DLWxrd/"><strong>Examples</strong></a></p>
+
 
 <p align="middle" style="max-width: 1000px; margin: 0px auto;" >
   <img src="https://daybrush.github.io/scenejs/example/logo.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>&nbsp;
