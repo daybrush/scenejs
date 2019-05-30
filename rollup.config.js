@@ -12,10 +12,9 @@ export default builder([
         external,
     },
     {
-        input: 'src/index.ts',
+        input: 'src/index.umd.ts',
         output: "./dist/scene.cjs.js",
         format: "cjs",
-        exports: "named",
         external,
     },
     {

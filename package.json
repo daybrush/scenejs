@@ -75,6 +75,6 @@
   },
   "dependencies": {
     "@daybrush/utils": "^0.10.0",
-    "list-map": "^0.1.0"
+    "list-map": "^0.1.1"
   }
 }
