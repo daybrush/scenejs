@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JavaScript & CSS timeline-based animation library",
   "main": "dist/scene.cjs.js",
   "module": "dist/scene.esm.js",
@@ -46,7 +46,7 @@
   },
   "homepage": "https://daybrush.com",
   "devDependencies": {
-    "@daybrush/builder": "^0.0.7",
+    "@daybrush/builder": "^0.1.0",
     "@daybrush/jsdoc": "^0.3.7",
     "@daybrush/page": "^0.2.0",
     "@daybrush/release": "^0.2.4",
@@ -55,7 +55,7 @@
     "@types/sinon": "^7.0.2",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
-    "daybrush-jsdoc-template": "^1.5.0",
+    "daybrush-jsdoc-template": "^1.6.0",
     "gh-pages": "^2.0.1",
     "karma": "^1.7.1",
     "karma-chai": "^0.1.0",
@@ -75,6 +75,6 @@
   },
   "dependencies": {
     "@daybrush/utils": "^0.10.0",
-    "list-map": "^0.0.3"
+    "list-map": "^0.1.0"
   }
 }
