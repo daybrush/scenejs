@@ -56,8 +56,6 @@ render() {
     onTimeUpdate={e => { console.log(e); }}
     onIteration={e => { console.log(e); }}
     onEnded={e => { console.log(e); }}
-
-    
   >
     <div className="circles">
       <div className="circle circle1"></div>
