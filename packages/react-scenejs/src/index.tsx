@@ -1,63 +1,11 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { SceneItem, EASE_IN_OUT, Scene } from './react-scenejs';
-import './raindrop.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./demo/App";
+import * as serviceWorker from "./demo/serviceWorker";
 
-class App extends React.Component<{}, { time: string | number }> {
-  constructor(props: any) {
-    super(props);
+ReactDOM.render(<App />, document.getElementById("root"));
 
-    this.state = {
-      time: 0,
-    };
-  }
-  public render() {
-    const time = this.state.time;
-    const keyframes = {
-      0: { 'border-width': '150px', 'opacity': 1, 'transform': 'scale(0)' },
-      1: { 'border-width': '0px', 'opacity': 0.3, 'transform': 'scale(0.7)' }
-    };
-    return <div className='wrapper'>
-      <Scene easing={EASE_IN_OUT} keyframes={{
-        raindrop1: { keyframes, options: { delay: 0 } },
-        raindrop2: { keyframes, options: { delay: 0.4 } },
-        raindrop3: { keyframes, options: { delay: 0.8 } },
-      }} iterationCount='infinite' css autoplay>
-        <div className='container'>
-          <div className='raindrop' data-scene-id='raindrop1'></div>
-          <div className='raindrop' data-scene-id='raindrop2'></div>
-          <div className='raindrop' data-scene-id='raindrop3'></div>
-        </div>
-      </Scene>
-      <br />
-      <input type='range' value={time} onInput={(e) => {
-        this.setState({ time: (e.target as HTMLInputElement).value });
-      }} />
-      <br />
-      <Scene easing={EASE_IN_OUT} time={`${time}%`} keyframes={{
-        raindrop1: { keyframes, options: { delay: 0 } },
-        raindrop2: { keyframes, options: { delay: 0.4 } },
-        raindrop3: { keyframes, options: { delay: 0.8 } },
-      }}>
-        <div className='container'>
-          <div className='raindrop' data-scene-id='raindrop1'></div>
-          <div className='raindrop' data-scene-id='raindrop2'></div>
-          <div className='raindrop' data-scene-id='raindrop3'></div>
-        </div>
-      </Scene>
-      <div className='container'>
-        <SceneItem
-          time={`${time}%`}
-          duration={1}
-          from={{ 'border-width': '150px', 'opacity': 1, 'transform': 'scale(0)' }}
-          to={{ 'border-width': '0px', 'opacity': 0, 'transform': 'scale(1)' }}
-          iterationCount='infinite'>
-          <div className='raindrop'></div>
-        </SceneItem>
-      </div>
-    </div >;
-  }
-}
-
-
-ReactDOM.render(<App />, document.getElementById('root'));
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();

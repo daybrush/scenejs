@@ -5,9 +5,6 @@ import { SceneInterface } from './SceneInterface';
 
 export class SceneItem extends SceneInterface<NativeSceneItem> {
   protected item: NativeSceneItem = new NativeSceneItem();
-  constructor(props: any) {
-    super(props);
-  }
   public render() {
     return this.props.children;
   }
