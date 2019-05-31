@@ -19,7 +19,8 @@
     "animation",
     "css",
     "requestAnimationFrame",
-    "motion"
+    "motion",
+    "react"
   ],
   "author": "Daybrush",
   "license": "MIT",
