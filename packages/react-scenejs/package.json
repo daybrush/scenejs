@@ -1,7 +1,32 @@
 {
   "name": "react-scenejs",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "A Rect Component that create tJavaScript & CSS timeline-based animation with Scene.js",
+  "main": "dist/scene.cjs.js",
+  "module": "dist/scene.esm.js",
+  "sideEffects": false,
+  "types": "declaration/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs"
+  },
+  "keywords": [
+    "scene",
+    "scenejs",
+    "keyframes",
+    "timeline",
+    "animate",
+    "animation",
+    "css",
+    "requestAnimationFrame",
+    "motion"
+  ],
+  "author": "Daybrush",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daybrush/scenejs/issues"
+  },
+  "homepage": "https://daybrush.com/scenejs",
   "dependencies": {
     "@types/node": "^12.0.0",
     "@types/react": "^16.0.0",
@@ -9,6 +34,7 @@
     "scenejs": "^1.0.1"
   },
   "devDependencies": {
+    "@daybrush/builder": "^0.1.1",
     "@scenejs/effects": "^0.1.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -17,9 +43,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "rollup -c && npm run declaration",
+    "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json"
   },
   "eslintConfig": {
     "extends": "react-app"

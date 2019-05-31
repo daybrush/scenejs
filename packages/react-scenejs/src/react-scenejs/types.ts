@@ -13,8 +13,6 @@ export interface EventTypes {
 }
 export interface ScenePropTypes extends Partial<AnimatorOptions>, EventTypes {
   keyframes?: IObject<any>;
-  from?: IObject<any>;
-  to?: IObject<any>;
   css?: boolean;
   time?: string | number;
   autoplay?: boolean;

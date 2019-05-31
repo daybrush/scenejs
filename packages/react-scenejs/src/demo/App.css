@@ -3,7 +3,15 @@ html, body {
   width: 100%;
   height: 100%;
 }
-
+.circle-area, .clapper-area {
+  position: relative;
+}
+.clapper-area {
+  height: 400px;
+}
+.circle-area {
+  height: 400px;
+}
 .clapper {
   position: absolute;
   top: 50%;
@@ -123,8 +131,8 @@ html, body {
 
 .circles {
   position: relative;
-  width: 220px;
-  height: 220px;
+  width: 300px;
+  height: 300px;
   margin: auto;
 }
 
@@ -132,11 +140,12 @@ html, body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 200px;
-  height: 200px;
-  border: 100px solid black;
+  width: 300px;
+  height: 300px;
+  border: 150px solid black;
   border-radius: 50%;
   transform: translate(-50%, -50%);
+  box-sizing: border-box;
 }
 
 

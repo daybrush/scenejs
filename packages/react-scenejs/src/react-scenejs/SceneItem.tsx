@@ -10,13 +10,6 @@ export class SceneItem extends SceneInterface<NativeSceneItem> {
   }
   public componentDidMount() {
     this.item.setElement(findDOMNode(this) as HTMLElement);
-
-    if (this.props.keyframes) {
-      this.item.set(this.props.keyframes);
-    } else {
-      this.item.set('0%', this.props.from);
-      this.item.set('100%', this.props.to);
-    }
     this.init();
   }
 }

@@ -7,11 +7,6 @@ export class Scene extends SceneInterface<NativeScene> {
     return this.props.children;
   }
   public componentDidMount() {
-    const keyframes = this.props.keyframes;
-
-    if (keyframes) {
-      this.item.load(keyframes);
-    }
     this.init();
   }
 }

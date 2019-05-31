@@ -44,7 +44,7 @@
   "bugs": {
     "url": "https://github.com/daybrush/scenejs/issues"
   },
-  "homepage": "https://daybrush.com",
+  "homepage": "https://daybrush.com/scenejs",
   "devDependencies": {
     "@daybrush/builder": "^0.1.0",
     "@daybrush/jsdoc": "^0.3.7",

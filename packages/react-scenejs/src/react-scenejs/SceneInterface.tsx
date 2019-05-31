@@ -54,6 +54,9 @@ export class SceneInterface<T extends Scene | SceneItem> extends PureComponent<S
   public pause() {
     this.item.pause();
   }
+  public isPaused() {
+    return this.item.isPaused();
+  }
   public getItem() {
     return this.item;
   }
@@ -65,6 +68,9 @@ export class SceneInterface<T extends Scene | SceneItem> extends PureComponent<S
     const events = this.events;
     const sceneOptions: Partial<AnimatorState> = {};
 
+    if (this.props.keyframes) {
+      this.item.load(this.props.keyframes);
+    }
     OPTIONS.forEach(name => {
       sceneOptions[name] = this.props[name] as any;
     });
