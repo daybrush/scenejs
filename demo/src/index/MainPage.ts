@@ -321,17 +321,17 @@ mediaScene
     .setDelay(nextStep3 + 0.9);
 (window as any).mediaScene = mediaScene;
 addEvent($<HTMLElement>(".play_btn.front"), "click", () => {
-    scene.playCSS(false);
+    scene.play();
     mediaScene.play();
 });
 const page1 = new Page(".page.page1");
 
 page1.range(["10%", "90%"]).on({
     firstEnter: () => {
-        scene.exportCSS();
+        // scene.exportCSS();
     },
     enter: () => {
-        scene.playCSS(false);
+        scene.play();
         mediaScene.play();
     },
 });
