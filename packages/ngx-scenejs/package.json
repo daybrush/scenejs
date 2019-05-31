@@ -1,7 +1,7 @@
 {
   "name": "ngx-scenejs",
-  "version": "1.0.0",
-  "description": "An Angular Component that create tJavaScript & CSS timeline-based animation with Scene.js",
+  "version": "1.0.1",
+  "description": "An Angular Component that create JavaScript & CSS timeline-based animation with Scene.js",
   "main": "dist/scene.cjs.js",
   "module": "dist/scene.esm.js",
   "sideEffects": false,

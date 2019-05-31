@@ -4,7 +4,7 @@
 <p align="middle"><a href="https://badge.fury.io/js/ngx-scenejs" target="_blank"><img src="https://badge.fury.io/js/ngx-scenejs.svg" alt="npm version" height="18"/></a>  <img src="https://img.shields.io/badge/language-typescript-blue.svg"/> <a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg"/></a></p>
 
 
-<p align="middle">🎬 An Angular Component that create tJavaScript & CSS timeline-based animation with Scene.js.</p>
+<p align="middle">🎬 An Angular Component that create JavaScript & CSS timeline-based animation with Scene.js.</p>
 
 <p align="middle"><a href="https://daybrush.com/scenejs"><strong>About Scene.js</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>Features</strong></a> &nbsp;/&nbsp; <a href="https://codesandbox.io/s/ngxscenejs-clapperboard-raindrop-demo-njhkc"><strong>CodeSandbox Demo</strong></a></p>
 <br/>

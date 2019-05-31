@@ -50,9 +50,9 @@ $ npm install scenejs
 * [Features Documentation](https://daybrush.com/scenejs/features.html)
 
 ## Related Projects
-* [**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs): AA React Component that create tJavaScript & CSS timeline-based animation with Scene.js.
-* [**ngx-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/ngx-scenejs): A Angular Component that create tJavaScript & CSS timeline-based animation with Scene.js.
-* [**vue-scene**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scene): A Vue Component that create tJavaScript & CSS timeline-based animation with Scene.js
+* [**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs): AA React Component that create JavaScript & CSS timeline-based animation with Scene.js.
+* [**ngx-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/ngx-scenejs): A Angular Component that create JavaScript & CSS timeline-based animation with Scene.js.
+* [**vue-scene**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scene): A Vue Component that create JavaScript & CSS timeline-based animation with Scene.js
 * [**keyframer**](https://github.com/daybrush/keyframer): Make the CSS Keyframes the keyframes object.
 * [**@scenejs/effects**](https://github.com/daybrush/scenejs-effects): Effect collection library where you can add scene effects to Scene.js.
 * [**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline): A library that represents the timeline of Scene.js. You can control time, properties, and items.
