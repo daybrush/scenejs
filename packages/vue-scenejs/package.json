@@ -1,6 +1,6 @@
 {
   "name": "vue-scenejs",
-  "version": "1.0.0-rc",
+  "version": "1.0.0-rc2",
   "description": "A Vue Component that create JavaScript & CSS timeline-based animation with Scene.js",
   "main": "dist/scene.cjs.js",
   "module": "dist/scene.esm.js",
@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "scenejs": "^1.0.1",
-    "vue-class-component": "^7.0.0"
+    "vue-property-decorator": "^8.0.0"
   },
   "devDependencies": {
     "@daybrush/builder": "^0.1.1",

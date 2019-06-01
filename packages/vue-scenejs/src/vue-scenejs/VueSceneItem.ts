@@ -1,4 +1,4 @@
-import Component from 'vue-class-component';
+import { Component } from 'vue-property-decorator';
 import { SceneItem } from 'scenejs';
 import SceneInterface from './SceneInterface';
 

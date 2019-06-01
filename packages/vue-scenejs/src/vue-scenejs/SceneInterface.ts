@@ -1,6 +1,5 @@
-// import { Prop, Vue, Component } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import Vue from 'vue';
-import Component from 'vue-class-component';
 import Scene, {
     SceneItem, OPTIONS, EVENTS, AnimatorState,
 } from 'scenejs';
@@ -53,7 +52,6 @@ import { SceneProps } from './types';
 class SceneInterface<T extends Scene | SceneItem> extends Vue {
     protected item!: T;
     public setTime(time: number | string) {
-        console.log(time);
         this.item.setTime(time);
     }
     public getTime() {

@@ -1,64 +1,82 @@
-# vue-scene [![npm version](https://badge.fury.io/js/vue-scene.svg)](https://badge.fury.io/js/vue-scene)
-It is an vue component of scenejs animation library.
 
-This supports @vue 2.x
+<p align="middle"><img src="https://daybrush.com/scenejs/images/clapperboard.png" width="250"/></p>
+<h2 align="middle">Vue Scene.js</h2>
+<p align="middle"><a href="https://badge.fury.io/js/vue-scenejs" target="_blank"><img src="https://badge.fury.io/js/vue-scenejs.svg" alt="npm version" height="18"/></a>  <img src="https://img.shields.io/badge/language-typescript-blue.svg"/> <a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg"/></a></p>
 
-* [Raindrop Demo](https://codesandbox.io/s/98zn82kq1w)
 
-## Install
+<p align="middle">🎬 A Vue Component that create JavaScript & CSS timeline-based animation with Scene.js.</p>
+
+<p align="middle"><a href="https://daybrush.com/scenejs"><strong>About Scene.js</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>Features</strong></a> &nbsp;/&nbsp; <a href="https://codesandbox.io/s/ngxscenejs-clapperboard-raindrop-demo-njhkc"><strong>CodeSandbox Demo</strong></a></p>
+<br/>
+
+
+## Installation
 ```bash
-$ npm install vue-scene  --save
+$ npm install vue-scenejs
 ```
+
+
 
 ## How to use
-```js
-import {VueScene, VueSceneItem, EASE, EASE_IN, EASE_IN_OUT, bezier, steps, STEP_START, STEP_END} from "vue-scene";
-
-export default {
-  name: "App",
-  components: {
-    VueScene,
-    VueSceneItem
-  },
-  data: function () {
-    return {
-      easing: EASE_IN_OUT,
-      time: 0,
-      keyframes: {
-        0: {"border-width": "150px", opacity: 1, transform: "scale(0)" },
-        1: { "border-width": "0px", opacity: 0.3, transform: "scale(0.7)" },
-      },
-    };
-  },
-};
-```
-* Scene
 ```html
-<vue-scene v-bind:easing='easing' v-bind:time='time'>
-	<div class='container'>
-		<vue-scene-item v-bind:keyframes='keyframes'>
-		<div class='raindrop'></div>
-		</vue-scene-item>
-		<vue-scene-item v-bind:keyframes='keyframes' v-bind:delay='0.4'>
-		<div class='raindrop'></div>
-		</vue-scene-item>
-		<vue-scene-item v-bind:keyframes='keyframes' v-bind:delay='0.8'>
-		<div class='raindrop'></div>
-		</vue-scene-item>
-	</div>
-</vue-scene>
-  ```
-* SceneItem
-```html
-<vue-scene-item
-  v-bind:time="time" v-bind:duration=1
-  v-bind:from="{'border-width': '150px', opacity: 1, transform: 'scale(0)'}"
-  v-bind:to="{'border-width': '0px', opacity: 0, transform: 'scale(1)'}"
-  iterationCount='infinite'>
-  <div class='raindrop'></div>
-</vue-scene-item>
-```
+<template>
+  <vue-scene
+    :keyframes="keyframes"
+    easing="ease-in-out"
+    fillMode="forwards"
+    direction="normal"
+    :iterationCount="1"
+    :playSpeed="1"
+    :time="0"
+    :css="false"
+    :autoplay="false"
+    @play="onPlay"
+    @paused="onPaused"
+    @ended="onEnded"
+    @animate="onAnimate"
+    @timeupdate="onTimeUpdate"
+    @iteration="onIteration"
+  >
+    <div className="circles">
+      <div className="circle circle1"></div>
+      <div className="circle circle2"></div>
+      <div className="circle circle3"></div>
+    </div>
+  </vue-scene>
+</template>
+<script>
+  import { VueScene, VueSceneItem } from "vue-scenejs";
 
+  export default {
+    name: "App",
+    components: {
+      VueScene,
+      VueSceneItem,
+    },
+    data: function () {
+      return {
+        keyframes: {
+          ".circles .circle": i => ({
+            0: {
+              "border-width": "150px",
+              "opacity": 1,
+              "transform": "translate(-50%, -50%) scale(0)",
+            },
+            1.5: {
+              "border-width": "0px",
+              "opacity": 0.3,
+              "transform": "scale(0.7)",
+            },
+            options: {
+              delay: i * 0.4,
+            },
+          }),
+        },
+      };
+    },
+  };
+</script>
+```
 
 
 ### Props
