@@ -59,23 +59,32 @@ export default {
 </vue-scene-item>
 ```
 
-### easing
-* [easing list](https://daybrush.github.io/scenejs/release/latest/doc/easing.html)
+
+
 ### Props
 |name|type|default|description|
 |---|---|---|---|
 |css|boolean|false|Check to play with CSS|
 |autoplay|boolean|false|Check to play automatically|
-|from(vue-scene-item)|object||Start properties. only |
-|to(vue-scene-item)|object||End properties|
-|keyframes(vue-scene-item)|object||Specify properties by time. If not keyframes, use **from**, **to**, and **duration**.|
+|keyframes|object|{}|Specify properties by time.|
 |...options|||[Check out the options](https://daybrush.github.io/scenejs/release/latest/doc/global.html#AnimatorOptions)|
+|...events|||[Check out Scene's events](https://daybrush.com/scenejs/release/latest/doc/Scene.html#events)<br/> [Check out SceneItem's events](https://daybrush.com/scenejs/release/latest/doc/SceneItem.html#events)|
 
-### Events
-```html
-<vue-scene-item v-on:animate="animate($event)" v-on:play="play($event)" v-on:paused="paused($event)">
-  <div class="item"></div>
-</vue-scene-item>
+
+
+
+## Development
+
+### Compiles and hot-reloads for development
 ```
-* [vue-scene events](https://daybrush.github.io/scenejs/release/latest/doc/Scene.html#events)
-* [vue-scene-item events](https://daybrush.github.io/scenejs/release/latest/doc/Scene.SceneItem.html#events)
+npm run serve
+```
+
+
+## License
+
+```
+MIT License
+
+Copyright (c) 2016 Daybrush
+```
