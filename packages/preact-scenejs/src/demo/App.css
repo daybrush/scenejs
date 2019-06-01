@@ -1,0 +1,196 @@
+html, body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.circle-area, .clapper-area {
+  position: relative;
+}
+.clapper-area {
+  height: 400px;
+}
+.circle-area {
+  height: 400px;
+}
+.clapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  z-index: 2;
+  transform-origin: 20% 60%;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+}
+
+.clapper .clapper-container {
+  position: absolute;
+  margin: auto;
+  width: 200px;
+  height: 170px;
+  left: -200px;
+  right: -200px;
+  top: -200px;
+  bottom: -200px;
+}
+
+.clapper .clapper-container .clapper-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.clapper .stick {
+  position: absolute;
+  box-sizing: border-box;
+  width: 200px;
+  height: 32px;
+  font-size: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 5px 8px;
+  text-align: center;
+  background: #333;
+}
+
+.clapper .stick1 {
+  transform-origin: 0% 100%;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.clapper .stick2 {
+  top: 30px;
+}
+
+.clapper .rect {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+  width: 20px;
+  background: white;
+  vertical-align: top;
+  margin: 0px 5px 0px;
+  border-radius: 5px;
+}
+
+.clapper .stick1 .rect {
+  transform: skew(15deg);
+}
+
+.clapper .stick2 .rect {
+  transform: skew(-15deg);
+}
+
+.clapper .top {
+  position: absolute;
+  top: 0;
+  border-radius: 5px 5px 0px 0px;
+  width: 100%;
+  height: 37%;
+}
+
+.clapper .bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 64%;
+  background: #333;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.clapper .circle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10%;
+  margin: auto;
+  width: 70px;
+  height: 70px;
+  background: white;
+  border-radius: 50%;
+}
+
+.clapper .play {
+  position: absolute;
+  left: 50%;
+  margin-left: 3px;
+  bottom: 7%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  /* 	overflow: hidden; */
+}
+
+.clapper .play svg {
+  -webkit-backface-visibility: hidden;
+  outline: 1px solid transparent;
+}
+
+.circles {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: auto;
+}
+
+.circles .circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  border: 150px solid black;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+}
+
+
+.player {
+  position: relative;
+  text-align: center;
+}
+
+.player .play, .player .pause, .player .progress {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.player .play {
+  border-left: 14px solid #333;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+
+.player .pause {
+  border-left: 4px solid #333;
+  border-right: 4px solid #333;
+  width: 14px;
+  height: 16px;
+  box-sizing: border-box;
+}
+
+.player input[type=range] {
+  width: 200px;
+}
+
+.player input[type=range] {
+  -webkit-appearance: none;
+  background: rgba(0, 0, 0, 0.2);
+  height: 5px;
+}
+
+.player input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  background: #333;
+}
+
+.player input[type=range]:focus {
+  outline: none;
+}
