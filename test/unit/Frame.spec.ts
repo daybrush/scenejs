@@ -129,6 +129,18 @@ describe("Frame Test", () => {
             expect(frame.get("transform", "scale")).to.be.not.ok;
             expect(frame.get("transform")).to.be.not.ok;
         });
+        it (`should check get(easing) test1`, () => {
+            frame.set("easing", "ease-in-out");
+
+            expect(typeof frame.get("easing")).to.be.equals("function");
+            expect(frame.get("easing").easingName).to.be.equals("cubic-bezier(0.42,0,0.58,1)");
+        });
+        it (`should check get(easing) test2`, () => {
+            frame.set("easing", "cubic-bezier(0.41,0,0.58,1)");
+
+            expect(typeof frame.get("easing")).to.be.equals("function");
+            expect(frame.get("easing").easingName).to.be.equals("cubic-bezier(0.41,0,0.58,1)");
+        });
         it("sholud check 'get(toObject)' method", () => {
             /*
                this.frame = new Frame({

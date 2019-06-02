@@ -7,7 +7,7 @@ import {
 } from "./consts";
 import EventTrigger from "./EventTrigger";
 import { bezier, steps } from "./easing";
-import { toFixed } from "./utils";
+import { toFixed, getEasing } from "./utils";
 import { splitUnit, isString, camelize, requestAnimationFrame, isArray, cancelAnimationFrame } from "@daybrush/utils";
 import {
     IterationCountType, DirectionType, AnimatorState,
@@ -114,34 +114,8 @@ class Animator
   });
       */
     public setEasing(curveArray: string | number[] | EasingFunction): this {
-        let easing: EasingFunction;
-
-        if (isString(curveArray)) {
-            if (curveArray in EASINGS) {
-                easing = EASINGS[curveArray];
-            } else {
-                const obj = toPropertyObject(curveArray);
-
-                if (isString(obj)) {
-                    return this;
-                } else {
-                    if (obj.model === "cubic-bezier") {
-                        curveArray = obj.value.map(v => parseFloat(v));
-                        easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
-                    } else if (obj.model === "steps") {
-                        easing = steps(parseFloat(obj.value[0]), obj.value[1]);
-                    } else {
-                        return this;
-                    }
-                }
-            }
-        } else if (isArray(curveArray)) {
-            easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
-        } else {
-            easing = curveArray;
-        }
-        const easingName = easing[EASING_NAME] || "linear";
-
+        const easing: EasingType = getEasing(curveArray);
+        const easingName = easing && easing[EASING_NAME] || "linear";
         const state = this.state;
 
         state[EASING] = easing;

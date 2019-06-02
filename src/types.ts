@@ -162,8 +162,8 @@ export type EventType = ["paused", "ended", "timeupdate", "animate", "play", "it
 /**
  * @typedef
  */
-export interface AnimateElement extends Element, ElementCSSInlineStyle {
-}
+export type AnimateElement = HTMLElement | SVGElement;
+
 /**
  * @typedef
  */

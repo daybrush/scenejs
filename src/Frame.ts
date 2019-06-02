@@ -1,7 +1,7 @@
 import {
     ALIAS, TIMING_FUNCTION, TRANSFORM_NAME, EASING_NAME
 } from "./consts";
-import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, updateFrame } from "./utils";
+import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, getEasing } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
 import {
     isObject, isArray, isString,
@@ -318,7 +318,11 @@ class Frame {
         if (!length) {
             return;
         }
-        properties[args[length - 1]] = isString(value) ? toPropertyObject(value) : value;
+        if (args.length === 1 && args[0] === TIMING_FUNCTION ) {
+            properties[TIMING_FUNCTION] = getEasing(value);
+        } else {
+            properties[args[length - 1]] = isString(value) ? toPropertyObject(value) : value;
+        }
     }
 }
 export default Frame;

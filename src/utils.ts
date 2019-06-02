@@ -1,14 +1,17 @@
 import {
     ROLES, MAXIMUM, FIXED, ALIAS,
-    PAUSED, RUNNING, PLAY, ENDED, PREFIX, PLAY_CSS, CURRENT_TIME, START_ANIMATION
+    PAUSED, RUNNING, PLAY, ENDED, PREFIX, PLAY_CSS, CURRENT_TIME, START_ANIMATION, EASINGS
 } from "./consts";
 import PropertyObject from "./PropertyObject";
 import Scene from "./Scene";
 import SceneItem from "./SceneItem";
 import {
     isArray, ANIMATION, ARRAY, OBJECT,
-    PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document, isObject, addEvent, removeEvent,
+    PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document, isObject, addEvent, removeEvent, isString,
 } from "@daybrush/utils";
+import { EasingType, EasingFunction } from "./types";
+import { toPropertyObject } from "./utils/property";
+import { bezier, steps } from "./easing";
 
 export function isPropertyObject(value: any): value is PropertyObject {
     return value instanceof PropertyObject;
@@ -219,4 +222,35 @@ export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
     addEvent(el, "animationend", animationend);
     addEvent(el, "animationiteration", animationiteration);
     addEvent(el, "animationstart", animationstart);
+}
+
+export function getEasing(curveArray: string | number[] | EasingFunction): EasingType {
+    let easing: EasingType;
+
+    if (isString(curveArray)) {
+        if (curveArray in EASINGS) {
+            easing = EASINGS[curveArray];
+        } else {
+            const obj = toPropertyObject(curveArray);
+
+            if (isString(obj)) {
+                return 0;
+            } else {
+                if (obj.model === "cubic-bezier") {
+                    curveArray = obj.value.map(v => parseFloat(v));
+                    easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
+                } else if (obj.model === "steps") {
+                    easing = steps(parseFloat(obj.value[0]), obj.value[1]);
+                } else {
+                    return 0;
+                }
+            }
+        }
+    } else if (isArray(curveArray)) {
+        easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
+    } else {
+        easing = curveArray;
+    }
+
+    return easing;
 }
