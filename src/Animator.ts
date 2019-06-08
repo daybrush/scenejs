@@ -229,7 +229,6 @@ class Animator
         if (this.isEnded() && (currentTime === 0 || currentTime >= this.getActiveDuration())) {
             this.setTime(-delay, true);
         }
-        state[TICK_TIME] = this.getTime();
 
         this.timerId = requestAnimationFrame((time: number) => {
             state[PREV_TIME] = time;
