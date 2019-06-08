@@ -116,10 +116,56 @@ describe("SceneItem Test", () => {
             expect(item.getId()).to.be.equals(".a .b");
         });
         it("should check 'getNowFrame' method", () => {
+            // Then
             expect(item.getNowFrame(0).get("display")).to.be.equals("block");
             expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
             expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
             expect(item.getNowFrame(1).get("display")).to.be.equals("none");
+        });
+        it("should check 'getNowFrame' method with wrong easing", () => {
+            ["easdasd", "easde(aa)"].forEach(easing => {
+                // When
+                item.setEasing(easing);
+                // Then
+                expect(item.getNowFrame(0).get("display")).to.be.equals("block");
+                expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
+                expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
+                expect(item.getNowFrame(1).get("display")).to.be.equals("none");
+            });
+        });
+        it("should check 'getNowFrame' method with easing", () => {
+            // When
+            item.setEasing("ease-out");
+
+            // Then
+            expect(item.getNowFrame(0.25).get("a")).to.be.not.equals(1.25);
+            expect(item.getNowFrame(0).get("display")).to.be.equals("block");
+            expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
+            expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
+            expect(item.getNowFrame(1).get("display")).to.be.equals("none");
+        });
+        it("should check 'getNowFrame' method with steps(start) easing", () => {
+            // When
+            item.setEasing("steps(2, start)");
+
+            // Then
+            expect(item.getNowFrame(0).get("a")).to.be.equals(1);
+            expect(item.getNowFrame(0.1).get("a")).to.be.equals(1.25);
+            expect(item.getNowFrame(0.2).get("a")).to.be.equals(1.25);
+            expect(item.getNowFrame(0.25).get("a")).to.be.equals(1.5);
+            expect(item.getNowFrame(0.4).get("a")).to.be.equals(1.5);
+            expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
+        });
+        it("should check 'getNowFrame' method with steps(end) easing", () => {
+            // When
+            item.setEasing("steps(2, end)");
+
+            // Then
+            expect(item.getNowFrame(0).get("a")).to.be.equals(1);
+            expect(item.getNowFrame(0.2).get("a")).to.be.equals(1);
+            expect(item.getNowFrame(0.25).get("a")).to.be.equals(1.25);
+            expect(item.getNowFrame(0.4).get("a")).to.be.equals(1.25);
+            expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
         });
         it("should check 'getNowFrame(true)' method", () => {
             // When
@@ -759,60 +805,60 @@ describe("SceneItem Test", () => {
             expect(this.item.get(3, "a")).to.be.equals(2);
         });
         function testEntries(...animators: Animator[]) {
-            const states = animators.map(({state}) => state);
+            const states = animators.map(({ state }) => state);
             it(`should check 'getEntries' => ${
-                states.map(({direction, delay, iterationCount}) =>
-                `{delay:${delay}, direction:${direction}, iterationCount:${iterationCount}}`).join(",")
-            }`, () => {
-                // Given
-                const entries = getEntries([0, 0.5, 1], states);
-                const item = animators[0];
-                const scene = animators[animators.length - 1];
-                const delay = scene.getDelay();
+                states.map(({ direction, delay, iterationCount }) =>
+                    `{delay:${delay}, direction:${direction}, iterationCount:${iterationCount}}`).join(",")
+                }`, () => {
+                    // Given
+                    const entries = getEntries([0, 0.5, 1], states);
+                    const item = animators[0];
+                    const scene = animators[animators.length - 1];
+                    const delay = scene.getDelay();
 
-                entries.forEach(([time, iterationTime] , i) => {
-                    const [prevTime] = entries[i - 1] || [-1, -1];
-                    const [nextTime] = entries[i + 1] || [-1, -1];
-                    const currentTime = time - delay;
-                    // When
-                    if (time === scene.getTotalDuration()) {
-                        scene.setTime(currentTime - THRESHOLD);
-                    } else if (time === prevTime) {
-                        // 0
-                        scene.setTime(currentTime + THRESHOLD);
-                    } else if (time === nextTime) {
-                        // duration
-                        scene.setTime(currentTime - THRESHOLD);
-                    } else {
-                        scene.setTime(currentTime, true);
-                    }
+                    entries.forEach(([time, iterationTime], i) => {
+                        const [prevTime] = entries[i - 1] || [-1, -1];
+                        const [nextTime] = entries[i + 1] || [-1, -1];
+                        const currentTime = time - delay;
+                        // When
+                        if (time === scene.getTotalDuration()) {
+                            scene.setTime(currentTime - THRESHOLD);
+                        } else if (time === prevTime) {
+                            // 0
+                            scene.setTime(currentTime + THRESHOLD);
+                        } else if (time === nextTime) {
+                            // duration
+                            scene.setTime(currentTime - THRESHOLD);
+                        } else {
+                            scene.setTime(currentTime, true);
+                        }
 
-                    const animatorTime = item.getIterationTime();
+                        const animatorTime = item.getIterationTime();
 
-                    // Then
-                    expect(animatorTime).to.be.closeTo(iterationTime, 0.0001);
+                        // Then
+                        expect(animatorTime).to.be.closeTo(iterationTime, 0.0001);
+                    });
                 });
-            });
         }
         describe(`should check 'getEntries' function`, () => {
             ["normal", "reverse", "alternate", "alternate-reverse"].forEach((direction: DirectionType) => {
                 [0.3, 1, 1.3, 2, 2.3].forEach(iterationCount => {
                     const item1 = new SceneItem({
-                        0: { a: 1},
+                        0: { a: 1 },
                         0.5: { a: 3 },
                         1: { a: 2 },
                     }, {
-                        iterationCount, direction,
-                        fillMode: "both",
-                    });
+                            iterationCount, direction,
+                            fillMode: "both",
+                        });
                     const item2 = new SceneItem({
-                        0: { a: 1},
+                        0: { a: 1 },
                         0.5: { a: 3 },
                         1: { a: 2 },
                     }, {
-                        delay: 1, iterationCount, direction,
-                        fillMode: "both",
-                    });
+                            delay: 1, iterationCount, direction,
+                            fillMode: "both",
+                        });
 
                     // Then
                     testEntries(item1);
@@ -823,17 +869,17 @@ describe("SceneItem Test", () => {
                             const scene1 = new Scene({
                                 item1,
                             }, {
-                                iterationCount: iterationCount2,
-                                direction: direction2,
-                                fillMode: "both",
-                            });
+                                    iterationCount: iterationCount2,
+                                    direction: direction2,
+                                    fillMode: "both",
+                                });
                             const scene2 = new Scene({
                                 item2,
                             }, {
-                                iterationCount: iterationCount2,
-                                direction: direction2,
-                                fillMode: "both",
-                            });
+                                    iterationCount: iterationCount2,
+                                    direction: direction2,
+                                    fillMode: "both",
+                                });
 
                             // Then
                             testEntries(item1, scene1);
