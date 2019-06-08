@@ -532,7 +532,7 @@ export const datas = [
             {
                 id: "fadein",
                 title: "fadeIn",
-                description: "Make a fade in effect.",
+                description: "Make a fade in effect. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.fadeIn\" target=\"_blank\">.fadeIn</a>)",
                 html: `<div class="target center">1</div>`,
                 code: FadeInCode,
                 examples: [{ value: "" }],
@@ -540,7 +540,7 @@ export const datas = [
             {
                 id: "fadeout",
                 title: "fadeOut",
-                description: "Make a fade out effect.",
+                description: "Make a fade out effect. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.fadeIn\" target=\"_blank\">.fadeIn</a>)",
                 html: `<div class="target center">1</div>`,
                 code: FadeOutCode,
                 examples: [{ value: "" }],
@@ -548,7 +548,7 @@ export const datas = [
             {
                 id: "blink",
                 title: "blink",
-                description: "Make a blinking effect.",
+                description: "Make a blinking effect. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.blink\" target=\"_blank\">.blink</a>)",
                 html: `<div class="target center">1</div>`,
                 code: BlinkCode,
                 examples: [{ value: "" }],
@@ -556,7 +556,7 @@ export const datas = [
             {
                 id: "wipein",
                 title: "wipeIn",
-                description: "Make a wipe in effect.",
+                description: "Make a wipe in effect. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.wipeIn\" target=\"_blank\">.wipeIn</a>)",
                 html: `<div class="target center">1</div>`,
                 code: WipeInCode,
                 examples: [{ value: "" }],
@@ -564,7 +564,7 @@ export const datas = [
             {
                 id: "wipeout",
                 title: "wipeOut",
-                description: "Make a wipe out effect.",
+                description: "Make a wipe out effect. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.wipeOut\" target=\"_blank\">.wipeOut</a>)",
                 html: `<div class="target center">1</div>`,
                 code: WipeOutCode,
                 examples: [{ value: "" }],
@@ -572,7 +572,7 @@ export const datas = [
             {
                 id: "zoomin",
                 title: "zoomIn",
-                description: "Make a zoom in effect.",
+                description: "Make a zoom in effect. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.zoomIn\" target=\"_blank\">.zoomIn</a>)",
                 html: `<div class="target center">1</div>`,
                 code: ZoomInCode,
                 examples: [{ value: "" }],
@@ -580,7 +580,7 @@ export const datas = [
             {
                 id: "zoomout",
                 title: "zoomOut",
-                description: "Make a zoom out effect.",
+                description: "Make a zoom out effect. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.zoomOut\" target=\"_blank\">.zoomOut</a>)",
                 html: `<div class="target center">1</div>`,
                 code: ZoomOutCode,
                 examples: [{ value: "" }],
@@ -588,7 +588,7 @@ export const datas = [
             {
                 id: "shake",
                 title: "shake",
-                description: "Make a shake effect.",
+                description: "Make a shake effect. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.shake\" target=\"_blank\">.shake</a>)",
                 html: `<div class="target center">1</div><div class="target2 center">2</div>`,
                 code: ShakeCode,
                 examples: [{ value: "" }],
@@ -596,7 +596,7 @@ export const datas = [
             {
                 id: "shakex",
                 title: "shakeX",
-                description: "Make a horizontal shake effect.",
+                description: "Make a horizontal shake effect. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.shakeX\" target=\"_blank\">.shakeX</a>)",
                 html: `<div class="target center">1</div>`,
                 code: ShakeXCode,
                 examples: [{ value: "" }],
@@ -604,7 +604,7 @@ export const datas = [
             {
                 id: "shakey",
                 title: "shakeY",
-                description: "Make a vertical shake effect.",
+                description: "Make a vertical shake effect. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.shakeY\" target=\"_blank\">.shakeY</a>)",
                 html: `<div class="target center">1</div>`,
                 code: ShakeYCode,
                 examples: [{ value: "" }],
@@ -612,7 +612,7 @@ export const datas = [
             {
                 id: "flip",
                 title: "flip",
-                description: "You can create a flip effect horizontally, vertically, or diagonally.",
+                description: "You can create a flip effect horizontally, vertically, or diagonally. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.flip\" target=\"_blank\">.flip</a>)",
                 html: `<div class="flip target center">1</div><div class="flip target2 center">2</div>`,
                 code: FlipCode,
                 examples: [{ value: "" }],
@@ -620,7 +620,7 @@ export const datas = [
             {
                 id: "flipx",
                 title: "flipX",
-                description: "You can create an effect that flips vertically around the x-axis.",
+                description: "You can create an effect that flips vertically around the x-axis. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.flipX\" target=\"_blank\">.flipX</a>)",
                 html: `<div class="flip target center">1</div><div class="flip target2 center">2</div>`,
                 code: FlipXCode,
                 examples: [{ value: "" }],
@@ -628,7 +628,7 @@ export const datas = [
             {
                 id: "flipy",
                 title: "flipY",
-                description: "You can create an effect that flips horizontally around the y-axis.",
+                description: "You can create an effect that flips horizontally around the y-axis. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.flipY\" target=\"_blank\">.flipY</a>)",
                 html: `<div class="flip target center">1</div><div class="flip target2 center">2</div>`,
                 code: FlipYCode,
                 examples: [{ value: "" }],
@@ -636,7 +636,7 @@ export const datas = [
             {
                 id: "transition",
                 title: "transition",
-                description: "Switch the scene from `item1` to `item2`.",
+                description: "Switch the scene from `item1` to `item2`. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.transition\" target=\"_blank\">.transition</a>)",
                 html: `<div class="flip target center">1</div><div class="flip target2 center">2</div>`,
                 code: TransitionCode,
                 examples: [{ value: "" }],
@@ -649,7 +649,7 @@ export const datas = [
             {
                 id: "mp4",
                 title: "Export MP4",
-                description: `You can export CSS Animation to a video file with simple commands using the <a href="https://github.com/daybrush/scenejs-render" target="_blank">@scenejs/render</a> library. <br/><br/> <a href="http://daybrush.com/scenejs/release/latest/examples/clapper.html" target="_blank">Original Source</a>`,
+                description: `You can export CSS Animation to a video file with simple commands using <a href="https://ffmpeg.org/" target="_blank">ffmpeg</a> and <a href="https://github.com/daybrush/scenejs-render" target="_blank">@scenejs/render</a>. <br/><br/> <a href="https://daybrush.com/scenejs/release/latest/examples/clapper.html" target="_blank">Original Source</a>`,
                 html: `<iframe width="560" height="315" src="https://www.youtube.com/embed/rb-5xBKyCeE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`,
                 code: ExportCode,
                 examples: [{ value: "" }],
