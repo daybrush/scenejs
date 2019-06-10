@@ -10,19 +10,20 @@
 <br/>
 
 <p align="middle" style="max-width: 1000px; margin: 0px auto;" >
-  <img src="https://daybrush.github.io/scenejs/example/logo.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>&nbsp;
-  <img src="https://daybrush.github.io/scenejs/example/motion.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>&nbsp;
-  <img src="https://daybrush.github.io/scenejs/example/main.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>&nbsp;
-  <img src="https://daybrush.github.io/scenejs/example/dissolve.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>&nbsp;
-  <img src="https://daybrush.github.io/scenejs/example/scenejs.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>&nbsp;
-  <img src="https://daybrush.github.io/scenejs/example/parallax.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>&nbsp;
-  <img src="https://daybrush.github.io/scenejs/example/raindrop.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>&nbsp;
-  <img src="https://daybrush.github.io/scenejs/example/search.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>&nbsp;
-  <img src="https://daybrush.github.io/scenejs/example/shape.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/>
+  <a href="https://codepen.io/daybrush/pen/arQpYb" target="_blank"><img src="https://daybrush.com/scenejs/images/daybrush.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/pLxQGY" target="_blank"><img src="https://daybrush.com/scenejs/example/motion.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/QYRyMd" target="_blank"><img src="https://daybrush.com/scenejs/images/card.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/zWMeJW" target="_blank"><img src="https://daybrush.com/scenejs/images/circleburst.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/aYPjjM" target="_blank"><img src="https://daybrush.com/scenejs/example/scenejs.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/EQPPBg" target="_blank"><img src="https://daybrush.com/scenejs/images/tree.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/vRrbXG" target="_blank"><img src="https://daybrush.com/scenejs/example/raindrop.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/RMBXBm" target="_blank"><img src="https://daybrush.com/scenejs/example/search.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/VXVgpE" target="_blank"><img src="https://daybrush.com/scenejs/example/shape.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
 </p>
 
 
 ## Examples
+* [ClapperBoard Animation](https://codepen.io/daybrush/pen/VRomqr)
 * [Circle Burst](https://codepen.io/daybrush/pen/zWMeJW)
 * [Motion Effect](https://codepen.io/daybrush/pen/pLxQGY)
 * [Tree Animation](https://codepen.io/daybrush/pen/EQPPBg)
@@ -107,6 +108,8 @@ const scene = new Scene({
 |9+(10+ playCSS)|latest|latest|latest|latest|
 
 
+
+## License
 
 ```
 MIT License
