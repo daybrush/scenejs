@@ -22,7 +22,7 @@
     "demo:start": "rollup -c rollup.config.demo.js -w",
     "demo:build": "rm -rf ./demo/dist && rollup -c rollup.config.demo.js",
     "release": "npm run build && npm run doc && npm run demo:build && release --dirs dist,doc,examples",
-    "release:build": "npm run build && prerelease"
+    "release:build": "npm run build && prerelease --dirs dist,doc,examples"
   },
   "repository": {
     "type": "git",
