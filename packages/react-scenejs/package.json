@@ -1,7 +1,7 @@
 {
   "name": "react-scenejs",
-  "version": "1.0.1",
-  "description": "A Rect Component that create JavaScript & CSS timeline-based animation with Scene.js",
+  "version": "1.0.2",
+  "description": "A React Component that create JavaScript & CSS timeline-based animation with Scene.js",
   "main": "dist/scene.cjs.js",
   "module": "dist/scene.esm.js",
   "sideEffects": false,
