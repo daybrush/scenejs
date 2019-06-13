@@ -115,6 +115,14 @@ describe("SceneItem Test", () => {
             // Then
             expect(item.getId()).to.be.equals(".a .b");
         });
+        it("should check 'get' method with transform", () => {
+            // Given // When
+            item.set(0, "transform", {});
+
+            // Then
+            expect(item.getFrame(0).has("transform")).to.be.equals(true);
+            expect(item.get(0, "transform")).to.be.deep.equals({});
+        });
         it("should check 'getNowFrame' method", () => {
             // Then
             expect(item.getNowFrame(0).get("display")).to.be.equals("block");

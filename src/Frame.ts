@@ -170,6 +170,9 @@ class Frame {
                 self._set(params, value);
             }
         } else if (isObject(value)) {
+            if (!self.has(...params) && isRole(params)) {
+                self._set(params, {});
+            }
             for (const name in value) {
                 self.set(...params, name, value[name]);
             }
