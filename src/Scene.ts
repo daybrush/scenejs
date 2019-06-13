@@ -48,7 +48,7 @@ class Scene extends Animator<SceneOptions, SceneState> {
       }
     });
       */
-    constructor(properties?: IObject<any>, options?: Partial<SceneOptions>) {
+    constructor(properties?: {options?: Partial<SceneOptions>} & IObject<any>, options?: Partial<SceneOptions>) {
         super();
         this.load(properties, options);
     }
@@ -294,6 +294,26 @@ const scene = new Scene({
         return this;
     }
     public set(properties: any, ...args: any[]): this;
+    /**
+      * Set properties to the Scene.
+      * @param - properties
+      * @return An instance itself
+      * @example
+scene.set({
+    ".a": {
+        0: {
+            opacity: 0,
+        },
+        1: {
+            opacity: 1,
+        },
+    },
+});
+// 0
+console.log(scene.getItem(".a").get(0, "opacity"));
+// 1
+console.log(scene.getItem(".a").get(1, "opacity"));
+      */
     public set(properties: any) {
         this.load(properties);
         return this;
