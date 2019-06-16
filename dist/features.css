@@ -760,6 +760,14 @@ h2 {
 
 [data-flipx] .target2 {}
 
+/* typing */
+[data-typing] .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 25px;
+    background: #333;
+    margin-left: 5px;
+}
 /* Export MP4 */
 
 [data-mp4] iframe {

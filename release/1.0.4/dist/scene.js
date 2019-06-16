@@ -252,12 +252,13 @@ version: 1.0.4
     var ROLES = {
       transform: {},
       filter: {},
-      attribute: {}
+      attribute: {},
+      html: true
     };
     var ALIAS = {
       easing: [TIMING_FUNCTION]
     };
-    var FIXED = (_a = {}, _a[TIMING_FUNCTION] = true, _a.contents = true, _a);
+    var FIXED = (_a = {}, _a[TIMING_FUNCTION] = true, _a.contents = true, _a.html = true, _a);
     var MAXIMUM = 1000000;
     var THRESHOLD = 0.000001;
     var DURATION = "duration";
@@ -3652,6 +3653,13 @@ version: 1.0.4
             for (var name in attributes) {
               _loop_2(name);
             }
+          }
+
+          if (frame.has("html")) {
+            var html_1 = frame.get("html");
+            elements.forEach(function (el) {
+              el.innerHTML = html_1;
+            });
           }
 
           var cssText = frame.toCSS();
