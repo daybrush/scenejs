@@ -495,6 +495,28 @@ export const FadeInCode = () => {
     ;/*play*/
   `;
 };
+export const TypingCode = () => {
+  return `
+  /*mouse*/new Scene({
+    "[data-typing] .text span":
+      Scene.typing({
+        text: "Make a typing effect with Scene.js.",
+        duration: 7,
+      }),
+    "[data-typing] .cursor": {
+      0: { opacity: 0 },
+      0.5: { opacity: 0 },
+      "0.5>": { opacity: 1 },
+      1: { opacity: 1 },
+      options: {
+        iterationCount: "infinite",
+      }
+    },
+  }, {
+    selector: true,
+  });/*play*/
+`;
+};
 export const FadeOutCode = () => {
     return `
   Scene

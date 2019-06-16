@@ -1007,4 +1007,45 @@ describe("SceneItem Test", () => {
             });
         });
     });
+    describe("test property", () => {
+        let item!: SceneItem;
+        let element!: HTMLElement;
+
+        beforeEach(() => {
+            element = document.createElement("div");
+            document.body.appendChild(element);
+
+            item = new SceneItem();
+
+            item.setElement(element);
+        });
+        afterEach(() => {
+            document.body.innerHTML = "";
+            element = null;
+            item.off();
+            item = null;
+        });
+        it("test 'html' property", () => {
+            // Given
+            item.set(0, "html", "1");
+            item.set(1, "html", "2");
+            item.set(2, "html", "3");
+
+            // When
+            item.setTime(0);
+            const html1 = element.innerHTML;
+            item.setTime(0.5);
+            const html2 = element.innerHTML;
+            item.setTime(1);
+            const html3 = element.innerHTML;
+            item.setTime(2);
+            const html4 = element.innerHTML;
+
+            // then
+            expect(html1).to.be.equals("1");
+            expect(html2).to.be.equals("1");
+            expect(html3).to.be.equals("2");
+            expect(html4).to.be.equals("3");
+        })
+    });
 });

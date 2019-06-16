@@ -500,6 +500,13 @@ item.setElement(document.querySelectorAll(".class"));
                     });
                 }
             }
+            if (frame.has("html")) {
+                const html = frame.get("html");
+
+                elements.forEach(el => {
+                    el.innerHTML = html;
+                });
+            }
             const cssText = frame.toCSS();
 
             if (state.cssText !== cssText) {

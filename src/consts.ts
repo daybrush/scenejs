@@ -5,9 +5,9 @@ import { EASE, EASE_IN, EASE_IN_OUT, LINEAR, EASE_OUT, STEP_START, STEP_END } fr
 export const PREFIX = "__SCENEJS_";
 export const DATA_SCENE_ID = "data-scene-id";
 export const TIMING_FUNCTION = "animation-timing-function";
-export const ROLES: RoleObject = { transform: {}, filter: {}, attribute: {} };
+export const ROLES: RoleObject = { transform: {}, filter: {}, attribute: {}, html: true };
 export const ALIAS: IObject<string[]> = { easing: [TIMING_FUNCTION] };
-export const FIXED = { [TIMING_FUNCTION]: true, contents: true };
+export const FIXED = { [TIMING_FUNCTION]: true, contents: true, html: true };
 export const MAXIMUM = 1000000;
 export const THRESHOLD = 0.000001;
 

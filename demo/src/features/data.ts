@@ -4,7 +4,7 @@ import {
     ColorCode, ArrayCode, ObjectCode, TimelineCode, KeyframerCode,
     ProgressCode, LineDrawingCode, MorphingCode, PlayMethodCode, BlinkCode, FadeInCode, FadeOutCode,
     WipeInCode, WipeOutCode, ZoomInCode, ZoomOutCode, ShakeCode, ShakeXCode,
-    ShakeYCode, FlipCode, FlipXCode, FlipYCode, TransitionCode, ExportCode,
+    ShakeYCode, FlipCode, FlipXCode, FlipYCode, TransitionCode, ExportCode, TypingCode,
 } from "./page";
 
 /* tslint:disable:max-line-length  */
@@ -529,6 +529,14 @@ export const datas = [
         title: "Effects",
         description: `<a href="https://github.com/daybrush/scenejs-effects" target="_blank">@scenejs/effects</a> is a library that can create various animation effects in <a href="https://github.com/daybrush/scenejs" target="_blank">scenejs</a>.`,
         features: [
+            {
+                id: "typing",
+                title: "typing",
+                description: "Make a typing effect that is typed one character at a time like a typewriter. (see: <a href=\"https://daybrush.com/scenejs-effects/release/latest/doc/effects.html#.typing\" target=\"_blank\">.typing</a>)",
+                html: `<div class="text center"><span></span><div class="cursor"></div></div>`,
+                code: TypingCode,
+                examples: [{ value: "" }],
+            },
             {
                 id: "fadein",
                 title: "fadeIn",
