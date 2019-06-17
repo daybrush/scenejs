@@ -853,7 +853,7 @@ item.setElement(document.querySelectorAll(".class"));
             const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(sel);
 
             if (matches) {
-                return [matches[0], matches[1]];
+                return [matches[1], matches[2]];
             } else {
                 return [sel, ""];
             }
