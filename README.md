@@ -22,7 +22,7 @@
 </p>
 
 
-## Examples
+## 🚀Examples
 * [ClapperBoard Animation](https://codepen.io/daybrush/pen/VRomqr)
 * [Circle Burst](https://codepen.io/daybrush/pen/zWMeJW)
 * [Motion Effect](https://codepen.io/daybrush/pen/pLxQGY)
@@ -38,7 +38,7 @@
 
 
 
-## Installation
+## ⚙️ Installation
 ```bash
 $ npm install scenejs
 ```
@@ -46,23 +46,24 @@ $ npm install scenejs
 <script src="//daybrush.com/scenejs/release/latest/dist/scene.min.js"></script>
 ```
 
-## Documents
+## 📄 Documents
 * [API Documentation](https://daybrush.com/scenejs/release/latest/doc/)
 * [Features Documentation](https://daybrush.com/scenejs/features.html)
 
-## Related Projects
-* [**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs): A React Component that create JavaScript & CSS timeline-based animation with Scene.js.
-* [**ngx-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/ngx-scenejs): An Angular Component that create JavaScript & CSS timeline-based animation with Scene.js.
-* [**vue-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs): A Vue Component that create JavaScript & CSS timeline-based animation with Scene.js.
-* [**preact-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/preact-scenejs): A Preact Component that create JavaScript & CSS timeline-based animation with Scene.js.
-* [**keyframer**](https://github.com/daybrush/keyframer): Make the CSS Keyframes the keyframes object.
-* [**@scenejs/effects**](https://github.com/daybrush/scenejs-effects): Effect collection library where you can add scene effects to Scene.js.
-* [**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline): A library that represents the timeline of Scene.js. You can control time, properties, and items.
-* [**@scenejs/media**](https://github.com/daybrush/scenejs-media): A library for playing or controlling media.
-* [**@scenejs/iframe**](https://github.com/daybrush/scenejs-iframe): A library that control the animation of iframe with Scene.js.
-* [**@scenejs/render**](https://github.com/daybrush/scenejs-render): Make a movie of CSS animation through Scene.js.
+## 📦 Packages
+|Package|Version|Description|
+|---|---|---|
+|[**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs)|[![](https://img.shields.io/npm/v/react-scenejs.svg)](https://npmjs.com/package/react-scenejs)|A React Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**ngx-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/ngx-scenejs)|[![](https://img.shields.io/npm/v/ngx-scenejs.svg)](https://npmjs.com/package/ngx-scenejs)|An Angular Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**vue-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs)|[![](https://img.shields.io/npm/v/vue-scenejs.svg)](https://npmjs.com/package/vue-scenejs)|A Vue Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**preact-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/preact-scenejs)|[![](https://img.shields.io/npm/v/preact-scenejs.svg)](https://npmjs.com/package/preact-scenejs)|A Preact Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**@scenejs/effects**](https://github.com/daybrush/scenejs-effects)|[![](https://img.shields.io/npm/v/@scenejs/effects.svg)](https://npmjs.com/package/@scenejs/effects)|Effect collection library where you can add scene effects to Scene.js.|
+|[**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline)|[![](https://img.shields.io/npm/v/@scenejs/timeline.svg)](https://npmjs.com/package/@scenejs/timeline)|A library that represents the timeline of Scene.js. You can control time, properties, and items.|
+|[**@scenejs/media**](https://github.com/daybrush/scenejs-media)|[![](https://img.shields.io/npm/v/@scenejs/media.svg)](https://npmjs.com/package/@scenejs/media)|A library for playing or controlling media with Scene.js.|
+|[**@scenejs/iframe**](https://github.com/daybrush/scenejs-iframe)|[![](https://img.shields.io/npm/v/@scenejs/iframe.svg)](https://npmjs.com/package/@scenejs/iframe)|A library that control the animation of iframe with Scene.js.|
+|[**@scenejs/render**](https://github.com/daybrush/scenejs-render)|[![](https://img.shields.io/npm/v/@scenejs/render.svg)](https://npmjs.com/package/@scenejs/render)|Make a movie of CSS animation through Scene.js.|
 
-## Make scene
+## 🎬 Make scene
 ```javascript
 import Scene from "scenejs";
 
@@ -84,7 +85,15 @@ const scene = new Scene({
 }).play();
 
 ```
-## Effects
+## ✨ Effects
+
+* [typing](https://daybrush.com/scenejs/features.html#typing)
+* [flip](https://daybrush.com/scenejs/features.html#flip)
+* [flipX](https://daybrush.com/scenejs/features.html#flipx)
+* [flipY](https://daybrush.com/scenejs/features.html#flipy)
+* [shake](https://daybrush.com/scenejs/features.html#shake)
+* [shakeX](https://daybrush.com/scenejs/features.html#shakex)
+* [shakeY](https://daybrush.com/scenejs/features.html#shakey)
 * [wipeIn](https://daybrush.com/scenejs/features.html#wipein)
 * [wipeOut](https://daybrush.com/scenejs/features.html#wipeout)
 * [zoomIn](https://daybrush.com/scenejs/features.html#zoomin)
@@ -92,24 +101,26 @@ const scene = new Scene({
 * [blink](https://daybrush.com/scenejs/features.html#bllink)
 * [fadeIn](https://daybrush.com/scenejs/features.html#fadein)
 * [fadeOut](https://daybrush.com/scenejs/features.html#fadeout)
-* [flip](https://daybrush.com/scenejs/features.html#flip)
-* [flipX](https://daybrush.com/scenejs/features.html#flipx)
-* [flipY](https://daybrush.com/scenejs/features.html#flipy)
-* [shake](https://daybrush.com/scenejs/features.html#shake)
-* [shakeX](https://daybrush.com/scenejs/features.html#shakex)
-* [shakeY](https://daybrush.com/scenejs/features.html#shakey)
 * [transition](https://daybrush.com/scenejs/features.html#transition)
 
 
-## Support Browser
+## 🌐 Supported Browsers
 
 |Internet Explorer|Chrome|FireFox|Safari|Opera|
 |---|---|---|---|---|
 |9+(10+ playCSS)|latest|latest|latest|latest|
 
 
+## 👏 Contributing
 
-## License
+If you have any questions or requests or want to contribute to `scenejs` or other packages, please write the issue or give me a Pull Request freely.
+
+## 🐞 Bug Report
+
+If you find a bug, please report to us opening a new [Issues](https://github.com/daybrush/scenejs/issues) on GitHub.
+
+
+## 📝 License
 
 ```
 MIT License
