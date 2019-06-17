@@ -22,7 +22,7 @@
 </p>
 
 
-## 🚀Examples
+## 🚀 Examples
 * [ClapperBoard Animation](https://codepen.io/daybrush/pen/VRomqr)
 * [Circle Burst](https://codepen.io/daybrush/pen/zWMeJW)
 * [Motion Effect](https://codepen.io/daybrush/pen/pLxQGY)
