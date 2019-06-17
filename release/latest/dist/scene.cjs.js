@@ -1980,12 +1980,11 @@ function () {
 
       if (name === TIMING_FUNCTION) {
         cssObject[TIMING_FUNCTION.replace("animation", utils.ANIMATION)] = (utils.isString(value) ? value : value[EASING_NAME]) || "initial";
-        continue;
       } else if (name === "content") {
         cssObject.content = "\"" + ("" + value).replace(/"/g, "\\\"") + "\"";
+      } else {
+        cssObject[name] = value;
       }
-
-      cssObject[name] = value;
     }
 
     var transform = toInnerProperties(properties[TRANSFORM_NAME]);
