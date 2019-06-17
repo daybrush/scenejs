@@ -284,9 +284,11 @@ class Frame {
             if (name === TIMING_FUNCTION) {
                 cssObject[TIMING_FUNCTION.replace("animation", ANIMATION)] =
                     (isString(value) ? value : value[EASING_NAME]) || "initial";
-                continue;
+            } else if (name === "content") {
+                cssObject.content = `"${("" + value).replace(/"/g, "\\\"")}"`;
+            } else {
+                cssObject[name] = value;
             }
-            cssObject[name] = value;
         }
         const transform = toInnerProperties(properties[TRANSFORM_NAME]);
         const filter = toInnerProperties(properties.filter);
