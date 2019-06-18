@@ -284,8 +284,6 @@ class Frame {
             if (name === TIMING_FUNCTION) {
                 cssObject[TIMING_FUNCTION.replace("animation", ANIMATION)] =
                     (isString(value) ? value : value[EASING_NAME]) || "initial";
-            } else if (name === "content") {
-                cssObject.content = `"${("" + value).replace(/"/g, "\\\"")}"`;
             } else {
                 cssObject[name] = value;
             }
