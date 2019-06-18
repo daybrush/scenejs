@@ -2413,51 +2413,56 @@ function (_super) {
     } else if (isObject(time)) {
       var _loop_1 = function (t) {
         var value = time[t];
-        var realTime = this_1.getUnitTime(t);
+        splitComma(t).forEach(function (eachTime) {
+          var realTime = _this.getUnitTime(eachTime);
 
-        if (isNaN(realTime)) {
-          getNames(value, [t]).forEach(function (names) {
-            var innerValue = getValueByNames(names.slice(1), value);
-            var arr = isArray(innerValue) ? innerValue : [getValueByNames(names, _this.target), innerValue];
-            var length = arr.length;
+          if (isNaN(realTime)) {
+            getNames(value, [eachTime]).forEach(function (names) {
+              var innerValue = getValueByNames(names.slice(1), value);
+              var arr = isArray(innerValue) ? innerValue : [getValueByNames(names, _this.target), innerValue];
+              var length = arr.length;
 
-            for (var i = 0; i < length; ++i) {
-              _this.newFrame(i / (length - 1) * 100 + "%").set(names, arr[i]);
-            }
-          });
-        } else {
-          this_1.set(realTime, value);
-        }
+              for (var i = 0; i < length; ++i) {
+                _this.newFrame(i / (length - 1) * 100 + "%").set(names, arr[i]);
+              }
+            });
+          } else {
+            _this.set(realTime, value);
+          }
+        });
       };
-
-      var this_1 = this;
 
       for (var t in time) {
         _loop_1(t);
       }
-    } else {
-      var value = args[0];
+    } else if (!isUndefined(time)) {
+      var value_1 = args[0];
+      splitComma(time + "").forEach(function (eachTime) {
+        if (value_1 instanceof SceneItem) {
+          var delay = value_1.getDelay();
 
-      if (value instanceof SceneItem) {
-        var delay = value.getDelay();
-        var realTime = this.getUnitTime(time);
-        var frames = value.toObject(!this.hasFrame(realTime + delay));
-        var duration = value.getDuration();
-        var direction = value.getDirection();
-        var isReverse = direction.indexOf("reverse") > -1;
+          var realTime = _this.getUnitTime(eachTime);
 
-        for (var frameTime in frames) {
-          var nextTime = isReverse ? duration - parseFloat(frameTime) : parseFloat(frameTime);
-          this.set(realTime + nextTime, frames[frameTime]);
+          var frames = value_1.toObject(!_this.hasFrame(realTime + delay));
+          var duration = value_1.getDuration();
+          var direction = value_1.getDirection();
+          var isReverse = direction.indexOf("reverse") > -1;
+
+          for (var frameTime in frames) {
+            var nextTime = isReverse ? duration - parseFloat(frameTime) : parseFloat(frameTime);
+
+            _this.set(realTime + nextTime, frames[frameTime]);
+          }
+        } else if (args.length === 1 && isArray(value_1)) {
+          value_1.forEach(function (item) {
+            _this.set(eachTime, item);
+          });
+        } else {
+          var frame = _this.newFrame(eachTime);
+
+          frame.set.apply(frame, args);
         }
-      } else if (args.length === 1 && isArray(value)) {
-        value.forEach(function (item) {
-          _this.set(time, item);
-        });
-      } else {
-        var frame = this.newFrame(time);
-        frame.set.apply(frame, args);
-      }
+      });
     }
 
     this.needUpdate = true;
