@@ -254,47 +254,52 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         } else if (isObject(time)) {
             for (const t in time) {
                 const value = time[t];
-                const realTime = this.getUnitTime(t);
 
-                if (isNaN(realTime)) {
-                    getNames(value, [t]).forEach(names => {
-                        const innerValue = getValueByNames(names.slice(1), value);
-                        const arr = isArray(innerValue) ?
-                            innerValue : [getValueByNames(names, this.target), innerValue];
-                        const length = arr.length;
+                splitComma(t).forEach(eachTime => {
+                    const realTime = this.getUnitTime(eachTime);
 
-                        for (let i = 0; i < length; ++i) {
-                            this.newFrame(`${i / (length - 1) * 100}%`).set(names, arr[i]);
-                        }
-                    });
-                } else {
-                    this.set(realTime, value);
-                }
+                    if (isNaN(realTime)) {
+                        getNames(value, [eachTime]).forEach(names => {
+                            const innerValue = getValueByNames(names.slice(1), value);
+                            const arr = isArray(innerValue) ?
+                                innerValue : [getValueByNames(names, this.target), innerValue];
+                            const length = arr.length;
+
+                            for (let i = 0; i < length; ++i) {
+                                this.newFrame(`${i / (length - 1) * 100}%`).set(names, arr[i]);
+                            }
+                        });
+                    } else {
+                        this.set(realTime, value);
+                    }
+                });
             }
-        } else {
+        } else if (!isUndefined(time)) {
             const value = args[0];
 
-            if (value instanceof SceneItem) {
-                const delay = value.getDelay();
-                const realTime = this.getUnitTime(time);
-                const frames = value.toObject(!this.hasFrame(realTime + delay));
-                const duration = value.getDuration();
-                const direction = value.getDirection();
-                const isReverse = direction.indexOf("reverse") > -1;
+            splitComma(time + "").forEach(eachTime => {
+                if (value instanceof SceneItem) {
+                    const delay = value.getDelay();
+                    const realTime = this.getUnitTime(eachTime);
+                    const frames = value.toObject(!this.hasFrame(realTime + delay));
+                    const duration = value.getDuration();
+                    const direction = value.getDirection();
+                    const isReverse = direction.indexOf("reverse") > -1;
 
-                for (const frameTime in frames) {
-                    const nextTime = isReverse ? duration - parseFloat(frameTime) : parseFloat(frameTime);
-                    this.set(realTime + nextTime, frames[frameTime]);
+                    for (const frameTime in frames) {
+                        const nextTime = isReverse ? duration - parseFloat(frameTime) : parseFloat(frameTime);
+                        this.set(realTime + nextTime, frames[frameTime]);
+                    }
+                } else if (args.length === 1 && isArray(value)) {
+                    value.forEach((item: any) => {
+                        this.set(eachTime, item);
+                    });
+                } else {
+                    const frame = this.newFrame(eachTime);
+
+                    frame.set(...args);
                 }
-            } else if (args.length === 1 && isArray(value)) {
-                value.forEach((item: any) => {
-                    this.set(time, item);
-                });
-            } else {
-                const frame = this.newFrame(time);
-
-                frame.set(...args);
-            }
+            });
         }
         this.needUpdate = true;
         return this;

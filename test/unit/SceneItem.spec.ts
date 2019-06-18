@@ -86,6 +86,27 @@ describe("SceneItem Test", () => {
             expect(item.get(0, "opacity")).to.be.equals(0);
             expect(item.get(1, "opacity")).to.be.equals(1);
         });
+        it("should check multiple time", () => {
+            // Given, When
+            const item = new SceneItem({
+                "0, 1": {
+                    opacity: 1,
+                },
+            });
+            const item2 = new SceneItem();
+
+            // When
+            item2.set("0%, 100%", "opacity", 0.5);
+
+            // Then
+            expect(item.getDuration()).to.be.equals(1);
+            expect(item.get(0, "opacity")).to.be.equals(1);
+            expect(item.get(1, "opacity")).to.be.equals(1);
+
+            expect(item2.getDuration()).to.be.equals(100);
+            expect(item2.get("0%", "opacity")).to.be.equals(0.5);
+            expect(item2.get("100%", "opacity")).to.be.equals(0.5);
+        });
     });
     describe("test item method", () => {
         let item: SceneItem;
