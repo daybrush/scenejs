@@ -156,11 +156,13 @@ class Frame {
         const length = args.length;
         const params = args.slice(0, -1);
         const value = args[length - 1];
-
-        if (params[0] in ALIAS) {
-            self._set(ALIAS[params[0]], value);
-        } else if (length === 2 && isArray(params[0])) {
-            self._set(params[0], value);
+        const firstParam = params[0];
+        if (firstParam instanceof Frame) {
+            self.merge(firstParam);
+        } else if (firstParam in ALIAS) {
+            self._set(ALIAS[firstParam], value);
+        } else if (length === 2 && isArray(firstParam)) {
+            self._set(firstParam, value);
         } else if (isArray(value)) {
             self._set(params, value);
         } else if (isPropertyObject(value)) {
