@@ -738,6 +738,7 @@ describe("SceneItem Test", () => {
             expect(frame.get("html3", "c")).to.be.deep.equals(4);
         });
         it(`should check 'append' method`, () => {
+            // 1 3 2
             this.item.append(new SceneItem({
                 0: {
                     a: 3,
@@ -1046,6 +1047,6 @@ describe("SceneItem Test", () => {
             expect(html2).to.be.equals("1");
             expect(html3).to.be.equals("2");
             expect(html4).to.be.equals("3");
-        })
+        });
     });
 });

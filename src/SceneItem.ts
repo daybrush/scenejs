@@ -241,7 +241,9 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
   console.log(item.get(0, "a")); // "b"
       */
     public set(time: any, ...args: any[]) {
-        if (isArray(time)) {
+        if (time instanceof SceneItem) {
+            return this.set(0, time);
+        } else if (isArray(time)) {
             const length = time.length;
 
             for (let i = 0; i < length; ++i) {
@@ -272,9 +274,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         } else {
             const value = args[0];
 
-            if (value instanceof Frame) {
-                this.setFrame(time, value);
-            } else if (value instanceof SceneItem) {
+            if (value instanceof SceneItem) {
                 const delay = value.getDelay();
                 const realTime = this.getUnitTime(time);
                 const frames = value.toObject(!this.hasFrame(realTime + delay));

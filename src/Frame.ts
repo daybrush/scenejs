@@ -157,8 +157,9 @@ class Frame {
         const params = args.slice(0, -1);
         const value = args[length - 1];
         const firstParam = params[0];
-        if (firstParam instanceof Frame) {
-            self.merge(firstParam);
+
+        if (length === 1 && value instanceof Frame) {
+            self.merge(value);
         } else if (firstParam in ALIAS) {
             self._set(ALIAS[firstParam], value);
         } else if (length === 2 && isArray(firstParam)) {
@@ -262,11 +263,9 @@ class Frame {
         const properties = this.properties;
         const frameProperties = frame.properties;
 
-        if (!frameProperties) {
-            return this;
+        if (frameProperties) {
+            merge(properties, frameProperties);
         }
-        merge(properties, frameProperties);
-
         return this;
     }
     /**
