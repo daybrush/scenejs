@@ -87,6 +87,17 @@ describe("SceneItem Test", () => {
             expect(item.get(0, "opacity")).to.be.equals(0);
             expect(item.get(1, "opacity")).to.be.equals(1);
         });
+        it("should check floating-point", () => {
+            // Given, When
+            const item = new SceneItem({
+                [1 / 3]: "opacity: 0.5",
+                [1 + 2]: "opacity: 1",
+            });
+
+            // Then
+            expect(item.get(1 / 3, "opacity")).to.be.equals("0.5");
+            expect(item.get(1 + 2, "opacity")).to.be.equals("1");
+        });
         it("should check multiple time", () => {
             // Given, When
             const item = new SceneItem({
