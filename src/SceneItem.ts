@@ -266,7 +266,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
                             const length = arr.length;
 
                             for (let i = 0; i < length; ++i) {
-                                this.newFrame(`${i / (length - 1) * 100}%`).set(names, arr[i]);
+                                this.newFrame(`${i / (length - 1) * 100}%`).set(...names, arr[i]);
                             }
                         });
                     } else {
