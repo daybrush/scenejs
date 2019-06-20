@@ -9,6 +9,7 @@ import * as sinon from "sinon";
 import { isTemplateSpan } from "typescript";
 import Scene from "../../src/Scene";
 import { DirectionType } from "../../src/types";
+import { Frame } from "../../src";
 
 describe("SceneItem Test", () => {
     describe("test item initialize", () => {
@@ -94,9 +95,29 @@ describe("SceneItem Test", () => {
                 },
             });
             const item2 = new SceneItem();
+            const item3 = new SceneItem();
+            const item4 = new SceneItem();
 
             // When
             item2.set("0%, 100%", "opacity", 0.5);
+            item3.set({
+                "0, 1": new Frame().set({
+                    opacity: 1,
+                    transform: {
+                        rotate: `100deg`,
+                        scale: 1,
+                    },
+                }),
+            });
+            item4.set({
+                "0, 0": new Frame().set({
+                    opacity: 1,
+                    transform: {
+                        rotate: `100deg`,
+                        scale: 1,
+                    },
+                }),
+            });
 
             // Then
             expect(item.getDuration()).to.be.equals(1);
@@ -106,6 +127,12 @@ describe("SceneItem Test", () => {
             expect(item2.getDuration()).to.be.equals(100);
             expect(item2.get("0%", "opacity")).to.be.equals(0.5);
             expect(item2.get("100%", "opacity")).to.be.equals(0.5);
+
+            expect(item3.getDuration()).to.be.equals(1);
+            expect(item3.get(0, "opacity")).to.be.equals(1);
+            expect(item3.get(1, "opacity")).to.be.equals(1);
+
+            expect(item4.get(0, "transform", "rotate")).to.be.equals("100deg");
         });
     });
     describe("test item method", () => {

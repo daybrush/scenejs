@@ -164,14 +164,14 @@ class Frame {
             self._set(ALIAS[firstParam], value);
         } else if (length === 2 && isArray(firstParam)) {
             self._set(firstParam, value);
-        } else if (isArray(value)) {
-            self._set(params, value);
         } else if (isPropertyObject(value)) {
             if (isRole(params)) {
                 self.set(...params, toObject(value));
             } else {
                 self._set(params, value);
             }
+        } else if (isArray(value)) {
+            self._set(params, value);
         } else if (isObject(value)) {
             if (!self.has(...params) && isRole(params)) {
                 self._set(params, {});
