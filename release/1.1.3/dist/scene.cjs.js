@@ -1838,14 +1838,14 @@ function () {
       self._set(ALIAS[firstParam], value);
     } else if (length === 2 && utils.isArray(firstParam)) {
       self._set(firstParam, value);
-    } else if (utils.isArray(value)) {
-      self._set(params, value);
     } else if (isPropertyObject(value)) {
       if (isRole(params)) {
         self.set.apply(self, params.concat([toObject(value)]));
       } else {
         self._set(params, value);
       }
+    } else if (utils.isArray(value)) {
+      self._set(params, value);
     } else if (utils.isObject(value)) {
       if (!self.has.apply(self, params) && isRole(params)) {
         self._set(params, {});
