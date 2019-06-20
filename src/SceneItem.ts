@@ -278,9 +278,10 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
             const value = args[0];
 
             splitComma(time + "").forEach(eachTime => {
+                const realTime = this.getUnitTime(eachTime);
+
                 if (value instanceof SceneItem) {
                     const delay = value.getDelay();
-                    const realTime = this.getUnitTime(eachTime);
                     const frames = value.toObject(!this.hasFrame(realTime + delay));
                     const duration = value.getDuration();
                     const direction = value.getDirection();
@@ -292,10 +293,10 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
                     }
                 } else if (args.length === 1 && isArray(value)) {
                     value.forEach((item: any) => {
-                        this.set(eachTime, item);
+                        this.set(realTime, item);
                     });
                 } else {
-                    const frame = this.newFrame(eachTime);
+                    const frame = this.newFrame(realTime);
 
                     frame.set(...args);
                 }
