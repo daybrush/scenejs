@@ -69,7 +69,7 @@ import Scene from "scenejs";
 
 const scene = new Scene({
   ".class": {
-    0: "left: 0px; top: 0px"
+    0: "left: 0px; top: 0px",
     1: {
       "left": "100px",
       "top": "0px"
