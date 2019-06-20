@@ -2420,12 +2420,14 @@ function (_super) {
 
           if (isNaN(realTime)) {
             getNames(value, [eachTime]).forEach(function (names) {
+              var _a;
+
               var innerValue = getValueByNames(names.slice(1), value);
               var arr = utils.isArray(innerValue) ? innerValue : [getValueByNames(names, _this.target), innerValue];
               var length = arr.length;
 
               for (var i = 0; i < length; ++i) {
-                _this.newFrame(i / (length - 1) * 100 + "%").set(names, arr[i]);
+                (_a = _this.newFrame(i / (length - 1) * 100 + "%")).set.apply(_a, names.concat([arr[i]]));
               }
             });
           } else {
