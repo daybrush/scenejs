@@ -328,16 +328,9 @@ const page1 = new Page(".page.page1");
 
 page1.range(["10%", "90%"]).on({
     firstEnter: () => {
-        // scene.exportCSS();
-    },
-    enter: () => {
         scene.play();
         mediaScene.play();
     },
-});
-page1.on("exit", () => {
-    scene.finish();
-    mediaScene.finish();
 });
 
 add(page1);
