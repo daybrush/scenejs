@@ -7,7 +7,7 @@
 <p align="middle">🎬 Scene.js是JavaScript和CSS时代的动画图书馆。</p>
 
 <p align="middle"><a href="https://daybrush.com/scenejs"><strong>官方广场</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>特征</strong></a> &nbsp;/&nbsp; <a href="https://codepen.io/collection/DLWxrd/"><strong>例子</strong></a></p>
-<p align="middle"><strong>译本</strong>: <a href="https://github.com/daybrush/scenejs/blob/master/README.md">🇺🇸</a> <a href="https://github.com/daybrush/scenejs/blob/master/README_CN.md">🇨🇳</a></p>
+<p align="middle"><strong>译本</strong>: <a href="https://github.com/daybrush/scenejs/blob/master/README_CN.md">🇨🇳</a> <a href="https://github.com/daybrush/scenejs/blob/master/README.md">🇺🇸</a></p>
 <br/>
 
 <p align="middle" style="max-width: 1000px; margin: 0px auto;" >
