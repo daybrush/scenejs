@@ -129,6 +129,8 @@ If you find a bug, please report to us opening a new [Issues](https://github.com
 
 ## 📝 License
 
+This project is [MIT](https://github.com/daybrush/scenejs/blob/master/LICENSE) licensed.
+
 ```
 MIT License
 

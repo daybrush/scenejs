@@ -25,6 +25,7 @@
 
 ## 🚀 例子
 * [纸板动画](https://codepen.io/daybrush/pen/VRomqr)
+* [熊猫吃竹子动画](https://codepen.io/daybrush/pen/ydMJKR)
 * [圈状爆炸动画](https://codepen.io/daybrush/pen/zWMeJW)
 * [运动效应动画](https://codepen.io/daybrush/pen/pLxQGY)
 * [树动画](https://codepen.io/daybrush/pen/EQPPBg)
@@ -127,6 +128,8 @@ const scene = new Scene({
 如果您发现了错误，请向我们报告在[GitHub](https://github.com/daybrush/scenejs/issues)上打开新[问题](https://github.com/daybrush/scenejs/issues).
 
 ## 📝 执照
+
+该项目获得[MIT](https://github.com/daybrush/scenejs/blob/master/LICENSE)许可。
 
 ```
 MIT License
