@@ -55,22 +55,24 @@
 <h2 align="middle">Scene.js</h2>
 <p align="middle"><a href="https://badge.fury.io/js/scenejs" target="_blank"><img src="https://badge.fury.io/js/scenejs.svg" alt="npm version" height="18"/></a> <a href="https://travis-ci.org/daybrush/scenejs"><img src="https://travis-ci.org/daybrush/scenejs.svg?branch=master"/></a> <a href="https://coveralls.io/github/daybrush/scenejs?branch=master"><img src="https://coveralls.io/repos/github/daybrush/scenejs/badge.svg?branch=master"/></a> <img src="https://img.shields.io/badge/language-typescript-blue.svg"/> <a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg"/></a></p>
 <p align="middle">🎬 Scene.js is an JavaScript & CSS timeline-based animation library.</p>
-<p align="middle"><a href="https://daybrush.com/scenejs"><strong>Main Site</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>Features</strong></a> &nbsp;/&nbsp; <a href="https://codepen.io/collection/DLWxrd/"><strong>Examples</strong></a></p>
+<p align="middle"><a href="https://daybrush.com/scenejs"><strong>Official Site</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>Features</strong></a> &nbsp;/&nbsp; <a href="https://codepen.io/collection/DLWxrd/"><strong>Examples</strong></a></p>
+<p align="middle"><strong>Translations</strong>: <a href="https://github.com/daybrush/scenejs/blob/master/README.md">🇺🇸</a> <a href="https://github.com/daybrush/scenejs/blob/master/README_CN.md">🇨🇳</a></p>
 <br/>
 <p align="middle" style="max-width: 1000px; margin: 0px auto;" >
   <a href="https://codepen.io/daybrush/pen/arQpYb" target="_blank"><img src="https://daybrush.com/scenejs/images/daybrush.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
-  <a href="https://codepen.io/daybrush/pen/pLxQGY" target="_blank"><img src="https://daybrush.com/scenejs/example/motion.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/EQPPBg" target="_blank"><img src="https://daybrush.com/scenejs/images/tree.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
   <a href="https://codepen.io/daybrush/pen/QYRyMd" target="_blank"><img src="https://daybrush.com/scenejs/images/card.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
   <a href="https://codepen.io/daybrush/pen/zWMeJW" target="_blank"><img src="https://daybrush.com/scenejs/images/circleburst.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
   <a href="https://codepen.io/daybrush/pen/aYPjjM" target="_blank"><img src="https://daybrush.com/scenejs/example/scenejs.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
-  <a href="https://codepen.io/daybrush/pen/EQPPBg" target="_blank"><img src="https://daybrush.com/scenejs/images/tree.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/ydMJKR" target="_blank"><img src="https://daybrush.com/scenejs/images/panda.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
   <a href="https://codepen.io/daybrush/pen/vRrbXG" target="_blank"><img src="https://daybrush.com/scenejs/example/raindrop.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
   <a href="https://codepen.io/daybrush/pen/RMBXBm" target="_blank"><img src="https://daybrush.com/scenejs/example/search.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
-  <a href="https://codepen.io/daybrush/pen/VXVgpE" target="_blank"><img src="https://daybrush.com/scenejs/example/shape.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
+  <a href="https://codepen.io/daybrush/pen/pLxQGY" target="_blank"><img src="https://daybrush.com/scenejs/example/motion.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
 </p>
 <h2>🚀 Examples</h2>
 <ul>
 <li><a href="https://codepen.io/daybrush/pen/VRomqr">ClapperBoard Animation</a></li>
+<li><a href="https://codepen.io/daybrush/pen/ydMJKR">Panda eating Bamboo Animation</a></li>
 <li><a href="https://codepen.io/daybrush/pen/zWMeJW">Circle Burst</a></li>
 <li><a href="https://codepen.io/daybrush/pen/pLxQGY">Motion Effect</a></li>
 <li><a href="https://codepen.io/daybrush/pen/EQPPBg">Tree Animation</a></li>
@@ -154,14 +156,18 @@
 
 const scene = new Scene({
   &quot;.class&quot;: {
-    0: &quot;left: 0px; top: 0px&quot;,
+    0: &quot;left: 0px; top: 0px; transform: translate(0px);&quot;,
     1: {
       &quot;left&quot;: &quot;100px&quot;,
-      &quot;top&quot;: &quot;0px&quot;
+      &quot;top&quot;: &quot;0px&quot;,
+      transform: &quot;translate(50px)&quot;,
     },
     2: {
       &quot;left&quot;: &quot;200px&quot;,
-      &quot;top&quot;: &quot;100px&quot;
+      &quot;top&quot;: &quot;100px&quot;,
+      transform: {
+        translate: &quot;100px&quot;,
+      },
     }
   }
 }, {
@@ -209,11 +215,14 @@ const scene = new Scene({
 </tr>
 </tbody>
 </table>
+<h2>⭐️ Show Your Support</h2>
+<p>Please give a ⭐️ if this project helped you!</p>
 <h2>👏 Contributing</h2>
 <p>If you have any questions or requests or want to contribute to <code>scenejs</code> or other packages, please write the issue or give me a Pull Request freely.</p>
 <h2>🐞 Bug Report</h2>
 <p>If you find a bug, please report to us opening a new <a href="https://github.com/daybrush/scenejs/issues">Issues</a> on GitHub.</p>
 <h2>📝 License</h2>
+<p>This project is <a href="https://github.com/daybrush/scenejs/blob/master/LICENSE">MIT</a> licensed.</p>
 <pre class="prettyprint source"><code>MIT License
 
 Copyright (c) 2016 Daybrush
@@ -267,7 +276,7 @@ nav li[file="home"] h4, nav li[file="home"] ul {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/daybrush/jsdoc">JSDoc 0.3.7</a> on Thu Jun 20 2019 23:21:50 GMT+0900 (GMT+09:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/daybrush/jsdoc">JSDoc 0.3.7</a> on Sun Jul 07 2019 08:56:41 GMT+0900 (GMT+09:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

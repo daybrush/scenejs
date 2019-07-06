@@ -2775,12 +2775,12 @@ function (_super) {
     var currentTime = this.getTime();
     this.temp = frame;
     /**
-         * This event is fired when timeupdate and animate.
-         * @event SceneItem#animate
-         * @param {Number} param.currentTime The total time that the animator is running.
-         * @param {Number} param.time The iteration time during duration that the animator is running.
-         * @param {Frame} param.frame frame of that time.
-         */
+     * This event is fired when timeupdate and animate.
+     * @event SceneItem#animate
+     * @param {Number} param.currentTime The total time that the animator is running.
+     * @param {Number} param.time The iteration time during duration that the animator is running.
+     * @param {Frame} param.frame frame of that time.
+     */
 
     this.trigger("animate", {
       frame: frame,
@@ -3548,9 +3548,9 @@ function (_super) {
     }
     }
     }).on("animate", e => {
-    console.log(e);
+    console.log(e.frames);
     // {a: Frame, b: Frame}
-    console.log(e.a.get("opacity"));
+    console.log(e.frames.a.get("opacity"));
     });
          */
 
