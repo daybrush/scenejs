@@ -560,12 +560,12 @@ item.setElement(document.querySelectorAll(".class"));
 
         this.temp = frame;
         /**
-             * This event is fired when timeupdate and animate.
-             * @event SceneItem#animate
-             * @param {Number} param.currentTime The total time that the animator is running.
-             * @param {Number} param.time The iteration time during duration that the animator is running.
-             * @param {Frame} param.frame frame of that time.
-             */
+         * This event is fired when timeupdate and animate.
+         * @event SceneItem#animate
+         * @param {Number} param.currentTime The total time that the animator is running.
+         * @param {Number} param.time The iteration time during duration that the animator is running.
+         * @param {Frame} param.frame frame of that time.
+         */
         this.trigger("animate", {
             frame,
             currentTime,

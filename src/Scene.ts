@@ -177,9 +177,9 @@ const scene = new Scene({
         }
     }
 }).on("animate", e => {
-    console.log(e);
+    console.log(e.frames);
     // {a: Frame, b: Frame}
-    console.log(e.a.get("opacity"));
+    console.log(e.frames.a.get("opacity"));
 });
              */
         this.trigger("animate", {
