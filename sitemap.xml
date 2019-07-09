@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://scene.js.org/</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/features.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/index.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/Scene.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/Animator.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/EventTrigger.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/Frame.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/PropertyObject.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/SceneItem.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/easing.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/global.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/Scene.ts.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/consts.ts.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/Animator.ts.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/EventTrigger.ts.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/Frame.ts.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/PropertyObject.ts.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/SceneItem.ts.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/easing.ts.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://scene.js.org/release/latest/doc/types.ts.html</loc>
+  <lastmod>2019-07-09T15:51:40+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
+
+</urlset>
