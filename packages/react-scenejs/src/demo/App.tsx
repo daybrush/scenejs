@@ -5,7 +5,12 @@ import { zoomIn } from "@scenejs/effects";
 
 import "./App.css";
 
-export default class App extends React.Component<{}, { time: string | number }> {
+export default class App extends React.Component<{}, { time: string | number, ready: boolean, keyframes: any }> {
+  public state = {
+    time: 0,
+    ready: false,
+    keyframes: {},
+  };
   private keyframes = {
     ".clapper": {
       2: "transform: translate(-50%, -50%) rotate(0deg)",
@@ -104,7 +109,8 @@ export default class App extends React.Component<{}, { time: string | number }> 
   public render() {
     return <div className="wrapper">
       <div className="clapper-area">
-        <Scene easing="ease-in-out" keyframes={this.keyframes} iterationCount="infinite" css autoplay>
+        <Scene easing="ease-in-out"
+          keyframes={this.state.keyframes} iterationCount="infinite" css ready={this.state.ready} autoplay>
           <div className="clapper">
             <div className="clapper-container">
               <div className="clapper-body">
@@ -153,7 +159,7 @@ export default class App extends React.Component<{}, { time: string | number }> 
           onPlay={() => {
             this.playEl.className = "pause";
           }}
-          onPaused= {() => {
+          onPaused={() => {
             this.playEl.className = "play";
           }}
         >
@@ -165,10 +171,10 @@ export default class App extends React.Component<{}, { time: string | number }> 
         </Scene>
         <div className="player">
           <div className="play"
-          ref={e => {this.playEl = e as any;}}
-          onClick={e => {
+            ref={e => { this.playEl = e as any; }}
+            onClick={e => {
               this.scene.isPaused() ? this.scene.play() : this.scene.pause();
-          }}
+            }}
           ></div>
           <input
             ref={e => { this.inputEl = e as any; }}
@@ -183,5 +189,13 @@ export default class App extends React.Component<{}, { time: string | number }> 
         </div>
       </div>
     </div >;
+  }
+  public componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        ready: true,
+        keyframes: this.keyframes,
+      });
+    }, 500);
   }
 }

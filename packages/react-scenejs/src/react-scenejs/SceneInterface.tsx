@@ -3,7 +3,7 @@ import Scene, { OPTIONS, EVENTS, SceneItem, AnimatorState } from "scenejs";
 import { IObject } from "@daybrush/utils";
 import { ScenePropTypes } from "./types";
 
-export class SceneInterface<T extends Scene | SceneItem> extends PureComponent<ScenePropTypes, {}> {
+export class SceneInterface<T extends Scene | SceneItem> extends PureComponent<ScenePropTypes, { ready: boolean }> {
   public static defaultProps: ScenePropTypes = {
     duration: 0,
     fillMode: "forwards",
@@ -15,6 +15,7 @@ export class SceneInterface<T extends Scene | SceneItem> extends PureComponent<S
     time: -1,
     css: false,
     autoplay: false,
+    ready: true,
     onPlay: () => undefined,
     onPaused: () => undefined,
     onEnded: () => undefined,
@@ -22,6 +23,7 @@ export class SceneInterface<T extends Scene | SceneItem> extends PureComponent<S
     onIteration: () => undefined,
     onAnimate: () => undefined,
   };
+  public state = { ready: false };
   protected item!: T;
   protected events: IObject<any> = {
     play: (e: any) => this.props.onPlay!(e),
@@ -35,6 +37,9 @@ export class SceneInterface<T extends Scene | SceneItem> extends PureComponent<S
     return this.props.children;
   }
   public componentDidUpdate() {
+    if (this.props.ready && !this.state.ready) {
+      this.init();
+    }
     if (this.props.time !== -1 && (this.props.autoplay === false || this.item.getPlayState() === "paused")) {
       this.item.setTime(this.props.time!);
     }
@@ -64,6 +69,11 @@ export class SceneInterface<T extends Scene | SceneItem> extends PureComponent<S
     return this.item.getDuration();
   }
   protected init() {
+    const state = this.state;
+    if (!this.props.ready || state.ready) {
+      return;
+    }
+    state.ready = true;
     const item = this.item;
     const events = this.events;
     const sceneOptions: Partial<AnimatorState> = {};
