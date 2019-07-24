@@ -30,6 +30,7 @@ $ npm install vue-scenejs
     :time="0"
     :css="false"
     :autoplay="false"
+    :ready="true"
     @play="onPlay"
     @paused="onPaused"
     @ended="onEnded"
@@ -85,6 +86,7 @@ $ npm install vue-scenejs
 |css|boolean|false|Check to play with CSS|
 |autoplay|boolean|false|Check to play automatically|
 |keyframes|object|{}|Specify properties by time.|
+|ready|boolean|true|Check if you are ready to init and play.|
 |...options|||[Check out the options](https://daybrush.github.io/scenejs/release/latest/doc/global.html#AnimatorOptions)|
 |...events|||[Check out Scene's events](https://daybrush.com/scenejs/release/latest/doc/Scene.html#events)<br/> [Check out SceneItem's events](https://daybrush.com/scenejs/release/latest/doc/SceneItem.html#events)|
 

@@ -15,6 +15,7 @@ export class NgxSceneInterface implements OnDestroy, AfterViewChecked {
   @Input() public autoplay = false;
   @Input() public css = false;
   @Input() public time = -1;
+  @Input() public ready = true;
   @Output() scenePaused: EventEmitter<any> = new EventEmitter<any>();
   @Output() sceneEnded: EventEmitter<any> = new EventEmitter<any>();
   @Output() sceneTimeUpdate: EventEmitter<any> = new EventEmitter<any>();
@@ -23,8 +24,13 @@ export class NgxSceneInterface implements OnDestroy, AfterViewChecked {
   @Output() scenePlay: EventEmitter<any> = new EventEmitter<any>();
 
   protected item: Scene | SceneItem;
+  protected isReady = false;
 
   public init() {
+    if (!this.ready || this.isReady) {
+      return;
+    }
+    this.isReady = true;
     const item = this.item;
     const sceneOptions: Partial<AnimatorState> = {};
 
@@ -32,7 +38,7 @@ export class NgxSceneInterface implements OnDestroy, AfterViewChecked {
       this.item.load(this.keyframes);
     }
     OPTIONS.forEach(name => {
-      sceneOptions[name] = this[name];
+      (sceneOptions[name] as any) = this[name];
     });
     (item as any).setOptions(sceneOptions);
     EVENTS.forEach(name => {
@@ -79,6 +85,9 @@ export class NgxSceneInterface implements OnDestroy, AfterViewChecked {
     this.item.off();
   }
   ngAfterViewChecked() {
+    if (this.ready && !this.isReady) {
+      this.init();
+    }
     if (this.time !== -1 && (this.autoplay === false || this.item.getPlayState() === 'paused')) {
       this.setTime(this.time);
     }

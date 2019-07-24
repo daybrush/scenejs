@@ -47,10 +47,15 @@ import { SceneProps } from './types';
             type: Number,
             default: 1,
         },
+        ready: {
+            type: Boolean,
+            default: true,
+        },
     },
 })
 class SceneInterface<T extends Scene | SceneItem> extends Vue {
     protected item!: T;
+    protected isReady: boolean = false;
     public setTime(time: number | string) {
         this.item.setTime(time);
     }
@@ -73,6 +78,10 @@ class SceneInterface<T extends Scene | SceneItem> extends Vue {
         return this.item.getDuration();
     }
     protected init() {
+        if (!this.ready || this.isReady) {
+            return;
+        }
+        this.isReady = true;
         const item = this.item;
         const sceneOptions: Partial<AnimatorState> = {};
 
@@ -101,6 +110,9 @@ class SceneInterface<T extends Scene | SceneItem> extends Vue {
         return this.$slots.default![0];
     }
     protected updated() {
+        if (this.ready && !this.isReady) {
+            this.init();
+        }
         if (this.time !== -1 && (this.autoplay === false || this.item.getPlayState() === 'paused')) {
             this.item.setTime(this.time);
         }

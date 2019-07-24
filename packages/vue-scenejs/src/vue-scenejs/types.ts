@@ -9,6 +9,7 @@ export interface SceneComponent {
 
 
 export interface SceneProps {
+    ready: boolean;
     keyframes: IObject<any>;
     css: boolean;
     autoplay: boolean;
