@@ -2,15 +2,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { NgxSceneComponent } from '../ngx-scenejs';
+import { NgxSceneModule } from 'projects/ngx-scenejs/src/lib/ngx-scene.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NgxSceneComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
+    NgxSceneModule
   ],
   providers: [],
   bootstrap: [AppComponent]

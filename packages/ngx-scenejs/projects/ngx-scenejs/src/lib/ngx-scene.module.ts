@@ -21,3 +21,4 @@ import { NgxSceneItemComponent } from './ngx-scene-item.component';
 export class NgxSceneModule {
 
 }
+export { NgxSceneComponent, NgxSceneItemComponent };

@@ -4,7 +4,7 @@
     "array-type": false,
     "arrow-parens": false,
     "deprecation": {
-      "severity": "warn"
+      "severity": "warning"
     },
     "component-class-suffix": true,
     "contextual-lifecycle": true,
@@ -18,7 +18,7 @@
     "component-selector": [
       true,
       "element",
-      "ngx",
+      "app",
       "kebab-case"
     ],
     "import-blacklist": [

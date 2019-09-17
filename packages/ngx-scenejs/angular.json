@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-scenejs": {
+    "ngx-scenejs-app": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,11 +13,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngx-scenejs",
+            "outputPath": "dist/ngx-scenejs-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "aot": false,
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -49,6 +50,11 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ]
             }
@@ -57,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-scenejs:build"
+            "browserTarget": "ngx-scenejs-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-scenejs:build:production"
+              "browserTarget": "ngx-scenejs-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-scenejs:build"
+            "browserTarget": "ngx-scenejs-app:build"
           }
         },
         "test": {
@@ -105,15 +111,50 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ngx-scenejs:serve"
+            "devServerTarget": "ngx-scenejs-app:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ngx-scenejs:serve:production"
+              "devServerTarget": "ngx-scenejs-app:serve:production"
             }
           }
         }
       }
+    },
+    "ngx-scenejs": {
+      "projectType": "library",
+      "root": "projects/ngx-scenejs",
+      "sourceRoot": "projects/ngx-scenejs/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-scenejs/tsconfig.lib.json",
+            "project": "projects/ngx-scenejs/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-scenejs/src/test.ts",
+            "tsConfig": "projects/ngx-scenejs/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-scenejs/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-scenejs/tsconfig.lib.json",
+              "projects/ngx-scenejs/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
-  "defaultProject": "ngx-scenejs"
+  "defaultProject": "ngx-scenejs-app"
 }

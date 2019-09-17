@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { zoomIn } from '@scenejs/effects';
-import { NgxSceneComponent } from 'src/ngx-scenejs';
+import { NgxSceneComponent } from '../../projects/ngx-scenejs/src/lib/ngx-scene.module';
 
 @Component({
 // tslint:disable-next-line: component-selector
@@ -106,10 +106,10 @@ export class AppComponent {
   onAnimate = e => {
     this.time = 100 * e.time / e.currentTarget.getDuration();
   }
-  onPlay = () => {
+  onPlay = e => {
     this.playState = 'pause';
   }
-  onPaused = () => {
+  onPaused = e => {
     this.playState = 'play';
   }
   onClick = () => {

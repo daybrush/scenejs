@@ -1,6 +1,5 @@
 import { Input, Output, EventEmitter, OnDestroy, AfterViewChecked } from '@angular/core';
 import Scene, { SceneItem, OPTIONS, DirectionType, FillModeType, IterationCountType, EasingType, AnimatorState, EVENTS } from 'scenejs';
-import { camelize } from '@daybrush/utils';
 import { EVENT_MAP } from './consts';
 
 export class NgxSceneInterface implements OnDestroy, AfterViewChecked {

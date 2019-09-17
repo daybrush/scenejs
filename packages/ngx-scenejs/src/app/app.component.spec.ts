@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'ngx-scenejs'`, () => {
+  it(`should have as title 'ngx-scenejs-app'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('ngx-scenejs');
+    expect(app.title).toEqual('ngx-scenejs-app');
   });
 
-  it('should render title in a h1 tag', () => {
+  it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to ngx-scenejs!');
+    expect(compiled.querySelector('.content span').textContent).toContain('ngx-scenejs-app app is running!');
   });
 });
