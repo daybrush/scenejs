@@ -9,7 +9,7 @@ import {
     isArray, ANIMATION, ARRAY, OBJECT,
     PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document, isObject, addEvent, removeEvent, isString,
 } from "@daybrush/utils";
-import { EasingType, EasingFunction } from "./types";
+import { EasingType, EasingFunction, NameType } from "./types";
 import { toPropertyObject } from "./utils/property";
 import { bezier, steps } from "./easing";
 
@@ -97,7 +97,7 @@ export function getValueByNames(
     }
     return value;
 }
-export function isInProperties(roles: IObject<any>, args: string[], isCheckTrue?: boolean) {
+export function isInProperties(roles: IObject<any>, args: NameType[], isCheckTrue?: boolean) {
     const length = args.length;
     let role: any = roles;
 
@@ -115,10 +115,10 @@ export function isInProperties(roles: IObject<any>, args: string[], isCheckTrue?
     }
     return true;
 }
-export function isRole(args: string[], isCheckTrue?: boolean) {
+export function isRole(args: NameType[], isCheckTrue?: boolean) {
     return isInProperties(ROLES, args, isCheckTrue);
 }
-export function isFixed(args: string[]) {
+export function isFixed(args: NameType[]) {
     return isInProperties(FIXED, args, true);
 }
 

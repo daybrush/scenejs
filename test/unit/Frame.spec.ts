@@ -1,7 +1,8 @@
 import Frame from "../../src/Frame";
-import {setAlias} from "../../src/utils";
+import {setAlias, setRole} from "../../src/utils";
 import { EASE_IN_OUT } from "../../src/easing";
 import { TIMING_FUNCTION, EASING_NAME } from "../../src/consts";
+import Scene from "../../src";
 
 describe("Frame Test", () => {
     describe("test frame initialize", () => {
@@ -242,5 +243,20 @@ filter:brightness(90%) grayscale(40%);`.split("\n");
 
             expect(css).to.have.string("scale(1,2) translateX(100px) translateY(200px) scale(3,4) translateX(100px)");
         });
+    });
+    it ("should check text is text when setRole", () => {
+        // Given, When
+        setRole(["text"], false, true);
+        const frame = new Frame({
+            text: "#Scene.js #Moveable",
+        });
+
+        // restore
+        setRole(["text"], false, false);
+
+
+        // Then
+        expect(frame.get("text")).to.be.equals("#Scene.js #Moveable");
+        expect(frame.raw("text")).to.be.equals("#Scene.js #Moveable");
     });
 });

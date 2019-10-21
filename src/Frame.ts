@@ -183,7 +183,7 @@ class Frame {
             if (isRole(params, true)) {
                 if (isFixed(params) || !isRole(params)) {
                     this._set(params, value);
-                } else  {
+                } else {
                     const obj = toPropertyObject(value);
 
                     if (isObject(obj)) {
@@ -322,10 +322,12 @@ class Frame {
         if (!length) {
             return;
         }
-        if (args.length === 1 && args[0] === TIMING_FUNCTION ) {
+        if (args.length === 1 && args[0] === TIMING_FUNCTION) {
             properties[TIMING_FUNCTION] = getEasing(value);
         } else {
-            properties[args[length - 1]] = isString(value) ? toPropertyObject(value) : value;
+            properties[args[length - 1]] = isString(value) && !isFixed(args)
+                ? toPropertyObject(value)
+                : value;
         }
     }
 }
