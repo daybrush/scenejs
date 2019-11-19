@@ -2970,10 +2970,11 @@ version: 1.1.6
           return;
         }
 
-        if (args.length === 1 && args[0] === TIMING_FUNCTION) {
+        if (length === 1 && args[0] === TIMING_FUNCTION) {
           properties[TIMING_FUNCTION] = getEasing(value);
         } else {
-          properties[args[length - 1]] = isString(value) && !isFixed(args) ? toPropertyObject(value) : value;
+          var lastParam = args[length - 1];
+          properties[lastParam] = isString(value) && !isFixed(args) ? toPropertyObject(value, lastParam) : value;
         }
       };
 
