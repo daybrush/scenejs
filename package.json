@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "JavaScript & CSS timeline-based animation library",
   "main": "dist/scene.cjs.js",
   "module": "dist/scene.esm.js",
@@ -22,7 +22,7 @@
     "demo:start": "rollup -c rollup.config.demo.js -w",
     "demo:build": "rm -rf ./demo/dist && rollup -c rollup.config.demo.js",
     "release": "npm run build && npm run doc && npm run demo:build && release --dirs dist,doc,examples",
-    "release:build": "npm run build && prerelease --dirs dist,doc,examples"
+    "release:build": "npm run build && npm run doc && npm run demo:build && prerelease --dirs dist,doc,examples"
   },
   "repository": {
     "type": "git",

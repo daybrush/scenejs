@@ -9,6 +9,7 @@ import {
   splitComma, splitSpace, stringToRGBA,
   RGBA, splitBracket, IObject, isArray
 } from "@daybrush/utils";
+import { NameType } from "../types";
 
 export function splitStyle(str: string) {
   const properties = str.split(";");
@@ -68,11 +69,11 @@ export function stringToBracketObject(text: string) {
   if (typeof value === "undefined") {
     return text;
   }
-  if (COLOR_MODELS.indexOf(model) !== -1) {
+  if (COLOR_MODELS.indexOf(model) > -1) {
     return arrayToColorObject(stringToRGBA(text));
   }
   // divide comma(,)
-  const obj = toPropertyObject(value);
+  const obj = toPropertyObject(value, model);
 
   let arr = [value];
   let separator = ",";
@@ -128,10 +129,10 @@ export function stringToColorObject(value: string): string | PropertyObject {
 toPropertyObject("1px solid #000");
 // => PropertyObject(["1px", "solid", rgba(0, 0, 0, 1)])
 */
-export function toPropertyObject(value: any[]): PropertyObject;
-export function toPropertyObject(value: IObject<any>): IObject<any>;
-export function toPropertyObject(value: string): PropertyObject | string;
-export function toPropertyObject(value: string | IObject<any> | any[]) {
+export function toPropertyObject(value: any[], model?: NameType): PropertyObject;
+export function toPropertyObject(value: IObject<any>, model?: NameType): IObject<any>;
+export function toPropertyObject(value: string, model?: NameType): PropertyObject | string;
+export function toPropertyObject(value: string | IObject<any> | any[], model?: NameType) {
   if (!isString(value)) {
     if (isArray(value)) {
       return arrayToPropertyObject(value, ",");
@@ -144,10 +145,12 @@ export function toPropertyObject(value: string | IObject<any> | any[]) {
     return arrayToPropertyObject(values.map(v => toPropertyObject(v)), ",");
   }
   values = splitSpace(value);
+
   if (values.length > 1) {
     return arrayToPropertyObject(values.map(v => toPropertyObject(v)), " ");
   }
   values = /^(['"])([^'"]*)(['"])$/g.exec(value);
+
   if (values && values[1] === values[3]) {
     // Quotes
     return new PropertyObject([toPropertyObject(values[2])], {
@@ -157,7 +160,7 @@ export function toPropertyObject(value: string | IObject<any> | any[]) {
   } else if (value.indexOf("(") !== -1) {
     // color
     return stringToBracketObject(value);
-  } else if (value.charAt(0) === "#") {
+  } else if (value.charAt(0) === "#" && model !== "url") {
     return stringToColorObject(value);
   }
   return value;

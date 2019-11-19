@@ -130,17 +130,27 @@ describe("Frame Test", () => {
             expect(frame.get("transform", "scale")).to.be.not.ok;
             expect(frame.get("transform")).to.be.not.ok;
         });
-        it (`should check get(easing) test1`, () => {
+        it (`should check get(ease-in-out) test1`, () => {
             frame.set("easing", "ease-in-out");
 
             expect(typeof frame.get("easing")).to.be.equals("function");
             expect(frame.get("easing").easingName).to.be.equals("cubic-bezier(0.42,0,0.58,1)");
         });
-        it (`should check get(easing) test2`, () => {
+        it (`should check get(cubic-bezier) test2`, () => {
             frame.set("easing", "cubic-bezier(0.41,0,0.58,1)");
 
             expect(typeof frame.get("easing")).to.be.equals("function");
             expect(frame.get("easing").easingName).to.be.equals("cubic-bezier(0.41,0,0.58,1)");
+        });
+        it("should check # is color ? or id?", () => {
+            // Given, When
+            frame.set("background", "url(#id)");
+            frame.set("background2", "#fff");
+            frame.set("filter", "url(#id)");
+
+            expect(frame.get("background")).to.be.equals("url(#id)");
+            expect(frame.get("filter", "url")).to.be.equals("#id");
+            expect(frame.get("background2")).to.be.equals("rgba(255,255,255,1)");
         });
         it("sholud check 'get(toObject)' method", () => {
             /*
@@ -253,7 +263,6 @@ filter:brightness(90%) grayscale(40%);`.split("\n");
 
         // restore
         setRole(["text"], false, false);
-
 
         // Then
         expect(frame.get("text")).to.be.equals("#Scene.js #Moveable");
