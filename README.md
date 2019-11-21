@@ -1,7 +1,13 @@
 
 <p align="middle"><img src="https://daybrush.com/scenejs/images/clapperboard.png" width="250"/></p>
 <h2 align="middle">Scene.js</h2>
-<p align="middle"><a href="https://opencollective.com/scenejs" alt="Financial Contributors on Open Collective"><img src="https://opencollective.com/scenejs/all/badge.svg?label=financial+contributors" /></a> <a href="https://badge.fury.io/js/scenejs" target="_blank"><img src="https://badge.fury.io/js/scenejs.svg" alt="npm version" height="18"/></a> <a href="https://travis-ci.org/daybrush/scenejs"><img src="https://travis-ci.org/daybrush/scenejs.svg?branch=master"/></a> <a href="https://coveralls.io/github/daybrush/scenejs?branch=master"><img src="https://coveralls.io/repos/github/daybrush/scenejs/badge.svg?branch=master"/></a> <img src="https://img.shields.io/badge/language-typescript-blue.svg"/> <a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/License-MIT-brightgreen.svg"/></a></p>
+<p align="middle">
+<a href="https://opencollective.com/scenejs" alt="Financial Contributors on Open Collective"><img src="https://opencollective.com/scenejs/all/badge.svg?label=financial+contributors" /></a>
+<a href="https://www.npmjs.com/package/scenejs" target="_blank"><img src="https://img.shields.io/npm/v/scenejs.svg?style=flat-square&color=007acc&label=version" alt="npm version" /></a>
+<img src="https://img.shields.io/badge/language-typescript-blue.svg?style=flat-square"/>
+<a href="https://travis-ci.org/daybrush/scenejs" target="_blank"><img alt="Travis (.org)" src="https://img.shields.io/travis/daybrush/scenejs.svg?style=flat-square&label=build" /></a>
+<a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/daybrush/scenejs.svg?style=flat-square&label=license&color=08CE5D"/></a>
+</p>
 
 
 <p align="middle">🎬 Scene.js is an JavaScript & CSS timeline-based animation library.</p>
@@ -54,15 +60,15 @@ $ npm install scenejs
 ## 📦 Packages
 |Package|Version|Description|
 |---|---|---|
-|[**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs)|[![](https://img.shields.io/npm/v/react-scenejs.svg)](https://npmjs.com/package/react-scenejs)|A React Component that create JavaScript & CSS timeline-based animation with Scene.js.|
-|[**ngx-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/ngx-scenejs)|[![](https://img.shields.io/npm/v/ngx-scenejs.svg)](https://npmjs.com/package/ngx-scenejs)|An Angular Component that create JavaScript & CSS timeline-based animation with Scene.js.|
-|[**vue-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs)|[![](https://img.shields.io/npm/v/vue-scenejs.svg)](https://npmjs.com/package/vue-scenejs)|A Vue Component that create JavaScript & CSS timeline-based animation with Scene.js.|
-|[**preact-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/preact-scenejs)|[![](https://img.shields.io/npm/v/preact-scenejs.svg)](https://npmjs.com/package/preact-scenejs)|A Preact Component that create JavaScript & CSS timeline-based animation with Scene.js.|
-|[**@scenejs/effects**](https://github.com/daybrush/scenejs-effects)|[![](https://img.shields.io/npm/v/@scenejs/effects.svg)](https://npmjs.com/package/@scenejs/effects)|Effect collection library where you can add scene effects to Scene.js.|
-|[**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline)|[![](https://img.shields.io/npm/v/@scenejs/timeline.svg)](https://npmjs.com/package/@scenejs/timeline)|A library that represents the timeline of Scene.js. You can control time, properties, and items.|
-|[**@scenejs/media**](https://github.com/daybrush/scenejs-media)|[![](https://img.shields.io/npm/v/@scenejs/media.svg)](https://npmjs.com/package/@scenejs/media)|A library for playing or controlling media with Scene.js.|
-|[**@scenejs/iframe**](https://github.com/daybrush/scenejs-iframe)|[![](https://img.shields.io/npm/v/@scenejs/iframe.svg)](https://npmjs.com/package/@scenejs/iframe)|A library that control the animation of iframe with Scene.js.|
-|[**@scenejs/render**](https://github.com/daybrush/scenejs-render)|[![](https://img.shields.io/npm/v/@scenejs/render.svg)](https://npmjs.com/package/@scenejs/render)|Make a movie of CSS animation through Scene.js.|
+|[**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs)|[![](https://img.shields.io/npm/v/react-scenejs.svg?style=flat-square)](https://npmjs.com/package/react-scenejs)|A React Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**ngx-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/ngx-scenejs)|[![](https://img.shields.io/npm/v/ngx-scenejs.svg?style=flat-square)](https://npmjs.com/package/ngx-scenejs)|An Angular Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**vue-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs)|[![](https://img.shields.io/npm/v/vue-scenejs.svg?style=flat-square)](https://npmjs.com/package/vue-scenejs)|A Vue Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**preact-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/preact-scenejs)|[![](https://img.shields.io/npm/v/preact-scenejs.svg?style=flat-square)](https://npmjs.com/package/preact-scenejs)|A Preact Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**@scenejs/effects**](https://github.com/daybrush/scenejs-effects)|[![](https://img.shields.io/npm/v/@scenejs/effects.svg?style=flat-square)](https://npmjs.com/package/@scenejs/effects)|Effect collection library where you can add scene effects to Scene.js.|
+|[**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline)|[![](https://img.shields.io/npm/v/@scenejs/timeline.svg?style=flat-square)](https://npmjs.com/package/@scenejs/timeline)|A library that represents the timeline of Scene.js. You can control time, properties, and items.|
+|[**@scenejs/media**](https://github.com/daybrush/scenejs-media)|[![](https://img.shields.io/npm/v/@scenejs/media.svg?style=flat-square)](https://npmjs.com/package/@scenejs/media)|A library for playing or controlling media with Scene.js.|
+|[**@scenejs/iframe**](https://github.com/daybrush/scenejs-iframe)|[![](https://img.shields.io/npm/v/@scenejs/iframe.svg?style=flat-square)](https://npmjs.com/package/@scenejs/iframe)|A library that control the animation of iframe with Scene.js.|
+|[**@scenejs/render**](https://github.com/daybrush/scenejs-render)|[![](https://img.shields.io/npm/v/@scenejs/render.svg?style=flat-square)](https://npmjs.com/package/@scenejs/render)|Make a movie of CSS animation through Scene.js.|
 
 ## 🎬 Make scene
 ```javascript
