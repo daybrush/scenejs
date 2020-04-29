@@ -216,11 +216,12 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
     }
     public setId(id?: number | string) {
         const state = this.state;
+        const elements = this.elements;
+        const length = elements.length;
 
         state.id = id || makeId(!!length);
-        const elements = this.elements;
 
-        if (elements.length && !state[SELECTOR]) {
+        if (length && !state[SELECTOR]) {
             const sceneId = toId(this.getId());
 
             state[SELECTOR] = `[${DATA_SCENE_ID}="${sceneId}"]`;
