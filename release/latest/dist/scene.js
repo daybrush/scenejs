@@ -329,7 +329,7 @@ version: 1.1.6
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 0.10.0
+    @version 0.10.3
     */
     /**
     * @namespace
@@ -568,6 +568,7 @@ version: 1.1.6
     var KEYFRAMES =
     /*#__PURE__*/
     ANIMATION.replace("animation", "keyframes");
+    var OPEN_CLOSED_CHARACTER = ["\"", "'", "\\\"", "\\'"];
 
     /**
     * @namespace
@@ -678,6 +679,72 @@ version: 1.1.6
     function isFunction(value) {
       return typeof value === FUNCTION;
     }
+
+    function findClosed(closedCharacter, texts, index, length) {
+      for (var i = index; i < length; ++i) {
+        var character = texts[i].trim();
+
+        if (character === closedCharacter) {
+          return i;
+        }
+
+        var nextIndex = i;
+
+        if (character === "(") {
+          nextIndex = findClosed(")", texts, i + 1, length);
+        } else if (OPEN_CLOSED_CHARACTER.indexOf(character) > -1) {
+          nextIndex = findClosed(character, texts, i + 1, length);
+        }
+
+        if (nextIndex === -1) {
+          break;
+        }
+
+        i = nextIndex;
+      }
+
+      return -1;
+    }
+
+    function splitText(text, separator) {
+      var texts = text.split(/(\s*,\s*|\(|\)|"|'|\\"|\\'|\s+)/g).filter(Boolean);
+      var length = texts.length;
+      var values = [];
+      var tempValues = [];
+
+      for (var i = 0; i < length; ++i) {
+        var character = texts[i].trim();
+        var nextIndex = i;
+
+        if (character === "(") {
+          nextIndex = findClosed(")", texts, i + 1, length);
+        } else if (character === ")") {
+          throw new Error("invalid format");
+        } else if (OPEN_CLOSED_CHARACTER.indexOf(character) > -1) {
+          nextIndex = findClosed(character, texts, i + 1, length);
+        } else if (character === separator) {
+          if (tempValues.length) {
+            values.push(tempValues.join(""));
+            tempValues = [];
+          }
+
+          continue;
+        }
+
+        if (nextIndex === -1) {
+          nextIndex = length - 1;
+        }
+
+        tempValues.push(texts.slice(i, nextIndex + 1).join(""));
+        i = nextIndex;
+      }
+
+      if (tempValues.length) {
+        values.push(tempValues.join(""));
+      }
+
+      return values;
+    }
     /**
     * divide text by space.
     * @memberof Utils
@@ -692,10 +759,10 @@ version: 1.1.6
     // ["'a,b'", "c", "'d,e'", "f", "g"]
     */
 
+
     function splitSpace(text) {
       // divide comma(,)
-      var matches = text.match(/("[^"]*")|('[^']*')|([^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\S+/g);
-      return matches || [];
+      return splitText(text, "");
     }
     /**
     * divide text by comma.
@@ -714,10 +781,7 @@ version: 1.1.6
     function splitComma(text) {
       // divide comma(,)
       // "[^"]*"|'[^']*'
-      var matches = text.match(/("[^"]*"|'[^']*'|[^,\s()]*\((?:[^()]*|\([^()]*\))*\)[^,\s()]*|[^,])+/g);
-      return matches ? matches.map(function (str) {
-        return str.trim();
-      }) : [];
+      return splitText(text, ",");
     }
     /**
     * divide text by bracket "(", ")".
@@ -3317,10 +3381,11 @@ version: 1.1.6
 
       __proto.setId = function (id) {
         var state = this.state;
-        state.id = id || makeId(!!length);
         var elements = this.elements;
+        var length = elements.length;
+        state.id = id || makeId(!!length);
 
-        if (elements.length && !state[SELECTOR]) {
+        if (length && !state[SELECTOR]) {
           var sceneId_1 = toId(this.getId());
           state[SELECTOR] = "[" + DATA_SCENE_ID + "=\"" + sceneId_1 + "\"]";
           elements.forEach(function (element) {
@@ -3940,8 +4005,6 @@ version: 1.1.6
       };
 
       __proto.load = function (properties, options) {
-        var _a;
-
         if (properties === void 0) {
           properties = {};
         }
@@ -3949,6 +4012,8 @@ version: 1.1.6
         if (options === void 0) {
           options = properties.options;
         }
+
+        var _a;
 
         options && this.setOptions(options);
 

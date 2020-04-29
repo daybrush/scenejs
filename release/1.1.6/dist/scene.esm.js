@@ -2369,10 +2369,11 @@ function (_super) {
 
   __proto.setId = function (id) {
     var state = this.state;
-    state.id = id || makeId(!!length);
     var elements = this.elements;
+    var length = elements.length;
+    state.id = id || makeId(!!length);
 
-    if (elements.length && !state[SELECTOR]) {
+    if (length && !state[SELECTOR]) {
       var sceneId_1 = toId(this.getId());
       state[SELECTOR] = "[" + DATA_SCENE_ID + "=\"" + sceneId_1 + "\"]";
       elements.forEach(function (element) {
@@ -2992,8 +2993,6 @@ function (_super) {
   };
 
   __proto.load = function (properties, options) {
-    var _a;
-
     if (properties === void 0) {
       properties = {};
     }
@@ -3001,6 +3000,8 @@ function (_super) {
     if (options === void 0) {
       options = properties.options;
     }
+
+    var _a;
 
     options && this.setOptions(options);
 
