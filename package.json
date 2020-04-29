@@ -75,7 +75,7 @@
     "typescript": "^2.8.4"
   },
   "dependencies": {
-    "@daybrush/utils": "^0.10.0",
+    "@daybrush/utils": "^0.10.3",
     "list-map": "^0.1.1"
   }
 }
