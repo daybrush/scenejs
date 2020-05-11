@@ -1,6 +1,6 @@
 {
   "name": "scenejs",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "JavaScript & CSS timeline-based animation library",
   "main": "dist/scene.cjs.js",
   "module": "dist/scene.esm.js",
@@ -75,7 +75,7 @@
     "typescript": "^2.8.4"
   },
   "dependencies": {
-    "@daybrush/utils": "^0.10.3",
+    "@daybrush/utils": "^0.10.4",
     "list-map": "^0.1.1"
   }
 }
