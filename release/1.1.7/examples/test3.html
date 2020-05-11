@@ -1,0 +1,35 @@
+<div class="rectangle"></div>
+<style>
+	body {
+  margin: 0;
+  padding: 0;
+}
+.rectangle {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: #f55;
+}
+</style>
+<script src="../dist/scene.js"></script>
+<script>
+const scene = new Scene({
+	".rectangle": {
+		0: {
+			left: "0px",
+		},
+		0.2: {
+			left: "200px",
+		},
+	},
+	"options": {
+		selector: true,
+	},
+});
+
+scene.playCSS();
+
+scene.on("ended", e => {
+	console.log(e);
+});
+</script>
