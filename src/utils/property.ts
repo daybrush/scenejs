@@ -7,23 +7,24 @@ import PropertyObject from "../PropertyObject";
 import {
     COLOR_MODELS, isString,
     splitComma, splitSpace, stringToRGBA,
-    RGBA, splitBracket, IObject, isArray
+    RGBA, splitBracket, IObject, isArray, splitText
 } from "@daybrush/utils";
 import { NameType } from "../types";
 
 export function splitStyle(str: string) {
-    const properties = str.split(";");
+
+    const properties = splitText(str, ";");
     const obj: IObject<string | PropertyObject> = {};
     let length = properties.length;
 
     for (let i = 0; i < length; ++i) {
-        const matches = /([^:]*):([\S\s]*)/g.exec(properties[i]);
+        const matches = splitText(properties[i], ":");
 
-        if (!matches || matches.length < 3 || !matches[1]) {
+        if (matches.length < 2 || !matches[1]) {
             --length;
             continue;
         }
-        obj[matches[1].trim()] = toPropertyObject(matches[2].trim());
+        obj[matches[0].trim()] = toPropertyObject(matches[1].trim());
     }
     return { styles: obj, length };
 }

@@ -1,5 +1,5 @@
 import Frame from "../../src/Frame";
-import {setAlias, setRole} from "../../src/utils";
+import { setAlias, setRole } from "../../src/utils";
 import { EASE_IN_OUT } from "../../src/easing";
 import { TIMING_FUNCTION, EASING_NAME } from "../../src/consts";
 import Scene from "../../src";
@@ -130,13 +130,13 @@ describe("Frame Test", () => {
             expect(frame.get("transform", "scale")).to.be.not.ok;
             expect(frame.get("transform")).to.be.not.ok;
         });
-        it (`should check get(ease-in-out) test1`, () => {
+        it(`should check get(ease-in-out) test1`, () => {
             frame.set("easing", "ease-in-out");
 
             expect(typeof frame.get("easing")).to.be.equals("function");
             expect(frame.get("easing").easingName).to.be.equals("cubic-bezier(0.42,0,0.58,1)");
         });
-        it (`should check get(cubic-bezier) test2`, () => {
+        it(`should check get(cubic-bezier) test2`, () => {
             frame.set("easing", "cubic-bezier(0.41,0,0.58,1)");
 
             expect(typeof frame.get("easing")).to.be.equals("function");
@@ -180,7 +180,7 @@ describe("Frame Test", () => {
             });
         });
 
-        it (`should check alias test`, () => {
+        it(`should check alias test`, () => {
             setAlias("tx", ["transform", "translateX"]);
             setAlias("ty", ["transform", "translateY"]);
             setAlias("tz", ["transform", "translateZ"]);
@@ -254,7 +254,7 @@ filter:brightness(90%) grayscale(40%);`.split("\n");
             expect(css).to.have.string("scale(1,2) translateX(100px) translateY(200px) scale(3,4) translateX(100px)");
         });
     });
-    it ("should check text is text when setRole", () => {
+    it("should check text is text when setRole", () => {
         // Given, When
         setRole(["text"], false, true);
         const frame = new Frame({
@@ -267,5 +267,22 @@ filter:brightness(90%) grayscale(40%);`.split("\n");
         // Then
         expect(frame.get("text")).to.be.equals("#Scene.js #Moveable");
         expect(frame.raw("text")).to.be.equals("#Scene.js #Moveable");
+    });
+    it("should check semiclone, clone style", () => {
+        // Given, When
+        const frame = new Frame({
+            "background-repeat": "no-repeat",
+            "background-position": "center center",
+            "background-size": "cover",
+            "background-image": 'url("https://a/a.jpg")',
+            "background-img": "url(https://b/b.jpg)",
+        });
+        const frame2 = new Frame(`background-repeat: no-repeat;background-image: url("https://a/a.jpg");background-img: url(https://b/b.jpg)`);
+
+        // Then
+        expect(frame.get("background-image")).to.be.equals(`url("https://a/a.jpg")`);
+        expect(frame.get("background-img")).to.be.equals(`url(https://b/b.jpg)`);
+        expect(frame2.get("background-image")).to.be.equals(`url("https://a/a.jpg")`);
+        expect(frame2.get("background-img")).to.be.equals(`url(https://b/b.jpg)`);
     });
 });
