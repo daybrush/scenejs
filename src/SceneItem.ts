@@ -961,6 +961,18 @@ item.setElement(document.querySelectorAll(".class"));
         }
         return elements[0];
     }
+    /**
+      * Remove All Frames
+      * @return {SceneItem} An instance itself
+      */
+    public clear() {
+        this.times = [];
+        this.items = {};
+        this.names = {};
+        this.temp = null;
+        this.needUpdate = true;
+        return this;
+    }
     public getNowValue(
         time: number,
         properties: string[],

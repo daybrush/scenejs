@@ -309,6 +309,14 @@ class Frame {
         }
         return cssArray.join("");
     }
+    /**
+      * Remove All Properties
+      * @return {Frame} An instance itself
+      */
+    public clear() {
+        this.properties = {};
+        return this;
+    }
     private _set(args: NameType[], value: any) {
         let properties = this.properties;
         const length = args.length;
