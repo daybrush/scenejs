@@ -4,10 +4,10 @@
 <p align="middle"><a href="https://badge.fury.io/js/scenejs" target="_blank"><img src="https://badge.fury.io/js/scenejs.svg" alt="npm version" height="18"/></a> <a href="https://travis-ci.org/daybrush/scenejs"><img src="https://travis-ci.org/daybrush/scenejs.svg?branch=master"/></a> <a href="https://coveralls.io/github/daybrush/scenejs?branch=master"><img src="https://coveralls.io/repos/github/daybrush/scenejs/badge.svg?branch=master"/></a> <img src="https://img.shields.io/badge/语言-typescript-blue.svg"/> <a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/执照-MIT-brightgreen.svg"/></a></p>
 
 
-<p align="middle">🎬 Scene.js是JavaScript和CSS时代的动画图书馆。</p>
+<p align="middle">🎬 Scene.js是 JavaScript 和 CSS 的基于时间轴的动画库。</p>
 
-<p align="middle"><a href="https://daybrush.com/scenejs"><strong>官方广场</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>特征</strong></a> &nbsp;/&nbsp; <a href="https://codepen.io/collection/DLWxrd/"><strong>例子</strong></a></p>
-<p align="middle"><strong>译本</strong>: <a href="https://github.com/daybrush/scenejs/blob/master/README_CN.md">🇨🇳</a> <a href="https://github.com/daybrush/scenejs/blob/master/README.md">🇺🇸</a></p>
+<p align="middle"><a href="https://daybrush.com/scenejs"><strong>官方广场</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>特性</strong></a> &nbsp;/&nbsp; <a href="https://codepen.io/collection/DLWxrd/"><strong>例子</strong></a></p>
+<p align="middle"><strong>翻译</strong>: <a href="https://github.com/daybrush/scenejs/blob/master/README_CN.md">🇨🇳</a> <a href="https://github.com/daybrush/scenejs/blob/master/README.md">🇺🇸</a></p>
 <br/>
 
 <p align="middle" style="max-width: 1000px; margin: 0px auto;" >
@@ -49,23 +49,23 @@ $ npm install scenejs
 ```
 
 ## 📄 文件
-* [API文件编制](https://daybrush.com/scenejs/release/latest/doc/)
-* [特征文件](https://daybrush.com/scenejs/features.html)
+* [API文档](https://daybrush.com/scenejs/release/latest/doc/)
+* [特性文档](https://daybrush.com/scenejs/features.html)
 
-## 📦 包装费
-|包裹名字|版本|描述|
+## 📦 包
+|包名|版本|简介|
 |---|---|---|
-|[**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs)|[![](https://img.shields.io/npm/v/react-scenejs.svg)](https://npmjs.com/package/react-scenejs)|一种React件,它生成JavaScript和CSS时使用Scene.js。|
-|[**ngx-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/ngx-scenejs)|[![](https://img.shields.io/npm/v/ngx-scenejs.svg)](https://npmjs.com/package/ngx-scenejs)|一种Angular件,它生成JavaScript和CSS时使用Scene.js。|
-|[**vue-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs)|[![](https://img.shields.io/npm/v/vue-scenejs.svg)](https://npmjs.com/package/vue-scenejs)|一种Vue件,它生成JavaScript和CSS时使用Scene.js。|
-|[**preact-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/preact-scenejs)|[![](https://img.shields.io/npm/v/preact-scenejs.svg)](https://npmjs.com/package/preact-scenejs)|一种Preact件,它生成JavaScript和CSS时使用Scene.js。|
-|[**@scenejs/effects**](https://github.com/daybrush/scenejs-effects)|[![](https://img.shields.io/npm/v/@scenejs/effects.svg)](https://npmjs.com/package/@scenejs/effects)|Scene.js效应收集库,可以添加场景剧本。|
-|[**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline)|[![](https://img.shields.io/npm/v/@scenejs/timeline.svg)](https://npmjs.com/package/@scenejs/timeline)|一种代表Scene.js的图书馆。 你可以控制时间,属性和项目。|
+|[**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs)|[![](https://img.shields.io/npm/v/react-scenejs.svg)](https://npmjs.com/package/react-scenejs)|通过 Sence.js 用JavaScript和CSS创建基于时间轴动画的 React 组件。|
+|[**ngx-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/ngx-scenejs)|[![](https://img.shields.io/npm/v/ngx-scenejs.svg)](https://npmjs.com/package/ngx-scenejs)|通过 Sence.js 用JavaScript和CSS创建基于时间轴动画的 Angular 组件。|
+|[**vue-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs)|[![](https://img.shields.io/npm/v/vue-scenejs.svg)](https://npmjs.com/package/vue-scenejs)|通过 Sence.js 用JavaScript和CSS创建基于时间轴动画的 Vue 组件。|
+|[**preact-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/preact-scenejs)|[![](https://img.shields.io/npm/v/preact-scenejs.svg)](https://npmjs.com/package/preact-scenejs)|通过 Sence.js 用JavaScript和CSS创建基于时间轴动画的 Preact 组件。|
+|[**@scenejs/effects**](https://github.com/daybrush/scenejs-effects)|[![](https://img.shields.io/npm/v/@scenejs/effects.svg)](https://npmjs.com/package/@scenejs/effects)|Scene.js 特效收集库,可以添加场景剧本。|
+|[**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline)|[![](https://img.shields.io/npm/v/@scenejs/timeline.svg)](https://npmjs.com/package/@scenejs/timeline)|代表Scene.js 中时间轴的库。 你可以控制时间,属性和项目。|
 |[**@scenejs/media**](https://github.com/daybrush/scenejs-media)|[![](https://img.shields.io/npm/v/@scenejs/media.svg)](https://npmjs.com/package/@scenejs/media)|用于使用Scene.js播放或控制媒体的库。|
 |[**@scenejs/iframe**](https://github.com/daybrush/scenejs-iframe)|[![](https://img.shields.io/npm/v/@scenejs/iframe.svg)](https://npmjs.com/package/@scenejs/iframe)|使用Scene.js控制iframe动画的库。|
 |[**@scenejs/render**](https://github.com/daybrush/scenejs-render)|[![](https://img.shields.io/npm/v/@scenejs/render.svg)](https://npmjs.com/package/@scenejs/render)|通过Scene.js制作CSS动画电影。|
 
-## 🎬 制造场面
+## 🎬 制作场景
 ```javascript
 import Scene from "scenejs";
 
@@ -91,7 +91,7 @@ const scene = new Scene({
 }).play();
 
 ```
-## ✨ 效果
+## ✨ 特效
 
 * [typing](https://daybrush.com/scenejs/features.html#typing)
 * [flip](https://daybrush.com/scenejs/features.html#flip)
@@ -119,15 +119,15 @@ const scene = new Scene({
 ## ⭐️ 显示您的支持
 如果这个项目对你有帮助，请给⭐️！
 
-## 👏 特约
+## 👏 贡献
 
-如果您有任何问题或要求或想要参与`scenejs`或其他套餐，请写下问题或免费给我一个拉请求。
+如果您有任何问题或要求或想要参与`scenejs`或其他包，请提 issue 或提交请求。
 
-## 🐞 错误报告
+## 🐞 Bug报告
 
 如果您发现了错误，请向我们报告在[GitHub](https://github.com/daybrush/scenejs/issues)上打开新[问题](https://github.com/daybrush/scenejs/issues).
 
-## 📝 执照
+## 📝 证书
 
 该项目获得[MIT](https://github.com/daybrush/scenejs/blob/master/LICENSE)许可。
 
