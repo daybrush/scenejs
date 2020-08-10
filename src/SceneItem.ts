@@ -947,16 +947,16 @@ item.setElement(document.querySelectorAll(".class"));
         } else {
             elements.forEach(element => {
                 element.style.cssText += cssText;
+
                 if (hasClass(element, START_ANIMATION)) {
                     removeClass(element, START_ANIMATION);
-                    requestAnimationFrame(() => {
-                        requestAnimationFrame(() => {
-                            addClass(element, START_ANIMATION);
-                        });
-                    });
-                } else {
-                    addClass(element, START_ANIMATION);
                 }
+            });
+            elements.forEach(element => {
+                element.clientWidth;
+            });
+            elements.forEach(element => {
+                addClass(element, START_ANIMATION);
             });
         }
         return elements[0];

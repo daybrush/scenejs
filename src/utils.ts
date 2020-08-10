@@ -90,7 +90,7 @@ export function getValueByNames(
     let value = properties;
 
     for (let i = 0; i < length; ++i) {
-        if (!isObject(value) || value != null) {
+        if (!isObject(value) || value == null) {
             return undefined;
         }
         value = value[names[i]];
@@ -204,6 +204,10 @@ export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
     };
     const animationstart = () => {
         item.trigger(PLAY);
+
+        addEvent(el, "animationcancel", animationend);
+        addEvent(el, "animationend", animationend);
+        addEvent(el, "animationiteration", animationiteration);
     };
     item.once(ENDED, () => {
         removeEvent(el, "animationcancel", animationend);
@@ -218,9 +222,6 @@ export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
         state[CURRENT_TIME] = currentTime;
         item.setIteration(iterationCount);
     };
-    addEvent(el, "animationcancel", animationend);
-    addEvent(el, "animationend", animationend);
-    addEvent(el, "animationiteration", animationiteration);
     addEvent(el, "animationstart", animationstart);
 }
 
