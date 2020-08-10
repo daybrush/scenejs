@@ -71,7 +71,8 @@ function getValue(names: NameType[], value: any): any {
 * Animation's Frame
 */
 class Frame {
-    public properties: IObject<any>;
+    public properties: IObject<any> = {};
+    public orders: IObject<any> = {};
     /**
      * @param - properties
      * @example
@@ -85,6 +86,7 @@ class Frame {
      */
     constructor(properties: any = {}) {
         this.properties = {};
+        this.orders = {};
         this.set(properties);
     }
     /**
@@ -98,6 +100,16 @@ class Frame {
         const value = this.raw(...args);
 
         return getValue(getPropertyName(args), value);
+    }
+    public getOrder(...args: NameType[]) {
+        return getValueByNames(args, this.orders) || [];
+    }
+    public setOrder(index: number, property: NameType | NameType[], ...args: NameType[]) {
+        const orders = this.getOrder(...args);
+
+        orders.splice(index, 0, ...(isArray(property) ? property : [property]));
+
+        return this;
     }
 
     public raw(...args: NameType[]) {

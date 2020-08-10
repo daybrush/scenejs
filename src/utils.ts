@@ -90,7 +90,7 @@ export function getValueByNames(
     let value = properties;
 
     for (let i = 0; i < length; ++i) {
-        if (!isObject(value)) {
+        if (!isObject(value) || value != null) {
             return undefined;
         }
         value = value[names[i]];
