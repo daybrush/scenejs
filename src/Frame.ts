@@ -1,23 +1,30 @@
 import {
-    ALIAS, TIMING_FUNCTION, TRANSFORM_NAME, EASING_NAME
+    ALIAS, TIMING_FUNCTION, TRANSFORM_NAME, EASING_NAME, NAME_SEPARATOR
 } from "./consts";
-import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, getEasing } from "./utils";
+import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, getEasing, getFullName } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
 import {
-    isObject, isArray, isString,
-    ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, IObject, isUndefined
+    isObject, isArray, isString, getKeys,
+    ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, IObject, isUndefined,
+    sortOrders,
 } from "@daybrush/utils";
-import { NameType } from "./types";
+import { NameType, KeyValueChildren } from "./types";
+import OrderMap from "order-map";
 
-function toInnerProperties(obj: IObject<string>) {
+function toInnerProperties(obj: IObject<string>, orders: NameType[] = []) {
     if (!obj) {
         return "";
     }
     const arrObj = [];
 
-    for (const name in obj) {
+    const keys = getKeys(obj);
+
+    sortOrders(keys, orders);
+
+    keys.forEach(name => {
         arrObj.push(`${name.replace(/\d$/g, "")}(${obj[name]})`);
-    }
+    });
+
     return arrObj.join(" ");
 }
 
@@ -72,7 +79,7 @@ function getValue(names: NameType[], value: any): any {
 */
 class Frame {
     public properties: IObject<any> = {};
-    public orders: IObject<any> = {};
+    public orderMap: OrderMap = new OrderMap(NAME_SEPARATOR);
     /**
      * @param - properties
      * @example
@@ -86,7 +93,7 @@ class Frame {
      */
     constructor(properties: any = {}) {
         this.properties = {};
-        this.orders = {};
+        // this.orders = [];
         this.set(properties);
     }
     /**
@@ -101,15 +108,60 @@ class Frame {
 
         return getValue(getPropertyName(args), value);
     }
-    public getOrder(...args: NameType[]) {
-        return getValueByNames(args, this.orders) || [];
+    /**
+      * get properties orders
+      * @param - property names
+      * @example
+      frame.getOrders(["display"]) // => []
+      frame.getOrders(["transform"]) // => ["translate", "scale"]
+      */
+    public getOrders(names: NameType[]): NameType[] | undefined {
+        return this.orderMap.get(names);
     }
-    public setOrder(index: number, property: NameType | NameType[], ...args: NameType[]) {
-        const orders = this.getOrder(...args);
+    /**
+      * set properties orders
+      * @param - property names
+      * @param - orders
+      * @example
+      frame.getOrders(["transform"]) // => ["translate", "scale"]
+      frame.setOrders(["transform"], ["scale", "tralsate"])
+      */
+    public setOrders(names: NameType[], orders: NameType[]): NameType[] {
+        return this.orderMap.set(names, orders);
+    }
+    public setOrderObject(obj: IObject<NameType[]>) {
+        this.orderMap.setObject(obj);
+    }
 
-        orders.splice(index, 0, ...(isArray(property) ? property : [property]));
+    /**
+      * get property keys
+      * @param - property names
+      * @example
+      frame.gets("display") // => []
+      frame.gets("transform") // => ["translate"]
+      */
+    public getKeys(...args: NameType[]): string[] {
+        const value = this.raw(...args);
+        const keys = getType(value) === OBJECT ? getKeys(value) : [];
 
-        return this;
+        sortOrders(keys, this.orderMap.get(args));
+        return keys;
+    }
+    /**
+      * get properties array
+      * @param - property names
+      * @example
+      frame.gets("display") // => []
+      frame.gets("transform") // => [{ key: "translate", value: "10px, 10px", children: [] }]
+      */
+    public gets(...args: NameType[]): KeyValueChildren[] {
+        const values = this.get(...args);
+        const keys = this.getKeys(...args);
+
+        return keys.map(key => {
+            const nextValue = values[key];
+            return { key, value: nextValue, children: this.gets(...args, key) };
+        });
     }
 
     public raw(...args: NameType[]) {
@@ -129,6 +181,7 @@ class Frame {
         if (!length) {
             return this;
         }
+        this.orderMap.remove(params);
         const value = getValueByNames(params, this.properties, length - 1);
 
         if (isObject(value)) {
@@ -262,6 +315,7 @@ class Frame {
     public clone() {
         const frame = new Frame();
 
+        frame.setOrderObject(this.orderMap.orderMap);
         return frame.merge(this);
     }
     /**
@@ -301,8 +355,8 @@ class Frame {
                 cssObject[name] = value;
             }
         }
-        const transform = toInnerProperties(properties[TRANSFORM_NAME]);
-        const filter = toInnerProperties(properties.filter);
+        const transform = toInnerProperties(properties[TRANSFORM_NAME], this.orderMap.get([TRANSFORM_NAME]));
+        const filter = toInnerProperties(properties.filter, this.orderMap.get([FILTER]));
 
         TRANSFORM && transform && (cssObject[TRANSFORM] = transform);
         FILTER && filter && (cssObject[FILTER] = filter);
@@ -315,10 +369,12 @@ class Frame {
     public toCSS() {
         const cssObject = this.toCSSObject();
         const cssArray = [];
+        const keys = getKeys(cssObject);
 
-        for (const name in cssObject) {
+        sortOrders(keys, this.orderMap.get([]));
+        keys.forEach(name => {
             cssArray.push(`${name}:${cssObject[name]};`);
-        }
+        });
         return cssArray.join("");
     }
     /**
@@ -327,6 +383,7 @@ class Frame {
       */
     public clear() {
         this.properties = {};
+        this.orderMap.clear();
         return this;
     }
     private _set(args: NameType[], value: any) {
@@ -342,10 +399,12 @@ class Frame {
         if (!length) {
             return;
         }
-        if (length === 1 && args[0] === TIMING_FUNCTION) {
-            properties[TIMING_FUNCTION] = getEasing(value);
+        const lastParam = args[length - 1];
+
+        this.orderMap.add(args);
+        if (length === 1 && lastParam === TIMING_FUNCTION) {
+            properties[lastParam] = getEasing(value);
         } else {
-            const lastParam = args[length - 1];
             properties[lastParam] = isString(value) && !isFixed(args)
                 ? toPropertyObject(value, lastParam)
                 : value;

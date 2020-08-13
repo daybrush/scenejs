@@ -50,7 +50,7 @@ export const EASINGS = {
     "step-start": STEP_START,
     "step-end": STEP_END,
 };
-
+export const NAME_SEPARATOR = "_///_";
 /**
 * option name list
 * @name Scene.OPTIONS

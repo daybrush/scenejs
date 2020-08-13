@@ -315,6 +315,30 @@ describe("SceneItem Test", () => {
             expect(item.getFrame(0.7)).to.be.not.ok;
             expect(item.getFrame(1).get("display")).to.be.equals("none");
         });
+        it("should check 'setOrders', 'getFrame' method", () => {
+            // Given
+            item.set(0, {
+                transform: "translate(10px) scale(2)",
+            });
+            const css1 = item.getFrame(0).toCSS();
+            const css2 = item.getNowFrame(0).toCSS();
+            const css3 = item.getNowFrame(0, undefined, true).toCSS();
+
+            // When
+            item.setOrders(["transform"], ["scale", "translate"]);
+
+            const css4 = item.getFrame(0).toCSS();
+            const css5 = item.getNowFrame(0).toCSS();
+            const css6 = item.getNowFrame(0, undefined, true).toCSS();
+
+            // Then
+            expect(css1).to.have.string("translate(10px) scale(2)");
+            expect(css2).to.have.string("translate(10px) scale(2)");
+            expect(css3).to.have.string("translate(10px) scale(2)");
+            expect(css4).to.have.string("scale(2) translate(10px)");
+            expect(css5).to.have.string("scale(2) translate(10px)");
+            expect(css6).to.have.string("scale(2) translate(10px)");
+        });
         it("should check 'hasFrame' method", () => {
             expect(item.hasFrame("0")).to.be.true;
             expect(item.hasFrame("0.5")).to.be.true;
@@ -989,11 +1013,12 @@ describe("SceneItem Test", () => {
     [true, false].forEach(hasClassList => {
         describe(`test SceneItem events(hasClassList = ${hasClassList})`, () => {
             let item: SceneItem;
+            let element: HTMLElement;
 
             beforeEach(() => {
-                this.element = document.createElement("div");
-                !hasClassList && removeProperty(this.element, "classList");
-                document.body.appendChild(this.element);
+                element = document.createElement("div");
+                !hasClassList && removeProperty(element, "classList");
+                document.body.appendChild(element);
 
                 item = new SceneItem({
                     0: {
@@ -1010,13 +1035,13 @@ describe("SceneItem Test", () => {
             });
             afterEach(() => {
                 document.body.innerHTML = "";
-                this.element = null;
+                element = null;
                 item.off();
                 item = null;
             });
             it(`should check "playCSS" and event order `, async () => {
                 // Given
-                item.setElement(this.element);
+                item.setElement(element);
                 const play = sinon.spy();
                 const ended = sinon.spy();
                 const iteration = sinon.spy();
@@ -1042,7 +1067,7 @@ describe("SceneItem Test", () => {
             });
             it(`should check "playCSS" and replay`, async () => {
                 // Given
-                item.setElement(this.element);
+                item.setElement(element);
                 const play = sinon.spy();
                 const ended = sinon.spy();
                 item.on("play", play);
@@ -1062,7 +1087,7 @@ describe("SceneItem Test", () => {
             });
             it(`should check "iteration" event `, done => {
                 // Given
-                item.setElement(this.element);
+                item.setElement(element);
                 const play = sinon.spy();
                 const ended = sinon.spy();
                 const iteration = sinon.spy();

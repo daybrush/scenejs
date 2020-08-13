@@ -92,6 +92,60 @@ describe("Frame Test", () => {
             const frame2 = frame.clone();
             expect(frame2.properties).to.deep.equals(frame.properties);
         });
+        it(`should check "setOrders" method`, () => {
+            // Given
+            frame.set("transform:translate(10px, 20px) scale(10px);");
+            const given1 = frame.toCSS();
+
+            // When
+            frame.setOrders(["transform"], ["translate", "scale"]);
+            const given2 = frame.toCSS();
+
+            // Then
+            expect(frame.getOrders(["transform"])).to.be.deep.equals(["translate", "scale"]);
+            expect(given1).to.have.string("scale(10px) translate(10px,20px)");
+            expect(given2).to.have.string("translate(10px,20px) scale(10px)");
+        });
+        it(`should check "getKeys" method`, () => {
+            // Given
+            frame.set("transform:translate(10px, 20px) scale(10px);");
+            const keys1 = frame.getKeys();
+            const transformKeys1 = frame.getKeys("transform");
+
+            // When
+            frame.setOrders([], ["a", "transform", "b", "filter"]);
+            frame.setOrders(["transform"], ["translate", "scale"]);
+            const keys2 = frame.getKeys();
+            const transformKeys2 = frame.getKeys("transform");
+
+            // Then
+            expect(keys1).to.be.deep.equals(["a", "b", "transform", "filter"]);
+            expect(keys2).to.be.deep.equals(["a", "transform", "b", "filter"]);
+            expect(transformKeys1).to.be.deep.equals(["scale", "translate"]);
+            expect(transformKeys2).to.be.deep.equals(["translate", "scale"]);
+            // expect(given2).to.have.string("translate(10px,20px) scale(10px)");
+        });
+        it(`should check "gets" method`, () => {
+            // Given
+            frame.set("transform:translate(10px, 20px) scale(10px);");
+            const values1 = frame.gets();
+            const transformValues1 = frame.gets("transform");
+
+            // When
+            frame.setOrders([], ["a", "transform", "b", "filter"]);
+            frame.setOrders(["transform"], ["translate", "scale"]);
+            const values2 = frame.gets();
+            const transformValues2 = frame.gets("transform");
+
+            // Then
+            expect(values1.map(v => v.key)).to.be.deep.equals(["a", "b", "transform", "filter"]);
+            expect(transformValues1.map(v => v.key)).to.be.deep.equals(["scale", "translate"]);
+            expect(values1[2].children).to.be.deep.equals(transformValues1);
+
+            expect(values2.map(v => v.key)).to.be.deep.equals(["a", "transform", "b", "filter"]);
+            expect(transformValues2.map(v => v.key)).to.be.deep.equals(["translate", "scale"]);
+            expect(values2[1].children).to.be.deep.equals(transformValues2);
+        });
         it("sholud check merge method", () => {
             const frame2 = new Frame({
                 a: 10,

@@ -1,14 +1,14 @@
 import Animator from "./Animator";
 import SceneItem from "./SceneItem";
-import { SELECTOR, DURATION, DELAY, RUNNING } from "./consts";
+import { SELECTOR, DURATION, DELAY, RUNNING, NAME_SEPARATOR } from "./consts";
 import { playCSS, exportCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import {
     AnimateElement, SceneState, SceneOptions, EasingType,
-    AnimatorState, SceneItemOptions, PlayCondition
+    AnimatorState, SceneItemOptions, PlayCondition, NameType
 } from "./types";
 import Frame from "./Frame";
-import ListMap from "list-map";
+import OrderMap from "order-map";
 
 /**
  * manage sceneItems and play Scene.
@@ -22,7 +22,8 @@ class Scene extends Animator<SceneOptions, SceneState> {
     * Scene.VERSION // #__VERSION__#
     */
     public static VERSION: string = "#__VERSION__#";
-    public items: ListMap<Scene | SceneItem> = new ListMap();
+    public items: IObject<Scene | SceneItem> = {};
+    public orderMap = new OrderMap(NAME_SEPARATOR);
     public temp: IObject<Frame>;
     /**
     * @param - properties
@@ -48,7 +49,7 @@ class Scene extends Animator<SceneOptions, SceneState> {
       }
     });
       */
-    constructor(properties?: {options?: Partial<SceneOptions>} & IObject<any>, options?: Partial<SceneOptions>) {
+    constructor(properties?: { options?: Partial<SceneOptions> } & IObject<any>, options?: Partial<SceneOptions>) {
         super();
         this.load(properties, options);
     }
@@ -91,7 +92,7 @@ class Scene extends Animator<SceneOptions, SceneState> {
     const item = scene.getItem("item1")
     */
     public getItem(name: number | string) {
-        return this.items.get(name);
+        return this.items[name];
     }
     /**
     * create item in scene
@@ -102,8 +103,8 @@ class Scene extends Animator<SceneOptions, SceneState> {
     const item = scene.newItem("item1")
     */
     public newItem(name: number | string, options: Partial<SceneItemOptions> = {}): Scene | SceneItem {
-        if (this.items.has(name)) {
-            return this.items.get(name);
+        if (this.items[name]) {
+            return this.items[name];
         }
         const item = new SceneItem();
 
@@ -122,7 +123,9 @@ class Scene extends Animator<SceneOptions, SceneState> {
     scene.removeItem("item1");
     */
     public removeItem(name: number | string): this {
-        this.items.remove(name);
+        delete this.items[name];
+
+        this.orderMap.remove([name]);
         return this;
     }
     /**
@@ -134,7 +137,9 @@ class Scene extends Animator<SceneOptions, SceneState> {
     */
     public setItem(name: number | string, item: Scene | SceneItem) {
         item.setId(name);
-        this.items.set(name, item);
+        this.items[name] = item;
+
+        this.orderMap.add([name]);
         return this;
     }
     public setTime(time: number | string, isTick?: boolean, isParent?: boolean, parentEasing?: EasingType) {
@@ -204,9 +209,8 @@ const scene = new Scene({
         ) => void,
     ) {
         const items = this.items;
-
-        items.forEach((item, id, index, obj) => {
-            func(item, id, index, obj);
+        this.orderMap.get([]).forEach((id, index) => {
+            func(items[id], id, index, items);
         });
         return this;
     }
@@ -264,6 +268,23 @@ const scene = new Scene({
         isEndedCSS(this) && this.endCSS();
         super.end();
         return this;
+    }
+        /**
+      * get item orders
+      * @example
+      scene.getOrders() // => ["item1", "item2"]
+      */
+     public getOrders(): NameType[] {
+        return this.orderMap.get([]);
+    }
+    /**
+      * set item orders
+      * @param - orders
+      * @example
+      frame.setOrders(["item2", "item1"]) // => ["item2", "item1"]
+      */
+    public setOrders(orders: NameType[]): NameType[] {
+        return this.orderMap.set([], orders);
     }
     public addPlayClass(isPaused: boolean, playClassName?: string, properties: object = {}) {
         let animtionElement: AnimateElement;

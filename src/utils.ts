@@ -1,6 +1,6 @@
 import {
     ROLES, MAXIMUM, FIXED, ALIAS,
-    PAUSED, RUNNING, PLAY, ENDED, PREFIX, PLAY_CSS, CURRENT_TIME, START_ANIMATION, EASINGS
+    PAUSED, RUNNING, PLAY, ENDED, PREFIX, PLAY_CSS, CURRENT_TIME, START_ANIMATION, EASINGS, NAME_SEPARATOR
 } from "./consts";
 import PropertyObject from "./PropertyObject";
 import Scene from "./Scene";
@@ -254,4 +254,8 @@ export function getEasing(curveArray: string | number[] | EasingFunction): Easin
     }
 
     return easing;
+}
+
+export function getFullName(names: NameType[]) {
+    return names.join(NAME_SEPARATOR);
 }

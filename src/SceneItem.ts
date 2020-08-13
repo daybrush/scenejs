@@ -10,7 +10,6 @@ import {
     makeId,
     isPausedCSS,
     isRole,
-    isInProperties,
     getValueByNames,
     isEndedCSS,
     setPlayCSS,
@@ -23,21 +22,25 @@ import {
     PREFIX, THRESHOLD,
     TIMING_FUNCTION, ALTERNATE, ALTERNATE_REVERSE, INFINITE,
     REVERSE, EASING, FILL_MODE, DIRECTION, ITERATION_COUNT,
-    EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION, DATA_SCENE_ID, SELECTOR, ROLES, CURRENT_TIME
+    EASING_NAME, DELAY, PLAY_SPEED, DURATION, PAUSE_ANIMATION,
+    DATA_SCENE_ID, SELECTOR, ROLES, NAME_SEPARATOR
 } from "./consts";
 import {
     isObject, isArray, isUndefined, decamelize,
     ANIMATION, fromCSS, addClass, removeClass, hasClass,
-    KEYFRAMES, requestAnimationFrame, isFunction,
+    KEYFRAMES, isFunction,
     IObject, $, splitComma, toArray, isString, IArrayFormat,
     dot as dotNumber,
     find,
     findIndex,
+    getKeys,
+    sortOrders,
 } from "@daybrush/utils";
 import {
-    NameType, RoleObject, AnimateElement, AnimatorState,
+    NameType, AnimateElement, AnimatorState,
     SceneItemState, SceneItemOptions, EasingType, PlayCondition, DirectionType
 } from "./types";
+import OrderMap from "order-map";
 
 function getNearTimeIndex(times: number[], time: number) {
     const length = times.length;
@@ -149,7 +152,7 @@ const item = new SceneItem({
 class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
     public times: number[] = [];
     public items: IObject<Frame> = {};
-    public names: RoleObject = {};
+    public nameMap = new OrderMap(NAME_SEPARATOR);
     public elements: AnimateElement[] = [];
     public temp: Frame;
     private needUpdate: boolean = true;
@@ -319,6 +322,40 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
         const frame = this.getFrame(time);
 
         return frame && frame.get(...args);
+    }
+    /**
+      * get properties orders
+      * @param - property names
+      * @example
+      item.getOrders(["display"]) // => []
+      item.getOrders(["transform"]) // => ["translate", "scale"]
+      */
+    public getOrders(names: NameType[]): NameType[] | undefined {
+        this.needUpdate && this.update();
+
+        return this.nameMap.get(names);
+    }
+    /**
+      * set properties orders
+      * @param - property names
+      * @param - orders
+      * @example
+      item.getOrders(["transform"]) // => ["translate", "scale"]
+      item.setOrders(["transform"], ["scale", "tralsate"])
+      */
+    public setOrders(names: NameType[], orders: NameType[]): NameType[] {
+        this.needUpdate && this.update();
+
+        const result = this.nameMap.set(names, orders);
+
+        this.updateFrameOrders();
+
+        return result;
+    }
+    public setOrderObject(obj: IObject<NameType[]>) {
+        this.nameMap.setObject(obj);
+
+        this.updateFrameOrders();
     }
     public remove(time: string | number, ...args: any[]): this;
     /**
@@ -582,11 +619,34 @@ item.setElement(document.querySelectorAll(".class"));
   item.update();
       */
     public update() {
+        const prevNameMap = this.nameMap;
         const names = {};
         this.forEach(frame => {
             updateFrame(names, frame.properties);
         });
-        this.names = names;
+
+        const nameMap = new OrderMap(NAME_SEPARATOR);
+
+        function pushKeys(map: IObject<any>, stack: NameType[]) {
+            const keys = getKeys(map);
+
+            sortOrders(keys, prevNameMap.get(stack));
+
+            nameMap.set(stack, keys);
+            keys.forEach(key => {
+                const nextMap = map[key];
+                if (isObject(nextMap)) {
+                    pushKeys(nextMap, [...stack, key]);
+                }
+            });
+        }
+        pushKeys(names, []);
+
+        this.nameMap = nameMap;
+
+        this.forEach(frame => {
+            frame.setOrderObject(nameMap.orderMap);
+        });
         this.needUpdate = false;
         return this;
     }
@@ -604,6 +664,7 @@ item.setElement(document.querySelectorAll(".class"));
             return frame;
         }
         frame = new Frame();
+
         this.setFrame(time, frame);
         return frame;
     }
@@ -678,7 +739,7 @@ item.setElement(document.querySelectorAll(".class"));
       */
     public hasName(args: string[]) {
         this.needUpdate && this.update();
-        return isInProperties(this.names, args, true);
+        return !!this.nameMap.get(args);
     }
     /**
       * merge frame of the previous time at the next time.
@@ -723,7 +784,7 @@ item.setElement(document.querySelectorAll(".class"));
         const frame = new Frame();
         const [left, right] = getNearTimeIndex(this.times, time);
         let realEasing = this.getEasing() || easing;
-        let nameObject = this.names;
+        let nameMap = this.nameMap;
 
         if (this.hasName([TIMING_FUNCTION])) {
             const nowEasing = this.getNowValue(time, [TIMING_FUNCTION], left, right, false, 0, true);
@@ -732,17 +793,21 @@ item.setElement(document.querySelectorAll(".class"));
         }
         if (isAccurate) {
             const prevFrame = this.getFrame(time);
-            const prevNames = updateFrame({}, prevFrame.properties);
+            const prevOrderMap = prevFrame.orderMap.filter([], orders => {
+                return prevFrame.has(...orders);
+            });
 
             for (const name in ROLES) {
-                if (name in prevNames) {
-                    prevNames[name] = nameObject[name];
+                const orders = nameMap.get([name]);
+                if (prevOrderMap.get([name]) && orders) {
+                    prevOrderMap.set([name], orders);
                 }
             }
-            nameObject = prevNames;
+            nameMap = prevOrderMap;
         }
-        const names = getNames(nameObject, []);
+        const names = nameMap.gets([]);
 
+        frame.setOrderObject(nameMap.orderMap);
         names.forEach(properties => {
             const value = this.getNowValue(time, properties, left, right, isAccurate, realEasing, isFixed(properties));
 
@@ -784,6 +849,8 @@ item.setElement(document.querySelectorAll(".class"));
         const item = new SceneItem();
 
         item.setOptions(this.state);
+        item.setOrderObject(this.nameMap.orderMap);
+
         this.forEach((frame: Frame, time: number) => {
             item.setFrame(time, frame.clone());
         });
@@ -968,14 +1035,14 @@ item.setElement(document.querySelectorAll(".class"));
     public clear() {
         this.times = [];
         this.items = {};
-        this.names = {};
+        this.nameMap = new OrderMap(NAME_SEPARATOR);
         this.temp = null;
         this.needUpdate = true;
         return this;
     }
     public getNowValue(
         time: number,
-        properties: string[],
+        properties: NameType[],
         left?: number,
         right?: number,
         isAccurate?: boolean,
@@ -1067,6 +1134,13 @@ item.setElement(document.querySelectorAll(".class"));
                 ${time === 0 && !isDirectionReverse(0, 1, direction) ? "" : frames[keytime]}
             }`;
         }).join("");
+    }
+    private updateFrameOrders() {
+        const nameMap = this.nameMap.orderMap;
+
+        this.forEach(frame => {
+            frame.setOrderObject(nameMap);
+        });
     }
 }
 

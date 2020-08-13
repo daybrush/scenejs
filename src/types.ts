@@ -171,3 +171,12 @@ export interface PlayCondition {
     className?: string;
     selector?: string | ((item: SceneItem, selector: string) => string);
 }
+
+/**
+ * @typedef
+ */
+export interface KeyValueChildren {
+    key: string;
+    value: any;
+    children: KeyValueChildren[];
+}
