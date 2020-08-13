@@ -137,17 +137,6 @@ export function isEndedCSS(item: Scene | SceneItem) {
     return !item.isEnded() && item.state[PLAY_CSS];
 }
 
-export function exportCSS(id: number | string, css: string) {
-    const styleId = `${PREFIX}STYLE_${toId(id)}`;
-    const styleElement: HTMLElement = $(`#${styleId}`);
-
-    if (styleElement) {
-        styleElement.innerText = css;
-    } else {
-        document.body.insertAdjacentHTML("beforeend",
-            `<style id="${styleId}">${css}</style>`);
-    }
-}
 export function makeId(selector?: boolean) {
     for (; ;) {
         const id = `${Math.floor(Math.random() * 10000000)}`;

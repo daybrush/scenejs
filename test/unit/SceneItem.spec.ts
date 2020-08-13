@@ -819,10 +819,9 @@ describe("SceneItem Test", () => {
             // When
             this.item.setElement(this.element);
             this.item.exportCSS();
-            const id = this.item.getId().match(/[0-9a-zA-Z]+/g).join("");
             // Then
 
-            expect(document.querySelector(`#__SCENEJS_STYLE_${id}`)).to.be.ok;
+            expect(document.querySelector(`[data-styled-id="${this.item.styled.className}"]`)).to.be.ok;
         });
         it(`should check role test`, () => {
             // Given

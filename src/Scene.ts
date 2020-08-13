@@ -1,7 +1,7 @@
 import Animator from "./Animator";
 import SceneItem from "./SceneItem";
 import { SELECTOR, DURATION, DELAY, RUNNING, NAME_SEPARATOR } from "./consts";
-import { playCSS, exportCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
+import { playCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import {
     AnimateElement, SceneState, SceneOptions, EasingType,
@@ -9,7 +9,7 @@ import {
 } from "./types";
 import Frame from "./Frame";
 import OrderMap from "order-map";
-
+import styled, { InjectResult, StyledInjector } from "css-styled";
 /**
  * manage sceneItems and play Scene.
  * @sort 1
@@ -24,6 +24,8 @@ class Scene extends Animator<SceneOptions, SceneState> {
     public static VERSION: string = "#__VERSION__#";
     public items: IObject<Scene | SceneItem> = {};
     public orderMap = new OrderMap(NAME_SEPARATOR);
+    public styled: StyledInjector;
+    public styledInjector: InjectResult;
     public temp: IObject<Frame>;
     /**
     * @param - properties
@@ -237,7 +239,15 @@ const scene = new Scene({
         playCondition?: PlayCondition, duration?: number, parentStates?: AnimatorState[]) {
         const css = this.toCSS(playCondition, duration, parentStates);
 
-        (!parentStates || !parentStates.length) && exportCSS(getRealId(this), css);
+        if (!parentStates || !parentStates.length) {
+            if (this.styledInjector) {
+                this.styledInjector.destroy();
+                this.styledInjector = null;
+            }
+            this.styled = styled(css);
+            this.styledInjector = this.styled.inject(this.getAnimationElement(), { original: true });
+            // && exportCSS(getRealId(this), css);
+        }
         return this;
     }
     public append(item: SceneItem | Scene) {
@@ -285,6 +295,16 @@ const scene = new Scene({
       */
     public setOrders(orders: NameType[]): NameType[] {
         return this.orderMap.set([], orders);
+    }
+    public getAnimationElement() {
+        let animtionElement: AnimateElement;
+
+        this.forEach(item => {
+            const el = item.getAnimationElement();
+
+            !animtionElement && (animtionElement = el);
+        });
+        return animtionElement;
     }
     public addPlayClass(isPaused: boolean, playClassName?: string, properties: object = {}) {
         let animtionElement: AnimateElement;
@@ -338,6 +358,21 @@ console.log(scene.getItem(".a").get(1, "opacity"));
     public set(properties: any) {
         this.load(properties);
         return this;
+    }
+    /**
+      * Clear All Items
+      * @return {Scene} An instance itself
+      */
+    public clear() {
+        this.finish();
+        this.items = {};
+        this.orderMap = new OrderMap(NAME_SEPARATOR);
+
+        if (this.styledInjector) {
+            this.styledInjector.destroy();
+        }
+        this.styled = null;
+        this.styledInjector = null;
     }
     public load(properties: any = {}, options = properties.options) {
         if (!properties) {

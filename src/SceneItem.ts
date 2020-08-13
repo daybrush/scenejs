@@ -5,7 +5,6 @@ import {
     isFixed,
     playCSS,
     toId,
-    exportCSS,
     getRealId,
     makeId,
     isPausedCSS,
@@ -41,6 +40,7 @@ import {
     SceneItemState, SceneItemOptions, EasingType, PlayCondition, DirectionType
 } from "./types";
 import OrderMap from "order-map";
+import styled, { InjectResult, StyledInjector } from "css-styled";
 
 function getNearTimeIndex(times: number[], time: number) {
     const length = times.length;
@@ -154,6 +154,8 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
     public items: IObject<Frame> = {};
     public nameMap = new OrderMap(NAME_SEPARATOR);
     public elements: AnimateElement[] = [];
+    public styled: StyledInjector;
+    public styledInjector: InjectResult;
     public temp: Frame;
     private needUpdate: boolean = true;
     private target: any;
@@ -955,7 +957,14 @@ item.setElement(document.querySelectorAll(".class"));
         const css = this.toCSS(playCondition, duration, options);
         const isParent = options && !isUndefined(options[ITERATION_COUNT]);
 
-        !isParent && exportCSS(getRealId(this), css);
+        if (!isParent) {
+            if (this.styledInjector) {
+                this.styledInjector.destroy();
+                this.styledInjector = null;
+            }
+            this.styled = styled(css);
+            this.styledInjector = this.styled.inject(this.getAnimationElement(), { original: true });
+        }
         return this;
     }
     public pause() {
@@ -999,6 +1008,9 @@ item.setElement(document.querySelectorAll(".class"));
         playCSS(this, isExportCSS, playClassName, properties);
         return this;
     }
+    public getAnimationElement(): AnimateElement {
+        return this.elements[0];
+    }
     public addPlayClass(isPaused: boolean, playClassName?: string, properties: object = {}) {
         const elements = this.elements;
         const length = elements.length;
@@ -1029,13 +1041,19 @@ item.setElement(document.querySelectorAll(".class"));
         return elements[0];
     }
     /**
-      * Remove All Frames
+      * Clear All Frames
       * @return {SceneItem} An instance itself
       */
     public clear() {
         this.times = [];
         this.items = {};
         this.nameMap = new OrderMap(NAME_SEPARATOR);
+
+        if (this.styledInjector) {
+            this.styledInjector.destroy();
+        }
+        this.styled = null;
+        this.styledInjector = null;
         this.temp = null;
         this.needUpdate = true;
         return this;
