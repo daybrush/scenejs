@@ -348,13 +348,15 @@ h2 {
 .half.left .semicircle {
     left: -100%;
     transform-origin: 100% 50%;
-    border-radius: 100% 0 0 100% / 50% 0 0 50%;
+    border-radius: 100% 0 0 100% / 50%;
 }
-
+.half, .half .semicircle {
+    will-change: transform;
+}
 .half.right .semicircle {
     left: 100%;
     transform-origin: 0% 50%;
-    border-radius: 0% 100 100 0% / 50% 0 0 50%;
+    border-radius: 0% 100% 100% 0% / 50%;
 }
 
 /* chase */
