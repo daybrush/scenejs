@@ -211,7 +211,7 @@ const scene = new Scene({
         ) => void,
     ) {
         const items = this.items;
-        this.orderMap.get([]).forEach((id, index) => {
+        this.getOrders().forEach((id, index) => {
             func(items[id], id, index, items);
         });
         return this;
@@ -285,7 +285,7 @@ const scene = new Scene({
       scene.getOrders() // => ["item1", "item2"]
       */
      public getOrders(): NameType[] {
-        return this.orderMap.get([]);
+        return this.orderMap.get([]) || [];
     }
     /**
       * set item orders
