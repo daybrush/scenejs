@@ -15,9 +15,10 @@ export function splitStyle(str: string) {
 
     const properties = splitText(str, ";");
     const obj: IObject<string | PropertyObject> = {};
-    let length = properties.length;
+    const totalLength = properties.length;
+    let length = totalLength;
 
-    for (let i = 0; i < length; ++i) {
+    for (let i = 0; i < totalLength; ++i) {
         const matches = splitText(properties[i], ":");
 
         if (matches.length < 2 || !matches[1]) {

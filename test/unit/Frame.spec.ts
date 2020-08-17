@@ -165,6 +165,13 @@ describe("Frame Test", () => {
             expect(frame2.get("filter", "brightness")).to.be.equals("90%");
             expect(frame2.get("filter", "grayscale")).to.be.equals("50%");
         });
+        it("should check `set` method with no value", () => {
+            // Given, When
+            frame.set(`text-shadow:5px 5px 5px;-webkit-mask-image:;filter:blur(6px);`);
+
+            // Then
+            expect(frame.has("filter", "blur")).to.be.equals(true);
+        });
         it("sholud check remove method", () => {
             // Given, When
             frame.remove("a");
