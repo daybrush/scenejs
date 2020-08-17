@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<style>
+    html,
+    body {
+        position: relative;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .page1 {
+        position: relative;
+        min-height: 600px;
+        height: 100%;
+    }
+
+    .page1 .startAnimation {
+        will-change: transform;
+        -webkit-backface-visibility: hidden;
+        -webkit-perspective: 1000;
+    }
+
+    .page1 .logo {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        height: 250px;
+        margin: auto;
+    }
+
+    .logo1 .clapper {
+        position: relative;
+        width: 200px;
+        height: 110px;
+        margin: 0px auto;
+    }
+
+    .logo1 .svg_circle {
+        position: absolute;
+    }
+
+    .logo1 svg circle {
+        stroke-dasharray: 0 1000;
+        stroke-dashoffset: 0;
+    }
+
+    .logo1 .play-btn {
+        width: 40px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translate(5px);
+        transition: width ease 0.2s;
+    }
+
+    .logo1 .play-btn:hover {
+        width: 45px;
+    }
+
+    .logo1 .circle,
+    .logo1 .center {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        z-index: -1;
+    }
+
+    .logo1 .circle {
+        transform: scale(0);
+    }
+
+    .logo1 .circle2 {
+        bottom: 100px;
+        left: 50px;
+    }
+
+    .logo1 .circle3 {
+        top: 50px;
+        right: 100px;
+    }
+
+    .logo1 .circle4 {
+        left: 100px;
+        top: 50px;
+    }
+
+    .logo1 .circle5 {
+        right: 100px;
+        bottom: 50px;
+    }
+
+    .logo1 .circle {
+        position: absolute;
+        box-sizing: border-box;
+        border-style: solid;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        border-width: 50px;
+        border-color: transparent;
+    }
+
+    .logo1 .circle:before,
+    .logo1 .circle:after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-style: solid;
+        width: inherit;
+        height: inherit;
+        border-width: inherit;
+        box-sizing: border-box;
+        border-radius: 50%;
+    }
+
+    .logo1 .circle:before {
+        transform: translate(-50%, -50%);
+        margin-top: 15%;
+        margin-left: 15%;
+        border-color: #D6D6D6;
+    }
+
+    .logo1 .circle:after {
+        transform: translate(-50%, -50%);
+        border-color: #333;
+    }
+
+    .logo1 .scene2.circle {
+        width: 90px;
+        height: 90px;
+    }
+
+    .logo1 ellipse {
+        opacity: 0;
+    }
+
+    .logo1 .background {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 200px;
+        height: 110px;
+        border-radius: 5px;
+        transform: translate(-50%, -50%);
+    }
+
+    .play-circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 70px;
+        height: 70px;
+        background: #fff;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+    }
+
+    .play-btn.front {
+        z-index: 2;
+    }
+
+    .clapper .stick {
+        position: absolute;
+        box-sizing: border-box;
+        width: 200px;
+        height: 32px;
+        font-size: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 5px 8px;
+        text-align: center;
+        background: #333;
+    }
+
+    .clapper .stick1 {
+        transform-origin: 0% 100%;
+        border-radius: 5px 5px 0px 0px;
+        top: -60px;
+    }
+
+    .clapper .stick2 {
+        top: -30px;
+    }
+
+    .clapper .rect {
+        position: relative;
+        display: inline-block;
+        height: 100%;
+        width: 20px;
+        background: white;
+        vertical-align: top;
+        margin: 0px 5px 0px;
+        border-radius: 5px;
+    }
+
+    .clapper .stick1 .rect {
+        transform: skew(15deg);
+    }
+
+    .clapper .stick2 .rect {
+        transform: skew(-15deg);
+    }
+
+    .logo1 .bottom {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #333;
+        box-sizing: border-box;
+        border-radius: 0px 0px 5px 5px;
+    }
+
+    .logo1 .shadow {
+        position: absolute;
+        box-sizing: border-box;
+        background: #D6D6D6;
+        margin-top: 10px;
+        margin-left: 10px;
+        z-index: -1;
+    }
+</style>
+<div id="main" class="page page1">
+    <div class="container container1">
+        <div class="logo logo1">
+            <div class="clapper">
+                <div class="background">
+                    <div class="stick stick1">
+                        <div class="rect rect1"></div>
+                        <div class="rect rect2"></div>
+                        <div class="rect rect3"></div>
+                        <div class="rect rect4"></div>
+                        <div class="rect rect5"></div>
+                        <div class="rect rect6"></div>
+                    </div>
+                    <div class="stick stick1 shadow"></div>
+                    <div class="stick stick2">
+                        <div class="rect rect1"></div>
+                        <div class="rect rect2"></div>
+                        <div class="rect rect3"></div>
+                        <div class="rect rect4"></div>
+                        <div class="rect rect5"></div>
+                        <div class="rect rect6"></div>
+                    </div>
+                    <div class="stick stick2 shadow"></div>
+                    <div class="bottom"></div>
+                    <div class="bottom shadow"></div>
+                </div>
+                <div class="play-circle"></div>
+                <div class="circle circle1 scene1"></div>
+                <div class="circle circle2 scene1"></div>
+                <div class="circle circle3 scene1"></div>
+                <div class="circle circle4 scene1"></div>
+                <div class="circle circle5 scene1"></div>
+                <div class="circle scene2"></div>
+                <div class="cut_effects"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://daybrush.com/shape-svg/release/latest/dist/shape-svg.min.js"></script>
+<script src="../dist/scene.js"></script>
+<script src="https://daybrush.com/scenejs-media/release/latest/dist/media.min.js"></script>
+<script>
+    const clapper = document.querySelector(".clapper");
+    const r = 50;
+
+    function makeShadow(element, func, options, left = 10, top = 15) {
+        const target = func({
+            left,
+            top,
+            opacity: 1,
+            ...options
+        });
+
+        func({
+            left: left * 2,
+            top: top * 2,
+            opacity: 0.2,
+            ...options,
+        }, target);
+
+        element.appendChild(target);
+
+        return target;
+    }
+    for (let i = 1; i <= 6; ++i) {
+        const size = (170 - (i - 1) * 20);
+        const stroke = r * 12 / size;
+        const ir = r - stroke;
+
+        const target = makeShadow(clapper, Shape.oval, {
+            "className": `svg_circle svg_circle${i} center`,
+            "r": ir,
+            "strokeWidth": stroke,
+            "strokeLinejoin": "round",
+            "stroke-linecap": "round",
+            "stroke": "#333",
+            "rotate": -360,
+            "origin": "50% 50%",
+        }, 5, 5);
+
+        target.style.cssText = `width: ${size}px; height: ${size}px;`;
+
+    }
+
+    makeShadow(clapper, Shape.poly, {
+        className: "play-btn back",
+        side: 3,
+        width: 60,
+        strokeWidth: 8,
+        strokeLinejoin: "round",
+        rotate: 90,
+        stroke: "#333",
+        fill: "#333",
+        origin: "50% 50%"
+    });
+    makeShadow(clapper, Shape.poly, {
+        className: "play-btn front",
+        side: 3,
+        width: 60,
+        strokeWidth: 8,
+        strokeLinejoin: "round",
+        rotate: 90,
+        stroke: "#333",
+        fill: "#333",
+        origin: "50% 50%"
+    });
+    const nextStep = 2.6;
+    const nextStep2 = nextStep + 4;
+    const scene = new Scene({
+        ".logo1 .scene1.circle": i => ({
+            0: {
+                transform: "scale(0)",
+            },
+            0.2: {
+                "border-width": "50px",
+            },
+            0.5: {
+                opacity: 1,
+            },
+            1: {
+                "transform": "scale(1)",
+                "border-width": "0px",
+                "opacity": 0,
+            },
+            options: {
+                delay: i * 0.4,
+            },
+        }),
+        ".logo1 ellipse": (i, el) => {
+            const opacity = el.getAttribute("opacity");
+            const index = Math.floor(i / 2);
+
+            return {
+                0: {
+                    "opacity": 0,
+                    "stroke-dasharray": "0 1000",
+                    "transform": `scaleX(${index % 2 ? -1 : 1}) rotate(${-90 + index * 180}deg)`
+                },
+                0.1: {
+                    opacity,
+                },
+                [0.6]: {
+                    "stroke-dasharray": `${70} 1000`,
+                    "stroke-dashoffset": 0,
+                },
+                [1.1 - index * 0.06]: {
+                    opacity,
+                },
+                [1.2 - index * 0.06]: {
+                    "stroke-dashoffset": -76,
+                    "stroke-dasharray": "0 1000",
+                    "transform": `rotate(${180 + index * 180}deg)`,
+                    "opacity": 0
+                },
+                options: {
+                    delay: nextStep + index * 0.16,
+                }
+            };
+        },
+        ".play-btn.back": {
+            0: {
+                transform: 'translate(-50%, -50%) scale(1)',
+            },
+            1: {
+                transform: 'scale(0.5)',
+            },
+            2: {
+                transform: 'scale(1)',
+            },
+            options: {
+                delay: nextStep + 1,
+            }
+        },
+        ".play-btn.front": {
+            0: {
+                transform: 'translate(-50%, -50%) scale(0)',
+            },
+            1: {
+                transform: 'scale(1)',
+            },
+            options: {
+                delay: nextStep + 2.4,
+            }
+        },
+        ".play-circle": {
+            0: {
+                transform: 'translate(-50%, -50%) scale(0)',
+            },
+            1: {
+                transform: 'scale(1)',
+            },
+            options: {
+                delay: nextStep + 2.1,
+            }
+        },
+        ".background": {
+            0: {
+                transform: 'translate(-50%, -50%) scale(0)',
+            },
+            1: {
+                transform: 'scale(1)',
+            },
+            options: {
+                delay: nextStep + 1.8,
+            }
+        },
+        ".stick1 .rect": i => ({
+            0: {
+                transform: {
+                    scale: 0,
+                    skew: "15deg",
+                }
+            },
+            0.7: {
+                transform: {
+                    scale: 1,
+                }
+            },
+            options: {
+                delay: nextStep + 2.8 + i * 0.1,
+            },
+        }),
+        ".stick2 .rect": i => ({
+            0: {
+                transform: {
+                    scale: 0,
+                    skew: "-15deg",
+                }
+            },
+            0.7: {
+                transform: {
+                    scale: 1,
+                }
+            },
+            options: {
+                delay: nextStep + 3 + i * 0.1,
+            },
+        }),
+        ".stick1": {
+            0: {
+                transform: {
+                    rotate: "0deg",
+                },
+            },
+            0.5: {
+                transform: {
+                    rotate: "-20deg",
+                }
+            },
+            1: {
+                transform: {
+                    rotate: "0deg",
+                }
+            },
+            1.5: {
+                transform: {
+                    rotate: "-10deg",
+                }
+            },
+            options: {
+                delay: nextStep2,
+                easing: Scene.EASE_IN_OUT,
+            }
+        },
+        ".clapper": {
+            0: {
+                transform: "rotate(0deg)",
+            },
+            0.5: {
+                transform: "rotate(-15deg)",
+            },
+            1: {
+                transform: "rotate(0deg)",
+            },
+            1.5: {
+                transform: "rotate(-10deg)",
+            },
+            options: {
+                delay: nextStep2,
+                easing: Scene.EASE_IN_OUT,
+            },
+        },
+    }, {
+            easing: Scene.EASE_IN_OUT,
+            selector: true,
+            iterationCount: 'infinite'
+        });
+        
+
+    const mediaScene = new MediaScene();
+
+    mediaScene
+        .addMedia("./clapper.mp3")
+        .seek(0, 0.452)
+        .setPlaySpeed(2)
+        .setVolume(0.7)
+        .setDelay(nextStep2 + 0.9);
+
+    scene.setItem("media", mediaScene);
+
+    scene.playCSS();
+</script>
