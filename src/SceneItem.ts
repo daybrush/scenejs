@@ -354,6 +354,23 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
 
         return result;
     }
+    /**
+      * get properties order object
+      * @example
+      console.log(item.getOrderObject());
+      */
+     public getOrderObject() {
+        return this.nameMap.getObject();
+    }
+    /**
+      * set properties orders object
+      * @param - properties orders object
+      * @example
+      item.setOrderObject({
+          "": ["transform"],
+          "transform": ["scale", "tralsate"],
+      });
+      */
     public setOrderObject(obj: IObject<NameType[]>) {
         this.nameMap.setObject(obj);
 

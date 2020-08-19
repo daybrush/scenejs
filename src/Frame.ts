@@ -129,6 +129,23 @@ class Frame {
     public setOrders(names: NameType[], orders: NameType[]): NameType[] {
         return this.orderMap.set(names, orders);
     }
+    /**
+      * get properties order object
+      * @example
+      console.log(frame.getOrderObject());
+      */
+    public getOrderObject() {
+        return this.orderMap.getObject();
+    }
+    /**
+      * set properties orders object
+      * @param - properties orders object
+      * @example
+      frame.setOrderObject({
+          "": ["transform"],
+          "transform": ["scale", "tralsate"],
+      });
+      */
     public setOrderObject(obj: IObject<NameType[]>) {
         this.orderMap.setObject(obj);
     }
