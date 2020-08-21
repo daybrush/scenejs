@@ -1,6 +1,6 @@
 {
     "name": "scenejs",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "description": "JavaScript & CSS timeline-based animation library",
     "main": "dist/scene.cjs.js",
     "module": "dist/scene.esm.js",
@@ -76,12 +76,12 @@
         "typescript": "^3.9.7"
     },
     "dependencies": {
-        "@daybrush/utils": "^0.13.0",
-        "css-styled": "^0.2.1",
-        "order-map": "^0.2.1"
+        "@daybrush/utils": "^1.0.0",
+        "css-styled": "^0.2.3",
+        "order-map": "^0.2.2"
     },
     "peerDependencies": {
-        "order-map": ">=0.2.1",
-        "@daybrush/utils": ">=0.13.0"
+        "order-map": ">=0.2.2",
+        "css-styled": ">=0.2.3"
     }
 }
