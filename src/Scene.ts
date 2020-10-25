@@ -5,7 +5,7 @@ import { playCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import {
     AnimateElement, SceneState, SceneOptions, EasingType,
-    AnimatorState, SceneItemOptions, PlayCondition, NameType
+    AnimatorState, SceneItemOptions, PlayCondition, NameType, SceneEvents
 } from "./types";
 import Frame from "./Frame";
 import OrderMap from "order-map";
@@ -14,7 +14,7 @@ import styled, { InjectResult, StyledInjector } from "css-styled";
  * manage sceneItems and play Scene.
  * @sort 1
  */
-class Scene extends Animator<SceneOptions, SceneState> {
+class Scene extends Animator<SceneOptions, SceneState, SceneEvents> {
     /**
     * version info
     * @type {string}

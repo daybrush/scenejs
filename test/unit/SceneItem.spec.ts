@@ -626,8 +626,9 @@ describe("SceneItem Test", () => {
         });
     });
     describe("test item events", () => {
+        let item: SceneItem;
         beforeEach(() => {
-            this.item = new SceneItem({
+            item = new SceneItem({
                 0: {
                     a: 1,
                     display: "block",
@@ -641,11 +642,9 @@ describe("SceneItem Test", () => {
                 });
         });
         afterEach(() => {
-            this.item = null;
+            item = null;
         });
         it("should check 'animate' event", done => {
-            const item = this.item;
-
             item.on("animate", ({ time, frame, currentTime }) => {
                 expect(time).to.be.equals(0.5);
                 expect(currentTime).to.be.equals(1.5);
@@ -658,9 +657,11 @@ describe("SceneItem Test", () => {
         });
     });
     describe("test frame for CSS", () => {
+        let element: HTMLElement;
+        let item: SceneItem;
         beforeEach(() => {
-            this.element = document.createElement("div");
-            this.item = new SceneItem({
+            element = document.createElement("div");
+            item = new SceneItem({
                 0: {
                     a: 1,
                 },
@@ -674,98 +675,96 @@ describe("SceneItem Test", () => {
             });
         });
         afterEach(() => {
-            this.element = "";
+            element = null;
             document.body.innerHTML = "";
         });
         it("should check 'setId' method (Element)", () => {
             // Given
-            const element = document.createElement("div");
-
-            this.item.elements = [element];
+            item.elements = [element];
             // When
 
-            this.item.setId(".a .b");
+            item.setId(".a .b");
 
             // Then
-            expect(this.item.state.id).to.be.equals(".a .b");
-            expect(this.item.state.selector).to.be.equals(`[data-scene-id="ab"]`);
-            expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.equal("ab");
+            expect(item.state.id).to.be.equals(".a .b");
+            expect(item.state.selector).to.be.equals(`[data-scene-id="ab"]`);
+            expect(item.elements[0].getAttribute("data-scene-id")).to.be.equal("ab");
         });
         it("should check 'setSelector' method", () => {
             // Given
-            document.body.appendChild(this.element);
+            document.body.appendChild(element);
             // When
-            this.item.setSelector("div");
+            item.setSelector("div");
 
             // Then
-            expect(this.item.state.selector).to.be.equals("div");
-            expect(this.item.elements[0].getAttribute("data-scene-id")).to.be.not.ok;
+            expect(item.state.selector).to.be.equals("div");
+            expect(item.elements[0].getAttribute("data-scene-id")).to.be.not.ok;
         });
         it("should check 'setSelector' method(peusdo)", () => {
             // Given
-            document.body.appendChild(this.element);
+            document.body.appendChild(element);
             // When
-            this.item.setSelector("div:before");
+            item.setSelector("div:before");
 
             // Then
-            expect(this.item.state.selector).to.be.equals("div:before");
-            expect(this.item.elements[0].tagName).to.be.equals("DIV");
+            expect(item.state.selector).to.be.equals("div:before");
+            expect(item.elements[0].tagName).to.be.equals("DIV");
         });
         it("should check 'setElement' method", () => {
             // Given
             // When
-            this.item.setElement(this.element);
-            const id = this.item.elements[0].getAttribute("data-scene-id");
+            item.setElement(element);
+            const id = item.elements[0].getAttribute("data-scene-id");
             // Then
-            expect(this.item.state.id).to.be.equals(id);
-            expect(this.item.state.selector).to.be.equals(`[data-scene-id="${id}"]`);
-            expect(this.item.elements[0]).to.be.equals(this.element);
+            expect(item.state.id).to.be.equals(id);
+            expect(item.state.selector).to.be.equals(`[data-scene-id="${id}"]`);
+            expect(item.elements[0]).to.be.equals(element);
         });
         it("should check 'setElement' method  with 'attribute'", () => {
             // Given
-            this.item.setElement(this.element);
+            item.setElement(element);
 
-            this.item.set(1, "attribute", "a", 1);
+            item.set(1, "attribute", "a", 1);
             // When
-            this.item.setTime(1);
+            item.setTime(1);
 
             // Then
-            expect(this.item.elements[0].getAttribute("a")).to.be.equals("1");
+            expect(item.elements[0].getAttribute("a")).to.be.equals("1");
         });
         it("should check 'setElement' method (already has id)", () => {
             // Given
-            this.item.state.id = "id123";
+            item.state.id = "id123";
             // When
-            this.item.setElement(this.element);
-            const id = this.item.elements[0].getAttribute("data-scene-id");
+            item.setElement(element);
+            const id = item.elements[0].getAttribute("data-scene-id");
             // Then
-            expect(this.item.state.id).to.be.equals(id);
-            expect(this.item.state.id).to.be.equals("id123");
-            expect(this.item.elements[0]).to.be.equals(this.element);
+            expect(item.state.id).to.be.equals(id);
+            expect(item.state.id).to.be.equals("id123");
+            expect(item.elements[0]).to.be.equals(element);
         });
         it("should check 'setElement' method (already has selector)", () => {
             // Given
-            this.item.state.selector = "div";
+            item.state.selector = "div";
             // When
-            this.item.setElement(this.element);
-            const id = this.item.elements[0].getAttribute("data-scene-id");
+            item.setElement(element);
+            const id = item.elements[0].getAttribute("data-scene-id");
             // Then
             expect(id).to.be.not.ok;
-            expect(this.item.state.selector).to.be.equals(`div`);
-            expect(this.item.elements[0]).to.be.equals(this.element);
+            expect(item.state.selector).to.be.equals(`div`);
+            expect(item.elements[0]).to.be.equals(element);
         });
         it("should check 'toKeyframes' method", () => {
             // Given
             // When
             // Then
-            // console.log(this.item.toKeyframes());
+            // console.log(item.toKeyframes());
         });
         it("should check 'toCSS' method", () => {
             // Given
 
             // When
             // Then
-            // console.log(this.item.toCSS());
+            // console.log(item.toCSS());
         });
         it(`should check toCSS method with no element`, () => {
             const scene = new SceneItem({
@@ -791,22 +790,22 @@ describe("SceneItem Test", () => {
         });
         it("should check 'setCSS' method", () => {
             // Given
-            this.element.style.width = "200px";
-            this.element.style.border = "5px solid black";
+            element.style.width = "200px";
+            element.style.border = "5px solid black";
             // When
-            this.item.setCSS(0, ["width"]);
-            const width = this.item.get(0, "width");
-            this.item.setCSS(0, ["border"]);
-            const border = this.item.get(0, "border");
-            this.item.setCSS(0);
+            item.setCSS(0, ["width"]);
+            const width = item.get(0, "width");
+            item.setCSS(0, ["border"]);
+            const border = item.get(0, "border");
+            item.setCSS(0);
 
-            document.body.appendChild(this.element);
-            this.item.setElement(this.element);
+            document.body.appendChild(element);
+            item.setElement(element);
 
-            this.item.setCSS(0, ["width"]);
-            const width2 = this.item.get(0, "width");
-            this.item.setCSS(0, ["border"]);
-            const border2 = this.item.get(0, "border");
+            item.setCSS(0, ["width"]);
+            const width2 = item.get(0, "width");
+            item.setCSS(0, ["border"]);
+            const border2 = item.get(0, "border");
 
             // Then
             expect(width).to.be.undefined;
@@ -817,11 +816,11 @@ describe("SceneItem Test", () => {
         it("should check 'exportCSS' method", () => {
             // Given
             // When
-            this.item.setElement(this.element);
-            this.item.exportCSS();
+            item.setElement(element);
+            item.exportCSS();
             // Then
 
-            expect(document.querySelector(`[data-styled-id="${this.item.styled.className}"]`)).to.be.ok;
+            expect(document.querySelector(`[data-styled-id="${item.styled.className}"]`)).to.be.ok;
         });
         it(`should check role test`, () => {
             // Given
@@ -830,15 +829,15 @@ describe("SceneItem Test", () => {
             setRole(["html3"], false);
 
             // When
-            this.item.set(0, "html", "a(1) b(2) c(3)");
-            this.item.set(2, "html", "a(3) b(4) c(5)");
-            this.item.set(0, "html2", "a(1) b(2) c(3)");
-            this.item.set(2, "html2", "a(3) b(4) c(5)");
-            this.item.set(0, "html3", "a(1) b(2) c(3)");
-            this.item.set(2, "html3", "a(3) b(4) c(5)");
+            item.set(0, "html", "a(1) b(2) c(3)");
+            item.set(2, "html", "a(3) b(4) c(5)");
+            item.set(0, "html2", "a(1) b(2) c(3)");
+            item.set(2, "html2", "a(3) b(4) c(5)");
+            item.set(0, "html3", "a(1) b(2) c(3)");
+            item.set(2, "html3", "a(3) b(4) c(5)");
 
             // Then
-            const frame = this.item.getNowFrame(1);
+            const frame = item.getNowFrame(1);
 
             expect(frame.get("html")).to.be.equals("a(1) b(2) c(3)");
             expect(frame.get("html2")).to.be.equals("a(2) b(3) c(4)");
@@ -849,7 +848,7 @@ describe("SceneItem Test", () => {
         });
         it(`should check 'append' method`, () => {
             // 1 3 2
-            this.item.append(new SceneItem({
+            item.append(new SceneItem({
                 0: {
                     a: 3,
                 },
@@ -859,7 +858,7 @@ describe("SceneItem Test", () => {
             }, {
                     iterationCount: 1,
                 }));
-            this.item.append(new SceneItem({
+            item.append(new SceneItem({
                 0: {
                     a: 4,
                 },
@@ -872,18 +871,18 @@ describe("SceneItem Test", () => {
                 }));
 
             // Then
-            expect(this.item.getDuration()).to.be.equals(3);
-            expect(this.item.get(1, "a")).to.be.equals(2);
-            expect(this.item.get(1 + THRESHOLD, "a")).to.be.equals(3);
-            expect(this.item.get("1>", "a")).to.be.equals(3);
-            expect(this.item.get(2, "a")).to.be.equals(5);
+            expect(item.getDuration()).to.be.equals(3);
+            expect(item.get(1, "a")).to.be.equals(2);
+            expect(item.get(1 + THRESHOLD, "a")).to.be.equals(3);
+            expect(item.get("1>", "a")).to.be.equals(3);
+            expect(item.get(2, "a")).to.be.equals(5);
 
-            expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(4);
-            expect(this.item.get("2>", "a")).to.be.equals(4);
-            expect(this.item.get(3, "a")).to.be.equals(6);
+            expect(item.get(2 + THRESHOLD, "a")).to.be.equals(4);
+            expect(item.get("2>", "a")).to.be.equals(4);
+            expect(item.get(3, "a")).to.be.equals(6);
         });
         it(`should check 'prepend' method`, () => {
-            this.item.prepend(new SceneItem({
+            item.prepend(new SceneItem({
                 0: {
                     a: 3,
                 },
@@ -893,7 +892,7 @@ describe("SceneItem Test", () => {
             }, {
                     iterationCount: 1,
                 }));
-            this.item.prepend({
+            item.prepend({
                 0: {
                     a: 4,
                 },
@@ -913,15 +912,15 @@ describe("SceneItem Test", () => {
 
             */
             // Then
-            expect(this.item.getDuration()).to.be.equals(3);
+            expect(item.getDuration()).to.be.equals(3);
 
-            expect(this.item.get(0, "a")).to.be.equals(4);
-            expect(this.item.get(1, "a")).to.be.equals(6);
-            expect(this.item.get("1>", "a")).to.be.equals(3);
-            expect(this.item.get(2, "a")).to.be.equals(5);
+            expect(item.get(0, "a")).to.be.equals(4);
+            expect(item.get(1, "a")).to.be.equals(6);
+            expect(item.get("1>", "a")).to.be.equals(3);
+            expect(item.get(2, "a")).to.be.equals(5);
 
-            expect(this.item.get(2 + THRESHOLD, "a")).to.be.equals(1);
-            expect(this.item.get(3, "a")).to.be.equals(2);
+            expect(item.get(2 + THRESHOLD, "a")).to.be.equals(1);
+            expect(item.get(3, "a")).to.be.equals(2);
         });
         function testEntries(...animators: Animator[]) {
             const states = animators.map(({ state }) => state);
@@ -931,7 +930,7 @@ describe("SceneItem Test", () => {
                 }`, () => {
                     // Given
                     const entries = getEntries([0, 0.5, 1], states);
-                    const item = animators[0];
+                    const animatorItem = animators[0];
                     const scene = animators[animators.length - 1];
                     const delay = scene.getDelay();
 
@@ -952,7 +951,7 @@ describe("SceneItem Test", () => {
                             scene.setTime(currentTime, true);
                         }
 
-                        const animatorTime = item.getIterationTime();
+                        const animatorTime = animatorItem.getIterationTime();
 
                         // Then
                         expect(animatorTime).to.be.closeTo(iterationTime, 0.0001);

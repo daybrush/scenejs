@@ -3,17 +3,14 @@ import {
     ALTERNATE, ALTERNATE_REVERSE, REVERSE, INFINITE, NORMAL,
     ITERATION_COUNT, DELAY, FILL_MODE, DIRECTION, PLAY_SPEED,
     DURATION, EASING, ITERATION_TIME, EASING_NAME, PAUSED,
-    RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE, PREV_TIME, TICK_TIME, CURRENT_TIME, ITERATION, OPTIONS, EASINGS
-} from "./consts";
-import EventTrigger from "./EventTrigger";
-import { bezier, steps } from "./easing";
+    RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE, PREV_TIME, TICK_TIME, CURRENT_TIME, ITERATION, OPTIONS} from "./consts";
 import { toFixed, getEasing } from "./utils";
-import { splitUnit, isString, camelize, requestAnimationFrame, isArray, cancelAnimationFrame } from "@daybrush/utils";
+import { splitUnit, isString, camelize, requestAnimationFrame, cancelAnimationFrame } from "@daybrush/utils";
 import {
     IterationCountType, DirectionType, AnimatorState,
-    EasingFunction, FillModeType, PlayStateType, EasingType, AnimatorOptions,
+    EasingFunction, FillModeType, PlayStateType, EasingType, AnimatorOptions, AnimatorEvents,
 } from "./types";
-import { toPropertyObject } from "./utils/property";
+import EventEmitter from "@scena/event-emitter";
 
 function GetterSetter<T extends new (...args: any[]) => {}>(
     getter: string[], setter: string[], parent: string) {
@@ -61,9 +58,12 @@ const getters = [...setters, EASING, EASING_NAME];
 * @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
 */
 @GetterSetter(getters, setters, "state")
-class Animator
-    <T extends AnimatorOptions = AnimatorOptions, U extends AnimatorState = AnimatorState> extends EventTrigger {
-    public state: U;
+class Animator <
+    Options extends AnimatorOptions = AnimatorOptions,
+    State extends AnimatorState = AnimatorState,
+    Events extends {} = {},
+> extends EventEmitter<AnimatorEvents & Events> {
+    public state: State;
     private timerId: number = 0;
 
     /**
@@ -78,7 +78,7 @@ class Animator
       easing: Scene.easing.EASE,
   });
      */
-    constructor(options?: Partial<T & AnimatorOptions>) {
+    constructor(options?: Partial<Options & AnimatorOptions>) {
         super();
         this.state = {
             id: "",
@@ -96,7 +96,7 @@ class Animator
             prevTime: 0,
             playState: PAUSED,
             duration: 0,
-        } as U;
+        } as State;
         this.setOptions(options);
     }
     /**
@@ -205,12 +205,13 @@ class Animator
         const state = this.state;
 
         state[PLAY_STATE] = RUNNING;
+
         if (state[TICK_TIME] >= delay) {
             /**
              * This event is fired when play animator.
              * @event Animator#play
              */
-            this.trigger(PLAY);
+            this.trigger<"play", AnimatorEvents["play"]>(PLAY);
             return true;
         }
         return false;
@@ -250,7 +251,7 @@ class Animator
              * This event is fired when animator is paused.
              * @event Animator#paused
              */
-            this.trigger(PAUSED);
+            this.trigger<"paused", AnimatorEvents["paused"]>(PAUSED);
         }
         cancelAnimationFrame(this.timerId);
         return this;
@@ -275,7 +276,7 @@ class Animator
              * This event is fired when animator is ended.
              * @event Animator#ended
              */
-        this.trigger(ENDED);
+        this.trigger<"ended", AnimatorEvents["ended"]>(ENDED);
         return this;
     }
     /**
@@ -328,7 +329,7 @@ class Animator
              * @param {Number} param.time The iteration time during duration that the animator is running.
              * @param {Number} param.iterationCount The iteration count that the animator is running.
              */
-        this.trigger(TIMEUPDATE, {
+        this.trigger<"timeupdate", AnimatorEvents["timeupdate"]>(TIMEUPDATE, {
             currentTime,
             time: this.getIterationTime(),
             iterationCount: state[ITERATION],
@@ -392,7 +393,7 @@ class Animator
                   * @param {Number} param.currentTime The total time that the animator is running.
                   * @param {Number} param.iterationCount The iteration count that the animator is running.
                   */
-            this.trigger("iteration", {
+            this.trigger<"iteration", AnimatorEvents["iteration"]>(ITERATION, {
                 currentTime: state[CURRENT_TIME],
                 iterationCount: passIterationCount,
             });
@@ -568,7 +569,11 @@ animator.getIterationTime();
 	*/
 
 // tslint:disable-next-line:interface-name
-interface Animator<T extends AnimatorOptions = AnimatorOptions, U extends AnimatorState = AnimatorState> {
+interface Animator <
+    Options extends AnimatorOptions = AnimatorOptions,
+    State extends AnimatorState = AnimatorState,
+    Events extends {} = {},
+> extends EventEmitter<AnimatorEvents & Events> {
     setId(id: number | string): this;
     getId(): number | string;
     getIterationTime(): number;

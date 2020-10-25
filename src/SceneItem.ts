@@ -37,7 +37,7 @@ import {
 } from "@daybrush/utils";
 import {
     NameType, AnimateElement, AnimatorState,
-    SceneItemState, SceneItemOptions, EasingType, PlayCondition, DirectionType
+    SceneItemState, SceneItemOptions, EasingType, PlayCondition, DirectionType, SceneItemEvents
 } from "./types";
 import OrderMap from "order-map";
 import styled, { InjectResult, StyledInjector } from "css-styled";
@@ -149,7 +149,7 @@ const item = new SceneItem({
 	}
 });
 */
-class SceneItem extends Animator<SceneItemOptions, SceneItemState> {
+class SceneItem extends Animator<SceneItemOptions, SceneItemState, SceneItemEvents> {
     public times: number[] = [];
     public items: IObject<Frame> = {};
     public nameMap = new OrderMap(NAME_SEPARATOR);
@@ -596,14 +596,15 @@ item.setElement(document.querySelectorAll(".class"));
     }
     /**
       * add css styles of items's element to the frame at that time.
-      * @param {Array} properties - elements to synchronize item's keyframes.
+      * @param - Time to synchronize and set css
+      * @param - elements to synchronize item's keyframes.
       * @return {SceneItem} An instance itself
       * @example
   item.setElement(document.querySelector("#id.class"));
   item.setCSS(0, ["opacity"]);
   item.setCSS(0, ["opacity", "width", "height"]);
       */
-    public setCSS(time: number, properties: string[]) {
+    public setCSS(time: number, properties: string[] = []) {
         this.set(time, fromCSS(this.elements, properties));
         return this;
     }

@@ -1,5 +1,6 @@
 import { IArrayFormat } from "@daybrush/utils";
-import { SceneItem } from ".";
+import SceneItem from "./SceneItem";
+import Frame from "./Frame";
 
 /**
  * @typedef
@@ -179,4 +180,53 @@ export interface KeyValueChildren {
     key: string;
     value: any;
     children: KeyValueChildren[];
+}
+/**
+ * @typedef
+ */
+export interface OnTimeUpdate {
+    currentTime: number;
+    time: number;
+    iterationCount: number;
+}
+export interface OnIteration {
+    currentTime: number;
+    iterationCount: number;
+}
+
+export interface OnSceneAnimate {
+    frames: Record<string, any>;
+    currentTime: number;
+    time: number;
+}
+
+export interface OnSceneItemAnimate {
+    frame: Frame;
+    currentTime: number;
+    time: number;
+}
+
+/**
+ * @typedef
+ */
+export interface AnimatorEvents {
+    play: {};
+    paused: {};
+    ended: {};
+    timeupdate: OnTimeUpdate;
+    iteration: OnIteration;
+}
+
+/**
+ * @typedef
+ */
+export interface SceneEvents extends AnimatorEvents {
+    animate: OnSceneAnimate;
+}
+
+/**
+ * @typedef
+ */
+export interface SceneItemEvents extends AnimatorEvents {
+    animate: OnSceneItemAnimate;
 }

@@ -1,17 +1,18 @@
 import {
     ROLES, MAXIMUM, FIXED, ALIAS,
-    PAUSED, RUNNING, PLAY, ENDED, PREFIX, PLAY_CSS, CURRENT_TIME, START_ANIMATION, EASINGS, NAME_SEPARATOR
+    RUNNING, PLAY, ENDED, PLAY_CSS, CURRENT_TIME, START_ANIMATION, EASINGS, NAME_SEPARATOR
 } from "./consts";
 import PropertyObject from "./PropertyObject";
 import Scene from "./Scene";
 import SceneItem from "./SceneItem";
 import {
     isArray, ANIMATION, ARRAY, OBJECT,
-    PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, document, isObject, addEvent, removeEvent, isString,
+    PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, isObject, addEvent, removeEvent, isString,
 } from "@daybrush/utils";
 import { EasingType, EasingFunction, NameType } from "./types";
 import { toPropertyObject } from "./utils/property";
 import { bezier, steps } from "./easing";
+import Animator from "./Animator";
 
 export function isPropertyObject(value: any): value is PropertyObject {
     return value instanceof PropertyObject;
@@ -127,7 +128,7 @@ export interface IterationInterface {
     iterationCount: number;
     elapsedTime: number;
 }
-export function setPlayCSS(item: Scene | SceneItem, isActivate: boolean) {
+export function setPlayCSS(item: Animator, isActivate: boolean) {
     item.state[PLAY_CSS] = isActivate;
 }
 export function isPausedCSS(item: Scene | SceneItem) {
@@ -183,7 +184,7 @@ export function playCSS(
     item.setPlayState(RUNNING);
 }
 
-export function addAnimationEvent(item: Scene | SceneItem, el: Element) {
+export function addAnimationEvent(item: Animator, el: Element) {
     const state = item.state;
     const duration = item.getDuration();
     const isZeroDuration = !duration || !isFinite(duration);
