@@ -1,6 +1,6 @@
 {
     "name": "scenejs",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "description": "JavaScript & CSS timeline-based animation library",
     "main": "dist/scene.cjs.js",
     "module": "dist/scene.esm.js",
@@ -82,7 +82,6 @@
         "order-map": "^0.2.2"
     },
     "peerDependencies": {
-        "order-map": ">=0.2.2",
-        "css-styled": ">=0.2.3"
+        "order-map": ">=0.2.2"
     }
 }
