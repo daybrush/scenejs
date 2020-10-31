@@ -1,0 +1,64 @@
+<div class="container">
+	<div class="rectangle rectangle1">
+		<img src="./image/2.jpg"/>
+	</div>
+	<div class="rectangle rectangle2">
+		<img src="./image/1.jpg"/>
+	</div>
+</div>
+<style>
+	body {
+  margin: 0;
+  padding: 0;
+}
+.container {
+	position: absolute;
+	width: 600px;
+	height: 400px;
+	overflow: hidden;
+}
+.rectangle {
+	position: absolute;
+	width: 600px;
+}
+.rectangle img {
+	width: 100%;
+	height: auto;
+}
+
+</style>
+<script src="../dist/scene.js"></script>
+<script src="https://daybrush.com/scenejs-effects/release/latest/dist/effects.js"></script>
+<script>
+var scene = new Scene({
+	".rectangle1": {options: {easing: Scene.bezier(1, 0, 1, 1)}},
+	".rectangle2": {options: {delay: 0.9, easing: Scene.bezier(0, 0, 0, 1)}},
+}, {
+	iterationCount: "infinite",
+	direction: "alternate",
+	selector: true,
+});
+var item1 = scene.getItem(".rectangle1");
+var item2 = scene.getItem(".rectangle2");
+
+Scene.transition(item1, item2, {
+	0: {
+		transform: {
+			scale: 1.2,
+			rotate: "0deg",
+		},
+	},
+	0.9: {
+		opacity: 1,
+	},
+	1: {
+		transform: {
+			scale: 2,
+			rotate: "40deg",
+		},
+		opacity: 0,
+	},
+});
+
+scene.playCSS();
+</script>

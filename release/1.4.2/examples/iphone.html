@@ -1,0 +1,181 @@
+<style>
+.iphone {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	width: 250px;
+	height: 444px;
+	background: #222;
+	border-radius: 35px;
+}
+.screen {
+	position: absolute;
+	left: 6%;
+	right: 6%;
+	background: #eee;
+	top: 15%;
+	bottom: 15%;
+}
+.icons {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	filter: blur(5px);
+}
+.icon {
+	position: absolute;
+  width: 40px;
+	height: 40px;
+	border-radius: 4px;
+	background: #f55;
+	margin: auto;
+}
+.line1.icon {
+	top: 0%;
+	bottom: 75%;
+}
+.line2.icon {
+	top: 25%;
+	bottom: 50%;
+}
+.line3.icon {
+	top: 50%;
+	bottom: 25%;
+}
+.line4.icon {
+	top: 75%;
+	bottom: 0%;
+}
+.icon:nth-child(4n + 1) {
+	left: 0%;
+	right: 75%;
+}
+.icon:nth-child(4n + 2) {
+	left: 25%;
+	right: 50%;
+}
+.icon:nth-child(4n + 3) {
+	left: 50%;
+	right: 25%;
+}
+.icon:nth-child(4n + 4) {
+	left: 75%;
+	right: 0%;
+}
+.icon:nth-child(6n + 1) {
+	background: #FDBC65;
+}
+.icon:nth-child(6n + 2) {
+	background: #8F7BB8;
+}
+.icon:nth-child(6n + 3) {
+	background: #29C9FF;
+}
+.icon:nth-child(6n + 4) {
+	background: #2688CB;
+}
+.icon:nth-child(6n + 5) {
+	background: #f55;
+}
+.icon:nth-child(6n) {
+	background: #7FD33F;
+
+}
+.select {
+	position: absolute;
+	top: 25%;
+	bottom: 50%;
+	left: 25%;
+	right: 0%;
+	width: 40px;
+	height: 40px;
+	margin: auto;
+}
+.select .label {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	right: 0;
+	background: rgba(255, 255, 255, 0.6);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+}
+.select .label p {
+	line-height: 1;
+	padding: 10px;
+	margin: 0;
+	font-size: 18px;
+	opacity: 0;
+}
+.select .icon {
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: #FDBC65;
+}
+</style>
+<div class="iphone">
+	<div class="screen">
+		<div class="icons">
+			<div class="icon line1"></div>
+			<div class="icon line1"></div>
+			<div class="icon line1"></div>
+			<div class="icon line1"></div>
+			<div class="icon line2"></div>
+			<div class="icon line2"></div>
+			<div class="icon line2 selected"></div>
+			<div class="icon line2"></div>
+			<div class="icon line3"></div>
+			<div class="icon line3"></div>
+			<div class="icon line3"></div>
+			<div class="icon line3"></div>
+			<div class="icon line4"></div>
+			<div class="icon line4"></div>
+			<div class="icon line4"></div>
+			<div class="icon line4"></div>
+		</div>
+		<div class="select">
+			<div class="label">
+				<p class="text">scene.js</p>
+			</div>
+			<div class="icon"></div>
+		</div>
+	</div>
+</div>
+<script src="../dist/scene.js"></script>
+<script>
+var scene = new Scene({
+	".icons": {
+		0.2: "filter: blur(0px)",
+		0.8: "filter: blur(8px)",
+		1: "filter: blur(13px)",
+		options: {
+			easing: Scene.LINEAR,
+		}
+	},
+	".select .label": {
+		0: "transform:scale(1)",
+		0.8: "transform:scale(1.5);bottom: 0; width: 100%",
+		1: "transform:scale(1);bottom: 120%; width: 300%",
+	},
+	".select .label .text": {
+		0.8: "opacity: 0",
+		1: "opacity: 1",
+	}
+}, {
+	duration: 1.5,
+	delay: 0.3,
+	selector: true,
+	easing: Scene.EASE_IN_OUT,
+}).playCSS();
+
+var icon = document.querySelector(".select .icon");
+icon.addEventListener("click", function() {
+	scene.playCSS(false);
+});
+</script>
