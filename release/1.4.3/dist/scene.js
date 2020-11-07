@@ -2322,7 +2322,7 @@ version: 1.4.3
     var getters = __spreadArrays(setters, [EASING, EASING_NAME]);
     /**
     * play video, animation, the others
-    * @extends EventTrigger
+    * @extends EventEmitter
     * @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
     */
 
@@ -5156,6 +5156,7 @@ version: 1.4.3
 
     /**
      * manage sceneItems and play Scene.
+     * @extends Animator
      * @sort 1
      */
 

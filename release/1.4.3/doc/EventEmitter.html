@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Frame - Documentation</title>
+    <title>EventEmitter - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="Frame - Documentation"/>
+    <meta name="description" content="EventEmitter - Documentation"/>
 
 </head>
 <body>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Frame</h1>
+    <h1 class="page-title">EventEmitter</h1>
     
 
     
@@ -45,10 +45,10 @@
 <header>
     
         <h2>
-        Frame
+        EventEmitter
         </h2>
         
-            <div class="class-description">Animation's Frame</div>
+            <div class="class-description">Implement EventEmitter on object or component.</div>
         
     
 </header>
@@ -62,7 +62,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="Frame"><span class="type-signature"></span>new Frame<span class="signature">(properties<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="EventEmitter"><span class="type-signature"></span>new EventEmitter<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -74,7 +74,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line80">line 80</a>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line7">line 7</a>
     </li></ul></dd>
     
 
@@ -121,75 +121,8 @@
 
 
 
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>properties</code>?</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">any</span>
 
 
-            
-            </td>
-
-            
-
-            
-                <td class="default">
-                
-                    <code>{}</code>
-                
-                </td>
-            
-
-            <td class="description last">properties</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const frame = new Scene.Frame({
-      display: "none"
-      transform: {
-          translate: "50px",
-          scale: "5, 5",
-      }
-  });</code></pre>
 
 
 
@@ -230,7 +163,7 @@
 
     
 
-    <h4 class="name" id="clear"><span class="type-signature"></span>clear<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Frame.html">Frame</a>}</span></h4>
+    <h4 class="name" id="emit"><span class="type-signature"></span>emit<span class="signature">(eventName, param<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
@@ -242,7 +175,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line401">line 401</a>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -282,230 +215,7 @@
 
 
 <div class="description">
-    Remove All Properties
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    An instance itself
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Frame.html">Frame</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="clone"><span class="type-signature"></span>clone<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Frame.html">Frame</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line332">line 332</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    clone frame.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>frame.clone();</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    An instance of clone
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Frame.html">Frame</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(&hellip;args)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line106">line 106</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    get property value
+    Fires an event to call listeners.
 </div>
 
 
@@ -528,9 +238,9 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -542,1375 +252,62 @@
 
         <tr>
             
-                <td class="name"><code>args</code></td>
+                <td class="name"><code>eventName</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Number</span>
+<span class="param-type">string</span>
 |
 
-<span class="param-type">String</span>
-|
-
-<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+<span class="param-type">...</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
 
-                
-
-                
-                    &lt;repeatable><br>
+            
+                <td class="default">
                 
                 </td>
             
 
-            
-
-            <td class="description last">property name or value</td>
+            <td class="description last">Event name</td>
         </tr>
 
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>frame.get("display") // => "none", "block", ....
-      frame.get("transform", "translate") // => "10px,10px"</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getKeys"><span class="type-signature"></span>getKeys<span class="signature">(...args)</span><span class="type-signature"> &rarr; {string[]}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line160">line 160</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    get property keys
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>...args</code></td>
+                <td class="name"><code>param</code>?</td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#NameType">NameType</a>[]</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">property names</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>frame.gets("display") // => []
-      frame.gets("transform") // => ["translate"]</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string[]</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getNames"><span class="type-signature"></span>getNames<span class="signature">()</span><span class="type-signature"> &rarr; {string[][]}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line308">line 308</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Gets the names of properties.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>// one parameter
-  frame.set({
-      display: "none",
-      transform: {
-          translate: "10px, 10px",
-          scale: "1",
-      },
-  });
-
-  // [["display"], ["transform", "translate"], ["transform", "scale"]]
-  console.log(frame.getNames());</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    the names of properties.
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string[][]</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getOrderObject"><span class="type-signature"></span>getOrderObject<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line137">line 137</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    get properties order object
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>console.log(frame.getOrderObject());</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getOrders"><span class="type-signature"></span>getOrders<span class="signature">(names)</span><span class="type-signature"> &rarr; {<a href="global.html#NameType">NameType</a>[] | undefined}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line118">line 118</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    get properties orders
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>names</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#NameType">NameType</a>[]</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">property names</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>frame.getOrders(["display"]) // => []
-      frame.getOrders(["transform"]) // => ["translate", "scale"]</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="global.html#NameType">NameType</a>[] | undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="gets"><span class="type-signature"></span>gets<span class="signature">(...args)</span><span class="type-signature"> &rarr; {<a href="global.html#KeyValueChildren">KeyValueChildren</a>[]}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line174">line 174</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    get properties array
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>...args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#NameType">NameType</a>[]</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">property names</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>frame.gets("display") // => []
-      frame.gets("transform") // => [{ key: "translate", value: "10px, 10px", children: [] }]</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="global.html#KeyValueChildren">KeyValueChildren</a>[]</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="has"><span class="type-signature"></span>has<span class="signature">(&hellip;args)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line317">line 317</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    check that has property.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-
-                
-
-                
-                    &lt;repeatable><br>
-                
-                </td>
-            
-
-            
-
-            <td class="description last">property name</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>frame.has("property", "display") // => true or false</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="merge"><span class="type-signature"></span>merge<span class="signature">(frame)</span><span class="type-signature"> &rarr; {<a href="Frame.html">Frame</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line345">line 345</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    merge one frame to other frame.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>frame</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Frame.html">Frame</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">target frame.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>frame.merge(frame2);</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    An instance itself
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Frame.html">Frame</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {<a href="Frame.html">Frame</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line194">line 194</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    remove property value
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-
-                
-
-                
-                    &lt;repeatable><br>
-                
-                </td>
-            
-
-            
-
-            <td class="description last">property name</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>frame.remove("display")</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    An instance itself
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Frame.html">Frame</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="set"><span class="type-signature"></span>set<span class="signature">(&hellip;args)</span><span class="type-signature"> &rarr; {<a href="Frame.html">Frame</a>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line236">line 236</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    set property
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;any></span>
 |
 
-<span class="param-type">String</span>
-|
-
-<span class="param-type"><a href="PropertyObject.html">PropertyObject</a></span>
+<span class="param-type">...</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
 
+            
+                <td class="default">
                 
-
-                
-                    &lt;repeatable><br>
+                    <code>{}</code>
                 
                 </td>
             
 
-            
-
-            <td class="description last">property names or values</td>
+            <td class="description last">Event parameter</td>
         </tr>
 
     
@@ -1920,31 +317,153 @@
 
 
 
+    <h4 class="name typescript" id="emit">
+        emit&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"> extends Param ? Name : never</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+    <h4 class="name typescript" id="emit">
+        emit&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName, param)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;Param></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
 
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// one parameter
-  frame.set({
-      display: "none",
-      transform: {
-          translate: "10px, 10px",
-          scale: "1",
-      },
-      filter: {
-          brightness: "50%",
-          grayscale: "100%"
-      }
-  });
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
 
-  // two parameters
-  frame.set("transform", {
-      translate: "10px, 10px",
-      scale: "1",
-  });
 
-  // three parameters
-  frame.set("transform", "translate", "50px");</code></pre>
+const emitter = new EventEmitter();
+
+emitter.on("a", e => {
+});
+
+
+emitter.emit("a", {
+  a: 1,
+});</code></pre>
 
 
 
@@ -1964,7 +483,7 @@
 
         
 <div class="param-desc">
-    An instance itself
+    If false, stop the event.
 </div>
 
 
@@ -1975,7 +494,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Frame.html">Frame</a></span>
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -1989,7 +508,7 @@
 
     
 
-    <h4 class="name" id="setOrderObject"><span class="type-signature"></span>setOrderObject<span class="signature">(obj)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="off"><span class="type-signature"></span>off<span class="signature">(eventName<span class="signature-attributes">opt</span>, listener<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {this}</span></h4>
 
     
 
@@ -2001,7 +520,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line149">line 149</a>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -2041,7 +560,7 @@
 
 
 <div class="description">
-    set properties orders object
+    Remove listeners registered in the event target.
 </div>
 
 
@@ -2076,13 +595,16 @@
 
         <tr>
             
-                <td class="name"><code>obj</code></td>
+                <td class="name"><code>eventName</code>?</td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="http://daybrush.com/utils/release/latest/doc/global.html#ObjectInterface" target="_blank">IObject</a>&lt;<a href="global.html#NameType">NameType</a>[]></span>
+<span class="param-type">string | object</span>
+|
+
+<span class="param-type">...</span>
 
 
             
@@ -2092,7 +614,33 @@
 
             
 
-            <td class="description last">properties orders object</td>
+            <td class="description last">Name of the event to be removed</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Events[any], this></span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">listener function of the event to be removed</td>
         </tr>
 
     
@@ -2102,14 +650,153 @@
 
 
 
+    <h4 class="name typescript" id="off">
+        off&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName, listener)</span>
+        <span class="type-signature"> → {this}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Param, this></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+    <h4 class="name typescript" id="off">
+        off<span class="signature">(events)</span>
+        <span class="type-signature"> → {this}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventHash">EventHash</a>&lt;Events, this></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
 
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>frame.setOrderObject({
-          "": ["transform"],
-          "transform": ["scale", "tralsate"],
-      });</code></pre>
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+cosnt emitter = new EventEmitter();
+
+// Remove all listeners.
+emitter.off();
+
+// Remove all listeners in "A" event.
+emitter.off("a");
+
+
+// Remove "listener" listener in "a" event.
+emitter.off("a", listener);</code></pre>
 
 
 
@@ -2125,6 +812,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">this</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
         
@@ -2132,7 +837,7 @@
 
     
 
-    <h4 class="name" id="setOrders"><span class="type-signature"></span>setOrders<span class="signature">(names, orders)</span><span class="type-signature"> &rarr; {<a href="global.html#NameType">NameType</a>[]}</span></h4>
+    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(eventName, listener<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {this}</span></h4>
 
     
 
@@ -2144,7 +849,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line129">line 129</a>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -2184,7 +889,7 @@
 
 
 <div class="description">
-    set properties orders
+    Add a listener to the registered event.
 </div>
 
 
@@ -2219,13 +924,16 @@
 
         <tr>
             
-                <td class="name"><code>names</code></td>
+                <td class="name"><code>eventName</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#NameType">NameType</a>[]</span>
+<span class="param-type">string | object</span>
+|
+
+<span class="param-type">...</span>
 
 
             
@@ -2235,20 +943,23 @@
 
             
 
-            <td class="description last">property names</td>
+            <td class="description last">Name of the event to be added</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>orders</code></td>
+                <td class="name"><code>listener</code>?</td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#NameType">NameType</a>[]</span>
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Events[any], this></span>
+|
+
+<span class="param-type">...</span>
 
 
             
@@ -2258,7 +969,7 @@
 
             
 
-            <td class="description last">orders</td>
+            <td class="description last">listener function of the event to be added</td>
         </tr>
 
     
@@ -2268,12 +979,152 @@
 
 
 
+    <h4 class="name typescript" id="on">
+        on&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName, listener)</span>
+        <span class="type-signature"> → {this}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Param, this></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+    <h4 class="name typescript" id="on">
+        on<span class="signature">(events)</span>
+        <span class="type-signature"> → {this}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventHash">EventHash</a>&lt;Events, this></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
 
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>frame.getOrders(["transform"]) // => ["translate", "scale"]
-      frame.setOrders(["transform"], ["scale", "tralsate"])</code></pre>
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+cosnt emitter = new EventEmitter();
+
+// Add listener in "a" event
+emitter.on("a", () => {
+});
+// Add listeners
+emitter.on({
+ a: () => {},
+ b: () => {},
+});</code></pre>
 
 
 
@@ -2300,7 +1151,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="global.html#NameType">NameType</a>[]</span>
+<span class="param-type">this</span>
 
 
     </dd>
@@ -2314,7 +1165,7 @@
 
     
 
-    <h4 class="name" id="toCSS"><span class="type-signature"></span>toCSS<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="once"><span class="type-signature"></span>once&lt;Name extends keyof Events &amp; string, Param = Events[Name]&gt;<span class="signature">(eventName, listener<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise&lt;<a href="EventEmitter.html#.OnEvent">OnEvent</a>&lt;Param, this>>}</span></h4>
 
     
 
@@ -2326,7 +1177,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line386">line 386</a>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -2366,7 +1217,7 @@
 
 
 <div class="description">
-    Specifies an css text that coverted the frame.
+    Add a disposable listener and Use promise to the registered event.
 </div>
 
 
@@ -2377,8 +1228,435 @@
 
 
 
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
 
 
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of the event to be added</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Param, this></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">disposable listener function of the event to be added</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+cosnt emitter = new EventEmitter();
+
+// Add a disposable listener in "a" event
+emitter.once("a", () => {
+});
+
+// Use Promise
+emitter.once("a").then(e => {
+});</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise&lt;<a href="EventEmitter.html#.OnEvent">OnEvent</a>&lt;Param, this>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="trigger"><span class="type-signature"></span>trigger&lt;Name extends keyof Events&gt;<span class="signature">(eventName, param<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line199">line 199</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Fires an event to call listeners.
+</div>
+
+
+
+
+
+
+
+
+
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Event name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;any></span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">Event parameter</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+    <h4 class="name typescript" id="trigger">
+        trigger&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"> extends Param ? Name : never</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+    <h4 class="name typescript" id="trigger">
+        trigger&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName, param)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;Param></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+
+
+const emitter = new EventEmitter();
+
+emitter.on("a", e => {
+});
+
+
+emitter.emit("a", {
+  a: 1,
+});
+     </code></pre>
 
 
 
@@ -2398,7 +1676,7 @@
 
         
 <div class="param-desc">
-    cssText
+    If false, stop the event.
 </div>
 
 
@@ -2409,23 +1687,537 @@
     </dt>
     <dd>
         
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="trigger"><span class="type-signature"></span>trigger&lt;Name extends keyof Events&gt;<span class="signature">(eventName, param<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line199">line 199</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Fires an event to call listeners.
+</div>
+
+
+
+
+
+
+
+
+
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Event name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;any></span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">Event parameter</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+    <h4 class="name typescript" id="trigger">
+        trigger&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"> extends Param ? Name : never</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+    <h4 class="name typescript" id="trigger">
+        trigger&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName, param)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;Param></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+
+
+const emitter = new EventEmitter();
+
+emitter.on("a", e => {
+});
+
+// emit
+emitter.trigger("a", {
+  a: 1,
+});</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    If false, stop the event.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id=".EmitterParam">EmitterParam&lt;Target = any&gt;</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
-    </dd>
-</dl>
+            
+            </td>
 
-    
-
-
-        
             
 
+            
+
+            <td class="description last"></td>
+        </tr>
+
     
 
-    <h4 class="name" id="toCSSObject"><span class="type-signature"></span>toCSSObject<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+        <tr>
+            
+                <td class="name"><code>currentTarget</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Target</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>stop</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">() => void</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">TSInterface</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".EventHash">EventHash&lt;Events, Target&gt;</h4>
+
 
 
 
@@ -2435,7 +2227,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_Frame.ts.html">src/Frame.ts</a>, <a href="src_Frame.ts.html#line358">line 358</a>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -2474,62 +2266,473 @@
 
 
 
-<div class="description">
-    Specifies an css object that coverted the frame.
-</div>
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Partial&lt;[Key extends keyof Events]: <a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Events[Key], Target>></span>
+
+
+        </li>
+    </ul>
 
 
 
 
 
 
+            
+                
+<h4 class="name" id=".EventInfo">EventInfo</h4>
 
 
 
 
 
+<dl class="details">
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line45">line 45</a>
+    </li></ul></dd>
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
-<h5>Returns:</h5>
+    
 
-        
-<div class="param-desc">
-    cssObject
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
+    
 </dl>
 
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
     
 
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;any, any></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">TSInterface</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".EventListener">EventListener&lt;Param, Target&gt;</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">(e: <a href="EventEmitter.html#.OnEvent">OnEvent</a>&lt;Param, Target>) => any</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".EventOptions">EventOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>once</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">TSInterface</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".OnEvent">OnEvent&lt;Param, Target = any&gt;</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="EventEmitter.html#.EmitterParam">EmitterParam</a>&lt;Target> &amp; Param</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".TargetParam">TargetParam&lt;Param&gt;</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Pick&lt;Param, Exclude&lt;keyof Param, keyof <a href="EventEmitter.html#.EmitterParam">EmitterParam</a>>> &amp; Partial&lt;<a href="EventEmitter.html#.EmitterParam">EmitterParam</a>></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
     
 
     
@@ -2544,10 +2747,10 @@
 <style>
 
 
-nav li[file="frame"]:after {
+nav li[file="eventemitter"]:after {
     display: none;
 }
-nav li[file="frame"] h4, nav li[file="frame"] ul {
+nav li[file="eventemitter"] h4, nav li[file="eventemitter"] ul {
     display: block;
 }
 </style>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>easing - Documentation</title>
+    <title>src/Frame.ts - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="easing - Documentation"/>
+    <meta name="description" content="src/Frame.ts - Documentation"/>
 
 </head>
 <body>
@@ -32,1090 +32,450 @@
 
 <div id="main">
     
-    <h1 class="page-title">easing</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        easing
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line29">line 29</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-        
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id=".EASE"><span class="type-signature">(static) </span>EASE<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line122">line 122</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Ease Speed (0.25, 0.1, 0.25, 1)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {EASE} from "scenejs";
-Scene.EASE</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".EASE_IN"><span class="type-signature">(static) </span>EASE_IN<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line133">line 133</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Ease In Speed (0.42, 0, 1, 1)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {EASE_IN} from "scenejs";
-Scene.EASE_IN</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".EASE_IN_OUT"><span class="type-signature">(static) </span>EASE_IN_OUT<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line155">line 155</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Ease In Out Speed (0.42, 0, 0.58, 1)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {EASE_IN_OUT} from "scenejs";
-Scene.EASE_IN_OUT</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".EASE_OUT"><span class="type-signature">(static) </span>EASE_OUT<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line144">line 144</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Ease Out Speed (0, 0, 0.58, 1)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {EASE_OUT} from "scenejs";
-Scene.EASE_OUT</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".LINEAR"><span class="type-signature">(static) </span>LINEAR<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line111">line 111</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Linear Speed (0, 0, 1, 1)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {LINEAR} from "scenejs";
-Scene.LINEAR</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".STEP_END"><span class="type-signature">(static) </span>STEP_END<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line100">line 100</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Equivalent to steps(1, end)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {STEP_END} from "scenejs";
-Scene.STEP_END // steps(1, end)</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".STEP_START"><span class="type-signature">(static) </span>STEP_START<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line89">line 89</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Equivalent to steps(1, start)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {STEP_START} from "scenejs";
-Scene.STEP_START // steps(1, start)</code></pre>
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title" id="methods">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id=".bezier"><span class="type-signature">(static) </span>bezier<span class="signature">(x1<span class="signature-attributes">opt</span>, y1<span class="signature-attributes">opt</span>, x2<span class="signature-attributes">opt</span>, y2<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {function}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line32">line 32</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Cubic Bezier curve.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>x1</code>?</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point1's x</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y1</code>?</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point1's y</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>x2</code>?</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point2's x</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y2</code>?</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point2's y</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {bezier} from "scenejs";
-Scene.bezier(0, 0, 1, 1) // LINEAR
-Scene.bezier(0.25, 0.1, 0.25, 1) // EASE</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    the curve function
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".steps"><span class="type-signature">(static) </span>steps<span class="signature">(count, postion)</span><span class="type-signature"> &rarr; {function}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line61">line 61</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://www.w3schools.com/cssref/css3_pr_animation-timing-function.asp">CSS3 Timing Function</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Specifies a stepping function
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>count</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point1's x</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>postion</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">"start"</span>
-|
-
-<span class="param-type">"end"</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point1's y</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {steps} from "scenejs";
-Scene.steps(1, "start") // Scene.STEP_START
-Scene.steps(1, "end") // Scene.STEP_END</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    the curve function
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">src/Frame.ts</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {
+    ALIAS, TIMING_FUNCTION, TRANSFORM_NAME, EASING_NAME, NAME_SEPARATOR
+} from "./consts";
+import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, getEasing } from "./utils";
+import { toPropertyObject, splitStyle, toObject } from "./utils/property";
+import {
+    isObject, isArray, isString, getKeys,
+    ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, IObject, isUndefined,
+    sortOrders,
+} from "@daybrush/utils";
+import { NameType, KeyValueChildren } from "./types";
+import OrderMap from "order-map";
+
+function toInnerProperties(obj: IObject&lt;string>, orders: NameType[] = []) {
+    if (!obj) {
+        return "";
+    }
+    const arrObj = [];
+
+    const keys = getKeys(obj);
+
+    sortOrders(keys, orders);
+
+    keys.forEach(name => {
+        arrObj.push(`${name.replace(/\d$/g, "")}(${obj[name]})`);
+    });
+
+    return arrObj.join(" ");
+}
+
+/* eslint-disable */
+function clone(target: IObject&lt;any>, toValue = false) {
+    return merge({}, target, toValue);
+}
+function merge(to: IObject&lt;any>, from: IObject&lt;any>, toValue = false) {
+    for (const name in from) {
+        const value = from[name];
+        const type = getType(value);
+
+        if (type === PROPERTY) {
+            to[name] = toValue ? value.toValue() : value.clone();
+        } else if (type === FUNCTION) {
+            to[name] = toValue ? getValue([name], value) : value;
+        } else if (type === ARRAY) {
+            to[name] = value.slice();
+        } else if (type === OBJECT) {
+            if (isObject(to[name]) &amp;&amp; !isPropertyObject(to[name])) {
+                merge(to[name], value, toValue);
+            } else {
+                to[name] = clone(value, toValue);
+            }
+        } else {
+            to[name] = from[name];
+        }
+    }
+    return to;
+}
+/* eslint-enable */
+
+function getPropertyName(args: NameType[]) {
+    return args[0] in ALIAS ? ALIAS[args[0]] : args;
+}
+function getValue(names: NameType[], value: any): any {
+    const type = getType(value);
+
+    if (type === PROPERTY) {
+        return value.toValue();
+    } else if (type === FUNCTION) {
+        if (names[0] !== TIMING_FUNCTION) {
+            return getValue(names, value());
+        }
+    } else if (type === OBJECT) {
+        return clone(value, true);
+    }
+    return value;
+}
+/**
+* Animation's Frame
+*/
+class Frame {
+    public properties: IObject&lt;any> = {};
+    public orderMap: OrderMap = new OrderMap(NAME_SEPARATOR);
+    /**
+     * @param - properties
+     * @example
+  const frame = new Scene.Frame({
+      display: "none"
+      transform: {
+          translate: "50px",
+          scale: "5, 5",
+      }
+  });
+     */
+    constructor(properties: any = {}) {
+        this.properties = {};
+        // this.orders = [];
+        this.set(properties);
+    }
+    /**
+      * get property value
+      * @param {...Number|String|PropertyObject} args - property name or value
+      * @example
+      frame.get("display") // => "none", "block", ....
+      frame.get("transform", "translate") // => "10px,10px"
+      */
+    public get(...args: NameType[]) {
+        const value = this.raw(...args);
+
+        return getValue(getPropertyName(args), value);
+    }
+    /**
+      * get properties orders
+      * @param - property names
+      * @example
+      frame.getOrders(["display"]) // => []
+      frame.getOrders(["transform"]) // => ["translate", "scale"]
+      */
+    public getOrders(names: NameType[]): NameType[] | undefined {
+        return this.orderMap.get(names);
+    }
+    /**
+      * set properties orders
+      * @param - property names
+      * @param - orders
+      * @example
+      frame.getOrders(["transform"]) // => ["translate", "scale"]
+      frame.setOrders(["transform"], ["scale", "tralsate"])
+      */
+    public setOrders(names: NameType[], orders: NameType[]): NameType[] {
+        return this.orderMap.set(names, orders);
+    }
+    /**
+      * get properties order object
+      * @example
+      console.log(frame.getOrderObject());
+      */
+    public getOrderObject() {
+        return this.orderMap.getObject();
+    }
+    /**
+      * set properties orders object
+      * @param - properties orders object
+      * @example
+      frame.setOrderObject({
+          "": ["transform"],
+          "transform": ["scale", "tralsate"],
+      });
+      */
+    public setOrderObject(obj: IObject&lt;NameType[]>) {
+        this.orderMap.setObject(obj);
+    }
+
+    /**
+      * get property keys
+      * @param - property names
+      * @example
+      frame.gets("display") // => []
+      frame.gets("transform") // => ["translate"]
+      */
+    public getKeys(...args: NameType[]): string[] {
+        const value = this.raw(...args);
+        const keys = getType(value) === OBJECT ? getKeys(value) : [];
+
+        sortOrders(keys, this.orderMap.get(args));
+        return keys;
+    }
+    /**
+      * get properties array
+      * @param - property names
+      * @example
+      frame.gets("display") // => []
+      frame.gets("transform") // => [{ key: "translate", value: "10px, 10px", children: [] }]
+      */
+    public gets(...args: NameType[]): KeyValueChildren[] {
+        const values = this.get(...args);
+        const keys = this.getKeys(...args);
+
+        return keys.map(key => {
+            const nextValue = values[key];
+            return { key, value: nextValue, children: this.gets(...args, key) };
+        });
+    }
+
+    public raw(...args: NameType[]) {
+        return getValueByNames(getPropertyName(args), this.properties);
+    }
+    /**
+      * remove property value
+      * @param {...String} args - property name
+      * @return {Frame} An instance itself
+      * @example
+      frame.remove("display")
+      */
+    public remove(...args: NameType[]) {
+        const params = getPropertyName(args);
+        const length = params.length;
+
+        if (!length) {
+            return this;
+        }
+        this.orderMap.remove(params);
+        const value = getValueByNames(params, this.properties, length - 1);
+
+        if (isObject(value)) {
+            delete value[params[length - 1]];
+        }
+        return this;
+    }
+    /**
+      * set property
+      * @param {...Number|String|PropertyObject} args - property names or values
+      * @return {Frame} An instance itself
+      * @example
+  // one parameter
+  frame.set({
+      display: "none",
+      transform: {
+          translate: "10px, 10px",
+          scale: "1",
+      },
+      filter: {
+          brightness: "50%",
+          grayscale: "100%"
+      }
+  });
+
+  // two parameters
+  frame.set("transform", {
+      translate: "10px, 10px",
+      scale: "1",
+  });
+
+  // three parameters
+  frame.set("transform", "translate", "50px");
+    */
+    public set(...args: any[]) {
+        const self = this;
+        const length = args.length;
+        const params = args.slice(0, -1);
+        const value = args[length - 1];
+        const firstParam = params[0];
+
+        if (length === 1 &amp;&amp; value instanceof Frame) {
+            self.merge(value);
+        } else if (firstParam in ALIAS) {
+            self._set(ALIAS[firstParam], value);
+        } else if (length === 2 &amp;&amp; isArray(firstParam)) {
+            self._set(firstParam, value);
+        } else if (isPropertyObject(value)) {
+            if (isRole(params)) {
+                self.set(...params, toObject(value));
+            } else {
+                self._set(params, value);
+            }
+        } else if (isArray(value)) {
+            self._set(params, value);
+        } else if (isObject(value)) {
+            if (!self.has(...params) &amp;&amp; isRole(params)) {
+                self._set(params, {});
+            }
+            for (const name in value) {
+                self.set(...params, name, value[name]);
+            }
+        } else if (isString(value)) {
+            if (isRole(params, true)) {
+                if (isFixed(params) || !isRole(params)) {
+                    this._set(params, value);
+                } else {
+                    const obj = toPropertyObject(value);
+
+                    if (isObject(obj)) {
+                        self.set(...params, obj);
+                    }
+                }
+                return this;
+            } else {
+                const { styles, length: stylesLength } = splitStyle(value);
+
+                for (const name in styles) {
+                    self.set(...params, name, styles[name]);
+                }
+                if (stylesLength) {
+                    return this;
+                }
+            }
+            self._set(params, value);
+        } else {
+            self._set(params, value);
+        }
+        return self;
+    }
+    /**
+      * Gets the names of properties.
+      * @return the names of properties.
+      * @example
+  // one parameter
+  frame.set({
+      display: "none",
+      transform: {
+          translate: "10px, 10px",
+          scale: "1",
+      },
+  });
+
+  // [["display"], ["transform", "translate"], ["transform", "scale"]]
+  console.log(frame.getNames());
+    */
+    public getNames(): string[][] {
+        return getNames(this.properties, []);
+    }
+    /**
+      * check that has property.
+      * @param {...String} args - property name
+      * @example
+      frame.has("property", "display") // => true or false
+      */
+    public has(...args: NameType[]) {
+        const params = getPropertyName(args);
+        const length = params.length;
+
+        if (!length) {
+            return false;
+        }
+        return !isUndefined(getValueByNames(params, this.properties, length));
+    }
+    /**
+      * clone frame.
+      * @return {Frame} An instance of clone
+      * @example
+      frame.clone();
+      */
+    public clone() {
+        const frame = new Frame();
+
+        frame.setOrderObject(this.orderMap.orderMap);
+        return frame.merge(this);
+    }
+    /**
+      * merge one frame to other frame.
+      * @param - target frame.
+      * @return {Frame} An instance itself
+      * @example
+      frame.merge(frame2);
+      */
+    public merge(frame: Frame) {
+        const properties = this.properties;
+        const frameProperties = frame.properties;
+
+        if (frameProperties) {
+            merge(properties, frameProperties);
+        }
+        return this;
+    }
+    /**
+      * Specifies an css object that coverted the frame.
+      * @return {object} cssObject
+      */
+    public toCSSObject() {
+        const properties = this.get();
+        const cssObject: IObject&lt;string> = {};
+
+        for (const name in properties) {
+            if (isRole([name], true)) {
+                continue;
+            }
+            const value = properties[name];
+
+            if (name === TIMING_FUNCTION) {
+                cssObject[TIMING_FUNCTION.replace("animation", ANIMATION)] =
+                    (isString(value) ? value : value[EASING_NAME]) || "initial";
+            } else {
+                cssObject[name] = value;
+            }
+        }
+        const transform = toInnerProperties(properties[TRANSFORM_NAME], this.orderMap.get([TRANSFORM_NAME]));
+        const filter = toInnerProperties(properties.filter, this.orderMap.get([FILTER]));
+
+        TRANSFORM &amp;&amp; transform &amp;&amp; (cssObject[TRANSFORM] = transform);
+        FILTER &amp;&amp; filter &amp;&amp; (cssObject[FILTER] = filter);
+        return cssObject;
+    }
+    /**
+      * Specifies an css text that coverted the frame.
+      * @return {string} cssText
+      */
+    public toCSS() {
+        const cssObject = this.toCSSObject();
+        const cssArray = [];
+        const keys = getKeys(cssObject);
+
+        sortOrders(keys, this.orderMap.get([]));
+        keys.forEach(name => {
+            cssArray.push(`${name}:${cssObject[name]};`);
+        });
+        return cssArray.join("");
+    }
+    /**
+      * Remove All Properties
+      * @return {Frame} An instance itself
+      */
+    public clear() {
+        this.properties = {};
+        this.orderMap.clear();
+        return this;
+    }
+    private _set(args: NameType[], value: any) {
+        let properties = this.properties;
+        const length = args.length;
+
+        for (let i = 0; i &lt; length - 1; ++i) {
+            const name = args[i];
+
+            !(name in properties) &amp;&amp; (properties[name] = {});
+            properties = properties[name];
+        }
+        if (!length) {
+            return;
+        }
+        const lastParam = args[length - 1];
+
+        this.orderMap.add(args);
+        if (length === 1 &amp;&amp; lastParam === TIMING_FUNCTION) {
+            properties[lastParam] = getEasing(value);
+        } else {
+            properties[lastParam] = isString(value) &amp;&amp; !isFixed(args)
+                ? toPropertyObject(value, lastParam)
+                : value;
+        }
+    }
+}
+export default Frame;
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -1124,10 +484,10 @@ Scene.steps(1, "end") // Scene.STEP_END</code></pre>
 <style>
 
 
-nav li[file="easing"]:after {
+nav li[file="src/frame"]:after {
     display: none;
 }
-nav li[file="easing"] h4, nav li[file="easing"] ul {
+nav li[file="src/frame"] h4, nav li[file="src/frame"] ul {
     display: block;
 }
 </style>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>easing - Documentation</title>
+    <title>src/Scene.ts - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="easing - Documentation"/>
+    <meta name="description" content="src/Scene.ts - Documentation"/>
 
 </head>
 <body>
@@ -32,1090 +32,472 @@
 
 <div id="main">
     
-    <h1 class="page-title">easing</h1>
-    
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        easing
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line29">line 29</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-        
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id=".EASE"><span class="type-signature">(static) </span>EASE<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line122">line 122</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Ease Speed (0.25, 0.1, 0.25, 1)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {EASE} from "scenejs";
-Scene.EASE</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".EASE_IN"><span class="type-signature">(static) </span>EASE_IN<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line133">line 133</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Ease In Speed (0.42, 0, 1, 1)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {EASE_IN} from "scenejs";
-Scene.EASE_IN</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".EASE_IN_OUT"><span class="type-signature">(static) </span>EASE_IN_OUT<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line155">line 155</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Ease In Out Speed (0.42, 0, 0.58, 1)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {EASE_IN_OUT} from "scenejs";
-Scene.EASE_IN_OUT</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".EASE_OUT"><span class="type-signature">(static) </span>EASE_OUT<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line144">line 144</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Ease Out Speed (0, 0, 0.58, 1)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {EASE_OUT} from "scenejs";
-Scene.EASE_OUT</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".LINEAR"><span class="type-signature">(static) </span>LINEAR<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line111">line 111</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Linear Speed (0, 0, 1, 1)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {LINEAR} from "scenejs";
-Scene.LINEAR</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".STEP_END"><span class="type-signature">(static) </span>STEP_END<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line100">line 100</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Equivalent to steps(1, end)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {STEP_END} from "scenejs";
-Scene.STEP_END // steps(1, end)</code></pre>
-
-
-
-        
-            
-<h4 class="name" id=".STEP_START"><span class="type-signature">(static) </span>STEP_START<span class="type-signature">: function</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line89">line 89</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Equivalent to steps(1, start)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">function</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {STEP_START} from "scenejs";
-Scene.STEP_START // steps(1, start)</code></pre>
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title" id="methods">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id=".bezier"><span class="type-signature">(static) </span>bezier<span class="signature">(x1<span class="signature-attributes">opt</span>, y1<span class="signature-attributes">opt</span>, x2<span class="signature-attributes">opt</span>, y2<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {function}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line32">line 32</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Cubic Bezier curve.
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>x1</code>?</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point1's x</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y1</code>?</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point1's y</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>x2</code>?</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point2's x</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>y2</code>?</td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point2's y</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {bezier} from "scenejs";
-Scene.bezier(0, 0, 1, 1) // LINEAR
-Scene.bezier(0.25, 0.1, 0.25, 1) // EASE</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    the curve function
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".steps"><span class="type-signature">(static) </span>steps<span class="signature">(count, postion)</span><span class="type-signature"> &rarr; {function}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_easing.ts.html">src/easing.ts</a>, <a href="src_easing.ts.html#line61">line 61</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://www.w3schools.com/cssref/css3_pr_animation-timing-function.asp">CSS3 Timing Function</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    Specifies a stepping function
-</div>
-
-
-
-
-
-
-
-
-
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>count</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point1's x</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>postion</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">"start"</span>
-|
-
-<span class="param-type">"end"</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">point1's y</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>import {steps} from "scenejs";
-Scene.steps(1, "start") // Scene.STEP_START
-Scene.steps(1, "end") // Scene.STEP_END</code></pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    the curve function
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">src/Scene.ts</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Animator from "./Animator";
+import SceneItem from "./SceneItem";
+import { SELECTOR, DURATION, DELAY, RUNNING, NAME_SEPARATOR } from "./consts";
+import { playCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
+import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
+import {
+    AnimateElement, SceneState, SceneOptions, EasingType,
+    AnimatorState, SceneItemOptions, PlayCondition, NameType, SceneEvents
+} from "./types";
+import Frame from "./Frame";
+import OrderMap from "order-map";
+import styled, { InjectResult, StyledInjector } from "css-styled";
+/**
+ * manage sceneItems and play Scene.
+ * @extends Animator
+ * @sort 1
+ */
+class Scene extends Animator&lt;SceneOptions, SceneState, SceneEvents> {
+    /**
+    * version info
+    * @type {string}
+    * @example
+    * Scene.VERSION // #__VERSION__#
+    */
+    public static VERSION: string = "#__VERSION__#";
+    public items: IObject&lt;Scene | SceneItem> = {};
+    public orderMap = new OrderMap(NAME_SEPARATOR);
+    public styled: StyledInjector;
+    public styledInjector: InjectResult;
+    public temp: IObject&lt;Frame>;
+    /**
+    * @param - properties
+    * @param - options
+    * @example
+    const scene = new Scene({
+      item1: {
+        0: {
+          display: "none",
+        },
+        1: {
+          display: "block",
+          opacity: 0,
+        },
+        2: {
+          opacity: 1,
+        },
+      },
+      item2: {
+        2: {
+          opacity: 1,
+        },
+      }
+    });
+      */
+    constructor(properties?: { options?: Partial&lt;SceneOptions> } &amp; IObject&lt;any>, options?: Partial&lt;SceneOptions>) {
+        super();
+        this.load(properties, options);
+    }
+    public getDuration() {
+        let time = 0;
+
+        this.forEach(item => {
+            time = Math.max(time, item.getTotalDuration() / item.getPlaySpeed());
+        });
+        return time || this.state[DURATION];
+    }
+    public setDuration(duration: number) {
+        const items = this.items;
+        const sceneDuration = this.getDuration();
+
+        if (duration === 0 || !isFinite(sceneDuration)) {
+            return this;
+        }
+        if (sceneDuration === 0) {
+            this.forEach(item => {
+                item.setDuration(duration);
+            });
+        } else {
+            const ratio = duration / sceneDuration;
+
+            this.forEach(item => {
+                item.setDelay(item.getDelay() * ratio);
+                item.setDuration(item.getDuration() * ratio);
+            });
+        }
+        super.setDuration(duration);
+        return this;
+    }
+    public getItem&lt;T extends (Scene | SceneItem) = Scene | SceneItem>(name: number | string): T;
+    /**
+    * get item in scene by name
+    * @param - The item's name
+    * @return {Scene | SceneItem} item
+    * @example
+    const item = scene.getItem("item1")
+    */
+    public getItem(name: number | string) {
+        return this.items[name];
+    }
+    /**
+    * create item in scene
+    * @param {} name - name of item to create
+    * @param {} options - The option object of SceneItem
+    * @return {} Newly created item
+    * @example
+    const item = scene.newItem("item1")
+    */
+    public newItem(name: number | string, options: Partial&lt;SceneItemOptions> = {}): Scene | SceneItem {
+        if (this.items[name]) {
+            return this.items[name];
+        }
+        const item = new SceneItem();
+
+        this.setItem(name, item);
+        item.setOptions(options);
+
+        return item;
+    }
+    /**
+    * remove item in scene
+    * @param - name of item to remove
+    * @return  An instance itself
+    * @example
+    const item = scene.newItem("item1")
+
+    scene.removeItem("item1");
+    */
+    public removeItem(name: number | string): this {
+        delete this.items[name];
+
+        this.orderMap.remove([name]);
+        return this;
+    }
+    /**
+    * add a sceneItem to the scene
+    * @param - name of item to create
+    * @param - sceneItem
+    * @example
+    const item = scene.newItem("item1")
+    */
+    public setItem(name: number | string, item: Scene | SceneItem) {
+        item.setId(name);
+        this.items[name] = item;
+
+        this.orderMap.add([name]);
+        return this;
+    }
+    public setTime(time: number | string, isTick?: boolean, isParent?: boolean, parentEasing?: EasingType) {
+        super.setTime(time, isTick, isParent);
+
+        const iterationTime = this.getIterationTime();
+        const easing = this.getEasing() || parentEasing;
+        const frames: IObject&lt;any> = {};
+
+        this.forEach(item => {
+            item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, true, easing);
+
+            frames[item.getId()] = item.temp;
+        });
+        this.temp = frames;
+
+        /**
+         * This event is fired when timeupdate and animate.
+         * @event Scene#animate
+         * @param {object} param The object of data to be sent to an event.
+         * @param {number} param.currentTime The total time that the animator is running.
+         * @param {number} param.time The iteration time during duration that the animator is running.
+         * @param {object} param.frames frames of that time.
+         * @example
+const scene = new Scene({
+    a: {
+        0: {
+            opacity: 0,
+        },
+        1: {
+            opacity: 1,
+        }
+    },
+    b: {
+        0: {
+            opacity: 0,
+        },
+        1: {
+            opacity: 1,
+        }
+    }
+}).on("animate", e => {
+    console.log(e.frames);
+    // {a: Frame, b: Frame}
+    console.log(e.frames.a.get("opacity"));
+});
+             */
+        this.trigger("animate", {
+            frames,
+            currentTime: this.getTime(),
+            time: iterationTime,
+        });
+
+        return this;
+    }
+    /**
+     * executes a provided function once for each scene item.
+     * @param - Function to execute for each element, taking three arguments
+     * @return {Scene} An instance itself
+     */
+    public forEach(
+        func: (
+            item: Scene | SceneItem,
+            id: string | number,
+            index: number,
+            items: IObject&lt;Scene | SceneItem>,
+        ) => void,
+    ) {
+        const items = this.items;
+        this.getOrders().forEach((id, index) => {
+            func(items[id], id, index, items);
+        });
+        return this;
+    }
+    public toCSS(
+        playCondition?: PlayCondition,
+        duration: number = this.getDuration(), parentStates: AnimatorState[] = []) {
+        const totalDuration = !duration || !isFinite(duration) ? 0 : duration;
+        const styles: string[] = [];
+        const state = this.state;
+
+        state[DURATION] = this.getDuration();
+
+        this.forEach(item => {
+            styles.push(item.toCSS(playCondition, totalDuration, parentStates.concat(state)));
+        });
+        return styles.join("");
+    }
+    /**
+     * Export the CSS of the items to the style.
+     * @param - Add a selector or className to play.
+     * @return {Scene} An instance itself
+     */
+    public exportCSS(
+        playCondition?: PlayCondition, duration?: number, parentStates?: AnimatorState[]) {
+        const css = this.toCSS(playCondition, duration, parentStates);
+
+        if (!parentStates || !parentStates.length) {
+            if (this.styledInjector) {
+                this.styledInjector.destroy();
+                this.styledInjector = null;
+            }
+            this.styled = styled(css);
+            this.styledInjector = this.styled.inject(this.getAnimationElement(), { original: true });
+            // &amp;&amp; exportCSS(getRealId(this), css);
+        }
+        return this;
+    }
+    public append(item: SceneItem | Scene) {
+        item.setDelay(item.getDelay() + this.getDuration());
+        this.setItem(getRealId(item), item);
+    }
+    public pauseCSS() {
+        return this.forEach(item => {
+            item.pauseCSS();
+        });
+    }
+    public pause() {
+        super.pause();
+
+        isPausedCSS(this) &amp;&amp; this.pauseCSS();
+        this.forEach(item => {
+            item.pause();
+        });
+        return this;
+    }
+    public endCSS() {
+        this.forEach(item => {
+            item.endCSS();
+        });
+        setPlayCSS(this, false);
+    }
+    public end() {
+        isEndedCSS(this) &amp;&amp; this.endCSS();
+        super.end();
+        return this;
+    }
+        /**
+      * get item orders
+      * @example
+      scene.getOrders() // => ["item1", "item2"]
+      */
+     public getOrders(): NameType[] {
+        return this.orderMap.get([]) || [];
+    }
+    /**
+      * set item orders
+      * @param - orders
+      * @example
+      frame.setOrders(["item2", "item1"]) // => ["item2", "item1"]
+      */
+    public setOrders(orders: NameType[]): NameType[] {
+        return this.orderMap.set([], orders);
+    }
+    public getAnimationElement() {
+        let animtionElement: AnimateElement;
+
+        this.forEach(item => {
+            const el = item.getAnimationElement();
+
+            !animtionElement &amp;&amp; (animtionElement = el);
+        });
+        return animtionElement;
+    }
+    public addPlayClass(isPaused: boolean, playClassName?: string, properties: object = {}) {
+        let animtionElement: AnimateElement;
+
+        this.forEach(item => {
+            const el = item.addPlayClass(isPaused, playClassName, properties);
+
+            !animtionElement &amp;&amp; (animtionElement = el);
+        });
+        return animtionElement;
+    }
+    /**
+    * Play using the css animation and keyframes.
+    * @param - Check if you want to export css.
+    * @param [playClassName="startAnimation"] - Add a class name to play.
+    * @param - The shorthand properties for six of the animation properties.
+    * @return {Scene} An instance itself
+    * @see {@link https://www.w3schools.com/cssref/css3_pr_animation.asp}
+    * @example
+    scene.playCSS();
+    scene.playCSS(false, {
+    direction: "reverse",
+    fillMode: "forwards",
+    });
+    */
+    public playCSS(isExportCSS = true, playClassName?: string, properties: Partial&lt;AnimatorState> = {}) {
+        playCSS(this, isExportCSS, playClassName, properties);
+        return this;
+    }
+    public set(properties: any, ...args: any[]): this;
+    /**
+      * Set properties to the Scene.
+      * @param - properties
+      * @return An instance itself
+      * @example
+scene.set({
+    ".a": {
+        0: {
+            opacity: 0,
+        },
+        1: {
+            opacity: 1,
+        },
+    },
+});
+// 0
+console.log(scene.getItem(".a").get(0, "opacity"));
+// 1
+console.log(scene.getItem(".a").get(1, "opacity"));
+      */
+    public set(properties: any) {
+        this.load(properties);
+        return this;
+    }
+    /**
+      * Clear All Items
+      * @return {Scene} An instance itself
+      */
+    public clear() {
+        this.finish();
+        this.items = {};
+        this.orderMap = new OrderMap(NAME_SEPARATOR);
+
+        if (this.styledInjector) {
+            this.styledInjector.destroy();
+        }
+        this.styled = null;
+        this.styledInjector = null;
+    }
+    public load(properties: any = {}, options = properties.options) {
+        if (!properties) {
+            return this;
+        }
+        const selector = options &amp;&amp; options[SELECTOR] || this.state[SELECTOR];
+        for (const name in properties) {
+            if (name === "options") {
+                continue;
+            }
+            const object = properties[name];
+            let item;
+
+            if (object instanceof Scene || object instanceof SceneItem) {
+                this.setItem(name, object);
+                item = object;
+            } else if (isFunction(object) &amp;&amp; selector) {
+                const elements =
+                    IS_WINDOW
+                        ? $(`${isFunction(selector) ? selector(name) : name}`, true) as IArrayFormat&lt;AnimateElement>
+                        : ([] as AnimateElement[]);
+                const length = elements.length;
+                const scene = new Scene();
+
+                for (let i = 0; i &lt; length; ++i) {
+                    (scene.newItem(i) as SceneItem).setId().setElement(elements[i]).load(object(i, elements[i]));
+                }
+                this.setItem(name, scene);
+                continue;
+            } else {
+                item = this.newItem(name);
+                item.load(object);
+            }
+            selector &amp;&amp; item.setSelector(selector);
+        }
+        this.setOptions(options);
+    }
+    public setOptions(options: Partial&lt;SceneState> = {}): this {
+        super.setOptions(options);
+
+        const selector = options.selector;
+
+        if (selector) {
+            this.state[SELECTOR] = selector;
+        }
+        return this;
+    }
+    public setSelector(target?: string | boolean | ((id: number | string) => string)) {
+        const state = this.state;
+        const selector = target || state[SELECTOR];
+
+        state[SELECTOR] = selector;
+        const isItFunction = isFunction(target);
+        if (selector) {
+            this.forEach((item, name) => {
+                item.setSelector(isItFunction ? (target as (id: number | string) => string)(name) : selector);
+            });
+        }
+        return this;
+    }
+    public start(delay: number = this.state[DELAY]): boolean {
+        const result = super.start(delay);
+
+        if (result) {
+            this.forEach(item => {
+                item.start(0);
+            });
+        } else {
+            this.forEach(item => {
+                item.setPlayState(RUNNING);
+            });
+        }
+        return result;
+    }
+}
+
+export default Scene;
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -1124,10 +506,10 @@ Scene.steps(1, "end") // Scene.STEP_END</code></pre>
 <style>
 
 
-nav li[file="easing"]:after {
+nav li[file="src/scene"]:after {
     display: none;
 }
-nav li[file="easing"] h4, nav li[file="easing"] ul {
+nav li[file="src/scene"] h4, nav li[file="src/scene"] ul {
     display: block;
 }
 </style>

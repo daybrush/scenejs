@@ -985,7 +985,7 @@ var setters = ["id", ITERATION_COUNT, DELAY, FILL_MODE, DIRECTION, PLAY_SPEED, D
 var getters = __spreadArrays(setters, [EASING, EASING_NAME]);
 /**
 * play video, animation, the others
-* @extends EventTrigger
+* @extends EventEmitter
 * @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
 */
 
@@ -3452,6 +3452,7 @@ function (_super) {
 
 /**
  * manage sceneItems and play Scene.
+ * @extends Animator
  * @sort 1
  */
 
