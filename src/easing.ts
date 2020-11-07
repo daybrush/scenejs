@@ -1,3 +1,4 @@
+import { between } from "@daybrush/utils";
 import { EasingFunction } from "./types";
 
 function cubic(y1: number, y2: number, t: number) {
@@ -49,7 +50,7 @@ export function bezier(x1: number, y1: number, x2: number, y2: number) {
 		t = f-1(x)
 	*/
   const func: EasingFunction = (x: number) => {
-    const t = solveFromX(x1, x2, Math.max(Math.min(1, x), 0));
+    const t = solveFromX(x1, x2, between(x, 0, 1));
 
     return cubic(y1, y2, t);
   };

@@ -245,7 +245,3 @@ export function getEasing(curveArray: string | number[] | EasingFunction): Easin
 
     return easing;
 }
-
-export function getFullName(names: NameType[]) {
-    return names.join(NAME_SEPARATOR);
-}

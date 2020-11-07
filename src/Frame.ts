@@ -1,7 +1,7 @@
 import {
     ALIAS, TIMING_FUNCTION, TRANSFORM_NAME, EASING_NAME, NAME_SEPARATOR
 } from "./consts";
-import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, getEasing, getFullName } from "./utils";
+import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, getEasing } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
 import {
     isObject, isArray, isString, getKeys,
