@@ -12,6 +12,7 @@ import OrderMap from "order-map";
 import styled, { InjectResult, StyledInjector } from "css-styled";
 /**
  * manage sceneItems and play Scene.
+ * @extends Animator
  * @sort 1
  */
 class Scene extends Animator<SceneOptions, SceneState, SceneEvents> {
