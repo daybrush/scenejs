@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src/utils.ts - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
+    <link type="text/css" rel="stylesheet" href="styles/custom.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="description" content="src/utils.ts - Documentation"/>
+
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h2 class="custom"><a href="https://github.com/daybrush/scenejs" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h2 class="custom"><a href="https://daybrush.com/scenejs/features.html" target="_blank" class="menu-item" id="features" >Features</a></h2><div class="search"><div class="input-area"><input type="text"/></div><button></button></div><ul class="classes"><li file="scene" class="parent"><a href="Scene.html">Scene</a><h4><a href="Scene.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="Scene.html#.isRole">isRole</a></li></ul><h4><a href="Scene.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Scene.html#.EVENTS">EVENTS</a></li><li data-type='member'><a href="Scene.html#.OPTIONS">OPTIONS</a></li><li data-type='member'><a href="Scene.html#.VERSION">VERSION</a></li></ul><h4><a href="Scene.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="Scene.html#clear">clear</a></li><li data-type='method'><a href="Scene.html#emit">emit</a></li><li data-type='method'><a href="Scene.html#end">end</a></li><li data-type='method'><a href="Scene.html#exportCSS">exportCSS</a></li><li data-type='method'><a href="Scene.html#finish">finish</a></li><li data-type='method'><a href="Scene.html#forEach">forEach</a></li><li data-type='method'><a href="Scene.html#getActiveDuration">getActiveDuration</a></li><li data-type='method'><a href="Scene.html#getDelay">getDelay</a></li><li data-type='method'><a href="Scene.html#getDirection">getDirection</a></li><li data-type='method'><a href="Scene.html#getDuration">getDuration</a></li><li data-type='method'><a href="Scene.html#getEasing">getEasing</a></li><li data-type='method'><a href="Scene.html#getEasingName">getEasingName</a></li><li data-type='method'><a href="Scene.html#getFillMode">getFillMode</a></li><li data-type='method'><a href="Scene.html#getId">getId</a></li><li data-type='method'><a href="Scene.html#getItem">getItem</a></li><li data-type='method'><a href="Scene.html#getIterationCount">getIterationCount</a></li><li data-type='method'><a href="Scene.html#getIterationTime">getIterationTime</a></li><li data-type='method'><a href="Scene.html#getOrders">getOrders</a></li><li data-type='method'><a href="Scene.html#getPlaySpeed">getPlaySpeed</a></li><li data-type='method'><a href="Scene.html#getPlayState">getPlayState</a></li><li data-type='method'><a href="Scene.html#getTime">getTime</a></li><li data-type='method'><a href="Scene.html#getTotalDuration">getTotalDuration</a></li><li data-type='method'><a href="Scene.html#isDelay">isDelay</a></li><li data-type='method'><a href="Scene.html#isEnded">isEnded</a></li><li data-type='method'><a href="Scene.html#isPaused">isPaused</a></li><li data-type='method'><a href="Scene.html#newItem">newItem</a></li><li data-type='method'><a href="Scene.html#off">off</a></li><li data-type='method'><a href="Scene.html#on">on</a></li><li data-type='method'><a href="Scene.html#once">once</a></li><li data-type='method'><a href="Scene.html#pause">pause</a></li><li data-type='method'><a href="Scene.html#play">play</a></li><li data-type='method'><a href="Scene.html#playCSS">playCSS</a></li><li data-type='method'><a href="Scene.html#removeItem">removeItem</a></li><li data-type='method'><a href="Scene.html#set">set</a></li><li data-type='method'><a href="Scene.html#setDelay">setDelay</a></li><li data-type='method'><a href="Scene.html#setDirection">setDirection</a></li><li data-type='method'><a href="Scene.html#setDuration">setDuration</a></li><li data-type='method'><a href="Scene.html#setEasing">setEasing</a></li><li data-type='method'><a href="Scene.html#setFillMode">setFillMode</a></li><li data-type='method'><a href="Scene.html#setId">setId</a></li><li data-type='method'><a href="Scene.html#setItem">setItem</a></li><li data-type='method'><a href="Scene.html#setIterationCount">setIterationCount</a></li><li data-type='method'><a href="Scene.html#setOptions">setOptions</a></li><li data-type='method'><a href="Scene.html#setOrders">setOrders</a></li><li data-type='method'><a href="Scene.html#setPlaySpeed">setPlaySpeed</a></li><li data-type='method'><a href="Scene.html#setPlayState">setPlayState</a></li><li data-type='method'><a href="Scene.html#setTime">setTime</a></li><li data-type='method'><a href="Scene.html#trigger">trigger</a></li></ul><h4><a href="Scene.html#events">Events</a></h4><ul class='events'><li data-type='event'><a href="Scene.html#event:animate">animate</a></li><li data-type='event'><a href="Scene.html#event:ended">ended</a></li><li data-type='event'><a href="Scene.html#event:iteration">iteration</a></li><li data-type='event'><a href="Scene.html#event:paused">paused</a></li><li data-type='event'><a href="Scene.html#event:play">play</a></li><li data-type='event'><a href="Scene.html#event:timeupdate">timeupdate</a></li></ul></li><li file="sceneitem" class="parent"><a href="SceneItem.html">SceneItem</a><h4><a href="SceneItem.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="SceneItem.html#append">append</a></li><li data-type='method'><a href="SceneItem.html#clear">clear</a></li><li data-type='method'><a href="SceneItem.html#clone">clone</a></li><li data-type='method'><a href="SceneItem.html#emit">emit</a></li><li data-type='method'><a href="SceneItem.html#end">end</a></li><li data-type='method'><a href="SceneItem.html#exportCSS">exportCSS</a></li><li data-type='method'><a href="SceneItem.html#finish">finish</a></li><li data-type='method'><a href="SceneItem.html#forEach">forEach</a></li><li data-type='method'><a href="SceneItem.html#get">get</a></li><li data-type='method'><a href="SceneItem.html#getActiveDuration">getActiveDuration</a></li><li data-type='method'><a href="SceneItem.html#getDelay">getDelay</a></li><li data-type='method'><a href="SceneItem.html#getDirection">getDirection</a></li><li data-type='method'><a href="SceneItem.html#getDuration">getDuration</a></li><li data-type='method'><a href="SceneItem.html#getEasing">getEasing</a></li><li data-type='method'><a href="SceneItem.html#getEasingName">getEasingName</a></li><li data-type='method'><a href="SceneItem.html#getElements">getElements</a></li><li data-type='method'><a href="SceneItem.html#getFillMode">getFillMode</a></li><li data-type='method'><a href="SceneItem.html#getFrame">getFrame</a></li><li data-type='method'><a href="SceneItem.html#getId">getId</a></li><li data-type='method'><a href="SceneItem.html#getIterationCount">getIterationCount</a></li><li data-type='method'><a href="SceneItem.html#getIterationTime">getIterationTime</a></li><li data-type='method'><a href="SceneItem.html#getNowFrame">getNowFrame</a></li><li data-type='method'><a href="SceneItem.html#getOrderObject">getOrderObject</a></li><li data-type='method'><a href="SceneItem.html#getOrders">getOrders</a></li><li data-type='method'><a href="SceneItem.html#getPlaySpeed">getPlaySpeed</a></li><li data-type='method'><a href="SceneItem.html#getPlayState">getPlayState</a></li><li data-type='method'><a href="SceneItem.html#getTime">getTime</a></li><li data-type='method'><a href="SceneItem.html#getTotalDuration">getTotalDuration</a></li><li data-type='method'><a href="SceneItem.html#hasFrame">hasFrame</a></li><li data-type='method'><a href="SceneItem.html#hasName">hasName</a></li><li data-type='method'><a href="SceneItem.html#isDelay">isDelay</a></li><li data-type='method'><a href="SceneItem.html#isEnded">isEnded</a></li><li data-type='method'><a href="SceneItem.html#isPaused">isPaused</a></li><li data-type='method'><a href="SceneItem.html#mergeFrame">mergeFrame</a></li><li data-type='method'><a href="SceneItem.html#newFrame">newFrame</a></li><li data-type='method'><a href="SceneItem.html#off">off</a></li><li data-type='method'><a href="SceneItem.html#on">on</a></li><li data-type='method'><a href="SceneItem.html#once">once</a></li><li data-type='method'><a href="SceneItem.html#pause">pause</a></li><li data-type='method'><a href="SceneItem.html#play">play</a></li><li data-type='method'><a href="SceneItem.html#playCSS">playCSS</a></li><li data-type='method'><a href="SceneItem.html#prepend">prepend</a></li><li data-type='method'><a href="SceneItem.html#remove">remove</a></li><li data-type='method'><a href="SceneItem.html#removeFrame">removeFrame</a></li><li data-type='method'><a href="SceneItem.html#set">set</a></li><li data-type='method'><a href="SceneItem.html#setCSS">setCSS</a></li><li data-type='method'><a href="SceneItem.html#setDelay">setDelay</a></li><li data-type='method'><a href="SceneItem.html#setDirection">setDirection</a></li><li data-type='method'><a href="SceneItem.html#setDuration">setDuration</a></li><li data-type='method'><a href="SceneItem.html#setEasing">setEasing</a></li><li data-type='method'><a href="SceneItem.html#setElement">setElement</a></li><li data-type='method'><a href="SceneItem.html#setElements">setElements</a></li><li data-type='method'><a href="SceneItem.html#setFillMode">setFillMode</a></li><li data-type='method'><a href="SceneItem.html#setFrame">setFrame</a></li><li data-type='method'><a href="SceneItem.html#setId">setId</a></li><li data-type='method'><a href="SceneItem.html#setIterationCount">setIterationCount</a></li><li data-type='method'><a href="SceneItem.html#setOptions">setOptions</a></li><li data-type='method'><a href="SceneItem.html#setOrderObject">setOrderObject</a></li><li data-type='method'><a href="SceneItem.html#setOrders">setOrders</a></li><li data-type='method'><a href="SceneItem.html#setPlaySpeed">setPlaySpeed</a></li><li data-type='method'><a href="SceneItem.html#setPlayState">setPlayState</a></li><li data-type='method'><a href="SceneItem.html#setSelector">setSelector</a></li><li data-type='method'><a href="SceneItem.html#setTime">setTime</a></li><li data-type='method'><a href="SceneItem.html#size">size</a></li><li data-type='method'><a href="SceneItem.html#toObject">toObject</a></li><li data-type='method'><a href="SceneItem.html#trigger">trigger</a></li><li data-type='method'><a href="SceneItem.html#unshift">unshift</a></li><li data-type='method'><a href="SceneItem.html#update">update</a></li></ul><h4><a href="SceneItem.html#events">Events</a></h4><ul class='events'><li data-type='event'><a href="SceneItem.html#event:animate">animate</a></li><li data-type='event'><a href="SceneItem.html#event:ended">ended</a></li><li data-type='event'><a href="SceneItem.html#event:iteration">iteration</a></li><li data-type='event'><a href="SceneItem.html#event:paused">paused</a></li><li data-type='event'><a href="SceneItem.html#event:play">play</a></li><li data-type='event'><a href="SceneItem.html#event:timeupdate">timeupdate</a></li></ul></li><li file="propertyobject" class="parent"><a href="PropertyObject.html">PropertyObject</a><h4><a href="PropertyObject.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="PropertyObject.html#clone">clone</a></li><li data-type='method'><a href="PropertyObject.html#forEach">forEach</a></li><li data-type='method'><a href="PropertyObject.html#get">get</a></li><li data-type='method'><a href="PropertyObject.html#join">join</a></li><li data-type='method'><a href="PropertyObject.html#set">set</a></li><li data-type='method'><a href="PropertyObject.html#size">size</a></li><li data-type='method'><a href="PropertyObject.html#toValue">toValue</a></li></ul></li><li file="frame" class="parent"><a href="Frame.html">Frame</a><h4><a href="Frame.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="Frame.html#clear">clear</a></li><li data-type='method'><a href="Frame.html#clone">clone</a></li><li data-type='method'><a href="Frame.html#get">get</a></li><li data-type='method'><a href="Frame.html#getKeys">getKeys</a></li><li data-type='method'><a href="Frame.html#getNames">getNames</a></li><li data-type='method'><a href="Frame.html#getOrderObject">getOrderObject</a></li><li data-type='method'><a href="Frame.html#getOrders">getOrders</a></li><li data-type='method'><a href="Frame.html#gets">gets</a></li><li data-type='method'><a href="Frame.html#has">has</a></li><li data-type='method'><a href="Frame.html#merge">merge</a></li><li data-type='method'><a href="Frame.html#remove">remove</a></li><li data-type='method'><a href="Frame.html#set">set</a></li><li data-type='method'><a href="Frame.html#setOrderObject">setOrderObject</a></li><li data-type='method'><a href="Frame.html#setOrders">setOrders</a></li><li data-type='method'><a href="Frame.html#toCSS">toCSS</a></li><li data-type='method'><a href="Frame.html#toCSSObject">toCSSObject</a></li></ul></li><li file="eventemitter" class="parent"><a href="EventEmitter.html">EventEmitter</a><h4><a href="EventEmitter.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="EventEmitter.html#emit">emit</a></li><li data-type='method'><a href="EventEmitter.html#off">off</a></li><li data-type='method'><a href="EventEmitter.html#on">on</a></li><li data-type='method'><a href="EventEmitter.html#once">once</a></li><li data-type='method'><a href="EventEmitter.html#trigger">trigger</a></li><li data-type='method'><a href="EventEmitter.html#trigger">trigger</a></li></ul><h4><a href="EventEmitter.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typddef'><a href="EventEmitter.html#.EmitterParam">EmitterParam</a></li><li data-type='typddef'><a href="EventEmitter.html#.EventHash">EventHash</a></li><li data-type='typddef'><a href="EventEmitter.html#.EventInfo">EventInfo</a></li><li data-type='typddef'><a href="EventEmitter.html#.EventListener">EventListener</a></li><li data-type='typddef'><a href="EventEmitter.html#.EventOptions">EventOptions</a></li><li data-type='typddef'><a href="EventEmitter.html#.OnEvent">OnEvent</a></li><li data-type='typddef'><a href="EventEmitter.html#.TargetParam">TargetParam</a></li></ul></li><li file="animator" class="parent"><a href="Animator.html">Animator</a><h4><a href="Animator.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="Animator.html#emit">emit</a></li><li data-type='method'><a href="Animator.html#end">end</a></li><li data-type='method'><a href="Animator.html#finish">finish</a></li><li data-type='method'><a href="Animator.html#getActiveDuration">getActiveDuration</a></li><li data-type='method'><a href="Animator.html#getDelay">getDelay</a></li><li data-type='method'><a href="Animator.html#getDirection">getDirection</a></li><li data-type='method'><a href="Animator.html#getDuration">getDuration</a></li><li data-type='method'><a href="Animator.html#getEasing">getEasing</a></li><li data-type='method'><a href="Animator.html#getEasingName">getEasingName</a></li><li data-type='method'><a href="Animator.html#getFillMode">getFillMode</a></li><li data-type='method'><a href="Animator.html#getId">getId</a></li><li data-type='method'><a href="Animator.html#getIterationCount">getIterationCount</a></li><li data-type='method'><a href="Animator.html#getIterationTime">getIterationTime</a></li><li data-type='method'><a href="Animator.html#getPlaySpeed">getPlaySpeed</a></li><li data-type='method'><a href="Animator.html#getPlayState">getPlayState</a></li><li data-type='method'><a href="Animator.html#getTime">getTime</a></li><li data-type='method'><a href="Animator.html#getTotalDuration">getTotalDuration</a></li><li data-type='method'><a href="Animator.html#isDelay">isDelay</a></li><li data-type='method'><a href="Animator.html#isEnded">isEnded</a></li><li data-type='method'><a href="Animator.html#isPaused">isPaused</a></li><li data-type='method'><a href="Animator.html#off">off</a></li><li data-type='method'><a href="Animator.html#on">on</a></li><li data-type='method'><a href="Animator.html#once">once</a></li><li data-type='method'><a href="Animator.html#pause">pause</a></li><li data-type='method'><a href="Animator.html#play">play</a></li><li data-type='method'><a href="Animator.html#setDelay">setDelay</a></li><li data-type='method'><a href="Animator.html#setDirection">setDirection</a></li><li data-type='method'><a href="Animator.html#setDuration">setDuration</a></li><li data-type='method'><a href="Animator.html#setEasing">setEasing</a></li><li data-type='method'><a href="Animator.html#setFillMode">setFillMode</a></li><li data-type='method'><a href="Animator.html#setId">setId</a></li><li data-type='method'><a href="Animator.html#setIterationCount">setIterationCount</a></li><li data-type='method'><a href="Animator.html#setOptions">setOptions</a></li><li data-type='method'><a href="Animator.html#setPlaySpeed">setPlaySpeed</a></li><li data-type='method'><a href="Animator.html#setPlayState">setPlayState</a></li><li data-type='method'><a href="Animator.html#setTime">setTime</a></li><li data-type='method'><a href="Animator.html#trigger">trigger</a></li></ul><h4><a href="Animator.html#events">Events</a></h4><ul class='events'><li data-type='event'><a href="Animator.html#event:ended">ended</a></li><li data-type='event'><a href="Animator.html#event:iteration">iteration</a></li><li data-type='event'><a href="Animator.html#event:paused">paused</a></li><li data-type='event'><a href="Animator.html#event:play">play</a></li><li data-type='event'><a href="Animator.html#event:timeupdate">timeupdate</a></li></ul></li></ul><ul class="namespaces"><li file="easing" class="parent"><a href="easing.html">easing</a><h4><a href="easing.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="easing.html#.bezier">bezier</a></li><li data-type='method'><a href="easing.html#.steps">steps</a></li></ul><h4><a href="easing.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="easing.html#.EASE">EASE</a></li><li data-type='member'><a href="easing.html#.EASE_IN">EASE_IN</a></li><li data-type='member'><a href="easing.html#.EASE_IN_OUT">EASE_IN_OUT</a></li><li data-type='member'><a href="easing.html#.EASE_OUT">EASE_OUT</a></li><li data-type='member'><a href="easing.html#.LINEAR">LINEAR</a></li><li data-type='member'><a href="easing.html#.STEP_END">STEP_END</a></li><li data-type='member'><a href="easing.html#.STEP_START">STEP_START</a></li></ul></li></ul><ul class="global"><li file="global"  class="parent"><a href="global.html">Global</a><h4><a href="global.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typedef'><a href="global.html#AnimateElement">AnimateElement</a></li><li data-type='typedef'><a href="global.html#AnimatorEvents">AnimatorEvents</a></li><li data-type='typedef'><a href="global.html#AnimatorOptions">AnimatorOptions</a></li><li data-type='typedef'><a href="global.html#AnimatorState">AnimatorState</a></li><li data-type='typedef'><a href="global.html#AnimatorState">AnimatorState</a></li><li data-type='typedef'><a href="global.html#CallbackType">CallbackType</a></li><li data-type='typedef'><a href="global.html#DirectionType">DirectionType</a></li><li data-type='typedef'><a href="global.html#EasingFunction">EasingFunction</a></li><li data-type='typedef'><a href="global.html#EasingType">EasingType</a></li><li data-type='typedef'><a href="global.html#ElementsType">ElementsType</a></li><li data-type='typedef'><a href="global.html#EventParameter">EventParameter</a></li><li data-type='typedef'><a href="global.html#EventType">EventType</a></li><li data-type='typedef'><a href="global.html#FillModeType">FillModeType</a></li><li data-type='typedef'><a href="global.html#IterationCountType">IterationCountType</a></li><li data-type='typedef'><a href="global.html#KeyValueChildren">KeyValueChildren</a></li><li data-type='typedef'><a href="global.html#NameType">NameType</a></li><li data-type='typedef'><a href="global.html#OnTimeUpdate">OnTimeUpdate</a></li><li data-type='typedef'><a href="global.html#OptionType">OptionType</a></li><li data-type='typedef'><a href="global.html#PlayCondition">PlayCondition</a></li><li data-type='typedef'><a href="global.html#PlayStateType">PlayStateType</a></li><li data-type='typedef'><a href="global.html#PropertyObjectState">PropertyObjectState</a></li><li data-type='typedef'><a href="global.html#Role">Role</a></li><li data-type='typedef'><a href="global.html#RoleObject">RoleObject</a></li><li data-type='typedef'><a href="global.html#SceneEvents">SceneEvents</a></li><li data-type='typedef'><a href="global.html#SceneItemEvents">SceneItemEvents</a></li><li data-type='typedef'><a href="global.html#SceneItemOptions">SceneItemOptions</a></li><li data-type='typedef'><a href="global.html#SceneItemState">SceneItemState</a></li><li data-type='typedef'><a href="global.html#SceneOptions">SceneOptions</a></li><li data-type='typedef'><a href="global.html#SceneState">SceneState</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/utils.ts</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {
+    ROLES, MAXIMUM, FIXED, ALIAS,
+    RUNNING, PLAY, ENDED, PLAY_CSS, CURRENT_TIME, START_ANIMATION, EASINGS, NAME_SEPARATOR
+} from "./consts";
+import PropertyObject from "./PropertyObject";
+import Scene from "./Scene";
+import SceneItem from "./SceneItem";
+import {
+    isArray, ANIMATION, ARRAY, OBJECT,
+    PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, isObject, addEvent, removeEvent, isString,
+} from "@daybrush/utils";
+import { EasingType, EasingFunction, NameType } from "./types";
+import { toPropertyObject } from "./utils/property";
+import { bezier, steps } from "./easing";
+import Animator from "./Animator";
+
+export function isPropertyObject(value: any): value is PropertyObject {
+    return value instanceof PropertyObject;
+}
+export function setAlias(name: string, alias: string[]) {
+    ALIAS[name] = alias;
+}
+export function setRole(names: string[], isProperty?: boolean, isFixedProperty?: boolean) {
+    const length = names.length;
+    let roles: any = ROLES;
+    let fixed: any = FIXED;
+
+    for (let i = 0; i &lt; length - 1; ++i) {
+        !roles[names[i]] &amp;&amp; (roles[names[i]] = {});
+        roles = roles[names[i]];
+        if (isFixedProperty) {
+            !fixed[names[i]] &amp;&amp; (fixed[names[i]] = {});
+            fixed = fixed[names[i]];
+        }
+    }
+    isFixedProperty &amp;&amp; (fixed[names[length - 1]] = true);
+    roles[names[length - 1]] = isProperty ? true : {};
+}
+export function getType(value: any) {
+    const type = typeof value;
+
+    if (type === OBJECT) {
+        if (isArray(value)) {
+            return ARRAY;
+        } else if (isPropertyObject(value)) {
+            return PROPERTY;
+        }
+    } else if (type === STRING || type === NUMBER) {
+        return "value";
+    }
+    return type;
+}
+export function isPureObject(obj: any): obj is object {
+    return isObject(obj) &amp;&amp; obj.constructor === Object;
+}
+export function getNames(names: IObject&lt;any>, stack: string[]) {
+    let arr: string[][] = [];
+
+    if (isPureObject(names)) {
+        for (const name in names) {
+            stack.push(name);
+            arr = arr.concat(getNames(names[name], stack));
+            stack.pop();
+        }
+    } else {
+        arr.push(stack.slice());
+    }
+    return arr;
+}
+export function updateFrame(names: IObject&lt;any>, properties: IObject&lt;any>) {
+    for (const name in properties) {
+        const value = properties[name];
+
+        if (!isPureObject(value)) {
+            names[name] = true;
+            continue;
+        }
+        if (!isObject(names[name])) {
+            names[name] = {};
+        }
+        updateFrame(names[name], properties[name]);
+    }
+    return names;
+}
+export function toFixed(num: number) {
+    return Math.round(num * MAXIMUM) / MAXIMUM;
+}
+export function getValueByNames(
+    names: Array&lt;string | number>,
+    properties: IObject&lt;any>, length: number = names.length) {
+    let value = properties;
+
+    for (let i = 0; i &lt; length; ++i) {
+        if (!isObject(value) || value == null) {
+            return undefined;
+        }
+        value = value[names[i]];
+    }
+    return value;
+}
+export function isInProperties(roles: IObject&lt;any>, args: NameType[], isLast?: boolean) {
+    const length = args.length;
+    let role: any = roles;
+
+    if (length === 0) {
+        return false;
+    }
+    for (let i = 0; i &lt; length; ++i) {
+        if (role === true) {
+            return false;
+        }
+        role = role[args[i]];
+        if (!role || (!isLast &amp;&amp; role === true)) {
+            return false;
+        }
+    }
+    return true;
+}
+/**
+ * @memberof Scene
+ * @param - Property names
+ * @param - Whether the property is the last property that cannot be an object (non-partitionable)
+ */
+export function isRole(args: NameType[], isLast?: boolean): boolean {
+    return isInProperties(ROLES, args, isLast);
+}
+export function isFixed(args: NameType[]) {
+    return isInProperties(FIXED, args, true);
+}
+
+export interface IterationInterface {
+    currentTime: number;
+    iterationCount: number;
+    elapsedTime: number;
+}
+export function setPlayCSS(item: Animator, isActivate: boolean) {
+    item.state[PLAY_CSS] = isActivate;
+}
+export function isPausedCSS(item: Scene | SceneItem) {
+    return item.state[PLAY_CSS] &amp;&amp; item.isPaused();
+}
+export function isEndedCSS(item: Scene | SceneItem) {
+    return !item.isEnded() &amp;&amp; item.state[PLAY_CSS];
+}
+
+export function makeId(selector?: boolean) {
+    for (; ;) {
+        const id = `${Math.floor(Math.random() * 10000000)}`;
+
+        if (!IS_WINDOW || !selector) {
+            return id;
+        }
+        const checkElement = $(`[data-scene-id="${id}"]`);
+
+        if (!checkElement) {
+            return id;
+        }
+    }
+}
+export function getRealId(item: Scene | SceneItem) {
+    return item.getId() || item.setId(makeId(false)).getId();
+}
+export function toId(text: number | string) {
+    return `${text}`.match(/[0-9a-zA-Z]+/g).join("");
+}
+export function playCSS(
+    item: Scene | SceneItem, isExportCSS?: boolean,
+    playClassName?: string, properties: object = {}) {
+    if (!ANIMATION || item.getPlayState() === RUNNING) {
+        return;
+    }
+    const className = playClassName || START_ANIMATION;
+
+    if (isPausedCSS(item)) {
+        item.addPlayClass(true, className, properties);
+    } else {
+        if (item.isEnded()) {
+            item.setTime(0);
+        }
+        isExportCSS &amp;&amp; item.exportCSS({ className });
+        const el = item.addPlayClass(false, className, properties);
+
+        if (!el) {
+            return;
+        }
+        addAnimationEvent(item, el);
+        setPlayCSS(item, true);
+    }
+    item.setPlayState(RUNNING);
+}
+
+export function addAnimationEvent(item: Animator, el: Element) {
+    const state = item.state;
+    const duration = item.getDuration();
+    const isZeroDuration = !duration || !isFinite(duration);
+    const animationend = () => {
+        setPlayCSS(item, false);
+        item.finish();
+    };
+    const animationstart = () => {
+        item.trigger(PLAY);
+
+        addEvent(el, "animationcancel", animationend);
+        addEvent(el, "animationend", animationend);
+        addEvent(el, "animationiteration", animationiteration);
+    };
+    item.once(ENDED, () => {
+        removeEvent(el, "animationcancel", animationend);
+        removeEvent(el, "animationend", animationend);
+        removeEvent(el, "animationiteration", animationiteration);
+        removeEvent(el, "animationstart", animationstart);
+    });
+    const animationiteration = ({ elapsedTime }: any) => {
+        const currentTime = elapsedTime;
+        const iterationCount = isZeroDuration ? 0 : (currentTime / duration);
+
+        state[CURRENT_TIME] = currentTime;
+        item.setIteration(iterationCount);
+    };
+    addEvent(el, "animationstart", animationstart);
+}
+
+export function getEasing(curveArray: string | number[] | EasingFunction): EasingType {
+    let easing: EasingType;
+
+    if (isString(curveArray)) {
+        if (curveArray in EASINGS) {
+            easing = EASINGS[curveArray];
+        } else {
+            const obj = toPropertyObject(curveArray);
+
+            if (isString(obj)) {
+                return 0;
+            } else {
+                if (obj.model === "cubic-bezier") {
+                    curveArray = obj.value.map(v => parseFloat(v));
+                    easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
+                } else if (obj.model === "steps") {
+                    easing = steps(parseFloat(obj.value[0]), obj.value[1]);
+                } else {
+                    return 0;
+                }
+            }
+        }
+    } else if (isArray(curveArray)) {
+        easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
+    } else {
+        easing = curveArray;
+    }
+
+    return easing;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+<style>
+
+
+nav li[file="src/utils"]:after {
+    display: none;
+}
+nav li[file="src/utils"] h4, nav li[file="src/utils"] ul {
+    display: block;
+}
+</style>
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/daybrush/jsdoc">JSDoc 0.3.10</a> on Wed Feb 10 2021 00:28:01 GMT+0900 (GMT+09:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/utils.min.js"></script>
+<script src="scripts/search.js"></script>
+<script src="scripts/custom.js"></script>
+</body>
+</html>
