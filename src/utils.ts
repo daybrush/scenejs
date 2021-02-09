@@ -98,7 +98,7 @@ export function getValueByNames(
     }
     return value;
 }
-export function isInProperties(roles: IObject<any>, args: NameType[], isCheckTrue?: boolean) {
+export function isInProperties(roles: IObject<any>, args: NameType[], isLast?: boolean) {
     const length = args.length;
     let role: any = roles;
 
@@ -110,14 +110,19 @@ export function isInProperties(roles: IObject<any>, args: NameType[], isCheckTru
             return false;
         }
         role = role[args[i]];
-        if (!role || (!isCheckTrue && role === true)) {
+        if (!role || (!isLast && role === true)) {
             return false;
         }
     }
     return true;
 }
-export function isRole(args: NameType[], isCheckTrue?: boolean) {
-    return isInProperties(ROLES, args, isCheckTrue);
+/**
+ * @memberof Scene
+ * @param - Property names
+ * @param - Whether the property is the last property that cannot be an object (non-partitionable)
+ */
+export function isRole(args: NameType[], isLast?: boolean): boolean {
+    return isInProperties(ROLES, args, isLast);
 }
 export function isFixed(args: NameType[]) {
     return isInProperties(FIXED, args, true);

@@ -8,5 +8,5 @@ export * from "./easing";
 export * from "./presets";
 export * from "./types";
 export { OPTIONS, EVENTS, FIXED, ROLES, NAME_SEPARATOR } from "./consts";
-export { setRole, setAlias } from "./utils";
+export { setRole, setAlias, isRole } from "./utils";
 export { Scene as default };
