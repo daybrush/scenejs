@@ -13,6 +13,7 @@ import { EasingType, EasingFunction, NameType } from "./types";
 import { toPropertyObject } from "./utils/property";
 import { bezier, steps } from "./easing";
 import Animator from "./Animator";
+import Frame from "./Frame";
 
 export function isPropertyObject(value: any): value is PropertyObject {
     return value instanceof PropertyObject;
@@ -249,4 +250,34 @@ export function getEasing(curveArray: string | number[] | EasingFunction): Easin
     }
 
     return easing;
+}
+
+export function isScene(value: any): value is Scene {
+    return value && !!(value.constructor as typeof Scene).prototype.getItem;
+}
+export function isSceneItem(value: any): value is SceneItem {
+    return (
+        value && !!(value.constructor as typeof SceneItem).prototype.getFrame
+    );
+}
+export function isFrame(value: any): value is Frame {
+    return value && !!(value.constructor as typeof Frame).prototype.toCSS;
+}
+export function flatSceneObject(obj: IObject<any>, seperator: string): Record<string, Frame> {
+    const newObj = {};
+
+    for (const name in obj) {
+        const value = obj[name];
+
+        if (isFrame(value)) {
+            newObj[name] = value;
+        } else if (isObject(value)) {
+            const nextObj = flatSceneObject(value, seperator);
+
+            for (const nextName in nextObj) {
+                newObj[`${name}${seperator}${nextName}`] = nextObj[nextName];
+            }
+        }
+    }
+    return newObj;
 }

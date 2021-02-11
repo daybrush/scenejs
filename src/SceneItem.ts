@@ -799,11 +799,11 @@ item.setElement(document.querySelectorAll(".class"));
   // opacity: 0.7; display:"block";
   const frame = item.getNowFrame(1.7);
       */
-    public getNowFrame(time: number, easing?: EasingType, isAccurate?: boolean) {
+    public getNowFrame(time: number, parentEasing?: EasingType, isAccurate?: boolean) {
         this.needUpdate && this.update();
         const frame = new Frame();
         const [left, right] = getNearTimeIndex(this.times, time);
-        let realEasing = this.getEasing() || easing;
+        let realEasing = this.getEasing() || parentEasing;
         let nameMap = this.nameMap;
 
         if (this.hasName([TIMING_FUNCTION])) {
@@ -837,6 +837,26 @@ item.setElement(document.querySelectorAll(".class"));
             frame.set(properties, value);
         });
         return frame;
+    }
+    /**
+     * Get the current computed frame. (If needUpdate is true, get a new computed frame, not the temp that has already been saved.)
+     */
+    public getCurrentFrame(needUpdate?: boolean, parentEasing?: EasingType): Frame {
+        const iterationTime = this.getIterationTime();
+
+        const frame = needUpdate || this.needUpdate || !this.temp
+            ? this.getComputedFrame(iterationTime, parentEasing)
+            : this.temp;
+
+        this.temp = frame;
+
+        return frame;
+    }
+    /**
+     * Get the computed frame corresponding to the time.
+     */
+    public getComputedFrame(time: number, parentEasing?: EasingType, isAccurate?: boolean): Frame {
+        return this.getNowFrame(time, parentEasing, isAccurate);
     }
     public load(properties: any = {}, options = properties.options) {
         options && this.setOptions(options);

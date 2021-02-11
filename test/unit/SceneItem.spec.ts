@@ -210,80 +210,80 @@ describe("SceneItem Test", () => {
             expect(item.getFrame(0).has("transform")).to.be.equals(true);
             expect(item.get(0, "transform")).to.be.deep.equals({});
         });
-        it("should check 'getNowFrame' method", () => {
+        it("should check 'getComputedFrame' method", () => {
             // Then
-            expect(item.getNowFrame(0).get("display")).to.be.equals("block");
-            expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
-            expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
-            expect(item.getNowFrame(1).get("display")).to.be.equals("none");
+            expect(item.getComputedFrame(0).get("display")).to.be.equals("block");
+            expect(item.getComputedFrame(0.5).get("display")).to.be.equals("block");
+            expect(item.getComputedFrame(0.5).get("a")).to.be.equals(1.5);
+            expect(item.getComputedFrame(1).get("display")).to.be.equals("none");
         });
-        it("should check 'getNowFrame' method with wrong easing", () => {
+        it("should check 'getComputedFrame' method with wrong easing", () => {
             ["easdasd", "easde(aa)"].forEach(easing => {
                 // When
                 item.setEasing(easing);
                 // Then
-                expect(item.getNowFrame(0).get("display")).to.be.equals("block");
-                expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
-                expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
-                expect(item.getNowFrame(1).get("display")).to.be.equals("none");
+                expect(item.getComputedFrame(0).get("display")).to.be.equals("block");
+                expect(item.getComputedFrame(0.5).get("display")).to.be.equals("block");
+                expect(item.getComputedFrame(0.5).get("a")).to.be.equals(1.5);
+                expect(item.getComputedFrame(1).get("display")).to.be.equals("none");
             });
         });
-        it("should check 'getNowFrame' method with easing", () => {
+        it("should check 'getComputedFrame' method with easing", () => {
             // When
             item.setEasing("ease-out");
 
             // Then
-            expect(item.getNowFrame(0.25).get("a")).to.be.not.equals(1.25);
-            expect(item.getNowFrame(0).get("display")).to.be.equals("block");
-            expect(item.getNowFrame(0.5).get("display")).to.be.equals("block");
-            expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
-            expect(item.getNowFrame(1).get("display")).to.be.equals("none");
+            expect(item.getComputedFrame(0.25).get("a")).to.be.not.equals(1.25);
+            expect(item.getComputedFrame(0).get("display")).to.be.equals("block");
+            expect(item.getComputedFrame(0.5).get("display")).to.be.equals("block");
+            expect(item.getComputedFrame(0.5).get("a")).to.be.equals(1.5);
+            expect(item.getComputedFrame(1).get("display")).to.be.equals("none");
         });
-        it("should check 'getNowFrame' method with steps(start) easing", () => {
+        it("should check 'getComputedFrame' method with steps(start) easing", () => {
             // When
             item.setEasing("steps(2, start)");
 
             // Then
-            expect(item.getNowFrame(0).get("a")).to.be.equals(1);
-            expect(item.getNowFrame(0.1).get("a")).to.be.equals(1.25);
-            expect(item.getNowFrame(0.2).get("a")).to.be.equals(1.25);
-            expect(item.getNowFrame(0.25).get("a")).to.be.equals(1.5);
-            expect(item.getNowFrame(0.4).get("a")).to.be.equals(1.5);
-            expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
+            expect(item.getComputedFrame(0).get("a")).to.be.equals(1);
+            expect(item.getComputedFrame(0.1).get("a")).to.be.equals(1.25);
+            expect(item.getComputedFrame(0.2).get("a")).to.be.equals(1.25);
+            expect(item.getComputedFrame(0.25).get("a")).to.be.equals(1.5);
+            expect(item.getComputedFrame(0.4).get("a")).to.be.equals(1.5);
+            expect(item.getComputedFrame(0.5).get("a")).to.be.equals(1.5);
         });
-        it("should check 'getNowFrame' method with steps(end) easing", () => {
+        it("should check 'getComputedFrame' method with steps(end) easing", () => {
             // When
             item.setEasing("steps(2, end)");
 
             // Then
-            expect(item.getNowFrame(0).get("a")).to.be.equals(1);
-            expect(item.getNowFrame(0.2).get("a")).to.be.equals(1);
-            expect(item.getNowFrame(0.25).get("a")).to.be.equals(1.25);
-            expect(item.getNowFrame(0.4).get("a")).to.be.equals(1.25);
-            expect(item.getNowFrame(0.5).get("a")).to.be.equals(1.5);
+            expect(item.getComputedFrame(0).get("a")).to.be.equals(1);
+            expect(item.getComputedFrame(0.2).get("a")).to.be.equals(1);
+            expect(item.getComputedFrame(0.25).get("a")).to.be.equals(1.25);
+            expect(item.getComputedFrame(0.4).get("a")).to.be.equals(1.25);
+            expect(item.getComputedFrame(0.5).get("a")).to.be.equals(1.5);
         });
-        it("should check 'getNowFrame(true)' method", () => {
+        it("should check 'getComputedFrame(true)' method", () => {
             // When
             item.set(0, "transform", "translate(20px)");
             item.set(1, "transform", "scale(0)");
             item.set(2, "transform", "translate(40px)");
 
             // Then
-            expect(item.getNowFrame(0, 0, true).get("display")).to.be.equals("block");
-            expect(item.getNowFrame(0.5, 0, true).get("display")).to.be.not.ok;
-            expect(item.getNowFrame(1, 0, true).get("display")).to.be.equals("none");
+            expect(item.getComputedFrame(0, 0, true).get("display")).to.be.equals("block");
+            expect(item.getComputedFrame(0.5, 0, true).get("display")).to.be.not.ok;
+            expect(item.getComputedFrame(1, 0, true).get("display")).to.be.equals("none");
 
-            expect(item.getNowFrame(0, 0, true).get("transform", "translate")).to.be.equals("20px");
-            expect(item.getNowFrame(0.5, 0, true).get("transform", "translate")).to.be.not.ok;
-            expect(item.getNowFrame(1, 0, true).get("transform", "translate")).to.be.equals("30px");
-            expect(item.getNowFrame(2, 0, true).get("transform", "translate")).to.be.equals("40px");
+            expect(item.getComputedFrame(0, 0, true).get("transform", "translate")).to.be.equals("20px");
+            expect(item.getComputedFrame(0.5, 0, true).get("transform", "translate")).to.be.not.ok;
+            expect(item.getComputedFrame(1, 0, true).get("transform", "translate")).to.be.equals("30px");
+            expect(item.getComputedFrame(2, 0, true).get("transform", "translate")).to.be.equals("40px");
 
-            expect(item.getNowFrame(0, 0, true).get("transform", "scale")).to.be.equals("0");
-            expect(item.getNowFrame(0.5, 0, true).get("transform", "scale")).to.be.not.ok;
-            expect(item.getNowFrame(1, 0, true).get("transform", "scale")).to.be.equal("0");
-            expect(item.getNowFrame(2, 0, true).get("transform", "scale")).to.be.equal("0");
+            expect(item.getComputedFrame(0, 0, true).get("transform", "scale")).to.be.equals("0");
+            expect(item.getComputedFrame(0.5, 0, true).get("transform", "scale")).to.be.not.ok;
+            expect(item.getComputedFrame(1, 0, true).get("transform", "scale")).to.be.equal("0");
+            expect(item.getComputedFrame(2, 0, true).get("transform", "scale")).to.be.equal("0");
         });
-        it("should check 'getNowFrame' method (no 0%)", () => {
+        it("should check 'getComputedFrame' method (no 0%)", () => {
             item = new SceneItem({
                 0.5: {
                     display: "none",
@@ -300,16 +300,41 @@ describe("SceneItem Test", () => {
                 },
             });
 
-            expect(item.getNowFrame(0).get("display")).to.be.equals("none");
-            expect(item.getNowFrame(0).get("a")).to.be.equals(1.5);
-            expect(item.getNowFrame(0.4).get("display")).to.be.equals("none");
-            expect(item.getNowFrame(0.4).get("a")).to.be.equals(1.5);
-            expect(item.getNowFrame(0.6).get("display")).to.be.equals("none");
-            expect(item.getNowFrame(0.75).get("filter", "hue-rotate")).to.be.equals("50deg");
-            expect(item.getNowFrame(0.6).get("a")).to.be.equals(1.6);
-            expect(item.getNowFrame(1).get("display")).to.be.equals("block");
-            expect(item.getNowFrame(1).get("a")).to.be.equals(2);
+            expect(item.getComputedFrame(0).get("display")).to.be.equals("none");
+            expect(item.getComputedFrame(0).get("a")).to.be.equals(1.5);
+            expect(item.getComputedFrame(0.4).get("display")).to.be.equals("none");
+            expect(item.getComputedFrame(0.4).get("a")).to.be.equals(1.5);
+            expect(item.getComputedFrame(0.6).get("display")).to.be.equals("none");
+            expect(item.getComputedFrame(0.75).get("filter", "hue-rotate")).to.be.equals("50deg");
+            expect(item.getComputedFrame(0.6).get("a")).to.be.equals(1.6);
+            expect(item.getComputedFrame(1).get("display")).to.be.equals("block");
+            expect(item.getComputedFrame(1).get("a")).to.be.equals(2);
         });
+        it("should check 'getCurrentFrame' with no needUpdate", () => {
+            // Given
+            item = new SceneItem({
+                0.5: {
+                    display: "none",
+                    a: 1.5,
+                    filter: { "hue-rotate": "0deg" },
+                },
+                1: {
+                    display: "block",
+                    a: 2,
+                    filter: { "hue-rotate": "100deg" },
+                },
+                1.2: {
+
+                },
+            });
+            item.setTime(0);
+
+            // When
+            const frame = item.getCurrentFrame();
+
+            // Then
+            expect(frame.get("display")).to.be.equals("none");
+        })
         it("should check 'getFrame' method", () => {
             expect(item.getFrame(0).get("display")).to.be.equals("block");
             expect(item.getFrame(0.7)).to.be.not.ok;
@@ -321,15 +346,15 @@ describe("SceneItem Test", () => {
                 transform: "translate(10px) scale(2)",
             });
             const css1 = item.getFrame(0).toCSS();
-            const css2 = item.getNowFrame(0).toCSS();
-            const css3 = item.getNowFrame(0, undefined, true).toCSS();
+            const css2 = item.getComputedFrame(0).toCSS();
+            const css3 = item.getComputedFrame(0, undefined, true).toCSS();
 
             // When
             item.setOrders(["transform"], ["scale", "translate"]);
 
             const css4 = item.getFrame(0).toCSS();
-            const css5 = item.getNowFrame(0).toCSS();
-            const css6 = item.getNowFrame(0, undefined, true).toCSS();
+            const css5 = item.getComputedFrame(0).toCSS();
+            const css6 = item.getComputedFrame(0, undefined, true).toCSS();
 
             // Then
             expect(css1).to.have.string("translate(10px) scale(2)");
@@ -379,7 +404,7 @@ describe("SceneItem Test", () => {
                 },
             });
             [0, 0.2, 0.5, 0.7, 1].forEach((t, i) => {
-                const frame = item.getNowFrame(t);
+                const frame = item.getComputedFrame(t);
                 if (t !== 1) {
                     expect(frame.get("a")).to.be.equals(`rgba(${200 * t},${200 * t},${200 * t},1)`);
                     expect(frame.get("b")).to.be.equals(i * t);
@@ -583,9 +608,9 @@ describe("SceneItem Test", () => {
             expect(item1.get("from", "a")).to.be.equal(1);
             expect(item1.get("to", "a")).to.be.equal(2);
             expect(item1.get("50%", "a")).to.be.equal(1.5);
-            expect(item1.getNowFrame(0).get("a")).to.be.equal(1);
-            expect(item1.getNowFrame(1).get("a")).to.be.equal(2);
-            expect(item1.getNowFrame(0.5).get("a")).to.be.equal(1.5);
+            expect(item1.getComputedFrame(0).get("a")).to.be.equal(1);
+            expect(item1.getComputedFrame(1).get("a")).to.be.equal(2);
+            expect(item1.getComputedFrame(0.5).get("a")).to.be.equal(1.5);
             expect(item1.getDelay()).to.be.equal(0);
             expect(item.constructor).to.be.equals(item1.constructor);
         });
@@ -837,7 +862,7 @@ describe("SceneItem Test", () => {
             item.set(2, "html3", "a(3) b(4) c(5)");
 
             // Then
-            const frame = item.getNowFrame(1);
+            const frame = item.getComputedFrame(1);
 
             expect(frame.get("html")).to.be.equals("a(1) b(2) c(3)");
             expect(frame.get("html2")).to.be.equals("a(2) b(3) c(4)");
@@ -959,7 +984,8 @@ describe("SceneItem Test", () => {
                 });
         }
         describe(`should check 'getEntries' function`, () => {
-            ["normal", "reverse", "alternate", "alternate-reverse"].forEach((direction: DirectionType) => {
+            const directions =  ["normal", "reverse", "alternate", "alternate-reverse"] as const;
+            directions.forEach((direction: DirectionType) => {
                 [0.3, 1, 1.3, 2, 2.3].forEach(iterationCount => {
                     const item1 = new SceneItem({
                         0: { a: 1 },
@@ -981,7 +1007,7 @@ describe("SceneItem Test", () => {
                     // Then
                     testEntries(item1);
                     testEntries(item2);
-                    ["normal", "reverse", "alternate", "alternate-reverse"].forEach((direction2: DirectionType) => {
+                    directions.forEach((direction2: DirectionType) => {
                         [0.5, 1, 1.5, 2].forEach(iterationCount2 => {
                             // Given
                             const scene1 = new Scene({

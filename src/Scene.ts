@@ -1,7 +1,7 @@
 import Animator from "./Animator";
 import SceneItem from "./SceneItem";
 import { SELECTOR, DURATION, DELAY, RUNNING, NAME_SEPARATOR } from "./consts";
-import { playCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS } from "./utils";
+import { playCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS, isScene, flatSceneObject } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import {
     AnimateElement, SceneState, SceneOptions, EasingType,
@@ -145,19 +145,64 @@ class Scene extends Animator<SceneOptions, SceneState, SceneEvents> {
         this.orderMap.add([name]);
         return this;
     }
+    /**
+    * Get the current computed frames. (If needUpdate is true, get a new computed frames, not the temp that has already been saved.)
+    */
+    public getCurrentFrames(needUpdate?: boolean, parentEasing?: EasingType) {
+        const easing = this.getEasing() || parentEasing;
+        const frames: IObject<any> = {};
+
+        this.forEach(item => {
+            const id = item.getId();
+
+            if (isScene(item)) {
+                frames[id] = item.getCurrentFrames(needUpdate, easing);
+            } else {
+                frames[id] = item.getCurrentFrame(needUpdate, easing);
+            }
+        });
+        this.temp = frames;
+
+        return frames;
+    }
+    /**
+   * Get the current flatted computed frames. (If needUpdate is true, get a new computed frames, not the temp that has already been saved.)
+   * If there is a scene in the scene, you can get a flatted frame map.
+   * @example
+   * import Scene, { NAME_SEPARATOR } from "scenejs";
+   *
+   * {
+   *   "a": Frame,
+   *   "b": {
+   *     "b1": Frame,
+   *     "b2": Frame,
+   *   },
+   * }
+   * const frames = scene.getCurrentFrames();
+   * {
+   *   "a": Frame,
+   *   "b_///_b1": Frame,
+   *   "b_///_b2": Frame,
+   * }
+   * const frames = scene.getCurrentFlattedFrames();
+   *
+   */
+    public getCurrentFlattedFrames(needUpdate?: boolean, parentEasing?: EasingType): Record<string, Frame> {
+        const frames = this.getCurrentFrames(needUpdate, parentEasing);
+
+        return flatSceneObject(frames, NAME_SEPARATOR);
+    }
     public setTime(time: number | string, isTick?: boolean, isParent?: boolean, parentEasing?: EasingType) {
         super.setTime(time, isTick, isParent);
 
         const iterationTime = this.getIterationTime();
         const easing = this.getEasing() || parentEasing;
-        const frames: IObject<any> = {};
 
         this.forEach(item => {
             item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, true, easing);
-
-            frames[item.getId()] = item.temp;
         });
-        this.temp = frames;
+
+        const frames = this.getCurrentFrames(false, parentEasing);
 
         /**
          * This event is fired when timeupdate and animate.
@@ -280,12 +325,12 @@ const scene = new Scene({
         super.end();
         return this;
     }
-        /**
-      * get item orders
-      * @example
-      scene.getOrders() // => ["item1", "item2"]
-      */
-     public getOrders(): NameType[] {
+    /**
+  * get item orders
+  * @example
+  scene.getOrders() // => ["item1", "item2"]
+  */
+    public getOrders(): NameType[] {
         return this.orderMap.get([]) || [];
     }
     /**
