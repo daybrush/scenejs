@@ -43,7 +43,7 @@ render() {
     keyframes={this.keyframes}
     easing="ease-in-out"
     fillMode="forwards"
-    direcition="normal"
+    direction="normal"
     iterationCount={1}
     playSpeed={1}
     delay={0}
