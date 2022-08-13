@@ -1,0 +1,24 @@
+name: Run tests
+on: [push, pull_request]
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 14.15.4
+      - name: install
+        run: npm install
+        working-directory: ./packages/scenejs
+      - name: lint
+        run: npm run lint
+        working-directory: ./packages/scenejs
+      - name: test
+        run: npm run coverage
+        working-directory: ./packages/scenejs
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          path-to-lcov: ./packages/scenejs/coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}

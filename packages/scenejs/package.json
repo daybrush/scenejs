@@ -1,0 +1,69 @@
+{
+    "name": "scenejs",
+    "version": "1.5.0",
+    "description": "JavaScript & CSS timeline-based animation library",
+    "main": "dist/scene.cjs.js",
+    "module": "dist/scene.esm.js",
+    "sideEffects": false,
+    "types": "declaration/index.d.ts",
+    "scripts": {
+        "lint": "tslint -c tslint.json 'src/**/*.ts'",
+        "coverage": "karma start --coverage && print-coveralls --sort=desc",
+        "test": "karma start",
+        "start": "rollup -c -w",
+        "test:chrome": "karma start --chrome",
+        "build": "rollup -c && print-sizes ./dist && npm run declaration",
+        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
+        "coveralls": "cat ./coverage/lcov.info | coveralls"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/daybrush/scenejs.git"
+    },
+    "keywords": [
+        "scene",
+        "scene.js",
+        "scenejs",
+        "keyframes",
+        "timeline",
+        "animate",
+        "animation",
+        "css",
+        "requestAnimationFrame",
+        "motion"
+    ],
+    "author": "Daybrush",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/daybrush/scenejs/issues"
+    },
+    "homepage": "https://daybrush.com/scenejs",
+    "devDependencies": {
+        "@daybrush/builder": "^0.1.0",
+        "@types/chai": "^4.1.7",
+		"@types/karma-chai": "^0.1.1",
+		"@types/mocha": "^5.2.6",
+		"@types/sinon": "^10.0.11",
+        "chai": "^4.2.0",
+        "coveralls": "^3.0.0",
+        "karma": "^4.0.1",
+		"karma-chai": "^0.1.0",
+		"karma-chrome-launcher": "^2.2.0",
+		"karma-mocha": "^1.3.0",
+		"karma-mocha-reporter": "^2.2.5",
+		"karma-typescript": "^5.5.3",
+        "mocha": "^6.0.2",
+        "print-coveralls": "^1.2.2",
+        "print-sizes": "^0.0.3",
+        "sinon": "^4.1.2",
+        "tslib": "^2.0.1",
+        "tslint": "^5.14.0",
+        "typescript": "^4.5.0 <4.6.0"
+    },
+    "dependencies": {
+        "@daybrush/utils": "^1.3.1",
+        "@scena/event-emitter": "^1.0.3",
+        "css-styled": "^1.0.0",
+        "order-map": "^0.2.2"
+    }
+}

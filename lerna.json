@@ -1,0 +1,31 @@
+{
+    "npmClient": "yarn",
+    "useWorkspaces": true,
+    "packages": [
+        "packages/*"
+    ],
+    "version": "independent",
+    "lernaHelperOptions": {
+        "deployFileMap": [
+            {
+                "basePath": "packages/moveable/dist",
+                "dists": [
+                    "demo/release/{{version}}/dist",
+                    "demo/release/latest/dist"
+                ]
+            },
+            {
+                "basePath": "doc",
+                "dists": [
+                    "demo/release/{{version}}/doc",
+                    "demo/release/latest/doc"
+                ]
+            }
+        ],
+        "beforeReleaseScripts": [
+            "npm run packages:build",
+            "npm run demo:build",
+            "npm run deploy"
+        ]
+    }
+}

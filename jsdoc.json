@@ -7,8 +7,8 @@
     },
     "source": {
         "include": [
-            "./src",
-            "README.md",
+            "./packages/scenejs/src",
+            "./README.md",
             "./node_modules/@scena/event-emitter/src/"
         ],
         "includePattern": "(.+\\.js(doc|x)?|.+\\.ts(doc|x)?)$",
