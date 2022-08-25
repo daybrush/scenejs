@@ -30,6 +30,46 @@ describe("Frame Test", () => {
             expect(frame!.get("a")).to.be.equals(1);
             expect(frame!.get("b")).to.be.equals(2);
         });
+        it("should check incomplete bracket", () => {
+            const frame = new Frame({
+                "mask-image": {
+                    prefix: "linear-gradient(",
+                    suffix: ")",
+                    model: "linear-gradient",
+                    type: "",
+                    separator: ",",
+                    value: [
+                        {
+                            prefix: "",
+                            suffix: "",
+                            model: "",
+                            type: "array",
+                            separator: " ",
+                            value: ["to", "left"]
+                        },
+                        {
+                            prefix: "",
+                            suffix: "",
+                            model: "",
+                            type: "array",
+                            separator: " ",
+                            value: ["transparent", "40%"]
+                        },
+                        {
+                            prefix: "",
+                            suffix: "",
+                            model: "",
+                            type: "array",
+                            separator: " ",
+                            value: ["black", "60%"]
+                        }
+                    ]
+                }
+            });
+
+            // Then
+            expect(frame.get("mask-image").suffix).to.be.equals(")");
+        });
         it("should check array", () => {
             const frame = new Frame({
                 a: [1, 2, 3],

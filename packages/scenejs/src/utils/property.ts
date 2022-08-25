@@ -13,7 +13,6 @@ import { NameType } from "../types";
 import { isPropertyObject } from "../utils";
 
 export function splitStyle(str: string) {
-
     const properties = splitText(str, ";");
     const obj: IObject<string | PropertyObject> = {};
     const totalLength = properties.length;

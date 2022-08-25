@@ -271,6 +271,11 @@
   resolved "https://registry.yarnpkg.com/@daybrush/utils/-/utils-1.7.1.tgz#82de000e69a0b85212933801df9b7c4c5ae15be5"
   integrity sha512-ruVDIfXeVAF4s0RxJoNx5hTjxlIRMnKoJ7N5e2m9eDyluIXB12EvhMPQdoq4a/ohJ+cPgj2MiWS5Lvmpsrx8Gg==
 
+"@daybrush/utils@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@daybrush/utils/-/utils-1.8.0.tgz#89806f0e3b245f72044bab08316d80c80da1203e"
+  integrity sha512-4r3dvrnGmR+vL+U9nm6UUWM1MrRkvxTcAM1VNegqyo6Ebc9QmDn1mNcm3rmKXwVH9/xkXyb1lFo6OQCoQeoXwg==
+
 "@egjs/component@^2.1.2":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@egjs/component/-/component-2.2.2.tgz#b8208ea4ca05f6562a51d58f1e6f9979aad8a9d9"
