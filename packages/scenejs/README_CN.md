@@ -56,9 +56,9 @@ $ npm install scenejs
 |包名|版本|简介|
 |---|---|---|
 |[**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs)|[![](https://img.shields.io/npm/v/react-scenejs.svg)](https://npmjs.com/package/react-scenejs)|通过 Sence.js 用JavaScript和CSS创建基于时间轴动画的 React 组件。|
-|[**ngx-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/ngx-scenejs)|[![](https://img.shields.io/npm/v/ngx-scenejs.svg)](https://npmjs.com/package/ngx-scenejs)|通过 Sence.js 用JavaScript和CSS创建基于时间轴动画的 Angular 组件。|
 |[**vue-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs)|[![](https://img.shields.io/npm/v/vue-scenejs.svg)](https://npmjs.com/package/vue-scenejs)|通过 Sence.js 用JavaScript和CSS创建基于时间轴动画的 Vue 组件。|
-|[**preact-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/preact-scenejs)|[![](https://img.shields.io/npm/v/preact-scenejs.svg)](https://npmjs.com/package/preact-scenejs)|通过 Sence.js 用JavaScript和CSS创建基于时间轴动画的 Preact 组件。|
+|[**vue3-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs)|[![](https://img.shields.io/npm/v/vue3-scenejs.svg)](https://npmjs.com/package/vue3-scenejs)|通过 Sence.js 用JavaScript和CSS创建基于时间轴动画的 Vue 3 组件。|
+|[**svelte-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/svelte-scenejs)|[![](https://img.shields.io/npm/v/svelte-scenejs.svg)](https://npmjs.com/package/svelte-scenejs)|通过 Sence.js 用JavaScript和CSS创建基于时间轴动画的 Svelte 组件。|
 |[**@scenejs/effects**](https://github.com/daybrush/scenejs-effects)|[![](https://img.shields.io/npm/v/@scenejs/effects.svg)](https://npmjs.com/package/@scenejs/effects)|Scene.js 特效收集库,可以添加场景剧本。|
 |[**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline)|[![](https://img.shields.io/npm/v/@scenejs/timeline.svg)](https://npmjs.com/package/@scenejs/timeline)|代表Scene.js 中时间轴的库。 你可以控制时间,属性和项目。|
 |[**@scenejs/media**](https://github.com/daybrush/scenejs-media)|[![](https://img.shields.io/npm/v/@scenejs/media.svg)](https://npmjs.com/package/@scenejs/media)|用于使用Scene.js播放或控制媒体的库。|
