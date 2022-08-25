@@ -1,7 +1,11 @@
 import Animator from "./Animator";
 import SceneItem from "./SceneItem";
 import { SELECTOR, DURATION, DELAY, RUNNING, NAME_SEPARATOR } from "./consts";
-import { playCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS, isScene, flatSceneObject, isSceneItem } from "./utils";
+import {
+    playCSS, getRealId, isPausedCSS,
+    isEndedCSS, setPlayCSS, isScene, flatSceneObject,
+    isSceneItem,
+} from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import {
     AnimateElement, SceneState, SceneOptions, EasingType,
@@ -146,7 +150,8 @@ class Scene extends Animator<SceneOptions, SceneState, SceneEvents> {
         return this;
     }
     /**
-    * Get the current computed frames. (If needUpdate is true, get a new computed frames, not the temp that has already been saved.)
+    * Get the current computed frames.
+    * (If needUpdate is true, get a new computed frames, not the temp that has already been saved.)
     */
     public getCurrentFrames(needUpdate?: boolean, parentEasing?: EasingType) {
         const easing = this.getEasing() || parentEasing;
@@ -166,7 +171,8 @@ class Scene extends Animator<SceneOptions, SceneState, SceneEvents> {
         return frames;
     }
     /**
-   * Get the current flatted computed frames. (If needUpdate is true, get a new computed frames, not the temp that has already been saved.)
+   * Get the current flatted computed frames.
+   * (If needUpdate is true, get a new computed frames, not the temp that has already been saved.)
    * If there is a scene in the scene, you can get a flatted frame map.
    * @example
    * import Scene, { NAME_SEPARATOR } from "scenejs";

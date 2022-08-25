@@ -840,7 +840,8 @@ item.setElement(document.querySelectorAll(".class"));
         return frame;
     }
     /**
-     * Get the current computed frame. (If needUpdate is true, get a new computed frame, not the temp that has already been saved.)
+     * Get the current computed frame.
+     * (If needUpdate is true, get a new computed frame, not the temp that has already been saved.)
      */
     public getCurrentFrame(needUpdate?: boolean, parentEasing?: EasingType): Frame {
         const iterationTime = this.getIterationTime();
