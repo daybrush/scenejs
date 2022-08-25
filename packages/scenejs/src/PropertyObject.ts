@@ -1,5 +1,6 @@
 import { isString } from "@daybrush/utils";
 import { PropertyObjectState } from "./types";
+import { isPropertyObject } from "./utils";
 
 /**
 * Make string, array to PropertyObject for the dot product
@@ -86,7 +87,7 @@ class PropertyObject implements PropertyObjectState {
             model,
             type,
         } = this;
-        const arr = this.value.map(v => ((v instanceof PropertyObject) ? v.clone() : v));
+        const arr = this.value.map(v => (isPropertyObject(v) ? v.clone() : v));
         return new PropertyObject(arr, {
             separator,
             prefix,
@@ -124,7 +125,7 @@ class PropertyObject implements PropertyObjectState {
       obj4.join();  // =>   "100,100,100,0.5"
        */
     public join() {
-        return this.value.map(v => ((v instanceof PropertyObject) ? v.toValue() : v)).join(this.separator);
+        return this.value.map(v => (isPropertyObject(v) ? v.toValue() : v)).join(this.separator);
     }
     /**
       * executes a provided function once per array element.

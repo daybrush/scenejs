@@ -14,6 +14,7 @@ import {
     setPlayCSS,
     getNames,
     updateFrame,
+    isSceneItem,
 } from "./utils";
 import { dotValue } from "./utils/dot";
 import {
@@ -247,7 +248,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState, SceneItemEven
   console.log(item.get(0, "a")); // "b"
       */
     public set(time: any, ...args: any[]) {
-        if (time instanceof SceneItem) {
+        if (isSceneItem(time)) {
             return this.set(0, time);
         } else if (isArray(time)) {
             const length = time.length;
@@ -286,7 +287,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState, SceneItemEven
             splitComma(time + "").forEach(eachTime => {
                 const realTime = this.getUnitTime(eachTime);
 
-                if (value instanceof SceneItem) {
+                if (isSceneItem(value)) {
                     const delay = value.getDelay();
                     const frames = value.toObject(!this.hasFrame(realTime + delay));
                     const duration = value.getDuration();
@@ -427,7 +428,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState, SceneItemEven
   });
       */
     public append(item: SceneItem | IObject<any>) {
-        if (item instanceof SceneItem) {
+        if (isSceneItem(item)) {
             this.set(this.getDuration(), item);
         } else {
             this.append(new SceneItem(item));
@@ -440,7 +441,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState, SceneItemEven
       * @return An instance itself
       */
     public prepend(item: SceneItem | IObject<any>) {
-        if (item instanceof SceneItem) {
+        if (isSceneItem(item)) {
             const unshiftTime = item.getDuration() + item.getDelay();
             const firstFrame = this.getFrame(0);
             // remove first frame

@@ -1,7 +1,7 @@
 import Animator from "./Animator";
 import SceneItem from "./SceneItem";
 import { SELECTOR, DURATION, DELAY, RUNNING, NAME_SEPARATOR } from "./consts";
-import { playCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS, isScene, flatSceneObject } from "./utils";
+import { playCSS, getRealId, isPausedCSS, isEndedCSS, setPlayCSS, isScene, flatSceneObject, isSceneItem } from "./utils";
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import {
     AnimateElement, SceneState, SceneOptions, EasingType,
@@ -432,7 +432,7 @@ console.log(scene.getItem(".a").get(1, "opacity"));
             const object = properties[name];
             let item;
 
-            if (object instanceof Scene || object instanceof SceneItem) {
+            if (isScene(object) || isSceneItem(object)) {
                 this.setItem(name, object);
                 item = object;
             } else if (isFunction(object) && selector) {

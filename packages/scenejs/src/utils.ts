@@ -15,9 +15,6 @@ import { bezier, steps } from "./easing";
 import Animator from "./Animator";
 import Frame from "./Frame";
 
-export function isPropertyObject(value: any): value is PropertyObject {
-    return value instanceof PropertyObject;
-}
 export function setAlias(name: string, alias: string[]) {
     ALIAS[name] = alias;
 }
@@ -250,6 +247,15 @@ export function getEasing(curveArray: string | number[] | EasingFunction): Easin
     }
 
     return easing;
+}
+
+export function isPropertyObject(value: any): value is PropertyObject {
+    if (!value) {
+        return false;
+    }
+    const prototype = (value.constructor as typeof PropertyObject).prototype;
+
+    return !!(prototype.clone && prototype.get && prototype.setOptions);
 }
 
 export function isScene(value: any): value is Scene {

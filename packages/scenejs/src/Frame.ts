@@ -1,7 +1,7 @@
 import {
     ALIAS, TIMING_FUNCTION, TRANSFORM_NAME, EASING_NAME, NAME_SEPARATOR
 } from "./consts";
-import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, getEasing } from "./utils";
+import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, getEasing, isFrame } from "./utils";
 import { toPropertyObject, splitStyle, toObject } from "./utils/property";
 import {
     isObject, isArray, isString, getKeys,
@@ -240,7 +240,7 @@ class Frame {
         const value = args[length - 1];
         const firstParam = params[0];
 
-        if (length === 1 && value instanceof Frame) {
+        if (length === 1 && isFrame(value)) {
             self.merge(value);
         } else if (firstParam in ALIAS) {
             self._set(ALIAS[firstParam], value);

@@ -10,6 +10,7 @@ import {
     RGBA, splitBracket, IObject, isArray, splitText
 } from "@daybrush/utils";
 import { NameType } from "../types";
+import { isPropertyObject } from "../utils";
 
 export function splitStyle(str: string) {
 
@@ -82,7 +83,7 @@ export function stringToBracketObject(text: string) {
     let prefix = `${model}(`;
     let suffix = `)${afterModel}`;
 
-    if (obj instanceof PropertyObject) {
+    if (isPropertyObject(obj)) {
         separator = obj.separator;
         arr = obj.value;
         prefix += obj.prefix;
