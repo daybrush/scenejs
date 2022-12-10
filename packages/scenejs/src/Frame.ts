@@ -8,6 +8,7 @@ import {
     ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, IObject, isUndefined,
     sortOrders,
     decamelize,
+    camelize,
 } from "@daybrush/utils";
 import { NameType, KeyValueChildren } from "./types";
 import OrderMap from "order-map";
@@ -354,24 +355,27 @@ class Frame {
     }
     /**
       * Specifies an css object that coverted the frame.
+      * @param - If you want to return camel case name like css property or react, use the following parameter
       * @return {object} cssObject
       */
-    public toCSSObject() {
+    public toCSSObject(useCamelCase?: boolean) {
         const properties = this.get();
         const cssObject: IObject<string> = {};
 
-        for (const name in properties) {
+        for (let name in properties) {
             if (isRole([name], true)) {
                 continue;
             }
-            const value = properties[name];
+            let value = properties[name];
 
             if (name === TIMING_FUNCTION) {
-                cssObject[TIMING_FUNCTION.replace("animation", ANIMATION)] =
-                    (isString(value) ? value : value[EASING_NAME]) || "initial";
-            } else {
-                cssObject[name] = value;
+                name = TIMING_FUNCTION.replace("animation", ANIMATION);
+                value = (isString(value) ? value : value[EASING_NAME]) || "initial";
             }
+            if (useCamelCase) {
+                name = camelize(name.replace(/^[-]+/g, ""));
+            }
+            cssObject[name] = value;
         }
         const transform = toInnerProperties(properties[TRANSFORM_NAME], this.orderMap.get([TRANSFORM_NAME]));
         const filter = toInnerProperties(properties.filter, this.orderMap.get([FILTER]));
@@ -384,7 +388,7 @@ class Frame {
       * Specifies an css text that coverted the frame.
       * @return {string} cssText
       */
-    public toCSS() {
+    public toCSSText() {
         const cssObject = this.toCSSObject();
         const cssArray = [];
         const keys = getKeys(cssObject);
@@ -392,6 +396,23 @@ class Frame {
         sortOrders(keys, this.orderMap.get([]));
         keys.forEach(name => {
             cssArray.push(`${decamelize(name, "-")}:${cssObject[name]};`);
+        });
+        return cssArray.join("");
+    }
+    /**
+      * Specifies an css text that coverted the frame.
+      * Use `toCSSText()` method.
+      * @deprecated
+      * @return {string} cssText
+      */
+    public toCSS() {
+        const cssObject = this.toCSSObject();
+        const cssArray = [];
+        const keys = getKeys(cssObject);
+
+        sortOrders(keys, this.orderMap.get([]));
+        keys.forEach(name => {
+            cssArray.push(`${name}:${cssObject[name]};`);
         });
         return cssArray.join("");
     }

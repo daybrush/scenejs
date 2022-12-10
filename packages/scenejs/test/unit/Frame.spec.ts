@@ -134,11 +134,11 @@ describe("Frame Test", () => {
         it(`should check "setOrders" method`, () => {
             // Given
             frame!.set("transform:translate(10px, 20px) scale(10px);");
-            const given1 = frame!.toCSS();
+            const given1 = frame!.toCSSText();
 
             // When
             frame!.setOrders(["transform"], ["translate", "scale"]);
-            const given2 = frame!.toCSS();
+            const given2 = frame!.toCSSText();
 
             // Then
             expect(frame!.getOrders(["transform"])).to.be.deep.equals(["translate", "scale"]);
@@ -302,7 +302,7 @@ describe("Frame Test", () => {
         });
     });
     describe("test frame for CSS", () => {
-        let frame;
+        let frame: Frame;
 
         beforeEach(() => {
             frame = new Frame({
@@ -334,8 +334,18 @@ describe("Frame Test", () => {
             expect(obj.filter).to.be.equals("brightness(90%) grayscale(40%)");
             expect(obj[TIMING_FUNCTION]).to.be.equals(EASE_IN_OUT[EASING_NAME]);
         });
+        it("should check 'toCSSObject' method (camelcase)", () => {
+            frame = new Frame({
+                "timing-function": "ease-in-out",
+                "-webkit-animation-test": 1,
+            });
+            const obj = frame!.toCSSObject(true);
+
+            expect(obj.timingFunction).to.be.equals("ease-in-out");
+            expect(obj.webkitAnimationTest).to.be.equals(1);
+        });
         it("should check 'toCSS' method", () => {
-            const css = frame!.toCSS().replace(/;(\S)/g, ";\n$1").split("\n");
+            const css = frame!.toCSSText().replace(/;(\S)/g, ";\n$1").split("\n");
 
             const result = `a:1;
 b:2;
@@ -344,12 +354,28 @@ filter:brightness(90%) grayscale(40%);`.split("\n");
             css.forEach((line, i) => {
                 expect(line).to.be.deep.equal(result[i]);
             });
-            expect(frame!.toCSS()).to.be.deep.equal(result.join(""));
+
+            // Then
+            expect(frame!.toCSSText()).to.be.deep.equal(result.join(""));
+        });
+        it("should check 'toCSS' method (camelcase)", () => {
+            // Given
+            frame!.clear();
+
+            // When
+            frame.set({
+                fontColor: "#f55",
+                fontSize: "10px",
+            });
+
+
+            // Then
+            expect(frame.toCSSText()).to.be.equals("font-color:rgba(255,85,85,1);font-size:10px;");
         });
         it("should check 'toCSS' method(multiple porperty)", () => {
             frame!.set("transform", "scale2", "3, 4");
             frame!.set("transform", "translateX2", "100px");
-            const css = frame!.toCSS();
+            const css = frame!.toCSSText();
 
             expect(css).to.have.string("scale(1,2) translateX(100px) translateY(200px) scale(3,4) translateX(100px)");
         });

@@ -571,7 +571,7 @@ item.setElement(document.querySelectorAll(".class"));
                     el.innerHTML = html;
                 });
             }
-            const cssText = frame.toCSS();
+            const cssText = frame.toCSSText();
 
             if (state.cssText !== cssText) {
                 state.cssText = cssText;
@@ -1179,7 +1179,7 @@ item.setElement(document.querySelectorAll(".class"));
             if (!frames[keytime]) {
                 frames[keytime] =
                     (!this.hasFrame(keytime) || keytime === 0 || keytime === originalDuration ?
-                        this.getNowFrame(keytime) : this.getNowFrame(keytime, 0, true)).toCSS();
+                        this.getNowFrame(keytime) : this.getNowFrame(keytime, 0, true)).toCSSText();
             }
 
             let frameTime = time / duration * 100;
