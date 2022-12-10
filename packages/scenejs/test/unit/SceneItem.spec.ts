@@ -905,6 +905,12 @@ describe("SceneItem Test", () => {
             expect(item!.get("2>", "a")).to.be.equals(4);
             expect(item!.get(3, "a")).to.be.equals(6);
         });
+        it(`should check 'append' method 2`, () => {
+            item.set(10);
+
+            // Then
+            expect(item!.getDuration()).to.be.equals(10);
+        });
         it(`should check 'prepend' method`, () => {
             item!.prepend(new SceneItem({
                 0: {

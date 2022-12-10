@@ -12,7 +12,6 @@
 <p align="middle">🎬 Scene.js is an JavaScript & CSS timeline-based animation library.</p>
 
 <p align="middle"><a href="https://daybrush.com/scenejs"><strong>Official Site</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>Features</strong></a> &nbsp;/&nbsp; <a href="https://codepen.io/collection/DLWxrd/"><strong>Examples</strong></a></p>
-<p align="middle"><strong>Translations</strong>: <a href="https://github.com/daybrush/scenejs/blob/master/README.md">🇺🇸</a> <a href="https://github.com/daybrush/scenejs/blob/master/README_CN.md">🇨🇳</a></p>
 <br/>
 <p align="middle" style="max-width: 1000px; margin: 0px auto;" >
   <a href="https://codepen.io/daybrush/pen/arQpYb" target="_blank"><img src="https://daybrush.com/scenejs/images/daybrush.gif" width="280" style="min-width:200px;max-width:320px;width: 32%;"/></a>&nbsp;
@@ -41,7 +40,6 @@
 * [Timer](https://codepen.io/daybrush/pen/OdMMXd)
 
 [**More Examples**](https://codepen.io/collection/DLWxrd/)
-
 
 
 ## ⚙️ Installation
@@ -123,23 +121,33 @@ const scene = new Scene({
 ## ⭐️ Show Your Support
 Please give a ⭐️ if this project helped you!
 
+
 ## 👏 Contributing
 
-If you have any questions or requests or want to contribute to `scenejs` or other packages, please write the issue or give me a Pull Request freely.
+If you have any questions or requests or want to contribute to `scenejs` or other packages, please write the [issue](https://github.com/daybrush/scenejs/issues) or give me a Pull Request freely.
 
-## 🐞 Bug Report
-
-If you find a bug, please report to us opening a new [Issues](https://github.com/daybrush/scenejs/issues) on GitHub.
-
-
-## Contributors
 
 ### Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+
 <a href="https://github.com/daybrush/scenejs/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=daybrush/scenejs" />
 </a>
+
+
+## Sponsors
+<p align="center">
+	<a href="https://daybrush.com/sponsors/sponsors.svg">
+		<img src="https://daybrush.com/sponsors/sponsors.svg"/>
+	</a>
+</p>
+
+
+## 🐞 Bug Report
+
+If you find a bug, please report to us opening a new [Issue](https://github.com/daybrush/scenejs/issues) on GitHub.
+
 
 
 ## 📝 License

@@ -7,6 +7,7 @@ import {
     isObject, isArray, isString, getKeys,
     ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, IObject, isUndefined,
     sortOrders,
+    decamelize,
 } from "@daybrush/utils";
 import { NameType, KeyValueChildren } from "./types";
 import OrderMap from "order-map";
@@ -390,7 +391,7 @@ class Frame {
 
         sortOrders(keys, this.orderMap.get([]));
         keys.forEach(name => {
-            cssArray.push(`${name}:${cssObject[name]};`);
+            cssArray.push(`${decamelize(name, "-")}:${cssObject[name]};`);
         });
         return cssArray.join("");
     }
