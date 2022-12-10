@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>node_modules/@scena/event-emitter/src/EventEmitter.ts - Documentation</title>
+    <title>packages/scenejs/src/types.ts - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="node_modules/@scena/event-emitter/src/EventEmitter.ts - Documentation"/>
+    <meta name="description" content="packages/scenejs/src/types.ts - Documentation"/>
 
 </head>
 <body>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">node_modules/@scena/event-emitter/src/EventEmitter.ts</h1>
+    <h1 class="page-title">packages/scenejs/src/types.ts</h1>
     
 
     
@@ -42,220 +42,263 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { findIndex, isObject } from "@daybrush/utils";
-import { EventListener, EventHash, EventInfo, EventOptions, OnEvent, TargetParam } from "./types";
+            <pre class="prettyprint source linenums"><code>import { IArrayFormat } from "@daybrush/utils";
+import SceneItem from "./SceneItem";
+import Frame from "./Frame";
 
 /**
- * Implement EventEmitter on object or component.
+ * @typedef
  */
-class EventEmitter&lt;Events extends {} = { [key: string]: { [key: string]: any } }> {
-
-    private _events: {
-        [name: string]: EventInfo[],
-    } = {};
-    public on&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName: Name, listener: EventListener&lt;Param, this>): this;
-    public on(events: EventHash&lt;Events, this>): this;
-    /**
-     * Add a listener to the registered event.
-     * @param - Name of the event to be added
-     * @param - listener function of the event to be added
-     * @example
-     * import EventEmitter from "@scena/event-emitter";
-     * cosnt emitter = new EventEmitter();
-     *
-     * // Add listener in "a" event
-     * emitter.on("a", () => {
-     * });
-     * // Add listeners
-     * emitter.on({
-     *  a: () => {},
-     *  b: () => {},
-     * });
-     */
-    public on(eventName: string | object, listener?: EventListener&lt;Events[any], this>): this {
-        if (isObject(eventName)) {
-            for (const name in eventName) {
-                this.on&lt;any>(name, eventName[name]);
-            }
-        } else {
-            this._addEvent(eventName, listener, {});
-        }
-        return this;
-    }
-    public off&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName?: Name, listener?: EventListener&lt;Param, this>): this;
-    public off(events: EventHash&lt;Events, this>): this;
-    /**
-     * Remove listeners registered in the event target.
-     * @param - Name of the event to be removed
-     * @param - listener function of the event to be removed
-     * @example
-     * import EventEmitter from "@scena/event-emitter";
-     * cosnt emitter = new EventEmitter();
-     *
-     * // Remove all listeners.
-     * emitter.off();
-     *
-     * // Remove all listeners in "A" event.
-     * emitter.off("a");
-     *
-     *
-     * // Remove "listener" listener in "a" event.
-     * emitter.off("a", listener);
-     */
-    public off(eventName?: string | object, listener?: EventListener&lt;Events[any], this>): this {
-        if (!eventName) {
-            this._events = {};
-        } else if(isObject(eventName)) {
-            for (const name in eventName) {
-                this.off&lt;any>(name);
-            }
-        } else if (!listener) {
-            this._events[eventName] = [];
-        } else {
-            const events = this._events[eventName];
-
-            if (events) {
-                const index = findIndex(events, e => e.listener === listener);
-
-                if (index > -1) {
-                    events.splice(index, 1);
-                }
-            }
-        }
-        return this;
-    }
-    /**
-     * Add a disposable listener and Use promise to the registered event.
-     * @param - Name of the event to be added
-     * @param - disposable listener function of the event to be added
-     * @example
-     * import EventEmitter from "@scena/event-emitter";
-     * cosnt emitter = new EventEmitter();
-     *
-     * // Add a disposable listener in "a" event
-     * emitter.once("a", () => {
-     * });
-     *
-     * // Use Promise
-     * emitter.once("a").then(e => {
-     * });
-     */
-    public once&lt;Name extends keyof Events &amp; string, Param = Events[Name]>(
-        eventName: Name, listener?: EventListener&lt;Param, this>): Promise&lt;OnEvent&lt;Param, this>> {
-        if (listener) {
-            this._addEvent(eventName, listener, { once: true });
-        }
-        return new Promise&lt;OnEvent&lt;Param, this>>(resolve => {
-            this._addEvent(eventName, resolve, { once: true });
-        });
-    }
-    public emit&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName: {} extends Param ? Name : never): boolean;
-    public emit&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName: Name, param: TargetParam&lt;Param>): boolean;
-    /**
-     * Fires an event to call listeners.
-     * @param - Event name
-     * @param - Event parameter
-     * @return If false, stop the event.
-     * @example
-     *
-     * import EventEmitter from "@scena/event-emitter";
-     *
-     *
-     * const emitter = new EventEmitter();
-     *
-     * emitter.on("a", e => {
-     * });
-     *
-     *
-     * emitter.emit("a", {
-     *   a: 1,
-     * });
-     */
-    public emit(eventName: string, param: TargetParam&lt;any> = {}): boolean {
-        const events = this._events[eventName];
-
-        if (!eventName || !events) {
-            return true;
-        }
-        let isStop = false;
-
-        param.eventType = eventName;
-        param.stop = () => {
-            isStop = true;
-        };
-        param.currentTarget = this;
-
-
-        [...events].forEach(info => {
-            info.listener(param);
-            if (info.once) {
-                this.off&lt;any>(eventName, info.listener);
-            }
-        });
-
-        return !isStop;
-    }
-    public trigger&lt;Name extends keyof Events, Param = Events[Name]>(eventName: {} extends TargetParam&lt;Param> ? Name : never): boolean;
-    public trigger&lt;Name extends keyof Events, Param = Events[Name]>(eventName: Name, param: TargetParam&lt;Param>): boolean;
-    /**
-     * Fires an event to call listeners.
-     * @param - Event name
-     * @param - Event parameter
-     * @return If false, stop the event.
-     * @example
-     *
-     * import EventEmitter from "@scena/event-emitter";
-     *
-     *
-     * const emitter = new EventEmitter();
-     *
-     * emitter.on("a", e => {
-     * });
-     *
-     *
-     * emitter.emit("a", {
-     *   a: 1,
-     * });
-     *//**
-     * Fires an event to call listeners.
-     * @param - Event name
-     * @param - Event parameter
-     * @return If false, stop the event.
-     * @example
-     *
-     * import EventEmitter from "@scena/event-emitter";
-     *
-     *
-     * const emitter = new EventEmitter();
-     *
-     * emitter.on("a", e => {
-     * });
-     *
-     * // emit
-     * emitter.trigger("a", {
-     *   a: 1,
-     * });
-     */
-    public trigger&lt;Name extends keyof Events>(eventName: Name, param: TargetParam&lt;any>= {}): boolean {
-        return this.emit&lt;any>(eventName, param);
-    }
-
-    private _addEvent(eventName: string, listener: EventListener&lt;Events[any], this>, options: Partial&lt;EventOptions>) {
-        const events = this._events;
-
-        events[eventName] = events[eventName] || [];
-
-        const listeners = events[eventName];
-
-        listeners.push({ listener, ...options });
-    }
+export interface EasingFunction extends Function {
+    easingName?: string;
 }
 
-export default EventEmitter;
+/**
+ * @typedef
+ */
+export type FillModeType = "forwards" | "backwards" | "both";
+/**
+ * @typedef
+ */
+export type IterationCountType = number | "infinite";
+/**
+ * @typedef
+ */
+export type EasingType = 0 | EasingFunction;
+/**
+ * @typedef
+ */
+export type DirectionType = "normal" | "reverse" | "alternate" | "alternate-reverse";
+
+/**
+ * @typedef
+ */
+export type PlayStateType = "paused" | "running";
+
+/**
+* @typedef - The Animator options. Properties used in css animation.
+* @property - The id represents the unique key of the animator.
+* @property - The easing(timing-function) specifies the speed curve of an animation.
+* @property - The iterationCount property specifies the number of times an animation should be played.
+* @property - The delay property specifies a delay for the start of an animation.
+* @property - The fillMode property specifies a style for the element when the animation is not playing (before it starts, after it ends, or both).
+* @property - The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
+* @property - The playspeed define the speed at which the play is performed.
+* @property - The duration property defines how long an animation should take to complete one cycle.
+
+*/
+export interface AnimatorOptions {
+    id: number | string;
+    easing: string | EasingType;
+    iterationCount: IterationCountType;
+    delay: number;
+    fillMode: FillModeType;
+    direction: DirectionType;
+    playSpeed: number;
+    duration: number;
+}
+/**
+ * @typedef
+ * @extends AnimatorOptions
+ * @see AnimatorOptions
+ */
+export interface AnimatorState extends AnimatorOptions {
+    easingName: string;
+    iterationTime: number;
+    currentTime: number;
+    tickTime: number;
+    iteration: number;
+    prevTime: number;
+    playState: PlayStateType;
+}
+
+/**
+ * @typedef
+ * @extends AnimatorState
+ * @see AnimatorState
+ */
+export interface SceneState extends AnimatorState {
+    selector: string | boolean | ((id: number | string) => string);
+    playCSS: boolean;
+    exportEvent?: boolean;
+}
+
+/**
+ * @typedef
+ * @extends AnimatorOptions
+ * @see AnimatorOptions
+ */
+export interface SceneOptions extends AnimatorOptions {
+    selector: string | boolean | ((id: number | string) => string);
+}
+/**
+ * @typedef
+ * @extends AnimatorState
+ * @see AnimatorState
+ */
+export interface SceneItemState extends AnimatorState {
+    playCSS: boolean;
+    cssText: string;
+    selector: string;
+    exportEvent?: boolean;
+}
+/**
+ * @typedef
+ * @extends AnimatorOptions
+ * @see AnimatorOptions
+ */
+export interface SceneItemOptions extends AnimatorOptions {
+    selector: string | boolean | ((id: number | string) => string);
+    elements: IArrayFormat&lt;AnimateElement> | AnimateElement;
+    element: IArrayFormat&lt;AnimateElement> | AnimateElement;
+    target: any;
+}
+
+/**
+ * @typedef
+ */
+export interface PropertyObjectState {
+    prefix: string;
+    suffix: string;
+    model: string;
+    type: string;
+    separator: string;
+}
+
+/**
+ * @typedef
+ */
+export type Role = true | RoleObject;
+
+/**
+ * @typedef
+ */
+export type ElementsType = HTMLElement | HTMLElement[] | NodeListOf&lt;HTMLElement>;
+/**
+ * @typedef
+ */
+export type CallbackType&lt;T = any> = (...args: any[]) => T;
+
+/**
+ * @typedef
+ */
+export interface EventParameter {
+    [name: string]: CallbackType | CallbackType[];
+}
+/**
+ * @typedef
+ */
+export interface RoleObject {
+    [role: string]: Role;
+}
+/**
+ * @typedef
+ */
+export type NameType = string | number;
+/**
+ * @typedef
+ */
+export type OptionType = ["duration", "fillMode", "direction", "iterationCount", "delay", "easing", "playSpeed"];
+/**
+ * @typedef
+ */
+export type EventType = ["paused", "ended", "timeupdate", "animate", "play", "iteration"];
+
+/**
+ * @typedef
+ */
+export type AnimateElement = HTMLElement | SVGElement;
+
+/**
+ * @typedef
+ */
+export interface PlayCondition {
+    className?: string;
+    selector?: string | ((item: SceneItem, selector: string) => string);
+}
+
+/**
+ * @typedef
+ */
+export interface KeyValueChildren {
+    key: string;
+    value: any;
+    children: KeyValueChildren[];
+}
+/**
+ * @typedef
+ */
+export interface OnTimeUpdate {
+    currentTime: number;
+    time: number;
+    iterationCount: number;
+}
+/**
+ * @typedef
+ */
+export interface OnIteration {
+    currentTime: number;
+    iterationCount: number;
+}
+
+/**
+ * @typedef
+ */
+export interface OnAnimate {
+    currentTime: number;
+    time: number;
+}
+
+/**
+ * @typedef
+ * @extends OnAnimate
+ */
+export interface OnSceneAnimate extends OnAnimate {
+    frames: Record&lt;string, any>;
+}
+
+/**
+ * @typedef
+ * @extends OnAnimate
+ */
+export interface OnSceneItemAnimate extends OnAnimate {
+    frame: Frame;
+}
+
+/**
+ * @typedef
+ */
+export interface AnimatorEvents {
+    play: {};
+    paused: {};
+    ended: {};
+    timeupdate: OnTimeUpdate;
+    iteration: OnIteration;
+}
+
+/**
+ * @typedef
+ * @extends AnimatorEvents
+ */
+export interface SceneAnimatorEvents extends AnimatorEvents {
+    animate: OnAnimate;
+}
+
+/**
+ * @typedef
+ * @extends SceneAnimatorEvents
+ */
+export interface SceneEvents extends SceneAnimatorEvents {
+    animate: OnSceneAnimate;
+}
+
+/**
+ * @typedef
+ * @extends SceneAnimatorEvents
+ */
+export interface SceneItemEvents extends SceneAnimatorEvents {
+    animate: OnSceneItemAnimate;
+}
 </code></pre>
         </article>
     </section>
@@ -267,10 +310,10 @@ export default EventEmitter;
 <style>
 
 
-nav li[file="node_modules/@scena/event-emitter/src/eventemitter"]:after {
+nav li[file="packages/scenejs/src/types"]:after {
     display: none;
 }
-nav li[file="node_modules/@scena/event-emitter/src/eventemitter"] h4, nav li[file="node_modules/@scena/event-emitter/src/eventemitter"] ul {
+nav li[file="packages/scenejs/src/types"] h4, nav li[file="packages/scenejs/src/types"] ul {
     display: block;
 }
 </style>

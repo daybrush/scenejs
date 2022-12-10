@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>node_modules/@scena/event-emitter/src/EventEmitter.ts - Documentation</title>
+    <title>packages/scenejs/src/Frame.ts - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="node_modules/@scena/event-emitter/src/EventEmitter.ts - Documentation"/>
+    <meta name="description" content="packages/scenejs/src/Frame.ts - Documentation"/>
 
 </head>
 <body>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">node_modules/@scena/event-emitter/src/EventEmitter.ts</h1>
+    <h1 class="page-title">packages/scenejs/src/Frame.ts</h1>
     
 
     
@@ -42,220 +42,459 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { findIndex, isObject } from "@daybrush/utils";
-import { EventListener, EventHash, EventInfo, EventOptions, OnEvent, TargetParam } from "./types";
+            <pre class="prettyprint source linenums"><code>import {
+    ALIAS, TIMING_FUNCTION, TRANSFORM_NAME, EASING_NAME, NAME_SEPARATOR
+} from "./consts";
+import { isRole, getType, isPropertyObject, getValueByNames, isFixed, getNames, getEasing, isFrame } from "./utils";
+import { toPropertyObject, splitStyle, toObject } from "./utils/property";
+import {
+    isObject, isArray, isString, getKeys,
+    ANIMATION, TRANSFORM, FILTER, PROPERTY, FUNCTION, ARRAY, OBJECT, IObject, isUndefined,
+    sortOrders,
+    decamelize,
+    camelize,
+} from "@daybrush/utils";
+import { NameType, KeyValueChildren } from "./types";
+import OrderMap from "order-map";
 
-/**
- * Implement EventEmitter on object or component.
- */
-class EventEmitter&lt;Events extends {} = { [key: string]: { [key: string]: any } }> {
-
-    private _events: {
-        [name: string]: EventInfo[],
-    } = {};
-    public on&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName: Name, listener: EventListener&lt;Param, this>): this;
-    public on(events: EventHash&lt;Events, this>): this;
-    /**
-     * Add a listener to the registered event.
-     * @param - Name of the event to be added
-     * @param - listener function of the event to be added
-     * @example
-     * import EventEmitter from "@scena/event-emitter";
-     * cosnt emitter = new EventEmitter();
-     *
-     * // Add listener in "a" event
-     * emitter.on("a", () => {
-     * });
-     * // Add listeners
-     * emitter.on({
-     *  a: () => {},
-     *  b: () => {},
-     * });
-     */
-    public on(eventName: string | object, listener?: EventListener&lt;Events[any], this>): this {
-        if (isObject(eventName)) {
-            for (const name in eventName) {
-                this.on&lt;any>(name, eventName[name]);
-            }
-        } else {
-            this._addEvent(eventName, listener, {});
-        }
-        return this;
+function toInnerProperties(obj: IObject&lt;string>, orders: NameType[] = []) {
+    if (!obj) {
+        return "";
     }
-    public off&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName?: Name, listener?: EventListener&lt;Param, this>): this;
-    public off(events: EventHash&lt;Events, this>): this;
-    /**
-     * Remove listeners registered in the event target.
-     * @param - Name of the event to be removed
-     * @param - listener function of the event to be removed
-     * @example
-     * import EventEmitter from "@scena/event-emitter";
-     * cosnt emitter = new EventEmitter();
-     *
-     * // Remove all listeners.
-     * emitter.off();
-     *
-     * // Remove all listeners in "A" event.
-     * emitter.off("a");
-     *
-     *
-     * // Remove "listener" listener in "a" event.
-     * emitter.off("a", listener);
-     */
-    public off(eventName?: string | object, listener?: EventListener&lt;Events[any], this>): this {
-        if (!eventName) {
-            this._events = {};
-        } else if(isObject(eventName)) {
-            for (const name in eventName) {
-                this.off&lt;any>(name);
-            }
-        } else if (!listener) {
-            this._events[eventName] = [];
-        } else {
-            const events = this._events[eventName];
+    const arrObj = [];
 
-            if (events) {
-                const index = findIndex(events, e => e.listener === listener);
+    const keys = getKeys(obj);
 
-                if (index > -1) {
-                    events.splice(index, 1);
-                }
-            }
-        }
-        return this;
-    }
-    /**
-     * Add a disposable listener and Use promise to the registered event.
-     * @param - Name of the event to be added
-     * @param - disposable listener function of the event to be added
-     * @example
-     * import EventEmitter from "@scena/event-emitter";
-     * cosnt emitter = new EventEmitter();
-     *
-     * // Add a disposable listener in "a" event
-     * emitter.once("a", () => {
-     * });
-     *
-     * // Use Promise
-     * emitter.once("a").then(e => {
-     * });
-     */
-    public once&lt;Name extends keyof Events &amp; string, Param = Events[Name]>(
-        eventName: Name, listener?: EventListener&lt;Param, this>): Promise&lt;OnEvent&lt;Param, this>> {
-        if (listener) {
-            this._addEvent(eventName, listener, { once: true });
-        }
-        return new Promise&lt;OnEvent&lt;Param, this>>(resolve => {
-            this._addEvent(eventName, resolve, { once: true });
-        });
-    }
-    public emit&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName: {} extends Param ? Name : never): boolean;
-    public emit&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName: Name, param: TargetParam&lt;Param>): boolean;
-    /**
-     * Fires an event to call listeners.
-     * @param - Event name
-     * @param - Event parameter
-     * @return If false, stop the event.
-     * @example
-     *
-     * import EventEmitter from "@scena/event-emitter";
-     *
-     *
-     * const emitter = new EventEmitter();
-     *
-     * emitter.on("a", e => {
-     * });
-     *
-     *
-     * emitter.emit("a", {
-     *   a: 1,
-     * });
-     */
-    public emit(eventName: string, param: TargetParam&lt;any> = {}): boolean {
-        const events = this._events[eventName];
+    sortOrders(keys, orders);
 
-        if (!eventName || !events) {
-            return true;
-        }
-        let isStop = false;
+    keys.forEach(name => {
+        arrObj.push(`${name.replace(/\d$/g, "")}(${obj[name]})`);
+    });
 
-        param.eventType = eventName;
-        param.stop = () => {
-            isStop = true;
-        };
-        param.currentTarget = this;
-
-
-        [...events].forEach(info => {
-            info.listener(param);
-            if (info.once) {
-                this.off&lt;any>(eventName, info.listener);
-            }
-        });
-
-        return !isStop;
-    }
-    public trigger&lt;Name extends keyof Events, Param = Events[Name]>(eventName: {} extends TargetParam&lt;Param> ? Name : never): boolean;
-    public trigger&lt;Name extends keyof Events, Param = Events[Name]>(eventName: Name, param: TargetParam&lt;Param>): boolean;
-    /**
-     * Fires an event to call listeners.
-     * @param - Event name
-     * @param - Event parameter
-     * @return If false, stop the event.
-     * @example
-     *
-     * import EventEmitter from "@scena/event-emitter";
-     *
-     *
-     * const emitter = new EventEmitter();
-     *
-     * emitter.on("a", e => {
-     * });
-     *
-     *
-     * emitter.emit("a", {
-     *   a: 1,
-     * });
-     *//**
-     * Fires an event to call listeners.
-     * @param - Event name
-     * @param - Event parameter
-     * @return If false, stop the event.
-     * @example
-     *
-     * import EventEmitter from "@scena/event-emitter";
-     *
-     *
-     * const emitter = new EventEmitter();
-     *
-     * emitter.on("a", e => {
-     * });
-     *
-     * // emit
-     * emitter.trigger("a", {
-     *   a: 1,
-     * });
-     */
-    public trigger&lt;Name extends keyof Events>(eventName: Name, param: TargetParam&lt;any>= {}): boolean {
-        return this.emit&lt;any>(eventName, param);
-    }
-
-    private _addEvent(eventName: string, listener: EventListener&lt;Events[any], this>, options: Partial&lt;EventOptions>) {
-        const events = this._events;
-
-        events[eventName] = events[eventName] || [];
-
-        const listeners = events[eventName];
-
-        listeners.push({ listener, ...options });
-    }
+    return arrObj.join(" ");
 }
 
-export default EventEmitter;
+/* eslint-disable */
+function clone(target: IObject&lt;any>, toValue = false) {
+    return merge({}, target, toValue);
+}
+function merge(to: IObject&lt;any>, from: IObject&lt;any>, toValue = false) {
+    for (const name in from) {
+        const value = from[name];
+        const type = getType(value);
+
+        if (type === PROPERTY) {
+            to[name] = toValue ? value.toValue() : value.clone();
+        } else if (type === FUNCTION) {
+            to[name] = toValue ? getValue([name], value) : value;
+        } else if (type === ARRAY) {
+            to[name] = value.slice();
+        } else if (type === OBJECT) {
+            if (isObject(to[name]) &amp;&amp; !isPropertyObject(to[name])) {
+                merge(to[name], value, toValue);
+            } else {
+                to[name] = clone(value, toValue);
+            }
+        } else {
+            to[name] = from[name];
+        }
+    }
+    return to;
+}
+/* eslint-enable */
+
+function getPropertyName(args: NameType[]) {
+    return args[0] in ALIAS ? ALIAS[args[0]] : args;
+}
+function getValue(names: NameType[], value: any): any {
+    const type = getType(value);
+
+    if (type === PROPERTY) {
+        return value.toValue();
+    } else if (type === FUNCTION) {
+        if (names[0] !== TIMING_FUNCTION) {
+            return getValue(names, value());
+        }
+    } else if (type === OBJECT) {
+        return clone(value, true);
+    }
+    return value;
+}
+/**
+* Animation's Frame
+*/
+class Frame {
+    public properties: IObject&lt;any> = {};
+    public orderMap: OrderMap = new OrderMap(NAME_SEPARATOR);
+    /**
+     * @param - properties
+     * @example
+  const frame = new Scene.Frame({
+      display: "none"
+      transform: {
+          translate: "50px",
+          scale: "5, 5",
+      }
+  });
+     */
+    constructor(properties: any = {}) {
+        this.properties = {};
+        // this.orders = [];
+        this.set(properties);
+    }
+    /**
+      * get property value
+      * @param {...Number|String|PropertyObject} args - property name or value
+      * @example
+      frame.get("display") // => "none", "block", ....
+      frame.get("transform", "translate") // => "10px,10px"
+      */
+    public get(...args: NameType[]) {
+        const value = this.raw(...args);
+
+        return getValue(getPropertyName(args), value);
+    }
+    /**
+      * get properties orders
+      * @param - property names
+      * @example
+      frame.getOrders(["display"]) // => []
+      frame.getOrders(["transform"]) // => ["translate", "scale"]
+      */
+    public getOrders(names: NameType[]): NameType[] | undefined {
+        return this.orderMap.get(names);
+    }
+    /**
+      * set properties orders
+      * @param - property names
+      * @param - orders
+      * @example
+      frame.getOrders(["transform"]) // => ["translate", "scale"]
+      frame.setOrders(["transform"], ["scale", "tralsate"])
+      */
+    public setOrders(names: NameType[], orders: NameType[]): NameType[] {
+        return this.orderMap.set(names, orders);
+    }
+    /**
+      * get properties order object
+      * @example
+      console.log(frame.getOrderObject());
+      */
+    public getOrderObject() {
+        return this.orderMap.getObject();
+    }
+    /**
+      * set properties orders object
+      * @param - properties orders object
+      * @example
+      frame.setOrderObject({
+          "": ["transform"],
+          "transform": ["scale", "tralsate"],
+      });
+      */
+    public setOrderObject(obj: IObject&lt;NameType[]>) {
+        this.orderMap.setObject(obj);
+    }
+
+    /**
+      * get property keys
+      * @param - property names
+      * @example
+      frame.gets("display") // => []
+      frame.gets("transform") // => ["translate"]
+      */
+    public getKeys(...args: NameType[]): string[] {
+        const value = this.raw(...args);
+        const keys = getType(value) === OBJECT ? getKeys(value) : [];
+
+        sortOrders(keys, this.orderMap.get(args));
+        return keys;
+    }
+    /**
+      * get properties array
+      * @param - property names
+      * @example
+      frame.gets("display") // => []
+      frame.gets("transform") // => [{ key: "translate", value: "10px, 10px", children: [] }]
+      */
+    public gets(...args: NameType[]): KeyValueChildren[] {
+        const values = this.get(...args);
+        const keys = this.getKeys(...args);
+
+        return keys.map(key => {
+            const nextValue = values[key];
+            return { key, value: nextValue, children: this.gets(...args, key) };
+        });
+    }
+
+    public raw(...args: NameType[]) {
+        return getValueByNames(getPropertyName(args), this.properties);
+    }
+    /**
+      * remove property value
+      * @param {...String} args - property name
+      * @return {Frame} An instance itself
+      * @example
+      frame.remove("display")
+      */
+    public remove(...args: NameType[]) {
+        const params = getPropertyName(args);
+        const length = params.length;
+
+        if (!length) {
+            return this;
+        }
+        this.orderMap.remove(params);
+        const value = getValueByNames(params, this.properties, length - 1);
+
+        if (isObject(value)) {
+            delete value[params[length - 1]];
+        }
+        return this;
+    }
+    /**
+      * set property
+      * @param {...Number|String|PropertyObject} args - property names or values
+      * @return {Frame} An instance itself
+      * @example
+  // one parameter
+  frame.set({
+      display: "none",
+      transform: {
+          translate: "10px, 10px",
+          scale: "1",
+      },
+      filter: {
+          brightness: "50%",
+          grayscale: "100%"
+      }
+  });
+
+  // two parameters
+  frame.set("transform", {
+      translate: "10px, 10px",
+      scale: "1",
+  });
+
+  // three parameters
+  frame.set("transform", "translate", "50px");
+    */
+    public set(...args: any[]) {
+        const self = this;
+        const length = args.length;
+        const params = args.slice(0, -1);
+        const value = args[length - 1];
+        const firstParam = params[0];
+
+        if (length === 1 &amp;&amp; isFrame(value)) {
+            self.merge(value);
+        } else if (firstParam in ALIAS) {
+            self._set(ALIAS[firstParam], value);
+        } else if (length === 2 &amp;&amp; isArray(firstParam)) {
+            self._set(firstParam, value);
+        } else if (isPropertyObject(value)) {
+            if (isRole(params)) {
+                self.set(...params, toObject(value));
+            } else {
+                self._set(params, value);
+            }
+        } else if (isArray(value)) {
+            self._set(params, value);
+        } else if (isObject(value)) {
+            if (!self.has(...params) &amp;&amp; isRole(params)) {
+                self._set(params, {});
+            }
+            for (const name in value) {
+                self.set(...params, name, value[name]);
+            }
+        } else if (isString(value)) {
+            if (isRole(params, true)) {
+                if (isFixed(params) || !isRole(params)) {
+                    this._set(params, value);
+                } else {
+                    const obj = toPropertyObject(value);
+
+                    if (isObject(obj)) {
+                        self.set(...params, obj);
+                    }
+                }
+                return this;
+            } else {
+                const { styles, length: stylesLength } = splitStyle(value);
+
+                for (const name in styles) {
+                    self.set(...params, name, styles[name]);
+                }
+                if (stylesLength) {
+                    return this;
+                }
+            }
+            self._set(params, value);
+        } else {
+            self._set(params, value);
+        }
+        return self;
+    }
+    /**
+      * Gets the names of properties.
+      * @return the names of properties.
+      * @example
+  // one parameter
+  frame.set({
+      display: "none",
+      transform: {
+          translate: "10px, 10px",
+          scale: "1",
+      },
+  });
+
+  // [["display"], ["transform", "translate"], ["transform", "scale"]]
+  console.log(frame.getNames());
+    */
+    public getNames(): string[][] {
+        return getNames(this.properties, []);
+    }
+    /**
+      * check that has property.
+      * @param {...String} args - property name
+      * @example
+      frame.has("property", "display") // => true or false
+      */
+    public has(...args: NameType[]) {
+        const params = getPropertyName(args);
+        const length = params.length;
+
+        if (!length) {
+            return false;
+        }
+        return !isUndefined(getValueByNames(params, this.properties, length));
+    }
+    /**
+      * clone frame.
+      * @return {Frame} An instance of clone
+      * @example
+      frame.clone();
+      */
+    public clone() {
+        const frame = new Frame();
+
+        frame.setOrderObject(this.orderMap.orderMap);
+        return frame.merge(this);
+    }
+    /**
+      * merge one frame to other frame.
+      * @param - target frame.
+      * @return {Frame} An instance itself
+      * @example
+      frame.merge(frame2);
+      */
+    public merge(frame: Frame) {
+        const properties = this.properties;
+        const frameProperties = frame.properties;
+
+        if (frameProperties) {
+            merge(properties, frameProperties);
+        }
+        return this;
+    }
+    /**
+      * Specifies an css object that coverted the frame.
+      * @param - If you want to return camel case name like css property or react, use the following parameter
+      * @return {object} cssObject
+      */
+    public toCSSObject(useCamelCase?: boolean) {
+        const properties = this.get();
+        const cssObject: IObject&lt;string> = {};
+
+        for (let name in properties) {
+            if (isRole([name], true)) {
+                continue;
+            }
+            let value = properties[name];
+
+            if (name === TIMING_FUNCTION) {
+                name = TIMING_FUNCTION.replace("animation", ANIMATION);
+                value = (isString(value) ? value : value[EASING_NAME]) || "initial";
+            }
+            if (useCamelCase) {
+                name = camelize(name.replace(/^[-]+/g, ""));
+            }
+            cssObject[name] = value;
+        }
+        const transform = toInnerProperties(properties[TRANSFORM_NAME], this.orderMap.get([TRANSFORM_NAME]));
+        const filter = toInnerProperties(properties.filter, this.orderMap.get([FILTER]));
+
+        TRANSFORM &amp;&amp; transform &amp;&amp; (cssObject[TRANSFORM] = transform);
+        FILTER &amp;&amp; filter &amp;&amp; (cssObject[FILTER] = filter);
+        return cssObject;
+    }
+    /**
+      * Specifies an css text that coverted the frame.
+      * @return {string} cssText
+      */
+    public toCSSText() {
+        const cssObject = this.toCSSObject();
+        const cssArray = [];
+        const keys = getKeys(cssObject);
+
+        sortOrders(keys, this.orderMap.get([]));
+        keys.forEach(name => {
+            cssArray.push(`${decamelize(name, "-")}:${cssObject[name]};`);
+        });
+        return cssArray.join("");
+    }
+    /**
+      * Specifies an css text that coverted the frame.
+      * Use `toCSSText()` method.
+      * @deprecated
+      * @return {string} cssText
+      */
+    public toCSS() {
+        const cssObject = this.toCSSObject();
+        const cssArray = [];
+        const keys = getKeys(cssObject);
+
+        sortOrders(keys, this.orderMap.get([]));
+        keys.forEach(name => {
+            cssArray.push(`${name}:${cssObject[name]};`);
+        });
+        return cssArray.join("");
+    }
+    /**
+      * Remove All Properties
+      * @return {Frame} An instance itself
+      */
+    public clear() {
+        this.properties = {};
+        this.orderMap.clear();
+        return this;
+    }
+    private _set(args: NameType[], value: any) {
+        let properties = this.properties;
+        const length = args.length;
+
+        for (let i = 0; i &lt; length - 1; ++i) {
+            const name = args[i];
+
+            !(name in properties) &amp;&amp; (properties[name] = {});
+            properties = properties[name];
+        }
+        if (!length) {
+            return;
+        }
+        const lastParam = args[length - 1];
+
+        this.orderMap.add(args);
+        if (length === 1 &amp;&amp; lastParam === TIMING_FUNCTION) {
+            properties[lastParam] = getEasing(value);
+        } else {
+            properties[lastParam] = isString(value) &amp;&amp; !isFixed(args)
+                ? toPropertyObject(value, lastParam)
+                : value;
+        }
+    }
+}
+export default Frame;
 </code></pre>
         </article>
     </section>
@@ -267,10 +506,10 @@ export default EventEmitter;
 <style>
 
 
-nav li[file="node_modules/@scena/event-emitter/src/eventemitter"]:after {
+nav li[file="packages/scenejs/src/frame"]:after {
     display: none;
 }
-nav li[file="node_modules/@scena/event-emitter/src/eventemitter"] h4, nav li[file="node_modules/@scena/event-emitter/src/eventemitter"] ul {
+nav li[file="packages/scenejs/src/frame"] h4, nav li[file="packages/scenejs/src/frame"] ul {
     display: block;
 }
 </style>

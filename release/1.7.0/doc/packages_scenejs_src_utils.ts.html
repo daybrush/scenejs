@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>node_modules/@scena/event-emitter/src/EventEmitter.ts - Documentation</title>
+    <title>packages/scenejs/src/utils.ts - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -14,7 +14,7 @@
     <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
     <link type="text/css" rel="stylesheet" href="styles/custom.css">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <meta name="description" content="node_modules/@scena/event-emitter/src/EventEmitter.ts - Documentation"/>
+    <meta name="description" content="packages/scenejs/src/utils.ts - Documentation"/>
 
 </head>
 <body>
@@ -32,7 +32,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">node_modules/@scena/event-emitter/src/EventEmitter.ts</h1>
+    <h1 class="page-title">packages/scenejs/src/utils.ts</h1>
     
 
     
@@ -42,220 +42,295 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { findIndex, isObject } from "@daybrush/utils";
-import { EventListener, EventHash, EventInfo, EventOptions, OnEvent, TargetParam } from "./types";
+            <pre class="prettyprint source linenums"><code>import {
+    ROLES, MAXIMUM, FIXED, ALIAS,
+    RUNNING, PLAY, ENDED, PLAY_CSS, CURRENT_TIME, START_ANIMATION, EASINGS, NAME_SEPARATOR
+} from "./consts";
+import PropertyObject from "./PropertyObject";
+import Scene from "./Scene";
+import SceneItem from "./SceneItem";
+import {
+    isArray, ANIMATION, ARRAY, OBJECT,
+    PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, isObject, addEvent, removeEvent, isString,
+} from "@daybrush/utils";
+import { EasingType, EasingFunction, NameType } from "./types";
+import { toPropertyObject } from "./utils/property";
+import { bezier, steps } from "./easing";
+import Animator from "./Animator";
+import Frame from "./Frame";
 
-/**
- * Implement EventEmitter on object or component.
- */
-class EventEmitter&lt;Events extends {} = { [key: string]: { [key: string]: any } }> {
+export function setAlias(name: string, alias: string[]) {
+    ALIAS[name] = alias;
+}
+export function setRole(names: string[], isProperty?: boolean, isFixedProperty?: boolean) {
+    const length = names.length;
+    let roles: any = ROLES;
+    let fixed: any = FIXED;
 
-    private _events: {
-        [name: string]: EventInfo[],
-    } = {};
-    public on&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName: Name, listener: EventListener&lt;Param, this>): this;
-    public on(events: EventHash&lt;Events, this>): this;
-    /**
-     * Add a listener to the registered event.
-     * @param - Name of the event to be added
-     * @param - listener function of the event to be added
-     * @example
-     * import EventEmitter from "@scena/event-emitter";
-     * cosnt emitter = new EventEmitter();
-     *
-     * // Add listener in "a" event
-     * emitter.on("a", () => {
-     * });
-     * // Add listeners
-     * emitter.on({
-     *  a: () => {},
-     *  b: () => {},
-     * });
-     */
-    public on(eventName: string | object, listener?: EventListener&lt;Events[any], this>): this {
-        if (isObject(eventName)) {
-            for (const name in eventName) {
-                this.on&lt;any>(name, eventName[name]);
-            }
-        } else {
-            this._addEvent(eventName, listener, {});
+    for (let i = 0; i &lt; length - 1; ++i) {
+        !roles[names[i]] &amp;&amp; (roles[names[i]] = {});
+        roles = roles[names[i]];
+        if (isFixedProperty) {
+            !fixed[names[i]] &amp;&amp; (fixed[names[i]] = {});
+            fixed = fixed[names[i]];
         }
-        return this;
     }
-    public off&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName?: Name, listener?: EventListener&lt;Param, this>): this;
-    public off(events: EventHash&lt;Events, this>): this;
-    /**
-     * Remove listeners registered in the event target.
-     * @param - Name of the event to be removed
-     * @param - listener function of the event to be removed
-     * @example
-     * import EventEmitter from "@scena/event-emitter";
-     * cosnt emitter = new EventEmitter();
-     *
-     * // Remove all listeners.
-     * emitter.off();
-     *
-     * // Remove all listeners in "A" event.
-     * emitter.off("a");
-     *
-     *
-     * // Remove "listener" listener in "a" event.
-     * emitter.off("a", listener);
-     */
-    public off(eventName?: string | object, listener?: EventListener&lt;Events[any], this>): this {
-        if (!eventName) {
-            this._events = {};
-        } else if(isObject(eventName)) {
-            for (const name in eventName) {
-                this.off&lt;any>(name);
-            }
-        } else if (!listener) {
-            this._events[eventName] = [];
+    isFixedProperty &amp;&amp; (fixed[names[length - 1]] = true);
+    roles[names[length - 1]] = isProperty ? true : {};
+}
+export function getType(value: any) {
+    const type = typeof value;
+
+    if (type === OBJECT) {
+        if (isArray(value)) {
+            return ARRAY;
+        } else if (isPropertyObject(value)) {
+            return PROPERTY;
+        }
+    } else if (type === STRING || type === NUMBER) {
+        return "value";
+    }
+    return type;
+}
+export function isPureObject(obj: any): obj is object {
+    return isObject(obj) &amp;&amp; obj.constructor === Object;
+}
+export function getNames(names: IObject&lt;any>, stack: string[]) {
+    let arr: string[][] = [];
+
+    if (isPureObject(names)) {
+        for (const name in names) {
+            stack.push(name);
+            arr = arr.concat(getNames(names[name], stack));
+            stack.pop();
+        }
+    } else {
+        arr.push(stack.slice());
+    }
+    return arr;
+}
+export function updateFrame(names: IObject&lt;any>, properties: IObject&lt;any>) {
+    for (const name in properties) {
+        const value = properties[name];
+
+        if (!isPureObject(value)) {
+            names[name] = true;
+            continue;
+        }
+        if (!isObject(names[name])) {
+            names[name] = {};
+        }
+        updateFrame(names[name], properties[name]);
+    }
+    return names;
+}
+export function toFixed(num: number) {
+    return Math.round(num * MAXIMUM) / MAXIMUM;
+}
+export function getValueByNames(
+    names: Array&lt;string | number>,
+    properties: IObject&lt;any>, length: number = names.length) {
+    let value = properties;
+
+    for (let i = 0; i &lt; length; ++i) {
+        if (!isObject(value) || value == null) {
+            return undefined;
+        }
+        value = value[names[i]];
+    }
+    return value;
+}
+export function isInProperties(roles: IObject&lt;any>, args: NameType[], isLast?: boolean) {
+    const length = args.length;
+    let role: any = roles;
+
+    if (length === 0) {
+        return false;
+    }
+    for (let i = 0; i &lt; length; ++i) {
+        if (role === true) {
+            return false;
+        }
+        role = role[args[i]];
+        if (!role || (!isLast &amp;&amp; role === true)) {
+            return false;
+        }
+    }
+    return true;
+}
+/**
+ * @memberof Scene
+ * @param - Property names
+ * @param - Whether the property is the last property that cannot be an object (non-partitionable)
+ */
+export function isRole(args: NameType[], isLast?: boolean): boolean {
+    return isInProperties(ROLES, args, isLast);
+}
+export function isFixed(args: NameType[]) {
+    return isInProperties(FIXED, args, true);
+}
+
+export interface IterationInterface {
+    currentTime: number;
+    iterationCount: number;
+    elapsedTime: number;
+}
+export function setPlayCSS(item: Animator, isActivate: boolean) {
+    item.state[PLAY_CSS] = isActivate;
+}
+export function isPausedCSS(item: Scene | SceneItem) {
+    return item.state[PLAY_CSS] &amp;&amp; item.isPaused();
+}
+export function isEndedCSS(item: Scene | SceneItem) {
+    return !item.isEnded() &amp;&amp; item.state[PLAY_CSS];
+}
+
+export function makeId(selector?: boolean) {
+    for (; ;) {
+        const id = `${Math.floor(Math.random() * 10000000)}`;
+
+        if (!IS_WINDOW || !selector) {
+            return id;
+        }
+        const checkElement = $(`[data-scene-id="${id}"]`);
+
+        if (!checkElement) {
+            return id;
+        }
+    }
+}
+export function getRealId(item: Scene | SceneItem) {
+    return item.getId() || item.setId(makeId(false)).getId();
+}
+export function toId(text: number | string) {
+    return `${text}`.match(/[0-9a-zA-Z]+/g).join("");
+}
+export function playCSS(
+    item: Scene | SceneItem, isExportCSS?: boolean,
+    playClassName?: string, properties: object = {}) {
+    if (!ANIMATION || item.getPlayState() === RUNNING) {
+        return;
+    }
+    const className = playClassName || START_ANIMATION;
+
+    if (isPausedCSS(item)) {
+        item.addPlayClass(true, className, properties);
+    } else {
+        if (item.isEnded()) {
+            item.setTime(0);
+        }
+        isExportCSS &amp;&amp; item.exportCSS({ className });
+        const el = item.addPlayClass(false, className, properties);
+
+        if (!el) {
+            return;
+        }
+        addAnimationEvent(item, el);
+        setPlayCSS(item, true);
+    }
+    item.setPlayState(RUNNING);
+}
+
+export function addAnimationEvent(item: Animator, el: Element) {
+    const state = item.state;
+    const duration = item.getDuration();
+    const isZeroDuration = !duration || !isFinite(duration);
+    const animationend = () => {
+        setPlayCSS(item, false);
+        item.finish();
+    };
+    const animationstart = () => {
+        item.trigger(PLAY);
+
+        addEvent(el, "animationcancel", animationend);
+        addEvent(el, "animationend", animationend);
+        addEvent(el, "animationiteration", animationiteration);
+    };
+    item.once(ENDED, () => {
+        removeEvent(el, "animationcancel", animationend);
+        removeEvent(el, "animationend", animationend);
+        removeEvent(el, "animationiteration", animationiteration);
+        removeEvent(el, "animationstart", animationstart);
+    });
+    const animationiteration = ({ elapsedTime }: any) => {
+        const currentTime = elapsedTime;
+        const iterationCount = isZeroDuration ? 0 : (currentTime / duration);
+
+        state[CURRENT_TIME] = currentTime;
+        item.setIteration(iterationCount);
+    };
+    addEvent(el, "animationstart", animationstart);
+}
+
+export function getEasing(curveArray: string | number[] | EasingFunction): EasingType {
+    let easing: EasingType;
+
+    if (isString(curveArray)) {
+        if (curveArray in EASINGS) {
+            easing = EASINGS[curveArray];
         } else {
-            const events = this._events[eventName];
+            const obj = toPropertyObject(curveArray);
 
-            if (events) {
-                const index = findIndex(events, e => e.listener === listener);
-
-                if (index > -1) {
-                    events.splice(index, 1);
+            if (isString(obj)) {
+                return 0;
+            } else {
+                if (obj.model === "cubic-bezier") {
+                    curveArray = obj.value.map(v => parseFloat(v));
+                    easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
+                } else if (obj.model === "steps") {
+                    easing = steps(parseFloat(obj.value[0]), obj.value[1]);
+                } else {
+                    return 0;
                 }
             }
         }
-        return this;
-    }
-    /**
-     * Add a disposable listener and Use promise to the registered event.
-     * @param - Name of the event to be added
-     * @param - disposable listener function of the event to be added
-     * @example
-     * import EventEmitter from "@scena/event-emitter";
-     * cosnt emitter = new EventEmitter();
-     *
-     * // Add a disposable listener in "a" event
-     * emitter.once("a", () => {
-     * });
-     *
-     * // Use Promise
-     * emitter.once("a").then(e => {
-     * });
-     */
-    public once&lt;Name extends keyof Events &amp; string, Param = Events[Name]>(
-        eventName: Name, listener?: EventListener&lt;Param, this>): Promise&lt;OnEvent&lt;Param, this>> {
-        if (listener) {
-            this._addEvent(eventName, listener, { once: true });
-        }
-        return new Promise&lt;OnEvent&lt;Param, this>>(resolve => {
-            this._addEvent(eventName, resolve, { once: true });
-        });
-    }
-    public emit&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName: {} extends Param ? Name : never): boolean;
-    public emit&lt;Name extends keyof Events, Param = Events[Name]>(
-        eventName: Name, param: TargetParam&lt;Param>): boolean;
-    /**
-     * Fires an event to call listeners.
-     * @param - Event name
-     * @param - Event parameter
-     * @return If false, stop the event.
-     * @example
-     *
-     * import EventEmitter from "@scena/event-emitter";
-     *
-     *
-     * const emitter = new EventEmitter();
-     *
-     * emitter.on("a", e => {
-     * });
-     *
-     *
-     * emitter.emit("a", {
-     *   a: 1,
-     * });
-     */
-    public emit(eventName: string, param: TargetParam&lt;any> = {}): boolean {
-        const events = this._events[eventName];
-
-        if (!eventName || !events) {
-            return true;
-        }
-        let isStop = false;
-
-        param.eventType = eventName;
-        param.stop = () => {
-            isStop = true;
-        };
-        param.currentTarget = this;
-
-
-        [...events].forEach(info => {
-            info.listener(param);
-            if (info.once) {
-                this.off&lt;any>(eventName, info.listener);
-            }
-        });
-
-        return !isStop;
-    }
-    public trigger&lt;Name extends keyof Events, Param = Events[Name]>(eventName: {} extends TargetParam&lt;Param> ? Name : never): boolean;
-    public trigger&lt;Name extends keyof Events, Param = Events[Name]>(eventName: Name, param: TargetParam&lt;Param>): boolean;
-    /**
-     * Fires an event to call listeners.
-     * @param - Event name
-     * @param - Event parameter
-     * @return If false, stop the event.
-     * @example
-     *
-     * import EventEmitter from "@scena/event-emitter";
-     *
-     *
-     * const emitter = new EventEmitter();
-     *
-     * emitter.on("a", e => {
-     * });
-     *
-     *
-     * emitter.emit("a", {
-     *   a: 1,
-     * });
-     *//**
-     * Fires an event to call listeners.
-     * @param - Event name
-     * @param - Event parameter
-     * @return If false, stop the event.
-     * @example
-     *
-     * import EventEmitter from "@scena/event-emitter";
-     *
-     *
-     * const emitter = new EventEmitter();
-     *
-     * emitter.on("a", e => {
-     * });
-     *
-     * // emit
-     * emitter.trigger("a", {
-     *   a: 1,
-     * });
-     */
-    public trigger&lt;Name extends keyof Events>(eventName: Name, param: TargetParam&lt;any>= {}): boolean {
-        return this.emit&lt;any>(eventName, param);
+    } else if (isArray(curveArray)) {
+        easing = bezier(curveArray[0], curveArray[1], curveArray[2], curveArray[3]);
+    } else {
+        easing = curveArray;
     }
 
-    private _addEvent(eventName: string, listener: EventListener&lt;Events[any], this>, options: Partial&lt;EventOptions>) {
-        const events = this._events;
-
-        events[eventName] = events[eventName] || [];
-
-        const listeners = events[eventName];
-
-        listeners.push({ listener, ...options });
-    }
+    return easing;
 }
 
-export default EventEmitter;
+export function isPropertyObject(value: any): value is PropertyObject {
+    if (!value) {
+        return false;
+    }
+    const prototype = (value.constructor as typeof PropertyObject).prototype;
+
+    return !!(prototype.clone &amp;&amp; prototype.get &amp;&amp; prototype.setOptions);
+}
+
+export function isScene(value: any): value is Scene {
+    return value &amp;&amp; !!(value.constructor as typeof Scene).prototype.getItem;
+}
+export function isSceneItem(value: any): value is SceneItem {
+    return (
+        value &amp;&amp; !!(value.constructor as typeof SceneItem).prototype.getFrame
+    );
+}
+export function isFrame(value: any): value is Frame {
+    return value &amp;&amp; !!(value.constructor as typeof Frame).prototype.toCSS;
+}
+export function flatSceneObject(obj: IObject&lt;any>, seperator: string): Record&lt;string, Frame> {
+    const newObj = {};
+
+    for (const name in obj) {
+        const value = obj[name];
+
+        if (isFrame(value)) {
+            newObj[name] = value;
+        } else if (isObject(value)) {
+            const nextObj = flatSceneObject(value, seperator);
+
+            for (const nextName in nextObj) {
+                newObj[`${name}${seperator}${nextName}`] = nextObj[nextName];
+            }
+        }
+    }
+    return newObj;
+}
 </code></pre>
         </article>
     </section>
@@ -267,10 +342,10 @@ export default EventEmitter;
 <style>
 
 
-nav li[file="node_modules/@scena/event-emitter/src/eventemitter"]:after {
+nav li[file="packages/scenejs/src/utils"]:after {
     display: none;
 }
-nav li[file="node_modules/@scena/event-emitter/src/eventemitter"] h4, nav li[file="node_modules/@scena/event-emitter/src/eventemitter"] ul {
+nav li[file="packages/scenejs/src/utils"] h4, nav li[file="packages/scenejs/src/utils"] ul {
     display: block;
 }
 </style>
