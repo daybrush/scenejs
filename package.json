@@ -35,7 +35,7 @@
         "changelog": "lerna-helper changelog --type all --base scenejs",
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
         "demo:start": "rollup -c rollup.config.demo.js -w",
-        "demo:build": "rm -rf ./demo/dist && rollup -c rollup.config.demo.js",
+        "demo:build": "rm -rf ./demo/dist && npm run build --prefix packages/demo",
         "demo:deploy": "gh-pages -d ./demo --dest=./ --add --remote origin",
         "deploy": "lerna-helper deploy --base scenejs",
         "release": "lerna-helper release --base scenejs"

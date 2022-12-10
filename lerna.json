@@ -8,7 +8,7 @@
     "lernaHelperOptions": {
         "deployFileMap": [
             {
-                "basePath": "packages/moveable/dist",
+                "basePath": "packages/scenejs/dist",
                 "dists": [
                     "demo/release/{{version}}/dist",
                     "demo/release/latest/dist"
