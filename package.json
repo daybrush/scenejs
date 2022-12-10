@@ -30,7 +30,7 @@
         "bootstrap": "lerna bootstrap",
         "build": "npm run build --prefix ./packages/scenejs",
         "packages:update": "lerna-helper version",
-        "packages:build": "npm run build --prefix packages/scenejs && lerna run build --ignore scenejs --ignore demo",
+        "packages:build": "npm run build --prefix packages/scenejs && lerna run build --ignore demo",
         "packages:publish": "lerna-helper publish --commit 'chore: publish packages' --ignore demo",
         "changelog": "lerna-helper changelog --type all --base scenejs",
         "doc": "rm -rf ./doc && jsdoc -c jsdoc.json",
