@@ -6,7 +6,7 @@
     "module": "es2015",
     "target": "es5",
     "experimentalDecorators": true,
-    "skipLibCheck": true,
+    "importHelpers": true,
     "moduleResolution": "node",
     "lib": [
       "es2015",

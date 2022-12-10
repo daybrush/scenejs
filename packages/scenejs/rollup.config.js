@@ -1,9 +1,10 @@
-import builder from "@daybrush/builder";
+const  builder = require("@daybrush/builder");
+
 const external = {
     "@daybrush/utils": "utils",
     "list-map": "ListMap",
 }
-export default builder([
+module.exports = builder([
     {
         input: 'src/index.ts',
         output: "./dist/scene.esm.js",

@@ -29,14 +29,14 @@
         "build": "rm -rf ../../demo/dist && rollup -c rollup.config.js"
     },
     "dependencies": {
-        "@daybrush/utils": "^1.7.0",
         "@daybrush/page": "^0.2.0",
-        "shape-svg": "^0.3.1",
-        "scenejs": "~1.6.0"
+        "@daybrush/utils": "^1.7.0",
+        "scenejs": "~1.7.0",
+        "shape-svg": "^0.3.1"
     },
     "devDependencies": {
-        "@daybrush/builder": "^0.1.2",
-        "typescript": "^4.5.0 <4.6.0",
-        "rollup-plugin-css-bundle": "^1.0.4"
+        "@daybrush/builder": "^0.2.0",
+        "rollup-plugin-css-only": "^4.3.0",
+        "typescript": "^4.5.0 <4.6.0"
     }
 }
