@@ -189,21 +189,36 @@ export interface OnTimeUpdate {
     time: number;
     iterationCount: number;
 }
+/**
+ * @typedef
+ */
 export interface OnIteration {
     currentTime: number;
     iterationCount: number;
 }
 
-export interface OnSceneAnimate {
-    frames: Record<string, any>;
+/**
+ * @typedef
+ */
+export interface OnAnimate {
     currentTime: number;
     time: number;
 }
 
-export interface OnSceneItemAnimate {
+/**
+ * @typedef
+ * @extends OnAnimate
+ */
+export interface OnSceneAnimate extends OnAnimate {
+    frames: Record<string, any>;
+}
+
+/**
+ * @typedef
+ * @extends OnAnimate
+ */
+export interface OnSceneItemAnimate extends OnAnimate {
     frame: Frame;
-    currentTime: number;
-    time: number;
 }
 
 /**
@@ -219,14 +234,24 @@ export interface AnimatorEvents {
 
 /**
  * @typedef
+ * @extends AnimatorEvents
  */
-export interface SceneEvents extends AnimatorEvents {
+export interface SceneAnimatorEvents extends AnimatorEvents {
+    animate: OnAnimate;
+}
+
+/**
+ * @typedef
+ * @extends SceneAnimatorEvents
+ */
+export interface SceneEvents extends SceneAnimatorEvents {
     animate: OnSceneAnimate;
 }
 
 /**
  * @typedef
+ * @extends SceneAnimatorEvents
  */
-export interface SceneItemEvents extends AnimatorEvents {
+export interface SceneItemEvents extends SceneAnimatorEvents {
     animate: OnSceneItemAnimate;
 }

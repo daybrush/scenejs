@@ -5,7 +5,10 @@ import {
     DURATION, EASING, ITERATION_TIME, EASING_NAME, PAUSED,
     RUNNING, PLAY, TIMEUPDATE, ENDED, PLAY_STATE, PREV_TIME, TICK_TIME, CURRENT_TIME, ITERATION, OPTIONS} from "./consts";
 import { toFixed, getEasing } from "./utils";
-import { splitUnit, isString, camelize, requestAnimationFrame, cancelAnimationFrame } from "@daybrush/utils";
+import {
+    splitUnit, isString, camelize,
+    requestAnimationFrame, cancelAnimationFrame
+} from "@daybrush/utils";
 import {
     IterationCountType, DirectionType, AnimatorState,
     EasingFunction, FillModeType, PlayStateType, EasingType, AnimatorOptions, AnimatorEvents,
@@ -55,7 +58,7 @@ const getters = [...setters, EASING, EASING_NAME];
 /**
 * play video, animation, the others
 * @extends EventEmitter
-* @see {@link https://www.w3schools.com/css/css3_animations.asp|CSS3 Animation}
+* @see {@link https://www.w3schools.com/css/css3_animations.asp CSS3 Animation}
 */
 @GetterSetter(getters, setters, "state")
 class Animator <

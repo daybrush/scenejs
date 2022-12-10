@@ -1,6 +1,6 @@
 /* tslint:disable:max-line-length  */
 
-import NativeShape, { getPath, getRect } from "shape-svg";
+import { getPath, getRect } from "shape-svg";
 
 export const ExportCSS = (selector: any) => {
     return `.exportCSS({

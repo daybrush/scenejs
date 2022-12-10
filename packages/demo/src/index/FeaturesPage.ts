@@ -203,17 +203,17 @@ const icon5Scene = new Scene({
 
 const descriptionElements = toArray($(".page2 .slide .sub_description", true));
 
-icon5Scene.getItem(".slide:nth-child(1) .target").on("animate", e => {
+icon5Scene.getItem<SceneItem>(".slide:nth-child(1) .target").on("animate", e => {
     const el = descriptionElements[0];
 
     el.innerHTML = `opacity: ${e.frame.get("opacity").toFixed(2)}`;
 });
-icon5Scene.getItem(".slide:nth-child(2) .target").on("animate", e => {
+icon5Scene.getItem<SceneItem>(".slide:nth-child(2) .target").on("animate", e => {
     const el = descriptionElements[1];
 
     el.innerHTML = `${e.frame.get("background-color")}`;
 });
-icon5Scene.getItem(".slide:nth-child(3) .target").on("animate", e => {
+icon5Scene.getItem<SceneItem>(".slide:nth-child(3) .target").on("animate", e => {
     const el = e.currentTarget.elements[0];
 
     el.innerHTML = `${e.frame.get("text")}`;

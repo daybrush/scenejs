@@ -2,7 +2,6 @@ import { $, addClass, removeClass, toArray, addEvent, hasClass } from "@daybrush
 import { pages } from "./Store";
 import { scroll } from "./utils";
 import NativeScene, { EasingFunction } from "scenejs";
-import { NONAME } from "dns";
 
 declare var Scene: typeof NativeScene & {
     EASE_IN_OUT: EasingFunction,
