@@ -29,15 +29,16 @@ export type SceneItemReactiveData = SceneItem | {
 };
 
 export type SceneItemReactiveMethods = ReactiveMethods<Scene>;
-export type SceneItemReactiveInstance = ReactiveObject<SceneItemReactiveMethods & AnimatorReactiveState>;
+export type SceneItemReactiveInstance = ReactiveObject<AnimatorReactiveState> & SceneItemReactiveMethods;
 
 export const SCENE_ITEM_REACTIVE: ReactiveAdapter<
     SceneItemReactiveInstance,
-    SceneItemReactiveInstance,
-    never,
+    AnimatorReactiveState,
+    keyof SceneItemReactiveMethods,
     SceneItemReactiveData,
     SceneItemEvents
 > = {
+    methods: SCENE_ITEM_METHODS as Array<keyof SceneItemReactiveMethods>,
     created(data: SceneItemReactiveData) {
         const sceneItem = isSceneItem(data) ? data : new SceneItem(data?.props, data?.options);
         const obj = sceneItem.state as any as ReactiveObject<AnimatorState>;

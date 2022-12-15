@@ -35,7 +35,7 @@ export interface FrameReactiveState {
     camelCasedCSSObject: Record<string, any>;
 }
 
-export type FrameReactiveInstance = ReactiveObject<FrameReactiveMethods & FrameReactiveState> & {
+export type FrameReactiveInstance = ReactiveObject<FrameReactiveState> & FrameReactiveMethods & {
     getFrameObserver(): Observer<Frame>;
     onUpdate(): void;
 };
@@ -43,10 +43,11 @@ export type FrameReactiveInstance = ReactiveObject<FrameReactiveMethods & FrameR
 export const FRAME_REACTIVE: ReactiveAdapter<
     FrameReactiveInstance,
     FrameReactiveState,
-    never,
+    keyof FrameReactiveMethods,
     FrameReactiveData,
     {}
 > = {
+    methods: FRAME_METHODS as Array<keyof FrameReactiveMethods>,
     created(data: FrameReactiveData) {
         const updateCount = observe(0);
         let frame: Observer<Frame>;

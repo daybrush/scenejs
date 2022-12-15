@@ -68,7 +68,7 @@ $ npm install scenejs
 |[**@scenejs/iframe**](https://github.com/daybrush/scenejs-iframe)|[![](https://img.shields.io/npm/v/@scenejs/iframe.svg?style=flat-square)](https://npmjs.com/package/@scenejs/iframe)|A library that control the animation of iframe with Scene.js.|
 
 
-## 🎬 Make scene
+## 🎬 Make Scene
 ```javascript
 import Scene from "scenejs";
 

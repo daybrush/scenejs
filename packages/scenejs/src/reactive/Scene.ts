@@ -26,19 +26,21 @@ export interface SceneReactiveProps {
 export declare type SceneReactiveData = Scene | SceneReactiveProps;
 
 export type SceneReactiveMethods = ReactiveMethods<Scene>;
-export type SceneReactiveInstance = ReactiveObject<SceneReactiveMethods & AnimatorReactiveState>;
+export type SceneReactiveInstance = ReactiveObject<AnimatorReactiveState> & SceneReactiveMethods;
 
 export const SCENE_REACTIVE: ReactiveAdapter<
     SceneReactiveInstance,
-    SceneReactiveInstance,
-    never,
+    AnimatorReactiveState,
+    keyof SceneReactiveMethods,
     SceneReactiveData,
     SceneEvents
 > = {
+    methods: SCENE_METHODS as Array<keyof SceneReactiveMethods>,
     created(data: SceneReactiveData) {
         const scene = isScene(data) ? data : new Scene(data?.props, data?.options);
         const obj = scene.state as any as ReactiveObject<AnimatorState>;
         const observers = getObservers(obj);
+
         const totalDuration = computed(() => {
             return scene.getTotalDuration();
         });
@@ -53,7 +55,6 @@ export const SCENE_REACTIVE: ReactiveAdapter<
             }, {}),
         };
 
-        console.log(scene);
         const nextReactiveObject = reactive(nextObj) as SceneReactiveInstance;
 
         return nextReactiveObject;

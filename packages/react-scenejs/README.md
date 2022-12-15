@@ -14,17 +14,17 @@
 <p align="middle"><a href="https://daybrush.com/scenejs"><strong>About Scene.js</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/release/latest/doc"><strong>API</strong></a> &nbsp;/&nbsp; <a href="https://daybrush.com/scenejs/features.html"><strong>Features</strong></a></p>
 <br/>
 
-## Demos
+## 🚀 Exampless
 * CodeSandbox 1 (Scene)
 * CodeSandbox 2 (Scene / SceneItem)
 
-## Installation
+## ⚙️ Installation
 ```bash
 $ npm install react-scenejs
 ```
 
 
-## Make Scene
+## 🎬 Make Scene
 ```jsx
 import {
     useScene,
@@ -69,7 +69,7 @@ function App() {
     }, []);
     return <div className="container">
         <div className="a1" style={a1.camelCasedCSSObject}></div>
-        <div className="a2" style={a1.camelCasedCSSObject}></div>
+        <div className="a2" style={a2.camelCasedCSSObject}></div>
     </div>;
 
 }

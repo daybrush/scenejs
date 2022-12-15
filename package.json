@@ -54,6 +54,32 @@
     "workspaces": {
         "packages": [
             "packages/*"
+        ],
+        "nohoist": [
+            "**/@egjs/build-helper",
+            "**/@egjs/build-helper/**",
+            "**/rollup-plugin-vue",
+            "**/rollup-plugin-vue/**",
+            "**/karma",
+            "**/karma/**",
+            "**/karma-*",
+            "**/karma-*/**",
+            "**/@types/chai",
+            "**/@types/chai/**",
+            "**/@types/karma-chai",
+            "**/@types/karma-chai/**",
+            "**/@types/mocha",
+            "**/@types/mocha/**",
+            "**/@vue/*",
+            "**/@vue/*/**",
+            "**/vue",
+            "**/vue/**",
+            "**/@sveltejs/*",
+            "**/@sveltejs/*/**",
+            "**/svelte",
+            "**/svelte/**",
+            "**/vite",
+            "**/vite/**"
         ]
     },
     "resolutions": {
@@ -77,25 +103,5 @@
         "css-styled": "^1.0.0",
         "order-map": "^0.2.2",
         "tslib": "^2.4.0"
-    },
-    "nohoist": [
-        "**/@egjs/build-helper",
-        "**/@egjs/build-helper/**",
-        "**/rollup-plugin-vue",
-        "**/rollup-plugin-vue/**",
-        "**/karma",
-        "**/karma/**",
-        "**/karma-*",
-        "**/karma-*/**",
-        "**/@types/chai",
-        "**/@types/chai/**",
-        "**/@types/karma-chai",
-        "**/@types/karma-chai/**",
-        "**/@types/mocha",
-        "**/@types/mocha/**",
-        "**/@vue/*",
-        "**/@vue/*/**",
-        "**/vue",
-        "**/vue/**"
-    ]
+    }
 }

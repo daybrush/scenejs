@@ -1,7 +1,7 @@
 import { observe, ReactiveAdapter } from "@cfcs/core";
 import Frame from "../Frame";
 import SceneItem from "../SceneItem";
-import { FrameReactiveInstance, FrameReactiveState, FRAME_REACTIVE } from "./Frame";
+import { FrameReactiveInstance, FrameReactiveMethods, FrameReactiveState, FRAME_REACTIVE } from "./Frame";
 
 export const NOW_FRAME_REACTIVE = {
     ...FRAME_REACTIVE,
@@ -16,7 +16,7 @@ export const NOW_FRAME_REACTIVE = {
 } as ReactiveAdapter<
     FrameReactiveInstance,
     FrameReactiveState,
-    never,
+    keyof FrameReactiveMethods,
     SceneItem,
     {}
 >;

@@ -3,10 +3,11 @@
     "version": "2.0.0-beta.0",
     "lernaHelperReleaseType": "prerelease",
     "lernaHelperPublishTag": "latest",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/daybrush/scenejs.git"
-    },
+    "description": "A React Component that create JavaScript & CSS timeline-based animation with Scene.js.",
+    "main": "./dist/scene.cjs.js",
+    "module": "./dist/scene.esm.js",
+    "sideEffects": false,
+    "types": "declaration/index.d.ts",
     "keywords": [
         "react",
         "reactive",
@@ -23,6 +24,10 @@
         "requestAnimationFrame",
         "motion"
     ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/daybrush/scenejs.git"
+    },
     "author": "Daybrush",
     "license": "MIT",
     "bugs": {
@@ -35,7 +40,7 @@
         "declaration/*"
     ],
     "dependencies": {
-        "@cfcs/react": "^0.0.9",
+        "@cfcs/react": "^0.0.10",
         "scenejs": "~1.8.0"
     },
     "scripts": {
