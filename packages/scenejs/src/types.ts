@@ -169,7 +169,7 @@ export type AnimateElement = HTMLElement | SVGElement;
  */
 export interface PlayCondition {
     className?: string;
-    selector?: string | ((item: SceneItem, selector: string) => string);
+    selector?: string | ((item: SceneItem, selector: string) => string | AnimateElement);
 }
 
 /**

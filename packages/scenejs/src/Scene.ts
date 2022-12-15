@@ -455,12 +455,14 @@ console.log(scene.getItem(".a").get(1, "opacity"));
                 const length = elementsLength || (object as SelectorAllType).defaultCount || 0;
                 const scene = new Scene();
 
+                const ids: Array<string | number> = [];
                 for (let i = 0; i < length; ++i) {
                     const element = elements[i];
                     const subItem = scene.newItem(i) as SceneItem;
 
                     subItem.setId().load(object(i, elements[i]));
 
+                    ids.push(subItem.getId());
                     if (element) {
                         subItem.setElement(element);
                     }
@@ -469,9 +471,11 @@ console.log(scene.getItem(".a").get(1, "opacity"));
                     let subElements: IArrayFormat<AnimateElement> = [];
 
                     scene.state[SELECTOR] = (id: number) => {
-                        subElements = subElements || $(`${isFunction(selector) ? selector(name) : name}`, true);
+                        if (!subElements.length) {
+                            subElements = $(`${isFunction(selector) ? selector(name) : name}`, true);
+                        }
 
-                        return subElements[id];
+                        return subElements[ids.indexOf(id)];
                     };
                 }
                 this.setItem(name, scene);
