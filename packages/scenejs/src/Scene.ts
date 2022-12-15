@@ -9,7 +9,8 @@ import {
 import { isFunction, IS_WINDOW, IObject, $, IArrayFormat } from "@daybrush/utils";
 import {
     AnimateElement, SceneState, SceneOptions, EasingType,
-    AnimatorState, SceneItemOptions, PlayCondition, NameType, SceneEvents
+    AnimatorState, SceneItemOptions, PlayCondition,
+    NameType, SceneEvents, SelectorAllType
 } from "./types";
 import Frame from "./Frame";
 import OrderMap from "order-map";
@@ -441,16 +442,34 @@ console.log(scene.getItem(".a").get(1, "opacity"));
             if (isScene(object) || isSceneItem(object)) {
                 this.setItem(name, object);
                 item = object;
-            } else if (isFunction(object) && selector) {
-                const elements =
-                    IS_WINDOW
-                        ? $(`${isFunction(selector) ? selector(name) : name}`, true) as IArrayFormat<AnimateElement>
-                        : ([] as AnimateElement[]);
-                const length = elements.length;
+            } else if (isFunction(object)) {
+                let elements: IArrayFormat<AnimateElement> = [];
+
+                if (selector && IS_WINDOW) {
+                    elements = $(`${isFunction(selector) ? selector(name) : name}`, true) as IArrayFormat<AnimateElement>;
+                }
+                const elementsLength = elements.length;
+                const length = elementsLength || (object as SelectorAllType).defaultCount || 0;
                 const scene = new Scene();
 
                 for (let i = 0; i < length; ++i) {
-                    (scene.newItem(i) as SceneItem).setId().setElement(elements[i]).load(object(i, elements[i]));
+                    const element = elements[i];
+                    const item = scene.newItem(i) as SceneItem;
+
+                    item.setId().load(object(i, elements[i]));
+
+                    if (element) {
+                        item.setElement(element)
+                    }
+                }
+                if (!elementsLength) {
+                    let elements: IArrayFormat<AnimateElement> = [];
+
+                    scene.state[SELECTOR] = (id: number) => {
+                        elements = elements || $(`${isFunction(selector) ? selector(name) : name}`, true);
+
+                        return elements[id];
+                    };
                 }
                 this.setItem(name, scene);
                 continue;
@@ -472,9 +491,9 @@ console.log(scene.getItem(".a").get(1, "opacity"));
         }
         return this;
     }
-    public setSelector(target?: string | boolean | ((id: number | string) => string)) {
+    public setSelector(target?: string | boolean | ((id: number | string) => string | AnimateElement)) {
         const state = this.state;
-        const selector = target || state[SELECTOR];
+        const selector = target === true ? state[SELECTOR] || true : target;
 
         state[SELECTOR] = selector;
         const isItFunction = isFunction(target);

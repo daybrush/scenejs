@@ -7,7 +7,9 @@
     },
     "source": {
         "include": [
-            "./packages/scenejs/src",
+            "./packages/scenejs/src/",
+            "./packages/scenejs/src/reactive",
+            "./packages/react-scenejs/src/react-scenejs/",
             "./README.md",
             "./node_modules/@scena/event-emitter/src/"
         ],

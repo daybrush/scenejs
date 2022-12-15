@@ -14,6 +14,7 @@ import {
     EasingFunction, FillModeType, PlayStateType, EasingType, AnimatorOptions, AnimatorEvents,
 } from "./types";
 import EventEmitter from "@scena/event-emitter";
+import { reactive } from "@cfcs/core";
 
 function GetterSetter<T extends new (...args: any[]) => {}>(
     getter: string[], setter: string[], parent: string) {
@@ -51,16 +52,22 @@ export function isDirectionReverse(iteration: number, iteraiontCount: IterationC
 * @property {"normal"|"reverse"|"alternate"|"alternate-reverse"} [direction] The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
 */
 
-const setters = ["id", ITERATION_COUNT, DELAY, FILL_MODE,
-    DIRECTION, PLAY_SPEED, DURATION, PLAY_SPEED, ITERATION_TIME, PLAY_STATE];
-const getters = [...setters, EASING, EASING_NAME];
+export const ANIMATOR_SETTERS = [
+    "id", ITERATION_COUNT, DELAY, FILL_MODE,
+    DIRECTION, PLAY_SPEED, DURATION,
+    PLAY_SPEED, ITERATION_TIME, PLAY_STATE
+];
+export const ANIMATOR_GETTERS = [
+    ...ANIMATOR_SETTERS,
+    EASING, EASING_NAME,
+];
 
 /**
 * play video, animation, the others
 * @extends EventEmitter
 * @see {@link https://www.w3schools.com/css/css3_animations.asp CSS3 Animation}
 */
-@GetterSetter(getters, setters, "state")
+@GetterSetter(ANIMATOR_GETTERS, ANIMATOR_SETTERS, "state")
 class Animator <
     Options extends AnimatorOptions = AnimatorOptions,
     State extends AnimatorState = AnimatorState,
@@ -83,7 +90,7 @@ class Animator <
      */
     constructor(options?: Partial<Options & AnimatorOptions>) {
         super();
-        this.state = {
+        this.state = reactive({
             id: "",
             easing: 0,
             easingName: "linear",
@@ -99,7 +106,7 @@ class Animator <
             prevTime: 0,
             playState: PAUSED,
             duration: 0,
-        } as State;
+        }) as State;
         this.setOptions(options);
     }
     /**

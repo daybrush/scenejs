@@ -13,7 +13,7 @@
         "start": "rollup -c -w",
         "test:chrome": "karma start --chrome",
         "build": "rollup -c && print-sizes ./dist && npm run declaration",
-        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
+        "declaration": "tsc -p tsconfig.declaration.json",
         "coveralls": "cat ./coverage/lcov.info | coveralls"
     },
     "repository": {
@@ -66,6 +66,7 @@
         "typescript": "^4.5.0 <4.6.0"
     },
     "dependencies": {
+        "@cfcs/core": "^0.0.9",
         "@daybrush/utils": "^1.8.0",
         "@scena/event-emitter": "^1.0.3",
         "css-styled": "^1.0.0",

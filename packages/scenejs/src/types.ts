@@ -41,7 +41,6 @@ export type PlayStateType = "paused" | "running";
 * @property - The direction property defines whether an animation should be played forwards, backwards or in alternate cycles.
 * @property - The playspeed define the speed at which the play is performed.
 * @property - The duration property defines how long an animation should take to complete one cycle.
-
 */
 export interface AnimatorOptions {
     id: number | string;
@@ -74,7 +73,7 @@ export interface AnimatorState extends AnimatorOptions {
  * @see AnimatorState
  */
 export interface SceneState extends AnimatorState {
-    selector: string | boolean | ((id: number | string) => string);
+    selector: string | boolean | ((id: number | string) => string | AnimateElement);
     playCSS: boolean;
     exportEvent?: boolean;
 }
@@ -85,7 +84,7 @@ export interface SceneState extends AnimatorState {
  * @see AnimatorOptions
  */
 export interface SceneOptions extends AnimatorOptions {
-    selector: string | boolean | ((id: number | string) => string);
+    selector: string | boolean | ((id: number | string) => string | AnimateElement);
 }
 /**
  * @typedef
@@ -250,8 +249,22 @@ export interface SceneEvents extends SceneAnimatorEvents {
 
 /**
  * @typedef
+ */
+export interface FrameEvents {
+    update: {};
+}
+
+/**
+ * @typedef
  * @extends SceneAnimatorEvents
  */
 export interface SceneItemEvents extends SceneAnimatorEvents {
     animate: OnSceneItemAnimate;
+}
+
+/**
+ * @typedef
+ */
+export type SelectorAllType = ((index: number) => any) & {
+    defaultCount: number;
 }

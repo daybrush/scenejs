@@ -57,7 +57,7 @@ $ npm install scenejs
 ## 📦 Packages
 |Package|Version|Description|
 |---|---|---|
-|[**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs)|(Soon)|A React Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs)|[![](https://img.shields.io/npm/v/react-scenejs.svg?style=flat-square)](https://npmjs.com/package/react-scenejs)|A React Component that create JavaScript & CSS timeline-based animation with Scene.js.|
 |[**vue2-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs)|(Soon)|A Vue Component that create JavaScript & CSS timeline-based animation with Scene.js.|
 |[**vue-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue3-scenejs)|(Soon)|A Vue 3 Component that create JavaScript & CSS timeline-based animation with Scene.js.|
 |[**svelte-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/svelte-scenejs)|(Soon)|A Svelte Component that create JavaScript & CSS timeline-based animation with Scene.js.|

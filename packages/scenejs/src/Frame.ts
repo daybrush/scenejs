@@ -10,8 +10,10 @@ import {
     decamelize,
     camelize,
 } from "@daybrush/utils";
-import { NameType, KeyValueChildren } from "./types";
+import { NameType, KeyValueChildren, FrameEvents } from "./types";
 import OrderMap from "order-map";
+import { Observe } from "@cfcs/core";
+import EventEmitter from "@scena/event-emitter";
 
 function toInnerProperties(obj: IObject<string>, orders: NameType[] = []) {
     if (!obj) {
@@ -76,10 +78,12 @@ function getValue(names: NameType[], value: any): any {
     }
     return value;
 }
+
+
 /**
 * Animation's Frame
 */
-class Frame {
+class Frame extends EventEmitter<FrameEvents> {
     public properties: IObject<any> = {};
     public orderMap: OrderMap = new OrderMap(NAME_SEPARATOR);
     /**
@@ -93,7 +97,8 @@ class Frame {
       }
   });
      */
-    constructor(properties: any = {}) {
+    constructor(properties: string | Record<string, any> = {}) {
+        super();
         this.properties = {};
         // this.orders = [];
         this.set(properties);
@@ -129,7 +134,10 @@ class Frame {
       frame.setOrders(["transform"], ["scale", "tralsate"])
       */
     public setOrders(names: NameType[], orders: NameType[]): NameType[] {
-        return this.orderMap.set(names, orders);
+        const result = this.orderMap.set(names, orders);
+
+        this._update();
+        return result;
     }
     /**
       * get properties order object
@@ -150,6 +158,7 @@ class Frame {
       */
     public setOrderObject(obj: IObject<NameType[]>) {
         this.orderMap.setObject(obj);
+        this._update();
     }
 
     /**
@@ -206,6 +215,7 @@ class Frame {
         if (isObject(value)) {
             delete value[params[length - 1]];
         }
+        this._update();
         return this;
     }
     /**
@@ -236,60 +246,9 @@ class Frame {
   frame.set("transform", "translate", "50px");
     */
     public set(...args: any[]) {
-        const self = this;
-        const length = args.length;
-        const params = args.slice(0, -1);
-        const value = args[length - 1];
-        const firstParam = params[0];
-
-        if (length === 1 && isFrame(value)) {
-            self.merge(value);
-        } else if (firstParam in ALIAS) {
-            self._set(ALIAS[firstParam], value);
-        } else if (length === 2 && isArray(firstParam)) {
-            self._set(firstParam, value);
-        } else if (isPropertyObject(value)) {
-            if (isRole(params)) {
-                self.set(...params, toObject(value));
-            } else {
-                self._set(params, value);
-            }
-        } else if (isArray(value)) {
-            self._set(params, value);
-        } else if (isObject(value)) {
-            if (!self.has(...params) && isRole(params)) {
-                self._set(params, {});
-            }
-            for (const name in value) {
-                self.set(...params, name, value[name]);
-            }
-        } else if (isString(value)) {
-            if (isRole(params, true)) {
-                if (isFixed(params) || !isRole(params)) {
-                    this._set(params, value);
-                } else {
-                    const obj = toPropertyObject(value);
-
-                    if (isObject(obj)) {
-                        self.set(...params, obj);
-                    }
-                }
-                return this;
-            } else {
-                const { styles, length: stylesLength } = splitStyle(value);
-
-                for (const name in styles) {
-                    self.set(...params, name, styles[name]);
-                }
-                if (stylesLength) {
-                    return this;
-                }
-            }
-            self._set(params, value);
-        } else {
-            self._set(params, value);
-        }
-        return self;
+        this._set(...args);
+        this._update();
+        return this;
     }
     /**
       * Gets the names of properties.
@@ -425,12 +384,67 @@ class Frame {
         this.orderMap.clear();
         return this;
     }
-    private _set(args: NameType[], value: any) {
-        let properties = this.properties;
+    private _set(...args: any[]) {
+        const self = this;
         const length = args.length;
+        const params = args.slice(0, -1);
+        const value = args[length - 1];
+        const firstParam = params[0];
+
+        if (length === 1 && isFrame(value)) {
+            self.merge(value);
+        } else if (firstParam in ALIAS) {
+            self._setByPath(ALIAS[firstParam], value);
+        } else if (length === 2 && isArray(firstParam)) {
+            self._setByPath(firstParam, value);
+        } else if (isPropertyObject(value)) {
+            if (isRole(params)) {
+                self._set(...params, toObject(value));
+            } else {
+                self._setByPath(params, value);
+            }
+        } else if (isArray(value)) {
+            self._setByPath(params, value);
+        } else if (isObject(value)) {
+            if (!self.has(...params) && isRole(params)) {
+                self._setByPath(params, {});
+            }
+            for (const name in value) {
+                self._set(...params, name, value[name]);
+            }
+        } else if (isString(value)) {
+            if (isRole(params, true)) {
+                if (isFixed(params) || !isRole(params)) {
+                    this._setByPath(params, value);
+                } else {
+                    const obj = toPropertyObject(value);
+
+                    if (isObject(obj)) {
+                        self._set(...params, obj);
+                    }
+                }
+                return this;
+            } else {
+                const { styles, length: stylesLength } = splitStyle(value);
+
+                for (const name in styles) {
+                    self._set(...params, name, styles[name]);
+                }
+                if (stylesLength) {
+                    return this;
+                }
+            }
+            self._setByPath(params, value);
+        } else {
+            self._setByPath(params, value);
+        }
+    }
+    private _setByPath(path: NameType[], value: any) {
+        let properties = this.properties;
+        const length = path.length;
 
         for (let i = 0; i < length - 1; ++i) {
-            const name = args[i];
+            const name = path[i];
 
             !(name in properties) && (properties[name] = {});
             properties = properties[name];
@@ -438,16 +452,19 @@ class Frame {
         if (!length) {
             return;
         }
-        const lastParam = args[length - 1];
+        const lastParam = path[length - 1];
 
-        this.orderMap.add(args);
+        this.orderMap.add(path);
         if (length === 1 && lastParam === TIMING_FUNCTION) {
             properties[lastParam] = getEasing(value);
         } else {
-            properties[lastParam] = isString(value) && !isFixed(args)
+            properties[lastParam] = isString(value) && !isFixed(path)
                 ? toPropertyObject(value, lastParam)
                 : value;
         }
+    }
+    private _update() {
+        this.emit("update");
     }
 }
 export default Frame;

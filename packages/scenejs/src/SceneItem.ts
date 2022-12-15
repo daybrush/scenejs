@@ -498,7 +498,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState, SceneItemEven
      * @example
 item.setSelector("#id.class");
      */
-    public setSelector(target: string | boolean | ((id: number | string) => string)) {
+    public setSelector(target: string | boolean | ((id: number | string) => string | AnimateElement)) {
         if (isFunction(target)) {
             this.setElement(target(this.getId()));
         } else {

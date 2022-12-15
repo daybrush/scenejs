@@ -9,7 +9,7 @@ import {
     isArray, ANIMATION, ARRAY, OBJECT,
     PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, isObject, addEvent, removeEvent, isString,
 } from "@daybrush/utils";
-import { EasingType, EasingFunction, NameType } from "./types";
+import { EasingType, EasingFunction, NameType, SelectorAllType } from "./types";
 import { toPropertyObject } from "./utils/property";
 import { bezier, steps } from "./easing";
 import Animator from "./Animator";
@@ -286,4 +286,12 @@ export function flatSceneObject(obj: IObject<any>, seperator: string): Record<st
         }
     }
     return newObj;
+}
+
+
+export function selectorAll(callback: (index: number) => any, defaultCount = 0): SelectorAllType {
+    const nextCallback = callback.bind({}) as SelectorAllType;
+    nextCallback.defaultCount = defaultCount;
+
+    return nextCallback;
 }
