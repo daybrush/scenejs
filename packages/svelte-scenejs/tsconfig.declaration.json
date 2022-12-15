@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "allowJs": false,
+    "noEmit": false,
+    "isolatedModules": false,
+    "removeComments": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "declaration"
+  },
+  "include": ["src/svelte-scenejs/**/*.ts"],
+  "exclude": ["node_modules"],
+}
