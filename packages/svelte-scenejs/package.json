@@ -47,7 +47,7 @@
     },
     "dependencies": {
         "@cfcs/svelte": "^0.0.10",
-        "scenejs": "~1.8.0"
+        "scenejs": "~1.8.2"
     },
     "devDependencies": {
         "@daybrush/builder": "^0.2.0",

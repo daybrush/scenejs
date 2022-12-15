@@ -1292,20 +1292,10 @@
     npmlog "6.0.2"
     sync-exec "^0.6.2"
 
-"@daybrush/utils@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-0.11.0.tgz#3fd113fcedaab29d8c80773ca5f4d32551bdc9d8"
-  integrity sha512-PnrY1NDjXqXKASoREcjHokQt0WWHiUBClMJ0l9APx42QkeOCQ5nXB7k4VdmkaU23BndeSmNNYJDNL6eEsRitaA==
-
-"@daybrush/utils@^0.5.2":
-  version "0.5.2"
-  resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-0.5.2.tgz#cc7876e2690895b6b4e5e048795271d5ddb2fedd"
-  integrity sha512-WD23IKwqFW8E8Y/gRUmoKpkkCAzedSGiU7kpOKvbqB+PRkg9rTq20SWMIlNxAU0Y+6zYGOVFguNPlL0W1lz1vQ==
-
-"@daybrush/utils@^1.0.0", "@daybrush/utils@^1.1.1", "@daybrush/utils@^1.6.0", "@daybrush/utils@^1.7.0", "@daybrush/utils@^1.8.0":
-  version "1.10.0"
-  resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-1.10.0.tgz#2a2235269b960b7ffaf05ca2e75379ea1fb58204"
-  integrity sha512-IDT0DWAGcjxb2+WMr8pHrVTkHVKdilBumX1SubXJUlowN4rMSLphwDxvMNfv+vQOrdCPXSoPVZ3mhfrHsQ9Xow==
+"@daybrush/utils@^0.11.0", "@daybrush/utils@^0.5.2", "@daybrush/utils@^1.0.0", "@daybrush/utils@^1.1.1", "@daybrush/utils@^1.10.1", "@daybrush/utils@^1.6.0":
+  version "1.10.1"
+  resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-1.10.1.tgz#16e252145f62d46ae481f25ea4eb2485d8035c95"
+  integrity sha512-/7z8vqe+/I1YDNW+JnjXLUY9mi4llXia5uIorZy/qCIqJII+ixjINl/R6Z92/ohfFQVa+3Uv6g0PwbF5kIPk5g==
 
 "@egjs/component@^2.1.2":
   version "2.2.2"
@@ -14683,12 +14673,7 @@ tsconfig-paths@^3.14.1:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
-  version "1.14.1"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
-  integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
-
-tslib@^2.0.3, tslib@^2.4.1:
+tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^2.0.3, tslib@^2.4.0, tslib@^2.4.1:
   version "2.4.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.4.1.tgz#0d0bfbaac2880b91e22df0768e55be9753a5b17e"
   integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==
