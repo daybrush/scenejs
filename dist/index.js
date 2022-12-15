@@ -41,7 +41,7 @@ version: 0.0.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.10.0
+    @version 1.10.1
     */
     /**
     * get string "object"
@@ -51,7 +51,6 @@ version: 0.0.0
 
     console.log(OBJECT); // "object"
     */
-
     var OBJECT = "object";
     /**
     * get string "string"
@@ -61,7 +60,6 @@ version: 0.0.0
 
     console.log(STRING); // "string"
     */
-
     var STRING = "string";
     /**
     * get string "undefined"
@@ -71,7 +69,6 @@ version: 0.0.0
 
     console.log(UNDEFINED); // "undefined"
     */
-
     var UNDEFINED = "undefined";
     /**
     * Check whether the environment is window or node.js.
@@ -83,7 +80,6 @@ version: 0.0.0
     console.log(IS_WINDOW); // false in node.js
     console.log(IS_WINDOW); // true in browser
     */
-
     var doc = typeof document !== UNDEFINED && document; // FIXME: this type maybe false
     var OPEN_CLOSED_CHARACTERS = [{
       open: "(",
@@ -118,9 +114,7 @@ version: 0.0.0
     ***************************************************************************** */
     function __spreadArrays() {
       for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-
       for (var r = Array(s), k = 0, i = 0; i < il; i++) for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
-
       return r;
     }
     /**
@@ -136,7 +130,6 @@ version: 0.0.0
     console.log(isObject("")); // false
     console.log(isObject(null)); // false
     */
-
     function isObject(value) {
       return value && typeof value === OBJECT;
     }
@@ -153,7 +146,6 @@ version: 0.0.0
     console.log(isArray(undefined)); // false
     console.log(isArray(null)); // false
     */
-
     function isArray(value) {
       return Array.isArray(value);
     }
@@ -170,99 +162,78 @@ version: 0.0.0
     console.log(isString(1)); // false
     console.log(isString(null)); // false
     */
-
     function isString(value) {
       return typeof value === STRING;
     }
-
     function isEqualSeparator(character, separator) {
       var isCharacterSpace = character === "" || character == " ";
       var isSeparatorSpace = separator === "" || separator == " ";
       return isSeparatorSpace && isCharacterSpace || character === separator;
     }
-
     function findOpen(openCharacter, texts, index, length, openCloseCharacters) {
       var isIgnore = findIgnore(openCharacter, texts, index);
-
       if (!isIgnore) {
         return findClose(openCharacter, texts, index + 1, length, openCloseCharacters);
       }
-
       return index;
     }
-
     function findIgnore(character, texts, index) {
       if (!character.ignore) {
         return null;
       }
-
       var otherText = texts.slice(Math.max(index - 3, 0), index + 3).join("");
       return new RegExp(character.ignore).exec(otherText);
     }
-
     function findClose(closeCharacter, texts, index, length, openCloseCharacters) {
       var _loop_1 = function (i) {
         var character = texts[i].trim();
-
         if (character === closeCharacter.close && !findIgnore(closeCharacter, texts, i)) {
           return {
             value: i
           };
         }
-
-        var nextIndex = i; // re open
-
+        var nextIndex = i;
+        // re open
         var openCharacter = find(openCloseCharacters, function (_a) {
           var open = _a.open;
           return open === character;
         });
-
         if (openCharacter) {
           nextIndex = findOpen(openCharacter, texts, i, length, openCloseCharacters);
         }
-
         if (nextIndex === -1) {
           return out_i_1 = i, "break";
         }
-
         i = nextIndex;
         out_i_1 = i;
       };
-
       var out_i_1;
-
       for (var i = index; i < length; ++i) {
         var state_1 = _loop_1(i);
-
         i = out_i_1;
         if (typeof state_1 === "object") return state_1.value;
         if (state_1 === "break") break;
       }
-
       return -1;
     }
-
     function splitText(text, splitOptions) {
       var _a = isString(splitOptions) ? {
-        separator: splitOptions
-      } : splitOptions,
-          _b = _a.separator,
-          separator = _b === void 0 ? "," : _b,
-          isSeparateFirst = _a.isSeparateFirst,
-          isSeparateOnlyOpenClose = _a.isSeparateOnlyOpenClose,
-          _c = _a.isSeparateOpenClose,
-          isSeparateOpenClose = _c === void 0 ? isSeparateOnlyOpenClose : _c,
-          _d = _a.openCloseCharacters,
-          openCloseCharacters = _d === void 0 ? OPEN_CLOSED_CHARACTERS : _d;
-
+          separator: splitOptions
+        } : splitOptions,
+        _b = _a.separator,
+        separator = _b === void 0 ? "," : _b,
+        isSeparateFirst = _a.isSeparateFirst,
+        isSeparateOnlyOpenClose = _a.isSeparateOnlyOpenClose,
+        _c = _a.isSeparateOpenClose,
+        isSeparateOpenClose = _c === void 0 ? isSeparateOnlyOpenClose : _c,
+        _d = _a.openCloseCharacters,
+        openCloseCharacters = _d === void 0 ? OPEN_CLOSED_CHARACTERS : _d;
       var openClosedText = openCloseCharacters.map(function (_a) {
         var open = _a.open,
-            close = _a.close;
-
+          close = _a.close;
         if (open === close) {
           return open;
         }
-
         return open + "|" + close;
       }).join("|");
       var regexText = "(\\s*" + separator + "\\s*|" + openClosedText + "|\\s+)";
@@ -271,17 +242,14 @@ version: 0.0.0
       var length = texts.length;
       var values = [];
       var tempValues = [];
-
       function resetTemp() {
         if (tempValues.length) {
           values.push(tempValues.join(""));
           tempValues = [];
           return true;
         }
-
         return false;
       }
-
       var _loop_2 = function (i) {
         var character = texts[i].trim();
         var nextIndex = i;
@@ -293,27 +261,21 @@ version: 0.0.0
           var close = _a.close;
           return close === character;
         });
-
         if (openCharacter) {
           nextIndex = findOpen(openCharacter, texts, i, length, openCloseCharacters);
-
           if (nextIndex !== -1 && isSeparateOpenClose) {
             if (resetTemp() && isSeparateFirst) {
               return out_i_2 = i, "break";
             }
-
             values.push(texts.slice(i, nextIndex + 1).join(""));
             i = nextIndex;
-
             if (isSeparateFirst) {
               return out_i_2 = i, "break";
             }
-
             return out_i_2 = i, "continue";
           }
         } else if (closeCharacter && !findIgnore(closeCharacter, texts, i)) {
           var nextOpenCloseCharacters = __spreadArrays(openCloseCharacters);
-
           nextOpenCloseCharacters.splice(openCloseCharacters.indexOf(closeCharacter), 1);
           return {
             value: splitText(text, {
@@ -326,37 +288,28 @@ version: 0.0.0
           };
         } else if (isEqualSeparator(character, separator) && !isSeparateOnlyOpenClose) {
           resetTemp();
-
           if (isSeparateFirst) {
             return out_i_2 = i, "break";
           }
-
           return out_i_2 = i, "continue";
         }
-
         if (nextIndex === -1) {
           nextIndex = length - 1;
         }
-
         tempValues.push(texts.slice(i, nextIndex + 1).join(""));
         i = nextIndex;
         out_i_2 = i;
       };
-
       var out_i_2;
-
       for (var i = 0; i < length; ++i) {
         var state_2 = _loop_2(i);
-
         i = out_i_2;
         if (typeof state_2 === "object") return state_2.value;
         if (state_2 === "break") break;
       }
-
       if (tempValues.length) {
         values.push(tempValues.join(""));
       }
-
       return values;
     }
     /**
@@ -372,7 +325,6 @@ version: 0.0.0
     console.log(splitSpace("'a,b' c 'd,e' f g"));
     // ["'a,b'", "c", "'d,e'", "f", "g"]
     */
-
     function splitSpace(text) {
       // divide comma(space)
       return splitText(text, "");
@@ -390,10 +342,8 @@ version: 0.0.0
     console.log(splitBracket("a(1, 2)b"));
     // {prefix: "a", value: "1, 2", suffix: "b"}
     */
-
     function splitBracket(text) {
       var matches = /([^(]*)\(([\s\S]*)\)([\s\S]*)/g.exec(text);
-
       if (!matches || matches.length < 4) {
         return {};
       } else {
@@ -419,10 +369,8 @@ version: 0.0.0
     console.log(splitUnit("a10%"));
     // {prefix: "a", value: 10, unit: "%"}
     */
-
     function splitUnit(text) {
       var matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
-
       if (!matches) {
         return {
           prefix: "",
@@ -430,7 +378,6 @@ version: 0.0.0
           value: NaN
         };
       }
-
       var prefix = matches[1];
       var value = matches[2];
       var unit = matches[3];
@@ -451,7 +398,6 @@ version: 0.0.0
     const arr1 = toArray(document.querySelectorAll(".a")); // Element[]
     const arr2 = toArray(document.querySelectorAll<HTMLElement>(".a")); // HTMLElement[]
     */
-
     function toArray(value) {
       return [].slice.call(value);
     }
@@ -467,20 +413,16 @@ version: 0.0.0
 
     findIndex([{a: 1}, {a: 2}, {a: 3}, {a: 4}], ({ a }) => a === 2); // 1
     */
-
     function findIndex(arr, callback, defaultIndex) {
       if (defaultIndex === void 0) {
         defaultIndex = -1;
       }
-
       var length = arr.length;
-
       for (var i = 0; i < length; ++i) {
         if (callback(arr[i], i, arr)) {
           return i;
         }
       }
-
       return defaultIndex;
     }
     /**
@@ -495,7 +437,6 @@ version: 0.0.0
 
     find([{a: 1}, {a: 2}, {a: 3}, {a: 4}], ({ a }) => a === 2); // {a: 2}
     */
-
     function find(arr, callback, defalutValue) {
       var index = findIndex(arr, callback);
       return index > -1 ? arr[index] : defalutValue;
@@ -505,7 +446,6 @@ version: 0.0.0
      * Returns all element descendants of node that
      * match selectors.
      */
-
     /**
      * Checks if the specified class value exists in the element's class attribute.
      * @memberof DOM
@@ -517,7 +457,6 @@ version: 0.0.0
     console.log($("div")); // div element
     console.log($("div", true)); // [div, div] elements
     */
-
     function $(selectors, multi) {
       return multi ? doc.querySelectorAll(selectors) : doc.querySelector(selectors);
     }
@@ -532,12 +471,10 @@ version: 0.0.0
 
     console.log(hasClass(element, "start")); // true or false
     */
-
     function hasClass(element, className) {
       if (element.classList) {
         return element.classList.contains(className);
       }
-
       return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
     }
     /**
@@ -550,7 +487,6 @@ version: 0.0.0
 
     addClass(element, "start");
     */
-
     function addClass(element, className) {
       if (element.classList) {
         element.classList.add(className);
@@ -568,7 +504,6 @@ version: 0.0.0
 
     removeClass(element, "start");
     */
-
     function removeClass(element, className) {
       if (element.classList) {
         element.classList.remove(className);
@@ -591,7 +526,6 @@ version: 0.0.0
       console.log(e);
     });
     */
-
     function addEvent(el, type, listener, options) {
       el.addEventListener(type, listener, options);
     }
