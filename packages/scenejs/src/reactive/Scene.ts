@@ -28,8 +28,6 @@ export declare type SceneReactiveData = Scene | SceneReactiveProps;
 export type SceneReactiveMethods = ReactiveMethods<Scene>;
 export type SceneReactiveInstance = ReactiveObject<SceneReactiveMethods & AnimatorReactiveState>;
 
-
-
 export const SCENE_REACTIVE: ReactiveAdapter<
     SceneReactiveInstance,
     SceneReactiveInstance,
@@ -47,11 +45,11 @@ export const SCENE_REACTIVE: ReactiveAdapter<
         const nextObj = {
             totalDuration,
             ...observers,
-            ...SCENE_METHODS.reduce((obj, cur) => {
-                obj[cur] = (...args) => {
+            ...SCENE_METHODS.reduce((methodObject, cur) => {
+                methodObject[cur] = (...args) => {
                     return scene[cur].call(scene, ...args);
                 };
-                return obj;
+                return methodObject;
             }, {}),
         };
 
@@ -67,4 +65,3 @@ export const SCENE_REACTIVE: ReactiveAdapter<
         inst.off(eventName, callback);
     },
 };
-

@@ -5,7 +5,6 @@ import { SceneItemEvents, AnimatorState, SceneItemOptions } from "../types";
 import { isSceneItem } from "../utils";
 import { ANIMATOR_METHODS, getMethodNames, AnimatorReactiveState, ReactiveMethods } from "./reactive";
 
-
 export const SCENE_ITEM_METHODS = [
     ...ANIMATOR_METHODS,
     ...getMethodNames(Scene),
@@ -27,11 +26,10 @@ export interface SceneItemReactiveProps {
 export type SceneItemReactiveData = SceneItem | {
     props?: SceneItemReactiveProps;
     options?: Partial<SceneItemOptions>;
-}
+};
 
 export type SceneItemReactiveMethods = ReactiveMethods<Scene>;
 export type SceneItemReactiveInstance = ReactiveObject<SceneItemReactiveMethods & AnimatorReactiveState>;
-
 
 export const SCENE_ITEM_REACTIVE: ReactiveAdapter<
     SceneItemReactiveInstance,
@@ -50,11 +48,11 @@ export const SCENE_ITEM_REACTIVE: ReactiveAdapter<
         const nextObj = {
             totalDuration,
             ...observers,
-            ...SCENE_ITEM_METHODS.reduce((obj, cur) => {
-                obj[cur] = (...args) => {
+            ...SCENE_ITEM_METHODS.reduce((methodObject, cur) => {
+                methodObject[cur] = (...args) => {
                     return sceneItem[cur].call(sceneItem, ...args);
                 };
-                return obj;
+                return methodObject;
             }, {}),
         };
 

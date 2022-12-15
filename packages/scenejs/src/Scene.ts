@@ -446,7 +446,10 @@ console.log(scene.getItem(".a").get(1, "opacity"));
                 let elements: IArrayFormat<AnimateElement> = [];
 
                 if (selector && IS_WINDOW) {
-                    elements = $(`${isFunction(selector) ? selector(name) : name}`, true) as IArrayFormat<AnimateElement>;
+                    elements = $(
+                        `${isFunction(selector) ? selector(name) : name}`,
+                        true,
+                    );
                 }
                 const elementsLength = elements.length;
                 const length = elementsLength || (object as SelectorAllType).defaultCount || 0;
@@ -454,21 +457,21 @@ console.log(scene.getItem(".a").get(1, "opacity"));
 
                 for (let i = 0; i < length; ++i) {
                     const element = elements[i];
-                    const item = scene.newItem(i) as SceneItem;
+                    const subItem = scene.newItem(i) as SceneItem;
 
-                    item.setId().load(object(i, elements[i]));
+                    subItem.setId().load(object(i, elements[i]));
 
                     if (element) {
-                        item.setElement(element)
+                        subItem.setElement(element);
                     }
                 }
                 if (!elementsLength) {
-                    let elements: IArrayFormat<AnimateElement> = [];
+                    let subElements: IArrayFormat<AnimateElement> = [];
 
                     scene.state[SELECTOR] = (id: number) => {
-                        elements = elements || $(`${isFunction(selector) ? selector(name) : name}`, true);
+                        subElements = subElements || $(`${isFunction(selector) ? selector(name) : name}`, true);
 
-                        return elements[id];
+                        return subElements[id];
                     };
                 }
                 this.setItem(name, scene);

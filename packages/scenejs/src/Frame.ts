@@ -79,7 +79,6 @@ function getValue(names: NameType[], value: any): any {
     return value;
 }
 
-
 /**
 * Animation's Frame
 */

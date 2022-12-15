@@ -55,7 +55,7 @@ export function isDirectionReverse(iteration: number, iteraiontCount: IterationC
 export const ANIMATOR_SETTERS = [
     "id", ITERATION_COUNT, DELAY, FILL_MODE,
     DIRECTION, PLAY_SPEED, DURATION,
-    PLAY_SPEED, ITERATION_TIME, PLAY_STATE
+    PLAY_SPEED, ITERATION_TIME, PLAY_STATE,
 ];
 export const ANIMATOR_GETTERS = [
     ...ANIMATOR_SETTERS,

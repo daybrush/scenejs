@@ -288,7 +288,6 @@ export function flatSceneObject(obj: IObject<any>, seperator: string): Record<st
     return newObj;
 }
 
-
 export function selectorAll(callback: (index: number) => any, defaultCount = 0): SelectorAllType {
     const nextCallback = callback.bind({}) as SelectorAllType;
     nextCallback.defaultCount = defaultCount;

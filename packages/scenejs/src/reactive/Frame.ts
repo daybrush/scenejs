@@ -3,12 +3,10 @@ import Frame from "../Frame";
 import { isFrame } from "../utils";
 import { ANIMATOR_METHODS, getMethodNames, ReactiveMethods } from "./reactive";
 
-
 export const FRAME_METHODS = [
     ...ANIMATOR_METHODS,
     ...getMethodNames(Frame),
 ];
-
 
 /**
  * @typedef
@@ -39,9 +37,8 @@ export interface FrameReactiveState {
 
 export type FrameReactiveInstance = ReactiveObject<FrameReactiveMethods & FrameReactiveState> & {
     getFrameObserver(): Observer<Frame>;
-    onUpdate: () => void;
+    onUpdate(): void;
 };
-
 
 export const FRAME_REACTIVE: ReactiveAdapter<
     FrameReactiveInstance,
@@ -82,7 +79,6 @@ export const FRAME_REACTIVE: ReactiveAdapter<
         const onUpdate = () => {
             ++updateCount.current;
         };
-
 
         frame.subscribe((currentFrame, prevFrame) => {
             prevFrame.off("update", onUpdate);

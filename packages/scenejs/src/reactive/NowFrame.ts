@@ -3,7 +3,6 @@ import Frame from "../Frame";
 import SceneItem from "../SceneItem";
 import { FrameReactiveInstance, FrameReactiveState, FRAME_REACTIVE } from "./Frame";
 
-
 export const NOW_FRAME_REACTIVE = {
     ...FRAME_REACTIVE,
     created(data: SceneItem) {
@@ -20,4 +19,4 @@ export const NOW_FRAME_REACTIVE = {
     never,
     SceneItem,
     {}
->
+>;

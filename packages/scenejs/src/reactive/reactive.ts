@@ -5,7 +5,7 @@ import EventEmitter from "@scena/event-emitter";
 import Animator from "../Animator";
 import { AnimatorState } from "../types";
 
-export function getMethodNames(classConstructor: Function) {
+export function getMethodNames(classConstructor: new (...args: any[]) => any) {
     const prototype = classConstructor.prototype;
 
     return getKeys(prototype).filter(name => {
@@ -22,9 +22,8 @@ export const ANIMATOR_METHODS = [
     ...getMethodNames(Animator),
 ];
 
-
 export type ReactiveMethods<Instance> = ExtractNever<{
-    [key in (keyof Instance) & string]: Instance[key] extends Function ? Instance[key] : never;
+    [key in (keyof Instance) & string]: Instance[key] extends (...args: any) => any ? Instance[key] : never;
 }>;
 
 /**

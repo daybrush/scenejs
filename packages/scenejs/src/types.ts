@@ -267,4 +267,4 @@ export interface SceneItemEvents extends SceneAnimatorEvents {
  */
 export type SelectorAllType = ((index: number) => any) & {
     defaultCount: number;
-}
+};
