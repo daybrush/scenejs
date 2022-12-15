@@ -1,6 +1,6 @@
 {
     "name": "scenejs",
-    "version": "1.7.1",
+    "version": "1.8.0",
     "description": "JavaScript & CSS timeline-based animation library",
     "main": "dist/scene.cjs.js",
     "module": "dist/scene.esm.js",
@@ -12,7 +12,7 @@
         "test": "karma start",
         "start": "rollup -c -w",
         "test:chrome": "karma start --chrome",
-        "build": "rollup -c && print-sizes ./dist && npm run declaration",
+        "build": "rollup -c && print-sizes ./dist && npm run declaration && npm run lint",
         "declaration": "tsc -p tsconfig.declaration.json",
         "coveralls": "cat ./coverage/lcov.info | coveralls"
     },
