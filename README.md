@@ -6,6 +6,8 @@
 <img src="https://img.shields.io/badge/language-typescript-blue.svg?style=flat-square"/>
 <a href="https://travis-ci.org/daybrush/scenejs" target="_blank"><img alt="Travis (.org)" src="https://img.shields.io/travis/daybrush/scenejs.svg?style=flat-square&label=build" /></a>
 <a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/daybrush/scenejs.svg?style=flat-square&label=license&color=08CE5D"/></a>
+<a href="https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs" target="_blank"><img alt="React" src="https://img.shields.io/static/v1.svg?label=&message=React&style=flat-square&color=61daeb"></a> 
+ <a href="https://github.com/daybrush/scenejs/tree/master/packages/svelte-scenejs" target="_blank"><img alt="Svelte" src="https://img.shields.io/static/v1.svg?label=&message=Svelte&style=flat-square&color=C82B38"></a>
 </p>
 
 
