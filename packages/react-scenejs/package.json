@@ -1,6 +1,6 @@
 {
     "name": "react-scenejs",
-    "version": "2.0.0-beta.1",
+    "version": "2.0.0-beta.2",
     "lernaHelperReleaseType": "prerelease",
     "lernaHelperPublishTag": "latest",
     "description": "A React Component that create JavaScript & CSS timeline-based animation with Scene.js.",
@@ -40,7 +40,7 @@
         "declaration/*"
     ],
     "dependencies": {
-        "@cfcs/react": "^0.0.10",
+        "@cfcs/react": "^0.0.11",
         "scenejs": "~1.8.2"
     },
     "scripts": {

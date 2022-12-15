@@ -1086,10 +1086,10 @@
   dependencies:
     "@egjs/component" "^3.0.3"
 
-"@cfcs/react@^0.0.10":
-  version "0.0.10"
-  resolved "https://registry.npmjs.org/@cfcs/react/-/react-0.0.10.tgz#131eb1600187b8b7b8db610a62347aa5c02bc360"
-  integrity sha512-3WHNamHj7fgRBg/vyp+/8nZnOE5v4kKUAA9QHmb+LykKhSDFSRaWWLUDlEOIlDIQ5YIMI15kflJ9NoXUeXlc9g==
+"@cfcs/react@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.npmjs.org/@cfcs/react/-/react-0.0.11.tgz#697dc7f2c871ba80282fe6efc501366edd8647da"
+  integrity sha512-HSkMo6kCZp6FaMq4O7GW7BKdDiQfnHzUfrx7MK+vkBpMFtRi+nDOeZzhD/x+MGb1bF2cncCcTj1fp0kePPGp6Q==
   dependencies:
     "@cfcs/core" "~0.0.10"
 
