@@ -15,8 +15,8 @@
 <br/>
 
 ## 🚀 Exampless
-* CodeSandbox 1 (Scene)
-* CodeSandbox 2 (Scene / SceneItem)
+* [Raindrop Selector Example](https://codesandbox.io/s/svelte-raindrop-selector-example-qtc5bn?file=/App.svelte)
+* [Raindrop No Selector Example](https://codesandbox.io/s/svelte-raindrop-no-selector-example-73xkeo)
 
 ## ⚙️ Installation
 ```bash
