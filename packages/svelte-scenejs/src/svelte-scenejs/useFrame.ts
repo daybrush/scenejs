@@ -17,7 +17,7 @@ export interface SvelteFrameResult extends SvelteReactiveAdapterResult<typeof FR
  * @param {Reactive.FrameReactiveData} - Can be used as frame, cssText, cssObject, etc.
  * @return - You can use Frame methods and cssText, cssObject, ...etc
  * @example
- * import { useFrame } from "react-scenejs";
+ * import { useFrame } from "svelte-scenejs";
  *
  * const { cssText } = useFrame("text-align: center; transform: translate(10px, 10px);");
  *

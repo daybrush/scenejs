@@ -17,7 +17,7 @@ export interface SvelteSceneResult extends SvelteReactiveAdapterResult<typeof SC
  * @param - Scene and Animator options
  * @return - You can use Scene methods and Animator State
  * @example
- * import { useScene, useNowFrame } from "react-scenejs";
+ * import { useScene, useNowFrame } from "svelte-scenejs";
  *
  * const scene = useScene({ ... });
  * const { cssText } = useNowFrame(scene.getItem("a1"));
