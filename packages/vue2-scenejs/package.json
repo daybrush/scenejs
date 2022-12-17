@@ -1,0 +1,70 @@
+{
+    "name": "vue2-scenejs",
+    "version": "1.0.0-beta.0",
+    "lernaHelperReleaseType": "prerelease",
+    "lernaHelperPublishTag": "latest",
+    "description": "A Vue 2 Component that create JavaScript & CSS timeline-based animation with Scene.js.",
+    "main": "./dist/scene.cjs.js",
+    "module": "./dist/scene.esm.js",
+    "sideEffects": false,
+    "types": "declaration/index.d.ts",
+    "keywords": [
+        "vue",
+        "vue2",
+        "reactive",
+        "use",
+        "scene",
+        "scene.js",
+        "scenejs",
+        "keyframes",
+        "timeline",
+        "animate",
+        "animation",
+        "css",
+        "requestAnimationFrame",
+        "motion"
+    ],
+    "scripts": {
+        "serve": "vue-cli-service serve demo",
+        "build": "rollup -c && npm run declaration",
+        "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json",
+        "lint": "vue-cli-service lint"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/daybrush/scenejs/blob/master/packages/vue2-scenejs"
+    },
+    "author": "Daybrush",
+    "bugs": {
+        "url": "https://github.com/daybrush/scenejs/issues"
+    },
+    "homepage": "https://github.com/daybrush/scenejs",
+    "files": [
+        "./*",
+        "dist/*"
+    ],
+    "dependencies": {
+        "@cfcs/vue2": "^0.0.10",
+        "scenejs": "~1.8.3"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.12.10",
+        "@daybrush/builder": "^0.2.0",
+        "@typescript-eslint/parser": "^2.33.0",
+        "@vue/cli-plugin-typescript": "~4.5.0",
+        "@vue/cli-service": "~4.5.0",
+        "@vue/composition-api": "^1.2.4",
+        "@vue/eslint-config-airbnb": "^5.0.2",
+        "@vue/eslint-config-prettier": "^6.0.0",
+        "@vue/eslint-config-typescript": "^5.0.2",
+        "@vue/test-utils": "^1.0.3",
+        "babel-eslint": "^10.1.0",
+        "babel-loader": "^8.2.2",
+        "print-sizes": "^0.1.0",
+        "rollup-plugin-vue": "^5.1.9",
+        "tslib": "^2.3.1",
+        "typescript": "^4.1.6",
+        "vue": "2.6.11",
+        "vue-template-compiler": "2.6.11"
+    }
+}

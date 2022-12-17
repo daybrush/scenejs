@@ -10,6 +10,9 @@
             "./packages/scenejs/src/",
             "./packages/scenejs/src/reactive",
             "./packages/react-scenejs/src/react-scenejs/",
+            "./packages/vue-scenejs/src/",
+            "./packages/vue2-scenejs/src/",
+            "./packages/svelete-scenejs/src/svelte-scenejs/",
             "./README.md",
             "./node_modules/@scena/event-emitter/src/"
         ],

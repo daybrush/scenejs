@@ -7,6 +7,12 @@
 <a href="https://travis-ci.org/daybrush/scenejs" target="_blank"><img alt="Travis (.org)" src="https://img.shields.io/travis/daybrush/scenejs.svg?style=flat-square&label=build" /></a>
 <a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/daybrush/scenejs.svg?style=flat-square&label=license&color=08CE5D"/></a>
 <a href="https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs" target="_blank"><img alt="React" src="https://img.shields.io/static/v1.svg?label=&message=React&style=flat-square&color=61daeb"></a> 
+<a href="https://github.com/daybrush/scenejs/tree/master/packages/vue2-scenejs" target="_blank"><img
+    alt="Vue 2"
+    src="https://img.shields.io/static/v1.svg?label=&message=Vue2&style=flat-square&color=3fb984"></a>
+<a href="https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs" target="_blank"><img
+    alt="Vue 3"
+    src="https://img.shields.io/static/v1.svg?label=&message=Vue%203&style=flat-square&color=3fb984"></a>
  <a href="https://github.com/daybrush/scenejs/tree/master/packages/svelte-scenejs" target="_blank"><img alt="Svelte" src="https://img.shields.io/static/v1.svg?label=&message=Svelte&style=flat-square&color=C82B38"></a>
 </p>
 
@@ -61,8 +67,8 @@ $ npm install scenejs
 |---|---|---|
 |[**react-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs)|[![](https://img.shields.io/npm/v/react-scenejs.svg?style=flat-square)](https://npmjs.com/package/react-scenejs)|A React Component that create JavaScript & CSS timeline-based animation with Scene.js.|
 |[**svelte-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/svelte-scenejs)|[![](https://img.shields.io/npm/v/svelte-scenejs.svg?style=flat-square)](https://npmjs.com/package/svelte-scenejs)|A Svelte Component that create JavaScript & CSS timeline-based animation with Scene.js.|
-|[**vue2-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs)|(Soon)|A Vue Component that create JavaScript & CSS timeline-based animation with Scene.js.|
-|[**vue-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue3-scenejs)|(Soon)|A Vue 3 Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**vue-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue3-scenejs)|[![](https://img.shields.io/npm/v/vue-scenejs.svg?style=flat-square)](https://npmjs.com/package/vue-scenejs)|A Vue 3 Component that create JavaScript & CSS timeline-based animation with Scene.js.|
+|[**vue2-scenejs**](https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs)|[![](https://img.shields.io/npm/v/vue2-scenejs.svg?style=flat-square)](https://npmjs.com/package/vue2-scenejs)|A Vue 2 Component that create JavaScript & CSS timeline-based animation with Scene.js.|
 |[**@scenejs/render**](https://github.com/daybrush/scenejs-render)|[![](https://img.shields.io/npm/v/@scenejs/render.svg?style=flat-square)](https://npmjs.com/package/@scenejs/render)|Make a movie of CSS animation through Scene.js.|
 |[**@scenejs/effects**](https://github.com/daybrush/scenejs-effects)|[![](https://img.shields.io/npm/v/@scenejs/effects.svg?style=flat-square)](https://npmjs.com/package/@scenejs/effects)|Effect collection library where you can add scene effects to Scene.js.|
 |[**@scenejs/timeline**](https://github.com/daybrush/scenejs-timeline)|[![](https://img.shields.io/npm/v/@scenejs/timeline.svg?style=flat-square)](https://npmjs.com/package/@scenejs/timeline)|A library that represents the timeline of Scene.js. You can control time, properties, and items.|
