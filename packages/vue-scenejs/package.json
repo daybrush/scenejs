@@ -1,6 +1,6 @@
 {
     "name": "vue-scenejs",
-    "version": "2.0.0-beta.0",
+    "version": "2.0.0-beta.1",
     "lernaHelperReleaseType": "prerelease",
     "lernaHelperPublishTag": "latest",
     "description": "A Vue 3 Component that create JavaScript & CSS timeline-based animation with Scene.js.",
@@ -26,7 +26,6 @@
         "requestAnimationFrame",
         "motion"
     ],
-    
     "scripts": {
         "serve": "vue-cli-service serve demo",
         "build": "rm -rf dist && rollup -c && npm run declaration",
@@ -48,7 +47,7 @@
     ],
     "dependencies": {
         "@cfcs/vue3": "^0.0.12",
-        "scenejs": "~1.8.3"
+        "scenejs": "~1.8.4"
     },
     "devDependencies": {
         "@daybrush/builder": "^0.2.0",
