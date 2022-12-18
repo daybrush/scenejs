@@ -1,4 +1,5 @@
 import { ReactiveAdapter, ReactiveObject, computed, reactive, observe, Observer, isObserver } from "@cfcs/core";
+import { isFunction } from "@daybrush/utils";
 import Frame from "../Frame";
 import { isFrame } from "../utils";
 import { ANIMATOR_METHODS, getMethodNames, ReactiveMethods } from "./reactive";
@@ -12,7 +13,9 @@ export const FRAME_METHODS = [
  * @typedef
  * @memberof Reactive
  */
-export type FrameReactiveData = Observer<Frame> | Frame | string | Record<string, any>;
+export type FrameReactiveData
+    = Observer<Frame> | Frame | string | Record<string, any>
+    | (() => (Observer<Frame> | Frame | string | Record<string, any>));
 
 export type FrameReactiveMethods = ReactiveMethods<Frame>;
 
@@ -49,13 +52,14 @@ export const FRAME_REACTIVE: ReactiveAdapter<
 > = {
     methods: FRAME_METHODS as Array<keyof FrameReactiveMethods>,
     created(data: FrameReactiveData) {
+        const nextObject = isFunction(data) ? data() : data;
         const updateCount = observe(0);
         let frame: Observer<Frame>;
 
-        if (isObserver(data)) {
-            frame = data;
+        if (isObserver(nextObject)) {
+            frame = nextObject;
         } else {
-            frame = observe(isFrame(data) ? data : new Frame(data));
+            frame = observe(isFrame(nextObject) ? nextObject : new Frame(nextObject));
         }
 
         const cssText = computed(() => {
