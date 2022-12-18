@@ -1,4 +1,4 @@
-html, body, #root,.root, .App {
+html, body, #root, .root, .App {
   position: relative;
   height: 100%;
 }
@@ -115,4 +115,18 @@ html, body, #root,.root, .App {
 .star1 {
   top: 0;
   bottom: 20px;
+}
+.raindrop {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  border: 100px solid black;
+  border-radius: 50%;
+  box-sizing: border-box;
+  transform: scale(0);
 }

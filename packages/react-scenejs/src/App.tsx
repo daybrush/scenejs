@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import './App.css';
 import { useScene } from './react-scenejs/useScene';
-import { EASE_OUT, selectorAll } from 'scenejs';
-import { useNowFrame } from './react-scenejs';
+import { selectorAll } from 'scenejs';
 
 
 export default function App() {
@@ -18,13 +17,13 @@ export default function App() {
       )
     },
     {
+      selector: true,
       easing: "ease-in-out",
       iterationCount: "infinite"
     }
   );
 
   useEffect(() => {
-    scene.setSelector(true);
     scene.play();
 
     return () => {
