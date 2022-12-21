@@ -41,7 +41,7 @@ version: 0.0.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.10.1
+    @version 1.10.2
     */
     /**
     * get string "object"
@@ -458,6 +458,9 @@ version: 0.0.0
     console.log($("div", true)); // [div, div] elements
     */
     function $(selectors, multi) {
+      if (!doc) {
+        return multi ? [] : null;
+      }
       return multi ? doc.querySelectorAll(selectors) : doc.querySelector(selectors);
     }
     /**
