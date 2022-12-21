@@ -74,6 +74,7 @@ class Animator <
     Events extends {} = {},
 > extends EventEmitter<AnimatorEvents & Events> {
     public state: State;
+    protected _scheduleEnded = false;
     private timerId: number = 0;
 
     /**
@@ -277,31 +278,30 @@ class Animator <
         return this;
     }
     /**
-       * end animator
-       * @return {Animator} An instance itself.
-      */
+     * end animator
+     * @return {Animator} An instance itself.
+     */
     public end() {
         this.pause();
         /**
-             * This event is fired when animator is ended.
-             * @event Animator#ended
-             */
+         * This event is fired when animator is ended.
+         * @event Animator#ended
+         */
         this.trigger<"ended", AnimatorEvents["ended"]>(ENDED);
         return this;
     }
     /**
-      * set currentTime
-      * @param {Number|String} time - currentTime
-      * @return {Animator} An instance itself.
-      * @example
-
+     * set currentTime
+     * @param {Number|String} time - currentTime
+     * @return {Animator} An instance itself.
+     * @example
   animator.setTime("from"); // 0
   animator.setTime("to"); // 100%
   animator.setTime("50%");
   animator.setTime(10);
   animator.getTime() // 10
       */
-    public setTime(time: number | string, isTick?: boolean, isParent?: boolean) {
+    public setTime(time: number | string, isTick?: boolean, isParent?: boolean, exec?: () => void) {
         const activeDuration = this.getActiveDuration();
         const state = this.state;
         const prevTime = state[TICK_TIME];
@@ -317,16 +317,16 @@ class Animator <
         state[CURRENT_TIME] = currentTime;
         this.calculate();
 
-        if (isTick && !isParent) {
-            const tickTime = state[TICK_TIME];
+        const isSelfTick = isTick && !isParent;
+        const tickTime = state[TICK_TIME];
 
-            if (prevTime < delay && time >= 0) {
-                this.start(0);
-            }
-            if (tickTime < prevTime || this.isEnded()) {
-                this.end();
-                return this;
-            }
+        if (isSelfTick && prevTime < delay && time >= 0) {
+            this.start(0);
+        }
+        exec?.();
+        if (isSelfTick && (tickTime < prevTime || this.isEnded())) {
+            this.end();
+            return this;
         }
         if (this.isDelay()) {
             return this;

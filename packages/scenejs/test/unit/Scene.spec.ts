@@ -3,7 +3,6 @@ import { hasClass } from "@daybrush/utils";
 import { START_ANIMATION, PAUSE_ANIMATION } from "../../src/consts";
 import SceneItem from "../../src/SceneItem";
 import * as sinon from "sinon";
-/* eslint-disable */
 
 describe("Scene Test", () => {
     describe("test Scene initialize", () => {
@@ -156,8 +155,8 @@ describe("Scene Test", () => {
                     diplay: "block",
                 },
             }, {
-                    id: "item2",
-                }));
+                id: "item2",
+            }));
 
             // Then
             expect(scene.getDuration()).to.be.equals(5);
@@ -267,6 +266,47 @@ describe("Scene Test", () => {
             // When
             scene.setTime(0.25);
         });
+        it(`should check 'ended' event`, done => {
+            // Given
+            const scene = new Scene({
+                ".test": {
+                    0: {
+                        width: "100px",
+                        height: "100px",
+                    },
+                    1: {
+                        width: "200px",
+                        height: "200px",
+                    },
+                },
+                ".test2": {
+                    0: {
+                        width: "200px",
+                        height: "200px",
+                    },
+                    1: {
+                        width: "100px",
+                        height: "100px",
+                    },
+                },
+            });
+
+            scene.play();
+            let isLastAnimate = false;
+
+            // When
+            scene.on("animate", e => {
+                if (e.currentTime === 1) {
+                    isLastAnimate = true;
+                }
+            });
+
+            scene.on("ended", () => {
+                // Then
+                expect(isLastAnimate).to.be.equals(true);
+                done();
+            });
+        });
     });
     describe(`test body's element`, () => {
         beforeEach(() => {
@@ -319,8 +359,8 @@ describe("Scene Test", () => {
                     },
                 }),
             }, {
-                    selector: true,
-                }).playCSS();
+                selector: true,
+            }).playCSS();
             const item0 = scene.getItem<Scene>(".test").getItem<SceneItem>(0);
             const item1 = scene.getItem<Scene>(".test").getItem<SceneItem>(1);
 
@@ -410,8 +450,8 @@ describe("Scene Test", () => {
                     },
                 },
             }, {
-                    selector: true,
-                });
+                selector: true,
+            });
 
             // When
             scene.playCSS();
@@ -469,8 +509,8 @@ describe("Scene Test", () => {
                     },
                 },
             }, {
-                    selector: true,
-                });
+                selector: true,
+            });
 
             // when
             const css = scene.toCSS();

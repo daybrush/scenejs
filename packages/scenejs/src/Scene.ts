@@ -200,25 +200,24 @@ class Scene extends Animator<SceneOptions, SceneState, SceneEvents> {
         return flatSceneObject(frames, NAME_SEPARATOR);
     }
     public setTime(time: number | string, isTick?: boolean, isParent?: boolean, parentEasing?: EasingType) {
-        super.setTime(time, isTick, isParent);
+        super.setTime(time, isTick, isParent, () => {
+            const iterationTime = this.getIterationTime();
+            const easing = this.getEasing() || parentEasing;
 
-        const iterationTime = this.getIterationTime();
-        const easing = this.getEasing() || parentEasing;
+            this.forEach(item => {
+                item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, true, easing);
+            });
 
-        this.forEach(item => {
-            item.setTime(iterationTime * item.getPlaySpeed() - item.getDelay(), isTick, true, easing);
-        });
+            const frames = this.getCurrentFrames(false, parentEasing);
 
-        const frames = this.getCurrentFrames(false, parentEasing);
-
-        /**
-         * This event is fired when timeupdate and animate.
-         * @event Scene#animate
-         * @param {object} param The object of data to be sent to an event.
-         * @param {number} param.currentTime The total time that the animator is running.
-         * @param {number} param.time The iteration time during duration that the animator is running.
-         * @param {object} param.frames frames of that time.
-         * @example
+            /**
+             * This event is fired when timeupdate and animate.
+             * @event Scene#animate
+             * @param {object} param The object of data to be sent to an event.
+             * @param {number} param.currentTime The total time that the animator is running.
+             * @param {number} param.time The iteration time during duration that the animator is running.
+             * @param {object} param.frames frames of that time.
+             * @example
 const scene = new Scene({
     a: {
         0: {
@@ -241,13 +240,13 @@ const scene = new Scene({
     // {a: Frame, b: Frame}
     console.log(e.frames.a.get("opacity"));
 });
-             */
-        this.trigger("animate", {
-            frames,
-            currentTime: this.getTime(),
-            time: iterationTime,
+                 */
+            this.trigger("animate", {
+                frames,
+                currentTime: this.getTime(),
+                time: iterationTime,
+            });
         });
-
         return this;
     }
     /**

@@ -679,6 +679,35 @@ describe("SceneItem Test", () => {
 
             item!.setTime(1.5);
         });
+        it(`should check 'ended' event`, done => {
+            // Given
+            item = new SceneItem({
+                0: {
+                    a: 1,
+                    display: "block",
+                },
+                1: {
+                    display: "none",
+                    a: 2,
+                },
+            });
+
+            item.play();
+            let isLastAnimate = false;
+
+            // When
+            item.on("animate", e => {
+                if (e.currentTime === 1) {
+                    isLastAnimate = true;
+                }
+            });
+
+            item.on("ended", () => {
+                // Then
+                expect(isLastAnimate).to.be.equals(true);
+                done();
+            });
+        });
     });
     describe("test frame for CSS", () => {
         let element: HTMLElement | null = null;

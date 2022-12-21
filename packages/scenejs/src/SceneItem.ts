@@ -610,27 +610,27 @@ item.setElement(document.querySelectorAll(".class"));
         return this;
     }
     public setTime(time: number | string, isTick?: boolean, isParent?: boolean, parentEasing?: EasingType) {
-        super.setTime(time, isTick, isParent);
+        super.setTime(time, isTick, isParent, () => {
+            const iterationTime = this.getIterationTime();
+            const easing = this.getEasing() || parentEasing;
+            const frame = this.getNowFrame(iterationTime, easing);
+            const currentTime = this.getTime();
 
-        const iterationTime = this.getIterationTime();
-        const easing = this.getEasing() || parentEasing;
-        const frame = this.getNowFrame(iterationTime, easing);
-        const currentTime = this.getTime();
-
-        this.temp = frame;
-        /**
-         * This event is fired when timeupdate and animate.
-         * @event SceneItem#animate
-         * @param {Number} param.currentTime The total time that the animator is running.
-         * @param {Number} param.time The iteration time during duration that the animator is running.
-         * @param {Frame} param.frame frame of that time.
-         */
-        this.trigger("animate", {
-            frame,
-            currentTime,
-            time: iterationTime,
+            this.temp = frame;
+            /**
+             * This event is fired when timeupdate and animate.
+             * @event SceneItem#animate
+             * @param {Number} param.currentTime The total time that the animator is running.
+             * @param {Number} param.time The iteration time during duration that the animator is running.
+             * @param {Frame} param.frame frame of that time.
+             */
+            this.trigger("animate", {
+                frame,
+                currentTime,
+                time: iterationTime,
+            });
+            this.targetFunc && this.targetFunc(frame);
         });
-        this.targetFunc && this.targetFunc(frame);
         return this;
     }
     /**
