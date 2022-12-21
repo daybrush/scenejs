@@ -20,5 +20,6 @@ jobs:
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v1.1.2
         with:
+          base-path: ./packages/scenejs
           path-to-lcov: ./packages/scenejs/coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
