@@ -1,7 +1,21 @@
 
 <p align="middle"><img src="https://daybrush.com/scenejs/images/clapperboard.png" width="250"/></p>
 <h2 align="middle">Scene.js</h2>
-<p align="middle"><a href="https://badge.fury.io/js/scenejs" target="_blank"><img src="https://badge.fury.io/js/scenejs.svg" alt="npm version" height="18"/></a> <a href="https://travis-ci.org/daybrush/scenejs"><img src="https://travis-ci.org/daybrush/scenejs.svg?branch=master"/></a> <a href="https://coveralls.io/github/daybrush/scenejs?branch=master"><img src="https://coveralls.io/repos/github/daybrush/scenejs/badge.svg?branch=master"/></a> <img src="https://img.shields.io/badge/语言-typescript-blue.svg"/> <a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/执照-MIT-brightgreen.svg"/></a></p>
+<p align="middle">
+<a href="https://www.npmjs.com/package/scenejs" target="_blank"><img src="https://img.shields.io/npm/v/scenejs.svg?style=flat-square&color=007acc&label=version" alt="npm version" /></a>
+<img src="https://img.shields.io/badge/language-typescript-blue.svg?style=flat-square"/>
+<a href="https://github.com/daybrush/scenejs/actions" target="_blank"><img alt="Github actions" src="https://img.shields.io/github/actions/workflow/status/daybrush/scenejs/test.yml?branch=master&style=flat-square" /></a>
+<a href="https://coveralls.io/github/daybrush/scenejs?branch=master&style=flat-square" target="_blank"><img alt="Coveralls github" src="https://img.shields.io/coveralls/github/daybrush/scenejs.svg?style=flat-square&label=%E2%9C%85%20coverage" /></a>
+<a href="https://github.com/daybrush/scenejs/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/daybrush/scenejs.svg?style=flat-square&label=license&color=08CE5D"/></a>
+<a href="https://github.com/daybrush/scenejs/tree/master/packages/react-scenejs" target="_blank"><img alt="React" src="https://img.shields.io/static/v1.svg?label=&message=React&style=flat-square&color=61daeb"></a> 
+<a href="https://github.com/daybrush/scenejs/tree/master/packages/vue2-scenejs" target="_blank"><img
+    alt="Vue 2"
+    src="https://img.shields.io/static/v1.svg?label=&message=Vue2&style=flat-square&color=3fb984"></a>
+<a href="https://github.com/daybrush/scenejs/tree/master/packages/vue-scenejs" target="_blank"><img
+    alt="Vue 3"
+    src="https://img.shields.io/static/v1.svg?label=&message=Vue%203&style=flat-square&color=3fb984"></a>
+ <a href="https://github.com/daybrush/scenejs/tree/master/packages/svelte-scenejs" target="_blank"><img alt="Svelte" src="https://img.shields.io/static/v1.svg?label=&message=Svelte&style=flat-square&color=C82B38"></a>
+</p>
 
 
 <p align="middle">🎬 Scene.js是 JavaScript 和 CSS 的基于时间轴的动画库。</p>
