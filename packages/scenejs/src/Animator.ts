@@ -74,7 +74,6 @@ class Animator <
     Events extends {} = {},
 > extends EventEmitter<AnimatorEvents & Events> {
     public state: State;
-    protected _scheduleEnded = false;
     private timerId: number = 0;
 
     /**
