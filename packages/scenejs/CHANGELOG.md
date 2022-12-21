@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.5](https://github.com/daybrush/scenejs/compare/scenejs@1.8.3...scenejs@1.8.5) (2022-12-21)
+
+
+### :rocket: New Features
+
+* support function type ([ccf09b7](https://github.com/daybrush/scenejs/commit/ccf09b7584472a0ca26316b2e5a45d21a90a39cd))
+
+
+### :bug: Bug Fix
+
+* fix ended event timing ([d2212a8](https://github.com/daybrush/scenejs/commit/d2212a888393e3b4d35ea864c1538f5f341b02d4))
+* update modules ([30191b8](https://github.com/daybrush/scenejs/commit/30191b8e7c195de355d0c01fa9110d6fe0b3df3b))
+
+
+### :mega: Other
+
+* fix github build badge ([1fbc785](https://github.com/daybrush/scenejs/commit/1fbc785104cb24bf679ba5697c006b02b457dea2))
+* fix lint ([0fc30b1](https://github.com/daybrush/scenejs/commit/0fc30b1710e6cf8a82a4893e2fed30f1b3aa2c22))
+* publish packages ([1f4a4f3](https://github.com/daybrush/scenejs/commit/1f4a4f3719f1789fb91c7e744f4bf8261751944f))
+* publish packages ([3b63fde](https://github.com/daybrush/scenejs/commit/3b63fde8232cdc6454a8d8fe1a42b6317d614036))
+
+
+
 ## [1.8.3](https://github.com/daybrush/scenejs/compare/scenejs@1.7.0...scenejs@1.8.3) (2022-12-15)
 
 

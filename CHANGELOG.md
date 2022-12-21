@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.5](https://github.com/daybrush/scenejs/compare/1.8.3...1.8.5) (2022-12-21)
+### :sparkles: Packages
+* `react-scenejs` 2.0.0-beta.5
+* `scenejs` 1.8.5
+* `svelte-scenejs` 1.0.0-beta.3
+* `vue-scenejs` 2.0.0-beta.2
+* `vue2-scenejs` 1.0.0-beta.2
+
+
+### :rocket: New Features
+
+* `vue2-scenejs`, `vue-scenejs`
+    * Support Vue 2 & Vue 3 frameworks ([a5a0665](https://github.com/daybrush/scenejs/commit/a5a066535781d7f690ffb904abf41f6256ebee62))
+* `scenejs`
+    * support function type ([ccf09b7](https://github.com/daybrush/scenejs/commit/ccf09b7584472a0ca26316b2e5a45d21a90a39cd))
+
+
+### :bug: Bug Fix
+
+* All
+    * update modules ([30191b8](https://github.com/daybrush/scenejs/commit/30191b8e7c195de355d0c01fa9110d6fe0b3df3b))
+* `svelte-scenejs`
+    * fix docs ([67546f5](https://github.com/daybrush/scenejs/commit/67546f5e6e06b5f9f4c626657f42038802f4b2b6))
+* `scenejs`
+    * fix ended event timing ([d2212a8](https://github.com/daybrush/scenejs/commit/d2212a888393e3b4d35ea864c1538f5f341b02d4))
+
+
+### :memo: Documentation
+
+* fix doc source paths ([e52bbd5](https://github.com/daybrush/scenejs/commit/e52bbd5746fe3bffa301a517a349439c2ab1737e))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([1f4a4f3](https://github.com/daybrush/scenejs/commit/1f4a4f3719f1789fb91c7e744f4bf8261751944f))
+    * publish packages ([3b63fde](https://github.com/daybrush/scenejs/commit/3b63fde8232cdc6454a8d8fe1a42b6317d614036))
+* `scenejs`
+    * fix github build badge ([1fbc785](https://github.com/daybrush/scenejs/commit/1fbc785104cb24bf679ba5697c006b02b457dea2))
+    * fix lint ([0fc30b1](https://github.com/daybrush/scenejs/commit/0fc30b1710e6cf8a82a4893e2fed30f1b3aa2c22))
+* Other
+    * fix github workflow ([87367bb](https://github.com/daybrush/scenejs/commit/87367bb6e35c59ced3fab2360ac253e87728329c))
+
+
+
 ## [1.8.3](https://github.com/daybrush/scenejs/compare/1.7.0...1.8.3) (2022-12-15)
 ### :sparkles: Packages
 * `react-scenejs` 2.0.0-beta.3
