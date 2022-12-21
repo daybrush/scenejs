@@ -31,7 +31,7 @@
     "dependencies": {
         "@daybrush/page": "^0.2.0",
         "@daybrush/utils": "^1.10.2",
-        "scenejs": "~1.8.4",
+        "scenejs": "~1.8.5",
         "shape-svg": "^0.3.1"
     },
     "devDependencies": {
