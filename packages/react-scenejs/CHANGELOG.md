@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-beta.6](https://github.com/daybrush/scenejs/compare/react-scenejs@2.0.0-beta.5...react-scenejs@2.0.0-beta.6) (2022-12-26)
+
+
+### :mega: Other
+
+* publish packages ([843ebf6](https://github.com/daybrush/scenejs/commit/843ebf6d483549c130db47499d69dd4825118798))
+
+
+
 ## [2.0.0-beta.5](https://github.com/daybrush/scenejs/compare/react-scenejs@2.0.0-beta.3...react-scenejs@2.0.0-beta.5) (2022-12-21)
 
 

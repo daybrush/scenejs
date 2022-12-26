@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.0](https://github.com/daybrush/scenejs/compare/1.8.5...1.9.0) (2022-12-26)
+### :sparkles: Packages
+* `react-scenejs` 2.0.0-beta.6
+* `scenejs` 1.9.0
+* `svelte-scenejs` 1.0.0-beta.4
+* `vue-scenejs` 2.0.0-beta.3
+* `vue2-scenejs` 1.0.0-beta.3
+
+
+### :rocket: New Features
+
+* `scenejs`
+    * add rgbaToHexa ([cb71d62](https://github.com/daybrush/scenejs/commit/cb71d629d44c9f28ff4befcc11bf8efba7549cf6))
+
+
+### :bug: Bug Fix
+
+* `scenejs`
+    * fix commonjs type ([54f971a](https://github.com/daybrush/scenejs/commit/54f971a1877547940c8b1db27865d2f31151caa8))
+    * fix play method's toTime param ([6918b58](https://github.com/daybrush/scenejs/commit/6918b58ceae42191a447b259ab739d296a8448a1))
+
+
+### :mega: Other
+
+* `vue2-scenejs`, `vue-scenejs`, `svelte-scenejs`, `react-scenejs`
+    * publish packages ([843ebf6](https://github.com/daybrush/scenejs/commit/843ebf6d483549c130db47499d69dd4825118798))
+
+
+
 ## [1.8.5](https://github.com/daybrush/scenejs/compare/1.8.3...1.8.5) (2022-12-21)
 ### :sparkles: Packages
 * `react-scenejs` 2.0.0-beta.5

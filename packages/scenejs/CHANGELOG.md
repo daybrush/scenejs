@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.0](https://github.com/daybrush/scenejs/compare/scenejs@1.8.5...scenejs@1.9.0) (2022-12-26)
+
+
+### :rocket: New Features
+
+* add rgbaToHexa ([cb71d62](https://github.com/daybrush/scenejs/commit/cb71d629d44c9f28ff4befcc11bf8efba7549cf6))
+
+
+### :bug: Bug Fix
+
+* fix commonjs type ([54f971a](https://github.com/daybrush/scenejs/commit/54f971a1877547940c8b1db27865d2f31151caa8))
+* fix play method's toTime param ([6918b58](https://github.com/daybrush/scenejs/commit/6918b58ceae42191a447b259ab739d296a8448a1))
+
+
+
 ## [1.8.5](https://github.com/daybrush/scenejs/compare/scenejs@1.8.3...scenejs@1.8.5) (2022-12-21)
 
 

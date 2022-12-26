@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.0-beta.4](https://github.com/daybrush/scenejs/blob/master/packages/svelte-scenejs/compare/svelte-scenejs@1.0.0-beta.3...svelte-scenejs@1.0.0-beta.4) (2022-12-26)
+
+
+### :mega: Other
+
+* publish packages ([843ebf6](https://github.com/daybrush/scenejs/blob/master/packages/svelte-scenejs/commit/843ebf6d483549c130db47499d69dd4825118798))
+
+
+
 ## [1.0.0-beta.3](https://github.com/daybrush/scenejs/blob/master/packages/svelte-scenejs/compare/svelte-scenejs@1.0.0-beta.1...svelte-scenejs@1.0.0-beta.3) (2022-12-21)
 
 
