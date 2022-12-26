@@ -63,6 +63,7 @@ describe("color Test", () => {
             const rgba6 = rgbaToHexa(`rgba(179, 77, 145, 1)`);
             const rgba7 = rgbaToHexa(`rgba(179, 77, 145, 0.4)`);
             const rgba8 = rgbaToHexa(`rgba(179, 77, 145, 1)`);
+            const rgba9 = rgbaToHexa(`transparent`);
 
             // Then
             expect(rgba1).to.be.equals("#b34d4dff");
@@ -73,6 +74,7 @@ describe("color Test", () => {
             expect(rgba6).to.be.equals("#b34d91ff");
             expect(rgba7).to.be.equals("#b34d9166");
             expect(rgba8).to.be.equals("#b34d91ff");
+            expect(rgba9).to.be.equals("");
         });
     });
 });

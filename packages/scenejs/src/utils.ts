@@ -313,7 +313,7 @@ export function rgbaToHexa(rgba: string) {
 export function rgbaToHexWithOpacity(rgba: string) {
     const rgbaInfo = splitBracket(rgba);
 
-    if (rgbaInfo.prefix.indexOf("rgb") !== 0) {
+    if ((rgbaInfo.prefix || "").indexOf("rgb") !== 0) {
         return {
             hex: "",
             opacity: 1,
