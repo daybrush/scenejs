@@ -12,6 +12,13 @@ export function group(arr: any[]) {
     return result;
 }
 
+export function waitFor(time: number) {
+    return new Promise<void>(resolve => {
+        setTimeout(() => {
+            resolve();
+        }, time);
+    });
+}
 export function waitEvent<T extends Animator>(et: T, name: keyof AnimatorEvents | (T extends Animator<any, any, infer Events> ? keyof Events : never)) {
     return new Promise(resolve => {
         et.once(name, e => {

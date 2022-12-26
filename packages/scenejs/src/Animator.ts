@@ -458,14 +458,17 @@ class Animator <
         const currentTime = tickTime + Math.min(1000, now - prevTime) / 1000 * playSpeed;
 
         state[PREV_TIME] = now;
-        this.setTime(currentTime - delay, true);
-        if (to && to * 1000 < now) {
+
+        if (to && to >= currentTime) {
+            this.setTime(to - delay, true);
             this.pause();
+        } else {
+            this.setTime(currentTime - delay, true);
         }
+
         if (state[PLAY_STATE] === PAUSED) {
             return;
         }
-
         this.timerId = requestAnimationFrame((time: number) => {
             this.tick(time, to);
         });

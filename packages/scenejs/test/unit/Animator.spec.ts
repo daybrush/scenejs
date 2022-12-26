@@ -1,6 +1,7 @@
 import * as sinon from "sinon";
 import Animator, { isDirectionReverse } from "../../src/Animator";
 import { TICK_TIME } from "../../src/consts";
+import { waitFor } from "./TestHelper";
 
 describe("Animator Test", () => {
     describe("test Animator initialize", () => {
@@ -270,6 +271,23 @@ describe("Animator Test", () => {
             expect(tick1).to.be.equals(4);
             expect(tick2).to.be.equals(4);
             expect(tick3).to.be.equals(4);
+        });
+        it("should check play with toTime", async () => {
+            // Given
+            const animator = new Animator({
+                fillMode: "forwards",
+                direction: "normal",
+                duration: 5,
+            });
+
+            // When
+            animator.play(0.1);
+
+            await waitFor(100);
+
+            // Then
+            expect(animator.getTime()).to.be.equals(0.1);
+            expect(animator.isPaused()).to.be.equals(true);
         });
         it("should check paused", done => {
             const animator = new Animator({
