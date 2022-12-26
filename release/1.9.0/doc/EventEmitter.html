@@ -1,0 +1,2727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>EventEmitter - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <link type="text/css" rel="stylesheet" href="styles/daybrush.css">
+    <link type="text/css" rel="stylesheet" href="styles/custom.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="description" content="EventEmitter - Documentation"/>
+
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h2 class="custom"><a href="https://github.com/daybrush/scenejs" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h2 class="custom"><a href="https://daybrush.com/scenejs/features.html" target="_blank" class="menu-item" id="features" >Features</a></h2><div class="search"><div class="input-area"><input type="text"/></div><button></button></div><ul class="classes"><li file="scene" class="parent"><a href="Scene.html">Scene</a><h4><a href="Scene.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="Scene.html#.isRole">isRole</a></li></ul><h4><a href="Scene.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="Scene.html#.EVENTS">EVENTS</a></li><li data-type='member'><a href="Scene.html#.OPTIONS">OPTIONS</a></li><li data-type='member'><a href="Scene.html#.VERSION">VERSION</a></li></ul><h4><a href="Scene.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="Scene.html#clear">clear</a></li><li data-type='method'><a href="Scene.html#emit">emit</a></li><li data-type='method'><a href="Scene.html#end">end</a></li><li data-type='method'><a href="Scene.html#exportCSS">exportCSS</a></li><li data-type='method'><a href="Scene.html#finish">finish</a></li><li data-type='method'><a href="Scene.html#forEach">forEach</a></li><li data-type='method'><a href="Scene.html#getActiveDuration">getActiveDuration</a></li><li data-type='method'><a href="Scene.html#getCurrentFlattedFrames">getCurrentFlattedFrames</a></li><li data-type='method'><a href="Scene.html#getCurrentFrames">getCurrentFrames</a></li><li data-type='method'><a href="Scene.html#getDelay">getDelay</a></li><li data-type='method'><a href="Scene.html#getDirection">getDirection</a></li><li data-type='method'><a href="Scene.html#getDuration">getDuration</a></li><li data-type='method'><a href="Scene.html#getEasing">getEasing</a></li><li data-type='method'><a href="Scene.html#getEasingName">getEasingName</a></li><li data-type='method'><a href="Scene.html#getFillMode">getFillMode</a></li><li data-type='method'><a href="Scene.html#getId">getId</a></li><li data-type='method'><a href="Scene.html#getItem">getItem</a></li><li data-type='method'><a href="Scene.html#getIterationCount">getIterationCount</a></li><li data-type='method'><a href="Scene.html#getIterationTime">getIterationTime</a></li><li data-type='method'><a href="Scene.html#getOrders">getOrders</a></li><li data-type='method'><a href="Scene.html#getPlaySpeed">getPlaySpeed</a></li><li data-type='method'><a href="Scene.html#getPlayState">getPlayState</a></li><li data-type='method'><a href="Scene.html#getTime">getTime</a></li><li data-type='method'><a href="Scene.html#getTotalDuration">getTotalDuration</a></li><li data-type='method'><a href="Scene.html#isDelay">isDelay</a></li><li data-type='method'><a href="Scene.html#isEnded">isEnded</a></li><li data-type='method'><a href="Scene.html#isPaused">isPaused</a></li><li data-type='method'><a href="Scene.html#newItem">newItem</a></li><li data-type='method'><a href="Scene.html#off">off</a></li><li data-type='method'><a href="Scene.html#on">on</a></li><li data-type='method'><a href="Scene.html#once">once</a></li><li data-type='method'><a href="Scene.html#pause">pause</a></li><li data-type='method'><a href="Scene.html#play">play</a></li><li data-type='method'><a href="Scene.html#playCSS">playCSS</a></li><li data-type='method'><a href="Scene.html#removeItem">removeItem</a></li><li data-type='method'><a href="Scene.html#set">set</a></li><li data-type='method'><a href="Scene.html#setDelay">setDelay</a></li><li data-type='method'><a href="Scene.html#setDirection">setDirection</a></li><li data-type='method'><a href="Scene.html#setDuration">setDuration</a></li><li data-type='method'><a href="Scene.html#setEasing">setEasing</a></li><li data-type='method'><a href="Scene.html#setFillMode">setFillMode</a></li><li data-type='method'><a href="Scene.html#setId">setId</a></li><li data-type='method'><a href="Scene.html#setItem">setItem</a></li><li data-type='method'><a href="Scene.html#setIterationCount">setIterationCount</a></li><li data-type='method'><a href="Scene.html#setOptions">setOptions</a></li><li data-type='method'><a href="Scene.html#setOrders">setOrders</a></li><li data-type='method'><a href="Scene.html#setPlaySpeed">setPlaySpeed</a></li><li data-type='method'><a href="Scene.html#setPlayState">setPlayState</a></li><li data-type='method'><a href="Scene.html#setTime">setTime</a></li><li data-type='method'><a href="Scene.html#trigger">trigger</a></li></ul><h4><a href="Scene.html#events">Events</a></h4><ul class='events'><li data-type='event'><a href="Scene.html#event:animate">animate</a></li><li data-type='event'><a href="Scene.html#event:ended">ended</a></li><li data-type='event'><a href="Scene.html#event:iteration">iteration</a></li><li data-type='event'><a href="Scene.html#event:paused">paused</a></li><li data-type='event'><a href="Scene.html#event:play">play</a></li><li data-type='event'><a href="Scene.html#event:timeupdate">timeupdate</a></li></ul></li><li file="sceneitem" class="parent"><a href="SceneItem.html">SceneItem</a><h4><a href="SceneItem.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="SceneItem.html#append">append</a></li><li data-type='method'><a href="SceneItem.html#clear">clear</a></li><li data-type='method'><a href="SceneItem.html#clone">clone</a></li><li data-type='method'><a href="SceneItem.html#emit">emit</a></li><li data-type='method'><a href="SceneItem.html#end">end</a></li><li data-type='method'><a href="SceneItem.html#exportCSS">exportCSS</a></li><li data-type='method'><a href="SceneItem.html#finish">finish</a></li><li data-type='method'><a href="SceneItem.html#forEach">forEach</a></li><li data-type='method'><a href="SceneItem.html#get">get</a></li><li data-type='method'><a href="SceneItem.html#getActiveDuration">getActiveDuration</a></li><li data-type='method'><a href="SceneItem.html#getComputedFrame">getComputedFrame</a></li><li data-type='method'><a href="SceneItem.html#getCurrentFrame">getCurrentFrame</a></li><li data-type='method'><a href="SceneItem.html#getDelay">getDelay</a></li><li data-type='method'><a href="SceneItem.html#getDirection">getDirection</a></li><li data-type='method'><a href="SceneItem.html#getDuration">getDuration</a></li><li data-type='method'><a href="SceneItem.html#getEasing">getEasing</a></li><li data-type='method'><a href="SceneItem.html#getEasingName">getEasingName</a></li><li data-type='method'><a href="SceneItem.html#getElements">getElements</a></li><li data-type='method'><a href="SceneItem.html#getFillMode">getFillMode</a></li><li data-type='method'><a href="SceneItem.html#getFrame">getFrame</a></li><li data-type='method'><a href="SceneItem.html#getId">getId</a></li><li data-type='method'><a href="SceneItem.html#getIterationCount">getIterationCount</a></li><li data-type='method'><a href="SceneItem.html#getIterationTime">getIterationTime</a></li><li data-type='method'><a href="SceneItem.html#getNowFrame">getNowFrame</a></li><li data-type='method'><a href="SceneItem.html#getOrderObject">getOrderObject</a></li><li data-type='method'><a href="SceneItem.html#getOrders">getOrders</a></li><li data-type='method'><a href="SceneItem.html#getPlaySpeed">getPlaySpeed</a></li><li data-type='method'><a href="SceneItem.html#getPlayState">getPlayState</a></li><li data-type='method'><a href="SceneItem.html#getTime">getTime</a></li><li data-type='method'><a href="SceneItem.html#getTotalDuration">getTotalDuration</a></li><li data-type='method'><a href="SceneItem.html#hasFrame">hasFrame</a></li><li data-type='method'><a href="SceneItem.html#hasName">hasName</a></li><li data-type='method'><a href="SceneItem.html#isDelay">isDelay</a></li><li data-type='method'><a href="SceneItem.html#isEnded">isEnded</a></li><li data-type='method'><a href="SceneItem.html#isPaused">isPaused</a></li><li data-type='method'><a href="SceneItem.html#mergeFrame">mergeFrame</a></li><li data-type='method'><a href="SceneItem.html#newFrame">newFrame</a></li><li data-type='method'><a href="SceneItem.html#off">off</a></li><li data-type='method'><a href="SceneItem.html#on">on</a></li><li data-type='method'><a href="SceneItem.html#once">once</a></li><li data-type='method'><a href="SceneItem.html#pause">pause</a></li><li data-type='method'><a href="SceneItem.html#play">play</a></li><li data-type='method'><a href="SceneItem.html#playCSS">playCSS</a></li><li data-type='method'><a href="SceneItem.html#prepend">prepend</a></li><li data-type='method'><a href="SceneItem.html#remove">remove</a></li><li data-type='method'><a href="SceneItem.html#removeFrame">removeFrame</a></li><li data-type='method'><a href="SceneItem.html#set">set</a></li><li data-type='method'><a href="SceneItem.html#setCSS">setCSS</a></li><li data-type='method'><a href="SceneItem.html#setDelay">setDelay</a></li><li data-type='method'><a href="SceneItem.html#setDirection">setDirection</a></li><li data-type='method'><a href="SceneItem.html#setDuration">setDuration</a></li><li data-type='method'><a href="SceneItem.html#setEasing">setEasing</a></li><li data-type='method'><a href="SceneItem.html#setElement">setElement</a></li><li data-type='method'><a href="SceneItem.html#setElements">setElements</a></li><li data-type='method'><a href="SceneItem.html#setFillMode">setFillMode</a></li><li data-type='method'><a href="SceneItem.html#setFrame">setFrame</a></li><li data-type='method'><a href="SceneItem.html#setId">setId</a></li><li data-type='method'><a href="SceneItem.html#setIterationCount">setIterationCount</a></li><li data-type='method'><a href="SceneItem.html#setOptions">setOptions</a></li><li data-type='method'><a href="SceneItem.html#setOrderObject">setOrderObject</a></li><li data-type='method'><a href="SceneItem.html#setOrders">setOrders</a></li><li data-type='method'><a href="SceneItem.html#setPlaySpeed">setPlaySpeed</a></li><li data-type='method'><a href="SceneItem.html#setPlayState">setPlayState</a></li><li data-type='method'><a href="SceneItem.html#setSelector">setSelector</a></li><li data-type='method'><a href="SceneItem.html#setTime">setTime</a></li><li data-type='method'><a href="SceneItem.html#size">size</a></li><li data-type='method'><a href="SceneItem.html#toObject">toObject</a></li><li data-type='method'><a href="SceneItem.html#trigger">trigger</a></li><li data-type='method'><a href="SceneItem.html#unshift">unshift</a></li><li data-type='method'><a href="SceneItem.html#update">update</a></li></ul><h4><a href="SceneItem.html#events">Events</a></h4><ul class='events'><li data-type='event'><a href="SceneItem.html#event:animate">animate</a></li><li data-type='event'><a href="SceneItem.html#event:ended">ended</a></li><li data-type='event'><a href="SceneItem.html#event:iteration">iteration</a></li><li data-type='event'><a href="SceneItem.html#event:paused">paused</a></li><li data-type='event'><a href="SceneItem.html#event:play">play</a></li><li data-type='event'><a href="SceneItem.html#event:timeupdate">timeupdate</a></li></ul></li><li file="propertyobject" class="parent"><a href="PropertyObject.html">PropertyObject</a><h4><a href="PropertyObject.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="PropertyObject.html#clone">clone</a></li><li data-type='method'><a href="PropertyObject.html#forEach">forEach</a></li><li data-type='method'><a href="PropertyObject.html#get">get</a></li><li data-type='method'><a href="PropertyObject.html#join">join</a></li><li data-type='method'><a href="PropertyObject.html#set">set</a></li><li data-type='method'><a href="PropertyObject.html#size">size</a></li><li data-type='method'><a href="PropertyObject.html#toValue">toValue</a></li></ul></li><li file="frame" class="parent"><a href="Frame.html">Frame</a><h4><a href="Frame.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="Frame.html#clear">clear</a></li><li data-type='method'><a href="Frame.html#clone">clone</a></li><li data-type='method'><a href="Frame.html#emit">emit</a></li><li data-type='method'><a href="Frame.html#get">get</a></li><li data-type='method'><a href="Frame.html#getKeys">getKeys</a></li><li data-type='method'><a href="Frame.html#getNames">getNames</a></li><li data-type='method'><a href="Frame.html#getOrderObject">getOrderObject</a></li><li data-type='method'><a href="Frame.html#getOrders">getOrders</a></li><li data-type='method'><a href="Frame.html#gets">gets</a></li><li data-type='method'><a href="Frame.html#has">has</a></li><li data-type='method'><a href="Frame.html#merge">merge</a></li><li data-type='method'><a href="Frame.html#off">off</a></li><li data-type='method'><a href="Frame.html#on">on</a></li><li data-type='method'><a href="Frame.html#once">once</a></li><li data-type='method'><a href="Frame.html#remove">remove</a></li><li data-type='method'><a href="Frame.html#set">set</a></li><li data-type='method'><a href="Frame.html#setOrderObject">setOrderObject</a></li><li data-type='method'><a href="Frame.html#setOrders">setOrders</a></li><li data-type='method'><a href="Frame.html#toCSS">toCSS</a></li><li data-type='method'><a href="Frame.html#toCSSObject">toCSSObject</a></li><li data-type='method'><a href="Frame.html#toCSSText">toCSSText</a></li><li data-type='method'><a href="Frame.html#trigger">trigger</a></li></ul></li><li file="eventemitter" class="parent"><a href="EventEmitter.html">EventEmitter</a><h4><a href="EventEmitter.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="EventEmitter.html#emit">emit</a></li><li data-type='method'><a href="EventEmitter.html#off">off</a></li><li data-type='method'><a href="EventEmitter.html#on">on</a></li><li data-type='method'><a href="EventEmitter.html#once">once</a></li><li data-type='method'><a href="EventEmitter.html#trigger">trigger</a></li><li data-type='method'><a href="EventEmitter.html#trigger">trigger</a></li></ul><h4><a href="EventEmitter.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typddef'><a href="EventEmitter.html#.EmitterParam">EmitterParam</a></li><li data-type='typddef'><a href="EventEmitter.html#.EventHash">EventHash</a></li><li data-type='typddef'><a href="EventEmitter.html#.EventInfo">EventInfo</a></li><li data-type='typddef'><a href="EventEmitter.html#.EventListener">EventListener</a></li><li data-type='typddef'><a href="EventEmitter.html#.EventOptions">EventOptions</a></li><li data-type='typddef'><a href="EventEmitter.html#.OnEvent">OnEvent</a></li><li data-type='typddef'><a href="EventEmitter.html#.TargetParam">TargetParam</a></li></ul></li><li file="animator" class="parent"><a href="Animator.html">Animator</a><h4><a href="Animator.html#methods">Methods</a></h4><ul class='methods'><li data-type='method'><a href="Animator.html#emit">emit</a></li><li data-type='method'><a href="Animator.html#end">end</a></li><li data-type='method'><a href="Animator.html#finish">finish</a></li><li data-type='method'><a href="Animator.html#getActiveDuration">getActiveDuration</a></li><li data-type='method'><a href="Animator.html#getDelay">getDelay</a></li><li data-type='method'><a href="Animator.html#getDirection">getDirection</a></li><li data-type='method'><a href="Animator.html#getDuration">getDuration</a></li><li data-type='method'><a href="Animator.html#getEasing">getEasing</a></li><li data-type='method'><a href="Animator.html#getEasingName">getEasingName</a></li><li data-type='method'><a href="Animator.html#getFillMode">getFillMode</a></li><li data-type='method'><a href="Animator.html#getId">getId</a></li><li data-type='method'><a href="Animator.html#getIterationCount">getIterationCount</a></li><li data-type='method'><a href="Animator.html#getIterationTime">getIterationTime</a></li><li data-type='method'><a href="Animator.html#getPlaySpeed">getPlaySpeed</a></li><li data-type='method'><a href="Animator.html#getPlayState">getPlayState</a></li><li data-type='method'><a href="Animator.html#getTime">getTime</a></li><li data-type='method'><a href="Animator.html#getTotalDuration">getTotalDuration</a></li><li data-type='method'><a href="Animator.html#isDelay">isDelay</a></li><li data-type='method'><a href="Animator.html#isEnded">isEnded</a></li><li data-type='method'><a href="Animator.html#isPaused">isPaused</a></li><li data-type='method'><a href="Animator.html#off">off</a></li><li data-type='method'><a href="Animator.html#on">on</a></li><li data-type='method'><a href="Animator.html#once">once</a></li><li data-type='method'><a href="Animator.html#pause">pause</a></li><li data-type='method'><a href="Animator.html#play">play</a></li><li data-type='method'><a href="Animator.html#setDelay">setDelay</a></li><li data-type='method'><a href="Animator.html#setDirection">setDirection</a></li><li data-type='method'><a href="Animator.html#setDuration">setDuration</a></li><li data-type='method'><a href="Animator.html#setEasing">setEasing</a></li><li data-type='method'><a href="Animator.html#setFillMode">setFillMode</a></li><li data-type='method'><a href="Animator.html#setId">setId</a></li><li data-type='method'><a href="Animator.html#setIterationCount">setIterationCount</a></li><li data-type='method'><a href="Animator.html#setOptions">setOptions</a></li><li data-type='method'><a href="Animator.html#setPlaySpeed">setPlaySpeed</a></li><li data-type='method'><a href="Animator.html#setPlayState">setPlayState</a></li><li data-type='method'><a href="Animator.html#setTime">setTime</a></li><li data-type='method'><a href="Animator.html#trigger">trigger</a></li></ul><h4><a href="Animator.html#events">Events</a></h4><ul class='events'><li data-type='event'><a href="Animator.html#event:ended">ended</a></li><li data-type='event'><a href="Animator.html#event:iteration">iteration</a></li><li data-type='event'><a href="Animator.html#event:paused">paused</a></li><li data-type='event'><a href="Animator.html#event:play">play</a></li><li data-type='event'><a href="Animator.html#event:timeupdate">timeupdate</a></li></ul></li></ul><ul class="namespaces"><li file="vue3scene" class="parent"><a href="Vue3Scene.html">Vue3Scene</a><h4><a href="Vue3Scene.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="Vue3Scene.html#.useFrame">useFrame</a></li><li data-type='method'><a href="Vue3Scene.html#.useNowFrame">useNowFrame</a></li><li data-type='method'><a href="Vue3Scene.html#.useScene">useScene</a></li><li data-type='method'><a href="Vue3Scene.html#.useSceneItem">useSceneItem</a></li></ul><h4><a href="Vue3Scene.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typddef'><a href="Vue3Scene.html#.VueFrameResult">VueFrameResult</a></li><li data-type='typddef'><a href="Vue3Scene.html#.VueNowFrameResult">VueNowFrameResult</a></li><li data-type='typddef'><a href="Vue3Scene.html#.VueSceneItemResult">VueSceneItemResult</a></li><li data-type='typddef'><a href="Vue3Scene.html#.VueSceneResult">VueSceneResult</a></li></ul></li><li file="vue2scene" class="parent"><a href="Vue2Scene.html">Vue2Scene</a><h4><a href="Vue2Scene.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="Vue2Scene.html#.useFrame">useFrame</a></li><li data-type='method'><a href="Vue2Scene.html#.useNowFrame">useNowFrame</a></li><li data-type='method'><a href="Vue2Scene.html#.useScene">useScene</a></li><li data-type='method'><a href="Vue2Scene.html#.useSceneItem">useSceneItem</a></li></ul><h4><a href="Vue2Scene.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typddef'><a href="Vue2Scene.html#.VueFrameResult">VueFrameResult</a></li><li data-type='typddef'><a href="Vue2Scene.html#.VueNowFrameResult">VueNowFrameResult</a></li><li data-type='typddef'><a href="Vue2Scene.html#.VueSceneItemResult">VueSceneItemResult</a></li><li data-type='typddef'><a href="Vue2Scene.html#.VueSceneResult">VueSceneResult</a></li></ul></li><li file="sveltescene" class="parent"><a href="SvelteScene.html">SvelteScene</a><h4><a href="SvelteScene.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="SvelteScene.html#.useFrame">useFrame</a></li><li data-type='method'><a href="SvelteScene.html#.useNowFrame">useNowFrame</a></li><li data-type='method'><a href="SvelteScene.html#.useScene">useScene</a></li><li data-type='method'><a href="SvelteScene.html#.useSceneItem">useSceneItem</a></li></ul><h4><a href="SvelteScene.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typddef'><a href="SvelteScene.html#.SvelteFrameResult">SvelteFrameResult</a></li><li data-type='typddef'><a href="SvelteScene.html#.SvelteNowFrameResult">SvelteNowFrameResult</a></li><li data-type='typddef'><a href="SvelteScene.html#.SvelteSceneItemResult">SvelteSceneItemResult</a></li><li data-type='typddef'><a href="SvelteScene.html#.SvelteSceneResult">SvelteSceneResult</a></li></ul></li><li file="reactscene" class="parent"><a href="ReactScene.html">ReactScene</a><h4><a href="ReactScene.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="ReactScene.html#.useFrame">useFrame</a></li><li data-type='method'><a href="ReactScene.html#.useNowFrame">useNowFrame</a></li><li data-type='method'><a href="ReactScene.html#.useScene">useScene</a></li><li data-type='method'><a href="ReactScene.html#.useSceneItem">useSceneItem</a></li></ul><h4><a href="ReactScene.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typddef'><a href="ReactScene.html#.ReactFrameResult">ReactFrameResult</a></li><li data-type='typddef'><a href="ReactScene.html#.ReactNowFrameResult">ReactNowFrameResult</a></li><li data-type='typddef'><a href="ReactScene.html#.ReactSceneItemResult">ReactSceneItemResult</a></li><li data-type='typddef'><a href="ReactScene.html#.ReactSceneResult">ReactSceneResult</a></li></ul></li><li file="reactive" class="parent"><a href="Reactive.html">Reactive</a><h4><a href="Reactive.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typddef'><a href="Reactive.html#.AnimatorReactiveState">AnimatorReactiveState</a></li><li data-type='typddef'><a href="Reactive.html#.FrameReactiveData">FrameReactiveData</a></li><li data-type='typddef'><a href="Reactive.html#.FrameReactiveState">FrameReactiveState</a></li><li data-type='typddef'><a href="Reactive.html#.SceneItemReactiveData">SceneItemReactiveData</a></li><li data-type='typddef'><a href="Reactive.html#.SceneItemReactiveProps">SceneItemReactiveProps</a></li><li data-type='typddef'><a href="Reactive.html#.SceneReactiveData">SceneReactiveData</a></li><li data-type='typddef'><a href="Reactive.html#.SceneReactiveProps">SceneReactiveProps</a></li></ul></li><li file="easing" class="parent"><a href="easing.html">easing</a><h4><a href="easing.html#static methods">Static Methods</a></h4><ul class='static methods'><li data-type='method'><a href="easing.html#.bezier">bezier</a></li><li data-type='method'><a href="easing.html#.steps">steps</a></li></ul><h4><a href="easing.html#static members">Static Members</a></h4><ul class='static members'><li data-type='member'><a href="easing.html#.EASE">EASE</a></li><li data-type='member'><a href="easing.html#.EASE_IN">EASE_IN</a></li><li data-type='member'><a href="easing.html#.EASE_IN_OUT">EASE_IN_OUT</a></li><li data-type='member'><a href="easing.html#.EASE_OUT">EASE_OUT</a></li><li data-type='member'><a href="easing.html#.LINEAR">LINEAR</a></li><li data-type='member'><a href="easing.html#.STEP_END">STEP_END</a></li><li data-type='member'><a href="easing.html#.STEP_START">STEP_START</a></li></ul></li></ul><ul class="global"><li file="global"  class="parent"><a href="global.html">Global</a><h4><a href="global.html#type definitions">Type Definitions</a></h4><ul class='type definitions'><li data-type='typedef'><a href="global.html#AnimateElement">AnimateElement</a></li><li data-type='typedef'><a href="global.html#AnimatorEvents">AnimatorEvents</a></li><li data-type='typedef'><a href="global.html#AnimatorOptions">AnimatorOptions</a></li><li data-type='typedef'><a href="global.html#AnimatorState">AnimatorState</a></li><li data-type='typedef'><a href="global.html#AnimatorState">AnimatorState</a></li><li data-type='typedef'><a href="global.html#CallbackType">CallbackType</a></li><li data-type='typedef'><a href="global.html#DirectionType">DirectionType</a></li><li data-type='typedef'><a href="global.html#EasingFunction">EasingFunction</a></li><li data-type='typedef'><a href="global.html#EasingType">EasingType</a></li><li data-type='typedef'><a href="global.html#ElementsType">ElementsType</a></li><li data-type='typedef'><a href="global.html#EventParameter">EventParameter</a></li><li data-type='typedef'><a href="global.html#EventType">EventType</a></li><li data-type='typedef'><a href="global.html#FillModeType">FillModeType</a></li><li data-type='typedef'><a href="global.html#FrameEvents">FrameEvents</a></li><li data-type='typedef'><a href="global.html#IterationCountType">IterationCountType</a></li><li data-type='typedef'><a href="global.html#KeyValueChildren">KeyValueChildren</a></li><li data-type='typedef'><a href="global.html#NameType">NameType</a></li><li data-type='typedef'><a href="global.html#OnAnimate">OnAnimate</a></li><li data-type='typedef'><a href="global.html#OnIteration">OnIteration</a></li><li data-type='typedef'><a href="global.html#OnSceneAnimate">OnSceneAnimate</a></li><li data-type='typedef'><a href="global.html#OnSceneItemAnimate">OnSceneItemAnimate</a></li><li data-type='typedef'><a href="global.html#OnTimeUpdate">OnTimeUpdate</a></li><li data-type='typedef'><a href="global.html#OptionType">OptionType</a></li><li data-type='typedef'><a href="global.html#PlayCondition">PlayCondition</a></li><li data-type='typedef'><a href="global.html#PlayStateType">PlayStateType</a></li><li data-type='typedef'><a href="global.html#PropertyObjectState">PropertyObjectState</a></li><li data-type='typedef'><a href="global.html#Role">Role</a></li><li data-type='typedef'><a href="global.html#RoleObject">RoleObject</a></li><li data-type='typedef'><a href="global.html#SceneAnimatorEvents">SceneAnimatorEvents</a></li><li data-type='typedef'><a href="global.html#SceneEvents">SceneEvents</a></li><li data-type='typedef'><a href="global.html#SceneItemEvents">SceneItemEvents</a></li><li data-type='typedef'><a href="global.html#SceneItemOptions">SceneItemOptions</a></li><li data-type='typedef'><a href="global.html#SceneItemState">SceneItemState</a></li><li data-type='typedef'><a href="global.html#SceneOptions">SceneOptions</a></li><li data-type='typedef'><a href="global.html#SceneState">SceneState</a></li><li data-type='typedef'><a href="global.html#SelectorAllType">SelectorAllType</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">EventEmitter</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        EventEmitter
+        </h2>
+        
+            <div class="class-description">Implement EventEmitter on object or component.</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="EventEmitter"><span class="type-signature"></span>new EventEmitter<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line7">line 7</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title" id="methods">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="emit"><span class="type-signature"></span>emit<span class="signature">(eventName, param<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line134">line 134</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Fires an event to call listeners.
+</div>
+
+
+
+
+
+
+
+
+
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Event name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;any></span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">Event parameter</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+    <h4 class="name typescript" id="emit">
+        emit&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"> extends Param ? Name : never</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+    <h4 class="name typescript" id="emit">
+        emit&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName, param)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;Param></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+
+
+const emitter = new EventEmitter();
+
+emitter.on("a", e => {
+});
+
+
+emitter.emit("a", {
+  a: 1,
+});</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    If false, stop the event.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="off"><span class="type-signature"></span>off<span class="signature">(eventName<span class="signature-attributes">opt</span>, listener<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {this}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line63">line 63</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Remove listeners registered in the event target.
+</div>
+
+
+
+
+
+
+
+
+
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string | object</span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of the event to be removed</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Events[any], this></span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">listener function of the event to be removed</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+    <h4 class="name typescript" id="off">
+        off&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName, listener)</span>
+        <span class="type-signature"> → {this}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Param, this></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+    <h4 class="name typescript" id="off">
+        off<span class="signature">(events)</span>
+        <span class="type-signature"> → {this}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventHash">EventHash</a>&lt;Events, this></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+cosnt emitter = new EventEmitter();
+
+// Remove all listeners.
+emitter.off();
+
+// Remove all listeners in "A" event.
+emitter.off("a");
+
+
+// Remove "listener" listener in "a" event.
+emitter.off("a", listener);</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">this</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="on"><span class="type-signature"></span>on<span class="signature">(eventName, listener<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {this}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Add a listener to the registered event.
+</div>
+
+
+
+
+
+
+
+
+
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string | object</span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of the event to be added</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Events[any], this></span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">listener function of the event to be added</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+    <h4 class="name typescript" id="on">
+        on&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName, listener)</span>
+        <span class="type-signature"> → {this}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Param, this></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+    <h4 class="name typescript" id="on">
+        on<span class="signature">(events)</span>
+        <span class="type-signature"> → {this}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventHash">EventHash</a>&lt;Events, this></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+cosnt emitter = new EventEmitter();
+
+// Add listener in "a" event
+emitter.on("a", () => {
+});
+// Add listeners
+emitter.on({
+ a: () => {},
+ b: () => {},
+});</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">this</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="once"><span class="type-signature"></span>once&lt;Name extends keyof Events &amp; string, Param = Events[Name]&gt;<span class="signature">(eventName, listener<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise&lt;<a href="EventEmitter.html#.OnEvent">OnEvent</a>&lt;Param, this>>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line101">line 101</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Add a disposable listener and Use promise to the registered event.
+</div>
+
+
+
+
+
+
+
+
+
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of the event to be added</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>listener</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Param, this></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">disposable listener function of the event to be added</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+cosnt emitter = new EventEmitter();
+
+// Add a disposable listener in "a" event
+emitter.once("a", () => {
+});
+
+// Use Promise
+emitter.once("a").then(e => {
+});</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise&lt;<a href="EventEmitter.html#.OnEvent">OnEvent</a>&lt;Param, this>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="trigger"><span class="type-signature"></span>trigger&lt;Name extends keyof Events&gt;<span class="signature">(eventName, param<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line199">line 199</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Fires an event to call listeners.
+</div>
+
+
+
+
+
+
+
+
+
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Event name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;any></span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">Event parameter</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+    <h4 class="name typescript" id="trigger">
+        trigger&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"> extends <a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;Param> ? Name : never</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+    <h4 class="name typescript" id="trigger">
+        trigger&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName, param)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;Param></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+
+
+const emitter = new EventEmitter();
+
+emitter.on("a", e => {
+});
+
+
+emitter.emit("a", {
+  a: 1,
+});
+     </code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    If false, stop the event.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="trigger"><span class="type-signature"></span>trigger&lt;Name extends keyof Events&gt;<span class="signature">(eventName, param<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html">node_modules/@scena/event-emitter/src/EventEmitter.ts</a>, <a href="node_modules_@scena_event-emitter_src_EventEmitter.ts.html#line199">line 199</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    Fires an event to call listeners.
+</div>
+
+
+
+
+
+
+
+
+
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Event name</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code>?</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;any></span>
+|
+
+<span class="param-type">...</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">Event parameter</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+    <h4 class="name typescript" id="trigger">
+        trigger&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"> extends <a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;Param> ? Name : never</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+    <h4 class="name typescript" id="trigger">
+        trigger&lt;Name extends keyof Events, Param = Events[Name]&gt;<span class="signature">(eventName, param)</span>
+        <span class="type-signature"> → {boolean}</span>
+    </h4>
+    <div class="ts-params typescript">
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>eventName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Name</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="EventEmitter.html#.TargetParam">TargetParam</a>&lt;Param></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import EventEmitter from "@scena/event-emitter";
+
+
+const emitter = new EventEmitter();
+
+emitter.on("a", e => {
+});
+
+// emit
+emitter.trigger("a", {
+  a: 1,
+});</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    If false, stop the event.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id=".EmitterParam">EmitterParam&lt;Target = any&gt;</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+
+    <div id=".EmitterParam-type" class="db-prop">
+        
+            <div class="db-div db-name">
+                <a href="#.EmitterParam-type">type</a>
+                
+                
+            </div>
+        
+        
+
+        <div class="db-div db-type">
+            
+                type: 
+<span class="param-type">string</span>
+
+
+            
+        </div>
+
+
+        <div class="db-div db-description">
+            
+        </div>
+        
+    </div>
+
+    <div id=".EmitterParam-currentTarget" class="db-prop">
+        
+            <div class="db-div db-name">
+                <a href="#.EmitterParam-currentTarget">currentTarget</a>
+                
+                
+            </div>
+        
+        
+
+        <div class="db-div db-type">
+            
+                currentTarget: 
+<span class="param-type">Target</span>
+
+
+            
+        </div>
+
+
+        <div class="db-div db-description">
+            
+        </div>
+        
+    </div>
+
+    <div id=".EmitterParam-stop" class="db-prop">
+        
+            <div class="db-div db-name">
+                <a href="#.EmitterParam-stop">stop</a>
+                
+                
+            </div>
+        
+        
+
+        <div class="db-div db-type">
+            
+                stop: 
+<span class="param-type">() => void</span>
+
+
+            
+        </div>
+
+
+        <div class="db-div db-description">
+            
+        </div>
+        
+    </div>
+
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">TSInterface</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".EventHash">EventHash&lt;Events, Target&gt;</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Partial&lt;[Key extends keyof Events]: <a href="EventEmitter.html#.EventListener">EventListener</a>&lt;Events[Key], Target>></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".EventInfo">EventInfo</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line45">line 45</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+
+    <div id=".EventInfo-listener" class="db-prop">
+        
+            <div class="db-div db-name">
+                <a href="#.EventInfo-listener">listener</a>
+                
+                
+            </div>
+        
+        
+
+        <div class="db-div db-type">
+            
+                listener: 
+<span class="param-type"><a href="EventEmitter.html#.EventListener">EventListener</a>&lt;any, any></span>
+
+
+            
+        </div>
+
+
+        <div class="db-div db-description">
+            
+        </div>
+        
+    </div>
+
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">TSInterface</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".EventListener">EventListener&lt;Param, Target&gt;</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">(e: <a href="EventEmitter.html#.OnEvent">OnEvent</a>&lt;Param, Target>) => any</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".EventOptions">EventOptions</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+
+    <div id=".EventOptions-once" class="db-prop">
+        
+            <div class="db-div db-name">
+                <a href="#.EventOptions-once">once</a>
+                
+                
+            </div>
+        
+        
+
+        <div class="db-div db-type">
+            
+                once: 
+<span class="param-type">boolean</span>
+
+
+            
+        </div>
+
+
+        <div class="db-div db-description">
+            
+        </div>
+        
+    </div>
+
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">TSInterface</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".OnEvent">OnEvent&lt;Param, Target = any&gt;</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="EventEmitter.html#.EmitterParam">EmitterParam</a>&lt;Target> &amp; Param</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id=".TargetParam">TargetParam&lt;Param&gt;</h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="node_modules_@scena_event-emitter_src_types.ts.html">node_modules/@scena/event-emitter/src/types.ts</a>, <a href="node_modules_@scena_event-emitter_src_types.ts.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Pick&lt;Param, Exclude&lt;keyof Param, keyof <a href="EventEmitter.html#.EmitterParam">EmitterParam</a>>> &amp; Partial&lt;<a href="EventEmitter.html#.EmitterParam">EmitterParam</a>></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+
+<style>
+
+
+nav li[file="eventemitter"]:after {
+    display: none;
+}
+nav li[file="eventemitter"] h4, nav li[file="eventemitter"] ul {
+    display: block;
+}
+</style>
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/daybrush/jsdoc">JSDoc 0.4.3</a> on Sat Dec 17 2022 16:34:20 GMT+0900 (대한민국 표준시) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/utils.min.js"></script>
+<script src="scripts/search.js"></script>
+<script src="scripts/custom.js"></script>
+</body>
+</html>
