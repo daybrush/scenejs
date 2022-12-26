@@ -13,9 +13,10 @@ module.exports = builder([
         external,
     },
     {
-        input: 'src/index.umd.ts',
+        input: 'src/index.cjs.ts',
         output: "./dist/scene.cjs.js",
         format: "cjs",
+        exports: "named",
         external,
     },
     {
