@@ -8,6 +8,12 @@ export * from "./easing";
 export * from "./presets";
 export * from "./types";
 export { OPTIONS, EVENTS, FIXED, ROLES, NAME_SEPARATOR } from "./consts";
-export { setRole, setAlias, isRole, isScene, isSceneItem, isFrame, selectorAll } from "./utils";
+export {
+    setRole, setAlias, isRole,
+    isScene, isSceneItem,
+    isFrame, selectorAll,
+    rgbaToHexWithOpacity,
+    rgbaToHexa,
+} from "./utils";
 export { Scene as default };
 export * from "./reactive";

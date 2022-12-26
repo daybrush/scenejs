@@ -1,4 +1,5 @@
 import { toFullHex, cutHex, hexToRGBA, hslToRGBA } from "@daybrush/utils";
+import { rgbaToHexa } from "../../../src/utils";
 
 describe("color Test", () => {
     describe("test color ", () => {
@@ -51,6 +52,27 @@ describe("color Test", () => {
             expect(rgb6).to.be.deep.equals([179, 77, 145, 1]);
             expect(rgb7).to.be.deep.equals([179, 77, 145, 0.4]);
             expect(rgb8).to.be.deep.equals([179, 77, 145, 1]);
+        });
+        it("should check 'rgbaToHexa'", () => {
+            // Given, When
+            const rgba1 = rgbaToHexa(`rgba(179, 77, 77, 1)`);
+            const rgba2 = rgbaToHexa(`rgba(145, 179, 77, 1)`);
+            const rgba3 = rgbaToHexa(`rgba(77, 179, 128, 1)`);
+            const rgba4 = rgbaToHexa(`rgba(77, 119, 179, 1)`);
+            const rgba5 = rgbaToHexa(`rgba(110, 77, 179, 1)`);
+            const rgba6 = rgbaToHexa(`rgba(179, 77, 145, 1)`);
+            const rgba7 = rgbaToHexa(`rgba(179, 77, 145, 0.4)`);
+            const rgba8 = rgbaToHexa(`rgba(179, 77, 145, 1)`);
+
+            // Then
+            expect(rgba1).to.be.equals("#b34d4dff");
+            expect(rgba2).to.be.equals("#91b34dff");
+            expect(rgba3).to.be.equals("#4db380ff");
+            expect(rgba4).to.be.equals("#4d77b3ff");
+            expect(rgba5).to.be.equals("#6e4db3ff");
+            expect(rgba6).to.be.equals("#b34d91ff");
+            expect(rgba7).to.be.equals("#b34d9166");
+            expect(rgba8).to.be.equals("#b34d91ff");
         });
     });
 });

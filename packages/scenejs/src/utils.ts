@@ -1,13 +1,16 @@
 import {
     ROLES, MAXIMUM, FIXED, ALIAS,
-    RUNNING, PLAY, ENDED, PLAY_CSS, CURRENT_TIME, START_ANIMATION, EASINGS, NAME_SEPARATOR
+    RUNNING, PLAY, ENDED, PLAY_CSS, CURRENT_TIME,
+    START_ANIMATION, EASINGS, NAME_SEPARATOR
 } from "./consts";
 import PropertyObject from "./PropertyObject";
 import Scene from "./Scene";
 import SceneItem from "./SceneItem";
 import {
     isArray, ANIMATION, ARRAY, OBJECT,
-    PROPERTY, STRING, NUMBER, IS_WINDOW, IObject, $, isObject, addEvent, removeEvent, isString,
+    PROPERTY, STRING, NUMBER, IS_WINDOW, IObject,
+    $, isObject, addEvent, removeEvent, isString,
+    splitComma, splitBracket,
 } from "@daybrush/utils";
 import { EasingType, EasingFunction, NameType, SelectorAllType } from "./types";
 import { toPropertyObject } from "./utils/property";
@@ -293,4 +296,39 @@ export function selectorAll(callback: (index: number) => any, defaultCount = 0):
     nextCallback.defaultCount = defaultCount;
 
     return nextCallback;
+}
+
+export function rgbaToHexa(rgba: string) {
+    const hexInfo = rgbaToHexWithOpacity(rgba);
+    const hex = hexInfo.hex;
+
+    if (!hexInfo.hex) {
+        return "";
+    }
+    const opacityHex = Math.floor(hexInfo.opacity * 255).toString(16);
+
+    return `${hex}${opacityHex}`;
+}
+
+export function rgbaToHexWithOpacity(rgba: string) {
+    const rgbaInfo = splitBracket(rgba);
+
+    if (rgbaInfo.prefix.indexOf("rgb") !== 0) {
+        return {
+            hex: "",
+            opacity: 1,
+        };
+    }
+
+    const rgbaArr = splitComma(rgbaInfo.value);
+    const rgbaNums = rgbaArr.slice(0, 3).map(num => {
+        const dec = parseInt(num, 10);
+
+        return dec.toString(16);
+    });
+
+    return {
+        hex: `#${rgbaNums.join("")}`,
+        opacity: rgbaArr[3] ? parseFloat(rgbaArr[3]) : 1,
+    };
 }

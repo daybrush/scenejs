@@ -167,6 +167,7 @@ export function toPropertyObject(value: string | IObject<any> | any[], model?: N
     }
     return value;
 }
+
 export function toObject(object: PropertyObject, result: IObject<any> = {}) {
     const model = object.model;
 

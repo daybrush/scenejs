@@ -3359,6 +3359,11 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-16.18.9.tgz"
   integrity sha512-nhrqXYxiQ+5B/tPorWum37VgAiefi/wmfJ1QZKGKKecC8/3HqcTTJD0O+VABSPwtseMMF7NCPVT9uGgwn0YqsQ==
 
+"@types/node@^18.11.17":
+  version "18.11.17"
+  resolved "https://registry.npmjs.org/@types/node/-/node-18.11.17.tgz#5c009e1d9c38f4a2a9d45c0b0c493fe6cdb4bcb5"
+  integrity sha512-HJSUJmni4BeDHhfzn6nF0sVmd1SMezP7/4F0Lq+aXzmp2xm9O7WXrUtHW/CHlYVtZUbByEvWidHqRtcJXGF2Ng==
+
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
   resolved "https://registry.npmjs.org/@types/normalize-package-data/-/normalize-package-data-2.4.1.tgz"
@@ -16327,6 +16332,17 @@ saxes@^5.0.1:
   integrity sha512-5LBh1Tls8c9xgGjw3QrMwETmTMVk0oFgvrFSvWx62llR2hcEInrKNZ2GZCCuuy2lvWrdl5jhbpeqc5hRYKFOcw==
   dependencies:
     xmlchars "^2.2.0"
+
+scenejs@~1.8.5:
+  version "1.8.5"
+  resolved "https://registry.npmjs.org/scenejs/-/scenejs-1.8.5.tgz#0023581e64807dd7e802b601f4d88c4a727da0ff"
+  integrity sha512-LkiHyK2fNGrsV+68b7wQ76SirmgZR93vUsZOdXuWNxc+O9SlapnxkJF698w2ZYHNX331vL9ETUnbToF7zEEgXQ==
+  dependencies:
+    "@cfcs/core" "^0.0.12"
+    "@daybrush/utils" "^1.10.2"
+    "@scena/event-emitter" "^1.0.3"
+    css-styled "^1.0.0"
+    order-map "^0.2.2"
 
 scheduler@^0.23.0:
   version "0.23.0"
