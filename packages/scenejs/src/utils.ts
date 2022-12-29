@@ -270,7 +270,10 @@ export function isSceneItem(value: any): value is SceneItem {
     );
 }
 export function isFrame(value: any): value is Frame {
-    return value && !!(value.constructor as typeof Frame).prototype.toCSS;
+    return value && !!(value.constructor as typeof Frame).prototype.toCSSText;
+}
+export function isAnimator(value: any): value is Animator {
+    return value && !!(value.constructor as typeof Animator).prototype.getActiveDuration;
 }
 export function flatSceneObject(obj: IObject<any>, seperator: string): Record<string, Frame> {
     const newObj = {};

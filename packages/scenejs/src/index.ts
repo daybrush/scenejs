@@ -11,6 +11,7 @@ export { OPTIONS, EVENTS, FIXED, ROLES, NAME_SEPARATOR } from "./consts";
 export {
     setRole, setAlias, isRole,
     isScene, isSceneItem,
+    isAnimator,
     isFrame, selectorAll,
     rgbaToHexWithOpacity,
     rgbaToHexa,
