@@ -6,7 +6,7 @@ about: Create a report to help us improve
 ## Environments
 * Framework name:
 * Framework version:
-* Moveable Component version:
+* Scene.js Component version:
 * Testable Address(optional):
 
 ## Description
