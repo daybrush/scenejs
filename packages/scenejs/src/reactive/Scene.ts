@@ -15,7 +15,7 @@ export const SCENE_METHODS = [
  * @typedef
  * @memberof Reactive
  */
-export interface SceneReactiveProps {
+export interface SceneReactiveOptions {
     options?: Partial<SceneOptions>;
     [key: string | number]: any;
 }
@@ -24,13 +24,16 @@ export interface SceneReactiveProps {
  * @typedef
  * @memberof Reactive
  */
-export type SceneReactiveData = Scene | {
-    props?: SceneReactiveProps;
+export type SceneReactiveProps = SceneReactiveOptions | Scene | (() => SceneReactiveOptions | Scene);
+
+/**
+ * @typedef
+ * @memberof Reactive
+ */
+export type SceneReactiveData = {
+    props: SceneReactiveProps;
     options?: Partial<SceneOptions>;
-} | (() => Scene | {
-    props?: SceneReactiveProps;
-    options?: Partial<SceneOptions>;
-});
+};
 
 export type SceneReactiveMethods = ReactiveMethods<Scene>;
 export type SceneReactiveInstance = ReactiveObject<AnimatorReactiveState> & SceneReactiveMethods & {
@@ -46,10 +49,11 @@ export const SCENE_REACTIVE: ReactiveAdapter<
 > = {
     methods: SCENE_METHODS as Array<keyof SceneReactiveMethods>,
     created(data: SceneReactiveData) {
-        const dataObject = isFunction(data) ? data() : data;
+        const dataProps = data.props;
+        const dataObject = isFunction(dataProps) ? dataProps() : dataProps;
         const scene = isScene(dataObject)
             ? dataObject
-            : new Scene(dataObject?.props, dataObject?.options);
+            : new Scene(dataObject?.props, data.options);
         const obj = scene.state as any as ReactiveObject<AnimatorState>;
         const observers = getObservers(obj);
 

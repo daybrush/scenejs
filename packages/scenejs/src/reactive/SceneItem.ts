@@ -15,22 +15,27 @@ export const SCENE_ITEM_METHODS = [
  * @typedef
  * @memberof Reactive
  */
-export interface SceneItemReactiveProps {
+export interface SceneItemReactiveOptions {
     options?: Partial<SceneItemOptions>;
     [key: string | number]: any;
 }
+
 
 /**
  * @typedef
  * @memberof Reactive
  */
-export type SceneItemReactiveData = SceneItem | {
-    props?: SceneItemReactiveProps;
+export type SceneItemReactiveProps = SceneItemReactiveOptions | SceneItem | (() => SceneItemReactiveOptions | SceneItem);
+
+
+/**
+ * @typedef
+ * @memberof Reactive
+ */
+export type SceneItemReactiveData = {
+    props: SceneItemReactiveProps;
     options?: Partial<SceneItemOptions>;
-} | (() => SceneItem | {
-    props?: SceneItemReactiveProps;
-    options?: Partial<SceneItemOptions>;
-});
+};
 
 export type SceneItemReactiveMethods = ReactiveMethods<Scene>;
 export type SceneItemReactiveInstance = ReactiveObject<AnimatorReactiveState> & SceneItemReactiveMethods & {
@@ -46,10 +51,11 @@ export const SCENE_ITEM_REACTIVE: ReactiveAdapter<
 > = {
     methods: SCENE_ITEM_METHODS as Array<keyof SceneItemReactiveMethods>,
     created(data: SceneItemReactiveData) {
-        const dataObject = isFunction(data) ? data() : data;
+        const dataProps = data.props;
+        const dataObject = isFunction(dataProps) ? dataProps() : dataProps;
         const sceneItem = isSceneItem(dataObject)
             ? dataObject
-            : new SceneItem(dataObject?.props, dataObject?.options);
+            : new SceneItem(dataObject?.props, data.options);
         const obj = sceneItem.state as any as ReactiveObject<AnimatorState>;
         const observers = getObservers(obj);
         const totalDuration = computed(() => {

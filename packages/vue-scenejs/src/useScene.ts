@@ -1,5 +1,5 @@
 import { VueReactiveAdapterResult, useReactive } from "@cfcs/vue3";
-import { SceneOptions, SceneReactiveData, SCENE_REACTIVE } from "scenejs";
+import { SceneOptions, SceneReactiveProps, SCENE_REACTIVE } from "scenejs";
 
 
 /**
@@ -13,7 +13,7 @@ export interface VueSceneResult extends VueReactiveAdapterResult<typeof SCENE_RE
 
 /**
  * @memberof Vue3Scene
- * @param {Reactive.SceneReactiveData} - Items and properties that make up the scene
+ * @param {Reactive.SceneReactiveProps} - Items and properties that make up the scene
  * @param - Scene and Animator options
  * @return - You can use Scene methods and Animator State
  * @example
@@ -24,7 +24,7 @@ export interface VueSceneResult extends VueReactiveAdapterResult<typeof SCENE_RE
  *
  * console.log(cssText.value);
  */
-export function useScene(props?: SceneReactiveData, options?: Partial<SceneOptions>): VueSceneResult {
+export function useScene(props?: SceneReactiveProps, options?: Partial<SceneOptions>): VueSceneResult {
     return useReactive({
         ...SCENE_REACTIVE,
         data() {

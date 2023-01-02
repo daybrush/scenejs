@@ -1,5 +1,5 @@
 import { SvelteReactiveAdapterResult, useReactive } from "@cfcs/svelte";
-import { SceneOptions, SceneReactiveData, SCENE_REACTIVE } from "scenejs";
+import { SceneOptions, SceneReactiveProps, SCENE_REACTIVE } from "scenejs";
 
 
 /**
@@ -13,7 +13,7 @@ export interface SvelteSceneResult extends SvelteReactiveAdapterResult<typeof SC
 
 /**
  * @memberof SvelteScene
- * @param {Reactive.SceneReactiveData} - Items and properties that make up the scene
+ * @param {Reactive.SceneReactiveProps} - Items and properties that make up the scene
  * @param - Scene and Animator options
  * @return - You can use Scene methods and Animator State
  * @example
@@ -24,7 +24,7 @@ export interface SvelteSceneResult extends SvelteReactiveAdapterResult<typeof SC
  *
  * $cssText
  */
-export function useScene(props?: SceneReactiveData, options?: Partial<SceneOptions>): SvelteSceneResult {
+export function useScene(props?: SceneReactiveProps, options?: Partial<SceneOptions>): SvelteSceneResult {
     return useReactive({
         ...SCENE_REACTIVE,
         data() {

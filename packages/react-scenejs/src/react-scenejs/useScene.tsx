@@ -1,5 +1,5 @@
 import { ReactReactiveAdapterResult, useReactive } from "@cfcs/react";
-import { SceneOptions, SceneReactiveData, SCENE_REACTIVE } from "scenejs";
+import { SceneOptions, SceneReactiveProps, SCENE_REACTIVE } from "scenejs";
 
 
 /**
@@ -12,7 +12,7 @@ export interface ReactSceneResult extends ReactReactiveAdapterResult<typeof SCEN
 
 /**
  * @memberof ReactScene
- * @param {Reactive.SceneReactiveData} - Items and properties that make up the scene
+ * @param {Reactive.SceneReactiveProps} - Items and properties that make up the scene
  * @param - Scene and Animator options
  * @return - You can use Scene methods and Animator State
  * @example
@@ -23,7 +23,7 @@ export interface ReactSceneResult extends ReactReactiveAdapterResult<typeof SCEN
  * 
  * frame.camelCasedCSSObject;
  */
-export function useScene(props?: SceneReactiveData, options?: Partial<SceneOptions>): ReactSceneResult {
+export function useScene(props?: SceneReactiveProps, options?: Partial<SceneOptions>): ReactSceneResult {
     return useReactive({
         ...SCENE_REACTIVE,
         data() {
