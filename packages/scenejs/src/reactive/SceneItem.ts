@@ -20,22 +20,22 @@ export interface SceneItemReactiveOptions {
     [key: string | number]: any;
 }
 
+/**
+ * @typedef
+ * @memberof Reactive
+ */
+export type SceneItemReactiveProps = SceneItemReactiveOptions
+    | SceneItem
+    | (() => SceneItemReactiveOptions | SceneItem);
 
 /**
  * @typedef
  * @memberof Reactive
  */
-export type SceneItemReactiveProps = SceneItemReactiveOptions | SceneItem | (() => SceneItemReactiveOptions | SceneItem);
-
-
-/**
- * @typedef
- * @memberof Reactive
- */
-export type SceneItemReactiveData = {
+export interface SceneItemReactiveData {
     props: SceneItemReactiveProps;
     options?: Partial<SceneItemOptions>;
-};
+}
 
 export type SceneItemReactiveMethods = ReactiveMethods<Scene>;
 export type SceneItemReactiveInstance = ReactiveObject<AnimatorReactiveState> & SceneItemReactiveMethods & {

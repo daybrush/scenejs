@@ -30,10 +30,10 @@ export type SceneReactiveProps = SceneReactiveOptions | Scene | (() => SceneReac
  * @typedef
  * @memberof Reactive
  */
-export type SceneReactiveData = {
+export interface SceneReactiveData {
     props: SceneReactiveProps;
     options?: Partial<SceneOptions>;
-};
+}
 
 export type SceneReactiveMethods = ReactiveMethods<Scene>;
 export type SceneReactiveInstance = ReactiveObject<AnimatorReactiveState> & SceneReactiveMethods & {
