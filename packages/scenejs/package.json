@@ -1,6 +1,6 @@
 {
     "name": "scenejs",
-    "version": "1.9.1",
+    "version": "1.9.2",
     "description": "JavaScript & CSS timeline-based animation library",
     "main": "dist/scene.cjs.js",
     "module": "dist/scene.esm.js",
