@@ -53,7 +53,7 @@ export const SCENE_REACTIVE: ReactiveAdapter<
         const dataObject = isFunction(dataProps) ? dataProps() : dataProps;
         const scene = isScene(dataObject)
             ? dataObject
-            : new Scene(dataObject?.props, data.options);
+            : new Scene(dataObject, data.options);
         const obj = scene.state as any as ReactiveObject<AnimatorState>;
         const observers = getObservers(obj);
 
