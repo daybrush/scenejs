@@ -540,10 +540,15 @@ item.setElement(document.querySelectorAll(".class"));
         if (!target) {
             return this;
         } else if (target === true || isString(target)) {
-            const selector = target === true ? `${state.id}` : target;
+            const prevSelector = (isString(state[SELECTOR]) && state[SELECTOR]) || `${state.id}`;
+            const selector = target === true ? prevSelector : target;
             const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(selector);
 
-            elements = toArray($(matches ? matches[1] : selector, true));
+            try {
+                elements = toArray($(matches ? matches[1] : selector, true));
+            } catch (e) {
+                elements = [];
+            }
             state[SELECTOR] = selector;
         } else {
             elements = (target instanceof Element) ? [target] : toArray(target);
