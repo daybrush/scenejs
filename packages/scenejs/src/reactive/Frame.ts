@@ -1,4 +1,4 @@
-import { ReactiveAdapter, ReactiveObject, computed, reactive, observe, Observer, isObserver } from "@cfcs/core";
+import { ReactiveAdapter, ReactiveObject, computed, reactive, observe, Observer, isObserver, partialReactive } from "@cfcs/core";
 import { isFunction } from "@daybrush/utils";
 import Frame from "../Frame";
 import { isFrame } from "../utils";
@@ -89,7 +89,7 @@ export const FRAME_REACTIVE: ReactiveAdapter<
             prevFrame.off("update", onUpdate);
             currentFrame.on("update", onUpdate);
         });
-        const nextReactiveObject = reactive({
+        const nextReactiveObject = partialReactive({
             cssText,
             cssObject,
             camelCasedCSSObject,

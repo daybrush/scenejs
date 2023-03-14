@@ -106,7 +106,8 @@ class Animator <
             prevTime: 0,
             playState: PAUSED,
             duration: 0,
-        }) as State;
+        } as any) as State;
+
         this.setOptions(options);
     }
     /**
