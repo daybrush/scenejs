@@ -1118,40 +1118,48 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cfcs/core@^0.0.12", "@cfcs/core@~0.0.12":
-  version "0.0.12"
-  resolved "https://registry.npmjs.org/@cfcs/core/-/core-0.0.12.tgz#b06ad9b95d4a5316cd756b3b3128ad3e8c48d3ba"
-  integrity sha512-DqFagZYApByyx5xcQfG5dApxjAZzhr53biM8eB5sTXsZbTaIZ6E+MyocoeTAChg4GArM9qsRT0QWEtdbIDsJdA==
+"@cfcs/cli@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.npmjs.org/@cfcs/cli/-/cli-0.0.3.tgz#97e1c2ad7fba194c1a93d0623a29cde673415719"
+  integrity sha512-IM6bynnDzyz0oCirX6K/NB0k6O8Nb+wzXfyTB9BcKmJbftP3W3pP5MRYkXTzNXt05bIDDy3cfY/sr+5yIVZBmQ==
   dependencies:
-    "@egjs/component" "^3.0.3"
+    commander "^9.4.1"
+    sync-exec "^0.6.2"
 
-"@cfcs/react@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.npmjs.org/@cfcs/react/-/react-0.0.12.tgz#9270e11d989dde8f40d74d2e23b8ae386d49842e"
-  integrity sha512-sAU8aXS1krIbLhW34AZWMY64t2UnXdwNX/39dHW6Y98A/P8XiOEWBa1bcD9M2PPrgM3lhiW35Bor9xcf3FO1hQ==
+"@cfcs/core@^0.1.0", "@cfcs/core@~0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@cfcs/core/-/core-0.1.0.tgz#64346f7634b46de6e9b1d4c195743b9b8e603162"
+  integrity sha512-kvYX0RpL45XTHJ5sW7teNbKeAa7pK3nNqaJPoFfZDPTIBJOkTtRD3QhkBG+O3Hu69a8xeMoPvF6y/RtJ6JUOdA==
   dependencies:
-    "@cfcs/core" "~0.0.12"
+    "@egjs/component" "^3.0.4"
 
-"@cfcs/svelte@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.npmjs.org/@cfcs/svelte/-/svelte-0.0.12.tgz#a60f3e05159c15af6fd48ca6787250e677202441"
-  integrity sha512-W6r8s56uR8mhajtzWTqSWnXzdZCH/Vg0hNl/YhCY4eRMjB6ErdvOgTr8P/4r2xbzOsq3QNhq2X7CK/ba6W/xFw==
+"@cfcs/react@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@cfcs/react/-/react-0.1.0.tgz#4cc5ac56c4391e2ca82e41e653fe25e4fa4b14e7"
+  integrity sha512-3IaDaE1Qn0iLZ1ZqD0cqoiX0Kjzp6/VB56409A963lQ5kK6ONNa3cNbCBqFZccCfPSnyzeSdvPlg75Af3W4raA==
   dependencies:
-    "@cfcs/core" "~0.0.12"
+    "@cfcs/core" "~0.1.0"
 
-"@cfcs/vue2@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.npmjs.org/@cfcs/vue2/-/vue2-0.0.12.tgz#3088d46fbad61857c75e26b77eca2f07e85dde9c"
-  integrity sha512-7eodpA1zuMiOQrOEQY0Bh6U3sK/fwlPzkjZxlKSxV6bS87AmyPpaMUsbEZYDOyvhj7TStSqGlazVPTHfoaFtNw==
+"@cfcs/svelte@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@cfcs/svelte/-/svelte-0.1.0.tgz#8ebf8b9a15d13b8172ed45dd4b2aab47ceb6ba3c"
+  integrity sha512-2DquJEQn+to1w5cvhw6LJUGLkJXS+OVfMuLdxLEmR/8EJGW6VbSepp1Im8vPKfqvH88br5YrEkZ5p/O2Tg1mlg==
   dependencies:
-    "@cfcs/core" "~0.0.12"
+    "@cfcs/core" "~0.1.0"
 
-"@cfcs/vue3@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.npmjs.org/@cfcs/vue3/-/vue3-0.0.12.tgz#d420522512e6958ca1e11914ee2e09c277e905d3"
-  integrity sha512-fJes14jQh97WT9iC79RxvymAJCEQbzjQnL8aiOWx8RUJt94VnIa70/EtreTk/48PcaAt7l6MNtBBXUd7ylCgYA==
+"@cfcs/vue2@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@cfcs/vue2/-/vue2-0.1.0.tgz#c34b42f235264fd9be294b557dba1fab49ad62fb"
+  integrity sha512-3lfJrksaqYbvsd0wb2hapMj1S/JEqW5p33/Uo5FueDvKCofd24PSYcBHgckTUQdzhqH4TER/v2hNi+UGWlqyIQ==
   dependencies:
-    "@cfcs/core" "~0.0.12"
+    "@cfcs/core" "~0.1.0"
+
+"@cfcs/vue3@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@cfcs/vue3/-/vue3-0.1.0.tgz#00bb40230e8a8cf4467529142e5d7079de515a8e"
+  integrity sha512-74G+uhtJYPbqYE8VcgA/lAnVkooNJ01yLq93i8qIDWdRYguHPzcMYSN57VsTpmA5QtQrEXc+nMokdR3L8JRCCQ==
+  dependencies:
+    "@cfcs/core" "~0.1.0"
 
 "@csstools/normalize.css@*":
   version "12.0.0"
@@ -1345,7 +1353,17 @@
     npmlog "6.0.2"
     sync-exec "^0.6.2"
 
-"@daybrush/utils@^0.11.0", "@daybrush/utils@^0.5.2", "@daybrush/utils@^1.0.0", "@daybrush/utils@^1.1.1", "@daybrush/utils@^1.10.2", "@daybrush/utils@^1.6.0":
+"@daybrush/utils@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-0.11.0.tgz#3fd113fcedaab29d8c80773ca5f4d32551bdc9d8"
+  integrity sha512-PnrY1NDjXqXKASoREcjHokQt0WWHiUBClMJ0l9APx42QkeOCQ5nXB7k4VdmkaU23BndeSmNNYJDNL6eEsRitaA==
+
+"@daybrush/utils@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-0.5.2.tgz#cc7876e2690895b6b4e5e048795271d5ddb2fedd"
+  integrity sha512-WD23IKwqFW8E8Y/gRUmoKpkkCAzedSGiU7kpOKvbqB+PRkg9rTq20SWMIlNxAU0Y+6zYGOVFguNPlL0W1lz1vQ==
+
+"@daybrush/utils@^1.0.0", "@daybrush/utils@^1.1.1", "@daybrush/utils@^1.10.2", "@daybrush/utils@^1.6.0":
   version "1.10.2"
   resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-1.10.2.tgz#fb10bab437d1bb3d052fa49ca01f23c86a2ad1f1"
   integrity sha512-fNMWeGUDokdIpebU8oIBUXkyGYITCwwodBfgx277p8d+kvI+k9wdFtKtdY4mvbWxhbAwuWprtVDq8My3KQ24Dg==
@@ -1355,10 +1373,10 @@
   resolved "https://registry.npmjs.org/@egjs/component/-/component-2.2.2.tgz"
   integrity sha512-2m6nu6/Mbs6VnoT4IHFGUBX6V82Zp01zDmlWpIJ3fMatHpe7BB1qUYFgMmSWGY0uOvOl4plvflwbCRUAGMfwWQ==
 
-"@egjs/component@^3.0.3":
-  version "3.0.3"
-  resolved "https://registry.npmjs.org/@egjs/component/-/component-3.0.3.tgz#805dee17d299513abfde8a68a4cd932bb7d4bca9"
-  integrity sha512-Pnwxw9mDTvz+j4md6ZlRTpM7jgYoOKlcmjfDgE9okhaAGTqTH0Rl2vIXHOHok5yqYVFR5QXbO31t4x93gavOPQ==
+"@egjs/component@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.npmjs.org/@egjs/component/-/component-3.0.4.tgz#ad7b53794b2a612806179a188ad828acb9525f61"
+  integrity sha512-sXA7bGbIeLF2OAw/vpka66c6QBBUPcA4UUhR4WGJfnp2XWdiI8QrnJGJMr/UxpE/xnevX9tN3jvNPlW8WkHl3g==
 
 "@esbuild/android-arm64@0.16.7":
   version "0.16.7"
@@ -6177,6 +6195,11 @@ commander@^8.3.0:
   version "8.3.0"
   resolved "https://registry.npmjs.org/commander/-/commander-8.3.0.tgz"
   integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
+
+commander@^9.4.1:
+  version "9.5.0"
+  resolved "https://registry.npmjs.org/commander/-/commander-9.5.0.tgz#bc08d1eb5cedf7ccb797a96199d41c7bc3e60d30"
+  integrity sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==
 
 commander@~2.19.0:
   version "2.19.0"
@@ -16333,17 +16356,6 @@ saxes@^5.0.1:
   dependencies:
     xmlchars "^2.2.0"
 
-scenejs@~1.8.5:
-  version "1.8.5"
-  resolved "https://registry.npmjs.org/scenejs/-/scenejs-1.8.5.tgz#0023581e64807dd7e802b601f4d88c4a727da0ff"
-  integrity sha512-LkiHyK2fNGrsV+68b7wQ76SirmgZR93vUsZOdXuWNxc+O9SlapnxkJF698w2ZYHNX331vL9ETUnbToF7zEEgXQ==
-  dependencies:
-    "@cfcs/core" "^0.0.12"
-    "@daybrush/utils" "^1.10.2"
-    "@scena/event-emitter" "^1.0.3"
-    css-styled "^1.0.0"
-    order-map "^0.2.2"
-
 scheduler@^0.23.0:
   version "0.23.0"
   resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.23.0.tgz"
@@ -17953,10 +17965,15 @@ tsconfig-paths@^3.14.1:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@^1.10.0, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^2.0.3, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-2.4.1.tgz#0d0bfbaac2880b91e22df0768e55be9753a5b17e"
-  integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==
+tslib@^1.10.0, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
+  version "1.14.1"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
+  integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
+
+tslib@^2.0.3, tslib@^2.3.1, tslib@^2.4.1:
+  version "2.5.0"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz#42bfed86f5787aeb41d031866c8f402429e0fddf"
+  integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==
 
 tslint@^5.14.0, tslint@^5.20.1:
   version "5.20.1"

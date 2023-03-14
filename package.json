@@ -41,6 +41,7 @@
         "release": "lerna-helper release --base scenejs"
     },
     "devDependencies": {
+        "@cfcs/cli": "^0.0.3",
         "@daybrush/jsdoc": "^0.4.3",
         "@daybrush/release": "^0.7.1",
         "cpx": "1.5.0",

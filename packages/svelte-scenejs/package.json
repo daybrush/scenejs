@@ -46,7 +46,7 @@
         "declaration": "rm -rf declaration && tsc -p tsconfig.declaration.json"
     },
     "dependencies": {
-        "@cfcs/svelte": "^0.0.12",
+        "@cfcs/svelte": "^0.1.0",
         "scenejs": "~1.9.4"
     },
     "devDependencies": {

@@ -44,7 +44,7 @@
         "dist/*"
     ],
     "dependencies": {
-        "@cfcs/vue2": "^0.0.12",
+        "@cfcs/vue2": "^0.1.0",
         "scenejs": "~1.9.4"
     },
     "devDependencies": {

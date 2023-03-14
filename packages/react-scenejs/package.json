@@ -40,7 +40,7 @@
         "declaration/*"
     ],
     "dependencies": {
-        "@cfcs/react": "^0.0.12",
+        "@cfcs/react": "^0.1.0",
         "scenejs": "~1.9.4"
     },
     "scripts": {

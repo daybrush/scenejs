@@ -1,4 +1,8 @@
-import { ReactiveObject, ReactiveAdapter, getObservers, computed, reactive } from "@cfcs/core";
+import {
+    ReactiveObject, ReactiveAdapter,
+    getObservers, computed,
+    partialReactive,
+} from "@cfcs/core";
 import { isFunction } from "@daybrush/utils";
 import Scene from "../Scene";
 import SceneItem from "../SceneItem";
@@ -74,7 +78,7 @@ export const SCENE_REACTIVE: ReactiveAdapter<
             },
         };
 
-        const nextReactiveObject = reactive(nextObj) as SceneReactiveInstance;
+        const nextReactiveObject = partialReactive(nextObj) as SceneReactiveInstance;
 
         return nextReactiveObject;
     },
