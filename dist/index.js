@@ -41,319 +41,8 @@ version: 0.0.0
     license: MIT
     author: Daybrush
     repository: https://github.com/daybrush/utils
-    @version 1.10.2
+    @version 0.5.2
     */
-    /**
-    * get string "object"
-    * @memberof Consts
-    * @example
-    import {OBJECT} from "@daybrush/utils";
-
-    console.log(OBJECT); // "object"
-    */
-    var OBJECT = "object";
-    /**
-    * get string "string"
-    * @memberof Consts
-    * @example
-    import {STRING} from "@daybrush/utils";
-
-    console.log(STRING); // "string"
-    */
-    var STRING = "string";
-    /**
-    * get string "undefined"
-    * @memberof Consts
-    * @example
-    import {UNDEFINED} from "@daybrush/utils";
-
-    console.log(UNDEFINED); // "undefined"
-    */
-    var UNDEFINED = "undefined";
-    /**
-    * Check whether the environment is window or node.js.
-    * @memberof Consts
-    * @name document
-    * @example
-    import {IS_WINDOW} from "@daybrush/utils";
-
-    console.log(IS_WINDOW); // false in node.js
-    console.log(IS_WINDOW); // true in browser
-    */
-    var doc = typeof document !== UNDEFINED && document; // FIXME: this type maybe false
-    var OPEN_CLOSED_CHARACTERS = [{
-      open: "(",
-      close: ")"
-    }, {
-      open: "\"",
-      close: "\""
-    }, {
-      open: "'",
-      close: "'"
-    }, {
-      open: "\\\"",
-      close: "\\\""
-    }, {
-      open: "\\'",
-      close: "\\'"
-    }];
-
-    /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation.
-
-    Permission to use, copy, modify, and/or distribute this software for any
-    purpose with or without fee is hereby granted.
-
-    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-    PERFORMANCE OF THIS SOFTWARE.
-    ***************************************************************************** */
-    function __spreadArrays() {
-      for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-      for (var r = Array(s), k = 0, i = 0; i < il; i++) for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
-      return r;
-    }
-    /**
-    * Check the type that the value is object.
-    * @memberof Utils
-    * @param {string} value - Value to check the type
-    * @return {} true if the type is correct, false otherwise
-    * @example
-    import {isObject} from "@daybrush/utils";
-
-    console.log(isObject({})); // true
-    console.log(isObject(undefined)); // false
-    console.log(isObject("")); // false
-    console.log(isObject(null)); // false
-    */
-    function isObject(value) {
-      return value && typeof value === OBJECT;
-    }
-    /**
-    * Check the type that the value is isArray.
-    * @memberof Utils
-    * @param {string} value - Value to check the type
-    * @return {} true if the type is correct, false otherwise
-    * @example
-    import {isArray} from "@daybrush/utils";
-
-    console.log(isArray([])); // true
-    console.log(isArray({})); // false
-    console.log(isArray(undefined)); // false
-    console.log(isArray(null)); // false
-    */
-    function isArray(value) {
-      return Array.isArray(value);
-    }
-    /**
-    * Check the type that the value is string.
-    * @memberof Utils
-    * @param {string} value - Value to check the type
-    * @return {} true if the type is correct, false otherwise
-    * @example
-    import {isString} from "@daybrush/utils";
-
-    console.log(isString("1234")); // true
-    console.log(isString(undefined)); // false
-    console.log(isString(1)); // false
-    console.log(isString(null)); // false
-    */
-    function isString(value) {
-      return typeof value === STRING;
-    }
-    function isEqualSeparator(character, separator) {
-      var isCharacterSpace = character === "" || character == " ";
-      var isSeparatorSpace = separator === "" || separator == " ";
-      return isSeparatorSpace && isCharacterSpace || character === separator;
-    }
-    function findOpen(openCharacter, texts, index, length, openCloseCharacters) {
-      var isIgnore = findIgnore(openCharacter, texts, index);
-      if (!isIgnore) {
-        return findClose(openCharacter, texts, index + 1, length, openCloseCharacters);
-      }
-      return index;
-    }
-    function findIgnore(character, texts, index) {
-      if (!character.ignore) {
-        return null;
-      }
-      var otherText = texts.slice(Math.max(index - 3, 0), index + 3).join("");
-      return new RegExp(character.ignore).exec(otherText);
-    }
-    function findClose(closeCharacter, texts, index, length, openCloseCharacters) {
-      var _loop_1 = function (i) {
-        var character = texts[i].trim();
-        if (character === closeCharacter.close && !findIgnore(closeCharacter, texts, i)) {
-          return {
-            value: i
-          };
-        }
-        var nextIndex = i;
-        // re open
-        var openCharacter = find(openCloseCharacters, function (_a) {
-          var open = _a.open;
-          return open === character;
-        });
-        if (openCharacter) {
-          nextIndex = findOpen(openCharacter, texts, i, length, openCloseCharacters);
-        }
-        if (nextIndex === -1) {
-          return out_i_1 = i, "break";
-        }
-        i = nextIndex;
-        out_i_1 = i;
-      };
-      var out_i_1;
-      for (var i = index; i < length; ++i) {
-        var state_1 = _loop_1(i);
-        i = out_i_1;
-        if (typeof state_1 === "object") return state_1.value;
-        if (state_1 === "break") break;
-      }
-      return -1;
-    }
-    function splitText(text, splitOptions) {
-      var _a = isString(splitOptions) ? {
-          separator: splitOptions
-        } : splitOptions,
-        _b = _a.separator,
-        separator = _b === void 0 ? "," : _b,
-        isSeparateFirst = _a.isSeparateFirst,
-        isSeparateOnlyOpenClose = _a.isSeparateOnlyOpenClose,
-        _c = _a.isSeparateOpenClose,
-        isSeparateOpenClose = _c === void 0 ? isSeparateOnlyOpenClose : _c,
-        _d = _a.openCloseCharacters,
-        openCloseCharacters = _d === void 0 ? OPEN_CLOSED_CHARACTERS : _d;
-      var openClosedText = openCloseCharacters.map(function (_a) {
-        var open = _a.open,
-          close = _a.close;
-        if (open === close) {
-          return open;
-        }
-        return open + "|" + close;
-      }).join("|");
-      var regexText = "(\\s*" + separator + "\\s*|" + openClosedText + "|\\s+)";
-      var regex = new RegExp(regexText, "g");
-      var texts = text.split(regex).filter(Boolean);
-      var length = texts.length;
-      var values = [];
-      var tempValues = [];
-      function resetTemp() {
-        if (tempValues.length) {
-          values.push(tempValues.join(""));
-          tempValues = [];
-          return true;
-        }
-        return false;
-      }
-      var _loop_2 = function (i) {
-        var character = texts[i].trim();
-        var nextIndex = i;
-        var openCharacter = find(openCloseCharacters, function (_a) {
-          var open = _a.open;
-          return open === character;
-        });
-        var closeCharacter = find(openCloseCharacters, function (_a) {
-          var close = _a.close;
-          return close === character;
-        });
-        if (openCharacter) {
-          nextIndex = findOpen(openCharacter, texts, i, length, openCloseCharacters);
-          if (nextIndex !== -1 && isSeparateOpenClose) {
-            if (resetTemp() && isSeparateFirst) {
-              return out_i_2 = i, "break";
-            }
-            values.push(texts.slice(i, nextIndex + 1).join(""));
-            i = nextIndex;
-            if (isSeparateFirst) {
-              return out_i_2 = i, "break";
-            }
-            return out_i_2 = i, "continue";
-          }
-        } else if (closeCharacter && !findIgnore(closeCharacter, texts, i)) {
-          var nextOpenCloseCharacters = __spreadArrays(openCloseCharacters);
-          nextOpenCloseCharacters.splice(openCloseCharacters.indexOf(closeCharacter), 1);
-          return {
-            value: splitText(text, {
-              separator: separator,
-              isSeparateFirst: isSeparateFirst,
-              isSeparateOnlyOpenClose: isSeparateOnlyOpenClose,
-              isSeparateOpenClose: isSeparateOpenClose,
-              openCloseCharacters: nextOpenCloseCharacters
-            })
-          };
-        } else if (isEqualSeparator(character, separator) && !isSeparateOnlyOpenClose) {
-          resetTemp();
-          if (isSeparateFirst) {
-            return out_i_2 = i, "break";
-          }
-          return out_i_2 = i, "continue";
-        }
-        if (nextIndex === -1) {
-          nextIndex = length - 1;
-        }
-        tempValues.push(texts.slice(i, nextIndex + 1).join(""));
-        i = nextIndex;
-        out_i_2 = i;
-      };
-      var out_i_2;
-      for (var i = 0; i < length; ++i) {
-        var state_2 = _loop_2(i);
-        i = out_i_2;
-        if (typeof state_2 === "object") return state_2.value;
-        if (state_2 === "break") break;
-      }
-      if (tempValues.length) {
-        values.push(tempValues.join(""));
-      }
-      return values;
-    }
-    /**
-    * divide text by space.
-    * @memberof Utils
-    * @param {string} text - text to divide
-    * @return {Array} divided texts
-    * @example
-    import {spliceSpace} from "@daybrush/utils";
-
-    console.log(splitSpace("a b c d e f g"));
-    // ["a", "b", "c", "d", "e", "f", "g"]
-    console.log(splitSpace("'a,b' c 'd,e' f g"));
-    // ["'a,b'", "c", "'d,e'", "f", "g"]
-    */
-    function splitSpace(text) {
-      // divide comma(space)
-      return splitText(text, "");
-    }
-    /**
-    * divide text by bracket "(", ")".
-    * @memberof Utils
-    * @param {string} text - text to divide
-    * @return {object} divided texts
-    * @example
-    import {splitBracket} from "@daybrush/utils";
-
-    console.log(splitBracket("a(1, 2)"));
-    // {prefix: "a", value: "1, 2", suffix: ""}
-    console.log(splitBracket("a(1, 2)b"));
-    // {prefix: "a", value: "1, 2", suffix: "b"}
-    */
-    function splitBracket(text) {
-      var matches = /([^(]*)\(([\s\S]*)\)([\s\S]*)/g.exec(text);
-      if (!matches || matches.length < 4) {
-        return {};
-      } else {
-        return {
-          prefix: matches[1],
-          value: matches[2],
-          suffix: matches[3]
-        };
-      }
-    }
     /**
     * divide text by number and unit.
     * @memberof Utils
@@ -369,8 +58,10 @@ version: 0.0.0
     console.log(splitUnit("a10%"));
     // {prefix: "a", value: 10, unit: "%"}
     */
-    function splitUnit(text) {
+
+    function splitUnit$1(text) {
       var matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
+
       if (!matches) {
         return {
           prefix: "",
@@ -378,6 +69,7 @@ version: 0.0.0
           value: NaN
         };
       }
+
       var prefix = matches[1];
       var value = matches[2];
       var unit = matches[3];
@@ -386,82 +78,6 @@ version: 0.0.0
         unit: unit,
         value: parseFloat(value)
       };
-    }
-    /**
-    * transforms something in an array into an array.
-    * @memberof Utils
-    * @param - Array form
-    * @return an array
-    * @example
-    import {toArray} from "@daybrush/utils";
-
-    const arr1 = toArray(document.querySelectorAll(".a")); // Element[]
-    const arr2 = toArray(document.querySelectorAll<HTMLElement>(".a")); // HTMLElement[]
-    */
-    function toArray(value) {
-      return [].slice.call(value);
-    }
-    /**
-    * Returns the index of the first element in the array that satisfies the provided testing function.
-    * @function
-    * @memberof CrossBrowser
-    * @param - The array `findIndex` was called upon.
-    * @param - A function to execute on each value in the array until the function returns true, indicating that the satisfying element was found.
-    * @param - Returns defaultIndex if not found by the function.
-    * @example
-    import { findIndex } from "@daybrush/utils";
-
-    findIndex([{a: 1}, {a: 2}, {a: 3}, {a: 4}], ({ a }) => a === 2); // 1
-    */
-    function findIndex(arr, callback, defaultIndex) {
-      if (defaultIndex === void 0) {
-        defaultIndex = -1;
-      }
-      var length = arr.length;
-      for (var i = 0; i < length; ++i) {
-        if (callback(arr[i], i, arr)) {
-          return i;
-        }
-      }
-      return defaultIndex;
-    }
-    /**
-    * Returns the value of the first element in the array that satisfies the provided testing function.
-    * @function
-    * @memberof CrossBrowser
-    * @param - The array `find` was called upon.
-    * @param - A function to execute on each value in the array,
-    * @param - Returns defalutValue if not found by the function.
-    * @example
-    import { find } from "@daybrush/utils";
-
-    find([{a: 1}, {a: 2}, {a: 3}, {a: 4}], ({ a }) => a === 2); // {a: 2}
-    */
-    function find(arr, callback, defalutValue) {
-      var index = findIndex(arr, callback);
-      return index > -1 ? arr[index] : defalutValue;
-    }
-
-    /**
-     * Returns all element descendants of node that
-     * match selectors.
-     */
-    /**
-     * Checks if the specified class value exists in the element's class attribute.
-     * @memberof DOM
-     * @param - A DOMString containing one or more selectors to match
-     * @param - If multi is true, a DOMString containing one or more selectors to match against.
-     * @example
-    import {$} from "@daybrush/utils";
-
-    console.log($("div")); // div element
-    console.log($("div", true)); // [div, div] elements
-    */
-    function $(selectors, multi) {
-      if (!doc) {
-        return multi ? [] : null;
-      }
-      return multi ? doc.querySelectorAll(selectors) : doc.querySelector(selectors);
     }
     /**
     * Checks if the specified class value exists in the element's class attribute.
@@ -474,10 +90,12 @@ version: 0.0.0
 
     console.log(hasClass(element, "start")); // true or false
     */
-    function hasClass(element, className) {
+
+    function hasClass$1(element, className) {
       if (element.classList) {
         return element.classList.contains(className);
       }
+
       return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
     }
     /**
@@ -490,47 +108,13 @@ version: 0.0.0
 
     addClass(element, "start");
     */
-    function addClass(element, className) {
+
+    function addClass$1(element, className) {
       if (element.classList) {
         element.classList.add(className);
       } else {
         element.className += " " + className;
       }
-    }
-    /**
-    * Removes the specified class value.
-    * @memberof DOM
-    * @param element - target
-    * @param className - the class name to remove
-    * @example
-    import {removeClass} from "@daybrush/utils";
-
-    removeClass(element, "start");
-    */
-    function removeClass(element, className) {
-      if (element.classList) {
-        element.classList.remove(className);
-      } else {
-        var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
-        element.className = element.className.replace(reg, " ");
-      }
-    }
-    /**
-    * Sets up a function that will be called whenever the specified event is delivered to the target
-    * @memberof DOM
-    * @param - event target
-    * @param - A case-sensitive string representing the event type to listen for.
-    * @param - The object which receives a notification (an object that implements the Event interface) when an event of the specified type occurs
-    * @param - An options object that specifies characteristics about the event listener.
-    * @example
-    import {addEvent} from "@daybrush/utils";
-
-    addEvent(el, "click", e => {
-      console.log(e);
-    });
-    */
-    function addEvent(el, type, listener, options) {
-      el.addEventListener(type, listener, options);
     }
 
     /*
@@ -586,7 +170,7 @@ version: 0.0.0
 
     function makeSVGDOM() {
       var el = makeDOM("svg");
-      addClass(el, CLASS_NAME);
+      addClass$1(el, CLASS_NAME);
       return el;
     }
 
@@ -607,7 +191,7 @@ version: 0.0.0
     }
 
     function getAbsoluteValue(value, pos, size) {
-      var info = splitUnit(value);
+      var info = splitUnit$1(value);
 
       if (info.unit === "%") {
         return pos + size * info.value / 100 + "px";
@@ -649,9 +233,9 @@ version: 0.0.0
           strokeWidth = _a.strokeWidth,
           className = _a.className;
 
-      if (container && hasClass(container, CLASS_NAME)) {
+      if (container && hasClass$1(container, CLASS_NAME)) {
         className && className.split(" ").forEach(function (name) {
-          addClass(container, name);
+          addClass$1(container, name);
         });
 
         var _b = (container.getAttribute("viewBox") || "").split(" ").map(function (pos) {
@@ -1251,6 +835,184 @@ version: 0.0.0
 
     /*
     Copyright (c) 2018 Daybrush
+    @name: @daybrush/utils
+    license: MIT
+    author: Daybrush
+    repository: https://github.com/daybrush/utils
+    @version 0.5.2
+    */
+    /**
+    * get string "object"
+    * @memberof Consts
+    * @example
+    import {OBJECT} from "@daybrush/utils";
+
+    console.log(OBJECT); // "object"
+    */
+
+    var OBJECT = "object";
+    /**
+    * get string "undefined"
+    * @memberof Consts
+    * @example
+    import {UNDEFINED} from "@daybrush/utils";
+
+    console.log(UNDEFINED); // "undefined"
+    */
+
+    var UNDEFINED$1 = "undefined";
+    /**
+    * Check whether the environment is window or node.js.
+    * @memberof Consts
+    * @name document
+    * @example
+    import {IS_WINDOW} from "@daybrush/utils";
+
+    console.log(IS_WINDOW); // false in node.js
+    console.log(IS_WINDOW); // true in browser
+    */
+
+    var doc$1 = typeof document !== UNDEFINED$1 && document;
+    /**
+    * Check the type that the value is object.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {} true if the type is correct, false otherwise
+    * @example
+    import {isObject} from "@daybrush/utils";
+
+    console.log(isObject({})); // true
+    console.log(isObject(undefined)); // false
+    console.log(isObject("")); // false
+    console.log(isObject(null)); // false
+    */
+
+    function isObject(value) {
+      return value && typeof value === OBJECT;
+    }
+    /**
+    * Check the type that the value is isArray.
+    * @memberof Utils
+    * @param {string} value - Value to check the type
+    * @return {} true if the type is correct, false otherwise
+    * @example
+    import {isArray} from "@daybrush/utils";
+
+    console.log(isArray([])); // true
+    console.log(isArray({})); // false
+    console.log(isArray(undefined)); // false
+    console.log(isArray(null)); // false
+    */
+
+    function isArray(value) {
+      return Array.isArray(value);
+    }
+    /**
+    * divide text by space.
+    * @memberof Utils
+    * @param {string} text - text to divide
+    * @return {Array} divided texts
+    * @example
+    import {spliceSpace} from "@daybrush/utils";
+
+    console.log(splitSpace("a b c d e f g"));
+    // ["a", "b", "c", "d", "e", "f", "g"]
+    console.log(splitSpace("'a,b' c 'd,e' f g"));
+    // ["'a,b'", "c", "'d,e'", "f", "g"]
+    */
+
+    function splitSpace(text) {
+      // divide comma(,)
+      var matches = text.match(/("[^"]*")|('[^']*')|([^\s()]*(?:\((?:[^()]*|\([^()]*\))*\))[^\s()]*)|\S+/g);
+      return matches || [];
+    }
+    /**
+    * divide text by bracket "(", ")".
+    * @memberof Utils
+    * @param {string} text - text to divide
+    * @return {object} divided texts
+    * @example
+    import {splitBracket} from "@daybrush/utils";
+
+    console.log(splitBracket("a(1, 2)"));
+    // {prefix: "a", value: "1, 2", suffix: ""}
+    console.log(splitBracket("a(1, 2)b"));
+    // {prefix: "a", value: "1, 2", suffix: "b"}
+    */
+
+    function splitBracket(text) {
+      var matches = /([^(]*)\(([\s\S]*)\)([\s\S]*)/g.exec(text);
+
+      if (!matches || matches.length < 4) {
+        return {};
+      } else {
+        return {
+          prefix: matches[1],
+          value: matches[2],
+          suffix: matches[3]
+        };
+      }
+    }
+    /**
+    * divide text by number and unit.
+    * @memberof Utils
+    * @param {string} text - text to divide
+    * @return {} divided texts
+    * @example
+    import {splitUnit} from "@daybrush/utils";
+
+    console.log(splitUnit("10px"));
+    // {prefix: "", value: 10, unit: "px"}
+    console.log(splitUnit("-10px"));
+    // {prefix: "", value: -10, unit: "px"}
+    console.log(splitUnit("a10%"));
+    // {prefix: "a", value: 10, unit: "%"}
+    */
+
+    function splitUnit(text) {
+      var matches = /^([^\d|e|\-|\+]*)((?:\d|\.|-|e-|e\+)+)(\S*)$/g.exec(text);
+
+      if (!matches) {
+        return {
+          prefix: "",
+          unit: "",
+          value: NaN
+        };
+      }
+
+      var prefix = matches[1];
+      var value = matches[2];
+      var unit = matches[3];
+      return {
+        prefix: prefix,
+        unit: unit,
+        value: parseFloat(value)
+      };
+    }
+
+    /**
+     * Returns all element descendants of node that
+     * match selectors.
+     */
+
+    /**
+     * Checks if the specified class value exists in the element's class attribute.
+     * @memberof DOM
+     * @param - A DOMString containing one or more selectors to match
+     * @param - If multi is true, a DOMString containing one or more selectors to match against.
+     * @example
+    import {$} from "@daybrush/utils";
+
+    console.log($("div")); // div element
+    console.log($("div", true)); // [div, div] elements
+    */
+
+    function $$1(selectors, multi) {
+      return multi ? doc$1.querySelectorAll(selectors) : doc$1.querySelector(selectors);
+    }
+
+    /*
+    Copyright (c) 2018 Daybrush
     name: @daybrush/page
     license: MIT
     author: Daybrush
@@ -1370,7 +1132,7 @@ version: 0.0.0
           _this.onCheck();
         };
 
-        _this.el = el ? isObject(el) ? el : $(el) : null;
+        _this.el = el ? isObject(el) ? el : $$1(el) : null;
 
         if ("range" in options) {
           var range = options.range;
@@ -1677,6 +1439,140 @@ version: 0.0.0
     }
     function scroll$1() {
         manager.scroll();
+    }
+
+    /*
+    Copyright (c) 2018 Daybrush
+    @name: @daybrush/utils
+    license: MIT
+    author: Daybrush
+    repository: https://github.com/daybrush/utils
+    @version 1.10.2
+    */
+    /**
+    * get string "undefined"
+    * @memberof Consts
+    * @example
+    import {UNDEFINED} from "@daybrush/utils";
+
+    console.log(UNDEFINED); // "undefined"
+    */
+    var UNDEFINED = "undefined";
+    /**
+    * Check whether the environment is window or node.js.
+    * @memberof Consts
+    * @name document
+    * @example
+    import {IS_WINDOW} from "@daybrush/utils";
+
+    console.log(IS_WINDOW); // false in node.js
+    console.log(IS_WINDOW); // true in browser
+    */
+    var doc = typeof document !== UNDEFINED && document; // FIXME: this type maybe false
+    /**
+    * transforms something in an array into an array.
+    * @memberof Utils
+    * @param - Array form
+    * @return an array
+    * @example
+    import {toArray} from "@daybrush/utils";
+
+    const arr1 = toArray(document.querySelectorAll(".a")); // Element[]
+    const arr2 = toArray(document.querySelectorAll<HTMLElement>(".a")); // HTMLElement[]
+    */
+    function toArray(value) {
+      return [].slice.call(value);
+    }
+
+    /**
+     * Returns all element descendants of node that
+     * match selectors.
+     */
+    /**
+     * Checks if the specified class value exists in the element's class attribute.
+     * @memberof DOM
+     * @param - A DOMString containing one or more selectors to match
+     * @param - If multi is true, a DOMString containing one or more selectors to match against.
+     * @example
+    import {$} from "@daybrush/utils";
+
+    console.log($("div")); // div element
+    console.log($("div", true)); // [div, div] elements
+    */
+    function $(selectors, multi) {
+      if (!doc) {
+        return multi ? [] : null;
+      }
+      return multi ? doc.querySelectorAll(selectors) : doc.querySelector(selectors);
+    }
+    /**
+    * Checks if the specified class value exists in the element's class attribute.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to search
+    * @return {boolean} return false if the class is not found.
+    * @example
+    import {hasClass} from "@daybrush/utils";
+
+    console.log(hasClass(element, "start")); // true or false
+    */
+    function hasClass(element, className) {
+      if (element.classList) {
+        return element.classList.contains(className);
+      }
+      return !!element.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
+    }
+    /**
+    * Add the specified class value. If these classe already exist in the element's class attribute they are ignored.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to add
+    * @example
+    import {addClass} from "@daybrush/utils";
+
+    addClass(element, "start");
+    */
+    function addClass(element, className) {
+      if (element.classList) {
+        element.classList.add(className);
+      } else {
+        element.className += " " + className;
+      }
+    }
+    /**
+    * Removes the specified class value.
+    * @memberof DOM
+    * @param element - target
+    * @param className - the class name to remove
+    * @example
+    import {removeClass} from "@daybrush/utils";
+
+    removeClass(element, "start");
+    */
+    function removeClass(element, className) {
+      if (element.classList) {
+        element.classList.remove(className);
+      } else {
+        var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
+        element.className = element.className.replace(reg, " ");
+      }
+    }
+    /**
+    * Sets up a function that will be called whenever the specified event is delivered to the target
+    * @memberof DOM
+    * @param - event target
+    * @param - A case-sensitive string representing the event type to listen for.
+    * @param - The object which receives a notification (an object that implements the Event interface) when an event of the specified type occurs
+    * @param - An options object that specifies characteristics about the event listener.
+    * @example
+    import {addEvent} from "@daybrush/utils";
+
+    addEvent(el, "click", e => {
+      console.log(e);
+    });
+    */
+    function addEvent(el, type, listener, options) {
+      el.addEventListener(type, listener, options);
     }
 
     var clapper = document.querySelector(".clapper");
