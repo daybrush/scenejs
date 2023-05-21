@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.0](https://github.com/daybrush/scenejs/compare/1.9.0...1.10.0) (2023-05-21)
+### :sparkles: Packages
+* `react-scenejs` 2.0.0-beta.11
+* `scenejs` 1.10.0
+* `svelte-scenejs` 1.0.0-beta.9
+* `vue-scenejs` 2.0.0-beta.8
+* `vue2-scenejs` 1.0.0-beta.8
+
+
+### :rocket: New Features
+
+* `vue2-scenejs`, `vue-scenejs`, `svelte-scenejs`
+    * add modules for frameworks ([d1c173d](https://github.com/daybrush/scenejs/commit/d1c173d72efba70193fbbcf50d8e9e3edb2629ae))
+* `scenejs`, `react-scenejs`
+    * add noRegisterElement option for frameworks ([af611e3](https://github.com/daybrush/scenejs/commit/af611e3f86583c0a6e029221b4787beb53823160))
+* `scenejs`
+    * add isAnimator function ([5827ab5](https://github.com/daybrush/scenejs/commit/5827ab54d754813ede14d4809fd523846642adf0))
+
+
+### :bug: Bug Fix
+
+* All
+    * fix frameworks' reactive props ([17f9538](https://github.com/daybrush/scenejs/commit/17f9538823dafad9e36673fe7cc5bfa9178a147e))
+    * fix partial reactive props ([06f063a](https://github.com/daybrush/scenejs/commit/06f063acd979e265bee1e09b1971211b65a6aaec))
+* `react-scenejs`
+    * fix declaration ([28a69ce](https://github.com/daybrush/scenejs/commit/28a69ce78d2e779764af989d48da04dca805128a))
+* `scenejs`
+    * fix no parsed color ([7a6d59c](https://github.com/daybrush/scenejs/commit/7a6d59cefd9e08254f9196ef2b64b73c5169bd78))
+    * fix prop types for frameworks ([ccfb34c](https://github.com/daybrush/scenejs/commit/ccfb34c60d3ea59b45255cd9c7aa6c5b47ff6760))
+    * fix reactive options ([ef4831d](https://github.com/daybrush/scenejs/commit/ef4831dd30c14740ae6b390ad8f83f6fb8b94d86))
+    * fix reactive types ([ec6bdb6](https://github.com/daybrush/scenejs/commit/ec6bdb649be1135a61396e3d4cd2abb288c56493))
+    * fix selector ([2f923b4](https://github.com/daybrush/scenejs/commit/2f923b45dcc10713878ee244cca75343a3f776b9))
+    * fix selectorAll ([14bdd99](https://github.com/daybrush/scenejs/commit/14bdd9990084f0fcc152aec4508435f3bddf37e1))
+    * fix selectorAll ([4b5f7dd](https://github.com/daybrush/scenejs/commit/4b5f7ddef4f0877200997787918e863ea5001951))
+    * fix types ([1d017a9](https://github.com/daybrush/scenejs/commit/1d017a9fd7f34e6b123012ed481b8133aecfb171))
+* Other
+    * fix bug report template ([9996fd2](https://github.com/daybrush/scenejs/commit/9996fd2344b9c4b80d8fdbb2f1ade0486b81a5fe))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([b328ba8](https://github.com/daybrush/scenejs/commit/b328ba8fbbf552d1d8048c280392be59f12da68b))
+    * publish packages ([275e338](https://github.com/daybrush/scenejs/commit/275e338931d19f3a75faf4c7f0935eeb848f5a9e))
+    * publish packages ([eb28736](https://github.com/daybrush/scenejs/commit/eb2873676adb0fedf18d1e5a52bfdce08552274a))
+    * publish packages ([0e37841](https://github.com/daybrush/scenejs/commit/0e37841738e150d6deb13f501bb715421ab040aa))
+* `vue2-scenejs`, `vue-scenejs`, `svelte-scenejs`, `react-scenejs`
+    * publish packages ([002fc93](https://github.com/daybrush/scenejs/commit/002fc93c9536659b5db95527c019f1e3ad32a1f8))
+* `scenejs`
+    * fix lint ([347f297](https://github.com/daybrush/scenejs/commit/347f297a1c83ccdabb055cbf8d9c4428561dc8a2))
+* Other
+    * update ga id ([3fbbe61](https://github.com/daybrush/scenejs/commit/3fbbe61ab8f1ba06793eacd8c6b896259dd95fed))
+
+
+
 ## [1.9.0](https://github.com/daybrush/scenejs/compare/1.8.5...1.9.0) (2022-12-26)
 ### :sparkles: Packages
 * `react-scenejs` 2.0.0-beta.6

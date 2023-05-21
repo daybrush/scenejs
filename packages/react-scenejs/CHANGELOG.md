@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-beta.11](https://github.com/daybrush/scenejs/compare/react-scenejs@2.0.0-beta.6...react-scenejs@2.0.0-beta.11) (2023-05-21)
+
+
+### :rocket: New Features
+
+* add noRegisterElement option for frameworks ([af611e3](https://github.com/daybrush/scenejs/commit/af611e3f86583c0a6e029221b4787beb53823160))
+
+
+### :bug: Bug Fix
+
+* fix declaration ([28a69ce](https://github.com/daybrush/scenejs/commit/28a69ce78d2e779764af989d48da04dca805128a))
+* fix frameworks' reactive props ([17f9538](https://github.com/daybrush/scenejs/commit/17f9538823dafad9e36673fe7cc5bfa9178a147e))
+* fix partial reactive props ([06f063a](https://github.com/daybrush/scenejs/commit/06f063acd979e265bee1e09b1971211b65a6aaec))
+
+
+### :mega: Other
+
+* publish packages ([b328ba8](https://github.com/daybrush/scenejs/commit/b328ba8fbbf552d1d8048c280392be59f12da68b))
+* publish packages ([275e338](https://github.com/daybrush/scenejs/commit/275e338931d19f3a75faf4c7f0935eeb848f5a9e))
+* publish packages ([eb28736](https://github.com/daybrush/scenejs/commit/eb2873676adb0fedf18d1e5a52bfdce08552274a))
+* publish packages ([0e37841](https://github.com/daybrush/scenejs/commit/0e37841738e150d6deb13f501bb715421ab040aa))
+* publish packages ([002fc93](https://github.com/daybrush/scenejs/commit/002fc93c9536659b5db95527c019f1e3ad32a1f8))
+
+
+
 ## [2.0.0-beta.6](https://github.com/daybrush/scenejs/compare/react-scenejs@2.0.0-beta.5...react-scenejs@2.0.0-beta.6) (2022-12-26)
 
 
