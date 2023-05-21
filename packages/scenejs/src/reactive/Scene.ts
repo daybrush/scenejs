@@ -35,7 +35,7 @@ export type SceneReactiveProps = SceneReactiveOptions | Scene | (() => SceneReac
  * @memberof Reactive
  */
 export interface SceneReactiveData {
-    props: SceneReactiveProps;
+    props?: SceneReactiveProps;
     options?: Partial<SceneOptions>;
 }
 

@@ -33,7 +33,7 @@ export type SceneItemReactiveProps = SceneItemReactiveOptions
  * @memberof Reactive
  */
 export interface SceneItemReactiveData {
-    props: SceneItemReactiveProps;
+    props?: SceneItemReactiveProps;
     options?: Partial<SceneItemOptions>;
 }
 
