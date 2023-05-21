@@ -1,6 +1,6 @@
 {
     "name": "svelte-scenejs",
-    "version": "1.0.0-beta.9",
+    "version": "1.0.0-beta.10",
     "type": "module",
     "lernaHelperReleaseType": "prerelease",
     "lernaHelperPublishTag": "latest",
@@ -47,7 +47,7 @@
     },
     "dependencies": {
         "@cfcs/svelte": "^0.1.0",
-        "scenejs": "~1.10.0"
+        "scenejs": "~1.10.1"
     },
     "devDependencies": {
         "@daybrush/builder": "^0.2.0",
