@@ -10,7 +10,7 @@ import {
     isArray, ANIMATION, ARRAY, OBJECT,
     PROPERTY, STRING, NUMBER, IS_WINDOW, IObject,
     $, isObject, addEvent, removeEvent, isString,
-    splitComma, splitBracket,
+    splitComma, splitBracket, IArrayFormat,
 } from "@daybrush/utils";
 import { EasingType, EasingFunction, NameType, SelectorAllType, AnimateElement } from "./types";
 import { toPropertyObject } from "./utils/property";
@@ -337,4 +337,8 @@ export function rgbaToHexWithOpacity(rgba: string) {
         hex: `#${rgbaNums.join("")}`,
         opacity: rgbaArr[3] ? parseFloat(rgbaArr[3]) : 1,
     };
+}
+
+export function isArrayLike(el: any): el is IArrayFormat<any> {
+    return "length" in el && el.length >= 0;
 }

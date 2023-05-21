@@ -55,7 +55,10 @@ export const SCENE_ITEM_REACTIVE: ReactiveAdapter<
         const dataObject = isFunction(dataProps) ? dataProps() : dataProps;
         const sceneItem = isSceneItem(dataObject)
             ? dataObject
-            : new SceneItem(dataObject, data.options);
+            : new SceneItem(dataObject, {
+                noRegisterElement: false,
+                ...data.options,
+            });
         const obj = sceneItem.state as any as ReactiveObject<AnimatorState>;
         const observers = getObservers(obj);
         const totalDuration = computed(() => {

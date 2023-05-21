@@ -430,6 +430,8 @@ console.log(scene.getItem(".a").get(1, "opacity"));
         if (!properties) {
             return this;
         }
+        this.setOptions(options);
+
         const selector = options && options[SELECTOR] || this.state[SELECTOR];
         for (const name in properties) {
             if (name === "options") {
@@ -445,10 +447,12 @@ console.log(scene.getItem(".a").get(1, "opacity"));
                 let elements: IArrayFormat<AnimateElement> = [];
 
                 if (selector && IS_WINDOW) {
-                    elements = $(
-                        `${isFunction(selector) ? selector(name) : name}`,
-                        true,
-                    );
+                    if (!this.state.noRegisterElement) {
+                        elements = $(
+                            `${isFunction(selector) ? selector(name) : name}`,
+                            true,
+                        );
+                    }
                 }
                 const elementsLength = elements.length;
                 const length = elementsLength || (object as SelectorAllType).defaultCount || 0;
@@ -480,12 +484,15 @@ console.log(scene.getItem(".a").get(1, "opacity"));
                 this.setItem(name, scene);
                 continue;
             } else {
-                item = this.newItem(name);
+                item = this.newItem(name, {
+                    noRegisterElement: true,
+                });
                 item.load(object);
             }
-            selector && item.setSelector(selector);
+            if (!this.state.noRegisterElement) {
+                selector && item.setSelector(selector);
+            }
         }
-        this.setOptions(options);
     }
     public setOptions(options: Partial<SceneState> = {}): this {
         super.setOptions(options);

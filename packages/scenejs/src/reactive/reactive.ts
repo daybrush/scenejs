@@ -11,6 +11,9 @@ export function getMethodNames(classConstructor: new (...args: any[]) => any) {
     return getKeys(prototype).filter(name => {
         const descriptor = Object.getOwnPropertyDescriptor(prototype, name);
 
+        if (name === "constructor") {
+            return false;
+        }
         return !descriptor.get && !descriptor.set && isFunction(descriptor.value || prototype[name]);
     });
 }

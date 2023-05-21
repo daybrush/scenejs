@@ -15,6 +15,7 @@ import {
     getNames,
     updateFrame,
     isSceneItem,
+    isArrayLike,
 } from "./utils";
 import { dotValue } from "./utils/dot";
 import {
@@ -38,10 +39,11 @@ import {
 } from "@daybrush/utils";
 import {
     NameType, AnimateElement, AnimatorState,
-    SceneItemState, SceneItemOptions, EasingType, PlayCondition, DirectionType, SceneItemEvents
+    SceneItemState, SceneItemOptions, EasingType, PlayCondition, DirectionType, SceneItemEvents, SceneItemSelectorType
 } from "./types";
 import OrderMap from "order-map";
 import styled, { InjectResult, StyledInjector } from "css-styled";
+import { Ref } from "@cfcs/core";
 
 function getNearTimeIndex(times: number[], time: number) {
     const length = times.length;
@@ -138,16 +140,16 @@ export function getEntries(times: number[], states: AnimatorState[]) {
 * @extends Animator
 * @example
 const item = new SceneItem({
-	0: {
-		display: "none",
-	},
-	1: {
-		display: "block",
-		opacity: 0,
-	},
-	2: {
-		opacity: 1,
-	}
+    0: {
+        display: "none",
+    },
+    1: {
+        display: "block",
+        opacity: 0,
+    },
+    2: {
+        opacity: 1,
+    }
 });
 */
 class SceneItem extends Animator<SceneItemOptions, SceneItemState, SceneItemEvents> {
@@ -161,6 +163,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState, SceneItemEven
     private needUpdate: boolean = true;
     private target: any;
     private targetFunc: (frame: Frame) => void;
+    private registeredElement: SceneItemSelectorType = false;
 
     /**
       * @param - properties
@@ -360,7 +363,7 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState, SceneItemEven
       * @example
       console.log(item.getOrderObject());
       */
-     public getOrderObject() {
+    public getOrderObject() {
         return this.nameMap.getObject();
     }
     /**
@@ -498,12 +501,8 @@ class SceneItem extends Animator<SceneItemOptions, SceneItemState, SceneItemEven
      * @example
 item.setSelector("#id.class");
      */
-    public setSelector(target: string | boolean | ((id: number | string, index: number) => string | AnimateElement)) {
-        if (isFunction(target)) {
-            this.setElement(target(this.getId(), 0));
-        } else {
-            this.setElement(target);
-        }
+    public setSelector(target: SceneItemSelectorType) {
+        this.setElement(target);
         return this;
     }
     /**
@@ -521,7 +520,7 @@ item.setSelector("#id.class");
 item.setElement(document.querySelector("#id.class"));
 item.setElement(document.querySelectorAll(".class"));
      */
-    public setElements(target: boolean | string | AnimateElement | IArrayFormat<AnimateElement>): this {
+    public setElements(target: SceneItemSelectorType): this {
         return this.setElement(target);
     }
     /**
@@ -533,15 +532,23 @@ item.setElement(document.querySelectorAll(".class"));
 item.setElement(document.querySelector("#id.class"));
 item.setElement(document.querySelectorAll(".class"));
      */
-    public setElement(target: boolean | string | AnimateElement | IArrayFormat<AnimateElement>) {
+    public setElement(target: SceneItemSelectorType) {
+        if (target !== true && this.registeredElement !== target) {
+            this.registeredElement = target;
+        }
         const state = this.state;
+        const selectorTarget = this.registeredElement;
+        let nextTarget: SceneItemSelectorType = target;
         let elements: AnimateElement[] = [];
 
+        if (isFunction(selectorTarget)) {
+            nextTarget = selectorTarget(this.getId(), 0);
+        }
         if (!target) {
             return this;
         } else if (target === true || isString(target)) {
-            const prevSelector = (isString(state[SELECTOR]) && state[SELECTOR]) || `${state.id}`;
-            const selector = target === true ? prevSelector : target;
+            const prevSelector = (isString(state[SELECTOR]) && state[SELECTOR] as string) || `${state.id}`;
+            const selector = target === true ? prevSelector : target as string;
             const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(selector);
 
             try {
@@ -550,8 +557,18 @@ item.setElement(document.querySelectorAll(".class"));
                 elements = [];
             }
             state[SELECTOR] = selector;
-        } else {
-            elements = (target instanceof Element) ? [target] : toArray(target);
+        } else if (isArrayLike(target)) {
+            elements = toArray(target);
+        } else if (target instanceof Element) {
+            elements = [target];
+        } else if ("current" in target || "value" in target) {
+            const currentTarget = target.current || target.value;
+
+            if (currentTarget) {
+                elements = [currentTarget];
+            } else {
+                elements = [];
+            }
         }
         if (!elements.length) {
             return this;
@@ -924,7 +941,7 @@ item.setElement(document.querySelectorAll(".class"));
         id && this.setId(id);
         if (target) {
             this.setTarget(target);
-        } else if (selector) {
+        } else if (selector && !this.state.noRegisterElement) {
             this.setSelector(selector);
         } else if (elements || element) {
             this.setElement(elements || element);

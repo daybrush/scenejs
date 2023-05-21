@@ -1,6 +1,7 @@
 import { IArrayFormat } from "@daybrush/utils";
 import SceneItem from "./SceneItem";
 import Frame from "./Frame";
+import { Ref } from "@cfcs/core";
 
 /**
  * @typedef
@@ -73,6 +74,7 @@ export interface AnimatorState extends AnimatorOptions {
  * @see AnimatorState
  */
 export interface SceneState extends AnimatorState {
+    noRegisterElement: boolean;
     selector: string | boolean | ((id: number | string) => string | AnimateElement);
     playCSS: boolean;
     exportEvent?: boolean;
@@ -84,7 +86,8 @@ export interface SceneState extends AnimatorState {
  * @see AnimatorOptions
  */
 export interface SceneOptions extends AnimatorOptions {
-    selector: string | boolean | ((id: number | string) => string | AnimateElement);
+    noRegisterElement: boolean;
+    selector: SceneItemSelectorType;
 }
 /**
  * @typedef
@@ -92,6 +95,7 @@ export interface SceneOptions extends AnimatorOptions {
  * @see AnimatorState
  */
 export interface SceneItemState extends AnimatorState {
+    noRegisterElement: boolean;
     playCSS: boolean;
     cssText: string;
     selector: string;
@@ -104,8 +108,9 @@ export interface SceneItemState extends AnimatorState {
  */
 export interface SceneItemOptions extends AnimatorOptions {
     selector: string | boolean | ((id: number | string) => string);
-    elements: IArrayFormat<AnimateElement> | AnimateElement;
-    element: IArrayFormat<AnimateElement> | AnimateElement;
+    elements: IArrayFormat<AnimateElement> | AnimateElement | Ref<AnimateElement>;
+    element: IArrayFormat<AnimateElement> | AnimateElement | Ref<AnimateElement>;
+    noRegisterElement: boolean;
     target: any;
 }
 
@@ -268,3 +273,10 @@ export interface SceneItemEvents extends SceneAnimatorEvents {
 export type SelectorAllType = ((index: number) => any) & {
     defaultCount: number;
 };
+
+/**
+ * @typedef
+ */
+export type SceneItemSelectorType = boolean | string | AnimateElement
+    | ((id: number | string, index: number) => string | AnimateElement)
+    | IArrayFormat<AnimateElement> | Ref<AnimateElement>;

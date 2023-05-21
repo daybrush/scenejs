@@ -320,7 +320,8 @@ class Animator <
         const isSelfTick = isTick && !isParent;
         const tickTime = state[TICK_TIME];
 
-        if (isSelfTick && prevTime < delay && time >= 0) {
+        const numericTime = isString(time) ? parseFloat(time) : time;
+        if (isSelfTick && prevTime < delay && numericTime >= 0) {
             this.start(0);
         }
         exec?.();
