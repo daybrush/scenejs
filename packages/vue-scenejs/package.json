@@ -1,6 +1,6 @@
 {
     "name": "vue-scenejs",
-    "version": "2.0.0-beta.7",
+    "version": "2.0.0-beta.8",
     "lernaHelperReleaseType": "prerelease",
     "lernaHelperPublishTag": "latest",
     "description": "A Vue 3 Component that create JavaScript & CSS timeline-based animation with Scene.js.",
@@ -47,7 +47,7 @@
     ],
     "dependencies": {
         "@cfcs/vue3": "^0.1.0",
-        "scenejs": "~1.9.4"
+        "scenejs": "~1.10.0"
     },
     "devDependencies": {
         "@daybrush/builder": "^0.2.0",
