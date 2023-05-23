@@ -544,11 +544,11 @@ item.setElement(document.querySelectorAll(".class"));
         if (isFunction(selectorTarget)) {
             nextTarget = selectorTarget(this.getId(), 0);
         }
-        if (!target) {
+        if (!nextTarget) {
             return this;
-        } else if (target === true || isString(target)) {
+        } else if (nextTarget === true || isString(nextTarget)) {
             const prevSelector = (isString(state[SELECTOR]) && state[SELECTOR] as string) || `${state.id}`;
-            const selector = target === true ? prevSelector : target as string;
+            const selector = nextTarget === true ? prevSelector : nextTarget as string;
             const matches = /([\s\S]+)(:+[a-zA-Z]+)$/g.exec(selector);
 
             try {
@@ -557,12 +557,12 @@ item.setElement(document.querySelectorAll(".class"));
                 elements = [];
             }
             state[SELECTOR] = selector;
-        } else if (isArrayLike(target)) {
-            elements = toArray(target);
-        } else if (target instanceof Element) {
-            elements = [target];
-        } else if ("current" in target || "value" in target) {
-            const currentTarget = target.current || target.value;
+        } else if (isArrayLike(nextTarget)) {
+            elements = toArray(nextTarget);
+        } else if (nextTarget instanceof Element) {
+            elements = [nextTarget];
+        } else if ("current" in nextTarget || "value" in nextTarget) {
+            const currentTarget = nextTarget.current || nextTarget.value;
 
             if (currentTarget) {
                 elements = [currentTarget];
