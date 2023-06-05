@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.3](https://github.com/daybrush/scenejs/compare/1.10.0...1.10.3) (2023-06-05)
+### :sparkles: Packages
+* `react-scenejs` 2.0.0-beta.14
+* `scenejs` 1.10.3
+* `svelte-scenejs` 1.0.0-beta.12
+* `vue-scenejs` 2.0.0-beta.11
+* `vue2-scenejs` 1.0.0-beta.11
+
+
+### :bug: Bug Fix
+
+* `scenejs`
+    * fix hasName #88 ([1955730](https://github.com/daybrush/scenejs/commit/1955730e3e1739405c985631574d67333cf067c2))
+    * fix target selector ([2321c43](https://github.com/daybrush/scenejs/commit/2321c43954b9518b765dd1d445c6714f14a635dd))
+    * update css-styled module ([d2d8105](https://github.com/daybrush/scenejs/commit/d2d810556a7c3f81b5f491dc37b1ce336ed9f3ee))
+
+
+### :mega: Other
+
+* All
+    * publish packages ([97ba4e7](https://github.com/daybrush/scenejs/commit/97ba4e775018179c16b0e5c0035f5a3773b64722))
+    * publish packages ([f76d778](https://github.com/daybrush/scenejs/commit/f76d7782ee508fc12f16d250ca0c925f81d2a0e1))
+* `vue2-scenejs`, `vue-scenejs`, `svelte-scenejs`, `react-scenejs`
+    * publish packages ([2f9e242](https://github.com/daybrush/scenejs/commit/2f9e242c926cb13672d7f6d9924ea7782fb69815))
+
+
+
 ## [1.10.0](https://github.com/daybrush/scenejs/compare/1.9.0...1.10.0) (2023-05-21)
 ### :sparkles: Packages
 * `react-scenejs` 2.0.0-beta.11
