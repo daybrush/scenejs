@@ -1,0 +1,46 @@
+<div></div>
+<style>
+    div {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: #f55;
+    }
+</style>
+<script src="../../dist/scene.js"></script>
+<script>
+    const sceneItem = new Scene.SceneItem({
+        0: {
+            "width": "200px",
+            "easing": "ease-in-out",
+            "transform": {
+                "translate": "0px, 0",
+            },
+        },
+        1: {
+            "width": "400px",
+            "easing": "ease-in",
+            "transform": {
+                "translate": "100px, 0",
+            },
+        },
+        2: {
+            "width": "600px",
+            "easing": "ease",
+            "transform": {
+                "translate": "200px, 0",
+            },
+        },
+        3: {
+            "width": "800px",
+            "transform": {
+                "translate": "300px, 0",
+            },
+        },
+    }, {
+        selector: "div",
+        iterationCount: "infinite",
+    });
+
+    sceneItem.play();
+</script>

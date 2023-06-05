@@ -782,7 +782,7 @@ item.setElement(document.querySelectorAll(".class"));
       */
     public hasName(args: string[]) {
         this.needUpdate && this.update();
-        return !!this.nameMap.get(args);
+        return !!this.nameMap.hasName(args);
     }
     /**
       * merge frame of the previous time at the next time.

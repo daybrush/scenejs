@@ -1353,7 +1353,7 @@
     npmlog "6.0.2"
     sync-exec "^0.6.2"
 
-"@daybrush/utils@^0.11.0", "@daybrush/utils@^0.5.2", "@daybrush/utils@^1.0.0", "@daybrush/utils@^1.1.1", "@daybrush/utils@^1.10.2", "@daybrush/utils@^1.11.0", "@daybrush/utils@^1.6.0":
+"@daybrush/utils@^0.11.0", "@daybrush/utils@^0.5.2", "@daybrush/utils@^1.1.1", "@daybrush/utils@^1.10.2", "@daybrush/utils@^1.11.0", "@daybrush/utils@^1.6.0":
   version "1.10.2"
   resolved "https://registry.npmjs.org/@daybrush/utils/-/utils-1.10.2.tgz#fb10bab437d1bb3d052fa49ca01f23c86a2ad1f1"
   integrity sha512-fNMWeGUDokdIpebU8oIBUXkyGYITCwwodBfgx277p8d+kvI+k9wdFtKtdY4mvbWxhbAwuWprtVDq8My3KQ24Dg==
@@ -13610,12 +13610,10 @@ ora@^3.4.0:
     strip-ansi "^5.2.0"
     wcwidth "^1.0.1"
 
-order-map@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.npmjs.org/order-map/-/order-map-0.2.2.tgz"
-  integrity sha512-X//Db/lT11tdxxutWQfE+bmbTyieDJWrr/vSiwBwOf8RRw9yAgF7gqn1ihFmfX2E7l7gcPcucep3aWFjo5FpoA==
-  dependencies:
-    "@daybrush/utils" "^1.0.0"
+order-map@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/order-map/-/order-map-0.3.1.tgz#0d519e2ad79c1606eb037d59fb191ab9bd5ce37b"
+  integrity sha512-RSuElIGwzPuBLzS9Io7G8fpcnQeudg0XswOyOiwRNLX7lkf+eQ/KUp+kcAP7z7nTOdkrfxhZycyXwzFW75iJ6A==
 
 os-browserify@^0.3.0:
   version "0.3.0"

@@ -209,6 +209,17 @@ describe("SceneItem Test", () => {
             expect(item!.getFrame(0).has("transform")).to.be.equals(true);
             expect(item!.get(0, "transform")).to.be.deep.equals({});
         });
+        it("should check `hasName` method", () => {
+            // Given
+            item!.set(0, "transform", {
+                "translate": "0px, 0px",
+            });
+
+            // When, Then
+            expect(item!.hasName(["a"])).to.be.equals(true);
+            expect(item!.hasName(["transform", "translate"])).to.be.equals(true);
+            expect(item!.hasName(["transform", "scale"])).to.be.equals(false)
+        })
         it("should check 'getComputedFrame' method", () => {
             // Then
             expect(item!.getComputedFrame(0).get("display")).to.be.equals("block");
