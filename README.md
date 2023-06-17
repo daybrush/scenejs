@@ -101,7 +101,22 @@ const scene = new Scene({
   selector: true,
   easing: "ease-in-out",
 }).play();
+```
+## 🎬 Add Media (Audio/Video)
+```javascript
+const mediaScene = new MediaScene();
+    mediaScene
+        .addMedia("background", "./background.mp3")
+        .seek(0, 40.79);
+    
+    mediaScene
+        .addMedia("video", "./video.mp4")
+        .seek(0, 40.79)
+        .setVolume(1)
+        .setPlaySpeed(1)
+        .setDelay(startTime);
 
+    scene.setItem("video",mediaScene);
 ```
 ## ✨ Effects
 
