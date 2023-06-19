@@ -101,8 +101,34 @@ const scene = new Scene({
   selector: true,
   easing: "ease-in-out",
 }).play();
-
 ```
+## 🎬 Add Media (Audio/Video)
+This library supports adding video and audio components to your scene. To add a video or an audio, you need to install @scenejs/media library.
+### Add necessary npm package
+```sh
+$ npm i @scenejs/media
+```
+### How to use
+```javascript
+
+import MediaScene from '@scenejs/media';
+
+const mediaScene = new MediaScene();
+    mediaScene
+        .addMedia("background", "./background.mp3")
+        .seek(0, 40.79);
+    
+    mediaScene
+        .addMedia("video", "./video.mp4")
+        .seek(0, 40.79)
+        .setVolume(1)
+        .setPlaySpeed(1)
+        .setDelay(startTime);
+
+    scene.setItem("video",mediaScene);
+```
+Please note that this library uses the built-in capability of your browser to play audio and video files. Make sure necessary codecs are installed, and the browser supports the video/audio file being added to the project
+
 ## ✨ Effects
 
 * [typing](https://daybrush.com/scenejs/features.html#typing)
